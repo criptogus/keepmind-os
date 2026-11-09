@@ -18,6 +18,8 @@
     "typecheck": "tsc --noEmit",
     "smoke:electron": "node scripts/smoke-electron.mjs",
     "dist:mac": "npm run build && electron-builder --mac --publish never",
+    "dist:mac:arm64": "npm run build && electron-builder --mac dmg zip --arm64 --publish never",
+    "dist:mac:x64": "npm run build && electron-builder --mac dmg zip --x64 --publish never",
     "astryx": "astryx",
     "scan:secrets": "node scripts/scan-secrets.mjs",
     "a11y:onboarding": "node scripts/a11y-onboarding.mjs",

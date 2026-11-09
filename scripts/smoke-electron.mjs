@@ -13,8 +13,11 @@ try {
     await chmod(resolve('test/fixtures/fake-claude.mjs'), 0o755);
     provider = await startMockProvider();
     const args = [...(process.env.ZAOS_SMOKE_EXECUTABLE ? [] : ['.']), ...(process.env.ZAOS_SMOKE_LINUX === '1' ? ['--no-sandbox'] : [])];
+    const appImageEnv = process.env.ZAOS_SMOKE_EXECUTABLE?.endsWith('.AppImage')
+        ? { APPIMAGE_EXTRACT_AND_RUN: process.env.APPIMAGE_EXTRACT_AND_RUN ?? '1' }
+        : {};
     child = spawn(process.env.ZAOS_SMOKE_EXECUTABLE || resolve('node_modules/.bin/electron'), args, {
-        env: { ...process.env, ZAOS_CODEX_BIN: resolve('test/fixtures/fake-codex.mjs'), ZAOS_CLAUDE_BIN: resolve('test/fixtures/fake-claude.mjs'), ZAOS_SMOKE: '1', ZAOS_SMOKE_PROVIDER_URL: `http://127.0.0.1:${provider.port}/v1`, ZAOS_USER_DATA: temp, ZAOS_SMOKE_OUT: resolve('evidence/screenshots') },
+        env: { ...process.env, ...appImageEnv, ZAOS_CODEX_BIN: resolve('test/fixtures/fake-codex.mjs'), ZAOS_CLAUDE_BIN: resolve('test/fixtures/fake-claude.mjs'), ZAOS_SMOKE: '1', ZAOS_SMOKE_PROVIDER_URL: `http://127.0.0.1:${provider.port}/v1`, ZAOS_USER_DATA: temp, ZAOS_SMOKE_OUT: resolve('evidence/screenshots') },
         stdio: 'inherit', detached: process.platform !== 'win32',
     });
     await new Promise((resolveExit, reject) => {

@@ -123,7 +123,7 @@
       "name": "light: capture q1 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 537
+        "elapsedMs": 559
       }
     },
     {
@@ -164,7 +164,7 @@
       "name": "light: q1 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 953
+        "elapsedMs": 998
       }
     },
     {
@@ -178,21 +178,21 @@
       "name": "light: capture q2 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 571
+        "elapsedMs": 543
       }
     },
     {
       "name": "light: q2 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 611
+        "elapsedMs": 587
       }
     },
     {
       "name": "light: capture q3 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 548
+        "elapsedMs": 593
       }
     },
     {
@@ -208,7 +208,7 @@
       "name": "light: q3 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 587
+        "elapsedMs": 638
       }
     },
     {
@@ -291,35 +291,35 @@
       "name": "light: advanced labels completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 82
+        "elapsedMs": 84
       }
     },
     {
       "name": "light: capture q3-auth completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 553
+        "elapsedMs": 590
       }
     },
     {
       "name": "light: q3-auth completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 772
+        "elapsedMs": 800
       }
     },
     {
       "name": "light: capture connection-error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 529
+        "elapsedMs": 577
       }
     },
     {
       "name": "light: connection-error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 570
+        "elapsedMs": 610
       }
     },
     {
@@ -351,21 +351,21 @@
       "name": "light: capture q4 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 519
+        "elapsedMs": 583
       }
     },
     {
       "name": "light: q4 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 567
+        "elapsedMs": 638
       }
     },
     {
       "name": "light: capture error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 589
+        "elapsedMs": 524
       }
     },
     {
@@ -383,7 +383,7 @@
       "name": "light: error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 652
+        "elapsedMs": 569
       }
     },
     {
@@ -394,7 +394,7 @@
       "name": "light: capture q3-pricing-confirm completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 510
+        "elapsedMs": 535
       }
     },
     {
@@ -418,7 +418,7 @@
       "name": "light: q3-pricing-confirm completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 673
+        "elapsedMs": 658
       }
     },
     {
@@ -462,21 +462,21 @@
       "name": "light: capture summary completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 508
+        "elapsedMs": 529
       }
     },
     {
       "name": "light: summary completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 733
+        "elapsedMs": 802
       }
     },
     {
       "name": "light: tab-test completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 1109
+        "elapsedMs": 1145
       }
     },
     {
@@ -497,14 +497,14 @@
       "name": "light: resume completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 151
+        "elapsedMs": 131
       }
     },
     {
       "name": "light: capture workspace completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 453
+        "elapsedMs": 455
       }
     },
     {
@@ -563,7 +563,7 @@
       "name": "light: workspace completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 844
+        "elapsedMs": 874
       }
     },
     {
@@ -605,7 +605,7 @@
       "name": "light: startup Powered by completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 680
+        "elapsedMs": 667
       }
     },
     {
@@ -631,7 +631,7 @@
       "name": "dark: capture q1 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 537
+        "elapsedMs": 515
       }
     },
     {
@@ -672,7 +672,7 @@
       "name": "dark: q1 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 827
+        "elapsedMs": 823
       }
     },
     {
@@ -686,21 +686,21 @@
       "name": "dark: capture q2 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 539
+        "elapsedMs": 531
       }
     },
     {
       "name": "dark: q2 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 571
+        "elapsedMs": 567
       }
     },
     {
       "name": "dark: capture q3 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 513
+        "elapsedMs": 482
       }
     },
     {
@@ -716,7 +716,7 @@
       "name": "dark: q3 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 532
+        "elapsedMs": 507
       }
     },
     {
@@ -770,7 +770,7 @@
       "name": "dark: field focus completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 10
+        "elapsedMs": 12
       }
     },
     {
@@ -799,7 +799,7 @@
       "name": "dark: advanced labels completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 88
+        "elapsedMs": 84
       }
     },
     {
@@ -813,21 +813,21 @@
       "name": "dark: q3-auth completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 705
+        "elapsedMs": 698
       }
     },
     {
       "name": "dark: capture connection-error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 526
+        "elapsedMs": 539
       }
     },
     {
       "name": "dark: connection-error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 558
+        "elapsedMs": 575
       }
     },
     {
@@ -859,21 +859,21 @@
       "name": "dark: capture q4 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 492
+        "elapsedMs": 532
       }
     },
     {
       "name": "dark: q4 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 528
+        "elapsedMs": 572
       }
     },
     {
       "name": "dark: capture error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 493
+        "elapsedMs": 508
       }
     },
     {
@@ -891,7 +891,7 @@
       "name": "dark: error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 520
+        "elapsedMs": 547
       }
     },
     {
@@ -902,7 +902,7 @@
       "name": "dark: capture q3-pricing-confirm completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 495
+        "elapsedMs": 494
       }
     },
     {
@@ -926,7 +926,7 @@
       "name": "dark: q3-pricing-confirm completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 646
+        "elapsedMs": 632
       }
     },
     {
@@ -970,21 +970,21 @@
       "name": "dark: capture summary completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 513
+        "elapsedMs": 542
       }
     },
     {
       "name": "dark: summary completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 814
+        "elapsedMs": 785
       }
     },
     {
       "name": "dark: tab-test completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 1081
+        "elapsedMs": 1167
       }
     },
     {
@@ -1005,14 +1005,14 @@
       "name": "dark: resume completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 120
+        "elapsedMs": 114
       }
     },
     {
       "name": "dark: capture workspace completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 457
+        "elapsedMs": 439
       }
     },
     {
@@ -1071,7 +1071,7 @@
       "name": "dark: workspace completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 844
+        "elapsedMs": 854
       }
     },
     {
@@ -1113,7 +1113,7 @@
       "name": "dark: startup Powered by completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 677
+        "elapsedMs": 676
       }
     },
     {

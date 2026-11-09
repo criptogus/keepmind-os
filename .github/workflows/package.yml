@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-14, windows-latest, ubuntu-latest]
+        os: [macos-14, macos-13, windows-latest, ubuntu-latest]
     runs-on: ${{ matrix.os }}
     env:
       CSC_IDENTITY_AUTO_DISCOVERY: 'false'
@@ -19,10 +19,13 @@ jobs:
         with:
           node-version: '24.x'
           cache: npm
-      - run: npm ci
+      # npm 11 lockfile quirk with paperclipai optional platform deps breaks npm ci.
+      - run: npm install --no-audit --no-fund
       - run: npm test
-      - if: runner.os == 'macOS'
-        run: npm run dist:mac
+      - if: matrix.os == 'macos-14'
+        run: npm run dist:mac:arm64
+      - if: matrix.os == 'macos-13'
+        run: npm run dist:mac:x64
       - if: runner.os == 'Windows'
         run: npm run dist:win
       - if: runner.os == 'Linux'
