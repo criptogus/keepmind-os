@@ -1,60 +1,5 @@
 {
-  "violations": [
-    {
-      "id": "target-size",
-      "impact": "serious",
-      "tags": [
-        "cat.sensory-and-visual-cues",
-        "wcag22aa",
-        "wcag258"
-      ],
-      "description": "Ensure touch targets have sufficient size and space",
-      "help": "All touch targets must be 24px large, or leave sufficient space",
-      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/target-size?application=axeAPI",
-      "nodes": [
-        {
-          "any": [
-            {
-              "id": "target-size",
-              "data": {
-                "minSize": 24,
-                "width": 20,
-                "height": 20
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Target has insufficient size (20px by 20px, should be at least 24px by 24px)"
-            },
-            {
-              "id": "target-offset",
-              "data": {
-                "closestOffset": 20,
-                "minOffset": 24
-              },
-              "relatedNodes": [
-                {
-                  "html": "<button type=\"button\" data-slot=\"icon-button\" class=\"inline-flex min-w-0 max-w-full items-center rounded-md px-1 py-0.5 text-left outline-none transition-colors hover:bg-accent/50 focus-visible:bg-accent/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1\" aria-label=\"Agents section actions\" id=\"radix-_r_a_\" aria-haspopup=\"menu\" aria-expanded=\"false\" data-state=\"closed\">",
-                  "target": [
-                    "#radix-_r_a_"
-                  ]
-                }
-              ],
-              "impact": "serious",
-              "message": "Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 20px instead of at least 24px."
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": "serious",
-          "html": "<button type=\"button\" data-slot=\"icon-button\" class=\"absolute -left-4 flex h-5 w-5 items-center justify-center rounded-sm outline-none transition-colors hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1\" aria-label=\"Collapse Agents\" aria-controls=\"radix-_r_9_\" aria-expanded=\"true\" data-state=\"open\">",
-          "target": [
-            "button[aria-label=\"Collapse Agents\"]"
-          ],
-          "failureSummary": "Fix any of the following:\n  Target has insufficient size (20px by 20px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 20px instead of at least 24px."
-        }
-      ]
-    }
-  ],
+  "violations": [],
   "passes": 24,
   "incomplete": [
     {
@@ -67,6 +12,6 @@
     }
   ],
   "colorContrastViolations": 0,
-  "url": "http://127.0.0.1:36743/NOR/dashboard",
+  "url": "http://127.0.0.1:38661/NOR/dashboard",
   "darkSupported": true
 }

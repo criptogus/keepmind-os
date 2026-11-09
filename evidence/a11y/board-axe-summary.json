@@ -1,11 +1,11 @@
 {
   "light": {
-    "violations": 1,
+    "violations": 0,
     "colorContrastViolations": 0,
     "passes": 24
   },
   "dark": {
-    "violations": 1,
+    "violations": 0,
     "colorContrastViolations": 0,
     "passes": 24,
     "darkSupported": true

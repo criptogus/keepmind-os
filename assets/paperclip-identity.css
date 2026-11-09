@@ -114,3 +114,18 @@ html body :is(.dark, [data-theme=dark]) svg:is(.text-muted-foreground, [class*="
 }
 
 *::-webkit-scrollbar-thumb { background: #767676; }
+
+/* WCAG 2.5.8 target size for sidebar section collapse/expand controls */
+button[data-slot="icon-button"][aria-label^="Collapse"],
+button[data-slot="icon-button"][aria-label^="Expand"] {
+  min-width: 24px !important;
+  min-height: 24px !important;
+  width: 24px !important;
+  height: 24px !important;
+  box-sizing: border-box;
+}
+button[data-slot="icon-button"][aria-label^="Collapse"] svg,
+button[data-slot="icon-button"][aria-label^="Expand"] svg {
+  width: 12px !important;
+  height: 12px !important;
+}
