@@ -1,7 +1,7 @@
 export type ConnectorId = 'custom' | 'openrouter' | 'deepseek' | 'hermes' | 'codex' | 'claude';
 export interface ConnectorModel { id: string; name: string; priceKnown: boolean; inputCentsPerMTok?: number; outputCentsPerMTok?: number; contextLength?: number; maxOutputTokens?: number; pricesRetrievedAt?: string; pricingSource?: string }
 export interface ConnectorDetection { installed: boolean; loggedIn: boolean; authMethod?: 'subscription' | 'api-key' | 'unknown' }
-export interface ConfigureConnector { connectorId: ConnectorId; mode: 'api' | 'api-key' | 'cli-subscription'; baseUrl?: string; model: string; prices?: { inputCentsPerMTok: number; outputCentsPerMTok: number }; limits: { maxOutputTokens?: number; maxRunCents?: number; monthlyRunCap?: number; cliTimeoutSec?: number } }
+export interface ConfigureConnector { pricingSource?: 'catalog' | 'user'; connectorId: ConnectorId; mode: 'api' | 'api-key' | 'cli-subscription'; baseUrl?: string; model: string; prices?: { inputCentsPerMTok: number; outputCentsPerMTok: number }; limits: { maxOutputTokens?: number; maxRunCents?: number; monthlyRunCap?: number; cliTimeoutSec?: number } }
 export type ConnectorConfig = (ProviderConfig & { connectorId: ConnectorId; mode: 'api'; priceKnown: true; pricingSource?: string; pricesRetrievedAt?: string }) | { connectorId: 'codex' | 'claude'; mode: 'cli-subscription'; model: string; monthlyRunCap: number; cliTimeoutSec: number };
 export interface ReviewInteraction {
     id: string;
@@ -57,7 +57,10 @@ export interface Encryptor {
 export interface BoardApi {
     request<T = unknown>(method: string, path: string, body?: unknown): Promise<T>;
 }
+export interface TestConnector { connectorId: ConnectorId; mode: ConfigureConnector["mode"]; baseUrl?: string; key?: string }
+export interface ConnectorTestResult { ok: boolean; models?: number; error?: "unavailable" | "http" | "invalid-response"; installed?: boolean; loggedIn?: boolean }
 export interface ZaosAPI {
+    testConnector(payload: TestConnector): Promise<ConnectorTestResult>;
     listConnectors(): Promise<{ id: ConnectorId; modes: string[] }[]>;
     detectConnector(id: ConnectorId): Promise<ConnectorDetection>;
     startConnectorLogin(id: ConnectorId): Promise<void>;
@@ -78,7 +81,7 @@ export interface ZaosAPI {
     createCompany(name: string): Promise<{
         id: string;
     }>;
-    createAgentFromTemplate(templateId: string, provider: ProviderConfig): Promise<Agent>;
+    createAgentFromTemplate(templateId: string, provider?: ProviderConfig): Promise<Agent>;
     setProviderKey(key: string): Promise<void>;
     setSpendCap(cap: number): Promise<void>;
     setPaidExecution(enabled: boolean, consent: boolean): Promise<void>;
@@ -89,6 +92,7 @@ export interface ZaosAPI {
     setTelemetry(enabled: boolean): Promise<void>;
 }
 export interface IpcPayloads {
+    testConnector: TestConnector;
     listConnectors: Record<string, never>;
     detectConnector: { id: ConnectorId };
     startConnectorLogin: { id: ConnectorId };
@@ -102,7 +106,7 @@ export interface IpcPayloads {
     };
     createAgentFromTemplate: {
         templateId: string;
-        provider: ProviderConfig;
+        provider?: ProviderConfig;
     };
     setProviderKey: {
         key: string;

@@ -1,0 +1,482 @@
+[
+  {
+    "mode": "light",
+    "tag": "DIV",
+    "name": "Setup conversation",
+    "box": {
+      "x": 140,
+      "y": 350.78125,
+      "width": 640,
+      "height": 560
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 1100,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "light",
+    "tag": "BUTTON",
+    "name": "Undo last answer",
+    "box": {
+      "x": 140,
+      "y": 926.78125,
+      "width": 640,
+      "height": 32
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 1100,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "light",
+    "tag": "BUTTON",
+    "name": "What I’ll configure",
+    "box": {
+      "x": 821,
+      "y": 367.78125,
+      "width": 266,
+      "height": 44
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 1100,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "light",
+    "tag": "BUTTON",
+    "name": "Change Workspace",
+    "box": {
+      "x": 953,
+      "y": 455.78125,
+      "width": 66,
+      "height": 32
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 1100,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "light",
+    "tag": "BUTTON",
+    "name": "Change Agent role",
+    "box": {
+      "x": 913,
+      "y": 531.78125,
+      "width": 66,
+      "height": 32
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 1100,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "light",
+    "tag": "BUTTON",
+    "name": "Change First task",
+    "box": {
+      "x": 953,
+      "y": 607.78125,
+      "width": 66,
+      "height": 32
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 1100,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "light",
+    "tag": "BUTTON",
+    "name": "Change Connector",
+    "box": {
+      "x": 899,
+      "y": 707.78125,
+      "width": 66,
+      "height": 32
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 1100,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "light",
+    "tag": "BUTTON",
+    "name": "Change Model",
+    "box": {
+      "x": 938,
+      "y": 783.78125,
+      "width": 66,
+      "height": 32
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 1100,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "light",
+    "tag": "BUTTON",
+    "name": "Change Monthly cap",
+    "box": {
+      "x": 882,
+      "y": 859.78125,
+      "width": 66,
+      "height": 32
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 1100,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "light",
+    "tag": "BUTTON",
+    "name": "Change Est. max / run",
+    "box": {
+      "x": 941,
+      "y": 935.78125,
+      "width": 66,
+      "height": 32
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 1100,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "light",
+    "tag": "BUTTON",
+    "name": "Change Consent",
+    "box": {
+      "x": 911,
+      "y": 1011.78125,
+      "width": 66,
+      "height": 32
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 1100,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "light",
+    "tag": "BUTTON",
+    "name": "Advanced",
+    "box": {
+      "x": 821,
+      "y": 1044.78125,
+      "width": 266,
+      "height": 44
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 1100,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "light",
+    "tag": "BUTTON",
+    "name": "Activate agent",
+    "box": {
+      "x": 821,
+      "y": 1044.78125,
+      "width": 141,
+      "height": 44
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 1100,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "light",
+    "tag": "A",
+    "name": "Skip to content",
+    "box": {
+      "x": 16,
+      "y": 16,
+      "width": 136,
+      "height": 40
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 1100,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "light",
+    "tag": "BUTTON",
+    "name": "Use dark mode",
+    "box": {
+      "x": 1042,
+      "y": 40,
+      "width": 148,
+      "height": 32
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 1100,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "dark",
+    "tag": "DIV",
+    "name": "Setup conversation",
+    "box": {
+      "x": 140,
+      "y": 350.78125,
+      "width": 640,
+      "height": 560
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 1100,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "dark",
+    "tag": "BUTTON",
+    "name": "Undo last answer",
+    "box": {
+      "x": 140,
+      "y": 926.78125,
+      "width": 640,
+      "height": 32
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 1100,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "dark",
+    "tag": "BUTTON",
+    "name": "What I’ll configure",
+    "box": {
+      "x": 821,
+      "y": 367.78125,
+      "width": 266,
+      "height": 44
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 1100,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "dark",
+    "tag": "BUTTON",
+    "name": "Change Workspace",
+    "box": {
+      "x": 953,
+      "y": 455.78125,
+      "width": 66,
+      "height": 32
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 1100,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "dark",
+    "tag": "BUTTON",
+    "name": "Change Agent role",
+    "box": {
+      "x": 913,
+      "y": 531.78125,
+      "width": 66,
+      "height": 32
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 1100,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "dark",
+    "tag": "BUTTON",
+    "name": "Change First task",
+    "box": {
+      "x": 953,
+      "y": 607.78125,
+      "width": 66,
+      "height": 32
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 1100,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "dark",
+    "tag": "BUTTON",
+    "name": "Change Connector",
+    "box": {
+      "x": 899,
+      "y": 707.78125,
+      "width": 66,
+      "height": 32
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 1100,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "dark",
+    "tag": "BUTTON",
+    "name": "Change Model",
+    "box": {
+      "x": 938,
+      "y": 783.78125,
+      "width": 66,
+      "height": 32
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 1100,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "dark",
+    "tag": "BUTTON",
+    "name": "Change Monthly cap",
+    "box": {
+      "x": 882,
+      "y": 859.78125,
+      "width": 66,
+      "height": 32
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 1100,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "dark",
+    "tag": "BUTTON",
+    "name": "Change Est. max / run",
+    "box": {
+      "x": 941,
+      "y": 935.78125,
+      "width": 66,
+      "height": 32
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 1100,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "dark",
+    "tag": "BUTTON",
+    "name": "Change Consent",
+    "box": {
+      "x": 911,
+      "y": 1011.78125,
+      "width": 66,
+      "height": 32
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 1100,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "dark",
+    "tag": "BUTTON",
+    "name": "Advanced",
+    "box": {
+      "x": 821,
+      "y": 1044.78125,
+      "width": 266,
+      "height": 44
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 1100,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "dark",
+    "tag": "BUTTON",
+    "name": "Activate agent",
+    "box": {
+      "x": 821,
+      "y": 1044.78125,
+      "width": 141,
+      "height": 44
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 1100,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "dark",
+    "tag": "A",
+    "name": "Skip to content",
+    "box": {
+      "x": 16,
+      "y": 16,
+      "width": 136,
+      "height": 40
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 1100,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "dark",
+    "tag": "BUTTON",
+    "name": "Use light mode",
+    "box": {
+      "x": 1044,
+      "y": 40,
+      "width": 146,
+      "height": 32
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 1100,
+    "oversized": false,
+    "outline": "solid"
+  }
+]

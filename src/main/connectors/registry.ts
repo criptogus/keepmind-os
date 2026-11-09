@@ -25,7 +25,7 @@ export async function buildConfig(p: ConfigureConnector, connectors = registry):
     }
     const adapter = connectors[p.connectorId];
     const model = ['openrouter','deepseek'].includes(p.connectorId) ? (await adapter.models()).find(m => m.id === p.model) : undefined;
-    const prices = ['openrouter','deepseek'].includes(p.connectorId) ? model?.priceKnown ? model : undefined : p.prices;
+    const prices = model?.priceKnown ? model : !['openrouter','deepseek'].includes(p.connectorId) || p.pricingSource === 'user' ? p.prices : undefined;
     if (!prices || ![prices.inputCentsPerMTok, prices.outputCentsPerMTok, p.limits.maxOutputTokens, p.limits.maxRunCents].every(n => typeof n === 'number' && Number.isFinite(n) && n > 0) || !Number.isSafeInteger(p.limits.maxOutputTokens)) throw new Error('Known positive prices and run limits required');
     const baseUrl = ['custom','hermes'].includes(p.connectorId) ? p.baseUrl ?? adapter.baseUrl : adapter.baseUrl;
     if (!baseUrl) throw new Error('Provider URL required');

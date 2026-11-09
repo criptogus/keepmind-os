@@ -31,3 +31,62 @@ footer { padding: 32px 0 0; font-size: 12px; display: flex; justify-content: spa
 @media (prefers-reduced-motion: reduce) {
   .zero-agency-os .za-control, .zero-agency-os * { transition: none !important; animation: none !important; }
 }
+
+.za-onboard { display:grid; grid-template-columns:minmax(0,640px) 300px; gap:24px; max-width:1000px; margin-inline:auto; align-items:start; }
+.za-onboard * { box-sizing:border-box; scroll-margin:12px; }
+.za-onboard :is(input:not([type=checkbox]),textarea,select) { min-block-size:44px; padding-block:12px; padding-inline:14px; caret-color:var(--color-text-primary); }
+.za-onboard [data-astryx-control] input, .za-onboard textarea { min-block-size:44px; padding-block:12px; padding-inline:14px; }
+.za-onboard :is(button,[role=radio],summary,input[type=checkbox]) { min-width:24px; min-height:24px; }
+.za-onboard :focus-visible { outline:2px solid var(--focus-outline-color); outline-offset:3px; }
+.onboard-chat { display:grid; gap:16px; min-width:0; }
+.onboard-chips { display:flex; gap:12px; flex-wrap:wrap; }
+.onboard-connectors { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.onboard-connectors button { text-align:left; padding:16px; }
+.onboard-connectors span { display:block; font-size:14px; margin-top:8px; }
+.za-onboard [aria-checked=true] { outline:2px solid var(--color-text-primary); outline-offset:2px; }
+.onboard-auth { display:grid; gap:16px; }
+.onboard-key { display:grid; grid-template-columns:minmax(0,1fr) 44px; align-items:center; gap:12px; }
+.onboard-panel { border:1px solid var(--color-border); border-radius:12px; padding:16px; min-width:0; }
+.onboard-panel dl > div { margin-block:12px; }
+.onboard-panel dt { font-weight:600; }
+.onboard-panel dd { margin:0; overflow-wrap:anywhere; }
+.onboard-panel button.za-link { display:inline-block; margin:4px; }
+.za-onboard button.za-link { background:transparent; border:0; font:inherit; cursor:pointer; padding:4px; }
+.onboard-field-status { min-height:28px; margin:4px 0; }
+.onboard-field { margin-block:8px 24px; }
+.za-onboard label { display:block; margin-bottom:8px; }
+.za-onboard [role=alert] { margin-block:8px; }
+@media(max-width:959px) { .za-onboard { grid-template-columns:1fr; } .onboard-panel { position:sticky; bottom:0; background:var(--color-background-body); max-height:50vh; overflow:auto; } }
+@media(prefers-reduced-motion:reduce) { .za-onboard *, .za-onboard *::before, .za-onboard *::after { animation:none !important; transition:none !important; } }
+
+/* One native-control focus ring; suppress Astryx and legacy ancestor rings locally. */
+.zero-agency-os .za-onboard :has(:is(input:not([type=checkbox]),textarea,select):focus-visible) {
+ outline:none !important; box-shadow:none !important;
+}
+.zero-agency-os .za-onboard :is(input:not([type=checkbox]),textarea,select):focus-visible {
+ outline:2px solid var(--focus-outline-color) !important; outline-offset:3px; box-shadow:none !important;
+}
+.za-onboard button:not(.za-link), .za-onboard [role=radio] { min-block-size:44px; }
+.za-onboard .onboard-key button { width:44px; height:44px; }
+.onboard-key { align-items:end; }
+.za-onboard .onboard-connectors button, .za-onboard .onboard-connectors button * { text-decoration:none !important; }
+.onboard-turn { display:grid; gap:16px; }
+.za-onboard .onboard-assistant { align-self:start; margin-inline-end:auto; margin-inline-start:0; max-width:90%; }
+.za-onboard .onboard-user { align-self:end; margin-inline-start:auto; margin-inline-end:0; max-width:90%; }
+.za-onboard .onboard-system { text-align:center; font-size:13px; }
+
+/* Neutral dark chat surfaces: border contrasts with both the bubble and canvas. */
+.zero-agency-os [data-theme="dark"] .za-onboard .onboard-bubble {
+ background:#1A1A1A; border:1px solid #737373; color:#FAFAFA;
+}
+
+/* History owns scrolling; current-step controls remain below it. */
+.onboard-history { display:grid; gap:16px; min-block-size:0; max-block-size:min(60vh, 560px); overflow-y:auto; overscroll-behavior:contain; scroll-padding:12px; padding:6px; overflow-wrap:anywhere; }
+.onboard-history:focus-visible { outline:2px solid var(--focus-outline-color); outline-offset:3px; }
+.onboard-controls { display:grid; gap:16px; min-width:0; }
+@media(max-width:959px) {
+ .onboard-chat { padding-bottom:var(--composer-height, 0px); }
+ .onboard-history { max-block-size:max(0px, calc(100dvh - var(--history-top, 12px) - var(--composer-height, 0px) - 48px)); }
+ .onboard-controls form { position:fixed; z-index:2; inset-inline:24px; bottom:0; padding:12px; background:var(--color-background-body); }
+ .onboard-panel { position:static; max-height:none; overflow:visible; }
+}

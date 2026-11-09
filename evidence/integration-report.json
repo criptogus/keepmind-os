@@ -1,6 +1,6 @@
 {
   "suite": "real Paperclip + mock provider",
-  "startedAt": "2026-11-09T16:07:10.313Z",
+  "startedAt": "2026-11-09T16:52:11.141Z",
   "passed": true,
   "connectorsExercised": [
     "custom",
@@ -10,7 +10,7 @@
   "loopbackListenerVerified": true,
   "disableSignUpHonoured": true,
   "reviewAcceptance": {
-    "interactionId": "05ef3582-6ef0-4ce6-932c-6e836dcacf86",
+    "interactionId": "0f33b9eb-9b36-44c7-b75c-2c0d097788f6",
     "interactionStatus": "accepted",
     "issueStatus": "done"
   },
@@ -19,7 +19,7 @@
     "costCents": 1.4,
     "inReview": true,
     "summary": {
-      "companyId": "66f2ac43-db11-45cd-b4bf-e6e7a49929ed",
+      "companyId": "cf978fd1-e9ce-4c8c-9c20-5ab9b2b86188",
       "eventCount": 2,
       "unpricedEventCount": 0,
       "unknownBillingEventCount": 1,
@@ -32,10 +32,10 @@
       "utilizationPercent": 1.4
     },
     "agentPolicy": {
-      "policyId": "c953f96b-d848-4d3f-8b50-221b8f75667f",
-      "companyId": "66f2ac43-db11-45cd-b4bf-e6e7a49929ed",
+      "policyId": "9ed265a4-f0b9-4791-9283-2257768bfaea",
+      "companyId": "cf978fd1-e9ce-4c8c-9c20-5ab9b2b86188",
       "scopeType": "agent",
-      "scopeId": "4f474582-99ab-44ad-8605-2ba314cc08c9",
+      "scopeId": "cfe81da4-92e2-4e14-899e-6f92ba39821d",
       "scopeName": "Researcher",
       "metric": "billed_cents",
       "windowKind": "calendar_month_utc",
@@ -60,16 +60,16 @@
     },
     "dataQualityEvents": [
       {
-        "id": "1710c1d5-4fd0-47a0-a914-ea902024a9fa",
-        "runId": "9fcb8467-280c-4872-a575-6536bc7f1f2d",
-        "agentId": "4f474582-99ab-44ad-8605-2ba314cc08c9",
+        "id": "bf4e845f-7558-4c3b-85f9-cc39a42db784",
+        "runId": "e0a0edf2-64f5-4ec0-b308-34bd19b5af40",
+        "agentId": "cfe81da4-92e2-4e14-899e-6f92ba39821d",
         "agentName": "Researcher",
         "agentAppearance": {
-          "paletteId": "violet-ember",
+          "paletteId": "tangerine-cobalt",
           "schemaVersion": 1,
           "characterVersion": "cap-v1"
         },
-        "occurredAt": "2026-11-09T16:07:28.345Z",
+        "occurredAt": "2026-11-09T16:52:34.228Z",
         "provider": "unknown",
         "model": "unknown",
         "reason": "unknown_billing"
@@ -85,5 +85,5 @@
   },
   "zeroCapRejected": true,
   "lowBudgetNoProviderCall": true,
-  "finishedAt": "2026-11-09T16:08:27.429Z"
+  "finishedAt": "2026-11-09T16:53:33.084Z"
 }

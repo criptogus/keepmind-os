@@ -1,0 +1,2414 @@
+[
+  {
+    "step": "q1",
+    "mode": "light",
+    "inputs": [
+      {
+        "tag": "textarea",
+        "id": "onboard-composer",
+        "measuredElement": "native control",
+        "label": "Workspace name",
+        "height": 74,
+        "minHeight": "44px",
+        "labelVisible": true
+      }
+    ],
+    "targets": [
+      {
+        "name": "Send",
+        "width": 72,
+        "height": 44,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "What I’ll configure",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Workspace",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Agent role",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change First task",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Connector",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Model",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Monthly cap",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Est. max / run",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Consent",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Advanced",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Activate agent",
+        "width": 141,
+        "height": 44,
+        "primary": true,
+        "reveal": false
+      }
+    ]
+  },
+  {
+    "step": "q2",
+    "mode": "light",
+    "inputs": [],
+    "targets": [
+      {
+        "name": "Undo last answer",
+        "width": 640,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Research a topic",
+        "width": 158,
+        "height": 46,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "Coordinate work and briefs",
+        "width": 239,
+        "height": 46,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "Write marketing drafts",
+        "width": 199,
+        "height": 46,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "Other…",
+        "width": 87,
+        "height": 46,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "What I’ll configure",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Workspace",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Agent role",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change First task",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Connector",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Model",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Monthly cap",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Est. max / run",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Consent",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Advanced",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Activate agent",
+        "width": 141,
+        "height": 44,
+        "primary": true,
+        "reveal": false
+      }
+    ]
+  },
+  {
+    "step": "q3",
+    "mode": "light",
+    "inputs": [],
+    "targets": [
+      {
+        "name": "Undo last answer",
+        "width": 640,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "CodexUse your ChatGPT sign-in via Codex CLI",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "ClaudeAnthropic API key",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "OpenRouterOne key, many models",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "DeepSeekAPI key",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "HermesLocal, no cloud key",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Custom (OpenAI-compatible)Base URL + API key",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "What I’ll configure",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Workspace",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Agent role",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change First task",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Connector",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Model",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Monthly cap",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Est. max / run",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Consent",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Advanced",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Activate agent",
+        "width": 141,
+        "height": 44,
+        "primary": true,
+        "reveal": false
+      }
+    ]
+  },
+  {
+    "step": "q3-auth",
+    "mode": "light",
+    "inputs": [
+      {
+        "tag": "select",
+        "id": "",
+        "measuredElement": "native control",
+        "label": "ModelPick a listed modelopenai/gpt-4o-minimock/unknown",
+        "height": 45,
+        "minHeight": "44px",
+        "labelVisible": true
+      },
+      {
+        "tag": "input",
+        "id": "_r_j_",
+        "measuredElement": "native control",
+        "label": "API key",
+        "height": 48,
+        "minHeight": "44px",
+        "labelVisible": true
+      }
+    ],
+    "targets": [
+      {
+        "name": "Undo last answer",
+        "width": 640,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "CodexUse your ChatGPT sign-in via Codex CLI",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "ClaudeAnthropic API key",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "OpenRouterOne key, many models",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "DeepSeekAPI key",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "HermesLocal, no cloud key",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Custom (OpenAI-compatible)Base URL + API key",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Show",
+        "width": 44,
+        "height": 44,
+        "primary": false,
+        "reveal": true
+      },
+      {
+        "name": "Test connection",
+        "width": 640,
+        "height": 44,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "What I’ll configure",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Workspace",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Agent role",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change First task",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Connector",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Model",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Monthly cap",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Est. max / run",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Consent",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Advanced",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Activate agent",
+        "width": 141,
+        "height": 44,
+        "primary": true,
+        "reveal": false
+      }
+    ]
+  },
+  {
+    "step": "connection-error",
+    "mode": "light",
+    "inputs": [
+      {
+        "tag": "select",
+        "id": "",
+        "measuredElement": "native control",
+        "label": "ModelPick a listed modelopenai/gpt-4o-minimock/unknown",
+        "height": 45,
+        "minHeight": "44px",
+        "labelVisible": true
+      },
+      {
+        "tag": "input",
+        "id": "_r_j_",
+        "measuredElement": "native control",
+        "label": "API key",
+        "height": 48,
+        "minHeight": "44px",
+        "labelVisible": true
+      }
+    ],
+    "targets": [
+      {
+        "name": "Undo last answer",
+        "width": 640,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "CodexUse your ChatGPT sign-in via Codex CLI",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "ClaudeAnthropic API key",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "OpenRouterOne key, many models",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "DeepSeekAPI key",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "HermesLocal, no cloud key",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Custom (OpenAI-compatible)Base URL + API key",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Show",
+        "width": 44,
+        "height": 44,
+        "primary": false,
+        "reveal": true
+      },
+      {
+        "name": "Test connection",
+        "width": 640,
+        "height": 44,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "What I’ll configure",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Workspace",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Agent role",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change First task",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Connector",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Model",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Monthly cap",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Est. max / run",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Consent",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Advanced",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Activate agent",
+        "width": 141,
+        "height": 44,
+        "primary": true,
+        "reveal": false
+      }
+    ]
+  },
+  {
+    "step": "q4",
+    "mode": "light",
+    "inputs": [
+      {
+        "tag": "input",
+        "id": "_r_2l_",
+        "measuredElement": "native control",
+        "label": "Monthly spend cap (USD)",
+        "height": 48,
+        "minHeight": "44px",
+        "labelVisible": true
+      }
+    ],
+    "targets": [
+      {
+        "name": "Undo last answer",
+        "width": 640,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Test connection",
+        "width": 640,
+        "height": 44,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "$10",
+        "width": 60,
+        "height": 46,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "$25",
+        "width": 63,
+        "height": 46,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "$50",
+        "width": 63,
+        "height": 46,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "$100",
+        "width": 70,
+        "height": 46,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "",
+        "width": 24,
+        "height": 24,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Continue",
+        "width": 82,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "What I’ll configure",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Workspace",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Agent role",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change First task",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Connector",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Model",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Monthly cap",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Est. max / run",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Consent",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Advanced",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Activate agent",
+        "width": 141,
+        "height": 44,
+        "primary": true,
+        "reveal": false
+      }
+    ]
+  },
+  {
+    "step": "error",
+    "mode": "light",
+    "inputs": [
+      {
+        "tag": "input",
+        "id": "_r_2l_",
+        "measuredElement": "native control",
+        "label": "Monthly spend cap (USD)",
+        "height": 48,
+        "minHeight": "44px",
+        "labelVisible": true
+      }
+    ],
+    "targets": [
+      {
+        "name": "Undo last answer",
+        "width": 640,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Test connection",
+        "width": 640,
+        "height": 44,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "$10",
+        "width": 60,
+        "height": 46,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "$25",
+        "width": 63,
+        "height": 46,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "$50",
+        "width": 63,
+        "height": 46,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "$100",
+        "width": 70,
+        "height": 46,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "",
+        "width": 24,
+        "height": 24,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Continue",
+        "width": 82,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "What I’ll configure",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Workspace",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Agent role",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change First task",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Connector",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Model",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Monthly cap",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Est. max / run",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Consent",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Advanced",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Activate agent",
+        "width": 141,
+        "height": 44,
+        "primary": true,
+        "reveal": false
+      }
+    ]
+  },
+  {
+    "step": "q3-pricing-confirm",
+    "mode": "light",
+    "inputs": [
+      {
+        "tag": "input",
+        "id": "_r_3t_",
+        "measuredElement": "native control",
+        "label": "Input ¢/MTok",
+        "height": 48,
+        "minHeight": "44px",
+        "labelVisible": true
+      },
+      {
+        "tag": "input",
+        "id": "_r_45_",
+        "measuredElement": "native control",
+        "label": "Output ¢/MTok",
+        "height": 48,
+        "minHeight": "44px",
+        "labelVisible": true
+      }
+    ],
+    "targets": [
+      {
+        "name": "Undo last answer",
+        "width": 640,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Test connection",
+        "width": 640,
+        "height": 44,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "Continue",
+        "width": 82,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "What I’ll configure",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Workspace",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Agent role",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change First task",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Connector",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Model",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Monthly cap",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Est. max / run",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Consent",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Advanced",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Activate agent",
+        "width": 141,
+        "height": 44,
+        "primary": true,
+        "reveal": false
+      }
+    ]
+  },
+  {
+    "step": "summary",
+    "mode": "light",
+    "inputs": [],
+    "targets": [
+      {
+        "name": "Undo last answer",
+        "width": 640,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "What I’ll configure",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Workspace",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Agent role",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change First task",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Connector",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Model",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Monthly cap",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Est. max / run",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Consent",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Advanced",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Activate agent",
+        "width": 141,
+        "height": 44,
+        "primary": true,
+        "reveal": false
+      }
+    ]
+  },
+  {
+    "step": "workspace",
+    "mode": "light",
+    "inputs": [],
+    "targets": []
+  },
+  {
+    "step": "q1",
+    "mode": "dark",
+    "inputs": [
+      {
+        "tag": "textarea",
+        "id": "onboard-composer",
+        "measuredElement": "native control",
+        "label": "Workspace name",
+        "height": 74,
+        "minHeight": "44px",
+        "labelVisible": true
+      }
+    ],
+    "targets": [
+      {
+        "name": "Send",
+        "width": 72,
+        "height": 44,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "What I’ll configure",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Workspace",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Agent role",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change First task",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Connector",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Model",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Monthly cap",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Est. max / run",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Consent",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Advanced",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Activate agent",
+        "width": 141,
+        "height": 44,
+        "primary": true,
+        "reveal": false
+      }
+    ]
+  },
+  {
+    "step": "q2",
+    "mode": "dark",
+    "inputs": [],
+    "targets": [
+      {
+        "name": "Undo last answer",
+        "width": 640,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Research a topic",
+        "width": 158,
+        "height": 46,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "Coordinate work and briefs",
+        "width": 239,
+        "height": 46,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "Write marketing drafts",
+        "width": 199,
+        "height": 46,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "Other…",
+        "width": 87,
+        "height": 46,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "What I’ll configure",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Workspace",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Agent role",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change First task",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Connector",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Model",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Monthly cap",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Est. max / run",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Consent",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Advanced",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Activate agent",
+        "width": 141,
+        "height": 44,
+        "primary": true,
+        "reveal": false
+      }
+    ]
+  },
+  {
+    "step": "q3",
+    "mode": "dark",
+    "inputs": [],
+    "targets": [
+      {
+        "name": "Undo last answer",
+        "width": 640,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "CodexUse your ChatGPT sign-in via Codex CLI",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "ClaudeAnthropic API key",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "OpenRouterOne key, many models",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "DeepSeekAPI key",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "HermesLocal, no cloud key",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Custom (OpenAI-compatible)Base URL + API key",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "What I’ll configure",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Workspace",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Agent role",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change First task",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Connector",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Model",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Monthly cap",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Est. max / run",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Consent",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Advanced",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Activate agent",
+        "width": 141,
+        "height": 44,
+        "primary": true,
+        "reveal": false
+      }
+    ]
+  },
+  {
+    "step": "q3-auth",
+    "mode": "dark",
+    "inputs": [
+      {
+        "tag": "select",
+        "id": "",
+        "measuredElement": "native control",
+        "label": "ModelPick a listed modelopenai/gpt-4o-minimock/unknown",
+        "height": 45,
+        "minHeight": "44px",
+        "labelVisible": true
+      },
+      {
+        "tag": "input",
+        "id": "_r_j_",
+        "measuredElement": "native control",
+        "label": "API key",
+        "height": 48,
+        "minHeight": "44px",
+        "labelVisible": true
+      }
+    ],
+    "targets": [
+      {
+        "name": "Undo last answer",
+        "width": 640,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "CodexUse your ChatGPT sign-in via Codex CLI",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "ClaudeAnthropic API key",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "OpenRouterOne key, many models",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "DeepSeekAPI key",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "HermesLocal, no cloud key",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Custom (OpenAI-compatible)Base URL + API key",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Show",
+        "width": 44,
+        "height": 44,
+        "primary": false,
+        "reveal": true
+      },
+      {
+        "name": "Test connection",
+        "width": 640,
+        "height": 44,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "What I’ll configure",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Workspace",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Agent role",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change First task",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Connector",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Model",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Monthly cap",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Est. max / run",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Consent",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Advanced",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Activate agent",
+        "width": 141,
+        "height": 44,
+        "primary": true,
+        "reveal": false
+      }
+    ]
+  },
+  {
+    "step": "connection-error",
+    "mode": "dark",
+    "inputs": [
+      {
+        "tag": "select",
+        "id": "",
+        "measuredElement": "native control",
+        "label": "ModelPick a listed modelopenai/gpt-4o-minimock/unknown",
+        "height": 45,
+        "minHeight": "44px",
+        "labelVisible": true
+      },
+      {
+        "tag": "input",
+        "id": "_r_j_",
+        "measuredElement": "native control",
+        "label": "API key",
+        "height": 48,
+        "minHeight": "44px",
+        "labelVisible": true
+      }
+    ],
+    "targets": [
+      {
+        "name": "Undo last answer",
+        "width": 640,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "CodexUse your ChatGPT sign-in via Codex CLI",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "ClaudeAnthropic API key",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "OpenRouterOne key, many models",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "DeepSeekAPI key",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "HermesLocal, no cloud key",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Custom (OpenAI-compatible)Base URL + API key",
+        "width": 314,
+        "height": 87,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Show",
+        "width": 44,
+        "height": 44,
+        "primary": false,
+        "reveal": true
+      },
+      {
+        "name": "Test connection",
+        "width": 640,
+        "height": 44,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "What I’ll configure",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Workspace",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Agent role",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change First task",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Connector",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Model",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Monthly cap",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Est. max / run",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Consent",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Advanced",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Activate agent",
+        "width": 141,
+        "height": 44,
+        "primary": true,
+        "reveal": false
+      }
+    ]
+  },
+  {
+    "step": "q4",
+    "mode": "dark",
+    "inputs": [
+      {
+        "tag": "input",
+        "id": "_r_2l_",
+        "measuredElement": "native control",
+        "label": "Monthly spend cap (USD)",
+        "height": 48,
+        "minHeight": "44px",
+        "labelVisible": true
+      }
+    ],
+    "targets": [
+      {
+        "name": "Undo last answer",
+        "width": 640,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Test connection",
+        "width": 640,
+        "height": 44,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "$10",
+        "width": 60,
+        "height": 46,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "$25",
+        "width": 63,
+        "height": 46,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "$50",
+        "width": 63,
+        "height": 46,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "$100",
+        "width": 70,
+        "height": 46,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "",
+        "width": 24,
+        "height": 24,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Continue",
+        "width": 82,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "What I’ll configure",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Workspace",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Agent role",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change First task",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Connector",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Model",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Monthly cap",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Est. max / run",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Consent",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Advanced",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Activate agent",
+        "width": 141,
+        "height": 44,
+        "primary": true,
+        "reveal": false
+      }
+    ]
+  },
+  {
+    "step": "error",
+    "mode": "dark",
+    "inputs": [
+      {
+        "tag": "input",
+        "id": "_r_2l_",
+        "measuredElement": "native control",
+        "label": "Monthly spend cap (USD)",
+        "height": 48,
+        "minHeight": "44px",
+        "labelVisible": true
+      }
+    ],
+    "targets": [
+      {
+        "name": "Undo last answer",
+        "width": 640,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Test connection",
+        "width": 640,
+        "height": 44,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "$10",
+        "width": 60,
+        "height": 46,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "$25",
+        "width": 63,
+        "height": 46,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "$50",
+        "width": 63,
+        "height": 46,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "$100",
+        "width": 70,
+        "height": 46,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "",
+        "width": 24,
+        "height": 24,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Continue",
+        "width": 82,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "What I’ll configure",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Workspace",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Agent role",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change First task",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Connector",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Model",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Monthly cap",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Est. max / run",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Consent",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Advanced",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Activate agent",
+        "width": 141,
+        "height": 44,
+        "primary": true,
+        "reveal": false
+      }
+    ]
+  },
+  {
+    "step": "q3-pricing-confirm",
+    "mode": "dark",
+    "inputs": [
+      {
+        "tag": "input",
+        "id": "_r_3t_",
+        "measuredElement": "native control",
+        "label": "Input ¢/MTok",
+        "height": 48,
+        "minHeight": "44px",
+        "labelVisible": true
+      },
+      {
+        "tag": "input",
+        "id": "_r_45_",
+        "measuredElement": "native control",
+        "label": "Output ¢/MTok",
+        "height": 48,
+        "minHeight": "44px",
+        "labelVisible": true
+      }
+    ],
+    "targets": [
+      {
+        "name": "Undo last answer",
+        "width": 640,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Test connection",
+        "width": 640,
+        "height": 44,
+        "primary": true,
+        "reveal": false
+      },
+      {
+        "name": "Continue",
+        "width": 82,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "What I’ll configure",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Workspace",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Agent role",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change First task",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Connector",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Model",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Monthly cap",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Est. max / run",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Consent",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Advanced",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Activate agent",
+        "width": 141,
+        "height": 44,
+        "primary": true,
+        "reveal": false
+      }
+    ]
+  },
+  {
+    "step": "summary",
+    "mode": "dark",
+    "inputs": [],
+    "targets": [
+      {
+        "name": "Undo last answer",
+        "width": 640,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "What I’ll configure",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Workspace",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Agent role",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change First task",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Connector",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Model",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Monthly cap",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Est. max / run",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Change Consent",
+        "width": 66,
+        "height": 32,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Advanced",
+        "width": 266,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Activate agent",
+        "width": 141,
+        "height": 44,
+        "primary": true,
+        "reveal": false
+      }
+    ]
+  },
+  {
+    "step": "workspace",
+    "mode": "dark",
+    "inputs": [],
+    "targets": []
+  }
+]

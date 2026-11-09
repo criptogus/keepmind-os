@@ -1,3 +1,4 @@
+import { testConnector } from './connectors/test';
 import { registry, buildConfig, listConnectors, assertSubscription } from './connectors/registry';
 import { resolveCli, startCliLogin } from './connectors/cli';
 import type { ConnectorConfig, ConnectorId, ConfigureConnector, ConnectorDetection, Agent, BoardApi, ProviderConfig, Run, Issue, TaskResult, ReviewInteraction } from '../shared/types';
@@ -26,6 +27,7 @@ export class Orchestrator {
     }, private save: (s: WorkspaceState) => Promise<void>, private status: () => unknown, private sleep = (ms: number) => new Promise<void>(r => setTimeout(r, ms)), private detector = (id: ConnectorId): Promise<ConnectorDetection> => registry[id].detect()) {
         if (!state.connector && state.provider) state.connector = { ...state.provider, connectorId: 'custom', mode: 'api', priceKnown: true };
     }
+    testConnector(payload: import("../shared/types").TestConnector) { return testConnector(payload, fetch, id => this.detectConnector(id)); }
     listConnectors() { return listConnectors(); }
     detectConnector(id: ConnectorId) { validatePayload('detectConnector', { id }); return this.detector(id); }
     listConnectorModels(id: ConnectorId) { validatePayload('listConnectorModels', { id }); return registry[id].models(); }
@@ -106,7 +108,7 @@ export class Orchestrator {
         this.state.secretId = secret.id;
         await this.save(this.state);
     }
-    async createAgentFromTemplate(templateId: string, provider: ProviderConfig) {
+    async createAgentFromTemplate(templateId: string, provider?: ProviderConfig) {
         validatePayload('createAgentFromTemplate', { templateId, provider });
         if (this.state.agentId)
             throw new Error('An agent is already configured');
@@ -118,7 +120,8 @@ export class Orchestrator {
         const session = await this.api.request<{ userId: string }>('GET', '/api/cli-auth/me');
         if (typeof session.userId !== 'string' || !session.userId.trim())
             throw new Error('Human reviewer user ID is required');
-        const connector = this.state.connector ?? { ...provider, connectorId: 'custom' as const, mode: 'api' as const, priceKnown: true as const };
+        if (!this.state.connector && !provider) throw new Error('Provider or configured connector required');
+        const connector = this.state.connector ?? { ...provider!, connectorId: 'custom' as const, mode: 'api' as const, priceKnown: true as const };
         const env = { ZAOS_REVIEWER_USER_ID: session.userId, ZAOS_AGENT_INSTRUCTIONS: template.instructions, ...await this.connectorEnv(connector) };
         const adapterConfig = { command: this.runtime.node, args: [this.runtime.runnerPath], cwd: this.runtime.cwd, timeoutSec: connector.mode === 'cli-subscription' ? connector.cliTimeoutSec + 30 : 120, env };
         validateAdapter('process', adapterConfig, this.runtime.runnerPath);

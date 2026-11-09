@@ -219,6 +219,7 @@ async function openBoard() {
     }
 }
 const api: ZaosAPI = {
+    testConnector: payload => core().testConnector(payload),
     listConnectors: async () => core().listConnectors(), detectConnector: id => core().detectConnector(id), startConnectorLogin: id => core().startConnectorLogin(id), listConnectorModels: id => core().listConnectorModels(id), configureConnector: config => core().configureConnector(config),
     getStatus: async () => ({ state: error ? 'unavailable' : ready ? supervisor!.state : booting ? 'starting' : supervisor?.state === 'ready' ? 'unavailable' : supervisor?.state ?? 'starting', lastError: error ?? supervisor?.lastError,
         paidExecution: ready && !!orchestrator?.getStatus().paidExecution, configured: !!workspace.agentId && !!workspace.cap, setupProgress: workspace.agentId ? 3 : workspace.secretId ? 2 : workspace.companyId ? 1 : 0, cap: workspace.cap,
