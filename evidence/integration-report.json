@@ -1,0 +1,9 @@
+{
+  "suite": "real Paperclip + mock provider",
+  "startedAt": "2026-11-09T14:01:06.809Z",
+  "passed": false,
+  "unauthenticatedCompaniesStatus": 403,
+  "loopbackListenerVerified": true,
+  "disableSignUpHonoured": true,
+  "finishedAt": "2026-11-09T14:01:59.953Z"
+}

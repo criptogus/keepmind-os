@@ -10,50 +10,38 @@ License: TBD (pending owner decision)
 The package metadata uses UNLICENSED until the owner decides the project license.
 See THIRD_PARTY_NOTICES.md for dependency notices and pending license checks.
 
-Phase 1 contains project configuration, directory placeholders, and supplied
-design assets. Application entry points, screens, runner, tests, and integration
-flows have not been implemented. No dependencies have been installed.
+Phase 2 implements the non-UI core: private Paperclip configuration and supervision,
+operator authentication, encrypted credential persistence, a typed board client,
+spend and adapter guards, generic templates, orchestration, pure IPC validators,
+and a dependency-free BYOK runner. Electron/preload/renderer entry points remain
+for the next phase; this is not yet a usable desktop app.
 
-## Setup
+Use Node >=24.11.0 and `npm ci`. Dependencies are installed and locked; no new
+packages were added for Phase 2.
 
-Use Node >=24.11.0. The operator should run `npm install` to install dependencies
-and generate package-lock.json, then use `npm ci` for subsequent reproducible
-installs. No lockfile is fabricated in this offline scaffold.
+- `npm test`: socket-free unit tests; two host socket tests are skipped by default.
+- `ZAOS_SOCKET_TESTS=1 npm test`: also run mock HTTP and fake-child server tests.
+- `npm run typecheck`: TypeScript verification.
+- `npm run test:integration`: real Paperclip + local mock provider; separate opt-in
+  suite with temporary storage, cleanup, and `evidence/integration-report.json`.
+- `npm run scan:secrets`: local heuristic secret scan.
 
-After application entry points are implemented:
+The sandbox denies loopback listening with EPERM. Real server integration and
+socket tests must be run by the operator outside it. Mock tests require no real
+provider key and generate no paid traffic.
 
-- `npm run dev`: renderer Vite development server on an ephemeral loopback port.
-- `npm run build`: renderer to dist/renderer, Electron main to dist/main/main.js,
-  and bundled CommonJS preload to dist/main/preload.cjs.
-- `npm start`: launches Electron from the built output.
-- `npm test`: unit tests, excluding test/integration.
-- `npm run test:integration`: separate opt-in integration test project.
-- `npm run typecheck`: TypeScript checks without emitting files.
-- `npm run smoke:electron`: reserved smoke command; currently exits with an
-  explicit unavailable message until the application and smoke flow exist.
-- `npm run dist:mac`: builds unsigned DMG and ZIP artifacts for arm64 and x64;
-  signing and notarization are outside MVP scope. Packaging is untested here.
-- `npm run astryx -- --help`: Astryx CLI.
-- `npm run scan:secrets`: local heuristic scan of tracked and untracked,
-  non-ignored text files; findings identify paths without exposing values.
+The intended full-app commands are `npm run dev`, `npm run build && npm start`,
+and `npm run dist:mac` (unsigned electron-builder artifacts). Application entry
+points are not implemented yet, so build/start/packaging remain unavailable.
+macOS, packaging, signing, notarization, and Electron smoke verification are not
+covered by the core unit tests.
 
-Build/start need the future renderer HTML and main/preload entry points. Tests
-will report no test files until later phases add them. Development currently
-serves an empty renderer directory. No application functionality is implied by
-these commands being configured.
+Paid execution defaults off. Enabling requires a BYOK secret, known prices,
+positive monthly cap, and explicit consent. A cap of zero is rejected because
+Paperclip treats it as disabling its budget policy. Disabling pauses the agent.
+Runner output goes to human review, never automatic completion or publication.
 
-## Layout
-
-Source directories separate Electron main, preload, runner, renderer, and shared
-types. Tests belong in test/; optional integration tests belong in test/integration/.
-Scripts, documentation, application assets, and local evidence have dedicated
-folders. Runtime data, credentials, build outputs, and evidence logs are ignored.
-
-The supplied theme is scoped to owned screens. Its font URL points to the copied
-assets/fonts/Inter-Regular.ttf so Vite can bundle the asset. Paperclip board
-styling and application behavior are deferred to later phases.
-
-All requested dependencies are declared in package.json. Astryx licenses must be
-verified from the installed packages before distribution. zod remains a development
-dependency because this phase contains no runtime validation code; move it to
-dependencies if later application code imports it at runtime.
+See [Architecture](docs/ARCHITECTURE.md), [Security model](docs/SECURITY-MODEL.md),
+[Spend policy](docs/SPEND-POLICY.md), [Telemetry](docs/TELEMETRY.md), and
+[Run on macOS](docs/RUN-MACOS.md). Paperclip is MIT; Zero Agency OS does not copy
+CompanyOS code, UI, or assets. Dependency notices are in THIRD_PARTY_NOTICES.md.

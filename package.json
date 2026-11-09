@@ -12,7 +12,7 @@
     "build": "vite build && esbuild src/main/main.ts --bundle --platform=node --format=esm --packages=external --outfile=dist/main/main.js && esbuild src/preload/preload.ts --bundle --platform=node --format=cjs --external:electron --outfile=dist/main/preload.cjs",
     "dev": "vite --host 127.0.0.1 --port 0",
     "start": "electron .",
-    "test": "vitest run",
+    "test": "vitest run --project unit",
     "test:integration": "vitest run --config vitest.config.ts --project integration",
     "typecheck": "tsc --noEmit",
     "smoke:electron": "node scripts/smoke-electron.mjs",
