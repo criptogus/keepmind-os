@@ -1,4 +1,4 @@
-import type { Agent, BoardApi, ProviderConfig, Run, Issue, TaskResult } from '../shared/types';
+import type { Agent, BoardApi, ProviderConfig, Run, Issue, TaskResult, ReviewInteraction } from '../shared/types';
 import { SpendGuard, assertPaidRequirements, parseCap } from './spend-guard';
 import { templates } from './templates';
 import { validateAdapter } from './adapter-guard';
@@ -129,7 +129,6 @@ export class Orchestrator {
         try {
             const before = new Set((await this.listRuns()).map(r => r.id));
             const issue = await this.api.request<Issue>('POST', `/api/companies/${this.company()}/issues`, { title, description, assigneeAgentId: this.agent(), status: 'todo' });
-            const session = await this.api.request<{ userId: string }>('GET', '/api/cli-auth/me');
             let completed: Run | undefined;
             let currentIssue = issue;
             let terminalPolls = 0;
@@ -142,7 +141,7 @@ export class Orchestrator {
                 if (run && ['succeeded', 'failed', 'timed_out', 'cancelled', 'interrupted'].includes(run.status)) {
                     completed = run;
                     if (!['succeeded', 'cancelled'].includes(run.status) ||
-                        (currentIssue.status === 'in_review' && currentIssue.assigneeUserId === session.userId && await this.guard().pricedReceipt(run.id)) || terminalPolls++ >= 30)
+                        ((currentIssue.status === 'in_review' || await this.pendingReview(issue.id, run.id)) && await this.guard().pricedReceipt(run.id)) || terminalPolls++ >= 30)
                         break;
                 }
                 await this.sleep(1000);
@@ -150,7 +149,7 @@ export class Orchestrator {
             if (!completed)
                 throw new Error('Task timed out; review the board before retrying');
             const guard = this.guard();
-            const reconciliation = await guard.reconcileRun(completed.id, this.sleep);
+            const reconciliation = await guard.reconcileRun(completed.id, this.sleep, this.agent());
             const [comments, agent, receipt, finalIssue] = await Promise.all([
                 this.api.request<{ body: string; createdByRunId?: string; createdByAgentId?: string; createdAt?: string }[]>('GET', `/api/issues/${issue.id}/comments`),
                 this.api.request<Agent>('GET', `/api/agents/${this.agent()}`),
@@ -160,7 +159,7 @@ export class Orchestrator {
             const runComments = comments.filter(c => c.createdByRunId === completed.id && (!c.createdByAgentId || c.createdByAgentId === this.agent()))
                 .sort((a, b) => (a.createdAt ?? '').localeCompare(b.createdAt ?? ''));
             const refusal = runComments.filter(c => c.body.startsWith('ZAOS refused:')).at(-1);
-            const succeeded = ['succeeded', 'cancelled'].includes(completed.status) && finalIssue.status === 'in_review' && !!session.userId && finalIssue.assigneeUserId === session.userId && !!receipt;
+            const succeeded = ['succeeded', 'cancelled'].includes(completed.status) && (finalIssue.status === 'in_review' || !!await this.pendingReview(issue.id, completed.id)) && !!receipt;
             if (reconciliation !== 'reconciled')
                 await this.setPaidExecution(false, false);
             return { result: (succeeded ? runComments.at(-1) : refusal ?? runComments.at(-1))?.body ?? '', costCents: receipt?.costCents ?? 0, spent: agent.spentMonthlyCents, cap: this.state.cap!, status: succeeded ? 'succeeded' : refusal ? 'refused' : 'failed' };
@@ -172,6 +171,17 @@ export class Orchestrator {
         finally {
             this.busy = false;
         }
+    }
+    private async pendingReview(issueId: string, runId?: string) {
+        const interactions = await this.api.request<ReviewInteraction[]>('GET', `/api/issues/${encodeURIComponent(issueId)}/interactions`);
+        return interactions.find(i => i.kind === 'request_confirmation' && i.status === 'pending' &&
+            !!i.sourceRunId && (runId ? i.sourceRunId === runId : i.idempotencyKey === `zaos-review:${i.sourceRunId}`));
+    }
+    async acceptReview(issueId: string): Promise<ReviewInteraction> {
+        if (typeof issueId !== 'string' || !issueId.trim()) throw new Error('Issue ID is required');
+        const interaction = await this.pendingReview(issueId);
+        if (!interaction) throw new Error('No pending ZAOS review for this issue');
+        return this.api.request<ReviewInteraction>('POST', `/api/issues/${encodeURIComponent(issueId)}/interactions/${encodeURIComponent(interaction.id)}/accept`, {});
     }
     getTelemetry() {
         return this.state.telemetry;

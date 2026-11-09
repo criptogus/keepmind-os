@@ -81,9 +81,16 @@ export async function run(env = process.env, fetcher = fetch, log = console.log,
         // Bounded acknowledgement only: never echo provider content, errors, keys or environments.
         log(JSON.stringify({ zaosReceipt: { eventId: event.id, runId: env.PAPERCLIP_RUN_ID, idempotencyKey: `zaos:${env.PAPERCLIP_RUN_ID}`, costCents: cost, costStatus: 'reported' } }));
         await api('POST', `/api/issues/${issue.id}/comments`, { body: redact(result) }, 'comment');
-        await api('PATCH', `/api/issues/${issue.id}`, { status: 'in_review', assigneeUserId: reviewerUserId }, 'review');
+        await api('POST', `/api/issues/${issue.id}/interactions`, {
+            kind: 'request_confirmation', resolverPolicy: 'human_only', addresseeUserId: reviewerUserId,
+            idempotencyKey: `zaos-review:${env.PAPERCLIP_RUN_ID}`, sourceRunId: env.PAPERCLIP_RUN_ID,
+            title: 'Review ZAOS result', summary: 'Draft ready for human review', continuationPolicy: 'none',
+            payload: { version: 1, prompt: 'Review the draft result.', acceptLabel: 'Accept draft', rejectLabel: 'Request changes', detailsMarkdown: redact(result) }
+        }, 'interaction');
+        // The persisted interaction is sufficient even if Paperclip rejects this disposition.
         checkedOut = false;
-        await api('POST', `/api/issues/${issue.id}/release`, undefined, 'release');
+        try { await api('PATCH', `/api/issues/${issue.id}`, { status: 'in_review' }, 'review'); }
+        catch { /* api already emitted a sanitized zaosError */ }
         return { ok: true, costCents: cost };
     }
     catch (error) {

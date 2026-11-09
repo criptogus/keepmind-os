@@ -66,10 +66,13 @@ it('applies nonzero hard-stop cap and requires consent', async () => {
 });
 it('adjusts only same-run unpriced process receipt with acknowledged ZAOS price', async () => {
     const receipt = { zaosReceipt: { eventId: 'priced', runId: 'r', idempotencyKey: 'zaos:r', costCents: 0.1, costStatus: 'reported' } };
-    const request = vi.fn().mockImplementation(async (_method, path) => path.endsWith('/log') ? { content: JSON.stringify({ stream: 'stdout', chunk: JSON.stringify(receipt) + '\n' }) } : { events: [{ id: 'u', runId: 'r', reason: 'unknown_billing' }, { id: 'other', runId: 'other', reason: 'unknown_billing' }] });
+    const request = vi.fn().mockImplementation(async (_method, path) => path.endsWith('/budgets/overview') ? { policies: [{scopeType: 'agent', scopeId: 'a', unpricedEventCount: 0}] } : path.endsWith('/log') ? { content: JSON.stringify({ stream: 'stdout', chunk: JSON.stringify(receipt) + '\n' }) } : { events: [{ id: 'u', runId: 'r', agentId: 'a', reason: 'missing_price' }, { id: 'status', heartbeatRunId: 'r', costStatus: 'unpriced' }, { id: 'reason', runId: 'r', reason: 'missing_model' }, { id: 'info', runId: 'r', provider: 'unknown', reason: 'unknown_billing', costCents: 0 }, { id: 'other', runId: 'other', reason: 'missing_price' }] });
     expect(await new SpendGuard({ request }, 'c').reconcileRun('r')).toBe('reconciled');
-    expect(request.mock.calls.filter(c => c[0] === 'POST')).toHaveLength(1);
-    expect(request.mock.calls[2][1]).toContain('/u/adjustments');
+    expect(request.mock.calls.filter(c => c[0] === 'POST').map(c => c[1])).toEqual([
+        '/api/companies/c/accounting/events/u/adjustments',
+        '/api/companies/c/accounting/events/reason/adjustments',
+        '/api/companies/c/accounting/events/info/adjustments'
+    ]);
 });
 it.each([{ amount: 0, isActive: true }, { amount: 100, isActive: false }])('startup audit pauses invalid policy %j', async (policy) => {
     const request = vi.fn().mockResolvedValue({ policies: [{ scopeId: 'a', ...policy }] });
@@ -96,4 +99,19 @@ it('reassembles fragmented receipt chunks and rejects foreign or invalid acknowl
  expect(readZaosReceipt(content,'other')).toBeUndefined();
  expect(readZaosReceipt(JSON.stringify({stream:'stderr',chunk:receipt}),'r')).toBeUndefined();
  expect(readZaosReceipt(content.replace('0.1','null'),'r')).toBeUndefined();
+});
+
+it.each([0, 1, undefined])('verifies policy after idempotent reconciliation retry: %s', async unpricedEventCount => {
+    const receipt = { zaosReceipt: { eventId: 'priced', runId: 'r', idempotencyKey: 'zaos:r', costCents: 0.1, costStatus: 'reported' } };
+    const request = vi.fn().mockImplementation(async (method, path) => {
+        if (path.endsWith('/log')) return { content: JSON.stringify({ stream: 'stdout', chunk: JSON.stringify(receipt) + '\n' }) };
+        if (path.endsWith('/costs/data-quality')) return { events: [{id: 'u', runId: 'r', agentId: 'a', provider: 'unknown', reason: 'unknown_billing'}] };
+        if (method === 'POST') throw new Error('Paperclip request failed (409)');
+        return {policies: unpricedEventCount === undefined ? [] : [{scopeType: 'agent', scopeId: 'a', unpricedEventCount}]};
+    });
+    const guard = new SpendGuard({ request }, 'c');
+    for (let i = 0; i < 2; i++) expect(await guard.reconcileRun('r')).toBe(unpricedEventCount === 0 ? 'reconciled' : 'unknown cost');
+    const adjustments = request.mock.calls.filter(c => c[0] === 'POST');
+    expect(adjustments).toHaveLength(2);
+    expect(adjustments.map(c => c[2].idempotencyKey)).toEqual(['zaos:reconcile:r:u', 'zaos:reconcile:r:u']);
 });

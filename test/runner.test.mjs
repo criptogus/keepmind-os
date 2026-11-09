@@ -31,11 +31,14 @@ it('records price idempotently, comments and leaves human review', async () => {
     s.mock.state.runs.push({ id: 'r', issueId: 'i', status: 'running' });
     expect((await run(env, s.fetcher, log)).ok).toBe(true);
     expect(s.calls()).toBe(1);
-    expect(s.mock.state.runs[0].status).toBe('cancelled');
+    expect(s.mock.state.runs[0].status).toBe('running');
     expect(s.mock.state.comments.at(-1).createdByRunId).toBe('r');
     expect(s.mock.state.events[0]).toMatchObject({ heartbeatRunId: 'r', idempotencyKey: 'zaos:r', costStatus: 'reported', costCents: '0.014' });
     expect(s.mock.state.comments.at(-1).body).toBe('Result');
-    expect(s.mock.state.issue).toMatchObject({ status: 'in_review', assigneeUserId: 'operator-user' });
+    expect(s.mock.state.issue).toMatchObject({ status: 'in_review' });
+    expect(s.mock.state.requests.find(r => r.method === 'PATCH').body).toEqual({status: 'in_review'});
+    const interaction = s.mock.state.interactions[0];
+    expect(await s.mock.request('POST', `/api/issues/i/interactions/${interaction.id}/accept`, {})).toMatchObject({status: 'accepted'});
     expect(JSON.stringify(log.mock.calls)).not.toContain('secret');
 });
 it('redacts thrown errors containing keys', async () => {
@@ -57,15 +60,15 @@ it('does not pick tasks already awaiting human review', async () => {
     expect((await run(env, s.fetcher, vi.fn())).ok).toBe(false);
     expect(s.calls()).toBe(0);
 });
-it.each(['checkout', 'comment', 'review', 'release'])('reports sanitized Paperclip errors at %s', async step => {
+it.each(['checkout', 'comment', 'interaction', 'review'])('reports sanitized Paperclip errors at %s', async step => {
     const s = setup(), stderr = vi.fn(), stdout = vi.fn();
     const fetcher = (url, init) => {
         const path = new URL(url).pathname;
-        const fail = step === 'checkout' ? path.endsWith('/checkout') : step === 'comment' ? path.endsWith('/comments') : step === 'release' ? path.endsWith('/release') : init.method === 'PATCH';
+        const fail = step === 'checkout' ? path.endsWith('/checkout') : step === 'comment' ? path.endsWith('/comments') : step === 'interaction' ? path.endsWith('/interactions') : init.method === 'PATCH';
         if (fail) return Promise.resolve(Response.json({ code: `denied ${env.PAPERCLIP_API_KEY}`, message: `${env.ZAOS_PROVIDER_API_KEY} ${env.PAPERCLIP_API_KEY} ${'x'.repeat(400)}`, unrelated: 'private-body' }, { status: 403 }));
         return s.fetcher(url, init);
     };
-    expect((await run(env, fetcher, stdout, stderr)).ok).toBe(false);
+    expect((await run(env, fetcher, stdout, stderr)).ok).toBe(step === 'review');
     const errors = stderr.mock.calls.map(([line]) => JSON.parse(line).zaosError);
     expect(errors[0]).toMatchObject({ step, status: 403, code: 'denied [redacted]' });
     expect(errors[0].message.length).toBeLessThanOrEqual(300);
@@ -76,7 +79,7 @@ it.each(['checkout', 'comment', 'review', 'release'])('reports sanitized Papercl
         expect(s.mock.state.comments[0].body).toContain('ZAOS refused');
     }
 });
-it('checks out with the schema and releases after review with run context', async () => {
+it('checks out and persists review before disposition with run context', async () => {
     const s = setup();
     const fetcher = (url, init) => {
         expect(init.headers['X-Paperclip-Run-Id'] ?? init.headers.Authorization).toBeTruthy();
@@ -85,7 +88,7 @@ it('checks out with the schema and releases after review with run context', asyn
     };
     expect((await run(env, fetcher, vi.fn(), vi.fn())).ok).toBe(true);
     const mutations = s.mock.state.requests.filter(r => r.method !== 'GET');
-    expect(mutations.map(r => r.path)).toEqual(['/api/issues/i/checkout', '/api/companies/c/cost-events', '/api/issues/i/comments', '/api/issues/i', '/api/issues/i/release']);
+    expect(mutations.map(r => r.path)).toEqual(['/api/issues/i/checkout', '/api/companies/c/cost-events', '/api/issues/i/comments', '/api/issues/i/interactions', '/api/issues/i']);
     expect(mutations[0].body).toEqual({ agentId: 'a', expectedStatuses: ['todo', 'in_progress'] });
 });
 it('never reads provider error bodies into diagnostics', async () => {
@@ -115,10 +118,20 @@ it.each([undefined, '', '   '])('refuses a missing reviewer before provider exec
     expect(s.mock.state.requests.some(r => r.method === 'PATCH')).toBe(false);
     expect(s.mock.state.requests.at(-1).path).toBe('/api/issues/i/release');
 });
-it('fake Paperclip rejects review without a human assignee', async () => {
+it('fake Paperclip rejects review without a pending confirmation', async () => {
     const mock = createMockPaperclip();
     const response = await mock.fetch(`${env.PAPERCLIP_API_URL}/api/issues/i`, { method: 'PATCH', body: JSON.stringify({ status: 'in_review' }) });
     expect(response.status).toBe(422);
     expect(await response.json()).toMatchObject({ code: 'invalid_issue_disposition' });
     expect(mock.state.issue.status).toBe('todo');
+});
+
+it('keeps the review interaction and succeeds when disposition is rejected', async () => {
+    const s = setup(), stderr = vi.fn();
+    s.mock.state.rejectReview = true;
+    expect((await run(env, s.fetcher, vi.fn(), stderr)).ok).toBe(true);
+    expect(s.mock.state.issue.status).toBe('todo');
+    expect(s.mock.state.interactions[0]).toMatchObject({kind: 'request_confirmation', status: 'pending', resolverPolicy: 'human_only', addresseeUserId: 'operator-user', sourceRunId: 'r', idempotencyKey: 'zaos-review:r', continuationPolicy: 'none', payload: {version: 1, detailsMarkdown: 'Result'}});
+    expect(JSON.parse(stderr.mock.calls[0][0]).zaosError).toMatchObject({step: 'review', status: 422});
+    expect(s.mock.state.requests.some(r => r.path.endsWith('/release'))).toBe(false);
 });

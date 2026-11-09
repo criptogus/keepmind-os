@@ -1,9 +1,79 @@
 {
   "suite": "real Paperclip + mock provider",
-  "startedAt": "2026-11-09T14:01:06.809Z",
-  "passed": false,
+  "startedAt": "2026-11-09T14:12:26.445Z",
+  "passed": true,
   "unauthenticatedCompaniesStatus": 403,
   "loopbackListenerVerified": true,
   "disableSignUpHonoured": true,
-  "finishedAt": "2026-11-09T14:01:59.953Z"
+  "reviewAcceptance": {
+    "interactionId": "6414e034-d6b5-474c-9f8e-fb88b373d45a",
+    "interactionStatus": "accepted",
+    "issueStatus": "todo"
+  },
+  "happyPath": {
+    "status": "succeeded",
+    "costCents": 1.4,
+    "inReview": true,
+    "summary": {
+      "companyId": "468de506-07ca-4d46-b0d0-db8f595dce94",
+      "eventCount": 2,
+      "unpricedEventCount": 0,
+      "unknownBillingEventCount": 1,
+      "estimatedEventCount": 0,
+      "pendingRunCount": 0,
+      "pricingComplete": true,
+      "spendCents": 1.4,
+      "spendCentsExact": "1.4000000",
+      "budgetCents": 0,
+      "utilizationPercent": 0
+    },
+    "agentPolicy": {
+      "policyId": "6b92afa3-c385-46d0-a08e-6dc54310c8c7",
+      "companyId": "468de506-07ca-4d46-b0d0-db8f595dce94",
+      "scopeType": "agent",
+      "scopeId": "274ab1a4-6dcb-4faa-b71e-4e4d6e082c60",
+      "scopeName": "Researcher",
+      "metric": "billed_cents",
+      "windowKind": "calendar_month_utc",
+      "amount": 100,
+      "observedAmount": 1.4,
+      "observedAmountExact": "1.4000000",
+      "reservationCents": "5.0000000",
+      "unpricedEventCount": 0,
+      "pendingRunCount": 0,
+      "unpricedUsagePolicy": "block",
+      "remainingAmount": 98.6,
+      "utilizationPercent": 1.4,
+      "warnPercent": 80,
+      "hardStopEnabled": true,
+      "notifyEnabled": true,
+      "isActive": true,
+      "status": "ok",
+      "paused": true,
+      "pauseReason": null,
+      "windowStart": "2026-11-01T00:00:00.000Z",
+      "windowEnd": "2026-12-01T00:00:00.000Z"
+    },
+    "dataQualityEvents": [
+      {
+        "id": "0dc64223-7d56-455f-9ce2-d61d9f7f5afb",
+        "runId": "027693e3-071c-4be1-8342-46e1ee8f50e5",
+        "agentId": "274ab1a4-6dcb-4faa-b71e-4e4d6e082c60",
+        "agentName": "Researcher",
+        "agentAppearance": {
+          "paletteId": "flamingo-jade",
+          "schemaVersion": 1,
+          "characterVersion": "cap-v1"
+        },
+        "occurredAt": "2026-11-09T14:12:50.558Z",
+        "provider": "unknown",
+        "model": "unknown",
+        "reason": "unknown_billing"
+      }
+    ],
+    "reconciled": true
+  },
+  "zeroCapRejected": true,
+  "lowBudgetNoProviderCall": true,
+  "finishedAt": "2026-11-09T14:13:18.838Z"
 }

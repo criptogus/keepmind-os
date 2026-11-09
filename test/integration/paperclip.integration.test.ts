@@ -112,7 +112,8 @@ afterAll(async () => {
                 const issues = await safeGet<{ id: string }[]>(`/api/companies/${state.companyId}/issues`);
                 for (const issue of (issues ?? []).slice(0, 20)) {
                     const comments = await safeGet<unknown>(`/api/issues/${issue.id}/comments`);
-                    (evidence.comments as unknown[]).push({ issueId: issue.id, comments: sanitizeEvidence(comments ?? [], evidenceSecrets) });
+                    const interactions = await safeGet<unknown>(`/api/issues/${issue.id}/interactions`);
+                    (evidence.comments as unknown[]).push({ issueId: issue.id, comments: sanitizeEvidence(comments ?? [], evidenceSecrets), interactions: sanitizeEvidence(interactions ?? [], evidenceSecrets) });
                 }
             }
             await mkdir(resolve('evidence'), { recursive: true });
@@ -150,17 +151,41 @@ it('executes, reconciles, leaves human review; refuses low budget without provid
     const issues = await api.request<{
         id: string;
         status: string;
+        title: string;
         assigneeUserId: string | null;
     }[]>('GET', `/api/companies/${state.companyId}/issues`);
     const operator = await api.request<{ userId: string }>('GET', '/api/cli-auth/me');
-    expect(issues.some(i => i.status === 'in_review' && i.assigneeUserId === operator.userId)).toBe(true);
-    const quality = await api.request<{
-        events: {
-            runId: string;
-        }[];
-    }>('GET', `/api/companies/${state.companyId}/costs/data-quality`);
-    expect(quality.events).toHaveLength(0);
-    report.happyPath = { status: result.status, costCents: result.costCents, reconciled: true, inReview: true };
+    const reviewIssue = issues.find(i => i.title === 'Research a fictional market')!;
+    expect(reviewIssue).toBeDefined();
+    const interactions = await api.request<import('../../src/shared/types').ReviewInteraction[]>('GET', `/api/issues/${reviewIssue.id}/interactions`);
+    const runs = await orchestrator.listRuns();
+    const run = runs.find(r => r.issueId === reviewIssue.id)!;
+    const interaction = interactions.find(i => i.sourceRunId === run.id && i.kind === 'request_confirmation')!;
+    expect(interaction).toMatchObject({status: 'pending', resolverPolicy: 'human_only', addresseeUserId: operator.userId, continuationPolicy: 'none', idempotencyKey: `zaos-review:${run.id}`, payload: {detailsMarkdown: result.result}});
+    const accepted = await orchestrator.acceptReview(reviewIssue.id);
+    expect(accepted).toMatchObject({id: interaction.id, status: 'accepted'});
+    const afterAcceptance = await api.request<{status: string}>('GET', `/api/issues/${reviewIssue.id}`);
+    const persisted = await api.request<import('../../src/shared/types').ReviewInteraction[]>('GET', `/api/issues/${reviewIssue.id}/interactions`);
+    expect(persisted.find(i => i.id === interaction.id)?.status).toBe('accepted');
+    report.reviewAcceptance = {interactionId: interaction.id, interactionStatus: accepted.status, issueStatus: afterAcceptance.status};
+    const [quality, summary, overview] = await Promise.all([
+        api.request<{ events: { runId?: string; heartbeatRunId?: string; reason: string }[] }>('GET', `/api/companies/${state.companyId}/costs/data-quality`),
+        api.request<{ unpricedEventCount: number; pricingComplete: boolean; spendCents: number }>('GET', `/api/companies/${state.companyId}/costs/summary`),
+        api.request<{ policies: { scopeType: string; scopeId: string; status: string; unpricedEventCount: number; remainingAmount: number }[] }>('GET', `/api/companies/${state.companyId}/budgets/overview`)
+    ]);
+    const policy = overview.policies.find(p => p.scopeType === 'agent' && p.scopeId === state.agentId);
+    const runQualityEvents = quality.events.filter(e => (e.runId ?? e.heartbeatRunId) === run.id);
+    report.happyPath = {
+        status: result.status, costCents: result.costCents, inReview: reviewIssue.status === 'in_review',
+        summary, agentPolicy: policy, dataQualityEvents: runQualityEvents
+    };
+    expect(summary.unpricedEventCount).toBe(0);
+    expect(summary.pricingComplete).toBe(true);
+    expect(summary.spendCents).toBeCloseTo(1.4);
+    expect(policy).toMatchObject({ status: 'ok', unpricedEventCount: 0 });
+    expect(policy!.remainingAmount).toBeCloseTo(98.6);
+    expect(runQualityEvents.filter(e => e.reason !== 'unknown_billing')).toHaveLength(0);
+    (report.happyPath as Record<string, unknown>).reconciled = true;
     await expect(orchestrator.setSpendCap(0)).rejects.toThrow('cap of 0');
     report.zeroCapRejected = true;
     await orchestrator.setPaidExecution(false, false);

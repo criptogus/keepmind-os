@@ -24,6 +24,7 @@ interface CostEvent {
     id: string;
     runId?: string;
     heartbeatRunId?: string;
+    agentId?: string;
     reason?: string;
     provider?: string;
     idempotencyKey?: string;
@@ -93,19 +94,28 @@ export class SpendGuard {
         const event = quality.events.find(e => (e.runId ?? e.heartbeatRunId) === runId && e.idempotencyKey === `zaos:${runId}` && ['reported', 'estimated'].includes(e.costStatus ?? '') && e.costCents != null && Number.isFinite(Number(e.costCents)) && Number(e.costCents) >= 0);
         return event ? { costCents: Number(event.costCents) } : undefined;
     }
-    async reconcileRun(runId: string, sleep?: (ms: number) => Promise<void>) {
+    async reconcileRun(runId: string, sleep?: (ms: number) => Promise<void>, agentId?: string) {
         if (!await this.pricedReceipt(runId))
             return 'unknown cost';
         let receipts: CostEvent[] = [];
         for (let i = 0; i <= (sleep ? 30 : 0); i++) {
             const quality = await this.api.request<{ events: CostEvent[] }>('GET', `/api/companies/${this.companyId}/costs/data-quality`);
-            receipts = quality.events.filter(e => (e.runId ?? e.heartbeatRunId) === runId && (e.costStatus === 'unpriced' || e.provider === 'unknown' || e.reason === 'unknown_billing'));
-            if (receipts.length || i === (sleep ? 30 : 0)) break;
+            const runEvents = quality.events.filter(e => (e.runId ?? e.heartbeatRunId) === runId);
+            agentId ??= runEvents.find(e => e.agentId)?.agentId;
+            receipts = runEvents.filter(e => ['unknown_billing', 'missing_price', 'missing_model'].includes(e.reason ?? '') || e.provider === 'unknown');
+            if (runEvents.length || i === (sleep ? 30 : 0)) break;
             await sleep!(1000);
         }
         for (const e of receipts) {
-            await this.api.request('POST', `/api/companies/${this.companyId}/accounting/events/${e.id}/adjustments`, { idempotencyKey: `zaos:reconcile:${runId}:${e.id}`, expectedCents: 0, correctedCents: 0, reason: 'ZAOS runner posted a priced event for this run', pricing: { source: 'operator' } });
+            try {
+                await this.api.request('POST', `/api/companies/${this.companyId}/accounting/events/${e.id}/adjustments`, { idempotencyKey: `zaos:reconcile:${runId}:${e.id}`, expectedCents: 0, correctedCents: 0, reason: 'ZAOS runner posted a priced event for this run', pricing: { source: 'operator' } });
+            } catch (error) {
+                // A retry can encounter the adjustment already recorded for this event.
+                if (!((error as { status?: number }).status === 409 || error instanceof Error && /\(409\)|duplicate/i.test(error.message))) throw error;
+            }
         }
-        return 'reconciled';
+        const overview = await this.api.request<{ policies: { scopeType: string; scopeId: string; unpricedEventCount: number }[] }>('GET', `/api/companies/${this.companyId}/budgets/overview`);
+        const policy = overview.policies.find(p => p.scopeType === 'agent' && p.scopeId === agentId);
+        return policy?.unpricedEventCount === 0 ? 'reconciled' : 'unknown cost';
     }
 }

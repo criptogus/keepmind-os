@@ -1,3 +1,14 @@
+export interface ReviewInteraction {
+    id: string;
+    kind: string;
+    status: string;
+    sourceRunId: string | null;
+    idempotencyKey?: string | null;
+    addresseeUserId?: string | null;
+    resolverPolicy?: string;
+    continuationPolicy?: string;
+    payload?: { detailsMarkdown?: string };
+}
 export type SupervisorState = 'stopped' | 'starting' | 'ready' | 'unavailable' | 'crashed';
 export interface ProviderConfig {
     baseUrl: string;
@@ -54,6 +65,7 @@ export interface ZaosAPI {
     setSpendCap(cap: number): Promise<void>;
     setPaidExecution(enabled: boolean, consent: boolean): Promise<void>;
     runTask(title: string, description: string): Promise<TaskResult>;
+    acceptReview(issueId: string): Promise<ReviewInteraction>;
     listRuns(): Promise<Run[]>;
     getTelemetry(): Promise<boolean>;
     setTelemetry(enabled: boolean): Promise<void>;
@@ -81,6 +93,7 @@ export interface IpcPayloads {
         title: string;
         description: string;
     };
+    acceptReview: { issueId: string };
     listRuns: Record<string, never>;
     getTelemetry: Record<string, never>;
     setTelemetry: {

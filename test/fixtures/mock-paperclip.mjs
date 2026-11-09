@@ -1,7 +1,7 @@
 import { createServer } from 'node:http';
 import { pathToFileURL } from 'node:url';
 export function createMockPaperclip() {
-    const state = { agent: { id: 'a', budgetMonthlyCents: 100, spentMonthlyCents: 0 }, issue: { id: 'i', title: 'Research', description: 'Write a brief', status: 'todo' }, comments: [], events: [], requests: [], policies: [], runs: [] };
+    const state = { agent: { id: 'a', budgetMonthlyCents: 100, spentMonthlyCents: 0 }, issue: { id: 'i', title: 'Research', description: 'Write a brief', status: 'todo' }, comments: [], interactions: [], rejectReview: false, events: [], requests: [], policies: [], runs: [] };
     async function request(method, path, body) {
         state.requests.push({ method, path, body });
         if (path.endsWith('/api/health'))
@@ -15,13 +15,29 @@ export function createMockPaperclip() {
         if (path === '/api/issues/i' && method === 'GET')
             return state.issue;
         if (path.endsWith('/checkout') || path.endsWith('/release')) return state.issue;
+        if (path.endsWith('/interactions')) {
+            if (method === 'GET') return state.interactions;
+            if (body.kind !== 'request_confirmation' || body.resolverPolicy !== 'human_only' || !body.addresseeUserId || body.payload?.version !== 1 || !body.payload.prompt || body.payload.detailsMarkdown?.length > 20000)
+                throw Object.assign(new Error('Invalid interaction'), { status: 400 });
+            const existing = state.interactions.find(i => i.idempotencyKey === body.idempotencyKey);
+            if (existing) return existing;
+            const interaction = { id: `interaction-${state.interactions.length}`, ...body, status: 'pending' };
+            state.interactions.push(interaction);
+            return interaction;
+        }
+        if (path.endsWith('/accept')) {
+            const interaction = state.interactions.find(i => path.endsWith(`/interactions/${i.id}/accept`));
+            if (!interaction || interaction.status !== 'pending') throw Object.assign(new Error('No pending interaction'), { status: 400 });
+            interaction.status = 'accepted';
+            return interaction;
+        }
         if (path.endsWith('/comments')) {
             if (method === 'POST')
                 state.comments.push({ ...body, createdByAgentId: 'a', createdByRunId: state.runs.find(r => r.issueId === state.issue.id && r.status === 'running')?.id });
             return state.comments;
         }
         if (path === '/api/issues/i' && method === 'PATCH') {
-            if (body.status === 'in_review' && !body.assigneeUserId?.trim())
+            if (body.status === 'in_review' && (state.rejectReview || !state.interactions.some(i => i.kind === 'request_confirmation' && i.status === 'pending')))
                 throw Object.assign(new Error('Human review path required'), { status: 422, code: 'invalid_issue_disposition' });
             if (body.assigneeUserId) {
                 state.issue.assigneeAgentId = null;
