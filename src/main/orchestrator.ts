@@ -1,3 +1,4 @@
+import type { KeepMindService } from './keepmind/service';
 import { withNodePath } from './node-runtime';
 import { testConnector } from './connectors/test';
 import { registry, buildConfig, listConnectors, assertSubscription } from './connectors/registry';
@@ -26,7 +27,7 @@ export class Orchestrator {
         nodeDir?: string;
         runnerPath: string;
         cwd: string;
-    }, private save: (s: WorkspaceState) => Promise<void>, private status: () => unknown, private sleep = (ms: number) => new Promise<void>(r => setTimeout(r, ms)), private detector = (id: ConnectorId): Promise<ConnectorDetection> => registry[id].detect()) {
+    }, private save: (s: WorkspaceState) => Promise<void>, private status: () => unknown, private sleep = (ms: number) => new Promise<void>(r => setTimeout(r, ms)), private detector = (id: ConnectorId): Promise<ConnectorDetection> => registry[id].detect(), private keepmind?: KeepMindService | null) {
         if (!state.connector && state.provider) state.connector = { ...state.provider, connectorId: 'custom', mode: 'api', priceKnown: true };
     }
     testConnector(payload: import("../shared/types").TestConnector) { return testConnector(payload, fetch, id => this.detectConnector(id)); }
@@ -169,6 +170,13 @@ export class Orchestrator {
             throw new Error('A task is already running');
         this.busy = true;
         try {
+            if (this.keepmind) {
+                try {
+                    if (this.keepmind.companyId !== this.company() || !await this.keepmind.health()) throw new Error('KeepMind unavailable');
+                } catch {
+                    return { result: 'KeepMind unavailable', status: 'blocked', costCents: 0, spent: 0, cap: this.state.cap ?? 0 };
+                }
+            }
             const config = this.state.connector;
             if (config?.mode === 'cli-subscription') {
                 const month = new Date().toISOString().slice(0, 7);
