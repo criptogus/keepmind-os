@@ -45,7 +45,7 @@ it('selects available nonexcluded distinct ports', async () => {
 });
 it('resolves explicit node binary and verifies version', async () => {
     const verify = vi.fn().mockResolvedValue('v24.22.1');
-    expect(await resolveNode({ ZAOS_NODE_BINARY: '/node24' }, verify)).toEqual({ binary: '/node24', version: 'v24.22.1' });
+    expect(await resolveNode({ ZAOS_NODE_BINARY: '/node24' }, verify)).toEqual({ binary: '/node24', version: 'v24.22.1', nodeDir: '/' });
     expect(verify).toHaveBeenCalledWith('/node24');
 });
 it('board client preserves session and Origin without leaking response errors', async () => {

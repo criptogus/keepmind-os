@@ -1,3 +1,4 @@
+import { cliEnvironment } from '../node-runtime';
 import { access } from 'node:fs/promises';
 import { constants } from 'node:fs';
 import { delimiter, isAbsolute, join } from 'node:path';
@@ -15,10 +16,11 @@ export async function resolveCli(id: 'codex' | 'claude', env = process.env) {
     return undefined;
 }
 export async function detectCli(id: 'codex' | 'claude', spawnProcess: typeof spawn = spawn): Promise<ConnectorDetection> {
-    const bin = await resolveCli(id);
+    const env = await cliEnvironment();
+    const bin = await resolveCli(id, env);
     if (!bin) return { installed: false, loggedIn: false };
     return new Promise(resolve => {
-        const child = spawnProcess(bin, id === 'codex' ? ['login','status'] : ['auth','status'], { shell: false, stdio: ['ignore','pipe','ignore'] });
+        const child = spawnProcess(bin, id === 'codex' ? ['login','status'] : ['auth','status'], { env, shell: false, stdio: ['ignore','pipe','ignore'] });
         let output = '', oversized = false;
         const timer = setTimeout(() => child.kill('SIGKILL'), 10000);
         child.stdout.on('data', chunk => { if (output.length + chunk.length > 16384) { oversized = true; child.kill('SIGKILL'); } else output += chunk.toString(); });
@@ -31,11 +33,12 @@ export async function detectCli(id: 'codex' | 'claude', spawnProcess: typeof spa
         });
     });
 }
-export async function startCliLogin(id: 'codex' | 'claude') {
-    const bin = await resolveCli(id);
+export async function startCliLogin(id: 'codex' | 'claude', spawnProcess: typeof spawn = spawn) {
+    const env = await cliEnvironment();
+    const bin = await resolveCli(id, env);
     if (!bin) throw new Error('CLI not installed');
     await new Promise<void>((resolve, reject) => {
-        const child = spawn(bin, id === 'codex' ? ['login'] : ['auth','login'], { shell: false, stdio: 'ignore' });
+        const child = spawnProcess(bin, id === 'codex' ? ['login'] : ['auth','login'], { env, shell: false, stdio: 'ignore' });
         child.once('error', () => reject(new Error('CLI login failed')));
         child.once('spawn', resolve);
     });

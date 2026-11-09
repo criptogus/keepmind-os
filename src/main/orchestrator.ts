@@ -49,7 +49,7 @@ export class Orchestrator {
         await this.save(this.state);
     }
     private async connectorEnv(config: ConnectorConfig): Promise<Record<string, unknown>> {
-        const common = { ...(this.runtime.nodeDir ? withNodePath({ PATH: process.env.PATH }, this.runtime.nodeDir) : {}), ZAOS_CONNECTOR: config.connectorId, ZAOS_CONNECTOR_MODE: config.mode, ZAOS_PROVIDER_MODEL: config.model };
+        const common = { ...(this.runtime.nodeDir ? { ...withNodePath({ PATH: process.env.PATH }, this.runtime.nodeDir), ZAOS_NODE_RUNTIME_DIR: this.runtime.nodeDir } : {}), ZAOS_CONNECTOR: config.connectorId, ZAOS_CONNECTOR_MODE: config.mode, ZAOS_PROVIDER_MODEL: config.model };
         if (config.mode === 'cli-subscription') {
             const bin = await resolveCli(config.connectorId);
             if (!bin) throw new Error('CLI not installed');

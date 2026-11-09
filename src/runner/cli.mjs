@@ -1,3 +1,4 @@
+import { withNodePath } from './node-path.mjs';
 import { spawn } from 'node:child_process';
 import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -11,7 +12,7 @@ export async function executeCli(id, bin, model, prompt, timeoutSec, env = proce
     const cwd = await mkdtemp(join(tmpdir(), 'zaos-cli-'));
     try {
         const out = await new Promise((resolve, reject) => {
-            const child = spawnProcess(bin, args, { cwd, env: childEnvironment(env), shell: false, stdio: ['pipe','pipe','ignore'] });
+            const child = spawnProcess(bin, args, { cwd, env: withNodePath(childEnvironment(env), env.ZAOS_NODE_RUNTIME_DIR), shell: false, stdio: ['pipe','pipe','ignore'] });
             let output = '', bytes = 0, failed = false, killTimer;
             const stop = () => { if (failed) return; failed = true; child.kill('SIGTERM'); killTimer = setTimeout(() => child.kill('SIGKILL'), 1000); };
             const timer = setTimeout(stop, timeoutSec * 1000);

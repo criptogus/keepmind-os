@@ -14,7 +14,7 @@ it.each([
 });
 it('prefers the override over an existing bundle', async () => {
     const exists = vi.fn().mockReturnValue(true);
-    expect(await resolveNode({ ZAOS_NODE_BINARY: '/override' }, async () => 'v24.11.0', { packaged: true, resourcesPath: '/r', exists })).toEqual({ binary: '/override', version: 'v24.11.0' });
+    expect(await resolveNode({ ZAOS_NODE_BINARY: '/override' }, async () => 'v24.11.0', { packaged: true, resourcesPath: '/r', exists })).toEqual({ binary: '/override', version: 'v24.11.0', nodeDir: '/' });
     expect(exists).not.toHaveBeenCalled();
 });
 it.each([false, true])('uses PATH in development or with a missing bundle (packaged=%s)', async packaged => {

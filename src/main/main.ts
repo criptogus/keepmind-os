@@ -5,7 +5,7 @@ import { pathToFileURL } from 'node:url';
 import { selectEncryptor } from './encryption';
 import { Supervisor } from './supervisor';
 import { runtimePaths } from './paths';
-import { resolveNode } from './node-runtime';
+import { initializeNodeRuntime } from './node-runtime';
 import { pickPorts } from './ports';
 import { createConfig, writeConfig } from './paperclip-config';
 import { instanceSecrets, readEncrypted, writeEncrypted } from './instance-secrets';
@@ -19,6 +19,7 @@ import type { Encryptor, ZaosAPI, TaskResult } from '../shared/types';
 
 if (process.env.ZAOS_USER_DATA) app.setPath('userData', resolve(process.env.ZAOS_USER_DATA));
 const smoke = process.env.ZAOS_SMOKE === '1';
+const nodeResolution = initializeNodeRuntime({ packaged: app.isPackaged, resourcesPath: process.resourcesPath });
 const paths = runtimePaths(app.getAppPath(), app.isPackaged);
 let window: BrowserWindow;
 let board: BrowserWindow | undefined;
@@ -55,7 +56,7 @@ async function boot() {
         workspace = await readEncrypted<WorkspaceState>(statePath, encryptor) ?? { managedAgentIds: [], telemetry: false };
         if (quitting) return;
         const secrets = await instanceSecrets(userData, encryptor);
-        const node = await resolveNode(process.env, undefined, { packaged: app.isPackaged, resourcesPath: process.resourcesPath });
+        const node = await nodeResolution;
         const ports = await pickPorts();
         origin = `http://127.0.0.1:${ports.server}`;
         // Existing credentials mean signup must stay disabled, including during startup.

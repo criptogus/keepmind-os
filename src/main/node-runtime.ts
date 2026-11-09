@@ -1,6 +1,8 @@
 import { execFile } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { posix, win32 } from 'node:path';
+export { withNodePath } from '../runner/node-path.mjs';
+import { withNodePath } from '../runner/node-path.mjs';
 export function verifyNodeVersion(version: string) {
     const m = /^v?(\d+)\.(\d+)\.(\d+)$/.exec(version.trim());
     if (!m || Number(m[1]) < 24 || (Number(m[1]) === 24 && Number(m[2]) < 11))
@@ -14,12 +16,18 @@ export async function resolveNode(env: NodeJS.ProcessEnv = process.env, verify =
         ? paths.join(options.resourcesPath, 'node', ...(platform === 'win32' ? ['node.exe'] : ['bin', 'node'])) : undefined;
     const binary = env.ZAOS_NODE_BINARY || (bundled && (options.exists ?? existsSync)(bundled) ? bundled : 'node');
     const version = verifyNodeVersion(await verify(binary));
-    return { binary, version, ...(binary === bundled ? { nodeDir: paths.dirname(binary) } : {}) };
+    return { binary, version, ...((env.ZAOS_NODE_BINARY || binary === bundled) ? { nodeDir: paths.dirname(paths.resolve(binary)) } : {}) };
 }
 
-// Preserve all existing environment entries; Windows PATH keys are case insensitive.
-export function withNodePath(env: NodeJS.ProcessEnv, nodeDir?: string, platform: NodeJS.Platform = process.platform): NodeJS.ProcessEnv {
-    if (!nodeDir) return env;
-    const key = platform === 'win32' ? Object.keys(env).find(key => key.toLowerCase() === 'path') ?? 'PATH' : 'PATH';
-    return { ...env, [key]: nodeDir + (env[key] ? (platform === 'win32' ? ';' : ':') + env[key] : '') };
+// Share one startup resolution with connector probes and the supervisor.
+let startupNode: ReturnType<typeof resolveNode> | undefined;
+export function initializeNodeRuntime(options: Parameters<typeof resolveNode>[2]) {
+    startupNode ??= resolveNode(process.env, undefined, options);
+    // Connector detection remains available even when runtime verification fails.
+    void startupNode.catch(() => {});
+    return startupNode;
+}
+export async function cliEnvironment(env: NodeJS.ProcessEnv = process.env) {
+    const node = await startupNode?.catch(() => undefined);
+    return withNodePath(env, node?.nodeDir);
 }
