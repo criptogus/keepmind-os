@@ -79,3 +79,10 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+## Node.js — 24.22.2
+
+MIT license, plus bundled third-party licenses reproduced in Node's upstream
+LICENSE file. Source: https://nodejs.org/dist/v24.22.2/ . The official archive's
+complete LICENSE is shipped as `resources/node/LICENSE` alongside the runtime
+(`resources/node/bin/node` on POSIX or `resources/node/node.exe` on Windows).

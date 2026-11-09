@@ -64,3 +64,12 @@ it('escalates shutdown to SIGKILL after grace',async()=>{
   await s.start();const stopping=s.stop();expect(c.kill).toHaveBeenCalledWith('SIGTERM');await vi.advanceTimersByTimeAsync(50);await stopping;expect(c.kill).toHaveBeenCalledWith('SIGKILL');expect(s.state).toBe('stopped');
  }finally{vi.useRealTimers();}
 });
+it('passes bundled Node PATH to Paperclip while preserving secrets and fixed env', async () => {
+    const c = child();
+    const spawn = vi.fn((_command: string, _args: string[], _options: import('node:child_process').SpawnOptions) => c);
+    const s = new Supervisor({ node: '/r/node/bin/node', nodeDir: '/r/node/bin', entry: 'fake', dataDir: '/tmp/x', port: 40000, secrets: { TEST_SECRET: 'kept', PATH: '/secret/path' }, spawn, fetch: vi.fn().mockResolvedValue(Response.json({ status: 'ok' })) });
+    try {
+        await s.start();
+        expect(spawn.mock.calls[0][2].env).toMatchObject({ PATH: `/r/node/bin${process.platform === 'win32' ? ';' : ':'}/secret/path`, TEST_SECRET: 'kept', HOST: '127.0.0.1', PAPERCLIP_HOME: '/tmp/x' });
+    } finally { await s.stop(); }
+});

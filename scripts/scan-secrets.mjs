@@ -20,7 +20,7 @@ const patterns = [
 ];
 let findings = 0;
 for (const file of new Set(files)) {
-  if (file === 'node_modules' || file.startsWith('node_modules/') || !statSync(file).isFile()) continue;
+  if (file.startsWith('build/node/') || file === 'node_modules' || file.startsWith('node_modules/') || !statSync(file).isFile()) continue;
   const data = readFileSync(file);
   if (data.includes(0)) continue;
   if (patterns.some((pattern) => pattern.test(data.toString('utf8')))) {

@@ -2,7 +2,7 @@ import { it, expect, vi } from 'vitest';
 import { Orchestrator } from '../src/main/orchestrator';
 import type { WorkspaceState } from '../src/main/orchestrator';
 const provider = { baseUrl: 'http://127.0.0.1:40000/v1', model: 'mock', inputCentsPerMTok: 100, outputCentsPerMTok: 200, maxOutputTokens: 100, maxRunCents: 1 };
-function setup() {
+function setup(nodeDir?: string) {
     const state: WorkspaceState = { managedAgentIds: [], telemetry: false };
     const request = vi.fn().mockImplementation(async (method, path) => {
         if (path === '/api/cli-auth/me')
@@ -19,7 +19,7 @@ function setup() {
     });
     const save = vi.fn();
     const sleep = vi.fn(async (_ms: number) => {});
-    return { state, request, save, sleep, o: new Orchestrator({ request }, state, { node: '/node', runnerPath: '/runner.mjs', cwd: '/tmp' }, save, () => ({ state: 'ready' }), sleep) };
+    return { state, request, save, sleep, o: new Orchestrator({ request }, state, { node: '/node', nodeDir, runnerPath: '/runner.mjs', cwd: '/tmp' }, save, () => ({ state: 'ready' }), sleep) };
 }
 it('setup keeps execution off until key, valid cap and explicit consent', async () => {
     const { o, request, state } = setup();
@@ -177,4 +177,16 @@ it('patches the allowlisted runner when switching to a subscription connector', 
         expect(patch.env).toMatchObject({ ZAOS_CONNECTOR: 'codex', ZAOS_CLI_BIN: process.execPath });
         expect(patch.env).not.toHaveProperty('ZAOS_PROVIDER_API_KEY');
     } finally { if (old === undefined) delete process.env.ZAOS_CODEX_BIN; else process.env.ZAOS_CODEX_BIN = old; }
+});
+
+it('sets bundled Node PATH on the runner process adapter', async () => {
+    const { o, request } = setup('/resources/node/bin');
+    await o.createCompany('Example');
+    await o.setProviderKey('test-only-key');
+    await o.createAgentFromTemplate('researcher', provider);
+    const adapter = request.mock.calls.find(c => c[1].endsWith('/agents'))?.[2].adapterConfig;
+    expect(adapter.command).toBe('/node');
+    expect(adapter.env.PATH).toBe('/resources/node/bin' + (process.env.PATH ? (process.platform === 'win32' ? ';' : ':') + process.env.PATH : ''));
+    expect(adapter.env.ZAOS_REVIEWER_USER_ID).toBe('operator-user');
+    expect(adapter.env.ZAOS_PROVIDER_API_KEY).toEqual({ type: 'secret_ref', secretId: 'secret', version: 'latest' });
 });

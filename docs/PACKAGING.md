@@ -34,13 +34,21 @@ operator's job.
 
 ## Runtime requirements and limitations
 
-The packaged app still requires an **external Node >=24.11.0** using
-`ZAOS_NODE_BINARY` or `node` on PATH (`src/main/node-runtime.ts`). Packaged builds
-do **not** bundle this Node runtime. **Bundle Node runtime** is the main remaining
-gap for end-user installs. Electron's internal Node is not used to run Paperclip.
-A desktop launch may have a different PATH; set `ZAOS_NODE_BINARY` to an absolute
-path as needed. Provider CLIs required by CLI connectors must also be installed
-separately.
+The packaged app bundles the official Node.js runtime pinned in
+`scripts/node-runtime.json`. Each dist script fetches its target runtime before
+building; `npm run dist:mac` fetches both architectures. Downloads use the official
+Node distribution and verify the archive's SHA256 against `SHASUMS256.txt` before
+extraction. Only the runtime binary, upstream LICENSE and VERSION.json metadata
+are staged in ignored `build/node/<os>-<arch>/` and shipped in `resources/node/`.
+No Node binary is committed. System `tar` is required for packaging.
+
+At launch, `ZAOS_NODE_BINARY` overrides runtime selection. Packaged apps otherwise
+use the bundled binary, falling back to `node` on PATH if it is missing;
+development uses PATH. Every selected binary is checked with `--version` and must
+be >=24.11.0. The bundled binary's directory is prepended to Paperclip and runner
+child PATH so nested Node invocations work without a system installation.
+Electron's internal Node is not used to run Paperclip. Provider CLIs required by
+CLI connectors must still be installed separately.
 
 Windows and macOS must be built on their own OS. A Windows build from Linux
 fails at NSIS without Wine (`spawn wine ENOENT`). Even with Wine, the
@@ -58,7 +66,7 @@ dependencies; generating both archives does not make both runnable. CI uses
 separate native macOS runners for this reason. Do not omit optional dependencies.
 Paperclip's installed production dependencies remain unpacked through the
 existing `asarUnpack` rule, alongside `src/runner`. Application assets, notices,
-renderer, main process and preload are packaged; Node, provider credentials,
+renderer, main process, preload and Node are packaged; provider credentials,
 user data and provider subscriptions are not bundled.
 
 ## Verified Linux results
@@ -105,3 +113,9 @@ When `ZAOS_SMOKE_EXECUTABLE` ends with `.AppImage`, the child environment defaul
 preserved. Without the executable variable the smoke still runs `electron .`.
 The existing `ZAOS_SMOKE_LINUX=1` switch adds `--no-sandbox` only for the Linux
 smoke test.
+
+For bundled-runtime verification, launch a packaged app with `ZAOS_NODE_BINARY`
+unset and no system Node on PATH, then verify Paperclip startup and task execution.
+Check `resources/node/VERSION.json` against the official distribution checksum and
+confirm `resources/node/LICENSE` is present. Downloads and builds must be run by
+the operator; the historical Linux results above predate runtime bundling.

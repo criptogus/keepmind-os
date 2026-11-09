@@ -17,14 +17,15 @@
     "test:integration": "vitest run --config vitest.config.ts --project integration --configLoader runner",
     "typecheck": "tsc --noEmit",
     "smoke:electron": "node scripts/smoke-electron.mjs",
-    "dist:mac": "npm run build && electron-builder --mac --publish never",
-    "dist:mac:arm64": "npm run build && electron-builder --mac dmg zip --arm64 --publish never",
-    "dist:mac:x64": "npm run build && electron-builder --mac dmg zip --x64 --publish never",
+    "dist:mac": "npm run fetch:node -- --platform darwin --arch arm64 && npm run fetch:node -- --platform darwin --arch x64 && npm run build && electron-builder --mac --publish never",
+    "dist:mac:arm64": "npm run fetch:node -- --platform darwin --arch arm64 && npm run build && electron-builder --mac dmg zip --arm64 --publish never",
+    "dist:mac:x64": "npm run fetch:node -- --platform darwin --arch x64 && npm run build && electron-builder --mac dmg zip --x64 --publish never",
     "astryx": "astryx",
     "scan:secrets": "node scripts/scan-secrets.mjs",
     "a11y:onboarding": "node scripts/a11y-onboarding.mjs",
-    "dist:win": "npm run build && electron-builder --win nsis --x64 --publish never",
-    "dist:linux": "npm run build && electron-builder --linux AppImage deb --x64 --publish never"
+    "dist:win": "npm run fetch:node -- --platform win32 --arch x64 && npm run build && electron-builder --win nsis --x64 --publish never",
+    "dist:linux": "npm run fetch:node -- --platform linux --arch x64 && npm run build && electron-builder --linux AppImage deb --x64 --publish never",
+    "fetch:node": "node scripts/fetch-node.mjs"
   },
   "dependencies": {
     "paperclipai": "2026.1106.0",
@@ -131,7 +132,16 @@
       "synopsis": "A local-first desktop operating layer for human-governed agent teams.",
       "description": "A local-first desktop operating layer for human-governed agent teams.",
       "executableName": "keepmind-os"
-    }
+    },
+    "extraResources": [
+      {
+        "from": "build/node/${os}-${arch}",
+        "to": "node",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ]
   },
   "author": {
     "name": "KeepMind contributors"

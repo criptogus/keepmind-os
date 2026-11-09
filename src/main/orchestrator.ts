@@ -1,3 +1,4 @@
+import { withNodePath } from './node-runtime';
 import { testConnector } from './connectors/test';
 import { registry, buildConfig, listConnectors, assertSubscription } from './connectors/registry';
 import { resolveCli, startCliLogin } from './connectors/cli';
@@ -22,6 +23,7 @@ export class Orchestrator {
     private busy = false;
     constructor(private api: BoardApi, private state: WorkspaceState, private runtime: {
         node: string;
+        nodeDir?: string;
         runnerPath: string;
         cwd: string;
     }, private save: (s: WorkspaceState) => Promise<void>, private status: () => unknown, private sleep = (ms: number) => new Promise<void>(r => setTimeout(r, ms)), private detector = (id: ConnectorId): Promise<ConnectorDetection> => registry[id].detect()) {
@@ -47,7 +49,7 @@ export class Orchestrator {
         await this.save(this.state);
     }
     private async connectorEnv(config: ConnectorConfig): Promise<Record<string, unknown>> {
-        const common = { ZAOS_CONNECTOR: config.connectorId, ZAOS_CONNECTOR_MODE: config.mode, ZAOS_PROVIDER_MODEL: config.model };
+        const common = { ...(this.runtime.nodeDir ? withNodePath({ PATH: process.env.PATH }, this.runtime.nodeDir) : {}), ZAOS_CONNECTOR: config.connectorId, ZAOS_CONNECTOR_MODE: config.mode, ZAOS_PROVIDER_MODEL: config.model };
         if (config.mode === 'cli-subscription') {
             const bin = await resolveCli(config.connectorId);
             if (!bin) throw new Error('CLI not installed');

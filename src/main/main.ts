@@ -55,14 +55,14 @@ async function boot() {
         workspace = await readEncrypted<WorkspaceState>(statePath, encryptor) ?? { managedAgentIds: [], telemetry: false };
         if (quitting) return;
         const secrets = await instanceSecrets(userData, encryptor);
-        const node = await resolveNode();
+        const node = await resolveNode(process.env, undefined, { packaged: app.isPackaged, resourcesPath: process.resourcesPath });
         const ports = await pickPorts();
         origin = `http://127.0.0.1:${ports.server}`;
         // Existing credentials mean signup must stay disabled, including during startup.
         const credentials = await readEncrypted(join(userData, 'zaos/operator.json'), encryptor);
         const config = createConfig(home, ports.server, ports.postgres, !!credentials);
         await writeConfig(home, config);
-        supervisor = new Supervisor({ node: node.binary, entry: paths.entry, dataDir: home, port: ports.server, secrets,
+        supervisor = new Supervisor({ node: node.binary, nodeDir: node.nodeDir, entry: paths.entry, dataDir: home, port: ports.server, secrets,
             onState: state => { if (state !== 'ready') ready = false; } });
         if (quitting) return;
         await supervisor.start();
@@ -80,7 +80,7 @@ async function boot() {
         if (quitting) return;
         if (supervisor.state !== 'ready') throw new Error(supervisor.lastError ?? 'Paperclip restart failed');
         await authenticateOperator(client, userData, encryptor, async () => {});
-        orchestrator = new Orchestrator(client, workspace, { node: node.binary, runnerPath: paths.runner, cwd: paths.cwd },
+        orchestrator = new Orchestrator(client, workspace, { node: node.binary, nodeDir: node.nodeDir, runnerPath: paths.runner, cwd: paths.cwd },
             s => writeEncrypted(statePath, s, encryptor), () => ({ state: ready ? supervisor!.state : 'starting' }));
         if (workspace.companyId) await orchestrator.startupAudit();
         ready = true;

@@ -1,8 +1,10 @@
+import { withNodePath } from './node-runtime';
 import { spawn as nodeSpawn } from 'node:child_process';
 import type { ChildProcess, SpawnOptions } from 'node:child_process';
 import type { SupervisorState } from '../shared/types';
 export interface SupervisorOptions {
     node: string;
+    nodeDir?: string;
     entry: string;
     dataDir: string;
     port: number;
@@ -44,7 +46,7 @@ export class Supervisor {
         this.transition('starting');
         let child: ChildProcess;
         try {
-            child = (o.spawn ?? nodeSpawn)(o.node, [o.entry, 'run', '-d', o.dataDir], { env: { ...process.env, ...o.secrets, HOST: '127.0.0.1', PORT: String(o.port), PAPERCLIP_HOME: o.dataDir, PAPERCLIP_INSTANCE_ID: 'default', PAPERCLIP_TELEMETRY_DISABLED: '1', DO_NOT_TRACK: '1' }, stdio: 'ignore' });
+            child = (o.spawn ?? nodeSpawn)(o.node, [o.entry, 'run', '-d', o.dataDir], { env: withNodePath({ ...process.env, ...o.secrets, HOST: '127.0.0.1', PORT: String(o.port), PAPERCLIP_HOME: o.dataDir, PAPERCLIP_INSTANCE_ID: 'default', PAPERCLIP_TELEMETRY_DISABLED: '1', DO_NOT_TRACK: '1' }, o.nodeDir), stdio: 'ignore' });
             this.child = child;
         }
         catch {

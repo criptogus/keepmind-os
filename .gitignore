@@ -21,3 +21,4 @@ coverage/
 *.tsbuildinfo
 .DS_Store
 evidence/*.log
+build/node/
