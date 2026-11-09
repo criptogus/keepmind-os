@@ -9,12 +9,12 @@
   "testEnvironment": {
     "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/131.0.6778.33 Safari/537.36",
     "windowWidth": 1280,
-    "windowHeight": 1100,
+    "windowHeight": 820,
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-11-09T16:51:58.377Z",
-  "url": "http://127.0.0.1:33503/",
+  "timestamp": "2026-11-09T17:40:33.838Z",
+  "url": "http://zaos-renderer.test/",
   "toolOptions": {
     "runOnly": {
       "type": "tag",
@@ -228,36 +228,6 @@
       "description": "Ensure <blink> elements are not used",
       "help": "<blink> elements are deprecated and must not be used",
       "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/blink?application=playwright",
-      "nodes": []
-    },
-    {
-      "id": "definition-list",
-      "impact": null,
-      "tags": [
-        "cat.structure",
-        "wcag2a",
-        "wcag131",
-        "EN-301-549",
-        "EN-9.1.3.1"
-      ],
-      "description": "Ensure <dl> elements are structured correctly",
-      "help": "<dl> elements must only directly contain properly-ordered <dt> and <dd> groups, <script>, <template> or <div> elements",
-      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/definition-list?application=playwright",
-      "nodes": []
-    },
-    {
-      "id": "dlitem",
-      "impact": null,
-      "tags": [
-        "cat.structure",
-        "wcag2a",
-        "wcag131",
-        "EN-301-549",
-        "EN-9.1.3.1"
-      ],
-      "description": "Ensure <dt> and <dd> elements are contained by a <dl>",
-      "help": "<dt> and <dd> elements must be contained by a <dl>",
-      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/dlitem?application=playwright",
       "nodes": []
     },
     {
@@ -491,26 +461,6 @@
       "nodes": []
     },
     {
-      "id": "role-img-alt",
-      "impact": null,
-      "tags": [
-        "cat.text-alternatives",
-        "wcag2a",
-        "wcag111",
-        "section508",
-        "section508.22.a",
-        "TTv5",
-        "TT7.a",
-        "EN-301-549",
-        "EN-9.1.1.1",
-        "ACT"
-      ],
-      "description": "Ensure [role=\"img\"] elements have alternative text",
-      "help": "[role=\"img\"] elements must have an alternative text",
-      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/role-img-alt?application=playwright",
-      "nodes": []
-    },
-    {
       "id": "scrollable-region-focusable",
       "impact": null,
       "tags": [
@@ -737,9 +687,9 @@
             }
           ],
           "impact": null,
-          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
+          "html": "<div class=\"status-line\" role=\"status\" aria-live=\"polite\"><span role=\"img\" aria-label=\"Ready\" class=\"astryx-status-dot x3nfvp2 x6s0dn4 xl56j7k x16rqkct x2lah0s x1xc55vz xdk7pt x1q5y3ey xrkvqaz\" data-variant=\"neutral\"></span>Paid execution enabled · Local service ready</div>",
           "target": [
-            "button[data-mode-toggle=\"true\"] > .x10l6tqk.x1i1rx1s.xjm9jq1"
+            ".status-line"
           ]
         },
         {
@@ -763,9 +713,61 @@
             }
           ],
           "impact": null,
-          "html": "<div class=\"status-line\" role=\"status\" aria-live=\"polite\">Paid execution enabled · Local service ready</div>",
+          "html": "<span role=\"img\" aria-label=\"Ready\" class=\"astryx-status-dot x3nfvp2 x6s0dn4 xl56j7k x16rqkct x2lah0s x1xc55vz xdk7pt x1q5y3ey xrkvqaz\" data-variant=\"neutral\"></span>",
           "target": [
-            ".status-line"
+            ".astryx-status-dot"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-allowed-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attributes are used correctly for the defined role"
+            }
+          ],
+          "none": [
+            {
+              "id": "aria-unsupported-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute is supported"
+            }
+          ],
+          "impact": null,
+          "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x1v15ycx xioom0i xnjsko4 xt970qd x2lah0s x1x1rfll x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 xjbqb8w x1tgivj0\" data-variant=\"ghost\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" data-mode-toggle=\"true\" aria-label=\"Use light mode\" data-astryx-edge-comp=\"\">",
+          "target": [
+            ".xssyfek"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-allowed-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attributes are used correctly for the defined role"
+            }
+          ],
+          "none": [
+            {
+              "id": "aria-unsupported-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute is supported"
+            }
+          ],
+          "impact": null,
+          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
+          "target": [
+            ".xssyfek > .x10l6tqk.x1i1rx1s.xjm9jq1"
           ]
         },
         {
@@ -815,9 +817,9 @@
             }
           ],
           "impact": null,
-          "html": "<input id=\"_r_1t_\" aria-required=\"true\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"Research a topic\" style=\"\">",
+          "html": "<input aria-invalid=\"false\" required=\"\" value=\"Research a topic\" style=\"\">",
           "target": [
-            "#_r_1t_"
+            "input"
           ]
         },
         {
@@ -841,7 +843,7 @@
             }
           ],
           "impact": null,
-          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"4\" style=\"\">Research a topic</textarea>",
+          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic</textarea>",
           "target": [
             "textarea"
           ]
@@ -947,7 +949,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[type=\"button\"]:nth-child(1) > .x10l6tqk.x1i1rx1s.xjm9jq1"
+            ".xce4md1.xrrkdod.x1ueg155:nth-child(1) > .x10l6tqk.x1i1rx1s.xjm9jq1"
           ]
         },
         {
@@ -973,7 +975,59 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".actions > button[type=\"button\"]:nth-child(2) > .x10l6tqk.x1i1rx1s.xjm9jq1"
+            ".actions > .xce4md1.xrrkdod.x1ueg155:nth-child(2) > .x10l6tqk.x1i1rx1s.xjm9jq1"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-allowed-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attributes are used correctly for the defined role"
+            }
+          ],
+          "none": [
+            {
+              "id": "aria-unsupported-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute is supported"
+            }
+          ],
+          "impact": null,
+          "html": "<div data-astryx-live-region=\"polite\" aria-live=\"polite\" aria-atomic=\"true\" role=\"status\" style=\"position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border: 0px; inset-block-start: 0px; inset-inline-start: 0px; pointer-events: none; user-select: none;\">",
+          "target": [
+            "div[data-astryx-live-region=\"polite\"]"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-allowed-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attributes are used correctly for the defined role"
+            }
+          ],
+          "none": [
+            {
+              "id": "aria-unsupported-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute is supported"
+            }
+          ],
+          "impact": null,
+          "html": "<div data-astryx-live-region=\"assertive\" aria-live=\"assertive\" aria-atomic=\"true\" role=\"alert\" style=\"position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border: 0px; inset-block-start: 0px; inset-inline-start: 0px; pointer-events: none; user-select: none;\">",
+          "target": [
+            "div[data-astryx-live-region=\"assertive\"]"
           ]
         }
       ]
@@ -1005,9 +1059,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
+          "html": "<div class=\"status-line\" role=\"status\" aria-live=\"polite\"><span role=\"img\" aria-label=\"Ready\" class=\"astryx-status-dot x3nfvp2 x6s0dn4 xl56j7k x16rqkct x2lah0s x1xc55vz xdk7pt x1q5y3ey xrkvqaz\" data-variant=\"neutral\"></span>Paid execution enabled · Local service ready</div>",
           "target": [
-            "button[data-mode-toggle=\"true\"] > .x10l6tqk.x1i1rx1s.xjm9jq1"
+            ".status-line"
           ]
         },
         {
@@ -1023,9 +1077,45 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<div class=\"status-line\" role=\"status\" aria-live=\"polite\">Paid execution enabled · Local service ready</div>",
+          "html": "<span role=\"img\" aria-label=\"Ready\" class=\"astryx-status-dot x3nfvp2 x6s0dn4 xl56j7k x16rqkct x2lah0s x1xc55vz xdk7pt x1q5y3ey xrkvqaz\" data-variant=\"neutral\"></span>",
           "target": [
-            ".status-line"
+            ".astryx-status-dot"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-conditional-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x1v15ycx xioom0i xnjsko4 xt970qd x2lah0s x1x1rfll x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 xjbqb8w x1tgivj0\" data-variant=\"ghost\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" data-mode-toggle=\"true\" aria-label=\"Use light mode\" data-astryx-edge-comp=\"\">",
+          "target": [
+            ".xssyfek"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-conditional-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
+          "target": [
+            ".xssyfek > .x10l6tqk.x1i1rx1s.xjm9jq1"
           ]
         },
         {
@@ -1059,9 +1149,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<input id=\"_r_1t_\" aria-required=\"true\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"Research a topic\" style=\"\">",
+          "html": "<input aria-invalid=\"false\" required=\"\" value=\"Research a topic\" style=\"\">",
           "target": [
-            "#_r_1t_"
+            "input"
           ]
         },
         {
@@ -1077,7 +1167,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"4\" style=\"\">Research a topic</textarea>",
+          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic</textarea>",
           "target": [
             "textarea"
           ]
@@ -1151,7 +1241,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[type=\"button\"]:nth-child(1) > .x10l6tqk.x1i1rx1s.xjm9jq1"
+            ".xce4md1.xrrkdod.x1ueg155:nth-child(1) > .x10l6tqk.x1i1rx1s.xjm9jq1"
           ]
         },
         {
@@ -1169,7 +1259,43 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".actions > button[type=\"button\"]:nth-child(2) > .x10l6tqk.x1i1rx1s.xjm9jq1"
+            ".actions > .xce4md1.xrrkdod.x1ueg155:nth-child(2) > .x10l6tqk.x1i1rx1s.xjm9jq1"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-conditional-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<div data-astryx-live-region=\"polite\" aria-live=\"polite\" aria-atomic=\"true\" role=\"status\" style=\"position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border: 0px; inset-block-start: 0px; inset-inline-start: 0px; pointer-events: none; user-select: none;\">",
+          "target": [
+            "div[data-astryx-live-region=\"polite\"]"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-conditional-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<div data-astryx-live-region=\"assertive\" aria-live=\"assertive\" aria-atomic=\"true\" role=\"alert\" style=\"position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border: 0px; inset-block-start: 0px; inset-inline-start: 0px; pointer-events: none; user-select: none;\">",
+          "target": [
+            "div[data-astryx-live-region=\"assertive\"]"
           ]
         }
       ]
@@ -1201,9 +1327,9 @@
             }
           ],
           "impact": null,
-          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
+          "html": "<div class=\"status-line\" role=\"status\" aria-live=\"polite\"><span role=\"img\" aria-label=\"Ready\" class=\"astryx-status-dot x3nfvp2 x6s0dn4 xl56j7k x16rqkct x2lah0s x1xc55vz xdk7pt x1q5y3ey xrkvqaz\" data-variant=\"neutral\"></span>Paid execution enabled · Local service ready</div>",
           "target": [
-            "button[data-mode-toggle=\"true\"] > .x10l6tqk.x1i1rx1s.xjm9jq1"
+            ".status-line"
           ]
         },
         {
@@ -1219,9 +1345,27 @@
             }
           ],
           "impact": null,
-          "html": "<div class=\"status-line\" role=\"status\" aria-live=\"polite\">Paid execution enabled · Local service ready</div>",
+          "html": "<span role=\"img\" aria-label=\"Ready\" class=\"astryx-status-dot x3nfvp2 x6s0dn4 xl56j7k x16rqkct x2lah0s x1xc55vz xdk7pt x1q5y3ey xrkvqaz\" data-variant=\"neutral\"></span>",
           "target": [
-            ".status-line"
+            ".astryx-status-dot"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "deprecatedrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "ARIA role is not deprecated"
+            }
+          ],
+          "impact": null,
+          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
+          "target": [
+            ".xssyfek > .x10l6tqk.x1i1rx1s.xjm9jq1"
           ]
         },
         {
@@ -1275,7 +1419,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[type=\"button\"]:nth-child(1) > .x10l6tqk.x1i1rx1s.xjm9jq1"
+            ".xce4md1.xrrkdod.x1ueg155:nth-child(1) > .x10l6tqk.x1i1rx1s.xjm9jq1"
           ]
         },
         {
@@ -1293,7 +1437,43 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".actions > button[type=\"button\"]:nth-child(2) > .x10l6tqk.x1i1rx1s.xjm9jq1"
+            ".actions > .xce4md1.xrrkdod.x1ueg155:nth-child(2) > .x10l6tqk.x1i1rx1s.xjm9jq1"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "deprecatedrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "ARIA role is not deprecated"
+            }
+          ],
+          "impact": null,
+          "html": "<div data-astryx-live-region=\"polite\" aria-live=\"polite\" aria-atomic=\"true\" role=\"status\" style=\"position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border: 0px; inset-block-start: 0px; inset-inline-start: 0px; pointer-events: none; user-select: none;\">",
+          "target": [
+            "div[data-astryx-live-region=\"polite\"]"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "deprecatedrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "ARIA role is not deprecated"
+            }
+          ],
+          "impact": null,
+          "html": "<div data-astryx-live-region=\"assertive\" aria-live=\"assertive\" aria-atomic=\"true\" role=\"alert\" style=\"position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border: 0px; inset-block-start: 0px; inset-inline-start: 0px; pointer-events: none; user-select: none;\">",
+          "target": [
+            "div[data-astryx-live-region=\"assertive\"]"
           ]
         }
       ]
@@ -1377,9 +1557,105 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<span aria-hidden=\"true\"> ∙ </span>",
+          "html": "<span class=\"brand-mark\" aria-hidden=\"true\">Z</span>",
           "target": [
-            "span[aria-hidden=\"true\"]"
+            ".brand-mark"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "focusable-modal-open",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements while a modal is open"
+            },
+            {
+              "id": "focusable-disabled",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            },
+            {
+              "id": "focusable-not-tabbable",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<svg aria-hidden=\"true\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\"><circle cx=\"12\" cy=\"12\" r=\"4\"></circle><path d=\"M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5\"></path></svg>",
+          "target": [
+            "svg"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "focusable-modal-open",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements while a modal is open"
+            },
+            {
+              "id": "focusable-disabled",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            },
+            {
+              "id": "focusable-not-tabbable",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"workspace-symbol\" aria-hidden=\"true\">↗</span>",
+          "target": [
+            ".workspace-symbol"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "focusable-modal-open",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements while a modal is open"
+            },
+            {
+              "id": "focusable-disabled",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            },
+            {
+              "id": "focusable-not-tabbable",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<div aria-hidden=\"true\"><span class=\"empty-icon\">◇</span></div>",
+          "target": [
+            "div[aria-hidden=\"true\"]"
           ]
         }
       ]
@@ -1411,9 +1687,9 @@
             }
           ],
           "impact": null,
-          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
+          "html": "<div class=\"status-line\" role=\"status\" aria-live=\"polite\"><span role=\"img\" aria-label=\"Ready\" class=\"astryx-status-dot x3nfvp2 x6s0dn4 xl56j7k x16rqkct x2lah0s x1xc55vz xdk7pt x1q5y3ey xrkvqaz\" data-variant=\"neutral\"></span>Paid execution enabled · Local service ready</div>",
           "target": [
-            "button[data-mode-toggle=\"true\"] > .x10l6tqk.x1i1rx1s.xjm9jq1"
+            ".status-line"
           ]
         },
         {
@@ -1429,9 +1705,45 @@
             }
           ],
           "impact": null,
-          "html": "<div class=\"status-line\" role=\"status\" aria-live=\"polite\">Paid execution enabled · Local service ready</div>",
+          "html": "<span role=\"img\" aria-label=\"Ready\" class=\"astryx-status-dot x3nfvp2 x6s0dn4 xl56j7k x16rqkct x2lah0s x1xc55vz xdk7pt x1q5y3ey xrkvqaz\" data-variant=\"neutral\"></span>",
           "target": [
-            ".status-line"
+            ".astryx-status-dot"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "aria-prohibited-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "impact": null,
+          "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x1v15ycx xioom0i xnjsko4 xt970qd x2lah0s x1x1rfll x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 xjbqb8w x1tgivj0\" data-variant=\"ghost\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" data-mode-toggle=\"true\" aria-label=\"Use light mode\" data-astryx-edge-comp=\"\">",
+          "target": [
+            ".xssyfek"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "aria-prohibited-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "impact": null,
+          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
+          "target": [
+            ".xssyfek > .x10l6tqk.x1i1rx1s.xjm9jq1"
           ]
         },
         {
@@ -1465,9 +1777,9 @@
             }
           ],
           "impact": null,
-          "html": "<input id=\"_r_1t_\" aria-required=\"true\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"Research a topic\" style=\"\">",
+          "html": "<input aria-invalid=\"false\" required=\"\" value=\"Research a topic\" style=\"\">",
           "target": [
-            "#_r_1t_"
+            "input"
           ]
         },
         {
@@ -1483,7 +1795,7 @@
             }
           ],
           "impact": null,
-          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"4\" style=\"\">Research a topic</textarea>",
+          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic</textarea>",
           "target": [
             "textarea"
           ]
@@ -1557,7 +1869,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[type=\"button\"]:nth-child(1) > .x10l6tqk.x1i1rx1s.xjm9jq1"
+            ".xce4md1.xrrkdod.x1ueg155:nth-child(1) > .x10l6tqk.x1i1rx1s.xjm9jq1"
           ]
         },
         {
@@ -1575,7 +1887,43 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".actions > button[type=\"button\"]:nth-child(2) > .x10l6tqk.x1i1rx1s.xjm9jq1"
+            ".actions > .xce4md1.xrrkdod.x1ueg155:nth-child(2) > .x10l6tqk.x1i1rx1s.xjm9jq1"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "aria-prohibited-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "impact": null,
+          "html": "<div data-astryx-live-region=\"polite\" aria-live=\"polite\" aria-atomic=\"true\" role=\"status\" style=\"position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border: 0px; inset-block-start: 0px; inset-inline-start: 0px; pointer-events: none; user-select: none;\">",
+          "target": [
+            "div[data-astryx-live-region=\"polite\"]"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "aria-prohibited-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "impact": null,
+          "html": "<div data-astryx-live-region=\"assertive\" aria-live=\"assertive\" aria-atomic=\"true\" role=\"alert\" style=\"position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border: 0px; inset-block-start: 0px; inset-inline-start: 0px; pointer-events: none; user-select: none;\">",
+          "target": [
+            "div[data-astryx-live-region=\"assertive\"]"
           ]
         }
       ]
@@ -1607,9 +1955,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
+          "html": "<div class=\"status-line\" role=\"status\" aria-live=\"polite\"><span role=\"img\" aria-label=\"Ready\" class=\"astryx-status-dot x3nfvp2 x6s0dn4 xl56j7k x16rqkct x2lah0s x1xc55vz xdk7pt x1q5y3ey xrkvqaz\" data-variant=\"neutral\"></span>Paid execution enabled · Local service ready</div>",
           "target": [
-            "button[data-mode-toggle=\"true\"] > .x10l6tqk.x1i1rx1s.xjm9jq1"
+            ".status-line"
           ]
         },
         {
@@ -1625,9 +1973,27 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"status-line\" role=\"status\" aria-live=\"polite\">Paid execution enabled · Local service ready</div>",
+          "html": "<span role=\"img\" aria-label=\"Ready\" class=\"astryx-status-dot x3nfvp2 x6s0dn4 xl56j7k x16rqkct x2lah0s x1xc55vz xdk7pt x1q5y3ey xrkvqaz\" data-variant=\"neutral\"></span>",
           "target": [
-            ".status-line"
+            ".astryx-status-dot"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-required-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "All required ARIA attributes are present"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
+          "target": [
+            ".xssyfek > .x10l6tqk.x1i1rx1s.xjm9jq1"
           ]
         },
         {
@@ -1681,7 +2047,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[type=\"button\"]:nth-child(1) > .x10l6tqk.x1i1rx1s.xjm9jq1"
+            ".xce4md1.xrrkdod.x1ueg155:nth-child(1) > .x10l6tqk.x1i1rx1s.xjm9jq1"
           ]
         },
         {
@@ -1699,7 +2065,43 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".actions > button[type=\"button\"]:nth-child(2) > .x10l6tqk.x1i1rx1s.xjm9jq1"
+            ".actions > .xce4md1.xrrkdod.x1ueg155:nth-child(2) > .x10l6tqk.x1i1rx1s.xjm9jq1"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-required-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "All required ARIA attributes are present"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div data-astryx-live-region=\"polite\" aria-live=\"polite\" aria-atomic=\"true\" role=\"status\" style=\"position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border: 0px; inset-block-start: 0px; inset-inline-start: 0px; pointer-events: none; user-select: none;\">",
+          "target": [
+            "div[data-astryx-live-region=\"polite\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-required-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "All required ARIA attributes are present"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div data-astryx-live-region=\"assertive\" aria-live=\"assertive\" aria-atomic=\"true\" role=\"alert\" style=\"position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border: 0px; inset-block-start: 0px; inset-inline-start: 0px; pointer-events: none; user-select: none;\">",
+          "target": [
+            "div[data-astryx-live-region=\"assertive\"]"
           ]
         }
       ]
@@ -1745,9 +2147,9 @@
             }
           ],
           "impact": null,
-          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
+          "html": "<div class=\"status-line\" role=\"status\" aria-live=\"polite\"><span role=\"img\" aria-label=\"Ready\" class=\"astryx-status-dot x3nfvp2 x6s0dn4 xl56j7k x16rqkct x2lah0s x1xc55vz xdk7pt x1q5y3ey xrkvqaz\" data-variant=\"neutral\"></span>Paid execution enabled · Local service ready</div>",
           "target": [
-            "button[data-mode-toggle=\"true\"] > .x10l6tqk.x1i1rx1s.xjm9jq1"
+            ".status-line"
           ]
         },
         {
@@ -1777,9 +2179,41 @@
             }
           ],
           "impact": null,
-          "html": "<div class=\"status-line\" role=\"status\" aria-live=\"polite\">Paid execution enabled · Local service ready</div>",
+          "html": "<span role=\"img\" aria-label=\"Ready\" class=\"astryx-status-dot x3nfvp2 x6s0dn4 xl56j7k x16rqkct x2lah0s x1xc55vz xdk7pt x1q5y3ey xrkvqaz\" data-variant=\"neutral\"></span>",
           "target": [
-            ".status-line"
+            ".astryx-status-dot"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "invalidrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA role is valid"
+            },
+            {
+              "id": "abstractrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Abstract roles are not used"
+            },
+            {
+              "id": "unsupportedrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA role is supported"
+            }
+          ],
+          "impact": null,
+          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
+          "target": [
+            ".xssyfek > .x10l6tqk.x1i1rx1s.xjm9jq1"
           ]
         },
         {
@@ -1875,7 +2309,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[type=\"button\"]:nth-child(1) > .x10l6tqk.x1i1rx1s.xjm9jq1"
+            ".xce4md1.xrrkdod.x1ueg155:nth-child(1) > .x10l6tqk.x1i1rx1s.xjm9jq1"
           ]
         },
         {
@@ -1907,7 +2341,71 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".actions > button[type=\"button\"]:nth-child(2) > .x10l6tqk.x1i1rx1s.xjm9jq1"
+            ".actions > .xce4md1.xrrkdod.x1ueg155:nth-child(2) > .x10l6tqk.x1i1rx1s.xjm9jq1"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "invalidrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA role is valid"
+            },
+            {
+              "id": "abstractrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Abstract roles are not used"
+            },
+            {
+              "id": "unsupportedrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA role is supported"
+            }
+          ],
+          "impact": null,
+          "html": "<div data-astryx-live-region=\"polite\" aria-live=\"polite\" aria-atomic=\"true\" role=\"status\" style=\"position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border: 0px; inset-block-start: 0px; inset-inline-start: 0px; pointer-events: none; user-select: none;\">",
+          "target": [
+            "div[data-astryx-live-region=\"polite\"]"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "invalidrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA role is valid"
+            },
+            {
+              "id": "abstractrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Abstract roles are not used"
+            },
+            {
+              "id": "unsupportedrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA role is supported"
+            }
+          ],
+          "impact": null,
+          "html": "<div data-astryx-live-region=\"assertive\" aria-live=\"assertive\" aria-atomic=\"true\" role=\"alert\" style=\"position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border: 0px; inset-block-start: 0px; inset-inline-start: 0px; pointer-events: none; user-select: none;\">",
+          "target": [
+            "div[data-astryx-live-region=\"assertive\"]"
           ]
         }
       ]
@@ -1953,9 +2451,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
+          "html": "<div class=\"status-line\" role=\"status\" aria-live=\"polite\"><span role=\"img\" aria-label=\"Ready\" class=\"astryx-status-dot x3nfvp2 x6s0dn4 xl56j7k x16rqkct x2lah0s x1xc55vz xdk7pt x1q5y3ey xrkvqaz\" data-variant=\"neutral\"></span>Paid execution enabled · Local service ready</div>",
           "target": [
-            "button[data-mode-toggle=\"true\"] > .x10l6tqk.x1i1rx1s.xjm9jq1"
+            ".status-line"
           ]
         },
         {
@@ -1985,9 +2483,73 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<div class=\"status-line\" role=\"status\" aria-live=\"polite\">Paid execution enabled · Local service ready</div>",
+          "html": "<span role=\"img\" aria-label=\"Ready\" class=\"astryx-status-dot x3nfvp2 x6s0dn4 xl56j7k x16rqkct x2lah0s x1xc55vz xdk7pt x1q5y3ey xrkvqaz\" data-variant=\"neutral\"></span>",
           "target": [
-            ".status-line"
+            ".astryx-status-dot"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-valid-attr-value",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute values are valid"
+            },
+            {
+              "id": "aria-errormessage",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
+            },
+            {
+              "id": "aria-level",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-level values are valid"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x1v15ycx xioom0i xnjsko4 xt970qd x2lah0s x1x1rfll x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 xjbqb8w x1tgivj0\" data-variant=\"ghost\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" data-mode-toggle=\"true\" aria-label=\"Use light mode\" data-astryx-edge-comp=\"\">",
+          "target": [
+            ".xssyfek"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-valid-attr-value",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute values are valid"
+            },
+            {
+              "id": "aria-errormessage",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
+            },
+            {
+              "id": "aria-level",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-level values are valid"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
+          "target": [
+            ".xssyfek > .x10l6tqk.x1i1rx1s.xjm9jq1"
           ]
         },
         {
@@ -2049,9 +2611,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<input id=\"_r_1t_\" aria-required=\"true\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"Research a topic\" style=\"\">",
+          "html": "<input aria-invalid=\"false\" required=\"\" value=\"Research a topic\" style=\"\">",
           "target": [
-            "#_r_1t_"
+            "input"
           ]
         },
         {
@@ -2081,7 +2643,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"4\" style=\"\">Research a topic</textarea>",
+          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic</textarea>",
           "target": [
             "textarea"
           ]
@@ -2211,7 +2773,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[type=\"button\"]:nth-child(1) > .x10l6tqk.x1i1rx1s.xjm9jq1"
+            ".xce4md1.xrrkdod.x1ueg155:nth-child(1) > .x10l6tqk.x1i1rx1s.xjm9jq1"
           ]
         },
         {
@@ -2243,7 +2805,71 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".actions > button[type=\"button\"]:nth-child(2) > .x10l6tqk.x1i1rx1s.xjm9jq1"
+            ".actions > .xce4md1.xrrkdod.x1ueg155:nth-child(2) > .x10l6tqk.x1i1rx1s.xjm9jq1"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-valid-attr-value",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute values are valid"
+            },
+            {
+              "id": "aria-errormessage",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
+            },
+            {
+              "id": "aria-level",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-level values are valid"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<div data-astryx-live-region=\"polite\" aria-live=\"polite\" aria-atomic=\"true\" role=\"status\" style=\"position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border: 0px; inset-block-start: 0px; inset-inline-start: 0px; pointer-events: none; user-select: none;\">",
+          "target": [
+            "div[data-astryx-live-region=\"polite\"]"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-valid-attr-value",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute values are valid"
+            },
+            {
+              "id": "aria-errormessage",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
+            },
+            {
+              "id": "aria-level",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-level values are valid"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<div data-astryx-live-region=\"assertive\" aria-live=\"assertive\" aria-atomic=\"true\" role=\"alert\" style=\"position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border: 0px; inset-block-start: 0px; inset-inline-start: 0px; pointer-events: none; user-select: none;\">",
+          "target": [
+            "div[data-astryx-live-region=\"assertive\"]"
           ]
         }
       ]
@@ -2275,9 +2901,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
+          "html": "<div class=\"status-line\" role=\"status\" aria-live=\"polite\"><span role=\"img\" aria-label=\"Ready\" class=\"astryx-status-dot x3nfvp2 x6s0dn4 xl56j7k x16rqkct x2lah0s x1xc55vz xdk7pt x1q5y3ey xrkvqaz\" data-variant=\"neutral\"></span>Paid execution enabled · Local service ready</div>",
           "target": [
-            "button[data-mode-toggle=\"true\"] > .x10l6tqk.x1i1rx1s.xjm9jq1"
+            ".status-line"
           ]
         },
         {
@@ -2293,9 +2919,45 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"status-line\" role=\"status\" aria-live=\"polite\">Paid execution enabled · Local service ready</div>",
+          "html": "<span role=\"img\" aria-label=\"Ready\" class=\"astryx-status-dot x3nfvp2 x6s0dn4 xl56j7k x16rqkct x2lah0s x1xc55vz xdk7pt x1q5y3ey xrkvqaz\" data-variant=\"neutral\"></span>",
           "target": [
-            ".status-line"
+            ".astryx-status-dot"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-valid-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute name is valid"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x1v15ycx xioom0i xnjsko4 xt970qd x2lah0s x1x1rfll x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 xjbqb8w x1tgivj0\" data-variant=\"ghost\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" data-mode-toggle=\"true\" aria-label=\"Use light mode\" data-astryx-edge-comp=\"\">",
+          "target": [
+            ".xssyfek"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-valid-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute name is valid"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
+          "target": [
+            ".xssyfek > .x10l6tqk.x1i1rx1s.xjm9jq1"
           ]
         },
         {
@@ -2329,9 +2991,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<input id=\"_r_1t_\" aria-required=\"true\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"Research a topic\" style=\"\">",
+          "html": "<input aria-invalid=\"false\" required=\"\" value=\"Research a topic\" style=\"\">",
           "target": [
-            "#_r_1t_"
+            "input"
           ]
         },
         {
@@ -2347,7 +3009,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"4\" style=\"\">Research a topic</textarea>",
+          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic</textarea>",
           "target": [
             "textarea"
           ]
@@ -2421,7 +3083,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[type=\"button\"]:nth-child(1) > .x10l6tqk.x1i1rx1s.xjm9jq1"
+            ".xce4md1.xrrkdod.x1ueg155:nth-child(1) > .x10l6tqk.x1i1rx1s.xjm9jq1"
           ]
         },
         {
@@ -2439,7 +3101,43 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".actions > button[type=\"button\"]:nth-child(2) > .x10l6tqk.x1i1rx1s.xjm9jq1"
+            ".actions > .xce4md1.xrrkdod.x1ueg155:nth-child(2) > .x10l6tqk.x1i1rx1s.xjm9jq1"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-valid-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute name is valid"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div data-astryx-live-region=\"polite\" aria-live=\"polite\" aria-atomic=\"true\" role=\"status\" style=\"position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border: 0px; inset-block-start: 0px; inset-inline-start: 0px; pointer-events: none; user-select: none;\">",
+          "target": [
+            "div[data-astryx-live-region=\"polite\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-valid-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute name is valid"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div data-astryx-live-region=\"assertive\" aria-live=\"assertive\" aria-atomic=\"true\" role=\"alert\" style=\"position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border: 0px; inset-block-start: 0px; inset-inline-start: 0px; pointer-events: none; user-select: none;\">",
+          "target": [
+            "div[data-astryx-live-region=\"assertive\"]"
           ]
         }
       ]
@@ -2486,9 +3184,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<input id=\"_r_1t_\" aria-required=\"true\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"Research a topic\" style=\"\">",
+          "html": "<input aria-invalid=\"false\" required=\"\" value=\"Research a topic\" style=\"\">",
           "target": [
-            "#_r_1t_"
+            "input"
           ]
         },
         {
@@ -2518,7 +3216,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"4\" style=\"\">Research a topic</textarea>",
+          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic</textarea>",
           "target": [
             "textarea"
           ]
@@ -2547,19 +3245,19 @@
         {
           "any": [
             {
-              "id": "button-has-visible-text",
+              "id": "aria-label",
               "data": null,
               "relatedNodes": [],
               "impact": "critical",
-              "message": "Element has inner text that is visible to screen readers"
+              "message": "aria-label attribute exists and is not empty"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 x1ueg155 x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control\" data-variant=\"secondary\" data-size=\"md\" data-elevation=\"none\" data-astryx-pressable=\"\" data-mode-toggle=\"true\">",
+          "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x1v15ycx xioom0i xnjsko4 xt970qd x2lah0s x1x1rfll x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 xjbqb8w x1tgivj0\" data-variant=\"ghost\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" data-mode-toggle=\"true\" aria-label=\"Use light mode\" data-astryx-edge-comp=\"\">",
           "target": [
-            "button[data-mode-toggle=\"true\"]"
+            ".xssyfek"
           ]
         },
         {
@@ -2595,7 +3293,7 @@
           "impact": null,
           "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 x1ueg155 x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control\" data-variant=\"secondary\" data-size=\"md\" data-elevation=\"none\" data-astryx-pressable=\"\">",
           "target": [
-            "button[type=\"button\"]:nth-child(1)"
+            ".xce4md1.xrrkdod.x1ueg155:nth-child(1)"
           ]
         },
         {
@@ -2613,7 +3311,7 @@
           "impact": null,
           "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 x1ueg155 x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control\" data-variant=\"secondary\" data-size=\"md\" data-elevation=\"none\" data-astryx-pressable=\"\">",
           "target": [
-            ".actions > button[type=\"button\"]:nth-child(2)"
+            ".actions > .xce4md1.xrrkdod.x1ueg155:nth-child(2)"
           ]
         }
       ]
@@ -2650,15 +3348,21 @@
               "data": null,
               "relatedNodes": [
                 {
-                  "html": "<h1>Human direction.<br>Agent execution.</h1>",
+                  "html": "<h1>Zero Agency OS</h1>",
                   "target": [
                     "h1"
                   ]
                 },
                 {
-                  "html": "<h2>Give your agent a task</h2>",
+                  "html": "<h2 class=\"astryx-heading x1tgivj0 x1xvnhcw x1cpk1wn x12yy4cs x1lliihq xh015us\" data-level=\"2\" data-color=\"primary\">Give your agent a task</h2>",
                   "target": [
-                    ".workspace > .astryx-card.x2kkz0m.x153u1i6 > h2"
+                    ".astryx-heading"
+                  ]
+                },
+                {
+                  "html": "<h3 class=\"astryx-empty-state-title x1ghz6dp xjb2p0i x2mo6ok xf74fhv x1tgivj0 xcr08ib\" data-variant=\"compact\">Ready when you are</h3>",
+                  "target": [
+                    "h3"
                   ]
                 },
                 {
@@ -2718,10 +3422,10 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#fafafa",
-                "bgColor": "#0a0a0a",
+                "fgColor": "#0a0a0a",
+                "bgColor": "#fafafa",
                 "contrastRatio": 18.96,
-                "fontSize": "8.3pt (11px)",
+                "fontSize": "12.0pt (16px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -2733,9 +3437,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p class=\"eyebrow\">ZERO AGENCY OS · LOCAL WORKSPACE</p>",
+          "html": "<span class=\"brand-mark\" aria-hidden=\"true\">Z</span>",
           "target": [
-            "header > div > .eyebrow"
+            ".brand-mark"
           ]
         },
         {
@@ -2746,9 +3450,9 @@
                 "fgColor": "#fafafa",
                 "bgColor": "#0a0a0a",
                 "contrastRatio": 18.96,
-                "fontSize": "31.5pt (42px)",
+                "fontSize": "11.3pt (15px)",
                 "fontWeight": "normal",
-                "expectedContrastRatio": "3:1"
+                "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
@@ -2758,159 +3462,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h1>Human direction.<br>Agent execution.</h1>",
+          "html": "<h1>Zero Agency OS</h1>",
           "target": [
             "h1"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#fafafa",
-                "bgColor": "#0a0a0a",
-                "contrastRatio": 18.96,
-                "fontSize": "12.0pt (16px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 18.96"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"xb3r6kr xlyipyv xeuugli\">Use light mode</span>",
-          "target": [
-            "button[data-mode-toggle=\"true\"] > .x1iyjqo2.xs83m0k.xdl72j9 > .xlyipyv.xb3r6kr"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#fafafa",
-                "bgColor": "#0a0a0a",
-                "contrastRatio": 18.96,
-                "fontSize": "12.0pt (16px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 18.96"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div class=\"status-line\" role=\"status\" aria-live=\"polite\">Paid execution enabled · Local service ready</div>",
-          "target": [
-            ".status-line"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#fafafa",
-                "bgColor": "#0a0a0a",
-                "contrastRatio": 18.96,
-                "fontSize": "8.3pt (11px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 18.96"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<p class=\"eyebrow\">03 / WORKSPACE</p>",
-          "target": [
-            ".astryx-card.x2kkz0m.x153u1i6 > .eyebrow"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#fafafa",
-                "bgColor": "#0a0a0a",
-                "contrastRatio": 18.96,
-                "fontSize": "17.3pt (23px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 18.96"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<h2>Give your agent a task</h2>",
-          "target": [
-            ".workspace > .astryx-card.x2kkz0m.x153u1i6 > h2"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#a0a0a0",
-                "bgColor": "#0a0a0a",
-                "contrastRatio": 7.57,
-                "fontSize": "12.0pt (16px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.57"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<p class=\"za-muted\">Drafts stay in review until you accept them.</p>",
-          "target": [
-            ".astryx-card.x2kkz0m.x153u1i6 > .za-muted"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#a0a0a0",
-                "bgColor": "#0a0a0a",
-                "contrastRatio": 7.57,
-                "fontSize": "10.5pt (14px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.57"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<label for=\"_r_1t_\" class=\"astryx-field-label x78zum5 x6s0dn4 xzye2dw x9ynric xcr08ib x1kq96og x1e4wzip xv1l7n4 x1ypdohk x16khyan\">Task title<span class=\"x1sodnla x141an7d x1ltkj2j xv1l7n4\"><span aria-hidden=\"true\"> ∙ </span>Required</span></label>",
-          "target": [
-            ".astryx-field-label"
           ]
         },
         {
@@ -2933,9 +3487,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span class=\"x1sodnla x141an7d x1ltkj2j xv1l7n4\"><span aria-hidden=\"true\"> ∙ </span>Required</span>",
+          "html": "<div class=\"status-line\" role=\"status\" aria-live=\"polite\"><span role=\"img\" aria-label=\"Ready\" class=\"astryx-status-dot x3nfvp2 x6s0dn4 xl56j7k x16rqkct x2lah0s x1xc55vz xdk7pt x1q5y3ey xrkvqaz\" data-variant=\"neutral\"></span>Paid execution enabled · Local service ready</div>",
           "target": [
-            ".x1sodnla"
+            ".status-line"
           ]
         },
         {
@@ -2944,23 +3498,23 @@
               "id": "color-contrast",
               "data": {
                 "fgColor": "#fafafa",
-                "bgColor": "#0a0a0a",
-                "contrastRatio": 18.96,
-                "fontSize": "12.0pt (16px)",
+                "bgColor": "#141414",
+                "contrastRatio": 17.65,
+                "fontSize": "18.8pt (25px)",
                 "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
+                "expectedContrastRatio": "3:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 18.96"
+              "message": "Element has sufficient color contrast of 17.65"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<input id=\"_r_1t_\" aria-required=\"true\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"Research a topic\" style=\"\">",
+          "html": "<h2 class=\"astryx-heading x1tgivj0 x1xvnhcw x1cpk1wn x12yy4cs x1lliihq xh015us\" data-level=\"2\" data-color=\"primary\">Give your agent a task</h2>",
           "target": [
-            "#_r_1t_"
+            ".astryx-heading"
           ]
         },
         {
@@ -2969,23 +3523,123 @@
               "id": "color-contrast",
               "data": {
                 "fgColor": "#a0a0a0",
-                "bgColor": "#0a0a0a",
-                "contrastRatio": 7.57,
-                "fontSize": "10.5pt (14px)",
+                "bgColor": "#141414",
+                "contrastRatio": 7.04,
+                "fontSize": "12.0pt (16px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.57"
+              "message": "Element has sufficient color contrast of 7.04"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<label>Task description (required)<textarea aria-invalid=\"false\" required=\"\" rows=\"4\" style=\"\">Research a topic</textarea></label>",
+          "html": "<span class=\"astryx-text xv1l7n4 xjm74w1 xw6l6zx xxovm9e xt0psk2 xh015us\" data-type=\"body\" data-color=\"secondary\">Drafts stay in review until you accept them.</span>",
           "target": [
-            "fieldset > label"
+            ".astryx-text"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#fafafa",
+                "bgColor": "#141414",
+                "contrastRatio": 17.65,
+                "fontSize": "9.8pt (13px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 17.65"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<label>Task title<input aria-invalid=\"false\" required=\"\" value=\"Research a topic\" style=\"\"></label>",
+          "target": [
+            "label:nth-child(1)"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#fafafa",
+                "bgColor": "#141414",
+                "contrastRatio": 17.65,
+                "fontSize": "9.8pt (13px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 17.65"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<input aria-invalid=\"false\" required=\"\" value=\"Research a topic\" style=\"\">",
+          "target": [
+            "input"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#fafafa",
+                "bgColor": "#141414",
+                "contrastRatio": 17.65,
+                "fontSize": "9.8pt (13px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 17.65"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<label>Task description (required)<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic</textarea></label>",
+          "target": [
+            "label:nth-child(2)"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#a0a0a0",
+                "bgColor": "#141414",
+                "contrastRatio": 7.04,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 7.04"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"za-muted\">You review every draft.</span>",
+          "target": [
+            ".za-muted"
           ]
         },
         {
@@ -2996,7 +3650,7 @@
                 "fgColor": "#0a0a0a",
                 "bgColor": "#c8ff00",
                 "contrastRatio": 16.74,
-                "fontSize": "12.0pt (16px)",
+                "fontSize": "10.5pt (14px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -3010,7 +3664,7 @@
           "impact": null,
           "html": "<span class=\"xb3r6kr xlyipyv xeuugli\">Run task</span>",
           "target": [
-            ".za-primary > .x1iyjqo2.xs83m0k.xdl72j9 > .xlyipyv.xb3r6kr"
+            ".za-primary > .x1iyjqo2.xs83m0k.xdl72j9 > .xlyipyv.xb3r6kr.xeuugli"
           ]
         },
         {
@@ -3019,23 +3673,48 @@
               "id": "color-contrast",
               "data": {
                 "fgColor": "#fafafa",
-                "bgColor": "#0a0a0a",
-                "contrastRatio": 18.96,
-                "fontSize": "12.0pt (16px)",
+                "bgColor": "#141414",
+                "contrastRatio": 17.65,
+                "fontSize": "10.5pt (14px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 18.96"
+              "message": "Element has sufficient color contrast of 17.65"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p>No task yet. Give your agent a task.</p>",
+          "html": "<h3 class=\"astryx-empty-state-title x1ghz6dp xjb2p0i x2mo6ok xf74fhv x1tgivj0 xcr08ib\" data-variant=\"compact\">Ready when you are</h3>",
           "target": [
-            "p:nth-child(6)"
+            "h3"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#a0a0a0",
+                "bgColor": "#141414",
+                "contrastRatio": 7.04,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 7.04"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"astryx-empty-state-description x1ghz6dp xjb2p0i x1sodnla xw6l6zx xv1l7n4 x141an7d\" data-variant=\"compact\">No task yet. Give your agent a task.</div>",
+          "target": [
+            ".astryx-empty-state-description"
           ]
         },
         {
@@ -3044,15 +3723,15 @@
               "id": "color-contrast",
               "data": {
                 "fgColor": "#fafafa",
-                "bgColor": "#0a0a0a",
-                "contrastRatio": 18.96,
-                "fontSize": "17.3pt (23px)",
+                "bgColor": "#141414",
+                "contrastRatio": 17.65,
+                "fontSize": "14.3pt (19px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 18.96"
+              "message": "Element has sufficient color contrast of 17.65"
             }
           ],
           "all": [],
@@ -3068,24 +3747,24 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#fafafa",
-                "bgColor": "#0a0a0a",
-                "contrastRatio": 18.96,
-                "fontSize": "12.0pt (16px)",
+                "fgColor": "#a0a0a0",
+                "bgColor": "#141414",
+                "contrastRatio": 7.04,
+                "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 18.96"
+              "message": "Element has sufficient color contrast of 7.04"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p>Monthly cap: $0.00</p>",
+          "html": "<dt class=\"xv1l7n4 xjm74w1 xw6l6zx x1e4wzip x78zum5 x6s0dn4 x1txdalj x1ghz6dp x1717udv\">Monthly cap</dt>",
           "target": [
-            "p:nth-child(2)"
+            ".astryx-metadata-list-item.x1lsbc85.xdt5ytf:nth-child(1) > dt"
           ]
         },
         {
@@ -3094,15 +3773,140 @@
               "id": "color-contrast",
               "data": {
                 "fgColor": "#fafafa",
-                "bgColor": "#0a0a0a",
-                "contrastRatio": 18.96,
-                "fontSize": "12.0pt (16px)",
+                "bgColor": "#141414",
+                "contrastRatio": 17.65,
+                "fontSize": "9.8pt (13px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 18.96"
+              "message": "Element has sufficient color contrast of 17.65"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<dd class=\"x1tgivj0 xjm74w1 xw6l6zx x1ghz6dp x1717udv x13faqbe\">$0.00</dd>",
+          "target": [
+            ".astryx-metadata-list-item.x1lsbc85.xdt5ytf:nth-child(1) > dd"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#a0a0a0",
+                "bgColor": "#141414",
+                "contrastRatio": 7.04,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 7.04"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<dt class=\"xv1l7n4 xjm74w1 xw6l6zx x1e4wzip x78zum5 x6s0dn4 x1txdalj x1ghz6dp x1717udv\">Spent</dt>",
+          "target": [
+            ".astryx-metadata-list-item.x1lsbc85.xdt5ytf:nth-child(2) > dt"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#fafafa",
+                "bgColor": "#141414",
+                "contrastRatio": 17.65,
+                "fontSize": "9.8pt (13px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 17.65"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<dd class=\"x1tgivj0 xjm74w1 xw6l6zx x1ghz6dp x1717udv x13faqbe\">$0.00</dd>",
+          "target": [
+            ".astryx-metadata-list-item.x1lsbc85.xdt5ytf:nth-child(2) > dd"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#a0a0a0",
+                "bgColor": "#141414",
+                "contrastRatio": 7.04,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 7.04"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<dt class=\"xv1l7n4 xjm74w1 xw6l6zx x1e4wzip x78zum5 x6s0dn4 x1txdalj x1ghz6dp x1717udv\">Paid execution</dt>",
+          "target": [
+            ".astryx-metadata-list-item.x1lsbc85.xdt5ytf:nth-child(3) > dt"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#d4d4d4",
+                "bgColor": "#303030",
+                "contrastRatio": 8.9,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 8.9"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"xb3r6kr xlyipyv xeuugli\">Enabled</span>",
+          "target": [
+            ".astryx-badge > .xlyipyv.xb3r6kr.xeuugli"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#a0a0a0",
+                "bgColor": "#141414",
+                "contrastRatio": 7.04,
+                "fontSize": "9.8pt (13px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 7.04"
             }
           ],
           "all": [],
@@ -3110,7 +3914,7 @@
           "impact": null,
           "html": "<p>Unpriced usage blocks future execution. Disabling execution pauses the agent.</p>",
           "target": [
-            "aside > .astryx-card.x2kkz0m.x153u1i6 > p:nth-child(3)"
+            "aside > .astryx-card.x2kkz0m.x153u1i6 > p"
           ]
         },
         {
@@ -3121,7 +3925,7 @@
                 "fgColor": "#fafafa",
                 "bgColor": "#0a0a0a",
                 "contrastRatio": 18.96,
-                "fontSize": "12.0pt (16px)",
+                "fontSize": "10.5pt (14px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -3135,7 +3939,7 @@
           "impact": null,
           "html": "<span class=\"xb3r6kr xlyipyv xeuugli\">Open Paperclip board</span>",
           "target": [
-            "button[type=\"button\"]:nth-child(1) > .x1iyjqo2.xs83m0k.xdl72j9 > .xlyipyv.xb3r6kr"
+            ".xce4md1.xrrkdod.x1ueg155:nth-child(1) > .x1iyjqo2.xs83m0k.xdl72j9 > .xlyipyv.xb3r6kr.xeuugli"
           ]
         },
         {
@@ -3146,7 +3950,7 @@
                 "fgColor": "#fafafa",
                 "bgColor": "#0a0a0a",
                 "contrastRatio": 18.96,
-                "fontSize": "12.0pt (16px)",
+                "fontSize": "10.5pt (14px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -3160,57 +3964,172 @@
           "impact": null,
           "html": "<span class=\"xb3r6kr xlyipyv xeuugli\">Disable paid execution</span>",
           "target": [
-            ".actions > button[type=\"button\"]:nth-child(2) > .x1iyjqo2.xs83m0k.xdl72j9 > .xlyipyv.xb3r6kr"
+            ".actions > .xce4md1.xrrkdod.x1ueg155:nth-child(2) > .x1iyjqo2.xs83m0k.xdl72j9 > .xlyipyv.xb3r6kr.xeuugli"
           ]
-        },
+        }
+      ]
+    },
+    {
+      "id": "definition-list",
+      "impact": null,
+      "tags": [
+        "cat.structure",
+        "wcag2a",
+        "wcag131",
+        "EN-301-549",
+        "EN-9.1.3.1"
+      ],
+      "description": "Ensure <dl> elements are structured correctly",
+      "help": "<dl> elements must only directly contain properly-ordered <dt> and <dd> groups, <script>, <template> or <div> elements",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/definition-list?application=playwright",
+      "nodes": [
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "structured-dlitems",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "When not empty, element has both <dt> and <dd> elements"
+            },
+            {
+              "id": "only-dlitems",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "dl element only has direct children that are allowed inside; <dt>, <dd>, or <div> elements"
+            }
+          ],
+          "impact": null,
+          "html": "<dl id=\"_r_22_\" class=\"x1ghz6dp x1717udv xrvj5dj x1y6fwsi xjcht0a\">",
+          "target": [
+            "#_r_22_"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dlitem",
+      "impact": null,
+      "tags": [
+        "cat.structure",
+        "wcag2a",
+        "wcag131",
+        "EN-301-549",
+        "EN-9.1.3.1"
+      ],
+      "description": "Ensure <dt> and <dd> elements are contained by a <dl>",
+      "help": "<dt> and <dd> elements must be contained by a <dl>",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/dlitem?application=playwright",
+      "nodes": [
         {
           "any": [
             {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#fafafa",
-                "bgColor": "#0a0a0a",
-                "contrastRatio": 18.96,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
+              "id": "dlitem",
+              "data": null,
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 18.96"
+              "message": "Description list item has a <dl> parent element"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<footer>Private by default. Human approval by design. <span class=\"za-muted\">MVP v0.1 · Telemetry sends nothing.</span></footer>",
+          "html": "<dt class=\"xv1l7n4 xjm74w1 xw6l6zx x1e4wzip x78zum5 x6s0dn4 x1txdalj x1ghz6dp x1717udv\">Monthly cap</dt>",
           "target": [
-            "footer"
+            ".astryx-metadata-list-item.x1lsbc85.xdt5ytf:nth-child(1) > dt"
           ]
         },
         {
           "any": [
             {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#a0a0a0",
-                "bgColor": "#0a0a0a",
-                "contrastRatio": 7.57,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
+              "id": "dlitem",
+              "data": null,
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.57"
+              "message": "Description list item has a <dl> parent element"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span class=\"za-muted\">MVP v0.1 · Telemetry sends nothing.</span>",
+          "html": "<dd class=\"x1tgivj0 xjm74w1 xw6l6zx x1ghz6dp x1717udv x13faqbe\">$0.00</dd>",
           "target": [
-            "footer > .za-muted"
+            ".astryx-metadata-list-item.x1lsbc85.xdt5ytf:nth-child(1) > dd"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "dlitem",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Description list item has a <dl> parent element"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<dt class=\"xv1l7n4 xjm74w1 xw6l6zx x1e4wzip x78zum5 x6s0dn4 x1txdalj x1ghz6dp x1717udv\">Spent</dt>",
+          "target": [
+            ".astryx-metadata-list-item.x1lsbc85.xdt5ytf:nth-child(2) > dt"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "dlitem",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Description list item has a <dl> parent element"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<dd class=\"x1tgivj0 xjm74w1 xw6l6zx x1ghz6dp x1717udv x13faqbe\">$0.00</dd>",
+          "target": [
+            ".astryx-metadata-list-item.x1lsbc85.xdt5ytf:nth-child(2) > dd"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "dlitem",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Description list item has a <dl> parent element"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<dt class=\"xv1l7n4 xjm74w1 xw6l6zx x1e4wzip x78zum5 x6s0dn4 x1txdalj x1ghz6dp x1717udv\">Paid execution</dt>",
+          "target": [
+            ".astryx-metadata-list-item.x1lsbc85.xdt5ytf:nth-child(3) > dt"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "dlitem",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Description list item has a <dl> parent element"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<dd class=\"x1tgivj0 xjm74w1 xw6l6zx x1ghz6dp x1717udv x13faqbe\">",
+          "target": [
+            ".astryx-metadata-list-item.x1lsbc85.xdt5ytf:nth-child(3) > dd"
           ]
         }
       ]
@@ -3270,24 +4189,6 @@
           "any": [
             {
               "id": "duplicate-id-aria",
-              "data": "_r_1t_",
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<input id=\"_r_1t_\" aria-required=\"true\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"Research a topic\" style=\"\">",
-          "target": [
-            "#_r_1t_"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "duplicate-id-aria",
               "data": "execution-controls-title",
               "relatedNodes": [],
               "impact": "critical",
@@ -3329,9 +4230,9 @@
               "data": null,
               "relatedNodes": [
                 {
-                  "html": "<label for=\"_r_1t_\" class=\"astryx-field-label x78zum5 x6s0dn4 xzye2dw x9ynric xcr08ib x1kq96og x1e4wzip xv1l7n4 x1ypdohk x16khyan\">Task title<span class=\"x1sodnla x141an7d x1ltkj2j xv1l7n4\"><span aria-hidden=\"true\"> ∙ </span>Required</span></label>",
+                  "html": "<label>Task title<input aria-invalid=\"false\" required=\"\" value=\"Research a topic\" style=\"\"></label>",
                   "target": [
-                    ".astryx-field-label"
+                    "label:nth-child(1)"
                   ]
                 }
               ],
@@ -3340,9 +4241,9 @@
             }
           ],
           "impact": null,
-          "html": "<input id=\"_r_1t_\" aria-required=\"true\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"Research a topic\" style=\"\">",
+          "html": "<input aria-invalid=\"false\" required=\"\" value=\"Research a topic\" style=\"\">",
           "target": [
-            "#_r_1t_"
+            "input"
           ]
         },
         {
@@ -3354,9 +4255,9 @@
               "data": null,
               "relatedNodes": [
                 {
-                  "html": "<label>Task description (required)<textarea aria-invalid=\"false\" required=\"\" rows=\"4\" style=\"\">Research a topic</textarea></label>",
+                  "html": "<label>Task description (required)<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic</textarea></label>",
                   "target": [
-                    "fieldset > label"
+                    "label:nth-child(2)"
                   ]
                 }
               ],
@@ -3365,7 +4266,7 @@
             }
           ],
           "impact": null,
-          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"4\" style=\"\">Research a topic</textarea>",
+          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic</textarea>",
           "target": [
             "textarea"
           ]
@@ -3468,50 +4369,15 @@
         {
           "any": [
             {
-              "id": "explicit-label",
-              "data": {
-                "explicitLabel": "Task titleRequired"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<label for=\"_r_1t_\" class=\"astryx-field-label x78zum5 x6s0dn4 xzye2dw x9ynric xcr08ib x1kq96og x1e4wzip xv1l7n4 x1ypdohk x16khyan\">Task title<span class=\"x1sodnla x141an7d x1ltkj2j xv1l7n4\"><span aria-hidden=\"true\"> ∙ </span>Required</span></label>",
-                  "target": [
-                    ".astryx-field-label"
-                  ]
-                }
-              ],
-              "impact": "critical",
-              "message": "Element has an explicit <label>"
-            }
-          ],
-          "all": [],
-          "none": [
-            {
-              "id": "hidden-explicit-label",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "Form element has a visible explicit <label>"
-            }
-          ],
-          "impact": null,
-          "html": "<input id=\"_r_1t_\" aria-required=\"true\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"Research a topic\" style=\"\">",
-          "target": [
-            "#_r_1t_"
-          ]
-        },
-        {
-          "any": [
-            {
               "id": "implicit-label",
               "data": {
-                "implicitLabel": "Task description (required)"
+                "implicitLabel": "Task title"
               },
               "relatedNodes": [
                 {
-                  "html": "<label>Task description (required)<textarea aria-invalid=\"false\" required=\"\" rows=\"4\" style=\"\">Research a topic</textarea></label>",
+                  "html": "<label>Task title<input aria-invalid=\"false\" required=\"\" value=\"Research a topic\" style=\"\"></label>",
                   "target": [
-                    "fieldset > label"
+                    "label:nth-child(1)"
                   ]
                 }
               ],
@@ -3530,7 +4396,42 @@
             }
           ],
           "impact": null,
-          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"4\" style=\"\">Research a topic</textarea>",
+          "html": "<input aria-invalid=\"false\" required=\"\" value=\"Research a topic\" style=\"\">",
+          "target": [
+            "input"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "implicit-label",
+              "data": {
+                "implicitLabel": "Task description (required)"
+              },
+              "relatedNodes": [
+                {
+                  "html": "<label>Task description (required)<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic</textarea></label>",
+                  "target": [
+                    "label:nth-child(2)"
+                  ]
+                }
+              ],
+              "impact": "critical",
+              "message": "Element has an implicit (wrapped) <label>"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "hidden-explicit-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Form element has a visible explicit <label>"
+            }
+          ],
+          "impact": null,
+          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic</textarea>",
           "target": [
             "textarea"
           ]
@@ -3650,9 +4551,27 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 x1ueg155 x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control\" data-variant=\"secondary\" data-size=\"md\" data-elevation=\"none\" data-astryx-pressable=\"\" data-mode-toggle=\"true\">",
+          "html": "<span role=\"img\" aria-label=\"Ready\" class=\"astryx-status-dot x3nfvp2 x6s0dn4 xl56j7k x16rqkct x2lah0s x1xc55vz xdk7pt x1q5y3ey xrkvqaz\" data-variant=\"neutral\"></span>",
           "target": [
-            "button[data-mode-toggle=\"true\"]"
+            ".astryx-status-dot"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "no-focusable-content",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have focusable descendants"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x1v15ycx xioom0i xnjsko4 xt970qd x2lah0s x1x1rfll x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 xjbqb8w x1tgivj0\" data-variant=\"ghost\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" data-mode-toggle=\"true\" aria-label=\"Use light mode\" data-astryx-edge-comp=\"\">",
+          "target": [
+            ".xssyfek"
           ]
         },
         {
@@ -3688,7 +4607,7 @@
           "impact": null,
           "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 x1ueg155 x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control\" data-variant=\"secondary\" data-size=\"md\" data-elevation=\"none\" data-astryx-pressable=\"\">",
           "target": [
-            "button[type=\"button\"]:nth-child(1)"
+            ".xce4md1.xrrkdod.x1ueg155:nth-child(1)"
           ]
         },
         {
@@ -3706,7 +4625,46 @@
           "impact": null,
           "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 x1ueg155 x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control\" data-variant=\"secondary\" data-size=\"md\" data-elevation=\"none\" data-astryx-pressable=\"\">",
           "target": [
-            ".actions > button[type=\"button\"]:nth-child(2)"
+            ".actions > .xce4md1.xrrkdod.x1ueg155:nth-child(2)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "role-img-alt",
+      "impact": null,
+      "tags": [
+        "cat.text-alternatives",
+        "wcag2a",
+        "wcag111",
+        "section508",
+        "section508.22.a",
+        "TTv5",
+        "TT7.a",
+        "EN-301-549",
+        "EN-9.1.1.1",
+        "ACT"
+      ],
+      "description": "Ensure [role=\"img\"] elements have alternative text",
+      "help": "[role=\"img\"] elements must have an alternative text",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/role-img-alt?application=playwright",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "aria-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "aria-label attribute exists and is not empty"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span role=\"img\" aria-label=\"Ready\" class=\"astryx-status-dot x3nfvp2 x6s0dn4 xl56j7k x16rqkct x2lah0s x1xc55vz xdk7pt x1q5y3ey xrkvqaz\" data-variant=\"neutral\"></span>",
+          "target": [
+            ".astryx-status-dot"
           ]
         }
       ]
@@ -3730,11 +4688,11 @@
               "data": {
                 "minSize": 24,
                 "width": 136,
-                "height": 40
+                "height": 48
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Control has sufficient size (136px by 40px, should be at least 24px by 24px)"
+              "message": "Control has sufficient size (136px by 48px, should be at least 24px by 24px)"
             },
             {
               "id": "target-offset",
@@ -3761,12 +4719,12 @@
               "id": "target-size",
               "data": {
                 "minSize": 24,
-                "width": 146,
-                "height": 32
+                "width": 44,
+                "height": 44
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Control has sufficient size (146px by 32px, should be at least 24px by 24px)"
+              "message": "Control has sufficient size (44px by 44px, should be at least 24px by 24px)"
             },
             {
               "id": "target-offset",
@@ -3782,9 +4740,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 x1ueg155 x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control\" data-variant=\"secondary\" data-size=\"md\" data-elevation=\"none\" data-astryx-pressable=\"\" data-mode-toggle=\"true\">",
+          "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x1v15ycx xioom0i xnjsko4 xt970qd x2lah0s x1x1rfll x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 xjbqb8w x1tgivj0\" data-variant=\"ghost\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" data-mode-toggle=\"true\" aria-label=\"Use light mode\" data-astryx-edge-comp=\"\">",
           "target": [
-            "button[data-mode-toggle=\"true\"]"
+            ".xssyfek"
           ]
         },
         {
@@ -3793,12 +4751,12 @@
               "id": "target-size",
               "data": {
                 "minSize": 24,
-                "width": 649.3,
-                "height": 24
+                "width": 706,
+                "height": 45.5
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Control has sufficient size (649.3px by 24px, should be at least 24px by 24px)"
+              "message": "Control has sufficient size (706px by 45.5px, should be at least 24px by 24px)"
             },
             {
               "id": "target-offset",
@@ -3814,9 +4772,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<input id=\"_r_1t_\" aria-required=\"true\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"Research a topic\" style=\"\">",
+          "html": "<input aria-invalid=\"false\" required=\"\" value=\"Research a topic\" style=\"\">",
           "target": [
-            "#_r_1t_"
+            "input"
           ]
         },
         {
@@ -3825,12 +4783,12 @@
               "id": "target-size",
               "data": {
                 "minSize": 24,
-                "width": 667.3,
-                "height": 102
+                "width": 706,
+                "height": 143
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Control has sufficient size (667.3px by 102px, should be at least 24px by 24px)"
+              "message": "Control has sufficient size (706px by 143px, should be at least 24px by 24px)"
             },
             {
               "id": "target-offset",
@@ -3846,7 +4804,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"4\" style=\"\">Research a topic</textarea>",
+          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic</textarea>",
           "target": [
             "textarea"
           ]
@@ -3857,12 +4815,12 @@
               "id": "target-size",
               "data": {
                 "minSize": 24,
-                "width": 198,
-                "height": 32
+                "width": 84,
+                "height": 44
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Control has sufficient size (198px by 32px, should be at least 24px by 24px)"
+              "message": "Control has sufficient size (84px by 44px, should be at least 24px by 24px)"
             },
             {
               "id": "target-offset",
@@ -3878,9 +4836,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 x1ueg155 x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control\" data-variant=\"secondary\" data-size=\"md\" data-elevation=\"none\" data-astryx-pressable=\"\">",
+          "html": "<button type=\"submit\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 x1ueg155 x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control za-primary\" data-variant=\"secondary\" data-size=\"md\" data-elevation=\"none\" data-astryx-pressable=\"\">",
           "target": [
-            "button[type=\"button\"]:nth-child(1)"
+            ".za-primary"
           ]
         },
         {
@@ -3889,12 +4847,12 @@
               "id": "target-size",
               "data": {
                 "minSize": 24,
-                "width": 204,
-                "height": 32
+                "width": 290,
+                "height": 44
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Control has sufficient size (204px by 32px, should be at least 24px by 24px)"
+              "message": "Control has sufficient size (290px by 44px, should be at least 24px by 24px)"
             },
             {
               "id": "target-offset",
@@ -3912,7 +4870,39 @@
           "impact": null,
           "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 x1ueg155 x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control\" data-variant=\"secondary\" data-size=\"md\" data-elevation=\"none\" data-astryx-pressable=\"\">",
           "target": [
-            ".actions > button[type=\"button\"]:nth-child(2)"
+            ".xce4md1.xrrkdod.x1ueg155:nth-child(1)"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "target-size",
+              "data": {
+                "minSize": 24,
+                "width": 290,
+                "height": 44
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Control has sufficient size (290px by 44px, should be at least 24px by 24px)"
+            },
+            {
+              "id": "target-offset",
+              "data": {
+                "closestOffset": 24,
+                "minOffset": 24
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Target has sufficient space from its closest neighbors. Safe clickable space has a diameter of 24px which is at least 24px."
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 x1ueg155 x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control\" data-variant=\"secondary\" data-size=\"md\" data-elevation=\"none\" data-astryx-pressable=\"\">",
+          "target": [
+            ".actions > .xce4md1.xrrkdod.x1ueg155:nth-child(2)"
           ]
         }
       ]
@@ -3941,36 +4931,15 @@
             {
               "id": "color-contrast",
               "data": {
-                "messageKey": "nonBmp"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element content contains only non-text characters"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": "serious",
-          "html": "<span aria-hidden=\"true\"> ∙ </span>",
-          "target": [
-            "span[aria-hidden=\"true\"]"
-          ],
-          "failureSummary": "Fix any of the following:\n  Element content contains only non-text characters"
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
                 "contrastRatio": 0,
-                "fontSize": "10.5pt (14px)",
+                "fontSize": "9.8pt (13px)",
                 "fontWeight": "normal",
                 "messageKey": "elmPartiallyObscured",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [
                 {
-                  "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"4\" style=\"\">Research a topic</textarea>",
+                  "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic</textarea>",
                   "target": [
                     "textarea"
                   ]
@@ -3983,11 +4952,32 @@
           "all": [],
           "none": [],
           "impact": "serious",
-          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"4\" style=\"\">Research a topic</textarea>",
+          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic</textarea>",
           "target": [
             "textarea"
           ],
           "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element"
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "messageKey": "nonBmp"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element content contains only non-text characters"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<span class=\"empty-icon\">◇</span>",
+          "target": [
+            ".empty-icon"
+          ],
+          "failureSummary": "Fix any of the following:\n  Element content contains only non-text characters"
         }
       ]
     }

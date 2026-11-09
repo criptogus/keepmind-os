@@ -35,7 +35,7 @@ all declare MIT. Retain their full bundled notices before distribution.
 
 ## Inter
 
-Inter-Regular.ttf is distributed under the SIL Open Font License 1.1.
+InterVariable.ttf (variable weight 100–900) and Inter-Regular.ttf are distributed under the SIL Open Font License 1.1.
 The font was copied from the supplied brief. Include the upstream font copyright
 and full OFL notice before distribution; the brief contains no license file.
 

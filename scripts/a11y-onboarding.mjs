@@ -1,4 +1,3 @@
-import { createServer } from 'node:http';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { resolve, extname } from 'node:path';
 import { createRequire } from 'node:module';
@@ -6,13 +5,12 @@ const require = createRequire(resolve(process.env.ZAOS_A11Y_MODULES ?? '/tmp/zao
 const { chromium } = require('playwright');
 const { default: AxeBuilder } = require('@axe-core/playwright');
 const root = resolve('dist/renderer');
-const server = createServer(async (req, res) => {
- try { const pathname = new URL(req.url, 'http://localhost').pathname; const file = resolve(root, '.' + (pathname === '/' ? '/index.html' : pathname)); if (!file.startsWith(root + '/')) throw Error(); const data = await readFile(file); res.setHeader('Content-Type', ({ '.html':'text/html', '.js':'text/javascript', '.css':'text/css', '.ttf':'font/ttf' })[extname(file)] ?? 'application/octet-stream'); res.end(data); } catch { res.writeHead(404); res.end(); }
-});
-await new Promise(r => server.listen(0, '127.0.0.1', r));
-const port = server.address().port;
-if ([3000,3100,8642,8787,8794].includes(port)) throw Error('Forbidden port allocated');
-const url = `http://127.0.0.1:${port}`;
+// No listening socket: every request to the fake origin is fulfilled from dist/renderer in-process.
+const url = 'http://zaos-renderer.test';
+const types = { '.html':'text/html', '.js':'text/javascript', '.css':'text/css', '.ttf':'font/ttf', '.woff2':'font/woff2', '.svg':'image/svg+xml', '.png':'image/png' };
+async function serve(route) {
+ try { const pathname = new URL(route.request().url()).pathname; const file = resolve(root, '.' + (pathname === '/' ? '/index.html' : pathname)); if (!file.startsWith(root + '/')) throw Error(); await route.fulfill({ status: 200, contentType: types[extname(file)] ?? 'application/octet-stream', body: await readFile(file) }); } catch { await route.fulfill({ status: 404, body: '' }); }
+}
 await mkdir('evidence/a11y', { recursive: true }); await mkdir('evidence/screenshots', { recursive: true });
 // Read the actual Phase 1 static table offline; do not maintain a second price catalog.
 const deepseekSource = await readFile('src/main/connectors/deepseek.ts', 'utf8');
@@ -24,8 +22,8 @@ let browser;
 try {
  browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });
  for (const mode of ['light','dark']) {
-  const context = await browser.newContext({ viewport: { width: 1280, height: 1100 }, colorScheme: mode, reducedMotion: 'reduce' });
-  await context.route('**/*', route => route.request().url().startsWith(url + '/') || route.request().url() === url ? route.continue() : route.abort());
+  const context = await browser.newContext({ viewport: { width: 1280, height: 820 }, colorScheme: mode, reducedMotion: 'reduce' });
+  await context.route('**/*', route => route.request().url().startsWith(url + '/') || route.request().url() === url ? serve(route) : route.abort());
   await context.addInitScript(({ deepseek }) => {
    const calls = []; let configured = false, paidExecution = false;
    const ids = ['codex','claude','openrouter','deepseek','hermes','custom'];
@@ -56,6 +54,7 @@ try {
   }
   async function capture(step) {
    await page.screenshot({ path: `evidence/screenshots/onboarding-${step}-${mode}.png`, fullPage: true });
+   await page.screenshot({ path: `evidence/screenshots/redesign-${step}-${mode}.png`, fullPage: false });
    const axe = await new AxeBuilder({ page }).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']).analyze();
    await writeFile(`evidence/a11y/onboarding-axe-${step}-${mode}.json`, JSON.stringify(axe, null, 2));
    violations.push({ step, mode, count: axe.violations.length });
@@ -68,7 +67,7 @@ try {
   }
   await step('q1', async () => {
   await page.goto(url); await chat.getByLabel('Workspace name').waitFor();
-  { const observed2 = await page.locator('dl > div').filter({ has: page.locator('dt', { hasText: 'Est. max / run' }) }).locator('dd').textContent(); check(`${mode}: estimate waits for cap and pricing`, observed2.trim().startsWith('—'), { observed: observed2 }); }
+  { const row = page.locator('dl > div').filter({ has: page.locator('dt', { hasText: 'Est. max / run' }) }); check(`${mode}: estimate waits for cap and pricing`, await row.count() === 0, { observed: await row.count() }); }
   await step('capture q1', () => capture('q1'));
   });
   await step('q2', async () => {
@@ -122,7 +121,7 @@ try {
   await step('capture q3-auth', () => capture('q3-auth'));
   });
   await step('connection-error', async () => {
-  await page.evaluate(() => { window.__testFailure = true; }); await page.getByRole('button', { name: 'Test connection', exact: true }).click(); await page.getByRole('alert').waitFor(); await step('capture connection-error', () => capture('connection-error'));
+  await page.evaluate(() => { window.__testFailure = true; }); await page.getByRole('button', { name: 'Test connection', exact: true }).click(); await page.getByRole('region', { name: 'Agent onboarding' }).locator('[role=alert]:not([data-astryx-live-region])').filter({ hasText: 'Connection failed' }).waitFor(); await step('capture connection-error', () => capture('connection-error'));
   });
   await step('q4', async () => {
   await page.evaluate(() => { window.__testFailure = false; }); await page.getByRole('button', { name: 'Test connection', exact: true }).click(); await page.getByRole('button', { name: 'Continue', exact: true }).waitFor();
@@ -174,7 +173,7 @@ try {
   finally { await context.close(); }
  }
 } catch (e) { check('script completed', false, { error: String(e.stack ?? e) }); console.error(e); }
-finally { await browser?.close(); await new Promise(r => server.close(r)); }
+finally { await browser?.close(); }
 const requiredSteps = ['q1','q2','q3','q3-auth','connection-error','q4','error','q3-pricing-confirm','summary','workspace'];
 { const observed19 = ['light','dark'].every(mode => requiredSteps.every(step => violations.some(v => v.mode === mode && v.step === step))); check('all required light/dark captures', observed19, { captures: violations.map(({ mode, step }) => ({ mode, step })), requiredSteps }); }
 { const observed20 = violations.length >= 20 && violations.every(v => v.count === 0); check('all axe scans clean', observed20, { scans: violations }); }

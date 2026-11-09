@@ -63,7 +63,7 @@
   "results": {
     "ok": true,
     "task": {
-      "issueId": "82e0a125-65e3-4566-bfa9-c093dd42c24c",
+      "issueId": "a0eed3af-ab68-4137-b325-1e0291c402f5",
       "result": "Mock research result for human review.",
       "costCents": 0.014,
       "spent": 0.014,
@@ -73,11 +73,11 @@
     "supervisor": "stopped"
   },
   "screenshots": [
-    "/workspace/zaos-onboarding/evidence/screenshots/startup.png",
-    "/workspace/zaos-onboarding/evidence/screenshots/setup-light.png",
-    "/workspace/zaos-onboarding/evidence/screenshots/setup-dark.png",
-    "/workspace/zaos-onboarding/evidence/screenshots/workspace-light.png",
-    "/workspace/zaos-onboarding/evidence/screenshots/workspace-dark.png",
-    "/workspace/zaos-onboarding/evidence/screenshots/paperclip-board.png"
+    "/workspace/zaos-redesign/evidence/screenshots/startup.png",
+    "/workspace/zaos-redesign/evidence/screenshots/setup-light.png",
+    "/workspace/zaos-redesign/evidence/screenshots/setup-dark.png",
+    "/workspace/zaos-redesign/evidence/screenshots/workspace-light.png",
+    "/workspace/zaos-redesign/evidence/screenshots/workspace-dark.png",
+    "/workspace/zaos-redesign/evidence/screenshots/paperclip-board.png"
   ]
 }

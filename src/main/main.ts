@@ -255,13 +255,13 @@ async function runSmoke(bootPromise: Promise<void>) {
         if (connectors.length !== 6 || !codexDetection.loggedIn) throw new Error('Connector smoke detection failed');
         steps.push('Six connectors listed; fake Codex CLI detected and logged in');
         steps.push('Supervisor ready; operator authenticated; startup audit complete');
-        window.setSize(1180, 1400);
+        window.setSize(1280, 820);
         await capture('setup-light'); await modeToggle(); await capture('setup-dark'); await modeToggle();
         await api.createCompany('Northstar Fictional Studio');
         await api.setProviderKey('mock-smoke-key');
         await api.createAgentFromTemplate('researcher', { baseUrl: process.env.ZAOS_SMOKE_PROVIDER_URL!, model: 'mock', inputCentsPerMTok: 100, outputCentsPerMTok: 200, maxOutputTokens: 100, maxRunCents: 1 });
         await api.setSpendCap(100); await api.setTelemetry(false); await api.setPaidExecution(true, true); steps.push('Company, Researcher, mock provider, $1 cap and consent configured');
-        window.setSize(1180, 960);
+        window.setSize(1280, 820);
         const result = await api.runTask('Research a fictional market', 'Draft a brief for a fictional local studio.');
         if (result.status !== 'succeeded' || !result.issueId || !result.result) throw new Error(`Smoke run ${result.status}: ${result.result}`);
         steps.push('Task succeeded with priced result');
@@ -290,7 +290,7 @@ else {
     void app.whenReady().then(async () => {
         if (smoke) { nativeTheme.themeSource = 'light'; const timeout = setTimeout(() => { error = 'Smoke timed out'; app.quit(); }, 350000); timeout.unref(); }
         const ownedUrl = pathToFileURL(paths.renderer).href;
-        window = new BrowserWindow({ width: 1180, height: 960, title: 'Zero Agency OS', webPreferences: { preload: paths.preload, contextIsolation: true, nodeIntegration: false, sandbox: true, webSecurity: true } });
+        window = new BrowserWindow({ width: 1280, height: 820, minWidth: 960, minHeight: 640, title: 'Zero Agency OS', webPreferences: { preload: paths.preload, contextIsolation: true, nodeIntegration: false, sandbox: true, webSecurity: true } });
         secureWindow(window, url => url === ownedUrl);
         window.webContents.session.webRequest.onHeadersReceived((details, callback) => {
             callback({ responseHeaders: { ...details.responseHeaders, ...(details.url.startsWith('file://') ? { 'Content-Security-Policy': [csp] } : {}) } });

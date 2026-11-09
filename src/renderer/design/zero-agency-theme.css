@@ -1,12 +1,12 @@
 /* Zero Agency · Neutral 0.7.11. Only verified upstream custom properties.
    Apply to owned screens only. Import after upstream CSS. Light success text uses brand ink; other semantic roles unchanged. */
-@font-face { font-family: Inter; src: url("../../../assets/fonts/Inter-Regular.ttf") format("truetype"); font-style: normal; font-weight: 400; font-display: swap; }
+@font-face { font-family: Inter; src: url("../../../assets/fonts/InterVariable.ttf") format("truetype"); font-style: normal; font-weight: 100 900; font-display: swap; }
 @scope (.zero-agency-os) to ([data-astryx-theme]:not([data-astryx-theme="neutral"])) {
   [data-astryx-theme="neutral"][data-theme="light"] {
     color-scheme: light;
     --color-background-body: #FAFAFA;
     --color-background-surface: #F0F0ED;
-    --color-background-card: #F0F0ED;
+    --color-background-card: #FFFFFF;
     --color-background-popover: #F0F0ED;
     --color-background-muted: #F0F0ED;
     --color-accent: #0A0A0A;
@@ -25,11 +25,12 @@
     --color-border: #858585;
     --color-border-emphasized: #616161;
     --focus-outline-color: #0A0A0A;
-    --color-overlay-hover: #00000000;
-    --color-overlay-pressed: #00000000;
+    --color-overlay-hover: #80808014;
+    --color-overlay-pressed: #80808026;
     --color-tint-hover: #0A0A0A;
     --font-family-body: Inter, Arial, sans-serif;
     --font-family-heading: Inter, Arial, sans-serif;
+    --size-element-lg: 44px;
     --text-body-size: 1rem;
     --text-body-leading: 1.5;
     --focus-outline-width: 2px;
@@ -38,10 +39,10 @@
   [data-astryx-theme="neutral"][data-theme="dark"] {
     color-scheme: dark;
     --color-background-body: #0A0A0A;
-    --color-background-surface: #0A0A0A;
-    --color-background-card: #0A0A0A;
-    --color-background-popover: #0A0A0A;
-    --color-background-muted: #0A0A0A;
+    --color-background-surface: #141414;
+    --color-background-card: #141414;
+    --color-background-popover: #141414;
+    --color-background-muted: #202020;
     --color-accent: #C8FF00;
     --color-accent-muted: #0A0A0A;
     --color-neutral: #0A0A0A;
@@ -57,24 +58,18 @@
     --color-border: #737373;
     --color-border-emphasized: #737373;
     --focus-outline-color: #C8FF00;
-    --color-overlay-hover: #00000000;
-    --color-overlay-pressed: #00000000;
+    --color-overlay-hover: #80808014;
+    --color-overlay-pressed: #80808026;
     --color-tint-hover: #0A0A0A;
     --font-family-body: Inter, Arial, sans-serif;
     --font-family-heading: Inter, Arial, sans-serif;
+    --size-element-lg: 44px;
     --text-body-size: 1rem;
     --text-body-leading: 1.5;
     --focus-outline-width: 2px;
     --focus-outline-offset: 3px;
   }
   .za-screen { background: var(--color-background-body); color: var(--color-text-primary); font-family: var(--font-family-body); font-size: 16px; line-height: 1.5; }
-  .za-card { background: var(--color-background-card); border: 1px solid var(--color-border); border-radius: 12px; padding: 24px; }
   .za-muted { color: var(--color-text-secondary); }
-  .za-control { font: inherit; color: var(--color-text-primary); background: var(--color-background-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 10px 16px; }
-  .za-primary { color: var(--color-on-accent); background: var(--color-accent); border-color: var(--color-accent); }
-  .za-link { color: var(--color-text-accent); text-decoration: underline; text-underline-offset: 4px; }
-  .za-control:hover:not(:disabled), .za-control:active:not(:disabled) { border-color: var(--color-border-emphasized); text-decoration: underline; }
-  .za-primary:hover:not(:disabled), .za-primary:active:not(:disabled) { border-color: var(--color-accent); }
-  :is(.za-control,.za-link):focus-visible { outline: var(--focus-outline-width) solid var(--focus-outline-color); outline-offset: var(--focus-outline-offset); }
-  .za-control:disabled { opacity: .45; cursor: not-allowed; }
+  .za-link { color: var(--color-text-primary); }
 }
