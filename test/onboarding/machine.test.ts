@@ -35,9 +35,9 @@ describe('local onboarding machine', () => {
   for (const cliTimeoutSec of [29,1801,30.5]) expect(canActivate({ ...cli, cliTimeoutSec })).toBe(false);
  });
  it('serializes only safe fields and never the API key', () => {
-  const secret = 'sk-super-secret-12345678';
+  const secret = 'test-key-not-real-7f2a';
   const json = serializeDraft({ ...ready, hasKey: true, last4: secret.slice(-4), key: secret } as typeof ready);
-  expect(json).not.toContain(secret); expect(json).not.toContain('sk-super'); expect(JSON.parse(json).key).toBeUndefined(); expect(maskKey(secret)).toBe('••••5678');
+  expect(json).not.toContain(secret); expect(json).not.toContain('test-key'); expect(JSON.parse(json).key).toBeUndefined(); expect(maskKey(secret)).toBe('••••7f2a');
   expect(restoreDraft(json).hasKey).toBe(true); expect(restoreDraft(json).connectorOk).toBe(false); expect(restoreDraft('invalid')).toEqual(initial);
  });
 });
