@@ -17,10 +17,11 @@ function text(v: unknown, max = 10000) {
 }
 export function validatePayload(channel: string, value: unknown) {
     const p = record(value);
-    const keys: Record<string, string[]> = { getStatus: [], createCompany: ['name'], createAgentFromTemplate: ['templateId', 'provider'], setProviderKey: ['key'], setSpendCap: ['cap'], setPaidExecution: ['enabled', 'consent'], runTask: ['title', 'description'], listRuns: [], getTelemetry: [], setTelemetry: ['enabled'] };
+    const keys: Record<string, string[]> = { getStatus: [], retryStartup: [], openBoard: [], acceptReview: ['issueId'], createCompany: ['name'], createAgentFromTemplate: ['templateId', 'provider'], setProviderKey: ['key'], setSpendCap: ['cap'], setPaidExecution: ['enabled', 'consent'], runTask: ['title', 'description'], listRuns: [], getTelemetry: [], setTelemetry: ['enabled'] };
     if (!keys[channel] || Object.keys(p).some(k => !keys[channel].includes(k)))
         throw new Error('Unknown channel or payload field');
     switch (channel) {
+        case 'acceptReview': return { issueId: text(p.issueId, 200) };
         case 'createCompany': return { name: text(p.name, 200) };
         case 'setProviderKey': return { key: text(p.key, 8192) };
         case 'setSpendCap': return { cap: parseCap(p.cap) };

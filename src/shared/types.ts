@@ -38,6 +38,7 @@ export interface Run {
     status: string;
 }
 export interface TaskResult {
+    issueId?: string;
     result: string;
     costCents: number;
     spent: number;
@@ -56,7 +57,14 @@ export interface ZaosAPI {
         state: SupervisorState;
         lastError?: string;
         paidExecution: boolean;
+        configured?: boolean;
+        setupProgress?: number;
+        cap?: number;
+        logTail?: string;
+        lastResult?: TaskResult;
     }>;
+    retryStartup(): Promise<void>;
+    openBoard(): Promise<void>;
     createCompany(name: string): Promise<{
         id: string;
     }>;
@@ -72,6 +80,8 @@ export interface ZaosAPI {
 }
 export interface IpcPayloads {
     getStatus: Record<string, never>;
+    retryStartup: Record<string, never>;
+    openBoard: Record<string, never>;
     createCompany: {
         name: string;
     };

@@ -10,7 +10,7 @@
   "main": "dist/main/main.js",
   "scripts": {
     "build": "vite build && esbuild src/main/main.ts --bundle --platform=node --format=esm --packages=external --outfile=dist/main/main.js && esbuild src/preload/preload.ts --bundle --platform=node --format=cjs --external:electron --outfile=dist/main/preload.cjs",
-    "dev": "vite --host 127.0.0.1 --port 0",
+    "dev": "npm run build && electron .",
     "start": "electron .",
     "test": "vitest run --project unit",
     "test:integration": "vitest run --config vitest.config.ts --project integration",
@@ -52,12 +52,13 @@
       "dist/**/*",
       "assets/**/*",
       "package.json",
-      "THIRD_PARTY_NOTICES.md"
+      "THIRD_PARTY_NOTICES.md",
+      "src/runner/**/*"
     ],
     "asar": true,
     "asarUnpack": [
-      "node_modules/paperclipai/**",
-      "node_modules/@embedded-postgres/**"
+      "node_modules/**/*",
+      "src/runner/**/*"
     ],
     "mac": {
       "target": [

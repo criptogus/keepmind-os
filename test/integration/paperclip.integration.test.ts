@@ -165,6 +165,7 @@ it('executes, reconciles, leaves human review; refuses low budget without provid
     const accepted = await orchestrator.acceptReview(reviewIssue.id);
     expect(accepted).toMatchObject({id: interaction.id, status: 'accepted'});
     const afterAcceptance = await api.request<{status: string}>('GET', `/api/issues/${reviewIssue.id}`);
+    expect(afterAcceptance.status).toBe('done');
     const persisted = await api.request<import('../../src/shared/types').ReviewInteraction[]>('GET', `/api/issues/${reviewIssue.id}/interactions`);
     expect(persisted.find(i => i.id === interaction.id)?.status).toBe('accepted');
     report.reviewAcceptance = {interactionId: interaction.id, interactionStatus: accepted.status, issueStatus: afterAcceptance.status};

@@ -162,7 +162,7 @@ export class Orchestrator {
             const succeeded = ['succeeded', 'cancelled'].includes(completed.status) && (finalIssue.status === 'in_review' || !!await this.pendingReview(issue.id, completed.id)) && !!receipt;
             if (reconciliation !== 'reconciled')
                 await this.setPaidExecution(false, false);
-            return { result: (succeeded ? runComments.at(-1) : refusal ?? runComments.at(-1))?.body ?? '', costCents: receipt?.costCents ?? 0, spent: agent.spentMonthlyCents, cap: this.state.cap!, status: succeeded ? 'succeeded' : refusal ? 'refused' : 'failed' };
+            return { issueId: issue.id, result: (succeeded ? runComments.at(-1) : refusal ?? runComments.at(-1))?.body ?? '', costCents: receipt?.costCents ?? 0, spent: agent.spentMonthlyCents, cap: this.state.cap!, status: succeeded ? 'succeeded' : refusal ? 'refused' : 'failed' };
         }
         catch (error) {
             await this.setPaidExecution(false, false);
@@ -181,7 +181,11 @@ export class Orchestrator {
         if (typeof issueId !== 'string' || !issueId.trim()) throw new Error('Issue ID is required');
         const interaction = await this.pendingReview(issueId);
         if (!interaction) throw new Error('No pending ZAOS review for this issue');
-        return this.api.request<ReviewInteraction>('POST', `/api/issues/${encodeURIComponent(issueId)}/interactions/${encodeURIComponent(interaction.id)}/accept`, {});
+        const accepted = await this.api.request<ReviewInteraction>('POST', `/api/issues/${encodeURIComponent(issueId)}/interactions/${encodeURIComponent(interaction.id)}/accept`, {});
+        const issue = await this.api.request<Issue>('GET', `/api/issues/${encodeURIComponent(issueId)}`);
+        if (issue.status === 'todo')
+            await this.api.request('PATCH', `/api/issues/${encodeURIComponent(issueId)}`, { status: 'done' });
+        return accepted;
     }
     getTelemetry() {
         return this.state.telemetry;

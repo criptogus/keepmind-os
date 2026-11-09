@@ -1,0 +1,18 @@
+body { margin: 0; }
+.za-screen { min-height: 100vh; padding: 40px max(24px, calc((100vw - 1100px) / 2)); }
+header { display: flex; justify-content: space-between; align-items: start; gap: 24px; margin-bottom: 28px; }
+h1 { font-size: clamp(28px, 4vw, 42px); line-height: 1.15; letter-spacing: -.04em; margin: 10px 0; }
+h2 { font-size: 23px; margin: 8px 0 12px; } h3 { font-size: 19px; margin: 24px 0 12px; }
+p { margin: 10px 0; } .eyebrow { font-size: 11px; letter-spacing: .14em; font-weight: 600; }
+.status-line { border-top: 1px solid var(--color-border); padding: 16px 0; margin-bottom: 12px; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 24px; }
+fieldset { border: 0; margin: 0 0 24px; padding: 0; min-width: 0; } legend { font-weight: 600; margin: 20px 0 16px; }
+label { display: flex; flex-direction: column; gap: 8px; font-size: 14px; }
+select, textarea { font: inherit; width: 100%; color: var(--color-text-primary); background: var(--color-background-body); border: 1px solid var(--color-border); border-radius: 8px; padding: 8px 12px; }
+textarea { resize: vertical; margin-bottom: 8px; } form label { margin-top: 12px; }
+.check { flex-direction: row; align-items: start; margin: 16px 0; } input[type=checkbox] { margin: 4px 4px 0 0; accent-color: var(--color-accent); }
+:focus-visible { outline: 2px solid var(--focus-outline-color); outline-offset: 3px; }
+.workspace { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; align-items: start; }.actions { display: flex; flex-direction: column; gap: 16px; align-items: start; }
+pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 320px; overflow: auto; font: inherit; }.result { border-top: 1px solid var(--color-border); padding-top: 16px; }.notice { border: 1px solid var(--color-border); padding: 16px; border-radius: 8px; }
+footer { padding: 32px 0 0; font-size: 12px; display: flex; justify-content: space-between; gap: 16px; }
+@media(max-width: 760px) { .grid, .workspace { grid-template-columns: 1fr; } header, footer { flex-direction: column; } .za-screen { padding: 24px; } }

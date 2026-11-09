@@ -1,0 +1,6 @@
+/* Identity layer for the upstream board. */
+:root { font-family: Inter, Arial, sans-serif; color: #0A0A0A; background: #FAFAFA; --background: #FAFAFA; --foreground: #0A0A0A; --card: #F0F0ED; --radius: 8px; }
+body, button, input, textarea, select { font-family: Inter, Arial, sans-serif; }
+button, input, textarea, select { border-radius: 8px; }
+[role="dialog"] { border-radius: 12px; }
+:focus-visible { outline: 2px solid #0A0A0A; outline-offset: 3px; }

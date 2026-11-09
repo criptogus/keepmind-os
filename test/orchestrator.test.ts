@@ -111,7 +111,22 @@ it('accepts a pending ZAOS review using the board endpoint', async () => {
  const interaction={id:'review',kind:'request_confirmation',status:'pending',sourceRunId:'run',idempotencyKey:'zaos-review:run'};
  request.mockImplementation(async(method,path)=>path.endsWith('/interactions')?[interaction]:{...interaction,status:'accepted'});
  expect(await o.acceptReview('issue')).toMatchObject({status:'accepted'});
- expect(request).toHaveBeenLastCalledWith('POST','/api/issues/issue/interactions/review/accept',{});
+ expect(request).toHaveBeenCalledWith('POST','/api/issues/issue/interactions/review/accept',{});
  request.mockResolvedValue([]);
  await expect(o.acceptReview('issue')).rejects.toThrow('No pending');
+});
+
+it.each(['todo', 'done', 'in_review'])('finishes accepted reviews returned to %s without re-waking the agent', async status => {
+    const { o, request } = setup();
+    const interaction = { id: 'review', kind: 'request_confirmation', status: 'pending', sourceRunId: 'run', idempotencyKey: 'zaos-review:run' };
+    request.mockImplementation(async (method, path) => {
+        if (path.endsWith('/interactions')) return [interaction];
+        if (path.endsWith('/accept')) return { ...interaction, status: 'accepted' };
+        if (method === 'GET' && path === '/api/issues/issue') return { id: 'issue', status };
+        return {};
+    });
+    await o.acceptReview('issue');
+    const patches = request.mock.calls.filter(c => c[0] === 'PATCH');
+    expect(patches).toEqual(status === 'todo' ? [['PATCH', '/api/issues/issue', { status: 'done' }]] : []);
+    expect(request.mock.calls.some(c => c[1].endsWith('/wakeup') || c[1].endsWith('/resume'))).toBe(false);
 });
