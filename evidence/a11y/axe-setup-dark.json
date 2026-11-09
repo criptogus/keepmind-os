@@ -1,0 +1,15 @@
+{
+  "url": "http://127.0.0.1:8765/",
+  "screen": "setup",
+  "mode": "dark",
+  "violations": [],
+  "passes": 24,
+  "incomplete": [
+    {
+      "id": "color-contrast",
+      "impact": "serious",
+      "nodes": 9
+    }
+  ],
+  "inapplicable": 38
+}

@@ -16,7 +16,7 @@
   "results": {
     "ok": true,
     "task": {
-      "issueId": "93684adf-a657-48ab-8443-ee24c1d9a50d",
+      "issueId": "bb5c6440-8aba-4374-9ad2-dda0da65ecd6",
       "result": "Mock research result for human review.",
       "costCents": 0.014,
       "spent": 0.014,
@@ -26,11 +26,11 @@
     "supervisor": "stopped"
   },
   "screenshots": [
-    "/workspace/zero-agency-os-mvp/evidence/screenshots/startup.png",
-    "/workspace/zero-agency-os-mvp/evidence/screenshots/setup-light.png",
-    "/workspace/zero-agency-os-mvp/evidence/screenshots/setup-dark.png",
-    "/workspace/zero-agency-os-mvp/evidence/screenshots/workspace-light.png",
-    "/workspace/zero-agency-os-mvp/evidence/screenshots/workspace-dark.png",
-    "/workspace/zero-agency-os-mvp/evidence/screenshots/paperclip-board.png"
+    "/workspace/zaos-ive-fixes/evidence/screenshots/startup.png",
+    "/workspace/zaos-ive-fixes/evidence/screenshots/setup-light.png",
+    "/workspace/zaos-ive-fixes/evidence/screenshots/setup-dark.png",
+    "/workspace/zaos-ive-fixes/evidence/screenshots/workspace-light.png",
+    "/workspace/zaos-ive-fixes/evidence/screenshots/workspace-dark.png",
+    "/workspace/zaos-ive-fixes/evidence/screenshots/paperclip-board.png"
   ]
 }

@@ -3,7 +3,7 @@
 > vitest run --project unit
 
 
- RUN  v3.2.7 /workspace/zero-agency-os-mvp
+ RUN  v3.2.7 /workspace/zaos-ive-fixes
 
  ✓ |unit| test/evidence.test.ts (2 tests) 3ms
 stderr | test/runner.test.mjs > redacts thrown errors containing keys
@@ -12,16 +12,16 @@ stderr | test/runner.test.mjs > redacts thrown errors containing keys
 stderr | test/runner.test.mjs > missing usage leaves cost unknown and never marks review
 {"zaosError":{"step":"provider","method":"POST","path":"/chat/completions","status":null,"code":null,"message":null}}
 
- ✓ |unit| test/supervisor.test.ts (4 tests) 34ms
- ✓ |unit| test/runner.test.mjs (22 tests) 44ms
- ✓ |unit| test/core.test.ts (21 tests) 16ms
+ ✓ |unit| test/supervisor.test.ts (4 tests) 26ms
+ ✓ |unit| test/runner.test.mjs (22 tests) 40ms
+ ✓ |unit| test/core.test.ts (21 tests) 22ms
+ ✓ |unit| test/electron-shell.test.ts (6 tests) 36ms
  ✓ |unit| test/orchestrator.test.ts (21 tests) 45ms
- ✓ |unit| test/electron-shell.test.ts (6 tests) 45ms
- ✓ |unit| test/services.test.ts (15 tests) 44ms
- ✓ |unit| test/socket.test.mjs (2 tests) 330ms
+ ✓ |unit| test/services.test.ts (15 tests) 41ms
+ ↓ |unit| test/socket.test.mjs (2 tests | 2 skipped)
 
- Test Files  8 passed (8)
-      Tests  93 passed (93)
-   Start at  11:41:09
-   Duration  1.07s (transform 678ms, setup 0ms, collect 1.16s, tests 562ms, environment 1ms, prepare 1000ms)
+ Test Files  7 passed | 1 skipped (8)
+      Tests  91 passed | 2 skipped (93)
+   Start at  12:02:16
+   Duration  609ms (transform 515ms, setup 0ms, collect 939ms, tests 214ms, environment 1ms, prepare 634ms)
 

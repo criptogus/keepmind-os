@@ -8,16 +8,26 @@ p { margin: 10px 0; } .eyebrow { font-size: 11px; letter-spacing: .14em; font-we
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 24px; }
 fieldset { border: 0; margin: 0 0 24px; padding: 0; min-width: 0; } legend { font-weight: 600; margin: 20px 0 16px; }
 label { display: flex; flex-direction: column; gap: 8px; font-size: 14px; }
-select, textarea { font: inherit; width: 100%; color: var(--color-text-primary); background: var(--color-background-body); border: 1px solid var(--color-border); border-radius: 8px; padding: 8px 12px; }
+.zero-agency-os label:not(.check) { color: var(--color-text-secondary); }
+.zero-agency-os select, .zero-agency-os textarea { font: inherit; width: 100%; color: var(--color-text-primary); background: var(--color-background-card); border: 1px solid var(--color-border); border-radius: 8px; padding: 8px 12px; min-block-size: 32px; }
 textarea { resize: vertical; margin-bottom: 8px; } form label { margin-top: 12px; }
-.check { flex-direction: row; align-items: start; margin: 16px 0; } input[type=checkbox] { margin: 4px 4px 0 0; accent-color: var(--color-accent); }
+.zero-agency-os .check { flex-direction: row; align-items: center; min-block-size: 24px; margin: 16px 0; cursor: pointer; gap: 8px; }
+.zero-agency-os .check input[type=checkbox] { inline-size: 24px; block-size: 24px; flex: 0 0 24px; margin: 0; accent-color: var(--color-accent); }
 :focus-visible { outline: 2px solid var(--focus-outline-color); outline-offset: 3px; }
 .workspace { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; align-items: start; }.actions { display: flex; flex-direction: column; gap: 16px; align-items: start; }
 pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 320px; overflow: auto; font: inherit; }.result { border-top: 1px solid var(--color-border); padding-top: 16px; }.notice { border: 1px solid var(--color-border); padding: 16px; border-radius: 8px; }
 footer { padding: 32px 0 0; font-size: 12px; display: flex; justify-content: space-between; gap: 16px; }
 @media(max-width: 760px) { .grid, .workspace { grid-template-columns: 1fr; } header, footer { flex-direction: column; } .za-screen { padding: 24px; } }
 
-/* Astryx labels use inline content plus a separate required indicator. Keep the
-   accessible required state; the visible suffix is part of our label text. */
+/* Keep Astryx's required indicator alongside its label. */
 .zero-agency-os form .astryx-field-label[for] { flex-direction: row; justify-content: flex-start; text-align: left; }
-.zero-agency-os form .astryx-field-label[for] > span { display: none; }
+.zero-agency-os :where(input, textarea, select, button, a, [tabindex]:not([tabindex="-1"])):focus-visible,
+.zero-agency-os [class*="Input"]:has(input:focus-visible),
+.zero-agency-os [class*="input"]:has(input:focus-visible),
+.zero-agency-os [data-astryx-control]:has(:focus-visible) { outline: 2px solid var(--focus-outline-color); outline-offset: 3px; }
+.zero-agency-os :is(input, textarea, select, button, .za-control, a, [tabindex]:not([tabindex="-1"])) { scroll-margin-block: 12px; }
+.za-skip { position: absolute; left: -9999px; top: 0; z-index: 10; padding: 8px 12px; background: var(--color-background-card); color: var(--color-text-primary); }
+.za-skip:focus { left: 16px; top: 16px; outline: 2px solid var(--focus-outline-color); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+  .zero-agency-os .za-control, .zero-agency-os * { transition: none !important; animation: none !important; }
+}

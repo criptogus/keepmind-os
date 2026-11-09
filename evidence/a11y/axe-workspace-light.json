@@ -1,0 +1,15 @@
+{
+  "url": "http://127.0.0.1:8765/",
+  "screen": "workspace",
+  "mode": "light",
+  "violations": [],
+  "passes": 23,
+  "incomplete": [
+    {
+      "id": "color-contrast",
+      "impact": "serious",
+      "nodes": 2
+    }
+  ],
+  "inapplicable": 39
+}

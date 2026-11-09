@@ -113,7 +113,20 @@ async function openBoard() {
     const boardOrigin = origin;
     secureWindow(board, url => { try { return new URL(url).origin === boardOrigin; } catch { return false; } });
     const css = await readFile(paths.identity, 'utf8');
-    board.webContents.on('dom-ready', () => { void board?.webContents.insertCSS(css).catch(console.error); });
+    const contents = board.webContents;
+    let identityKey: string | undefined;
+    let identityApplication = Promise.resolve();
+    const applyIdentity = () => {
+        identityApplication = identityApplication.then(async () => {
+            if (contents.isDestroyed()) return;
+            if (identityKey) await contents.removeInsertedCSS(identityKey);
+            identityKey = await contents.insertCSS(css);
+        }).catch(console.error);
+        return identityApplication;
+    };
+    contents.on('dom-ready', () => { void applyIdentity(); });
+    contents.on('did-finish-load', () => { void applyIdentity(); });
+    contents.on('did-navigate-in-page', () => { void applyIdentity(); });
     board.on('closed', () => { board = undefined; });
     await board.loadURL(`${origin}/`);
 }

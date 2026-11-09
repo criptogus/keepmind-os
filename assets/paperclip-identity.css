@@ -1,6 +1,46 @@
 /* Identity layer for the upstream board. */
-:root { font-family: Inter, Arial, sans-serif; color: #0A0A0A; background: #FAFAFA; --background: #FAFAFA; --foreground: #0A0A0A; --card: #F0F0ED; --radius: 8px; }
+:root {
+  font-family: Inter, Arial, sans-serif;
+  color: #0A0A0A;
+  background: #FAFAFA;
+  --radius: 8px;
+}
+
+:root, html, body, .light, [data-theme=light] {
+  --background: #FAFAFA;
+  --foreground: #0A0A0A;
+  --card: #F0F0ED;
+  --muted-foreground: #616161 !important;
+  --color-muted-foreground: #616161 !important;
+  --sidebar-foreground: #0A0A0A !important;
+  --color-sidebar-foreground: #0A0A0A !important;
+}
+
+.dark, [data-theme=dark], .dark body, [data-theme=dark] body {
+  --muted-foreground: #A0A0A0 !important;
+  --color-muted-foreground: #A0A0A0 !important;
+  --sidebar-foreground: #FAFAFA !important;
+  --color-sidebar-foreground: #FAFAFA !important;
+}
+
 body, button, input, textarea, select { font-family: Inter, Arial, sans-serif; }
 button, input, textarea, select { border-radius: 8px; }
 [role="dialog"] { border-radius: 12px; }
 :focus-visible { outline: 2px solid #0A0A0A; outline-offset: 3px; }
+
+/* Target text utilities without matching background-only muted utilities. */
+.text-muted-foreground, .text-muted, .text-secondary,
+[class*="text-muted"], [class*="text-secondary"], [class*="text-caption"],
+[class*="description"], [class*="subtle"], [data-slot="muted"] {
+  color: #616161 !important;
+  opacity: 1 !important;
+}
+
+:is(.dark, [data-theme=dark]) :is(
+  .text-muted-foreground, .text-muted, .text-secondary,
+  [class*="text-muted"], [class*="text-secondary"], [class*="text-caption"],
+  [class*="description"], [class*="subtle"], [data-slot="muted"]
+) {
+  color: #A0A0A0 !important;
+  opacity: 1 !important;
+}
