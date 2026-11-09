@@ -73,6 +73,11 @@
     --focus-outline-width: 2px;
     --focus-outline-offset: 3px;
   }
+  /* neutralTheme remaps muted on ProgressBar to border-emphasized. Override
+     only the semantic track, preserving other surfaces and dark mode. */
+  [data-astryx-theme="neutral"][data-theme="light"] .astryx-progress-bar-track {
+    background-color: #E5E5E5;
+  }
   .za-screen { background: var(--color-background-body); color: var(--color-text-primary); font-family: var(--font-family-body); font-size: 16px; line-height: 1.5; }
   .za-muted { color: var(--color-text-secondary); }
   .za-link { color: var(--color-text-primary); }

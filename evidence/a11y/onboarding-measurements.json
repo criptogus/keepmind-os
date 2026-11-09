@@ -134,7 +134,7 @@
         "reveal": false
       },
       {
-        "name": "DeepSeek API key",
+        "name": "DeepSeek Paste an API key from the DeepSeek Platform.",
         "width": 346,
         "height": 66,
         "primary": false,
@@ -244,7 +244,7 @@
         "reveal": false
       },
       {
-        "name": "DeepSeek API key",
+        "name": "DeepSeek Paste an API key from the DeepSeek Platform.",
         "width": 346,
         "height": 66,
         "primary": false,
@@ -382,7 +382,7 @@
         "reveal": false
       },
       {
-        "name": "DeepSeek API key",
+        "name": "DeepSeek Paste an API key from the DeepSeek Platform.",
         "width": 346,
         "height": 66,
         "primary": false,
@@ -700,30 +700,18 @@
   {
     "step": "q3-pricing-confirm",
     "mode": "light",
-    "inputs": [
-      {
-        "tag": "input",
-        "id": "_r_42_",
-        "measuredElement": "native control",
-        "label": "Input ¢/MTok",
-        "height": 44,
-        "minHeight": "44px",
-        "labelVisible": true
-      },
-      {
-        "tag": "input",
-        "id": "_r_4a_",
-        "measuredElement": "native control",
-        "label": "Output ¢/MTok",
-        "height": 44,
-        "minHeight": "44px",
-        "labelVisible": true
-      }
-    ],
+    "inputs": [],
     "targets": [
       {
         "name": "Undo last answer",
         "width": 165,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Open Advanced",
+        "width": 134,
         "height": 44,
         "primary": false,
         "reveal": false
@@ -1011,7 +999,7 @@
         "reveal": false
       },
       {
-        "name": "DeepSeek API key",
+        "name": "DeepSeek Paste an API key from the DeepSeek Platform.",
         "width": 346,
         "height": 66,
         "primary": false,
@@ -1121,7 +1109,7 @@
         "reveal": false
       },
       {
-        "name": "DeepSeek API key",
+        "name": "DeepSeek Paste an API key from the DeepSeek Platform.",
         "width": 346,
         "height": 66,
         "primary": false,
@@ -1259,7 +1247,7 @@
         "reveal": false
       },
       {
-        "name": "DeepSeek API key",
+        "name": "DeepSeek Paste an API key from the DeepSeek Platform.",
         "width": 346,
         "height": 66,
         "primary": false,
@@ -1577,30 +1565,18 @@
   {
     "step": "q3-pricing-confirm",
     "mode": "dark",
-    "inputs": [
-      {
-        "tag": "input",
-        "id": "_r_42_",
-        "measuredElement": "native control",
-        "label": "Input ¢/MTok",
-        "height": 44,
-        "minHeight": "44px",
-        "labelVisible": true
-      },
-      {
-        "tag": "input",
-        "id": "_r_4a_",
-        "measuredElement": "native control",
-        "label": "Output ¢/MTok",
-        "height": 44,
-        "minHeight": "44px",
-        "labelVisible": true
-      }
-    ],
+    "inputs": [],
     "targets": [
       {
         "name": "Undo last answer",
         "width": 165,
+        "height": 44,
+        "primary": false,
+        "reveal": false
+      },
+      {
+        "name": "Open Advanced",
+        "width": 134,
         "height": 44,
         "primary": false,
         "reveal": false

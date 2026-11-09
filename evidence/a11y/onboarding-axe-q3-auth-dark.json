@@ -13,7 +13,7 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-11-09T17:49:25.862Z",
+  "timestamp": "2026-11-09T18:00:39.288Z",
   "url": "http://zaos-renderer.test/",
   "toolOptions": {
     "runOnly": {
@@ -1137,9 +1137,9 @@
             }
           ],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"DeepSeek API key\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\"><span class=\"provider-mark\" data-provider=\"deepseek\" aria-hidden=\"true\">DS</span><span class=\"provider-copy\"><strong>DeepSeek</strong><span>API key</span></span></button>",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"DeepSeek Paste an API key from the DeepSeek Platform.\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
           "target": [
-            "button[aria-label=\"DeepSeek API key\"]"
+            ".za-control[role=\"radio\"][type=\"button\"]:nth-child(4)"
           ]
         },
         {
@@ -1947,9 +1947,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"DeepSeek API key\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\"><span class=\"provider-mark\" data-provider=\"deepseek\" aria-hidden=\"true\">DS</span><span class=\"provider-copy\"><strong>DeepSeek</strong><span>API key</span></span></button>",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"DeepSeek Paste an API key from the DeepSeek Platform.\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
           "target": [
-            "button[aria-label=\"DeepSeek API key\"]"
+            ".za-control[role=\"radio\"][type=\"button\"]:nth-child(4)"
           ]
         },
         {
@@ -2449,9 +2449,9 @@
             }
           ],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"DeepSeek API key\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\"><span class=\"provider-mark\" data-provider=\"deepseek\" aria-hidden=\"true\">DS</span><span class=\"provider-copy\"><strong>DeepSeek</strong><span>API key</span></span></button>",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"DeepSeek Paste an API key from the DeepSeek Platform.\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
           "target": [
-            "button[aria-label=\"DeepSeek API key\"]"
+            ".za-control[role=\"radio\"][type=\"button\"]:nth-child(4)"
           ]
         },
         {
@@ -3619,9 +3619,9 @@
             }
           ],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"DeepSeek API key\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\"><span class=\"provider-mark\" data-provider=\"deepseek\" aria-hidden=\"true\">DS</span><span class=\"provider-copy\"><strong>DeepSeek</strong><span>API key</span></span></button>",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"DeepSeek Paste an API key from the DeepSeek Platform.\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
           "target": [
-            "button[aria-label=\"DeepSeek API key\"]"
+            ".za-control[role=\"radio\"][type=\"button\"]:nth-child(4)"
           ]
         },
         {
@@ -4121,9 +4121,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"DeepSeek API key\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\"><span class=\"provider-mark\" data-provider=\"deepseek\" aria-hidden=\"true\">DS</span><span class=\"provider-copy\"><strong>DeepSeek</strong><span>API key</span></span></button>",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"DeepSeek Paste an API key from the DeepSeek Platform.\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
           "target": [
-            "button[aria-label=\"DeepSeek API key\"]"
+            ".za-control[role=\"radio\"][type=\"button\"]:nth-child(4)"
           ]
         },
         {
@@ -4633,9 +4633,9 @@
             }
           ],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"DeepSeek API key\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\"><span class=\"provider-mark\" data-provider=\"deepseek\" aria-hidden=\"true\">DS</span><span class=\"provider-copy\"><strong>DeepSeek</strong><span>API key</span></span></button>",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"DeepSeek Paste an API key from the DeepSeek Platform.\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
           "target": [
-            "button[aria-label=\"DeepSeek API key\"]"
+            ".za-control[role=\"radio\"][type=\"button\"]:nth-child(4)"
           ]
         },
         {
@@ -5577,9 +5577,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"DeepSeek API key\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\"><span class=\"provider-mark\" data-provider=\"deepseek\" aria-hidden=\"true\">DS</span><span class=\"provider-copy\"><strong>DeepSeek</strong><span>API key</span></span></button>",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"DeepSeek Paste an API key from the DeepSeek Platform.\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
           "target": [
-            "button[aria-label=\"DeepSeek API key\"]"
+            ".za-control[role=\"radio\"][type=\"button\"]:nth-child(4)"
           ]
         },
         {
@@ -6483,9 +6483,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"DeepSeek API key\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\"><span class=\"provider-mark\" data-provider=\"deepseek\" aria-hidden=\"true\">DS</span><span class=\"provider-copy\"><strong>DeepSeek</strong><span>API key</span></span></button>",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"DeepSeek Paste an API key from the DeepSeek Platform.\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
           "target": [
-            "button[aria-label=\"DeepSeek API key\"]"
+            ".za-control[role=\"radio\"][type=\"button\"]:nth-child(4)"
           ]
         },
         {
@@ -7062,9 +7062,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"DeepSeek API key\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\"><span class=\"provider-mark\" data-provider=\"deepseek\" aria-hidden=\"true\">DS</span><span class=\"provider-copy\"><strong>DeepSeek</strong><span>API key</span></span></button>",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"DeepSeek Paste an API key from the DeepSeek Platform.\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
           "target": [
-            "button[aria-label=\"DeepSeek API key\"]"
+            ".za-control[role=\"radio\"][type=\"button\"]:nth-child(4)"
           ]
         },
         {
@@ -7927,7 +7927,7 @@
           "impact": null,
           "html": "<strong>DeepSeek</strong>",
           "target": [
-            "button[aria-label=\"DeepSeek API key\"] > .provider-copy > strong"
+            ".za-control[role=\"radio\"][type=\"button\"]:nth-child(4) > .provider-copy > strong"
           ]
         },
         {
@@ -7950,9 +7950,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span>API key</span>",
+          "html": "<span>Paste an API key from the DeepSeek Platform.</span>",
           "target": [
-            "button[aria-label=\"DeepSeek API key\"] > .provider-copy > span"
+            ".za-control[role=\"radio\"][type=\"button\"]:nth-child(4) > .provider-copy > span"
           ]
         },
         {
@@ -9481,9 +9481,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"DeepSeek API key\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\"><span class=\"provider-mark\" data-provider=\"deepseek\" aria-hidden=\"true\">DS</span><span class=\"provider-copy\"><strong>DeepSeek</strong><span>API key</span></span></button>",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"DeepSeek Paste an API key from the DeepSeek Platform.\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
           "target": [
-            "button[aria-label=\"DeepSeek API key\"]"
+            ".za-control[role=\"radio\"][type=\"button\"]:nth-child(4)"
           ]
         },
         {
@@ -10190,9 +10190,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"DeepSeek API key\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\"><span class=\"provider-mark\" data-provider=\"deepseek\" aria-hidden=\"true\">DS</span><span class=\"provider-copy\"><strong>DeepSeek</strong><span>API key</span></span></button>",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"DeepSeek Paste an API key from the DeepSeek Platform.\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
           "target": [
-            "button[aria-label=\"DeepSeek API key\"]"
+            ".za-control[role=\"radio\"][type=\"button\"]:nth-child(4)"
           ]
         },
         {

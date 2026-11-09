@@ -260,7 +260,10 @@ async function runSmoke(bootPromise: Promise<void>) {
         await api.createCompany('Northstar Fictional Studio');
         await api.setProviderKey('mock-smoke-key');
         await api.createAgentFromTemplate('researcher', { baseUrl: process.env.ZAOS_SMOKE_PROVIDER_URL!, model: 'mock', inputCentsPerMTok: 100, outputCentsPerMTok: 200, maxOutputTokens: 100, maxRunCents: 1 });
-        await api.setSpendCap(100); await api.setTelemetry(false); await api.setPaidExecution(true, true); steps.push('Company, Researcher, mock provider, $1 cap and consent configured');
+        await api.setSpendCap(100);
+        if ((await api.getStatus()).cap !== 100) throw new Error('Spend cap status did not retain 100 cents');
+        steps.push('Status retains the configured $1 monthly cap');
+        await api.setTelemetry(false); await api.setPaidExecution(true, true); steps.push('Company, Researcher, mock provider, $1 cap and consent configured');
         window.setSize(1280, 820);
         const result = await api.runTask('Research a fictional market', 'Draft a brief for a fictional local studio.');
         if (result.status !== 'succeeded' || !result.issueId || !result.result) throw new Error(`Smoke run ${result.status}: ${result.result}`);

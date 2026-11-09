@@ -13,7 +13,7 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-11-09T17:49:20.666Z",
+  "timestamp": "2026-11-09T18:00:33.946Z",
   "url": "http://zaos-renderer.test/",
   "toolOptions": {
     "runOnly": {
@@ -216,6 +216,23 @@
       "nodes": []
     },
     {
+      "id": "form-field-multiple-labels",
+      "impact": null,
+      "tags": [
+        "cat.forms",
+        "wcag2a",
+        "wcag332",
+        "TTv5",
+        "TT5.c",
+        "EN-301-549",
+        "EN-9.3.3.2"
+      ],
+      "description": "Ensure form field does not have multiple label elements",
+      "help": "Form field must not have multiple label elements",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/form-field-multiple-labels?application=playwright",
+      "nodes": []
+    },
+    {
       "id": "frame-focusable-content",
       "impact": null,
       "tags": [
@@ -345,6 +362,26 @@
       "description": "Ensure <input type=\"image\"> elements have alternative text",
       "help": "Image buttons must have alternative text",
       "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/input-image-alt?application=playwright",
+      "nodes": []
+    },
+    {
+      "id": "label",
+      "impact": null,
+      "tags": [
+        "cat.forms",
+        "wcag2a",
+        "wcag412",
+        "section508",
+        "section508.22.n",
+        "TTv5",
+        "TT5.c",
+        "EN-301-549",
+        "EN-9.4.1.2",
+        "ACT"
+      ],
+      "description": "Ensure every form element has a label",
+      "help": "Form elements must have labels",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/label?application=playwright",
       "nodes": []
     },
     {
@@ -733,7 +770,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -785,7 +822,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -1173,9 +1210,9 @@
             }
           ],
           "impact": null,
-          "html": "<article aria-label=\"Message from assistant\" class=\"astryx-chat-message xwbd0jv x1p8rq6b x78zum5 x1cy8zhl x193iq5w x1q0g3np x1nhvcw1 x1txdalj onboard-assistant\" data-sender=\"assistant\" data-density=\"balanced\">",
+          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".x1na6nto > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]"
+            ".x6k0iem > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -1201,7 +1238,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".x6k0iem > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            ".pricing-actions > .za-control.x17x4s8c[data-variant=\"secondary\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -1225,35 +1262,9 @@
             }
           ],
           "impact": null,
-          "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
+          "html": "<button type=\"button\" disabled=\"\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x1mrddfy xt0e3qv x18o3ruo xbyyjgo x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" aria-disabled=\"true\" aria-describedby=\"pricing-disabled-reason\">",
           "target": [
-            ".onboard-field:nth-child(1) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-allowed-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attributes are used correctly for the defined role"
-            }
-          ],
-          "none": [
-            {
-              "id": "aria-unsupported-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute is supported"
-            }
-          ],
-          "impact": null,
-          "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
-          "target": [
-            ".onboard-field:nth-child(2) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
+            "button[aria-describedby=\"pricing-disabled-reason\"]"
           ]
         },
         {
@@ -1279,7 +1290,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".onboard-controls > div > .xt0e3qv.x18o3ruo.xbyyjgo > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            "button[aria-describedby=\"pricing-disabled-reason\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -1303,7 +1314,7 @@
             }
           ],
           "impact": null,
-          "html": "<div role=\"progressbar\" aria-valuenow=\"4\" aria-valuemin=\"0\" aria-valuemax=\"4\" aria-labelledby=\"_r_4_\" aria-valuetext=\"100%\" class=\"astryx-progress-bar-track xh8yej3 xdk7pt xwmxj5m xjspbzw xb3r6kr\">",
+          "html": "<div role=\"progressbar\" aria-valuenow=\"2\" aria-valuemin=\"0\" aria-valuemax=\"4\" aria-labelledby=\"_r_4_\" aria-valuetext=\"50%\" class=\"astryx-progress-bar-track xh8yej3 xdk7pt xwmxj5m xjspbzw xb3r6kr\">",
           "target": [
             ".astryx-progress-bar-track"
           ]
@@ -1487,7 +1498,7 @@
           "impact": null,
           "html": "<button type=\"button\" disabled=\"\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x1mrddfy xt0e3qv x18o3ruo xbyyjgo x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" aria-disabled=\"true\" aria-describedby=\"onboard-disabled-reason\">",
           "target": [
-            ".za-control"
+            "button[aria-describedby=\"onboard-disabled-reason\"]"
           ]
         },
         {
@@ -1513,7 +1524,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".za-control > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            "button[aria-describedby=\"onboard-disabled-reason\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -1653,7 +1664,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -1689,7 +1700,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -1957,9 +1968,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<article aria-label=\"Message from assistant\" class=\"astryx-chat-message xwbd0jv x1p8rq6b x78zum5 x1cy8zhl x193iq5w x1q0g3np x1nhvcw1 x1txdalj onboard-assistant\" data-sender=\"assistant\" data-density=\"balanced\">",
+          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".x1na6nto > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]"
+            ".x6k0iem > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -1977,7 +1988,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".x6k0iem > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            ".pricing-actions > .za-control.x17x4s8c[data-variant=\"secondary\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -1993,27 +2004,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
+          "html": "<button type=\"button\" disabled=\"\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x1mrddfy xt0e3qv x18o3ruo xbyyjgo x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" aria-disabled=\"true\" aria-describedby=\"pricing-disabled-reason\">",
           "target": [
-            ".onboard-field:nth-child(1) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-conditional-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "ARIA attribute is allowed"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
-          "target": [
-            ".onboard-field:nth-child(2) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
+            "button[aria-describedby=\"pricing-disabled-reason\"]"
           ]
         },
         {
@@ -2031,7 +2024,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".onboard-controls > div > .xt0e3qv.x18o3ruo.xbyyjgo > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            "button[aria-describedby=\"pricing-disabled-reason\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -2047,7 +2040,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<div role=\"progressbar\" aria-valuenow=\"4\" aria-valuemin=\"0\" aria-valuemax=\"4\" aria-labelledby=\"_r_4_\" aria-valuetext=\"100%\" class=\"astryx-progress-bar-track xh8yej3 xdk7pt xwmxj5m xjspbzw xb3r6kr\">",
+          "html": "<div role=\"progressbar\" aria-valuenow=\"2\" aria-valuemin=\"0\" aria-valuemax=\"4\" aria-labelledby=\"_r_4_\" aria-valuetext=\"50%\" class=\"astryx-progress-bar-track xh8yej3 xdk7pt xwmxj5m xjspbzw xb3r6kr\">",
           "target": [
             ".astryx-progress-bar-track"
           ]
@@ -2175,7 +2168,7 @@
           "impact": null,
           "html": "<button type=\"button\" disabled=\"\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x1mrddfy xt0e3qv x18o3ruo xbyyjgo x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" aria-disabled=\"true\" aria-describedby=\"onboard-disabled-reason\">",
           "target": [
-            ".za-control"
+            "button[aria-describedby=\"onboard-disabled-reason\"]"
           ]
         },
         {
@@ -2193,7 +2186,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".za-control > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            "button[aria-describedby=\"onboard-disabled-reason\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -2299,7 +2292,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -2317,7 +2310,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -2353,79 +2346,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".x6k0iem > .x1i1rx1s.xjm9jq1[role=\"status\"]"
-          ]
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "deprecatedrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "minor",
-              "message": "ARIA role is not deprecated"
-            }
-          ],
-          "impact": null,
-          "html": "<input id=\"_r_42_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
-          "target": [
-            "#_r_42_"
-          ]
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "deprecatedrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "minor",
-              "message": "ARIA role is not deprecated"
-            }
-          ],
-          "impact": null,
-          "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
-          "target": [
-            ".onboard-field:nth-child(1) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
-          ]
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "deprecatedrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "minor",
-              "message": "ARIA role is not deprecated"
-            }
-          ],
-          "impact": null,
-          "html": "<input id=\"_r_4a_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
-          "target": [
-            "#_r_4a_"
-          ]
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "deprecatedrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "minor",
-              "message": "ARIA role is not deprecated"
-            }
-          ],
-          "impact": null,
-          "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
-          "target": [
-            ".onboard-field:nth-child(2) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
+            ".x6k0iem > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -2443,7 +2364,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".onboard-controls > div > .xt0e3qv.x18o3ruo.xbyyjgo > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            ".pricing-actions > .za-control.x17x4s8c[data-variant=\"secondary\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -2459,7 +2380,25 @@
             }
           ],
           "impact": null,
-          "html": "<div role=\"progressbar\" aria-valuenow=\"4\" aria-valuemin=\"0\" aria-valuemax=\"4\" aria-labelledby=\"_r_4_\" aria-valuetext=\"100%\" class=\"astryx-progress-bar-track xh8yej3 xdk7pt xwmxj5m xjspbzw xb3r6kr\">",
+          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
+          "target": [
+            "button[aria-describedby=\"pricing-disabled-reason\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "deprecatedrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "ARIA role is not deprecated"
+            }
+          ],
+          "impact": null,
+          "html": "<div role=\"progressbar\" aria-valuenow=\"2\" aria-valuemin=\"0\" aria-valuemax=\"4\" aria-labelledby=\"_r_4_\" aria-valuetext=\"50%\" class=\"astryx-progress-bar-track xh8yej3 xdk7pt xwmxj5m xjspbzw xb3r6kr\">",
           "target": [
             ".astryx-progress-bar-track"
           ]
@@ -2479,7 +2418,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".za-control > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            "button[aria-describedby=\"onboard-disabled-reason\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -2919,38 +2858,6 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">Z</span>",
-          "target": [
-            ".x1na6nto > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"] > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "focusable-modal-open",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements while a modal is open"
-            },
-            {
-              "id": "focusable-disabled",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements contained within element"
-            },
-            {
-              "id": "focusable-not-tabbable",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements contained within element"
-            }
-          ],
-          "none": [],
-          "impact": null,
           "html": "<svg aria-hidden=\"true\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M9 4 4 9l5 5M4 9h10a6 6 0 0 1 0 12h-3\"></path></svg>",
           "target": [
             "svg[width=\"16\"]"
@@ -3017,7 +2924,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div role=\"progressbar\" aria-valuenow=\"4\" aria-valuemin=\"0\" aria-valuemax=\"4\" aria-labelledby=\"_r_4_\" aria-valuetext=\"100%\" class=\"astryx-progress-bar-track xh8yej3 xdk7pt xwmxj5m xjspbzw xb3r6kr\">",
+          "html": "<div role=\"progressbar\" aria-valuenow=\"2\" aria-valuemin=\"0\" aria-valuemax=\"4\" aria-labelledby=\"_r_4_\" aria-valuetext=\"50%\" class=\"astryx-progress-bar-track xh8yej3 xdk7pt xwmxj5m xjspbzw xb3r6kr\">",
           "target": [
             ".astryx-progress-bar-track"
           ]
@@ -3107,7 +3014,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -3143,7 +3050,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -3411,9 +3318,9 @@
             }
           ],
           "impact": null,
-          "html": "<article aria-label=\"Message from assistant\" class=\"astryx-chat-message xwbd0jv x1p8rq6b x78zum5 x1cy8zhl x193iq5w x1q0g3np x1nhvcw1 x1txdalj onboard-assistant\" data-sender=\"assistant\" data-density=\"balanced\">",
+          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".x1na6nto > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]"
+            ".x6k0iem > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -3431,7 +3338,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".x6k0iem > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            ".pricing-actions > .za-control.x17x4s8c[data-variant=\"secondary\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -3447,27 +3354,9 @@
             }
           ],
           "impact": null,
-          "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
+          "html": "<button type=\"button\" disabled=\"\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x1mrddfy xt0e3qv x18o3ruo xbyyjgo x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" aria-disabled=\"true\" aria-describedby=\"pricing-disabled-reason\">",
           "target": [
-            ".onboard-field:nth-child(1) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
-          ]
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "aria-prohibited-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "ARIA attribute is allowed"
-            }
-          ],
-          "impact": null,
-          "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
-          "target": [
-            ".onboard-field:nth-child(2) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
+            "button[aria-describedby=\"pricing-disabled-reason\"]"
           ]
         },
         {
@@ -3485,7 +3374,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".onboard-controls > div > .xt0e3qv.x18o3ruo.xbyyjgo > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            "button[aria-describedby=\"pricing-disabled-reason\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -3501,7 +3390,7 @@
             }
           ],
           "impact": null,
-          "html": "<div role=\"progressbar\" aria-valuenow=\"4\" aria-valuemin=\"0\" aria-valuemax=\"4\" aria-labelledby=\"_r_4_\" aria-valuetext=\"100%\" class=\"astryx-progress-bar-track xh8yej3 xdk7pt xwmxj5m xjspbzw xb3r6kr\">",
+          "html": "<div role=\"progressbar\" aria-valuenow=\"2\" aria-valuemin=\"0\" aria-valuemax=\"4\" aria-labelledby=\"_r_4_\" aria-valuetext=\"50%\" class=\"astryx-progress-bar-track xh8yej3 xdk7pt xwmxj5m xjspbzw xb3r6kr\">",
           "target": [
             ".astryx-progress-bar-track"
           ]
@@ -3629,7 +3518,7 @@
           "impact": null,
           "html": "<button type=\"button\" disabled=\"\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x1mrddfy xt0e3qv x18o3ruo xbyyjgo x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" aria-disabled=\"true\" aria-describedby=\"onboard-disabled-reason\">",
           "target": [
-            ".za-control"
+            "button[aria-describedby=\"onboard-disabled-reason\"]"
           ]
         },
         {
@@ -3647,7 +3536,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".za-control > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            "button[aria-describedby=\"onboard-disabled-reason\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -3753,7 +3642,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -3771,7 +3660,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -3807,79 +3696,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".x6k0iem > .x1i1rx1s.xjm9jq1[role=\"status\"]"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "aria-required-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "All required ARIA attributes are present"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<input id=\"_r_42_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
-          "target": [
-            "#_r_42_"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "aria-required-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "All required ARIA attributes are present"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
-          "target": [
-            ".onboard-field:nth-child(1) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "aria-required-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "All required ARIA attributes are present"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<input id=\"_r_4a_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
-          "target": [
-            "#_r_4a_"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "aria-required-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "All required ARIA attributes are present"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
-          "target": [
-            ".onboard-field:nth-child(2) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
+            ".x6k0iem > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -3897,7 +3714,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".onboard-controls > div > .xt0e3qv.x18o3ruo.xbyyjgo > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            ".pricing-actions > .za-control.x17x4s8c[data-variant=\"secondary\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -3913,7 +3730,25 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div role=\"progressbar\" aria-valuenow=\"4\" aria-valuemin=\"0\" aria-valuemax=\"4\" aria-labelledby=\"_r_4_\" aria-valuetext=\"100%\" class=\"astryx-progress-bar-track xh8yej3 xdk7pt xwmxj5m xjspbzw xb3r6kr\">",
+          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
+          "target": [
+            "button[aria-describedby=\"pricing-disabled-reason\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-required-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "All required ARIA attributes are present"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div role=\"progressbar\" aria-valuenow=\"2\" aria-valuemin=\"0\" aria-valuemax=\"4\" aria-labelledby=\"_r_4_\" aria-valuetext=\"50%\" class=\"astryx-progress-bar-track xh8yej3 xdk7pt xwmxj5m xjspbzw xb3r6kr\">",
           "target": [
             ".astryx-progress-bar-track"
           ]
@@ -3933,7 +3768,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".za-control > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            "button[aria-describedby=\"onboard-disabled-reason\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -4081,7 +3916,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -4113,7 +3948,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -4177,135 +4012,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".x6k0iem > .x1i1rx1s.xjm9jq1[role=\"status\"]"
-          ]
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "invalidrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA role is valid"
-            },
-            {
-              "id": "abstractrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "Abstract roles are not used"
-            },
-            {
-              "id": "unsupportedrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA role is supported"
-            }
-          ],
-          "impact": null,
-          "html": "<input id=\"_r_42_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
-          "target": [
-            "#_r_42_"
-          ]
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "invalidrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA role is valid"
-            },
-            {
-              "id": "abstractrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "Abstract roles are not used"
-            },
-            {
-              "id": "unsupportedrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA role is supported"
-            }
-          ],
-          "impact": null,
-          "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
-          "target": [
-            ".onboard-field:nth-child(1) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
-          ]
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "invalidrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA role is valid"
-            },
-            {
-              "id": "abstractrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "Abstract roles are not used"
-            },
-            {
-              "id": "unsupportedrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA role is supported"
-            }
-          ],
-          "impact": null,
-          "html": "<input id=\"_r_4a_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
-          "target": [
-            "#_r_4a_"
-          ]
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "invalidrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA role is valid"
-            },
-            {
-              "id": "abstractrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "Abstract roles are not used"
-            },
-            {
-              "id": "unsupportedrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA role is supported"
-            }
-          ],
-          "impact": null,
-          "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
-          "target": [
-            ".onboard-field:nth-child(2) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
+            ".x6k0iem > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -4337,7 +4044,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".onboard-controls > div > .xt0e3qv.x18o3ruo.xbyyjgo > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            ".pricing-actions > .za-control.x17x4s8c[data-variant=\"secondary\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -4367,7 +4074,39 @@
             }
           ],
           "impact": null,
-          "html": "<div role=\"progressbar\" aria-valuenow=\"4\" aria-valuemin=\"0\" aria-valuemax=\"4\" aria-labelledby=\"_r_4_\" aria-valuetext=\"100%\" class=\"astryx-progress-bar-track xh8yej3 xdk7pt xwmxj5m xjspbzw xb3r6kr\">",
+          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
+          "target": [
+            "button[aria-describedby=\"pricing-disabled-reason\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "invalidrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA role is valid"
+            },
+            {
+              "id": "abstractrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Abstract roles are not used"
+            },
+            {
+              "id": "unsupportedrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA role is supported"
+            }
+          ],
+          "impact": null,
+          "html": "<div role=\"progressbar\" aria-valuenow=\"2\" aria-valuemin=\"0\" aria-valuemax=\"4\" aria-labelledby=\"_r_4_\" aria-valuetext=\"50%\" class=\"astryx-progress-bar-track xh8yej3 xdk7pt xwmxj5m xjspbzw xb3r6kr\">",
           "target": [
             ".astryx-progress-bar-track"
           ]
@@ -4401,7 +4140,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".za-control > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            "button[aria-describedby=\"onboard-disabled-reason\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -4609,7 +4348,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -4673,7 +4412,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -5151,9 +4890,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<article aria-label=\"Message from assistant\" class=\"astryx-chat-message xwbd0jv x1p8rq6b x78zum5 x1cy8zhl x193iq5w x1q0g3np x1nhvcw1 x1txdalj onboard-assistant\" data-sender=\"assistant\" data-density=\"balanced\">",
+          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".x1na6nto > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]"
+            ".x6k0iem > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -5185,7 +4924,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".x6k0iem > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            ".pricing-actions > .za-control.x17x4s8c[data-variant=\"secondary\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -5215,41 +4954,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
+          "html": "<button type=\"button\" disabled=\"\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x1mrddfy xt0e3qv x18o3ruo xbyyjgo x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" aria-disabled=\"true\" aria-describedby=\"pricing-disabled-reason\">",
           "target": [
-            ".onboard-field:nth-child(1) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-valid-attr-value",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute values are valid"
-            },
-            {
-              "id": "aria-errormessage",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
-            },
-            {
-              "id": "aria-level",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "aria-level values are valid"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
-          "target": [
-            ".onboard-field:nth-child(2) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
+            "button[aria-describedby=\"pricing-disabled-reason\"]"
           ]
         },
         {
@@ -5281,7 +4988,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".onboard-controls > div > .xt0e3qv.x18o3ruo.xbyyjgo > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            "button[aria-describedby=\"pricing-disabled-reason\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -5311,7 +5018,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<div role=\"progressbar\" aria-valuenow=\"4\" aria-valuemin=\"0\" aria-valuemax=\"4\" aria-labelledby=\"_r_4_\" aria-valuetext=\"100%\" class=\"astryx-progress-bar-track xh8yej3 xdk7pt xwmxj5m xjspbzw xb3r6kr\">",
+          "html": "<div role=\"progressbar\" aria-valuenow=\"2\" aria-valuemin=\"0\" aria-valuemax=\"4\" aria-labelledby=\"_r_4_\" aria-valuetext=\"50%\" class=\"astryx-progress-bar-track xh8yej3 xdk7pt xwmxj5m xjspbzw xb3r6kr\">",
           "target": [
             ".astryx-progress-bar-track"
           ]
@@ -5537,7 +5244,7 @@
           "impact": null,
           "html": "<button type=\"button\" disabled=\"\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x1mrddfy xt0e3qv x18o3ruo xbyyjgo x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" aria-disabled=\"true\" aria-describedby=\"onboard-disabled-reason\">",
           "target": [
-            ".za-control"
+            "button[aria-describedby=\"onboard-disabled-reason\"]"
           ]
         },
         {
@@ -5569,7 +5276,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".za-control > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            "button[aria-describedby=\"onboard-disabled-reason\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -5721,7 +5428,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -5757,7 +5464,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -6025,9 +5732,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<article aria-label=\"Message from assistant\" class=\"astryx-chat-message xwbd0jv x1p8rq6b x78zum5 x1cy8zhl x193iq5w x1q0g3np x1nhvcw1 x1txdalj onboard-assistant\" data-sender=\"assistant\" data-density=\"balanced\">",
+          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".x1na6nto > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]"
+            ".x6k0iem > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -6045,7 +5752,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".x6k0iem > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            ".pricing-actions > .za-control.x17x4s8c[data-variant=\"secondary\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -6061,27 +5768,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
+          "html": "<button type=\"button\" disabled=\"\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x1mrddfy xt0e3qv x18o3ruo xbyyjgo x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" aria-disabled=\"true\" aria-describedby=\"pricing-disabled-reason\">",
           "target": [
-            ".onboard-field:nth-child(1) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "aria-valid-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute name is valid"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
-          "target": [
-            ".onboard-field:nth-child(2) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
+            "button[aria-describedby=\"pricing-disabled-reason\"]"
           ]
         },
         {
@@ -6099,7 +5788,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".onboard-controls > div > .xt0e3qv.x18o3ruo.xbyyjgo > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            "button[aria-describedby=\"pricing-disabled-reason\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -6115,7 +5804,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div role=\"progressbar\" aria-valuenow=\"4\" aria-valuemin=\"0\" aria-valuemax=\"4\" aria-labelledby=\"_r_4_\" aria-valuetext=\"100%\" class=\"astryx-progress-bar-track xh8yej3 xdk7pt xwmxj5m xjspbzw xb3r6kr\">",
+          "html": "<div role=\"progressbar\" aria-valuenow=\"2\" aria-valuemin=\"0\" aria-valuemax=\"4\" aria-labelledby=\"_r_4_\" aria-valuetext=\"50%\" class=\"astryx-progress-bar-track xh8yej3 xdk7pt xwmxj5m xjspbzw xb3r6kr\">",
           "target": [
             ".astryx-progress-bar-track"
           ]
@@ -6243,7 +5932,7 @@
           "impact": null,
           "html": "<button type=\"button\" disabled=\"\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x1mrddfy xt0e3qv x18o3ruo xbyyjgo x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" aria-disabled=\"true\" aria-describedby=\"onboard-disabled-reason\">",
           "target": [
-            ".za-control"
+            "button[aria-describedby=\"onboard-disabled-reason\"]"
           ]
         },
         {
@@ -6261,7 +5950,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".za-control > .x1i1rx1s.xjm9jq1[role=\"status\"]"
+            "button[aria-describedby=\"onboard-disabled-reason\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
           ]
         },
         {
@@ -6344,71 +6033,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<input id=\"_r_42_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
-          "target": [
-            "#_r_42_"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "important-letter-spacing",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Letter-spacing in the style attribute is not set to !important, or meets the minimum"
-            },
-            {
-              "id": "important-word-spacing",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "word-spacing in the style attribute is not set to !important, or meets the minimum"
-            },
-            {
-              "id": "important-line-height",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "line-height in the style attribute is not set to !important, or meets the minimum"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<input id=\"_r_4a_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
-          "target": [
-            "#_r_4a_"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "important-letter-spacing",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Letter-spacing in the style attribute is not set to !important, or meets the minimum"
-            },
-            {
-              "id": "important-word-spacing",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "word-spacing in the style attribute is not set to !important, or meets the minimum"
-            },
-            {
-              "id": "important-line-height",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "line-height in the style attribute is not set to !important, or meets the minimum"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<div class=\"astryx-progress-bar-fill xh8yej3 xtyencx x1j61smm x5yr21d xcthrzx x815t2r x3teovq xvr1dqx xjspbzw x8mk83g x13s8k5t x1xwfpud x1ayxeub x1rvio82 x10rjfdt x1so62im x1mfxj9n x11xpdln x18hto2h x80gvsz x1k32oa2 x11y4s09 xo2sced x1r9o9eb xlr8y92 x1itqrb8 x1ewilqj\" data-variant=\"accent\" style=\"--_progress-bar-fill: 100%; --_progress-bar-move: 250ms; --_progress-bar-curve: cubic-bezier(0, 0, 1, 1); --_progress-bar-flip: 1; --_progress-bar-min: 16px;\">",
+          "html": "<div class=\"astryx-progress-bar-fill xh8yej3 xtyencx x1j61smm x5yr21d xcthrzx x815t2r x3teovq xvr1dqx xjspbzw x8mk83g x13s8k5t x1xwfpud x1ayxeub x1rvio82 x10rjfdt x1so62im x1mfxj9n x11xpdln x18hto2h x80gvsz x1k32oa2 x11y4s09 xo2sced x1r9o9eb xlr8y92 x1itqrb8 x1ewilqj\" data-variant=\"accent\" style=\"--_progress-bar-fill: 50%; --_progress-bar-move: 250ms; --_progress-bar-curve: cubic-bezier(0, 0, 1, 1); --_progress-bar-flip: 1; --_progress-bar-min: 16px;\">",
           "target": [
             ".astryx-progress-bar-fill"
           ]
@@ -6501,9 +6126,27 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button type=\"button\" disabled=\"\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x1mrddfy xt0e3qv x18o3ruo xbyyjgo x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\">",
+          "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\">",
           "target": [
-            ".onboard-controls > div > .xt0e3qv.x18o3ruo.xbyyjgo"
+            ".pricing-actions > .za-control.x17x4s8c[data-variant=\"secondary\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "button-has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has inner text that is visible to screen readers"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button type=\"button\" disabled=\"\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x1mrddfy xt0e3qv x18o3ruo xbyyjgo x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" aria-disabled=\"true\" aria-describedby=\"pricing-disabled-reason\">",
+          "target": [
+            "button[aria-describedby=\"pricing-disabled-reason\"]"
           ]
         },
         {
@@ -6664,7 +6307,7 @@
           "impact": null,
           "html": "<button type=\"button\" disabled=\"\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x1mrddfy xt0e3qv x18o3ruo xbyyjgo x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" aria-disabled=\"true\" aria-describedby=\"onboard-disabled-reason\">",
           "target": [
-            ".za-control"
+            "button[aria-describedby=\"onboard-disabled-reason\"]"
           ]
         }
       ]
@@ -6831,6 +6474,131 @@
           "html": "<div class=\"status-line\" role=\"status\" aria-live=\"polite\"><span role=\"img\" aria-label=\"Ready\" class=\"astryx-status-dot x3nfvp2 x6s0dn4 xl56j7k x16rqkct x2lah0s x1xc55vz xdk7pt x1q5y3ey xrkvqaz\" data-variant=\"neutral\"></span>Paid execution disabled · Local service ready</div>",
           "target": [
             ".status-line"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#fafafa",
+                "bgColor": "#0a0a0a",
+                "contrastRatio": 18.96,
+                "fontSize": "11.3pt (15px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 18.96"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">Z</span>",
+          "target": [
+            ".onboard-turn:nth-child(3) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(3) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#0a0a0a",
+                "bgColor": "#fafafa",
+                "contrastRatio": 18.96,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 18.96"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"astryx-chat-message-bubble x78zum5 xdt5ytf xl6temz xashgol x9ynric xjm74w1 xw6l6zx x1mzt3pk x13faqbe xjbqb8w x1tgivj0 x1pzlopt xt970qd onboard-bubble\" data-sender=\"assistant\" data-variant=\"ghost\" data-density=\"balanced\">Got it. I’ll use the Researcher template.</div>",
+          "target": [
+            ".onboard-turn:nth-child(3) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(3) > .x98rzlu.x1cy8zhl.xeuugli > .xzye2dw.xh8yej3.x1cy8zhl > .astryx-chat-message-bubble.xl6temz.xashgol"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#fafafa",
+                "bgColor": "#0a0a0a",
+                "contrastRatio": 18.96,
+                "fontSize": "11.3pt (15px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 18.96"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">Z</span>",
+          "target": [
+            ".onboard-turn:nth-child(4) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(1) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#0a0a0a",
+                "bgColor": "#fafafa",
+                "contrastRatio": 18.96,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 18.96"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"astryx-chat-message-bubble x78zum5 xdt5ytf xl6temz xashgol x9ynric xjm74w1 xw6l6zx x1mzt3pk x13faqbe xjbqb8w x1tgivj0 x1pzlopt xt970qd onboard-bubble\" data-sender=\"assistant\" data-variant=\"ghost\" data-density=\"balanced\">How should the agent reach a model?</div>",
+          "target": [
+            ".onboard-turn:nth-child(4) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(1) > .x98rzlu.x1cy8zhl.xeuugli > .xzye2dw.xh8yej3.x1cy8zhl > .astryx-chat-message-bubble.xl6temz.xashgol"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#0a0a0a",
+                "bgColor": "#f0f0ed",
+                "contrastRatio": 17.33,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 17.33"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"astryx-chat-message-bubble x78zum5 xdt5ytf xl6temz xashgol x9ynric xjm74w1 xw6l6zx x1mzt3pk x13faqbe xjbqb8w x1tgivj0 x1pzlopt xt970qd onboard-bubble\" data-sender=\"user\" data-variant=\"ghost\" data-density=\"balanced\">OpenRouter · ••••7f2a</div>",
+          "target": [
+            ".onboard-turn:nth-child(4) > .x15zctf7.onboard-user[aria-label=\"Message from user\"] > .xuk3077.x98rzlu.xeuugli > .xuk3077.xzye2dw.xh8yej3 > .astryx-chat-message-bubble.xl6temz[data-sender=\"user\"]"
           ]
         },
         {
@@ -7028,59 +6796,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"astryx-chat-message-bubble x78zum5 xdt5ytf xl6temz xashgol x9ynric xjm74w1 xw6l6zx x1mzt3pk x13faqbe xjbqb8w x1tgivj0 x1pzlopt xt970qd onboard-bubble\" data-sender=\"assistant\" data-variant=\"ghost\" data-density=\"balanced\">",
+          "html": "<div class=\"astryx-chat-message-bubble x78zum5 xdt5ytf xl6temz xashgol x9ynric xjm74w1 xw6l6zx x1mzt3pk x13faqbe xjbqb8w x1tgivj0 x1pzlopt xt970qd onboard-bubble\" data-sender=\"assistant\" data-variant=\"ghost\" data-density=\"balanced\">I need the price for this model. Open Advanced to add it.</div>",
           "target": [
             ".onboard-turn:nth-child(6) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(3) > .x98rzlu.x1cy8zhl.xeuugli > .xzye2dw.xh8yej3.x1cy8zhl > .astryx-chat-message-bubble.xl6temz.xashgol"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#fafafa",
-                "bgColor": "#0a0a0a",
-                "contrastRatio": 18.96,
-                "fontSize": "11.3pt (15px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 18.96"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">Z</span>",
-          "target": [
-            ".x1na6nto > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"] > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#0a0a0a",
-                "bgColor": "#fafafa",
-                "contrastRatio": 18.96,
-                "fontSize": "12.0pt (16px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 18.96"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div class=\"astryx-chat-message-bubble x78zum5 xdt5ytf xl6temz xashgol x9ynric xjm74w1 xw6l6zx x1mzt3pk x13faqbe xjbqb8w x1tgivj0 x1pzlopt xt970qd onboard-bubble\" data-sender=\"assistant\" data-variant=\"ghost\" data-density=\"balanced\">Confirm pricing to continue.</div>",
-          "target": [
-            ".x1na6nto > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"] > .x98rzlu.x1cy8zhl.xeuugli > .xzye2dw.xh8yej3.x1cy8zhl > .astryx-chat-message-bubble.xl6temz.xashgol"
           ]
         },
         {
@@ -7105,32 +6823,7 @@
           "impact": null,
           "html": "<span class=\"xb3r6kr xlyipyv xeuugli\">Undo last answer</span>",
           "target": [
-            ".x1fjtqre.x7b72wb.x1ukc1h5 > .xlyipyv.xb3r6kr"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#616161",
-                "bgColor": "#fafafa",
-                "contrastRatio": 5.93,
-                "fontSize": "10.5pt (14px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.93"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<label for=\"_r_42_\" class=\"astryx-field-label x78zum5 x6s0dn4 xzye2dw x9ynric xcr08ib x1kq96og x1e4wzip xv1l7n4 x1ypdohk x16khyan\">Input ¢/MTok</label>",
-          "target": [
-            "label[for=\"_r_42_\"]"
+            ".x6k0iem > .x1fjtqre.x7b72wb.x1ukc1h5 > .xlyipyv.xb3r6kr.xeuugli"
           ]
         },
         {
@@ -7141,7 +6834,7 @@
                 "fgColor": "#0a0a0a",
                 "bgColor": "#f0f0ed",
                 "contrastRatio": 17.33,
-                "fontSize": "12.0pt (16px)",
+                "fontSize": "10.5pt (14px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -7153,9 +6846,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<input id=\"_r_42_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
+          "html": "<span class=\"xb3r6kr xlyipyv xeuugli\">Open Advanced</span>",
           "target": [
-            "#_r_42_"
+            ".za-control.x17x4s8c[data-variant=\"secondary\"] > .x1fjtqre.x7b72wb.x1ukc1h5 > .xlyipyv.xb3r6kr.xeuugli"
           ]
         },
         {
@@ -7166,7 +6859,7 @@
                 "fgColor": "#616161",
                 "bgColor": "#fafafa",
                 "contrastRatio": 5.93,
-                "fontSize": "10.5pt (14px)",
+                "fontSize": "12.0pt (16px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -7178,34 +6871,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<label for=\"_r_4a_\" class=\"astryx-field-label x78zum5 x6s0dn4 xzye2dw x9ynric xcr08ib x1kq96og x1e4wzip xv1l7n4 x1ypdohk x16khyan\">Output ¢/MTok</label>",
+          "html": "<p id=\"pricing-disabled-reason\" class=\"za-muted\">Enter both model prices in Advanced to continue.</p>",
           "target": [
-            "label[for=\"_r_4a_\"]"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#0a0a0a",
-                "bgColor": "#f0f0ed",
-                "contrastRatio": 17.33,
-                "fontSize": "12.0pt (16px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 17.33"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<input id=\"_r_4a_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
-          "target": [
-            "#_r_4a_"
+            "#pricing-disabled-reason"
           ]
         },
         {
@@ -7253,7 +6921,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p class=\"za-muted\">4 of 4 steps complete</p>",
+          "html": "<p class=\"za-muted\">2 of 4 steps complete</p>",
           "target": [
             ".panel-scroll > p"
           ]
@@ -8088,7 +7756,7 @@
           "any": [
             {
               "id": "duplicate-id-aria",
-              "data": "_r_42_",
+              "data": "pricing-disabled-reason",
               "relatedNodes": [],
               "impact": "critical",
               "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
@@ -8097,27 +7765,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<input id=\"_r_42_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
+          "html": "<p id=\"pricing-disabled-reason\" class=\"za-muted\">Enter both model prices in Advanced to continue.</p>",
           "target": [
-            "#_r_42_"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "duplicate-id-aria",
-              "data": "_r_4a_",
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<input id=\"_r_4a_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
-          "target": [
-            "#_r_4a_"
+            "#pricing-disabled-reason"
           ]
         },
         {
@@ -8172,74 +7822,6 @@
           "html": "<p id=\"onboard-disabled-reason\" class=\"za-muted\">Finish the four steps and confirm pricing.</p>",
           "target": [
             "#onboard-disabled-reason"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "form-field-multiple-labels",
-      "impact": null,
-      "tags": [
-        "cat.forms",
-        "wcag2a",
-        "wcag332",
-        "TTv5",
-        "TT5.c",
-        "EN-301-549",
-        "EN-9.3.3.2"
-      ],
-      "description": "Ensure form field does not have multiple label elements",
-      "help": "Form field must not have multiple label elements",
-      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/form-field-multiple-labels?application=playwright",
-      "nodes": [
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "multiple-label",
-              "data": null,
-              "relatedNodes": [
-                {
-                  "html": "<label for=\"_r_42_\" class=\"astryx-field-label x78zum5 x6s0dn4 xzye2dw x9ynric xcr08ib x1kq96og x1e4wzip xv1l7n4 x1ypdohk x16khyan\">Input ¢/MTok</label>",
-                  "target": [
-                    "label[for=\"_r_42_\"]"
-                  ]
-                }
-              ],
-              "impact": "moderate",
-              "message": "Form field does not have multiple label elements"
-            }
-          ],
-          "impact": null,
-          "html": "<input id=\"_r_42_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
-          "target": [
-            "#_r_42_"
-          ]
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "multiple-label",
-              "data": null,
-              "relatedNodes": [
-                {
-                  "html": "<label for=\"_r_4a_\" class=\"astryx-field-label x78zum5 x6s0dn4 xzye2dw x9ynric xcr08ib x1kq96og x1e4wzip xv1l7n4 x1ypdohk x16khyan\">Output ¢/MTok</label>",
-                  "target": [
-                    "label[for=\"_r_4a_\"]"
-                  ]
-                }
-              ],
-              "impact": "moderate",
-              "message": "Form field does not have multiple label elements"
-            }
-          ],
-          "impact": null,
-          "html": "<input id=\"_r_4a_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
-          "target": [
-            "#_r_4a_"
           ]
         }
       ]
@@ -8314,97 +7896,6 @@
           "html": "<html lang=\"en\" data-theme=\"light\" data-astryx-theme=\"neutral\">",
           "target": [
             "html"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "label",
-      "impact": null,
-      "tags": [
-        "cat.forms",
-        "wcag2a",
-        "wcag412",
-        "section508",
-        "section508.22.n",
-        "TTv5",
-        "TT5.c",
-        "EN-301-549",
-        "EN-9.4.1.2",
-        "ACT"
-      ],
-      "description": "Ensure every form element has a label",
-      "help": "Form elements must have labels",
-      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/label?application=playwright",
-      "nodes": [
-        {
-          "any": [
-            {
-              "id": "explicit-label",
-              "data": {
-                "explicitLabel": "Input ¢/MTok"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<label for=\"_r_42_\" class=\"astryx-field-label x78zum5 x6s0dn4 xzye2dw x9ynric xcr08ib x1kq96og x1e4wzip xv1l7n4 x1ypdohk x16khyan\">Input ¢/MTok</label>",
-                  "target": [
-                    "label[for=\"_r_42_\"]"
-                  ]
-                }
-              ],
-              "impact": "critical",
-              "message": "Element has an explicit <label>"
-            }
-          ],
-          "all": [],
-          "none": [
-            {
-              "id": "hidden-explicit-label",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "Form element has a visible explicit <label>"
-            }
-          ],
-          "impact": null,
-          "html": "<input id=\"_r_42_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
-          "target": [
-            "#_r_42_"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "explicit-label",
-              "data": {
-                "explicitLabel": "Output ¢/MTok"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<label for=\"_r_4a_\" class=\"astryx-field-label x78zum5 x6s0dn4 xzye2dw x9ynric xcr08ib x1kq96og x1e4wzip xv1l7n4 x1ypdohk x16khyan\">Output ¢/MTok</label>",
-                  "target": [
-                    "label[for=\"_r_4a_\"]"
-                  ]
-                }
-              ],
-              "impact": "critical",
-              "message": "Element has an explicit <label>"
-            }
-          ],
-          "all": [],
-          "none": [
-            {
-              "id": "hidden-explicit-label",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "Form element has a visible explicit <label>"
-            }
-          ],
-          "impact": null,
-          "html": "<input id=\"_r_4a_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
-          "target": [
-            "#_r_4a_"
           ]
         }
       ]
@@ -8594,9 +8085,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button type=\"button\" disabled=\"\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x1mrddfy xt0e3qv x18o3ruo xbyyjgo x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\">",
+          "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\">",
           "target": [
-            ".onboard-controls > div > .xt0e3qv.x18o3ruo.xbyyjgo"
+            ".pricing-actions > .za-control.x17x4s8c[data-variant=\"secondary\"]"
           ]
         },
         {
@@ -8612,7 +8103,25 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div role=\"progressbar\" aria-valuenow=\"4\" aria-valuemin=\"0\" aria-valuemax=\"4\" aria-labelledby=\"_r_4_\" aria-valuetext=\"100%\" class=\"astryx-progress-bar-track xh8yej3 xdk7pt xwmxj5m xjspbzw xb3r6kr\">",
+          "html": "<button type=\"button\" disabled=\"\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x1mrddfy xt0e3qv x18o3ruo xbyyjgo x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" aria-disabled=\"true\" aria-describedby=\"pricing-disabled-reason\">",
+          "target": [
+            "button[aria-describedby=\"pricing-disabled-reason\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "no-focusable-content",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have focusable descendants"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div role=\"progressbar\" aria-valuenow=\"2\" aria-valuemin=\"0\" aria-valuemax=\"4\" aria-labelledby=\"_r_4_\" aria-valuetext=\"50%\" class=\"astryx-progress-bar-track xh8yej3 xdk7pt xwmxj5m xjspbzw xb3r6kr\">",
           "target": [
             ".astryx-progress-bar-track"
           ]
@@ -8740,7 +8249,7 @@
           "impact": null,
           "html": "<button type=\"button\" disabled=\"\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x1mrddfy xt0e3qv x18o3ruo xbyyjgo x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" aria-disabled=\"true\" aria-describedby=\"onboard-disabled-reason\">",
           "target": [
-            ".za-control"
+            "button[aria-describedby=\"onboard-disabled-reason\"]"
           ]
         }
       ]
@@ -8986,12 +8495,12 @@
               "id": "target-size",
               "data": {
                 "minSize": 24,
-                "width": 686,
+                "width": 134,
                 "height": 44
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Control has sufficient size (686px by 44px, should be at least 24px by 24px)"
+              "message": "Control has sufficient size (134px by 44px, should be at least 24px by 24px)"
             },
             {
               "id": "target-offset",
@@ -9007,41 +8516,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<input id=\"_r_42_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
+          "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\">",
           "target": [
-            "#_r_42_"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "target-size",
-              "data": {
-                "minSize": 24,
-                "width": 686,
-                "height": 44
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Control has sufficient size (686px by 44px, should be at least 24px by 24px)"
-            },
-            {
-              "id": "target-offset",
-              "data": {
-                "closestOffset": 24,
-                "minOffset": 24
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Target has sufficient space from its closest neighbors. Safe clickable space has a diameter of 24px which is at least 24px."
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<input id=\"_r_4a_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
-          "target": [
-            "#_r_4a_"
+            ".pricing-actions > .za-control.x17x4s8c[data-variant=\"secondary\"]"
           ]
         },
         {

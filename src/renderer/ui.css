@@ -126,3 +126,5 @@ textarea { field-sizing:content; max-height:260px; }
 .zero-agency-os .onboard-chat.is-landing { overflow:auto; }
 /* Astryx FieldLabel is already a row; native vertical labels must not alter it. */
 .zero-agency-os .astryx-field-label { flex-direction:row; align-items:center; justify-content:flex-start; }
+
+.pricing-actions { display:flex; flex-wrap:wrap; gap:var(--spacing-3); }

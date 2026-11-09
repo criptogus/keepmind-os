@@ -13,7 +13,7 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-11-09T17:49:29.101Z",
+  "timestamp": "2026-11-09T18:00:42.441Z",
   "url": "http://zaos-renderer.test/",
   "toolOptions": {
     "runOnly": {
@@ -6185,7 +6185,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<div class=\"astryx-progress-bar-fill xh8yej3 xtyencx x1j61smm x5yr21d xcthrzx x815t2r x3teovq xvr1dqx xjspbzw x8mk83g x13s8k5t x1xwfpud x1ayxeub x1rvio82 x10rjfdt x1so62im x1mfxj9n x11xpdln x18hto2h x80gvsz x1k32oa2 x11y4s09 xo2sced x1r9o9eb xlr8y92 x1itqrb8 x1ewilqj\" data-variant=\"accent\" style=\"--_progress-bar-fill: 100%; --_progress-bar-move: 250ms; --_progress-bar-curve: cubic-bezier(0, 0, 1, 1); --_progress-bar-flip: 1; --_progress-bar-min: 16px;\">",
+          "html": "<div class=\"astryx-progress-bar-fill xh8yej3 xtyencx x1j61smm x5yr21d xcthrzx x815t2r x3teovq xvr1dqx xjspbzw x8mk83g x13s8k5t x1xwfpud x1ayxeub x1rvio82 x10rjfdt x1so62im x1mfxj9n x11xpdln x18hto2h x80gvsz x1k32oa2 x11y4s09 xo2sced x1r9o9eb xlr8y92 x1itqrb8 x1ewilqj\" data-variant=\"accent\" style=\"--_progress-bar-fill: 100%; --_progress-bar-move: 250ms; --_progress-bar-curve: cubic-bezier(0, 0, 1, 1); --_progress-bar-flip: 0; --_progress-bar-min: 16px;\">",
           "target": [
             ".astryx-progress-bar-fill"
           ]
@@ -6672,6 +6672,56 @@
             {
               "id": "color-contrast",
               "data": {
+                "fgColor": "#0a0a0a",
+                "bgColor": "#fafafa",
+                "contrastRatio": 18.96,
+                "fontSize": "11.3pt (15px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 18.96"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">Z</span>",
+          "target": [
+            ".onboard-turn:nth-child(4) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(1) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#fafafa",
+                "bgColor": "#0a0a0a",
+                "contrastRatio": 18.96,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 18.96"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"astryx-chat-message-bubble x78zum5 xdt5ytf xl6temz xashgol x9ynric xjm74w1 xw6l6zx x1mzt3pk x13faqbe xjbqb8w x1tgivj0 x1pzlopt xt970qd onboard-bubble\" data-sender=\"assistant\" data-variant=\"ghost\" data-density=\"balanced\">How should the agent reach a model?</div>",
+          "target": [
+            ".onboard-turn:nth-child(4) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(1) > .x98rzlu.x1cy8zhl.xeuugli > .xzye2dw.xh8yej3.x1cy8zhl > .astryx-chat-message-bubble.xl6temz.xashgol"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
                 "fgColor": "#fafafa",
                 "bgColor": "#202020",
                 "contrastRatio": 15.61,
@@ -6887,7 +6937,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"astryx-chat-message-bubble x78zum5 xdt5ytf xl6temz xashgol x9ynric xjm74w1 xw6l6zx x1mzt3pk x13faqbe xjbqb8w x1tgivj0 x1pzlopt xt970qd onboard-bubble\" data-sender=\"assistant\" data-variant=\"ghost\" data-density=\"balanced\">",
+          "html": "<div class=\"astryx-chat-message-bubble x78zum5 xdt5ytf xl6temz xashgol x9ynric xjm74w1 xw6l6zx x1mzt3pk x13faqbe xjbqb8w x1tgivj0 x1pzlopt xt970qd onboard-bubble\" data-sender=\"assistant\" data-variant=\"ghost\" data-density=\"balanced\">I need the price for this model. Open Advanced to add it.</div>",
           "target": [
             ".onboard-turn:nth-child(6) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(3) > .x98rzlu.x1cy8zhl.xeuugli > .xzye2dw.xh8yej3.x1cy8zhl > .astryx-chat-message-bubble.xl6temz.xashgol"
           ]

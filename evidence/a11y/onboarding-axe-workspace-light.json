@@ -13,7 +13,7 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-11-09T17:49:23.199Z",
+  "timestamp": "2026-11-09T18:00:36.690Z",
   "url": "http://zaos-renderer.test/",
   "toolOptions": {
     "runOnly": {
@@ -843,7 +843,7 @@
             }
           ],
           "impact": null,
-          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic</textarea>",
+          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic for Northstar Fiction and draft findings for human review.</textarea>",
           "target": [
             "textarea"
           ]
@@ -1167,7 +1167,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic</textarea>",
+          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic for Northstar Fiction and draft findings for human review.</textarea>",
           "target": [
             "textarea"
           ]
@@ -1795,7 +1795,7 @@
             }
           ],
           "impact": null,
-          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic</textarea>",
+          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic for Northstar Fiction and draft findings for human review.</textarea>",
           "target": [
             "textarea"
           ]
@@ -2643,7 +2643,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic</textarea>",
+          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic for Northstar Fiction and draft findings for human review.</textarea>",
           "target": [
             "textarea"
           ]
@@ -3009,7 +3009,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic</textarea>",
+          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic for Northstar Fiction and draft findings for human review.</textarea>",
           "target": [
             "textarea"
           ]
@@ -3216,7 +3216,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic</textarea>",
+          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic for Northstar Fiction and draft findings for human review.</textarea>",
           "target": [
             "textarea"
           ]
@@ -3612,7 +3612,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<label>Task description (required)<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic</textarea></label>",
+          "html": "<label>Task description (required)<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic for Northstar Fiction and draft findings for human review.</textarea></label>",
           "target": [
             "label:nth-child(2)"
           ]
@@ -3787,7 +3787,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<dd class=\"x1tgivj0 xjm74w1 xw6l6zx x1ghz6dp x1717udv x13faqbe\">$0.00</dd>",
+          "html": "<dd class=\"x1tgivj0 xjm74w1 xw6l6zx x1ghz6dp x1717udv x13faqbe\">$25.00</dd>",
           "target": [
             ".astryx-metadata-list-item.x1lsbc85.xdt5ytf:nth-child(1) > dd"
           ]
@@ -4055,7 +4055,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<dd class=\"x1tgivj0 xjm74w1 xw6l6zx x1ghz6dp x1717udv x13faqbe\">$0.00</dd>",
+          "html": "<dd class=\"x1tgivj0 xjm74w1 xw6l6zx x1ghz6dp x1717udv x13faqbe\">$25.00</dd>",
           "target": [
             ".astryx-metadata-list-item.x1lsbc85.xdt5ytf:nth-child(1) > dd"
           ]
@@ -4255,7 +4255,7 @@
               "data": null,
               "relatedNodes": [
                 {
-                  "html": "<label>Task description (required)<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic</textarea></label>",
+                  "html": "<label>Task description (required)<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic for Northstar Fiction and draft findings for human review.</textarea></label>",
                   "target": [
                     "label:nth-child(2)"
                   ]
@@ -4266,7 +4266,7 @@
             }
           ],
           "impact": null,
-          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic</textarea>",
+          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic for Northstar Fiction and draft findings for human review.</textarea>",
           "target": [
             "textarea"
           ]
@@ -4410,7 +4410,7 @@
               },
               "relatedNodes": [
                 {
-                  "html": "<label>Task description (required)<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic</textarea></label>",
+                  "html": "<label>Task description (required)<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic for Northstar Fiction and draft findings for human review.</textarea></label>",
                   "target": [
                     "label:nth-child(2)"
                   ]
@@ -4431,7 +4431,7 @@
             }
           ],
           "impact": null,
-          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic</textarea>",
+          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic for Northstar Fiction and draft findings for human review.</textarea>",
           "target": [
             "textarea"
           ]
@@ -4804,7 +4804,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic</textarea>",
+          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic for Northstar Fiction and draft findings for human review.</textarea>",
           "target": [
             "textarea"
           ]
@@ -4939,7 +4939,7 @@
               },
               "relatedNodes": [
                 {
-                  "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic</textarea>",
+                  "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic for Northstar Fiction and draft findings for human review.</textarea>",
                   "target": [
                     "textarea"
                   ]
@@ -4952,7 +4952,7 @@
           "all": [],
           "none": [],
           "impact": "serious",
-          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic</textarea>",
+          "html": "<textarea aria-invalid=\"false\" required=\"\" rows=\"6\" style=\"\">Research a topic for Northstar Fiction and draft findings for human review.</textarea>",
           "target": [
             "textarea"
           ],

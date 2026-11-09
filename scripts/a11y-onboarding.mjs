@@ -25,12 +25,12 @@ try {
   const context = await browser.newContext({ viewport: { width: 1280, height: 820 }, colorScheme: mode, reducedMotion: 'reduce' });
   await context.route('**/*', route => route.request().url().startsWith(url + '/') || route.request().url() === url ? serve(route) : route.abort());
   await context.addInitScript(({ deepseek }) => {
-   const calls = []; let configured = false, paidExecution = false;
+   const calls = []; let configured = false, paidExecution = false, cap = 0;
    const ids = ['codex','claude','openrouter','deepseek','hermes','custom'];
    window.__ipcCalls = calls;
-   const record = name => async (...args) => { calls.push({ name, args }); if (name === 'setPaidExecution') { paidExecution = args[0]; configured = args[0]; } return { id: name + '-id' }; };
+   const record = name => async (...args) => { calls.push({ name, args }); if (name === 'setSpendCap') cap = args[0]; if (name === 'setPaidExecution') { paidExecution = args[0]; configured = args[0]; } return { id: name + '-id' }; };
    window.zaos = {
-    getStatus: async () => ({ state: 'ready', configured, paidExecution, setupProgress: 0 }),
+    getStatus: async () => ({ state: 'ready', configured, paidExecution, cap, spent: 0, setupProgress: 0 }),
     listConnectors: async () => ids.map(id => ({ id, modes: id === 'codex' ? ['api-key','cli-subscription'] : ['api'] })),
     detectConnector: async () => ({ installed: true, loggedIn: true }),
     startConnectorLogin: record('startConnectorLogin'),
@@ -158,12 +158,25 @@ try {
   // Exercise Custom pricing confirmation before the enabled summary.
   await page.getByRole('button', { name: 'Change Connector', exact: true }).click(); await page.getByRole('radio', { name: 'Custom (OpenAI-compatible) Base URL + API key' }).click();
   await chat.getByLabel('Base URL', { exact: true }).fill('https://example.test/v1'); await chat.getByLabel('Model', { exact: true }).fill('custom-model'); await chat.getByLabel('API key', { exact: true }).fill('mock-custom-7f2a'); await page.getByRole('button', { name: 'Test connection', exact: true }).click();
-  await page.getByText('I don’t have catalog prices', { exact: false }).waitFor(); await step('capture q3-pricing-confirm', () => capture('q3-pricing-confirm'));
+  await chat.getByText('I need the price for this model. Open Advanced to add it.', { exact: true }).waitFor();
+  check(`${mode}: pricing prompt appears once`, await chat.getByText('I need the price for this model. Open Advanced to add it.', { exact: true }).count() === 1); await step('capture q3-pricing-confirm', () => capture('q3-pricing-confirm'));
   await checkAuthUnmounted('pricing-confirm');
   { const observed13 = await page.getByRole('button', { name: 'Activate agent', exact: true }).getAttribute('aria-disabled'); check(`${mode}: unknown price blocks`, observed13 === 'true', { observed: observed13 }); }
   });
   await step('summary', async () => {
-  await chat.getByLabel('Input ¢/MTok', { exact: true }).fill('20'); await chat.getByLabel('Input ¢/MTok', { exact: true }).press('Tab'); await chat.getByLabel('Output ¢/MTok', { exact: true }).fill('40'); await chat.getByLabel('Output ¢/MTok', { exact: true }).press('Tab');
+  const next = page.getByRole('button', { name: 'Continue', exact: true });
+  check(`${mode}: unknown price disables Continue`, await next.getAttribute('aria-disabled') === 'true');
+  check(`${mode}: prices absent from chat dock`, await chat.getByLabel(/¢\/MTok/).count() === 0);
+  await page.getByRole('button', { name: 'Open Advanced', exact: true }).click();
+  const input = page.getByLabel('Advanced · Input ¢/MTok', { exact: true });
+  const output = page.getByLabel('Advanced · Output ¢/MTok', { exact: true });
+  await input.waitFor();
+  check(`${mode}: Open Advanced focuses first price`, await input.evaluate(el => el === document.activeElement));
+  await input.fill('20'); await input.press('Tab');
+  check(`${mode}: one price still blocks Continue and Activate`, await next.getAttribute('aria-disabled') === 'true' && await page.getByRole('button', { name: 'Activate agent', exact: true }).getAttribute('aria-disabled') === 'true');
+  await output.fill('40'); await output.press('Tab');
+  check(`${mode}: both prices enable Continue`, await next.getAttribute('aria-disabled') !== 'true');
+  await page.getByRole('button', { name: 'Advanced', exact: true }).click();
   await page.getByRole('button', { name: 'Continue', exact: true }).click();
   await page.getByRole('radio', { name: '$25', exact: true }).click(); await chat.getByLabel('I authorize paid execution within this cap. Provider charges are mine.', { exact: true }).check(); await page.getByRole('button', { name: 'Continue', exact: true }).click();
   await checkAuthUnmounted('summary');
@@ -184,13 +197,14 @@ try {
   });
   await step('resume', async () => {
   await page.getByRole('button', { name:'Change Workspace', exact:true }).click(); { const observed15 = await chat.getByLabel('Workspace name').inputValue(); check(`${mode}: Change retains value`, observed15 === 'Northstar Fiction', { observed: observed15 }); }
-  await page.reload(); await page.getByText('Welcome back — pick up where you left off.', { exact:true }).waitFor(); { const observed16 = await chat.getByLabel('Workspace name').inputValue(); check(`${mode}: resume retains workspace`, observed16 === 'Northstar Fiction', { observed: observed16 }); }
+  await page.reload(); await page.getByText('Welcome back. Pick up where you left off.', { exact:true }).waitFor(); { const observed16 = await chat.getByLabel('Workspace name').inputValue(); check(`${mode}: resume retains workspace`, observed16 === 'Northstar Fiction', { observed: observed16 }); }
   });
   await step('workspace', async () => {
   // Re-test is required on reload because the secret was never persisted.
   await chat.getByLabel('Workspace name').press('Enter'); await page.getByRole('radio', { name:'Research a topic', exact:true }).click(); await page.getByRole('radio', { name:'OpenRouter One key, many models' }).click(); await chat.getByLabel('API key', { exact:true }).fill('mock-secret-7f2a'); await page.getByRole('button', { name:'Test connection', exact:true }).click(); await page.getByRole('button', { name:'Continue', exact:true }).click();
   await page.getByRole('button', { name:'Activate agent', exact:true }).click(); await page.getByRole('heading', { name:'Give your agent a task' }).waitFor(); await step('capture workspace', () => capture('workspace'));
-  { const observed17 = await page.getByLabel('Task title').inputValue() === 'Research a topic' && await page.getByLabel('Task description (required)').inputValue() === 'Research a topic'; check(`${mode}: task prefill`, observed17, { observed: observed17 }); }
+  { const observed17 = await page.getByLabel('Task title').inputValue() === 'Research a topic' && await page.getByLabel('Task description (required)').inputValue() === 'Research a topic for Northstar Fiction and draft findings for human review.'; check(`${mode}: task prefill`, observed17, { observed: observed17 }); }
+  check(`${mode}: workspace Monthly cap retains $25.00`, await page.locator('.control-metadata').getByText('$25.00', { exact: true }).isVisible());
   { const observed18 = (await page.evaluate(() => window.__ipcCalls.map(c => c.name))).join(','); check(`${mode}: activation IPC sequence`, observed18 === 'createCompany,setProviderKey,configureConnector,createAgentFromTemplate,setSpendCap,setTelemetry,setPaidExecution', { observed: observed18 }); }
   });
   } catch (e) { check(`${mode}: theme completed`, false, { error: String(e.stack ?? e) }); }
@@ -207,7 +221,7 @@ const requiredSteps = ['q1','q2','q3','q3-auth','connection-error','q4','error',
 { const observed24 = ['light','dark'].every(mode => tabs.filter(t => t.mode === mode).length > 5) && tabs.every(t => !t.oversized && t.visible && t.unobscured && t.outline !== 'none'); check('keyboard focus visible and unobscured', observed24, { tabs }); }
 const namedPass = text => checks.filter(c => c.name.includes(text)).length >= 2 && checks.filter(c => c.name.includes(text)).every(c => c.pass);
 const criteria = [
- ['Chat and panel; four questions', namedPass('summary activation enabled')], ['Pricing fields only in Advanced or pricing confirmation', namedPass('unknown price blocks')], ['44px inputs, visible labels, blur/submit validation', checks.find(c => c.name === 'all input heights and labels')?.pass], ['Six connectors, masked key, connection success/fail', namedPass('six connector') && namedPass('key masked')], ['Unknown prices block activation', namedPass('unknown price blocks')], ['Cap and consent block activation', namedPass('invalid cap/consent')], ['Undo and prefilled Change', namedPass('Change retains value')], ['Draft resumes without keys', namedPass('resume retains workspace') && namedPass('key masked')], ['Light/dark theme', violations.filter(v => v.step === 'summary').length === 2 && violations.every(v => v.count === 0)], ['Keyboard Tab, arrows, Enter', namedPass('Enter sends') && namedPass('arrow right') && checks.find(c => c.name === 'keyboard focus visible and unobscured')?.pass], ['Reduced motion', true], ['IPC chain and workspace task', namedPass('activation IPC sequence') && namedPass('task prefill')],
+ ['Chat and panel; four questions', namedPass('summary activation enabled')], ['Pricing fields only in Advanced', namedPass('unknown price blocks')], ['44px inputs, visible labels, blur/submit validation', checks.find(c => c.name === 'all input heights and labels')?.pass], ['Six connectors, masked key, connection success/fail', namedPass('six connector') && namedPass('key masked')], ['Unknown prices block activation', namedPass('unknown price blocks')], ['Cap and consent block activation', namedPass('invalid cap/consent')], ['Undo and prefilled Change', namedPass('Change retains value')], ['Draft resumes without keys', namedPass('resume retains workspace') && namedPass('key masked')], ['Light/dark theme', violations.filter(v => v.step === 'summary').length === 2 && violations.every(v => v.count === 0)], ['Keyboard Tab, arrows, Enter', namedPass('Enter sends') && namedPass('arrow right') && checks.find(c => c.name === 'keyboard focus visible and unobscured')?.pass], ['Reduced motion', true], ['IPC chain and workspace task', namedPass('activation IPC sequence') && namedPass('task prefill')],
 ].map(([name,pass],i) => ({ criterion:i+1,name,pass:!!pass }));
 await writeFile('evidence/a11y/onboarding-tab-test.json', JSON.stringify(tabs,null,2)); await writeFile('evidence/a11y/onboarding-measurements.json',JSON.stringify(measurements,null,2));
 await writeFile('evidence/a11y/onboarding-summary.json',JSON.stringify({ violations,checks,acceptanceCriteria:criteria,pass: checks.every(c=>c.pass) && criteria.every(c=>c.pass) },null,2));

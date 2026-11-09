@@ -6,6 +6,7 @@
     "Supervisor ready; operator authenticated; startup audit complete",
     "Captured setup-light",
     "Captured setup-dark",
+    "Status retains the configured $1 monthly cap",
     "Company, Researcher, mock provider, $1 cap and consent configured",
     "Task succeeded with priced result",
     "Captured workspace-light",
@@ -63,7 +64,7 @@
   "results": {
     "ok": true,
     "task": {
-      "issueId": "b5ef3f12-abeb-4e04-ace6-92b25cf8ac7c",
+      "issueId": "64e5f5eb-138c-491c-a757-d56a79d50508",
       "result": "Mock research result for human review.",
       "costCents": 0.014,
       "spent": 0.014,

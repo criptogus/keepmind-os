@@ -113,14 +113,14 @@
       "name": "light: capture q1 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 538
+        "elapsedMs": 514
       }
     },
     {
       "name": "light: q1 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 752
+        "elapsedMs": 691
       }
     },
     {
@@ -134,37 +134,37 @@
       "name": "light: capture q2 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 527
+        "elapsedMs": 547
       }
     },
     {
       "name": "light: q2 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 565
+        "elapsedMs": 585
       }
     },
     {
       "name": "light: capture q3 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 551
+        "elapsedMs": 562
       }
     },
     {
       "name": "light: answer confirmation question order",
       "pass": true,
       "detail": {
-        "answer": 222,
-        "confirmation": 239,
-        "question": 281
+        "answer": 221,
+        "confirmation": 238,
+        "question": 280
       }
     },
     {
       "name": "light: q3 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 592
+        "elapsedMs": 598
       }
     },
     {
@@ -218,7 +218,7 @@
       "name": "light: field focus completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 12
+        "elapsedMs": 13
       }
     },
     {
@@ -247,35 +247,35 @@
       "name": "light: advanced labels completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 92
+        "elapsedMs": 85
       }
     },
     {
       "name": "light: capture q3-auth completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 543
+        "elapsedMs": 588
       }
     },
     {
       "name": "light: q3-auth completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 755
+        "elapsedMs": 791
       }
     },
     {
       "name": "light: capture connection-error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 610
+        "elapsedMs": 537
       }
     },
     {
       "name": "light: connection-error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 646
+        "elapsedMs": 576
       }
     },
     {
@@ -307,21 +307,21 @@
       "name": "light: capture q4 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 543
+        "elapsedMs": 572
       }
     },
     {
       "name": "light: q4 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 598
+        "elapsedMs": 615
       }
     },
     {
       "name": "light: capture error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 522
+        "elapsedMs": 533
       }
     },
     {
@@ -339,14 +339,18 @@
       "name": "light: error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 543
+        "elapsedMs": 561
       }
+    },
+    {
+      "name": "light: pricing prompt appears once",
+      "pass": true
     },
     {
       "name": "light: capture q3-pricing-confirm completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 511
+        "elapsedMs": 510
       }
     },
     {
@@ -370,8 +374,28 @@
       "name": "light: q3-pricing-confirm completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 665
+        "elapsedMs": 655
       }
+    },
+    {
+      "name": "light: unknown price disables Continue",
+      "pass": true
+    },
+    {
+      "name": "light: prices absent from chat dock",
+      "pass": true
+    },
+    {
+      "name": "light: Open Advanced focuses first price",
+      "pass": true
+    },
+    {
+      "name": "light: one price still blocks Continue and Activate",
+      "pass": true
+    },
+    {
+      "name": "light: both prices enable Continue",
+      "pass": true
     },
     {
       "name": "light: summary unmounts connector controls and status",
@@ -394,21 +418,21 @@
       "name": "light: capture summary completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 493
+        "elapsedMs": 508
       }
     },
     {
       "name": "light: summary completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 655
+        "elapsedMs": 753
       }
     },
     {
       "name": "light: tab-test completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 1005
+        "elapsedMs": 1069
       }
     },
     {
@@ -429,14 +453,14 @@
       "name": "light: resume completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 116
+        "elapsedMs": 139
       }
     },
     {
       "name": "light: capture workspace completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 478
+        "elapsedMs": 471
       }
     },
     {
@@ -445,6 +469,10 @@
       "detail": {
         "observed": true
       }
+    },
+    {
+      "name": "light: workspace Monthly cap retains $25.00",
+      "pass": true
     },
     {
       "name": "light: activation IPC sequence",
@@ -457,7 +485,7 @@
       "name": "light: workspace completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 713
+        "elapsedMs": 717
       }
     },
     {
@@ -483,14 +511,14 @@
       "name": "dark: capture q1 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 547
+        "elapsedMs": 527
       }
     },
     {
       "name": "dark: q1 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 710
+        "elapsedMs": 692
       }
     },
     {
@@ -504,37 +532,37 @@
       "name": "dark: capture q2 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 564
+        "elapsedMs": 556
       }
     },
     {
       "name": "dark: q2 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 602
+        "elapsedMs": 590
       }
     },
     {
       "name": "dark: capture q3 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 591
+        "elapsedMs": 573
       }
     },
     {
       "name": "dark: answer confirmation question order",
       "pass": true,
       "detail": {
-        "answer": 222,
-        "confirmation": 239,
-        "question": 281
+        "answer": 221,
+        "confirmation": 238,
+        "question": 280
       }
     },
     {
       "name": "dark: q3 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 618
+        "elapsedMs": 604
       }
     },
     {
@@ -588,7 +616,7 @@
       "name": "dark: field focus completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 11
+        "elapsedMs": 14
       }
     },
     {
@@ -617,35 +645,35 @@
       "name": "dark: advanced labels completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 84
+        "elapsedMs": 95
       }
     },
     {
       "name": "dark: capture q3-auth completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 588
+        "elapsedMs": 544
       }
     },
     {
       "name": "dark: q3-auth completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 773
+        "elapsedMs": 746
       }
     },
     {
       "name": "dark: capture connection-error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 548
+        "elapsedMs": 541
       }
     },
     {
       "name": "dark: connection-error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 582
+        "elapsedMs": 575
       }
     },
     {
@@ -677,21 +705,21 @@
       "name": "dark: capture q4 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 530
+        "elapsedMs": 547
       }
     },
     {
       "name": "dark: q4 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 575
+        "elapsedMs": 593
       }
     },
     {
       "name": "dark: capture error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 521
+        "elapsedMs": 557
       }
     },
     {
@@ -709,14 +737,18 @@
       "name": "dark: error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 543
+        "elapsedMs": 581
       }
+    },
+    {
+      "name": "dark: pricing prompt appears once",
+      "pass": true
     },
     {
       "name": "dark: capture q3-pricing-confirm completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 589
+        "elapsedMs": 505
       }
     },
     {
@@ -740,8 +772,28 @@
       "name": "dark: q3-pricing-confirm completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 749
+        "elapsedMs": 645
       }
+    },
+    {
+      "name": "dark: unknown price disables Continue",
+      "pass": true
+    },
+    {
+      "name": "dark: prices absent from chat dock",
+      "pass": true
+    },
+    {
+      "name": "dark: Open Advanced focuses first price",
+      "pass": true
+    },
+    {
+      "name": "dark: one price still blocks Continue and Activate",
+      "pass": true
+    },
+    {
+      "name": "dark: both prices enable Continue",
+      "pass": true
     },
     {
       "name": "dark: summary unmounts connector controls and status",
@@ -764,21 +816,21 @@
       "name": "dark: capture summary completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 584
+        "elapsedMs": 534
       }
     },
     {
       "name": "dark: summary completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 783
+        "elapsedMs": 782
       }
     },
     {
       "name": "dark: tab-test completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 1061
+        "elapsedMs": 1078
       }
     },
     {
@@ -799,14 +851,14 @@
       "name": "dark: resume completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 108
+        "elapsedMs": 109
       }
     },
     {
       "name": "dark: capture workspace completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 445
+        "elapsedMs": 482
       }
     },
     {
@@ -815,6 +867,10 @@
       "detail": {
         "observed": true
       }
+    },
+    {
+      "name": "dark: workspace Monthly cap retains $25.00",
+      "pass": true
     },
     {
       "name": "dark: activation IPC sequence",
@@ -827,7 +883,7 @@
       "name": "dark: workspace completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 668
+        "elapsedMs": 723
       }
     },
     {
@@ -1178,7 +1234,7 @@
                 "reveal": false
               },
               {
-                "name": "DeepSeek API key",
+                "name": "DeepSeek Paste an API key from the DeepSeek Platform.",
                 "width": 346,
                 "height": 66,
                 "primary": false,
@@ -1288,7 +1344,7 @@
                 "reveal": false
               },
               {
-                "name": "DeepSeek API key",
+                "name": "DeepSeek Paste an API key from the DeepSeek Platform.",
                 "width": 346,
                 "height": 66,
                 "primary": false,
@@ -1426,7 +1482,7 @@
                 "reveal": false
               },
               {
-                "name": "DeepSeek API key",
+                "name": "DeepSeek Paste an API key from the DeepSeek Platform.",
                 "width": 346,
                 "height": 66,
                 "primary": false,
@@ -1744,30 +1800,18 @@
           {
             "step": "q3-pricing-confirm",
             "mode": "light",
-            "inputs": [
-              {
-                "tag": "input",
-                "id": "_r_42_",
-                "measuredElement": "native control",
-                "label": "Input ¢/MTok",
-                "height": 44,
-                "minHeight": "44px",
-                "labelVisible": true
-              },
-              {
-                "tag": "input",
-                "id": "_r_4a_",
-                "measuredElement": "native control",
-                "label": "Output ¢/MTok",
-                "height": 44,
-                "minHeight": "44px",
-                "labelVisible": true
-              }
-            ],
+            "inputs": [],
             "targets": [
               {
                 "name": "Undo last answer",
                 "width": 165,
+                "height": 44,
+                "primary": false,
+                "reveal": false
+              },
+              {
+                "name": "Open Advanced",
+                "width": 134,
                 "height": 44,
                 "primary": false,
                 "reveal": false
@@ -2055,7 +2099,7 @@
                 "reveal": false
               },
               {
-                "name": "DeepSeek API key",
+                "name": "DeepSeek Paste an API key from the DeepSeek Platform.",
                 "width": 346,
                 "height": 66,
                 "primary": false,
@@ -2165,7 +2209,7 @@
                 "reveal": false
               },
               {
-                "name": "DeepSeek API key",
+                "name": "DeepSeek Paste an API key from the DeepSeek Platform.",
                 "width": 346,
                 "height": 66,
                 "primary": false,
@@ -2303,7 +2347,7 @@
                 "reveal": false
               },
               {
-                "name": "DeepSeek API key",
+                "name": "DeepSeek Paste an API key from the DeepSeek Platform.",
                 "width": 346,
                 "height": 66,
                 "primary": false,
@@ -2621,30 +2665,18 @@
           {
             "step": "q3-pricing-confirm",
             "mode": "dark",
-            "inputs": [
-              {
-                "tag": "input",
-                "id": "_r_42_",
-                "measuredElement": "native control",
-                "label": "Input ¢/MTok",
-                "height": 44,
-                "minHeight": "44px",
-                "labelVisible": true
-              },
-              {
-                "tag": "input",
-                "id": "_r_4a_",
-                "measuredElement": "native control",
-                "label": "Output ¢/MTok",
-                "height": 44,
-                "minHeight": "44px",
-                "labelVisible": true
-              }
-            ],
+            "inputs": [],
             "targets": [
               {
                 "name": "Undo last answer",
                 "width": 165,
+                "height": 44,
+                "primary": false,
+                "reveal": false
+              },
+              {
+                "name": "Open Advanced",
+                "width": 134,
                 "height": 44,
                 "primary": false,
                 "reveal": false
@@ -2940,7 +2972,7 @@
                 "reveal": false
               },
               {
-                "name": "DeepSeek API key",
+                "name": "DeepSeek Paste an API key from the DeepSeek Platform.",
                 "width": 346,
                 "height": 66,
                 "primary": false,
@@ -3050,7 +3082,7 @@
                 "reveal": false
               },
               {
-                "name": "DeepSeek API key",
+                "name": "DeepSeek Paste an API key from the DeepSeek Platform.",
                 "width": 346,
                 "height": 66,
                 "primary": false,
@@ -3188,7 +3220,7 @@
                 "reveal": false
               },
               {
-                "name": "DeepSeek API key",
+                "name": "DeepSeek Paste an API key from the DeepSeek Platform.",
                 "width": 346,
                 "height": 66,
                 "primary": false,
@@ -3506,30 +3538,18 @@
           {
             "step": "q3-pricing-confirm",
             "mode": "light",
-            "inputs": [
-              {
-                "tag": "input",
-                "id": "_r_42_",
-                "measuredElement": "native control",
-                "label": "Input ¢/MTok",
-                "height": 44,
-                "minHeight": "44px",
-                "labelVisible": true
-              },
-              {
-                "tag": "input",
-                "id": "_r_4a_",
-                "measuredElement": "native control",
-                "label": "Output ¢/MTok",
-                "height": 44,
-                "minHeight": "44px",
-                "labelVisible": true
-              }
-            ],
+            "inputs": [],
             "targets": [
               {
                 "name": "Undo last answer",
                 "width": 165,
+                "height": 44,
+                "primary": false,
+                "reveal": false
+              },
+              {
+                "name": "Open Advanced",
+                "width": 134,
                 "height": 44,
                 "primary": false,
                 "reveal": false
@@ -3817,7 +3837,7 @@
                 "reveal": false
               },
               {
-                "name": "DeepSeek API key",
+                "name": "DeepSeek Paste an API key from the DeepSeek Platform.",
                 "width": 346,
                 "height": 66,
                 "primary": false,
@@ -3927,7 +3947,7 @@
                 "reveal": false
               },
               {
-                "name": "DeepSeek API key",
+                "name": "DeepSeek Paste an API key from the DeepSeek Platform.",
                 "width": 346,
                 "height": 66,
                 "primary": false,
@@ -4065,7 +4085,7 @@
                 "reveal": false
               },
               {
-                "name": "DeepSeek API key",
+                "name": "DeepSeek Paste an API key from the DeepSeek Platform.",
                 "width": 346,
                 "height": 66,
                 "primary": false,
@@ -4383,30 +4403,18 @@
           {
             "step": "q3-pricing-confirm",
             "mode": "dark",
-            "inputs": [
-              {
-                "tag": "input",
-                "id": "_r_42_",
-                "measuredElement": "native control",
-                "label": "Input ¢/MTok",
-                "height": 44,
-                "minHeight": "44px",
-                "labelVisible": true
-              },
-              {
-                "tag": "input",
-                "id": "_r_4a_",
-                "measuredElement": "native control",
-                "label": "Output ¢/MTok",
-                "height": 44,
-                "minHeight": "44px",
-                "labelVisible": true
-              }
-            ],
+            "inputs": [],
             "targets": [
               {
                 "name": "Undo last answer",
                 "width": 165,
+                "height": 44,
+                "primary": false,
+                "reveal": false
+              },
+              {
+                "name": "Open Advanced",
+                "width": 134,
                 "height": 44,
                 "primary": false,
                 "reveal": false
@@ -4702,7 +4710,7 @@
                 "reveal": false
               },
               {
-                "name": "DeepSeek API key",
+                "name": "DeepSeek Paste an API key from the DeepSeek Platform.",
                 "width": 346,
                 "height": 66,
                 "primary": false,
@@ -4812,7 +4820,7 @@
                 "reveal": false
               },
               {
-                "name": "DeepSeek API key",
+                "name": "DeepSeek Paste an API key from the DeepSeek Platform.",
                 "width": 346,
                 "height": 66,
                 "primary": false,
@@ -4950,7 +4958,7 @@
                 "reveal": false
               },
               {
-                "name": "DeepSeek API key",
+                "name": "DeepSeek Paste an API key from the DeepSeek Platform.",
                 "width": 346,
                 "height": 66,
                 "primary": false,
@@ -5268,30 +5276,18 @@
           {
             "step": "q3-pricing-confirm",
             "mode": "light",
-            "inputs": [
-              {
-                "tag": "input",
-                "id": "_r_42_",
-                "measuredElement": "native control",
-                "label": "Input ¢/MTok",
-                "height": 44,
-                "minHeight": "44px",
-                "labelVisible": true
-              },
-              {
-                "tag": "input",
-                "id": "_r_4a_",
-                "measuredElement": "native control",
-                "label": "Output ¢/MTok",
-                "height": 44,
-                "minHeight": "44px",
-                "labelVisible": true
-              }
-            ],
+            "inputs": [],
             "targets": [
               {
                 "name": "Undo last answer",
                 "width": 165,
+                "height": 44,
+                "primary": false,
+                "reveal": false
+              },
+              {
+                "name": "Open Advanced",
+                "width": 134,
                 "height": 44,
                 "primary": false,
                 "reveal": false
@@ -5579,7 +5575,7 @@
                 "reveal": false
               },
               {
-                "name": "DeepSeek API key",
+                "name": "DeepSeek Paste an API key from the DeepSeek Platform.",
                 "width": 346,
                 "height": 66,
                 "primary": false,
@@ -5689,7 +5685,7 @@
                 "reveal": false
               },
               {
-                "name": "DeepSeek API key",
+                "name": "DeepSeek Paste an API key from the DeepSeek Platform.",
                 "width": 346,
                 "height": 66,
                 "primary": false,
@@ -5827,7 +5823,7 @@
                 "reveal": false
               },
               {
-                "name": "DeepSeek API key",
+                "name": "DeepSeek Paste an API key from the DeepSeek Platform.",
                 "width": 346,
                 "height": 66,
                 "primary": false,
@@ -6145,30 +6141,18 @@
           {
             "step": "q3-pricing-confirm",
             "mode": "dark",
-            "inputs": [
-              {
-                "tag": "input",
-                "id": "_r_42_",
-                "measuredElement": "native control",
-                "label": "Input ¢/MTok",
-                "height": 44,
-                "minHeight": "44px",
-                "labelVisible": true
-              },
-              {
-                "tag": "input",
-                "id": "_r_4a_",
-                "measuredElement": "native control",
-                "label": "Output ¢/MTok",
-                "height": 44,
-                "minHeight": "44px",
-                "labelVisible": true
-              }
-            ],
+            "inputs": [],
             "targets": [
               {
                 "name": "Undo last answer",
                 "width": 165,
+                "height": 44,
+                "primary": false,
+                "reveal": false
+              },
+              {
+                "name": "Open Advanced",
+                "width": 134,
                 "height": 44,
                 "primary": false,
                 "reveal": false
@@ -6367,7 +6351,7 @@
             "name": "Change Workspace",
             "box": {
               "x": 1196,
-              "y": 210.5,
+              "y": 199.5,
               "width": 60,
               "height": 28
             },
@@ -6383,7 +6367,7 @@
             "name": "Change Agent role",
             "box": {
               "x": 1196,
-              "y": 299.5,
+              "y": 288.5,
               "width": 60,
               "height": 28
             },
@@ -6399,7 +6383,7 @@
             "name": "Change First task",
             "box": {
               "x": 1196,
-              "y": 388.5,
+              "y": 377.5,
               "width": 60,
               "height": 28
             },
@@ -6415,7 +6399,7 @@
             "name": "Change Connector",
             "box": {
               "x": 1196,
-              "y": 483,
+              "y": 472,
               "width": 60,
               "height": 28
             },
@@ -6431,7 +6415,7 @@
             "name": "Change Model",
             "box": {
               "x": 1196,
-              "y": 577.5,
+              "y": 566.5,
               "width": 60,
               "height": 28
             },
@@ -6447,7 +6431,7 @@
             "name": "Change Monthly cap",
             "box": {
               "x": 1196,
-              "y": 666.5,
+              "y": 655.5,
               "width": 60,
               "height": 28
             },
@@ -6607,7 +6591,7 @@
             "name": "Change Workspace",
             "box": {
               "x": 1196,
-              "y": 210.5,
+              "y": 199.5,
               "width": 60,
               "height": 28
             },
@@ -6623,7 +6607,7 @@
             "name": "Change Agent role",
             "box": {
               "x": 1196,
-              "y": 299.5,
+              "y": 288.5,
               "width": 60,
               "height": 28
             },
@@ -6639,7 +6623,7 @@
             "name": "Change First task",
             "box": {
               "x": 1196,
-              "y": 388.5,
+              "y": 377.5,
               "width": 60,
               "height": 28
             },
@@ -6655,7 +6639,7 @@
             "name": "Change Connector",
             "box": {
               "x": 1196,
-              "y": 483,
+              "y": 472,
               "width": 60,
               "height": 28
             },
@@ -6671,7 +6655,7 @@
             "name": "Change Model",
             "box": {
               "x": 1196,
-              "y": 577.5,
+              "y": 566.5,
               "width": 60,
               "height": 28
             },
@@ -6687,7 +6671,7 @@
             "name": "Change Monthly cap",
             "box": {
               "x": 1196,
-              "y": 666.5,
+              "y": 655.5,
               "width": 60,
               "height": 28
             },
@@ -6821,7 +6805,7 @@
     },
     {
       "criterion": 2,
-      "name": "Pricing fields only in Advanced or pricing confirmation",
+      "name": "Pricing fields only in Advanced",
       "pass": true
     },
     {

@@ -53,3 +53,14 @@ Results on 2026-11-09 (run outside the Codex sandbox, where Chromium cannot laun
 P1 review follow-up: connector cards, authentication fields, testing and connection status mount only on q3. Later steps retain chat history and their own controls. Codex and Claude cards explain app sign-in and API keys in plain language; Codex login reads “Continue in Codex”. The browser script also checks that q4 begins with an empty cap and no premature error, that later steps unmount auth controls, and that disabled dark activation uses neutral colours. These new browser assertions must be run outside the sandbox.
 
 The transcript inner column keeps its natural content height within the scrolling log, preventing clipped assistant-avatar fragments above the dock.
+
+P2 polish: light ProgressBar tracks override `.astryx-progress-bar-track` in the theme layer at
+#E5E5E5 (neutralTheme locally remaps muted to border-emphasized) with near-black fill (over 15:1 contrast); dark tokens are unchanged.
+Progress counts distinct completed questions and requires tested, known pricing
+and a positive cap with consent. Unknown model prices are entered only in
+Advanced; the dock reveals that panel and focuses its first price input, including
+on narrow layouts. Workspace prefill keeps the short goal as title and adds the
+workspace name and human-review intent to the description. The browser harness
+retains the configured cap in status, and smoke verifies real cap persistence.
+
+Pricing confirmation renders its assistant message once in the connection turn. Its dock actions use a spacing-3 gap and the shared secondary control border.
