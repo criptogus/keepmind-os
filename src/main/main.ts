@@ -121,14 +121,102 @@ async function openBoard() {
             if (contents.isDestroyed()) return;
             if (identityKey) await contents.removeInsertedCSS(identityKey);
             identityKey = await contents.insertCSS(css);
-        }).catch(console.error);
+        });
         return identityApplication;
     };
-    contents.on('dom-ready', () => { void applyIdentity(); });
-    contents.on('did-finish-load', () => { void applyIdentity(); });
-    contents.on('did-navigate-in-page', () => { void applyIdentity(); });
+    contents.on('dom-ready', () => { void applyIdentity().catch(console.error); });
+    contents.on('did-finish-load', () => { void applyIdentity().catch(console.error); });
+    contents.on('did-navigate-in-page', () => { void applyIdentity().catch(console.error); });
     board.on('closed', () => { board = undefined; });
     await board.loadURL(`${origin}/`);
+    await applyIdentity();
+    if (process.env.ZAOS_BOARD_A11Y === '1') {
+        const axeSource = await readFile('/tmp/zaos-a11y/node_modules/axe-core/axe.min.js', 'utf8');
+        await mkdir(resolve('evidence/a11y'), { recursive: true });
+        const hadDark = await contents.executeJavaScript("document.documentElement.classList.contains('dark')");
+        const collectProbe = (dark: boolean) => contents.executeJavaScript(`(${(async (dark: boolean) => {
+            document.documentElement.classList.toggle('dark', dark);
+            await new Promise(resolve => setTimeout(resolve, 300));
+            const elements = Array.from(document.querySelectorAll('[class*="text-muted-foreground"], [class*="text-muted"]')).slice(0, 80).map(element => {
+                const style = getComputedStyle(element);
+                let parent = element.parentElement;
+                let parentBackground = 'transparent';
+                while (parent) {
+                    const background = getComputedStyle(parent).backgroundColor;
+                    if (background !== 'transparent' && background !== 'rgba(0, 0, 0, 0)') {
+                        parentBackground = background;
+                        break;
+                    }
+                    parent = parent.parentElement;
+                }
+                return { tag: element.tagName, className: element.getAttribute('class') ?? '', textContent: (element.textContent ?? '').slice(0, 60), color: style.color, opacity: style.opacity, fill: style.fill, parentBackground };
+            });
+            return { elements, background: getComputedStyle(document.body).backgroundColor };
+        }).toString()})(${JSON.stringify(dark)})`);
+        const runAxe = () => contents.executeJavaScript(`(async () => {
+            if (!window.axe) { (0, eval)(${JSON.stringify(axeSource)}); }
+            const { violations, passes, incomplete } = await window.axe.run(document, {
+                runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"] }
+            });
+            return {
+                violations,
+                passes: passes.length,
+                incomplete: incomplete.map(({ id, impact, description, help, helpUrl, nodes }) => ({
+                    id, impact, description, help, helpUrl, nodes: nodes.length
+                })),
+                colorContrastViolations: violations.filter(({ id }) => id === 'color-contrast').length,
+                url: location.href
+            };
+        })()`);
+        try {
+            for (let attempt = 0; attempt < 3; attempt++) {
+                contents.sendInputEvent({ type: 'keyDown', keyCode: 'Escape' });
+                contents.sendInputEvent({ type: 'keyUp', keyCode: 'Escape' });
+            }
+            await new Promise(resolve => setTimeout(resolve, 200));
+            await contents.executeJavaScript(`(async () => {
+                const deadline = Date.now() + 5000;
+                while (Date.now() < deadline) {
+                    const labels = document.querySelectorAll('[class*="text-muted-foreground"], [class*="text-muted"]');
+                    if (Array.from(labels).some(element =>
+                        /^(Work|Org|Agents)$/.test((element.textContent ?? '').trim()) ||
+                        element.matches('span.text-muted-foreground.tabular-nums')
+                    )) return;
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+                throw new Error('Board dashboard muted labels did not appear within 5 seconds');
+            })()`);
+            const light = await collectProbe(false);
+            await writeFile(resolve('evidence/a11y/board-axe-light.png'), (await contents.capturePage()).toPNG());
+            const lightAxe = await runAxe();
+            await writeFile(resolve('evidence/a11y/board-axe-light.json'), JSON.stringify(lightAxe, null, 2));
+            const dark = await collectProbe(true);
+            const darkSupported = light.background !== dark.background || light.elements.some((element: { parentBackground: string }, index: number) => {
+                const other = dark.elements[index];
+                // Text overrides alone do not establish a usable dark surface.
+                return other && element.parentBackground !== other.parentBackground;
+            });
+            await writeFile(resolve('evidence/a11y/board-axe-dark.png'), (await contents.capturePage()).toPNG());
+            const darkAxe = { ...await runAxe(), darkSupported };
+            await writeFile(resolve('evidence/a11y/board-axe-dark.json'), JSON.stringify(darkAxe, null, 2));
+            const summarize = (result: typeof lightAxe) => ({
+                violations: result.violations.length,
+                colorContrastViolations: result.colorContrastViolations,
+                passes: result.passes,
+            });
+            await writeFile(resolve('evidence/a11y/board-axe-summary.json'), JSON.stringify({
+                light: summarize(lightAxe),
+                dark: { ...summarize(darkAxe), darkSupported },
+            }, null, 2));
+            const probe = { light: { elements: light.elements }, dark: { darkSupported, elements: dark.elements } };
+            console.log('ZAOS_BOARD_A11Y_PROBE ' + JSON.stringify(probe));
+            await writeFile(resolve('evidence/a11y/board-dom-probe.json'), JSON.stringify(probe.light, null, 2));
+            await writeFile(resolve('evidence/a11y/board-dom-probe-dark.json'), JSON.stringify(probe.dark, null, 2));
+        } finally {
+            await contents.executeJavaScript(`document.documentElement.classList.toggle('dark', ${JSON.stringify(hadDark)})`);
+            await new Promise(resolve => setTimeout(resolve, 300));
+        }
+    }
 }
 const api: ZaosAPI = {
     getStatus: async () => ({ state: error ? 'unavailable' : ready ? supervisor!.state : booting ? 'starting' : supervisor?.state === 'ready' ? 'unavailable' : supervisor?.state ?? 'starting', lastError: error ?? supervisor?.lastError,

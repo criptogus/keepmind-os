@@ -5,23 +5,23 @@
 
  RUN  v3.2.7 /workspace/zaos-ive-fixes
 
- ✓ |unit| test/evidence.test.ts (2 tests) 3ms
+ ✓ |unit| test/evidence.test.ts (2 tests) 4ms
 stderr | test/runner.test.mjs > redacts thrown errors containing keys
 {"zaosError":{"step":"provider","method":"POST","path":"/chat/completions","status":null,"code":null,"message":null}}
 
 stderr | test/runner.test.mjs > missing usage leaves cost unknown and never marks review
 {"zaosError":{"step":"provider","method":"POST","path":"/chat/completions","status":null,"code":null,"message":null}}
 
- ✓ |unit| test/supervisor.test.ts (4 tests) 26ms
- ✓ |unit| test/runner.test.mjs (22 tests) 40ms
- ✓ |unit| test/core.test.ts (21 tests) 22ms
- ✓ |unit| test/electron-shell.test.ts (6 tests) 36ms
- ✓ |unit| test/orchestrator.test.ts (21 tests) 45ms
+ ✓ |unit| test/supervisor.test.ts (4 tests) 37ms
+ ✓ |unit| test/runner.test.mjs (22 tests) 59ms
+ ✓ |unit| test/core.test.ts (21 tests) 15ms
+ ✓ |unit| test/orchestrator.test.ts (21 tests) 37ms
+ ✓ |unit| test/electron-shell.test.ts (6 tests) 41ms
  ✓ |unit| test/services.test.ts (15 tests) 41ms
  ↓ |unit| test/socket.test.mjs (2 tests | 2 skipped)
 
  Test Files  7 passed | 1 skipped (8)
       Tests  91 passed | 2 skipped (93)
-   Start at  12:02:16
-   Duration  609ms (transform 515ms, setup 0ms, collect 939ms, tests 214ms, environment 1ms, prepare 634ms)
+   Start at  12:15:22
+   Duration  868ms (transform 1.68s, setup 0ms, collect 2.06s, tests 235ms, environment 2ms, prepare 758ms)
 
