@@ -113,16 +113,16 @@
         "reveal": false
       },
       {
-        "name": "Codex Use your ChatGPT sign-in via Codex CLI",
+        "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
         "width": 346,
-        "height": 66,
+        "height": 82.5,
         "primary": false,
         "reveal": false
       },
       {
-        "name": "Claude Anthropic API key",
+        "name": "Claude Paste an API key from the Anthropic Console.",
         "width": 346,
-        "height": 66,
+        "height": 82.5,
         "primary": false,
         "reveal": false
       },
@@ -223,16 +223,16 @@
         "reveal": false
       },
       {
-        "name": "Codex Use your ChatGPT sign-in via Codex CLI",
+        "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
         "width": 346,
-        "height": 66,
+        "height": 82.5,
         "primary": false,
         "reveal": false
       },
       {
-        "name": "Claude Anthropic API key",
+        "name": "Claude Paste an API key from the Anthropic Console.",
         "width": 346,
-        "height": 66,
+        "height": 82.5,
         "primary": false,
         "reveal": false
       },
@@ -361,16 +361,16 @@
         "reveal": false
       },
       {
-        "name": "Codex Use your ChatGPT sign-in via Codex CLI",
+        "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
         "width": 346,
-        "height": 66,
+        "height": 82.5,
         "primary": false,
         "reveal": false
       },
       {
-        "name": "Claude Anthropic API key",
+        "name": "Claude Paste an API key from the Anthropic Console.",
         "width": 346,
-        "height": 66,
+        "height": 82.5,
         "primary": false,
         "reveal": false
       },
@@ -490,13 +490,6 @@
         "reveal": false
       },
       {
-        "name": "Test connection",
-        "width": 672,
-        "height": 44,
-        "primary": true,
-        "reveal": false
-      },
-      {
         "name": "$10",
         "width": 57,
         "height": 44,
@@ -612,13 +605,6 @@
         "reveal": false
       },
       {
-        "name": "Test connection",
-        "width": 672,
-        "height": 44,
-        "primary": true,
-        "reveal": false
-      },
-      {
         "name": "$10",
         "width": 57,
         "height": 44,
@@ -717,7 +703,7 @@
     "inputs": [
       {
         "tag": "input",
-        "id": "_r_41_",
+        "id": "_r_42_",
         "measuredElement": "native control",
         "label": "Input ¢/MTok",
         "height": 44,
@@ -726,7 +712,7 @@
       },
       {
         "tag": "input",
-        "id": "_r_49_",
+        "id": "_r_4a_",
         "measuredElement": "native control",
         "label": "Output ¢/MTok",
         "height": 44,
@@ -740,13 +726,6 @@
         "width": 165,
         "height": 44,
         "primary": false,
-        "reveal": false
-      },
-      {
-        "name": "Test connection",
-        "width": 672,
-        "height": 44,
-        "primary": true,
         "reveal": false
       },
       {
@@ -1011,16 +990,16 @@
         "reveal": false
       },
       {
-        "name": "Codex Use your ChatGPT sign-in via Codex CLI",
+        "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
         "width": 346,
-        "height": 66,
+        "height": 82.5,
         "primary": false,
         "reveal": false
       },
       {
-        "name": "Claude Anthropic API key",
+        "name": "Claude Paste an API key from the Anthropic Console.",
         "width": 346,
-        "height": 66,
+        "height": 82.5,
         "primary": false,
         "reveal": false
       },
@@ -1121,16 +1100,16 @@
         "reveal": false
       },
       {
-        "name": "Codex Use your ChatGPT sign-in via Codex CLI",
+        "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
         "width": 346,
-        "height": 66,
+        "height": 82.5,
         "primary": false,
         "reveal": false
       },
       {
-        "name": "Claude Anthropic API key",
+        "name": "Claude Paste an API key from the Anthropic Console.",
         "width": 346,
-        "height": 66,
+        "height": 82.5,
         "primary": false,
         "reveal": false
       },
@@ -1259,16 +1238,16 @@
         "reveal": false
       },
       {
-        "name": "Codex Use your ChatGPT sign-in via Codex CLI",
+        "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
         "width": 346,
-        "height": 66,
+        "height": 82.5,
         "primary": false,
         "reveal": false
       },
       {
-        "name": "Claude Anthropic API key",
+        "name": "Claude Paste an API key from the Anthropic Console.",
         "width": 346,
-        "height": 66,
+        "height": 82.5,
         "primary": false,
         "reveal": false
       },
@@ -1388,13 +1367,6 @@
         "reveal": false
       },
       {
-        "name": "Test connection",
-        "width": 672,
-        "height": 44,
-        "primary": true,
-        "reveal": false
-      },
-      {
         "name": "$10",
         "width": 57,
         "height": 44,
@@ -1510,13 +1482,6 @@
         "reveal": false
       },
       {
-        "name": "Test connection",
-        "width": 672,
-        "height": 44,
-        "primary": true,
-        "reveal": false
-      },
-      {
         "name": "$10",
         "width": 57,
         "height": 44,
@@ -1615,7 +1580,7 @@
     "inputs": [
       {
         "tag": "input",
-        "id": "_r_41_",
+        "id": "_r_42_",
         "measuredElement": "native control",
         "label": "Input ¢/MTok",
         "height": 44,
@@ -1624,7 +1589,7 @@
       },
       {
         "tag": "input",
-        "id": "_r_49_",
+        "id": "_r_4a_",
         "measuredElement": "native control",
         "label": "Output ¢/MTok",
         "height": 44,
@@ -1638,13 +1603,6 @@
         "width": 165,
         "height": 44,
         "primary": false,
-        "reveal": false
-      },
-      {
-        "name": "Test connection",
-        "width": 672,
-        "height": 44,
-        "primary": true,
         "reveal": false
       },
       {

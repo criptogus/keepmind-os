@@ -13,7 +13,7 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-11-09T17:40:20.015Z",
+  "timestamp": "2026-11-09T17:49:17.429Z",
   "url": "http://zaos-renderer.test/",
   "toolOptions": {
     "runOnly": {
@@ -1132,7 +1132,7 @@
             }
           ],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Codex Use your ChatGPT sign-in via Codex CLI\" role=\"radio\" aria-checked=\"false\" tabindex=\"0\">",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.\" role=\"radio\" aria-checked=\"false\" tabindex=\"0\">",
           "target": [
             ".za-control[role=\"radio\"][type=\"button\"]:nth-child(1)"
           ]
@@ -1158,9 +1158,9 @@
             }
           ],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Claude Anthropic API key\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Claude Paste an API key from the Anthropic Console.\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
           "target": [
-            "button[aria-label=\"Claude Anthropic API key\"]"
+            ".za-control[role=\"radio\"][type=\"button\"]:nth-child(2)"
           ]
         },
         {
@@ -1836,7 +1836,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Codex Use your ChatGPT sign-in via Codex CLI\" role=\"radio\" aria-checked=\"false\" tabindex=\"0\">",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.\" role=\"radio\" aria-checked=\"false\" tabindex=\"0\">",
           "target": [
             ".za-control[role=\"radio\"][type=\"button\"]:nth-child(1)"
           ]
@@ -1854,9 +1854,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Claude Anthropic API key\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Claude Paste an API key from the Anthropic Console.\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
           "target": [
-            "button[aria-label=\"Claude Anthropic API key\"]"
+            ".za-control[role=\"radio\"][type=\"button\"]:nth-child(2)"
           ]
         },
         {
@@ -2248,7 +2248,7 @@
             }
           ],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Codex Use your ChatGPT sign-in via Codex CLI\" role=\"radio\" aria-checked=\"false\" tabindex=\"0\">",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.\" role=\"radio\" aria-checked=\"false\" tabindex=\"0\">",
           "target": [
             ".za-control[role=\"radio\"][type=\"button\"]:nth-child(1)"
           ]
@@ -2266,9 +2266,9 @@
             }
           ],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Claude Anthropic API key\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Claude Paste an API key from the Anthropic Console.\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
           "target": [
-            "button[aria-label=\"Claude Anthropic API key\"]"
+            ".za-control[role=\"radio\"][type=\"button\"]:nth-child(2)"
           ]
         },
         {
@@ -3318,7 +3318,7 @@
             }
           ],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Codex Use your ChatGPT sign-in via Codex CLI\" role=\"radio\" aria-checked=\"false\" tabindex=\"0\">",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.\" role=\"radio\" aria-checked=\"false\" tabindex=\"0\">",
           "target": [
             ".za-control[role=\"radio\"][type=\"button\"]:nth-child(1)"
           ]
@@ -3336,9 +3336,9 @@
             }
           ],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Claude Anthropic API key\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Claude Paste an API key from the Anthropic Console.\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
           "target": [
-            "button[aria-label=\"Claude Anthropic API key\"]"
+            ".za-control[role=\"radio\"][type=\"button\"]:nth-child(2)"
           ]
         },
         {
@@ -3730,7 +3730,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Codex Use your ChatGPT sign-in via Codex CLI\" role=\"radio\" aria-checked=\"false\" tabindex=\"0\">",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.\" role=\"radio\" aria-checked=\"false\" tabindex=\"0\">",
           "target": [
             ".za-control[role=\"radio\"][type=\"button\"]:nth-child(1)"
           ]
@@ -3748,9 +3748,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Claude Anthropic API key\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Claude Paste an API key from the Anthropic Console.\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
           "target": [
-            "button[aria-label=\"Claude Anthropic API key\"]"
+            ".za-control[role=\"radio\"][type=\"button\"]:nth-child(2)"
           ]
         },
         {
@@ -4164,7 +4164,7 @@
             }
           ],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Codex Use your ChatGPT sign-in via Codex CLI\" role=\"radio\" aria-checked=\"false\" tabindex=\"0\">",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.\" role=\"radio\" aria-checked=\"false\" tabindex=\"0\">",
           "target": [
             ".za-control[role=\"radio\"][type=\"button\"]:nth-child(1)"
           ]
@@ -4196,9 +4196,9 @@
             }
           ],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Claude Anthropic API key\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Claude Paste an API key from the Anthropic Console.\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
           "target": [
-            "button[aria-label=\"Claude Anthropic API key\"]"
+            ".za-control[role=\"radio\"][type=\"button\"]:nth-child(2)"
           ]
         },
         {
@@ -5044,7 +5044,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Codex Use your ChatGPT sign-in via Codex CLI\" role=\"radio\" aria-checked=\"false\" tabindex=\"0\">",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.\" role=\"radio\" aria-checked=\"false\" tabindex=\"0\">",
           "target": [
             ".za-control[role=\"radio\"][type=\"button\"]:nth-child(1)"
           ]
@@ -5076,9 +5076,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Claude Anthropic API key\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Claude Paste an API key from the Anthropic Console.\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
           "target": [
-            "button[aria-label=\"Claude Anthropic API key\"]"
+            ".za-control[role=\"radio\"][type=\"button\"]:nth-child(2)"
           ]
         },
         {
@@ -5832,7 +5832,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Codex Use your ChatGPT sign-in via Codex CLI\" role=\"radio\" aria-checked=\"false\" tabindex=\"0\">",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.\" role=\"radio\" aria-checked=\"false\" tabindex=\"0\">",
           "target": [
             ".za-control[role=\"radio\"][type=\"button\"]:nth-child(1)"
           ]
@@ -5850,9 +5850,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Claude Anthropic API key\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Claude Paste an API key from the Anthropic Console.\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
           "target": [
-            "button[aria-label=\"Claude Anthropic API key\"]"
+            ".za-control[role=\"radio\"][type=\"button\"]:nth-child(2)"
           ]
         },
         {
@@ -6233,7 +6233,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Codex Use your ChatGPT sign-in via Codex CLI\" role=\"radio\" aria-checked=\"false\" tabindex=\"0\">",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.\" role=\"radio\" aria-checked=\"false\" tabindex=\"0\">",
           "target": [
             ".za-control[role=\"radio\"][type=\"button\"]:nth-child(1)"
           ]
@@ -6258,9 +6258,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Claude Anthropic API key\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Claude Paste an API key from the Anthropic Console.\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
           "target": [
-            "button[aria-label=\"Claude Anthropic API key\"]"
+            ".za-control[role=\"radio\"][type=\"button\"]:nth-child(2)"
           ]
         },
         {
@@ -7010,7 +7010,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span>Use your ChatGPT sign-in via Codex CLI</span>",
+          "html": "<span>Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.</span>",
           "target": [
             ".za-control[role=\"radio\"][type=\"button\"]:nth-child(1) > .provider-copy > span"
           ]
@@ -7062,7 +7062,7 @@
           "impact": null,
           "html": "<strong>Claude</strong>",
           "target": [
-            "button[aria-label=\"Claude Anthropic API key\"] > .provider-copy > strong"
+            ".za-control[role=\"radio\"][type=\"button\"]:nth-child(2) > .provider-copy > strong"
           ]
         },
         {
@@ -7085,9 +7085,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span>Anthropic API key</span>",
+          "html": "<span>Paste an API key from the Anthropic Console.</span>",
           "target": [
-            "button[aria-label=\"Claude Anthropic API key\"] > .provider-copy > span"
+            ".za-control[role=\"radio\"][type=\"button\"]:nth-child(2) > .provider-copy > span"
           ]
         },
         {
@@ -8223,7 +8223,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Codex Use your ChatGPT sign-in via Codex CLI\" role=\"radio\" aria-checked=\"false\" tabindex=\"0\">",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.\" role=\"radio\" aria-checked=\"false\" tabindex=\"0\">",
           "target": [
             ".za-control[role=\"radio\"][type=\"button\"]:nth-child(1)"
           ]
@@ -8241,9 +8241,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Claude Anthropic API key\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Claude Paste an API key from the Anthropic Console.\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
           "target": [
-            "button[aria-label=\"Claude Anthropic API key\"]"
+            ".za-control[role=\"radio\"][type=\"button\"]:nth-child(2)"
           ]
         },
         {
@@ -8652,11 +8652,11 @@
               "data": {
                 "minSize": 24,
                 "width": 346,
-                "height": 66
+                "height": 82.5
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Control has sufficient size (346px by 66px, should be at least 24px by 24px)"
+              "message": "Control has sufficient size (346px by 82.5px, should be at least 24px by 24px)"
             },
             {
               "id": "target-offset",
@@ -8672,7 +8672,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Codex Use your ChatGPT sign-in via Codex CLI\" role=\"radio\" aria-checked=\"false\" tabindex=\"0\">",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.\" role=\"radio\" aria-checked=\"false\" tabindex=\"0\">",
           "target": [
             ".za-control[role=\"radio\"][type=\"button\"]:nth-child(1)"
           ]
@@ -8684,11 +8684,11 @@
               "data": {
                 "minSize": 24,
                 "width": 346,
-                "height": 66
+                "height": 82.5
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Control has sufficient size (346px by 66px, should be at least 24px by 24px)"
+              "message": "Control has sufficient size (346px by 82.5px, should be at least 24px by 24px)"
             },
             {
               "id": "target-offset",
@@ -8704,9 +8704,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Claude Anthropic API key\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
+          "html": "<button type=\"button\" class=\"za-control\" aria-label=\"Claude Paste an API key from the Anthropic Console.\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\">",
           "target": [
-            "button[aria-label=\"Claude Anthropic API key\"]"
+            ".za-control[role=\"radio\"][type=\"button\"]:nth-child(2)"
           ]
         },
         {

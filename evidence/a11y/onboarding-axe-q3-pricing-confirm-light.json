@@ -13,7 +13,7 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-11-09T17:40:23.353Z",
+  "timestamp": "2026-11-09T17:49:20.666Z",
   "url": "http://zaos-renderer.test/",
   "toolOptions": {
     "runOnly": {
@@ -733,7 +733,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
+            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -785,7 +785,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
+            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -1201,59 +1201,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".x6k0iem > .x1i1rx1s.xjm9jq1.xkdpibf"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-allowed-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attributes are used correctly for the defined role"
-            }
-          ],
-          "none": [
-            {
-              "id": "aria-unsupported-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute is supported"
-            }
-          ],
-          "impact": null,
-          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
-          "target": [
-            ".astryx-card > .za-control.x17x4s8c.za-primary > .x1i1rx1s.xjm9jq1.xkdpibf"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-allowed-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attributes are used correctly for the defined role"
-            }
-          ],
-          "none": [
-            {
-              "id": "aria-unsupported-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute is supported"
-            }
-          ],
-          "impact": null,
-          "html": "<div role=\"status\" aria-live=\"polite\" class=\"onboard-field-status\">Connection works.</div>",
-          "target": [
-            ".onboard-field-status"
+            ".x6k0iem > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -1279,7 +1227,7 @@
           "impact": null,
           "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
           "target": [
-            ".onboard-field:nth-child(1) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.xvy26l8 > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
+            ".onboard-field:nth-child(1) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
           ]
         },
         {
@@ -1305,7 +1253,7 @@
           "impact": null,
           "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
           "target": [
-            ".onboard-field:nth-child(2) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.xvy26l8 > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
+            ".onboard-field:nth-child(2) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
           ]
         },
         {
@@ -1331,7 +1279,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "div:nth-child(3) > .xt0e3qv.x18o3ruo.xbyyjgo > .x1i1rx1s.xjm9jq1.xkdpibf"
+            ".onboard-controls > div > .xt0e3qv.x18o3ruo.xbyyjgo > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -1539,7 +1487,7 @@
           "impact": null,
           "html": "<button type=\"button\" disabled=\"\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x1mrddfy xt0e3qv x18o3ruo xbyyjgo x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" aria-disabled=\"true\" aria-describedby=\"onboard-disabled-reason\">",
           "target": [
-            "button[aria-describedby=\"onboard-disabled-reason\"]"
+            ".za-control"
           ]
         },
         {
@@ -1565,7 +1513,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[aria-describedby=\"onboard-disabled-reason\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
+            ".za-control > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -1705,7 +1653,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
+            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -1741,7 +1689,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
+            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -2029,43 +1977,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".x6k0iem > .x1i1rx1s.xjm9jq1.xkdpibf"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-conditional-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "ARIA attribute is allowed"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
-          "target": [
-            ".astryx-card > .za-control.x17x4s8c.za-primary > .x1i1rx1s.xjm9jq1.xkdpibf"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-conditional-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "ARIA attribute is allowed"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<div role=\"status\" aria-live=\"polite\" class=\"onboard-field-status\">Connection works.</div>",
-          "target": [
-            ".onboard-field-status"
+            ".x6k0iem > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -2083,7 +1995,7 @@
           "impact": null,
           "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
           "target": [
-            ".onboard-field:nth-child(1) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.xvy26l8 > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
+            ".onboard-field:nth-child(1) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
           ]
         },
         {
@@ -2101,7 +2013,7 @@
           "impact": null,
           "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
           "target": [
-            ".onboard-field:nth-child(2) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.xvy26l8 > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
+            ".onboard-field:nth-child(2) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
           ]
         },
         {
@@ -2119,7 +2031,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "div:nth-child(3) > .xt0e3qv.x18o3ruo.xbyyjgo > .x1i1rx1s.xjm9jq1.xkdpibf"
+            ".onboard-controls > div > .xt0e3qv.x18o3ruo.xbyyjgo > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -2263,7 +2175,7 @@
           "impact": null,
           "html": "<button type=\"button\" disabled=\"\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x1mrddfy xt0e3qv x18o3ruo xbyyjgo x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" aria-disabled=\"true\" aria-describedby=\"onboard-disabled-reason\">",
           "target": [
-            "button[aria-describedby=\"onboard-disabled-reason\"]"
+            ".za-control"
           ]
         },
         {
@@ -2281,7 +2193,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[aria-describedby=\"onboard-disabled-reason\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
+            ".za-control > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -2387,7 +2299,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
+            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -2405,7 +2317,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
+            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -2441,7 +2353,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".x6k0iem > .x1i1rx1s.xjm9jq1.xkdpibf"
+            ".x6k0iem > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -2457,45 +2369,9 @@
             }
           ],
           "impact": null,
-          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
+          "html": "<input id=\"_r_42_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
           "target": [
-            ".astryx-card > .za-control.x17x4s8c.za-primary > .x1i1rx1s.xjm9jq1.xkdpibf"
-          ]
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "deprecatedrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "minor",
-              "message": "ARIA role is not deprecated"
-            }
-          ],
-          "impact": null,
-          "html": "<div role=\"status\" aria-live=\"polite\" class=\"onboard-field-status\">Connection works.</div>",
-          "target": [
-            ".onboard-field-status"
-          ]
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "deprecatedrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "minor",
-              "message": "ARIA role is not deprecated"
-            }
-          ],
-          "impact": null,
-          "html": "<input id=\"_r_41_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
-          "target": [
-            "#_r_41_"
+            "#_r_42_"
           ]
         },
         {
@@ -2513,7 +2389,7 @@
           "impact": null,
           "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
           "target": [
-            ".onboard-field:nth-child(1) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.xvy26l8 > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
+            ".onboard-field:nth-child(1) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
           ]
         },
         {
@@ -2529,9 +2405,9 @@
             }
           ],
           "impact": null,
-          "html": "<input id=\"_r_49_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
+          "html": "<input id=\"_r_4a_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
           "target": [
-            "#_r_49_"
+            "#_r_4a_"
           ]
         },
         {
@@ -2549,7 +2425,7 @@
           "impact": null,
           "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
           "target": [
-            ".onboard-field:nth-child(2) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.xvy26l8 > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
+            ".onboard-field:nth-child(2) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
           ]
         },
         {
@@ -2567,7 +2443,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "div:nth-child(3) > .xt0e3qv.x18o3ruo.xbyyjgo > .x1i1rx1s.xjm9jq1.xkdpibf"
+            ".onboard-controls > div > .xt0e3qv.x18o3ruo.xbyyjgo > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -2603,7 +2479,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[aria-describedby=\"onboard-disabled-reason\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
+            ".za-control > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -3231,7 +3107,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
+            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -3267,7 +3143,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
+            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -3555,43 +3431,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".x6k0iem > .x1i1rx1s.xjm9jq1.xkdpibf"
-          ]
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "aria-prohibited-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "ARIA attribute is allowed"
-            }
-          ],
-          "impact": null,
-          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
-          "target": [
-            ".astryx-card > .za-control.x17x4s8c.za-primary > .x1i1rx1s.xjm9jq1.xkdpibf"
-          ]
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "aria-prohibited-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "ARIA attribute is allowed"
-            }
-          ],
-          "impact": null,
-          "html": "<div role=\"status\" aria-live=\"polite\" class=\"onboard-field-status\">Connection works.</div>",
-          "target": [
-            ".onboard-field-status"
+            ".x6k0iem > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -3609,7 +3449,7 @@
           "impact": null,
           "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
           "target": [
-            ".onboard-field:nth-child(1) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.xvy26l8 > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
+            ".onboard-field:nth-child(1) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
           ]
         },
         {
@@ -3627,7 +3467,7 @@
           "impact": null,
           "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
           "target": [
-            ".onboard-field:nth-child(2) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.xvy26l8 > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
+            ".onboard-field:nth-child(2) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
           ]
         },
         {
@@ -3645,7 +3485,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "div:nth-child(3) > .xt0e3qv.x18o3ruo.xbyyjgo > .x1i1rx1s.xjm9jq1.xkdpibf"
+            ".onboard-controls > div > .xt0e3qv.x18o3ruo.xbyyjgo > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -3789,7 +3629,7 @@
           "impact": null,
           "html": "<button type=\"button\" disabled=\"\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x1mrddfy xt0e3qv x18o3ruo xbyyjgo x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" aria-disabled=\"true\" aria-describedby=\"onboard-disabled-reason\">",
           "target": [
-            "button[aria-describedby=\"onboard-disabled-reason\"]"
+            ".za-control"
           ]
         },
         {
@@ -3807,7 +3647,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[aria-describedby=\"onboard-disabled-reason\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
+            ".za-control > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -3913,7 +3753,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
+            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -3931,7 +3771,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
+            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -3967,7 +3807,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".x6k0iem > .x1i1rx1s.xjm9jq1.xkdpibf"
+            ".x6k0iem > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -3983,45 +3823,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
+          "html": "<input id=\"_r_42_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
           "target": [
-            ".astryx-card > .za-control.x17x4s8c.za-primary > .x1i1rx1s.xjm9jq1.xkdpibf"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "aria-required-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "All required ARIA attributes are present"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div role=\"status\" aria-live=\"polite\" class=\"onboard-field-status\">Connection works.</div>",
-          "target": [
-            ".onboard-field-status"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "aria-required-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "All required ARIA attributes are present"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<input id=\"_r_41_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
-          "target": [
-            "#_r_41_"
+            "#_r_42_"
           ]
         },
         {
@@ -4039,7 +3843,7 @@
           "impact": null,
           "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
           "target": [
-            ".onboard-field:nth-child(1) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.xvy26l8 > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
+            ".onboard-field:nth-child(1) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
           ]
         },
         {
@@ -4055,9 +3859,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<input id=\"_r_49_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
+          "html": "<input id=\"_r_4a_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
           "target": [
-            "#_r_49_"
+            "#_r_4a_"
           ]
         },
         {
@@ -4075,7 +3879,7 @@
           "impact": null,
           "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
           "target": [
-            ".onboard-field:nth-child(2) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.xvy26l8 > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
+            ".onboard-field:nth-child(2) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
           ]
         },
         {
@@ -4093,7 +3897,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "div:nth-child(3) > .xt0e3qv.x18o3ruo.xbyyjgo > .x1i1rx1s.xjm9jq1.xkdpibf"
+            ".onboard-controls > div > .xt0e3qv.x18o3ruo.xbyyjgo > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -4129,7 +3933,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[aria-describedby=\"onboard-disabled-reason\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
+            ".za-control > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -4277,7 +4081,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
+            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -4309,7 +4113,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
+            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -4373,7 +4177,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".x6k0iem > .x1i1rx1s.xjm9jq1.xkdpibf"
+            ".x6k0iem > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -4403,73 +4207,9 @@
             }
           ],
           "impact": null,
-          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
+          "html": "<input id=\"_r_42_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
           "target": [
-            ".astryx-card > .za-control.x17x4s8c.za-primary > .x1i1rx1s.xjm9jq1.xkdpibf"
-          ]
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "invalidrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA role is valid"
-            },
-            {
-              "id": "abstractrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "Abstract roles are not used"
-            },
-            {
-              "id": "unsupportedrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA role is supported"
-            }
-          ],
-          "impact": null,
-          "html": "<div role=\"status\" aria-live=\"polite\" class=\"onboard-field-status\">Connection works.</div>",
-          "target": [
-            ".onboard-field-status"
-          ]
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "invalidrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA role is valid"
-            },
-            {
-              "id": "abstractrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "Abstract roles are not used"
-            },
-            {
-              "id": "unsupportedrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA role is supported"
-            }
-          ],
-          "impact": null,
-          "html": "<input id=\"_r_41_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
-          "target": [
-            "#_r_41_"
+            "#_r_42_"
           ]
         },
         {
@@ -4501,7 +4241,7 @@
           "impact": null,
           "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
           "target": [
-            ".onboard-field:nth-child(1) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.xvy26l8 > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
+            ".onboard-field:nth-child(1) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
           ]
         },
         {
@@ -4531,9 +4271,9 @@
             }
           ],
           "impact": null,
-          "html": "<input id=\"_r_49_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
+          "html": "<input id=\"_r_4a_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
           "target": [
-            "#_r_49_"
+            "#_r_4a_"
           ]
         },
         {
@@ -4565,7 +4305,7 @@
           "impact": null,
           "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
           "target": [
-            ".onboard-field:nth-child(2) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.xvy26l8 > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
+            ".onboard-field:nth-child(2) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
           ]
         },
         {
@@ -4597,7 +4337,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "div:nth-child(3) > .xt0e3qv.x18o3ruo.xbyyjgo > .x1i1rx1s.xjm9jq1.xkdpibf"
+            ".onboard-controls > div > .xt0e3qv.x18o3ruo.xbyyjgo > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -4661,7 +4401,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[aria-describedby=\"onboard-disabled-reason\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
+            ".za-control > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -4869,7 +4609,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
+            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -4933,7 +4673,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
+            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -5445,71 +5185,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".x6k0iem > .x1i1rx1s.xjm9jq1.xkdpibf"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-valid-attr-value",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute values are valid"
-            },
-            {
-              "id": "aria-errormessage",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
-            },
-            {
-              "id": "aria-level",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "aria-level values are valid"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
-          "target": [
-            ".astryx-card > .za-control.x17x4s8c.za-primary > .x1i1rx1s.xjm9jq1.xkdpibf"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-valid-attr-value",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute values are valid"
-            },
-            {
-              "id": "aria-errormessage",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
-            },
-            {
-              "id": "aria-level",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "aria-level values are valid"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<div role=\"status\" aria-live=\"polite\" class=\"onboard-field-status\">Connection works.</div>",
-          "target": [
-            ".onboard-field-status"
+            ".x6k0iem > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -5541,7 +5217,7 @@
           "impact": null,
           "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
           "target": [
-            ".onboard-field:nth-child(1) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.xvy26l8 > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
+            ".onboard-field:nth-child(1) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
           ]
         },
         {
@@ -5573,7 +5249,7 @@
           "impact": null,
           "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
           "target": [
-            ".onboard-field:nth-child(2) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.xvy26l8 > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
+            ".onboard-field:nth-child(2) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
           ]
         },
         {
@@ -5605,7 +5281,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "div:nth-child(3) > .xt0e3qv.x18o3ruo.xbyyjgo > .x1i1rx1s.xjm9jq1.xkdpibf"
+            ".onboard-controls > div > .xt0e3qv.x18o3ruo.xbyyjgo > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -5861,7 +5537,7 @@
           "impact": null,
           "html": "<button type=\"button\" disabled=\"\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x1mrddfy xt0e3qv x18o3ruo xbyyjgo x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" aria-disabled=\"true\" aria-describedby=\"onboard-disabled-reason\">",
           "target": [
-            "button[aria-describedby=\"onboard-disabled-reason\"]"
+            ".za-control"
           ]
         },
         {
@@ -5893,7 +5569,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[aria-describedby=\"onboard-disabled-reason\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
+            ".za-control > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -6045,7 +5721,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
+            "button[aria-label=\"Hide configuration\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -6081,7 +5757,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
+            "button[data-mode-toggle=\"true\"] > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -6369,43 +6045,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            ".x6k0iem > .x1i1rx1s.xjm9jq1.xkdpibf"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "aria-valid-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute name is valid"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
-          "target": [
-            ".astryx-card > .za-control.x17x4s8c.za-primary > .x1i1rx1s.xjm9jq1.xkdpibf"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "aria-valid-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute name is valid"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div role=\"status\" aria-live=\"polite\" class=\"onboard-field-status\">Connection works.</div>",
-          "target": [
-            ".onboard-field-status"
+            ".x6k0iem > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -6423,7 +6063,7 @@
           "impact": null,
           "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
           "target": [
-            ".onboard-field:nth-child(1) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.xvy26l8 > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
+            ".onboard-field:nth-child(1) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
           ]
         },
         {
@@ -6441,7 +6081,7 @@
           "impact": null,
           "html": "<div role=\"alert\" aria-live=\"assertive\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></div>",
           "target": [
-            ".onboard-field:nth-child(2) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.xvy26l8 > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
+            ".onboard-field:nth-child(2) > .astryx-field.xc8icb0.xzye2dw > .x19nvjgn.xlumz0n.x1qs65gq > .astryx-number-input.xf314gf.x1litavf > .x1i1rx1s[role=\"alert\"][aria-live=\"assertive\"]"
           ]
         },
         {
@@ -6459,7 +6099,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "div:nth-child(3) > .xt0e3qv.x18o3ruo.xbyyjgo > .x1i1rx1s.xjm9jq1.xkdpibf"
+            ".onboard-controls > div > .xt0e3qv.x18o3ruo.xbyyjgo > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -6603,7 +6243,7 @@
           "impact": null,
           "html": "<button type=\"button\" disabled=\"\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x1mrddfy xt0e3qv x18o3ruo xbyyjgo x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" aria-disabled=\"true\" aria-describedby=\"onboard-disabled-reason\">",
           "target": [
-            "button[aria-describedby=\"onboard-disabled-reason\"]"
+            ".za-control"
           ]
         },
         {
@@ -6621,7 +6261,7 @@
           "impact": null,
           "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
           "target": [
-            "button[aria-describedby=\"onboard-disabled-reason\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
+            ".za-control > .x1i1rx1s.xjm9jq1[role=\"status\"]"
           ]
         },
         {
@@ -6704,9 +6344,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<input id=\"_r_41_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
+          "html": "<input id=\"_r_42_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
           "target": [
-            "#_r_41_"
+            "#_r_42_"
           ]
         },
         {
@@ -6736,9 +6376,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<input id=\"_r_49_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
+          "html": "<input id=\"_r_4a_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
           "target": [
-            "#_r_49_"
+            "#_r_4a_"
           ]
         },
         {
@@ -6861,27 +6501,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\">",
-          "target": [
-            ".astryx-card > .za-control.x17x4s8c.za-primary"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "button-has-visible-text",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "Element has inner text that is visible to screen readers"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
           "html": "<button type=\"button\" disabled=\"\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x1mrddfy xt0e3qv x18o3ruo xbyyjgo x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\">",
           "target": [
-            "div:nth-child(3) > .xt0e3qv.x18o3ruo.xbyyjgo"
+            ".onboard-controls > div > .xt0e3qv.x18o3ruo.xbyyjgo"
           ]
         },
         {
@@ -7042,7 +6664,7 @@
           "impact": null,
           "html": "<button type=\"button\" disabled=\"\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x1mrddfy xt0e3qv x18o3ruo xbyyjgo x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" aria-disabled=\"true\" aria-describedby=\"onboard-disabled-reason\">",
           "target": [
-            "button[aria-describedby=\"onboard-disabled-reason\"]"
+            ".za-control"
           ]
         }
       ]
@@ -7209,6 +6831,81 @@
           "html": "<div class=\"status-line\" role=\"status\" aria-live=\"polite\"><span role=\"img\" aria-label=\"Ready\" class=\"astryx-status-dot x3nfvp2 x6s0dn4 xl56j7k x16rqkct x2lah0s x1xc55vz xdk7pt x1q5y3ey xrkvqaz\" data-variant=\"neutral\"></span>Paid execution disabled · Local service ready</div>",
           "target": [
             ".status-line"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#fafafa",
+                "bgColor": "#0a0a0a",
+                "contrastRatio": 18.96,
+                "fontSize": "11.3pt (15px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 18.96"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">Z</span>",
+          "target": [
+            ".onboard-turn:nth-child(4) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(3) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#0a0a0a",
+                "bgColor": "#fafafa",
+                "contrastRatio": 18.96,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 18.96"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"astryx-chat-message-bubble x78zum5 xdt5ytf xl6temz xashgol x9ynric xjm74w1 xw6l6zx x1mzt3pk x13faqbe xjbqb8w x1tgivj0 x1pzlopt xt970qd onboard-bubble\" data-sender=\"assistant\" data-variant=\"ghost\" data-density=\"balanced\">",
+          "target": [
+            ".onboard-turn:nth-child(4) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(3) > .x98rzlu.x1cy8zhl.xeuugli > .xzye2dw.xh8yej3.x1cy8zhl > .astryx-chat-message-bubble.xl6temz.xashgol"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#616161",
+                "bgColor": "#f0f0ed",
+                "contrastRatio": 5.42,
+                "fontSize": "9.8pt (13px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 5.42"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span>Editing Connector.</span>",
+          "target": [
+            ".x1s4dlld.x3nfvp2.x6s0dn4 > span"
           ]
         },
         {
@@ -7408,57 +7105,7 @@
           "impact": null,
           "html": "<span class=\"xb3r6kr xlyipyv xeuugli\">Undo last answer</span>",
           "target": [
-            ".x6k0iem > .x1fjtqre.x7b72wb.x1ukc1h5 > .xlyipyv.xb3r6kr"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#ffffff",
-                "bgColor": "#0a0a0a",
-                "contrastRatio": 19.79,
-                "fontSize": "10.5pt (14px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 19.79"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"xb3r6kr xlyipyv xeuugli\">Test connection</span>",
-          "target": [
-            ".za-control.x17x4s8c.za-primary > .x1fjtqre.x7b72wb.x1ukc1h5 > .xlyipyv.xb3r6kr"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#616161",
-                "bgColor": "#ffffff",
-                "contrastRatio": 6.19,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 6.19"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div role=\"status\" aria-live=\"polite\" class=\"onboard-field-status\">Connection works.</div>",
-          "target": [
-            ".onboard-field-status"
+            ".x1fjtqre.x7b72wb.x1ukc1h5 > .xlyipyv.xb3r6kr"
           ]
         },
         {
@@ -7481,9 +7128,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<label for=\"_r_41_\" class=\"astryx-field-label x78zum5 x6s0dn4 xzye2dw x9ynric xcr08ib x1kq96og x1e4wzip xv1l7n4 x1ypdohk x16khyan\">Input ¢/MTok</label>",
+          "html": "<label for=\"_r_42_\" class=\"astryx-field-label x78zum5 x6s0dn4 xzye2dw x9ynric xcr08ib x1kq96og x1e4wzip xv1l7n4 x1ypdohk x16khyan\">Input ¢/MTok</label>",
           "target": [
-            "label[for=\"_r_41_\"]"
+            "label[for=\"_r_42_\"]"
           ]
         },
         {
@@ -7506,9 +7153,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<input id=\"_r_41_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
+          "html": "<input id=\"_r_42_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
           "target": [
-            "#_r_41_"
+            "#_r_42_"
           ]
         },
         {
@@ -7531,9 +7178,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<label for=\"_r_49_\" class=\"astryx-field-label x78zum5 x6s0dn4 xzye2dw x9ynric xcr08ib x1kq96og x1e4wzip xv1l7n4 x1ypdohk x16khyan\">Output ¢/MTok</label>",
+          "html": "<label for=\"_r_4a_\" class=\"astryx-field-label x78zum5 x6s0dn4 xzye2dw x9ynric xcr08ib x1kq96og x1e4wzip xv1l7n4 x1ypdohk x16khyan\">Output ¢/MTok</label>",
           "target": [
-            "label[for=\"_r_49_\"]"
+            "label[for=\"_r_4a_\"]"
           ]
         },
         {
@@ -7556,9 +7203,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<input id=\"_r_49_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
+          "html": "<input id=\"_r_4a_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
           "target": [
-            "#_r_49_"
+            "#_r_4a_"
           ]
         },
         {
@@ -8441,7 +8088,7 @@
           "any": [
             {
               "id": "duplicate-id-aria",
-              "data": "_r_41_",
+              "data": "_r_42_",
               "relatedNodes": [],
               "impact": "critical",
               "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
@@ -8450,16 +8097,16 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<input id=\"_r_41_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
+          "html": "<input id=\"_r_42_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
           "target": [
-            "#_r_41_"
+            "#_r_42_"
           ]
         },
         {
           "any": [
             {
               "id": "duplicate-id-aria",
-              "data": "_r_49_",
+              "data": "_r_4a_",
               "relatedNodes": [],
               "impact": "critical",
               "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
@@ -8468,9 +8115,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<input id=\"_r_49_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
+          "html": "<input id=\"_r_4a_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
           "target": [
-            "#_r_49_"
+            "#_r_4a_"
           ]
         },
         {
@@ -8554,9 +8201,9 @@
               "data": null,
               "relatedNodes": [
                 {
-                  "html": "<label for=\"_r_41_\" class=\"astryx-field-label x78zum5 x6s0dn4 xzye2dw x9ynric xcr08ib x1kq96og x1e4wzip xv1l7n4 x1ypdohk x16khyan\">Input ¢/MTok</label>",
+                  "html": "<label for=\"_r_42_\" class=\"astryx-field-label x78zum5 x6s0dn4 xzye2dw x9ynric xcr08ib x1kq96og x1e4wzip xv1l7n4 x1ypdohk x16khyan\">Input ¢/MTok</label>",
                   "target": [
-                    "label[for=\"_r_41_\"]"
+                    "label[for=\"_r_42_\"]"
                   ]
                 }
               ],
@@ -8565,9 +8212,9 @@
             }
           ],
           "impact": null,
-          "html": "<input id=\"_r_41_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
+          "html": "<input id=\"_r_42_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
           "target": [
-            "#_r_41_"
+            "#_r_42_"
           ]
         },
         {
@@ -8579,9 +8226,9 @@
               "data": null,
               "relatedNodes": [
                 {
-                  "html": "<label for=\"_r_49_\" class=\"astryx-field-label x78zum5 x6s0dn4 xzye2dw x9ynric xcr08ib x1kq96og x1e4wzip xv1l7n4 x1ypdohk x16khyan\">Output ¢/MTok</label>",
+                  "html": "<label for=\"_r_4a_\" class=\"astryx-field-label x78zum5 x6s0dn4 xzye2dw x9ynric xcr08ib x1kq96og x1e4wzip xv1l7n4 x1ypdohk x16khyan\">Output ¢/MTok</label>",
                   "target": [
-                    "label[for=\"_r_49_\"]"
+                    "label[for=\"_r_4a_\"]"
                   ]
                 }
               ],
@@ -8590,9 +8237,9 @@
             }
           ],
           "impact": null,
-          "html": "<input id=\"_r_49_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
+          "html": "<input id=\"_r_4a_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
           "target": [
-            "#_r_49_"
+            "#_r_4a_"
           ]
         }
       ]
@@ -8699,9 +8346,9 @@
               },
               "relatedNodes": [
                 {
-                  "html": "<label for=\"_r_41_\" class=\"astryx-field-label x78zum5 x6s0dn4 xzye2dw x9ynric xcr08ib x1kq96og x1e4wzip xv1l7n4 x1ypdohk x16khyan\">Input ¢/MTok</label>",
+                  "html": "<label for=\"_r_42_\" class=\"astryx-field-label x78zum5 x6s0dn4 xzye2dw x9ynric xcr08ib x1kq96og x1e4wzip xv1l7n4 x1ypdohk x16khyan\">Input ¢/MTok</label>",
                   "target": [
-                    "label[for=\"_r_41_\"]"
+                    "label[for=\"_r_42_\"]"
                   ]
                 }
               ],
@@ -8720,9 +8367,9 @@
             }
           ],
           "impact": null,
-          "html": "<input id=\"_r_41_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
+          "html": "<input id=\"_r_42_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
           "target": [
-            "#_r_41_"
+            "#_r_42_"
           ]
         },
         {
@@ -8734,9 +8381,9 @@
               },
               "relatedNodes": [
                 {
-                  "html": "<label for=\"_r_49_\" class=\"astryx-field-label x78zum5 x6s0dn4 xzye2dw x9ynric xcr08ib x1kq96og x1e4wzip xv1l7n4 x1ypdohk x16khyan\">Output ¢/MTok</label>",
+                  "html": "<label for=\"_r_4a_\" class=\"astryx-field-label x78zum5 x6s0dn4 xzye2dw x9ynric xcr08ib x1kq96og x1e4wzip xv1l7n4 x1ypdohk x16khyan\">Output ¢/MTok</label>",
                   "target": [
-                    "label[for=\"_r_49_\"]"
+                    "label[for=\"_r_4a_\"]"
                   ]
                 }
               ],
@@ -8755,9 +8402,9 @@
             }
           ],
           "impact": null,
-          "html": "<input id=\"_r_49_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
+          "html": "<input id=\"_r_4a_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
           "target": [
-            "#_r_49_"
+            "#_r_4a_"
           ]
         }
       ]
@@ -8947,27 +8594,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\">",
-          "target": [
-            ".astryx-card > .za-control.x17x4s8c.za-primary"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "no-focusable-content",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element does not have focusable descendants"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
           "html": "<button type=\"button\" disabled=\"\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x1mrddfy xt0e3qv x18o3ruo xbyyjgo x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\">",
           "target": [
-            "div:nth-child(3) > .xt0e3qv.x18o3ruo.xbyyjgo"
+            ".onboard-controls > div > .xt0e3qv.x18o3ruo.xbyyjgo"
           ]
         },
         {
@@ -9111,7 +8740,7 @@
           "impact": null,
           "html": "<button type=\"button\" disabled=\"\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x1mrddfy xt0e3qv x18o3ruo xbyyjgo x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" aria-disabled=\"true\" aria-describedby=\"onboard-disabled-reason\">",
           "target": [
-            "button[aria-describedby=\"onboard-disabled-reason\"]"
+            ".za-control"
           ]
         }
       ]
@@ -9357,12 +8986,12 @@
               "id": "target-size",
               "data": {
                 "minSize": 24,
-                "width": 672,
+                "width": 686,
                 "height": 44
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Control has sufficient size (672px by 44px, should be at least 24px by 24px)"
+              "message": "Control has sufficient size (686px by 44px, should be at least 24px by 24px)"
             },
             {
               "id": "target-offset",
@@ -9378,9 +9007,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\">",
+          "html": "<input id=\"_r_42_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
           "target": [
-            ".astryx-card > .za-control.x17x4s8c.za-primary"
+            "#_r_42_"
           ]
         },
         {
@@ -9410,41 +9039,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<input id=\"_r_41_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
+          "html": "<input id=\"_r_4a_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
           "target": [
-            "#_r_41_"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "target-size",
-              "data": {
-                "minSize": 24,
-                "width": 686,
-                "height": 44
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Control has sufficient size (686px by 44px, should be at least 24px by 24px)"
-            },
-            {
-              "id": "target-offset",
-              "data": {
-                "closestOffset": 24,
-                "minOffset": 24
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Target has sufficient space from its closest neighbors. Safe clickable space has a diameter of 24px which is at least 24px."
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<input id=\"_r_49_\" inputmode=\"decimal\" role=\"spinbutton\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\">",
-          "target": [
-            "#_r_49_"
+            "#_r_4a_"
           ]
         },
         {

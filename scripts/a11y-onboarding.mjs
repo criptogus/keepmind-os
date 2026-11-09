@@ -52,6 +52,15 @@ try {
    try { const started = Date.now(); await action(); check(`${mode}: ${name} completed`, true, { elapsedMs: Date.now() - started }); }
    catch (e) { check(`${mode}: ${name} completed`, false, { error: String(e.stack ?? e) }); console.error(`${mode}: ${name}`, e); }
   }
+  async function checkAuthUnmounted(step) {
+   const observed = {
+    testButtons: await page.getByRole('button', { name: 'Test connection', exact: true }).count(),
+    connectorGroups: await page.getByRole('radiogroup', { name: 'Connector', exact: true }).count(),
+    authCards: await page.locator('.onboard-auth').count(),
+    successStatus: await page.getByText('Connection works.', { exact: true }).count(),
+   };
+   check(`${mode}: ${step} unmounts connector controls and status`, Object.values(observed).every(n => n === 0), observed);
+  }
   async function capture(step) {
    await page.screenshot({ path: `evidence/screenshots/onboarding-${step}-${mode}.png`, fullPage: true });
    await page.screenshot({ path: `evidence/screenshots/redesign-${step}-${mode}.png`, fullPage: false });
@@ -68,6 +77,13 @@ try {
   await step('q1', async () => {
   await page.goto(url); await chat.getByLabel('Workspace name').waitFor();
   { const row = page.locator('dl > div').filter({ has: page.locator('dt', { hasText: 'Est. max / run' }) }); check(`${mode}: estimate waits for cap and pricing`, await row.count() === 0, { observed: await row.count() }); }
+  if (mode === 'dark') {
+   const disabled = await page.getByRole('button', { name: 'Activate agent', exact: true }).evaluate(e => {
+    const css = getComputedStyle(e);
+    return { disabled: e.getAttribute('aria-disabled'), reason: e.getAttribute('aria-describedby'), background: css.backgroundColor, color: css.color, border: css.borderTopColor, cursor: css.cursor };
+   });
+   check(`${mode}: disabled Activate is neutral with a reason`, disabled.disabled === 'true' && !!disabled.reason && disabled.background === 'rgb(42, 42, 42)' && disabled.color === 'rgb(115, 115, 115)' && disabled.border !== 'rgb(200, 255, 0)' && disabled.cursor === 'default', disabled);
+  }
   await step('capture q1', () => capture('q1'));
   });
   await step('q2', async () => {
@@ -86,6 +102,8 @@ try {
   });
   await step('q3-auth', async () => {
   const cards = page.getByRole('radiogroup', { name: 'Connector', exact: true }).getByRole('radio');
+  check(`${mode}: Codex card copy`, await page.getByRole('radio', { name: 'Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.', exact: true }).count() === 1);
+  check(`${mode}: Claude card copy`, await page.getByRole('radio', { name: 'Claude Paste an API key from the Anthropic Console.', exact: true }).count() === 1);
   { const observed5 = await cards.count(); check(`${mode}: six connector cards`, observed5 === 6, { observed: observed5 }); }
   await cards.first().focus(); await page.keyboard.press('ArrowRight'); { const observed6 = await cards.nth(1).evaluate(e => e === document.activeElement); check(`${mode}: arrow right`, observed6, { observed: observed6 }); }
   await page.keyboard.press('End'); { const observed7 = await cards.last().evaluate(e => e === document.activeElement); check(`${mode}: End`, observed7, { observed: observed7 }); }
@@ -126,10 +144,14 @@ try {
   await step('q4', async () => {
   await page.evaluate(() => { window.__testFailure = false; }); await page.getByRole('button', { name: 'Test connection', exact: true }).click(); await page.getByRole('button', { name: 'Continue', exact: true }).waitFor();
   { const observed11 = await page.evaluate(() => !localStorage.getItem('zaos.onboard.v1').includes('mock-secret') && document.body.textContent.includes('••••7f2a') && !document.body.textContent.includes('mock-secret')); check(`${mode}: key masked and draft redacted`, observed11, { observed: observed11 }); }
+  await checkAuthUnmounted('q4');
+  check(`${mode}: cap starts empty before interaction`, await chat.getByLabel('Monthly spend cap (USD)', { exact: true }).inputValue() === '');
+  check(`${mode}: cap error absent before blur or submit`, await page.getByLabel('Agent onboarding').getByText('Enter a monthly cap greater than 0.', { exact: true }).count() === 0);
   await step('capture q4', () => capture('q4'));
   });
   await step('error', async () => {
   await page.getByRole('button', { name: 'Continue', exact: true }).click(); await step('capture error', () => capture('error'));
+  check(`${mode}: submit validates empty cap`, await page.getByLabel('Agent onboarding').getByText('Enter a monthly cap greater than 0.', { exact: true }).isVisible());
   { const observed12 = await page.getByRole('button', { name: 'Activate agent', exact: true }).getAttribute('aria-disabled'); check(`${mode}: invalid cap/consent blocks`, observed12 === 'true', { observed: observed12 }); }
   });
   await step('q3-pricing-confirm', async () => {
@@ -137,12 +159,14 @@ try {
   await page.getByRole('button', { name: 'Change Connector', exact: true }).click(); await page.getByRole('radio', { name: 'Custom (OpenAI-compatible) Base URL + API key' }).click();
   await chat.getByLabel('Base URL', { exact: true }).fill('https://example.test/v1'); await chat.getByLabel('Model', { exact: true }).fill('custom-model'); await chat.getByLabel('API key', { exact: true }).fill('mock-custom-7f2a'); await page.getByRole('button', { name: 'Test connection', exact: true }).click();
   await page.getByText('I don’t have catalog prices', { exact: false }).waitFor(); await step('capture q3-pricing-confirm', () => capture('q3-pricing-confirm'));
+  await checkAuthUnmounted('pricing-confirm');
   { const observed13 = await page.getByRole('button', { name: 'Activate agent', exact: true }).getAttribute('aria-disabled'); check(`${mode}: unknown price blocks`, observed13 === 'true', { observed: observed13 }); }
   });
   await step('summary', async () => {
   await chat.getByLabel('Input ¢/MTok', { exact: true }).fill('20'); await chat.getByLabel('Input ¢/MTok', { exact: true }).press('Tab'); await chat.getByLabel('Output ¢/MTok', { exact: true }).fill('40'); await chat.getByLabel('Output ¢/MTok', { exact: true }).press('Tab');
   await page.getByRole('button', { name: 'Continue', exact: true }).click();
   await page.getByRole('radio', { name: '$25', exact: true }).click(); await chat.getByLabel('I authorize paid execution within this cap. Provider charges are mine.', { exact: true }).check(); await page.getByRole('button', { name: 'Continue', exact: true }).click();
+  await checkAuthUnmounted('summary');
   { const observed14 = await page.getByRole('button', { name: 'Activate agent', exact: true }).getAttribute('aria-disabled'); check(`${mode}: summary activation enabled`, observed14 !== 'true', { observed: observed14 }); }
   await step('capture summary', () => capture('summary'));
   });

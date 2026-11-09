@@ -113,14 +113,14 @@
       "name": "light: capture q1 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 658
+        "elapsedMs": 538
       }
     },
     {
       "name": "light: q1 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 934
+        "elapsedMs": 752
       }
     },
     {
@@ -134,21 +134,21 @@
       "name": "light: capture q2 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 580
+        "elapsedMs": 527
       }
     },
     {
       "name": "light: q2 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 639
+        "elapsedMs": 565
       }
     },
     {
       "name": "light: capture q3 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 563
+        "elapsedMs": 551
       }
     },
     {
@@ -164,8 +164,16 @@
       "name": "light: q3 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 604
+        "elapsedMs": 592
       }
+    },
+    {
+      "name": "light: Codex card copy",
+      "pass": true
+    },
+    {
+      "name": "light: Claude card copy",
+      "pass": true
     },
     {
       "name": "light: six connector cards",
@@ -210,7 +218,7 @@
       "name": "light: field focus completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 17
+        "elapsedMs": 12
       }
     },
     {
@@ -239,35 +247,35 @@
       "name": "light: advanced labels completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 95
+        "elapsedMs": 92
       }
     },
     {
       "name": "light: capture q3-auth completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 584
+        "elapsedMs": 543
       }
     },
     {
       "name": "light: q3-auth completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 813
+        "elapsedMs": 755
       }
     },
     {
       "name": "light: capture connection-error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 573
+        "elapsedMs": 610
       }
     },
     {
       "name": "light: connection-error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 615
+        "elapsedMs": 646
       }
     },
     {
@@ -278,25 +286,47 @@
       }
     },
     {
+      "name": "light: q4 unmounts connector controls and status",
+      "pass": true,
+      "detail": {
+        "testButtons": 0,
+        "connectorGroups": 0,
+        "authCards": 0,
+        "successStatus": 0
+      }
+    },
+    {
+      "name": "light: cap starts empty before interaction",
+      "pass": true
+    },
+    {
+      "name": "light: cap error absent before blur or submit",
+      "pass": true
+    },
+    {
       "name": "light: capture q4 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 563
+        "elapsedMs": 543
       }
     },
     {
       "name": "light: q4 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 593
+        "elapsedMs": 598
       }
     },
     {
       "name": "light: capture error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 592
+        "elapsedMs": 522
       }
+    },
+    {
+      "name": "light: submit validates empty cap",
+      "pass": true
     },
     {
       "name": "light: invalid cap/consent blocks",
@@ -309,14 +339,24 @@
       "name": "light: error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 636
+        "elapsedMs": 543
       }
     },
     {
       "name": "light: capture q3-pricing-confirm completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 517
+        "elapsedMs": 511
+      }
+    },
+    {
+      "name": "light: pricing-confirm unmounts connector controls and status",
+      "pass": true,
+      "detail": {
+        "testButtons": 0,
+        "connectorGroups": 0,
+        "authCards": 0,
+        "successStatus": 0
       }
     },
     {
@@ -330,7 +370,17 @@
       "name": "light: q3-pricing-confirm completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 654
+        "elapsedMs": 665
+      }
+    },
+    {
+      "name": "light: summary unmounts connector controls and status",
+      "pass": true,
+      "detail": {
+        "testButtons": 0,
+        "connectorGroups": 0,
+        "authCards": 0,
+        "successStatus": 0
       }
     },
     {
@@ -344,21 +394,21 @@
       "name": "light: capture summary completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 512
+        "elapsedMs": 493
       }
     },
     {
       "name": "light: summary completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 713
+        "elapsedMs": 655
       }
     },
     {
       "name": "light: tab-test completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 1091
+        "elapsedMs": 1005
       }
     },
     {
@@ -379,14 +429,14 @@
       "name": "light: resume completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 114
+        "elapsedMs": 116
       }
     },
     {
       "name": "light: capture workspace completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 504
+        "elapsedMs": 478
       }
     },
     {
@@ -407,7 +457,7 @@
       "name": "light: workspace completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 743
+        "elapsedMs": 713
       }
     },
     {
@@ -418,17 +468,29 @@
       }
     },
     {
+      "name": "dark: disabled Activate is neutral with a reason",
+      "pass": true,
+      "detail": {
+        "disabled": "true",
+        "reason": "onboard-disabled-reason",
+        "background": "rgb(42, 42, 42)",
+        "color": "rgb(115, 115, 115)",
+        "border": "rgb(42, 42, 42)",
+        "cursor": "default"
+      }
+    },
+    {
       "name": "dark: capture q1 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 577
+        "elapsedMs": 547
       }
     },
     {
       "name": "dark: q1 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 704
+        "elapsedMs": 710
       }
     },
     {
@@ -442,21 +504,21 @@
       "name": "dark: capture q2 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 562
+        "elapsedMs": 564
       }
     },
     {
       "name": "dark: q2 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 600
+        "elapsedMs": 602
       }
     },
     {
       "name": "dark: capture q3 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 548
+        "elapsedMs": 591
       }
     },
     {
@@ -472,8 +534,16 @@
       "name": "dark: q3 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 592
+        "elapsedMs": 618
       }
+    },
+    {
+      "name": "dark: Codex card copy",
+      "pass": true
+    },
+    {
+      "name": "dark: Claude card copy",
+      "pass": true
     },
     {
       "name": "dark: six connector cards",
@@ -547,35 +617,35 @@
       "name": "dark: advanced labels completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 131
+        "elapsedMs": 84
       }
     },
     {
       "name": "dark: capture q3-auth completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 639
+        "elapsedMs": 588
       }
     },
     {
       "name": "dark: q3-auth completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 858
+        "elapsedMs": 773
       }
     },
     {
       "name": "dark: capture connection-error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 560
+        "elapsedMs": 548
       }
     },
     {
       "name": "dark: connection-error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 597
+        "elapsedMs": 582
       }
     },
     {
@@ -586,10 +656,28 @@
       }
     },
     {
+      "name": "dark: q4 unmounts connector controls and status",
+      "pass": true,
+      "detail": {
+        "testButtons": 0,
+        "connectorGroups": 0,
+        "authCards": 0,
+        "successStatus": 0
+      }
+    },
+    {
+      "name": "dark: cap starts empty before interaction",
+      "pass": true
+    },
+    {
+      "name": "dark: cap error absent before blur or submit",
+      "pass": true
+    },
+    {
       "name": "dark: capture q4 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 527
+        "elapsedMs": 530
       }
     },
     {
@@ -603,8 +691,12 @@
       "name": "dark: capture error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 533
+        "elapsedMs": 521
       }
+    },
+    {
+      "name": "dark: submit validates empty cap",
+      "pass": true
     },
     {
       "name": "dark: invalid cap/consent blocks",
@@ -617,14 +709,24 @@
       "name": "dark: error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 560
+        "elapsedMs": 543
       }
     },
     {
       "name": "dark: capture q3-pricing-confirm completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 538
+        "elapsedMs": 589
+      }
+    },
+    {
+      "name": "dark: pricing-confirm unmounts connector controls and status",
+      "pass": true,
+      "detail": {
+        "testButtons": 0,
+        "connectorGroups": 0,
+        "authCards": 0,
+        "successStatus": 0
       }
     },
     {
@@ -638,7 +740,17 @@
       "name": "dark: q3-pricing-confirm completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 681
+        "elapsedMs": 749
+      }
+    },
+    {
+      "name": "dark: summary unmounts connector controls and status",
+      "pass": true,
+      "detail": {
+        "testButtons": 0,
+        "connectorGroups": 0,
+        "authCards": 0,
+        "successStatus": 0
       }
     },
     {
@@ -652,21 +764,21 @@
       "name": "dark: capture summary completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 513
+        "elapsedMs": 584
       }
     },
     {
       "name": "dark: summary completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 681
+        "elapsedMs": 783
       }
     },
     {
       "name": "dark: tab-test completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 1059
+        "elapsedMs": 1061
       }
     },
     {
@@ -687,14 +799,14 @@
       "name": "dark: resume completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 119
+        "elapsedMs": 108
       }
     },
     {
       "name": "dark: capture workspace completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 493
+        "elapsedMs": 445
       }
     },
     {
@@ -715,7 +827,7 @@
       "name": "dark: workspace completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 727
+        "elapsedMs": 668
       }
     },
     {
@@ -1045,16 +1157,16 @@
                 "reveal": false
               },
               {
-                "name": "Codex Use your ChatGPT sign-in via Codex CLI",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
               {
-                "name": "Claude Anthropic API key",
+                "name": "Claude Paste an API key from the Anthropic Console.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
@@ -1155,16 +1267,16 @@
                 "reveal": false
               },
               {
-                "name": "Codex Use your ChatGPT sign-in via Codex CLI",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
               {
-                "name": "Claude Anthropic API key",
+                "name": "Claude Paste an API key from the Anthropic Console.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
@@ -1293,16 +1405,16 @@
                 "reveal": false
               },
               {
-                "name": "Codex Use your ChatGPT sign-in via Codex CLI",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
               {
-                "name": "Claude Anthropic API key",
+                "name": "Claude Paste an API key from the Anthropic Console.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
@@ -1422,13 +1534,6 @@
                 "reveal": false
               },
               {
-                "name": "Test connection",
-                "width": 672,
-                "height": 44,
-                "primary": true,
-                "reveal": false
-              },
-              {
                 "name": "$10",
                 "width": 57,
                 "height": 44,
@@ -1544,13 +1649,6 @@
                 "reveal": false
               },
               {
-                "name": "Test connection",
-                "width": 672,
-                "height": 44,
-                "primary": true,
-                "reveal": false
-              },
-              {
                 "name": "$10",
                 "width": 57,
                 "height": 44,
@@ -1649,7 +1747,7 @@
             "inputs": [
               {
                 "tag": "input",
-                "id": "_r_41_",
+                "id": "_r_42_",
                 "measuredElement": "native control",
                 "label": "Input ¢/MTok",
                 "height": 44,
@@ -1658,7 +1756,7 @@
               },
               {
                 "tag": "input",
-                "id": "_r_49_",
+                "id": "_r_4a_",
                 "measuredElement": "native control",
                 "label": "Output ¢/MTok",
                 "height": 44,
@@ -1672,13 +1770,6 @@
                 "width": 165,
                 "height": 44,
                 "primary": false,
-                "reveal": false
-              },
-              {
-                "name": "Test connection",
-                "width": 672,
-                "height": 44,
-                "primary": true,
                 "reveal": false
               },
               {
@@ -1943,16 +2034,16 @@
                 "reveal": false
               },
               {
-                "name": "Codex Use your ChatGPT sign-in via Codex CLI",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
               {
-                "name": "Claude Anthropic API key",
+                "name": "Claude Paste an API key from the Anthropic Console.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
@@ -2053,16 +2144,16 @@
                 "reveal": false
               },
               {
-                "name": "Codex Use your ChatGPT sign-in via Codex CLI",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
               {
-                "name": "Claude Anthropic API key",
+                "name": "Claude Paste an API key from the Anthropic Console.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
@@ -2191,16 +2282,16 @@
                 "reveal": false
               },
               {
-                "name": "Codex Use your ChatGPT sign-in via Codex CLI",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
               {
-                "name": "Claude Anthropic API key",
+                "name": "Claude Paste an API key from the Anthropic Console.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
@@ -2320,13 +2411,6 @@
                 "reveal": false
               },
               {
-                "name": "Test connection",
-                "width": 672,
-                "height": 44,
-                "primary": true,
-                "reveal": false
-              },
-              {
                 "name": "$10",
                 "width": 57,
                 "height": 44,
@@ -2442,13 +2526,6 @@
                 "reveal": false
               },
               {
-                "name": "Test connection",
-                "width": 672,
-                "height": 44,
-                "primary": true,
-                "reveal": false
-              },
-              {
                 "name": "$10",
                 "width": 57,
                 "height": 44,
@@ -2547,7 +2624,7 @@
             "inputs": [
               {
                 "tag": "input",
-                "id": "_r_41_",
+                "id": "_r_42_",
                 "measuredElement": "native control",
                 "label": "Input ¢/MTok",
                 "height": 44,
@@ -2556,7 +2633,7 @@
               },
               {
                 "tag": "input",
-                "id": "_r_49_",
+                "id": "_r_4a_",
                 "measuredElement": "native control",
                 "label": "Output ¢/MTok",
                 "height": 44,
@@ -2570,13 +2647,6 @@
                 "width": 165,
                 "height": 44,
                 "primary": false,
-                "reveal": false
-              },
-              {
-                "name": "Test connection",
-                "width": 672,
-                "height": 44,
-                "primary": true,
                 "reveal": false
               },
               {
@@ -2849,16 +2919,16 @@
                 "reveal": false
               },
               {
-                "name": "Codex Use your ChatGPT sign-in via Codex CLI",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
               {
-                "name": "Claude Anthropic API key",
+                "name": "Claude Paste an API key from the Anthropic Console.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
@@ -2959,16 +3029,16 @@
                 "reveal": false
               },
               {
-                "name": "Codex Use your ChatGPT sign-in via Codex CLI",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
               {
-                "name": "Claude Anthropic API key",
+                "name": "Claude Paste an API key from the Anthropic Console.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
@@ -3097,16 +3167,16 @@
                 "reveal": false
               },
               {
-                "name": "Codex Use your ChatGPT sign-in via Codex CLI",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
               {
-                "name": "Claude Anthropic API key",
+                "name": "Claude Paste an API key from the Anthropic Console.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
@@ -3226,13 +3296,6 @@
                 "reveal": false
               },
               {
-                "name": "Test connection",
-                "width": 672,
-                "height": 44,
-                "primary": true,
-                "reveal": false
-              },
-              {
                 "name": "$10",
                 "width": 57,
                 "height": 44,
@@ -3348,13 +3411,6 @@
                 "reveal": false
               },
               {
-                "name": "Test connection",
-                "width": 672,
-                "height": 44,
-                "primary": true,
-                "reveal": false
-              },
-              {
                 "name": "$10",
                 "width": 57,
                 "height": 44,
@@ -3453,7 +3509,7 @@
             "inputs": [
               {
                 "tag": "input",
-                "id": "_r_41_",
+                "id": "_r_42_",
                 "measuredElement": "native control",
                 "label": "Input ¢/MTok",
                 "height": 44,
@@ -3462,7 +3518,7 @@
               },
               {
                 "tag": "input",
-                "id": "_r_49_",
+                "id": "_r_4a_",
                 "measuredElement": "native control",
                 "label": "Output ¢/MTok",
                 "height": 44,
@@ -3476,13 +3532,6 @@
                 "width": 165,
                 "height": 44,
                 "primary": false,
-                "reveal": false
-              },
-              {
-                "name": "Test connection",
-                "width": 672,
-                "height": 44,
-                "primary": true,
                 "reveal": false
               },
               {
@@ -3747,16 +3796,16 @@
                 "reveal": false
               },
               {
-                "name": "Codex Use your ChatGPT sign-in via Codex CLI",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
               {
-                "name": "Claude Anthropic API key",
+                "name": "Claude Paste an API key from the Anthropic Console.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
@@ -3857,16 +3906,16 @@
                 "reveal": false
               },
               {
-                "name": "Codex Use your ChatGPT sign-in via Codex CLI",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
               {
-                "name": "Claude Anthropic API key",
+                "name": "Claude Paste an API key from the Anthropic Console.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
@@ -3995,16 +4044,16 @@
                 "reveal": false
               },
               {
-                "name": "Codex Use your ChatGPT sign-in via Codex CLI",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
               {
-                "name": "Claude Anthropic API key",
+                "name": "Claude Paste an API key from the Anthropic Console.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
@@ -4124,13 +4173,6 @@
                 "reveal": false
               },
               {
-                "name": "Test connection",
-                "width": 672,
-                "height": 44,
-                "primary": true,
-                "reveal": false
-              },
-              {
                 "name": "$10",
                 "width": 57,
                 "height": 44,
@@ -4246,13 +4288,6 @@
                 "reveal": false
               },
               {
-                "name": "Test connection",
-                "width": 672,
-                "height": 44,
-                "primary": true,
-                "reveal": false
-              },
-              {
                 "name": "$10",
                 "width": 57,
                 "height": 44,
@@ -4351,7 +4386,7 @@
             "inputs": [
               {
                 "tag": "input",
-                "id": "_r_41_",
+                "id": "_r_42_",
                 "measuredElement": "native control",
                 "label": "Input ¢/MTok",
                 "height": 44,
@@ -4360,7 +4395,7 @@
               },
               {
                 "tag": "input",
-                "id": "_r_49_",
+                "id": "_r_4a_",
                 "measuredElement": "native control",
                 "label": "Output ¢/MTok",
                 "height": 44,
@@ -4374,13 +4409,6 @@
                 "width": 165,
                 "height": 44,
                 "primary": false,
-                "reveal": false
-              },
-              {
-                "name": "Test connection",
-                "width": 672,
-                "height": 44,
-                "primary": true,
                 "reveal": false
               },
               {
@@ -4653,16 +4681,16 @@
                 "reveal": false
               },
               {
-                "name": "Codex Use your ChatGPT sign-in via Codex CLI",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
               {
-                "name": "Claude Anthropic API key",
+                "name": "Claude Paste an API key from the Anthropic Console.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
@@ -4763,16 +4791,16 @@
                 "reveal": false
               },
               {
-                "name": "Codex Use your ChatGPT sign-in via Codex CLI",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
               {
-                "name": "Claude Anthropic API key",
+                "name": "Claude Paste an API key from the Anthropic Console.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
@@ -4901,16 +4929,16 @@
                 "reveal": false
               },
               {
-                "name": "Codex Use your ChatGPT sign-in via Codex CLI",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
               {
-                "name": "Claude Anthropic API key",
+                "name": "Claude Paste an API key from the Anthropic Console.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
@@ -5030,13 +5058,6 @@
                 "reveal": false
               },
               {
-                "name": "Test connection",
-                "width": 672,
-                "height": 44,
-                "primary": true,
-                "reveal": false
-              },
-              {
                 "name": "$10",
                 "width": 57,
                 "height": 44,
@@ -5152,13 +5173,6 @@
                 "reveal": false
               },
               {
-                "name": "Test connection",
-                "width": 672,
-                "height": 44,
-                "primary": true,
-                "reveal": false
-              },
-              {
                 "name": "$10",
                 "width": 57,
                 "height": 44,
@@ -5257,7 +5271,7 @@
             "inputs": [
               {
                 "tag": "input",
-                "id": "_r_41_",
+                "id": "_r_42_",
                 "measuredElement": "native control",
                 "label": "Input ¢/MTok",
                 "height": 44,
@@ -5266,7 +5280,7 @@
               },
               {
                 "tag": "input",
-                "id": "_r_49_",
+                "id": "_r_4a_",
                 "measuredElement": "native control",
                 "label": "Output ¢/MTok",
                 "height": 44,
@@ -5280,13 +5294,6 @@
                 "width": 165,
                 "height": 44,
                 "primary": false,
-                "reveal": false
-              },
-              {
-                "name": "Test connection",
-                "width": 672,
-                "height": 44,
-                "primary": true,
                 "reveal": false
               },
               {
@@ -5551,16 +5558,16 @@
                 "reveal": false
               },
               {
-                "name": "Codex Use your ChatGPT sign-in via Codex CLI",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
               {
-                "name": "Claude Anthropic API key",
+                "name": "Claude Paste an API key from the Anthropic Console.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
@@ -5661,16 +5668,16 @@
                 "reveal": false
               },
               {
-                "name": "Codex Use your ChatGPT sign-in via Codex CLI",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
               {
-                "name": "Claude Anthropic API key",
+                "name": "Claude Paste an API key from the Anthropic Console.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
@@ -5799,16 +5806,16 @@
                 "reveal": false
               },
               {
-                "name": "Codex Use your ChatGPT sign-in via Codex CLI",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
               {
-                "name": "Claude Anthropic API key",
+                "name": "Claude Paste an API key from the Anthropic Console.",
                 "width": 346,
-                "height": 66,
+                "height": 82.5,
                 "primary": false,
                 "reveal": false
               },
@@ -5928,13 +5935,6 @@
                 "reveal": false
               },
               {
-                "name": "Test connection",
-                "width": 672,
-                "height": 44,
-                "primary": true,
-                "reveal": false
-              },
-              {
                 "name": "$10",
                 "width": 57,
                 "height": 44,
@@ -6050,13 +6050,6 @@
                 "reveal": false
               },
               {
-                "name": "Test connection",
-                "width": 672,
-                "height": 44,
-                "primary": true,
-                "reveal": false
-              },
-              {
                 "name": "$10",
                 "width": 57,
                 "height": 44,
@@ -6155,7 +6148,7 @@
             "inputs": [
               {
                 "tag": "input",
-                "id": "_r_41_",
+                "id": "_r_42_",
                 "measuredElement": "native control",
                 "label": "Input ¢/MTok",
                 "height": 44,
@@ -6164,7 +6157,7 @@
               },
               {
                 "tag": "input",
-                "id": "_r_49_",
+                "id": "_r_4a_",
                 "measuredElement": "native control",
                 "label": "Output ¢/MTok",
                 "height": 44,
@@ -6178,13 +6171,6 @@
                 "width": 165,
                 "height": 44,
                 "primary": false,
-                "reveal": false
-              },
-              {
-                "name": "Test connection",
-                "width": 672,
-                "height": 44,
-                "primary": true,
                 "reveal": false
               },
               {

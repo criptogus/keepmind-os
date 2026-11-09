@@ -1,6 +1,6 @@
 # Renderer design system
 
-The renderer uses Astryx **0.7.11**, the latest stable release on npm (`latest` dist-tag) and GitHub (v0.7.11, 2026-11-07) as of 2026-11-09; 0.7.12 exists only as canary builds. Dependencies were not upgraded. State transitions, draft storage, pricing policy, and IPC ordering remain unchanged; `machine.ts` is untouched.
+The renderer uses Astryx **0.7.11**, the latest stable release on npm (`latest` dist-tag) and GitHub (v0.7.11, 2026-11-07) as of 2026-11-09; 0.7.12 exists only as canary builds. Dependencies were not upgraded. Pricing policy and IPC ordering remain unchanged. The monthly cap starts unset, remains empty through draft restore, and validates on blur or submit.
 
 ## Template structure and components
 
@@ -20,7 +20,7 @@ The workspace is a centered full-height two-column canvas with a fluid task card
 
 `src/renderer/design/zero-agency-theme.css` is the single brand token layer. The bundled OFL 1.1 `assets/fonts/InterVariable.ttf` supplies variable weights 100–900; body, labels and headings use 400/500/600. Vite bundles the font locally under the existing self-only CSP.
 
-Light mode uses a near-white canvas, white cards, neutral side surface, and near-black primary actions with white text. Dark mode uses #0A0A0A canvas and #141414 elevated surfaces. #C8FF00 lime appears only on dark surfaces as the primary/focus/selection accent, with near-black text on filled primary actions. Explicit primary styles correct the neutral theme's otherwise indistinct action surfaces. Secondary control borders use the contrasting border token; purely decorative separators use a reduced-opacity mixture. Contrast is verified by axe (WCAG 2.2 AA tags) in `scripts/a11y-onboarding.mjs`: 0 violations on every onboarding step and the workspace, light and dark.
+Light mode uses a near-white canvas, white cards, neutral side surface, and near-black primary actions with white text. Dark mode uses #0A0A0A canvas and #141414 elevated surfaces. #C8FF00 lime appears only on dark surfaces as the primary/focus/selection accent, with near-black text on filled primary actions. Disabled primary actions use neutral grey in both modes; dark disabled actions use #2A2A2A with #737373 text and a default cursor. Their reason remains readable, and keyboard focus uses a neutral outline. Explicit primary styles correct the neutral theme's otherwise indistinct action surfaces. Secondary control borders use the contrasting border token; purely decorative separators use a reduced-opacity mixture. Contrast is verified by axe (WCAG 2.2 AA tags) in `scripts/a11y-onboarding.mjs`: 0 violations on every onboarding step and the workspace, light and dark.
 
 ## Remaining CSS and its purpose
 
@@ -28,7 +28,7 @@ Light mode uses a near-white canvas, white cards, neutral side surface, and near
 
 - Shell geometry, compact top bar, brand mark, and startup placement establish the desktop canvas.
 - Chat and landing geometry adapt the official templates to the Electron viewport. Direct ChatLayout slot selectors make the message region and dock independent scrolling regions; they avoid fixed positioning and reserved-height guessing.
-- Native composer, radio cards and pills preserve required labels, autocomplete and keyboard behavior. Target dimensions, card containment, one-line descriptions and selected styling are explicit.
+- Native composer, radio cards and pills preserve required labels, autocomplete and keyboard behavior. Target dimensions, card containment, descriptions clamped to two lines with natural card height and equal heights within each grid row and selected styling are explicit.
 - Metadata panel geometry separates scrolling edits from activation. Definition-list spacing and subtle separators complement MetadataList.
 - Workspace geometry balances authoring, empty/review content and policy. The form footer and consent alignment are application-specific.
 - Native input geometry and button token fills ensure 44px inputs/actions and visible primary/secondary differentiation.
@@ -49,3 +49,7 @@ Required commands: `npm run typecheck`, `npm test`, `npm run build`, `node scrip
 The browser flow preserves all existing assertions and scopes the connection-failure alert to the onboarding region and its actual error text, excluding the empty Astryx global live region. Redesign captures use a 1280×820 context and `fullPage: false`; legacy evidence captures remain full-page.
 
 Results on 2026-11-09 (run outside the Codex sandbox, where Chromium cannot launch): typecheck, 137 unit tests, integration, Electron smoke (`ZAOS_SMOKE_LINUX=1 xvfb-run`), secret scan and the onboarding browser flow all pass, with 0 axe violations across 9 steps × light/dark. Evidence: `evidence/a11y/onboarding-summary.json`, `evidence/screenshots/redesign-*.png`.
+
+P1 review follow-up: connector cards, authentication fields, testing and connection status mount only on q3. Later steps retain chat history and their own controls. Codex and Claude cards explain app sign-in and API keys in plain language; Codex login reads “Continue in Codex”. The browser script also checks that q4 begins with an empty cap and no premature error, that later steps unmount auth controls, and that disabled dark activation uses neutral colours. These new browser assertions must be run outside the sandbox.
+
+The transcript inner column keeps its natural content height within the scrolling log, preventing clipped assistant-avatar fragments above the dock.

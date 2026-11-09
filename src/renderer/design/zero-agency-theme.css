@@ -10,6 +10,8 @@
     --color-background-popover: #F0F0ED;
     --color-background-muted: #F0F0ED;
     --color-accent: #0A0A0A;
+    --za-disabled-background: #E0E0E0;
+    --za-disabled-text: #737373;
     --color-accent-muted: #F0F0ED;
     --color-neutral: #F0F0ED;
     --color-text-primary: #0A0A0A;
@@ -44,6 +46,8 @@
     --color-background-popover: #141414;
     --color-background-muted: #202020;
     --color-accent: #C8FF00;
+    --za-disabled-background: #2A2A2A;
+    --za-disabled-text: #737373;
     --color-accent-muted: #0A0A0A;
     --color-neutral: #0A0A0A;
     --color-text-primary: #FAFAFA;

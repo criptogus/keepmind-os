@@ -21,6 +21,8 @@ main { min-width:0; }
 .zero-agency-os .setup-layout > :first-child { flex:1 1 0; min-height:0; overflow:hidden; padding:var(--spacing-6) var(--spacing-8) var(--spacing-4); scroll-padding:var(--spacing-6); }
 .zero-agency-os .setup-layout > :last-child { position:relative; flex-shrink:0; max-height:72%; overflow:auto; background:var(--color-background-body); scroll-padding:var(--spacing-5); }
 .zero-agency-os .onboard-history { width:100%; max-width:720px; margin:0 auto; padding:0; gap:var(--spacing-6); overflow:auto; min-height:0; scroll-padding:var(--spacing-5); }
+/* Keep transcript content at its natural height so the log scrolls instead of clipping message fragments. */
+.zero-agency-os .onboard-history > div { flex:0 0 auto; }
 .onboard-turn { display:grid; gap:var(--spacing-5); animation:message-in .2s ease-out; }
 .zero-agency-os .onboard-system { font-size:14px; line-height:1.6; color:var(--color-text-secondary); text-align:left; justify-content:flex-start; }
 .zero-agency-os .transcript-mark { width:28px; height:28px; border-radius:9px; font-size:15px; line-height:1; }
@@ -52,7 +54,7 @@ main { min-width:0; }
 .provider-mark { display:grid; place-items:center; flex:0 0 38px; height:38px; border-radius:11px; background:var(--color-background-muted); font-size:13px; font-weight:600; }
 .provider-copy { display:grid; gap:var(--spacing-1); min-width:0; flex:1; }
 .provider-copy strong { font-size:13px; font-weight:600; }
-.provider-copy > span { font-size:11px; color:var(--color-text-secondary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.provider-copy > span { font-size:11px; color:var(--color-text-secondary); display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; line-clamp:2; white-space:normal; overflow:hidden; }
 .provider-check { color:var(--color-text-accent); font-size:16px; }
 .za-onboard [aria-checked=true] { border:2px solid var(--color-accent); background:var(--color-accent-muted); }
 .onboard-chips { display:flex; flex-wrap:wrap; gap:var(--spacing-2); }
@@ -105,7 +107,8 @@ textarea { field-sizing:content; max-height:260px; }
 .zero-agency-os button.za-link { min-height:28px; }
 .zero-agency-os .za-primary { background:var(--color-accent); color:var(--color-on-accent); border:1px solid var(--color-accent); border-radius:10px; }
 .zero-agency-os .za-control:not(.za-primary) { border:1px solid var(--color-border); border-radius:10px; }
-.zero-agency-os .za-primary:disabled { opacity:.45; }
+.zero-agency-os .za-primary:is(:disabled,[aria-disabled="true"]) { background:var(--za-disabled-background); color:var(--za-disabled-text); border-color:var(--za-disabled-background); opacity:1; cursor:default; box-shadow:none; }
+.zero-agency-os .za-primary:is(:disabled,[aria-disabled="true"]):focus-visible { outline-color:var(--color-border); }
 /* Visible focus and safe scroll margins across both independent regions. */
 .zero-agency-os :is(input,textarea,select,button,a,[tabindex]) { scroll-margin:var(--spacing-5); }
 .zero-agency-os :focus-visible { outline:2px solid var(--focus-outline-color); outline-offset:3px; }

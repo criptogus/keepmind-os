@@ -13,7 +13,7 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-11-09T17:40:22.653Z",
+  "timestamp": "2026-11-09T17:49:19.983Z",
   "url": "http://zaos-renderer.test/",
   "toolOptions": {
     "runOnly": {
@@ -1131,59 +1131,7 @@
             }
           ],
           "impact": null,
-          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
-          "target": [
-            ".astryx-card > .x17x4s8c.za-primary[data-variant=\"secondary\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-allowed-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attributes are used correctly for the defined role"
-            }
-          ],
-          "none": [
-            {
-              "id": "aria-unsupported-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute is supported"
-            }
-          ],
-          "impact": null,
-          "html": "<div role=\"status\" aria-live=\"polite\" class=\"onboard-field-status\">Connection works.</div>",
-          "target": [
-            ".onboard-field-status[role=\"status\"][aria-live=\"polite\"]"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-allowed-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attributes are used correctly for the defined role"
-            }
-          ],
-          "none": [
-            {
-              "id": "aria-unsupported-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute is supported"
-            }
-          ],
-          "impact": null,
-          "html": "<input inputmode=\"decimal\" id=\"_r_2p_\" role=\"spinbutton\" autocomplete=\"off\" aria-valuenow=\"0\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"0\" style=\"\" aria-describedby=\"_r_2t_\" aria-invalid=\"true\">",
+          "html": "<input inputmode=\"decimal\" id=\"_r_2p_\" role=\"spinbutton\" autocomplete=\"off\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\" aria-describedby=\"_r_2t_\" aria-invalid=\"true\">",
           "target": [
             "#_r_2p_"
           ]
@@ -2053,43 +2001,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
-          "target": [
-            ".astryx-card > .x17x4s8c.za-primary[data-variant=\"secondary\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-conditional-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "ARIA attribute is allowed"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<div role=\"status\" aria-live=\"polite\" class=\"onboard-field-status\">Connection works.</div>",
-          "target": [
-            ".onboard-field-status[role=\"status\"][aria-live=\"polite\"]"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-conditional-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "ARIA attribute is allowed"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<input inputmode=\"decimal\" id=\"_r_2p_\" role=\"spinbutton\" autocomplete=\"off\" aria-valuenow=\"0\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"0\" style=\"\" aria-describedby=\"_r_2t_\" aria-invalid=\"true\">",
+          "html": "<input inputmode=\"decimal\" id=\"_r_2p_\" role=\"spinbutton\" autocomplete=\"off\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\" aria-describedby=\"_r_2t_\" aria-invalid=\"true\">",
           "target": [
             "#_r_2p_"
           ]
@@ -2573,43 +2485,7 @@
             }
           ],
           "impact": null,
-          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
-          "target": [
-            ".astryx-card > .x17x4s8c.za-primary[data-variant=\"secondary\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
-          ]
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "deprecatedrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "minor",
-              "message": "ARIA role is not deprecated"
-            }
-          ],
-          "impact": null,
-          "html": "<div role=\"status\" aria-live=\"polite\" class=\"onboard-field-status\">Connection works.</div>",
-          "target": [
-            ".onboard-field-status[role=\"status\"][aria-live=\"polite\"]"
-          ]
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "deprecatedrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "minor",
-              "message": "ARIA role is not deprecated"
-            }
-          ],
-          "impact": null,
-          "html": "<input inputmode=\"decimal\" id=\"_r_2p_\" role=\"spinbutton\" autocomplete=\"off\" aria-valuenow=\"0\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"0\" style=\"\" aria-describedby=\"_r_2t_\" aria-invalid=\"true\">",
+          "html": "<input inputmode=\"decimal\" id=\"_r_2p_\" role=\"spinbutton\" autocomplete=\"off\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\" aria-describedby=\"_r_2t_\" aria-invalid=\"true\">",
           "target": [
             "#_r_2p_"
           ]
@@ -3687,43 +3563,7 @@
             }
           ],
           "impact": null,
-          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
-          "target": [
-            ".astryx-card > .x17x4s8c.za-primary[data-variant=\"secondary\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
-          ]
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "aria-prohibited-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "ARIA attribute is allowed"
-            }
-          ],
-          "impact": null,
-          "html": "<div role=\"status\" aria-live=\"polite\" class=\"onboard-field-status\">Connection works.</div>",
-          "target": [
-            ".onboard-field-status[role=\"status\"][aria-live=\"polite\"]"
-          ]
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "aria-prohibited-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "ARIA attribute is allowed"
-            }
-          ],
-          "impact": null,
-          "html": "<input inputmode=\"decimal\" id=\"_r_2p_\" role=\"spinbutton\" autocomplete=\"off\" aria-valuenow=\"0\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"0\" style=\"\" aria-describedby=\"_r_2t_\" aria-invalid=\"true\">",
+          "html": "<input inputmode=\"decimal\" id=\"_r_2p_\" role=\"spinbutton\" autocomplete=\"off\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\" aria-describedby=\"_r_2t_\" aria-invalid=\"true\">",
           "target": [
             "#_r_2p_"
           ]
@@ -4207,43 +4047,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
-          "target": [
-            ".astryx-card > .x17x4s8c.za-primary[data-variant=\"secondary\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "aria-required-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "All required ARIA attributes are present"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div role=\"status\" aria-live=\"polite\" class=\"onboard-field-status\">Connection works.</div>",
-          "target": [
-            ".onboard-field-status[role=\"status\"][aria-live=\"polite\"]"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "aria-required-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "All required ARIA attributes are present"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<input inputmode=\"decimal\" id=\"_r_2p_\" role=\"spinbutton\" autocomplete=\"off\" aria-valuenow=\"0\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"0\" style=\"\" aria-describedby=\"_r_2t_\" aria-invalid=\"true\">",
+          "html": "<input inputmode=\"decimal\" id=\"_r_2p_\" role=\"spinbutton\" autocomplete=\"off\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\" aria-describedby=\"_r_2t_\" aria-invalid=\"true\">",
           "target": [
             "#_r_2p_"
           ]
@@ -4681,71 +4485,7 @@
             }
           ],
           "impact": null,
-          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
-          "target": [
-            ".astryx-card > .x17x4s8c.za-primary[data-variant=\"secondary\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
-          ]
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "invalidrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA role is valid"
-            },
-            {
-              "id": "abstractrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "Abstract roles are not used"
-            },
-            {
-              "id": "unsupportedrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA role is supported"
-            }
-          ],
-          "impact": null,
-          "html": "<div role=\"status\" aria-live=\"polite\" class=\"onboard-field-status\">Connection works.</div>",
-          "target": [
-            ".onboard-field-status[role=\"status\"][aria-live=\"polite\"]"
-          ]
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "invalidrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA role is valid"
-            },
-            {
-              "id": "abstractrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "Abstract roles are not used"
-            },
-            {
-              "id": "unsupportedrole",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA role is supported"
-            }
-          ],
-          "impact": null,
-          "html": "<input inputmode=\"decimal\" id=\"_r_2p_\" role=\"spinbutton\" autocomplete=\"off\" aria-valuenow=\"0\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"0\" style=\"\" aria-describedby=\"_r_2t_\" aria-invalid=\"true\">",
+          "html": "<input inputmode=\"decimal\" id=\"_r_2p_\" role=\"spinbutton\" autocomplete=\"off\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\" aria-describedby=\"_r_2t_\" aria-invalid=\"true\">",
           "target": [
             "#_r_2p_"
           ]
@@ -5753,71 +5493,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
-          "target": [
-            ".astryx-card > .x17x4s8c.za-primary[data-variant=\"secondary\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-valid-attr-value",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute values are valid"
-            },
-            {
-              "id": "aria-errormessage",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
-            },
-            {
-              "id": "aria-level",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "aria-level values are valid"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<div role=\"status\" aria-live=\"polite\" class=\"onboard-field-status\">Connection works.</div>",
-          "target": [
-            ".onboard-field-status[role=\"status\"][aria-live=\"polite\"]"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-valid-attr-value",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute values are valid"
-            },
-            {
-              "id": "aria-errormessage",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
-            },
-            {
-              "id": "aria-level",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "aria-level values are valid"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<input inputmode=\"decimal\" id=\"_r_2p_\" role=\"spinbutton\" autocomplete=\"off\" aria-valuenow=\"0\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"0\" style=\"\" aria-describedby=\"_r_2t_\" aria-invalid=\"true\">",
+          "html": "<input inputmode=\"decimal\" id=\"_r_2p_\" role=\"spinbutton\" autocomplete=\"off\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\" aria-describedby=\"_r_2t_\" aria-invalid=\"true\">",
           "target": [
             "#_r_2p_"
           ]
@@ -6801,43 +6477,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span role=\"status\" aria-live=\"polite\" class=\"x10l6tqk x1i1rx1s xjm9jq1 xkdpibf x1717udv xb3r6kr xzpqnlu xuxw1ft xng3xce x13vifvy x1o0tod x47corl x87ps6o\"></span>",
-          "target": [
-            ".astryx-card > .x17x4s8c.za-primary[data-variant=\"secondary\"] > .x1i1rx1s.xjm9jq1.xkdpibf"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "aria-valid-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute name is valid"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div role=\"status\" aria-live=\"polite\" class=\"onboard-field-status\">Connection works.</div>",
-          "target": [
-            ".onboard-field-status[role=\"status\"][aria-live=\"polite\"]"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "aria-valid-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute name is valid"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<input inputmode=\"decimal\" id=\"_r_2p_\" role=\"spinbutton\" autocomplete=\"off\" aria-valuenow=\"0\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"0\" style=\"\" aria-describedby=\"_r_2t_\" aria-invalid=\"true\">",
+          "html": "<input inputmode=\"decimal\" id=\"_r_2p_\" role=\"spinbutton\" autocomplete=\"off\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\" aria-describedby=\"_r_2t_\" aria-invalid=\"true\">",
           "target": [
             "#_r_2p_"
           ]
@@ -7214,7 +6854,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<input inputmode=\"decimal\" id=\"_r_2p_\" role=\"spinbutton\" autocomplete=\"off\" aria-valuenow=\"0\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"0\" style=\"\" aria-describedby=\"_r_2t_\" aria-invalid=\"true\">",
+          "html": "<input inputmode=\"decimal\" id=\"_r_2p_\" role=\"spinbutton\" autocomplete=\"off\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\" aria-describedby=\"_r_2t_\" aria-invalid=\"true\">",
           "target": [
             "#_r_2p_"
           ]
@@ -7263,7 +6903,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<input inputmode=\"decimal\" id=\"_r_2p_\" role=\"spinbutton\" autocomplete=\"off\" aria-valuenow=\"0\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"0\" style=\"\" aria-describedby=\"_r_2t_\" aria-invalid=\"true\">",
+          "html": "<input inputmode=\"decimal\" id=\"_r_2p_\" role=\"spinbutton\" autocomplete=\"off\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\" aria-describedby=\"_r_2t_\" aria-invalid=\"true\">",
           "target": [
             "#_r_2p_"
           ]
@@ -7373,24 +7013,6 @@
           "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 x6k0iem x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 xjbqb8w x1tgivj0 onboard-undo\" data-variant=\"ghost\" data-size=\"sm\" data-elevation=\"none\" data-astryx-pressable=\"\" data-astryx-edge-comp=\"\">",
           "target": [
             ".x6k0iem"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "button-has-visible-text",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "Element has inner text that is visible to screen readers"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\">",
-          "target": [
-            ".astryx-card > .x17x4s8c.za-primary[data-variant=\"secondary\"]"
           ]
         },
         {
@@ -7843,6 +7465,81 @@
             {
               "id": "color-contrast",
               "data": {
+                "fgColor": "#0a0a0a",
+                "bgColor": "#f0f0ed",
+                "contrastRatio": 17.33,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 17.33"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"astryx-chat-message-bubble x78zum5 xdt5ytf xl6temz xashgol x9ynric xjm74w1 xw6l6zx x1mzt3pk x13faqbe xjbqb8w x1tgivj0 x1pzlopt xt970qd onboard-bubble\" data-sender=\"user\" data-variant=\"ghost\" data-density=\"balanced\">Research a topic</div>",
+          "target": [
+            ".onboard-turn:nth-child(3) > .x15zctf7.onboard-user[aria-label=\"Message from user\"] > .xuk3077.x98rzlu.xeuugli > .xuk3077.xzye2dw.xh8yej3 > .astryx-chat-message-bubble.xl6temz[data-sender=\"user\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#fafafa",
+                "bgColor": "#0a0a0a",
+                "contrastRatio": 18.96,
+                "fontSize": "11.3pt (15px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 18.96"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">Z</span>",
+          "target": [
+            ".onboard-turn:nth-child(3) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(3) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#0a0a0a",
+                "bgColor": "#fafafa",
+                "contrastRatio": 18.96,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 18.96"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"astryx-chat-message-bubble x78zum5 xdt5ytf xl6temz xashgol x9ynric xjm74w1 xw6l6zx x1mzt3pk x13faqbe xjbqb8w x1tgivj0 x1pzlopt xt970qd onboard-bubble\" data-sender=\"assistant\" data-variant=\"ghost\" data-density=\"balanced\">Got it. I’ll use the Researcher template.</div>",
+          "target": [
+            ".onboard-turn:nth-child(3) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(3) > .x98rzlu.x1cy8zhl.xeuugli > .xzye2dw.xh8yej3.x1cy8zhl > .astryx-chat-message-bubble.xl6temz.xashgol"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
                 "fgColor": "#fafafa",
                 "bgColor": "#0a0a0a",
                 "contrastRatio": 18.96,
@@ -7993,56 +7690,6 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#ffffff",
-                "bgColor": "#0a0a0a",
-                "contrastRatio": 19.79,
-                "fontSize": "10.5pt (14px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 19.79"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"xb3r6kr xlyipyv xeuugli\">Test connection</span>",
-          "target": [
-            ".astryx-card > .x17x4s8c.za-primary[data-variant=\"secondary\"] > .xs83m0k.xkh2ocl.x1beo9mf > .xlyipyv.xb3r6kr.xeuugli"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#616161",
-                "bgColor": "#ffffff",
-                "contrastRatio": 6.19,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 6.19"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div role=\"status\" aria-live=\"polite\" class=\"onboard-field-status\">Connection works.</div>",
-          "target": [
-            ".onboard-field-status[role=\"status\"][aria-live=\"polite\"]"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
                 "fgColor": "#616161",
                 "bgColor": "#fafafa",
                 "contrastRatio": 5.93,
@@ -8083,7 +7730,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<input inputmode=\"decimal\" id=\"_r_2p_\" role=\"spinbutton\" autocomplete=\"off\" aria-valuenow=\"0\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"0\" style=\"\" aria-describedby=\"_r_2t_\" aria-invalid=\"true\">",
+          "html": "<input inputmode=\"decimal\" id=\"_r_2p_\" role=\"spinbutton\" autocomplete=\"off\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\" aria-describedby=\"_r_2t_\" aria-invalid=\"true\">",
           "target": [
             "#_r_2p_"
           ]
@@ -9066,7 +8713,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<input inputmode=\"decimal\" id=\"_r_2p_\" role=\"spinbutton\" autocomplete=\"off\" aria-valuenow=\"0\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"0\" style=\"\" aria-describedby=\"_r_2t_\" aria-invalid=\"true\">",
+          "html": "<input inputmode=\"decimal\" id=\"_r_2p_\" role=\"spinbutton\" autocomplete=\"off\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\" aria-describedby=\"_r_2t_\" aria-invalid=\"true\">",
           "target": [
             "#_r_2p_"
           ]
@@ -9217,7 +8864,7 @@
             }
           ],
           "impact": null,
-          "html": "<input inputmode=\"decimal\" id=\"_r_2p_\" role=\"spinbutton\" autocomplete=\"off\" aria-valuenow=\"0\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"0\" style=\"\" aria-describedby=\"_r_2t_\" aria-invalid=\"true\">",
+          "html": "<input inputmode=\"decimal\" id=\"_r_2p_\" role=\"spinbutton\" autocomplete=\"off\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\" aria-describedby=\"_r_2t_\" aria-invalid=\"true\">",
           "target": [
             "#_r_2p_"
           ]
@@ -9372,7 +9019,7 @@
             }
           ],
           "impact": null,
-          "html": "<input inputmode=\"decimal\" id=\"_r_2p_\" role=\"spinbutton\" autocomplete=\"off\" aria-valuenow=\"0\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"0\" style=\"\" aria-describedby=\"_r_2t_\" aria-invalid=\"true\">",
+          "html": "<input inputmode=\"decimal\" id=\"_r_2p_\" role=\"spinbutton\" autocomplete=\"off\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\" aria-describedby=\"_r_2t_\" aria-invalid=\"true\">",
           "target": [
             "#_r_2p_"
           ]
@@ -9584,24 +9231,6 @@
           "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 x6k0iem x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 xjbqb8w x1tgivj0 onboard-undo\" data-variant=\"ghost\" data-size=\"sm\" data-elevation=\"none\" data-astryx-pressable=\"\" data-astryx-edge-comp=\"\">",
           "target": [
             ".x6k0iem"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "no-focusable-content",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element does not have focusable descendants"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\">",
-          "target": [
-            ".astryx-card > .x17x4s8c.za-primary[data-variant=\"secondary\"]"
           ]
         },
         {
@@ -9946,24 +9575,6 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"x1ey2m1c x1o0tod xtijo5x x1ja2u2z xc8icb0 x47corl x2lah0s x7wzq59\">",
-          "target": [
-            ".x1ja2u2z"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "focusable-content",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element contains focusable elements"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
           "html": "<div class=\"panel-scroll\">",
           "target": [
             ".panel-scroll"
@@ -10117,38 +9728,6 @@
               "id": "target-size",
               "data": {
                 "minSize": 24,
-                "width": 672,
-                "height": 44
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Control has sufficient size (672px by 44px, should be at least 24px by 24px)"
-            },
-            {
-              "id": "target-offset",
-              "data": {
-                "closestOffset": 24,
-                "minOffset": 24
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Target has sufficient space from its closest neighbors. Safe clickable space has a diameter of 24px which is at least 24px."
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xce4md1 xrrkdod xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x193iq5w x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 x17x4s8c x1tgivj0 za-control za-primary\" data-variant=\"secondary\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\">",
-          "target": [
-            ".astryx-card > .x17x4s8c.za-primary[data-variant=\"secondary\"]"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "target-size",
-              "data": {
-                "minSize": 24,
                 "width": 658,
                 "height": 44
               },
@@ -10170,7 +9749,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<input inputmode=\"decimal\" id=\"_r_2p_\" role=\"spinbutton\" autocomplete=\"off\" aria-valuenow=\"0\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"0\" style=\"\" aria-describedby=\"_r_2t_\" aria-invalid=\"true\">",
+          "html": "<input inputmode=\"decimal\" id=\"_r_2p_\" role=\"spinbutton\" autocomplete=\"off\" class=\"x1lliihq x98rzlu xeuugli xc342km xng3xce x1717udv x9ynric xjm74w1 xf9zqsd xw6l6zx x1tgivj0 xjbqb8w x1a2a7pz xeyghm5\" type=\"text\" value=\"\" style=\"\" aria-describedby=\"_r_2t_\" aria-invalid=\"true\">",
           "target": [
             "#_r_2p_"
           ]

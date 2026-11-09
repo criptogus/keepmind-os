@@ -23,8 +23,8 @@ const connectors: {
     subtitle: string;
     base: string;
 }[] = [
-    { id: 'codex', title: 'Codex', subtitle: 'Use your ChatGPT sign-in via Codex CLI', base: 'https://api.openai.com/v1' },
-    { id: 'claude', title: 'Claude', subtitle: 'Anthropic API key', base: 'https://api.anthropic.com/v1' },
+    { id: 'codex', title: 'Codex', subtitle: 'Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.', base: 'https://api.openai.com/v1' },
+    { id: 'claude', title: 'Claude', subtitle: 'Paste an API key from the Anthropic Console.', base: 'https://api.anthropic.com/v1' },
     { id: 'openrouter', title: 'OpenRouter', subtitle: 'One key, many models', base: 'https://openrouter.ai/api/v1' },
     { id: 'deepseek', title: 'DeepSeek', subtitle: 'API key', base: 'https://api.deepseek.com' },
     { id: 'hermes', title: 'Hermes', subtitle: 'Local, no cloud key', base: 'http://127.0.0.1:8642/v1' },
@@ -191,7 +191,7 @@ export function Onboarding({ progress, onComplete }: {
         string,
         string,
         Step
-    ][] = [['Workspace', s.company || '—', 'q1'], ['Agent role', s.template ? roles[s.template] : '—', 'q2'], ['First task', s.goalDraft || '—', 'q2'], ['Connector', s.connector ? `${connectors.find(c => c.id === s.connector)?.title}${s.last4 ? ' · ••••' + s.last4 : ''}` : '—', 'q3'], ['Model', s.model || (s.mode === 'cli-subscription' ? 'CLI default' : '—'), 'q3'], ['Monthly cap', s.capUsd > 0 ? `$${s.capUsd.toFixed(2)}` : '—', 'q4'], ['Est. max / run', s.mode === 'cli-subscription' ? 'Included in your plan (run cap applies)' : s.capUsd > 0 && pricingKnown(s) ? `$${(s.maxRunCents / 100).toFixed(2)} (derived)` : '—', 'q4'], ['Consent', s.consent ? 'Authorized' : '—', 'q4']];
+    ][] = [['Workspace', s.company || '—', 'q1'], ['Agent role', s.template ? roles[s.template] : '—', 'q2'], ['First task', s.goalDraft || '—', 'q2'], ['Connector', s.connector ? `${connectors.find(c => c.id === s.connector)?.title}${s.last4 ? ' · ••••' + s.last4 : ''}` : '—', 'q3'], ['Model', s.model || (s.mode === 'cli-subscription' ? 'App default' : '—'), 'q3'], ['Monthly cap', (s.capUsd ?? 0) > 0 ? `$${s.capUsd!.toFixed(2)}` : '—', 'q4'], ['Est. max / run', s.mode === 'cli-subscription' ? 'Included in your plan (run cap applies)' : (s.capUsd ?? 0) > 0 && pricingKnown(s) ? `$${(s.maxRunCents / 100).toFixed(2)} (derived)` : '—', 'q4'], ['Consent', s.consent ? 'Authorized' : '—', 'q4']];
     const landing = s.step === 'q1' && !s.turns.length;
     const dock = <div className="onboard-controls" ref={controls}>
  {s.turns.length > 0 && <Button className="onboard-undo" size="sm" variant="ghost" label="Undo last answer" icon={<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"><path d="M9 4 4 9l5 5M4 9h10a6 6 0 0 1 0 12h-3"/></svg>} onClick={() => set(v => transition(v, { type: 'undo' }))}/>}
@@ -204,22 +204,22 @@ export function Onboarding({ progress, onComplete }: {
         setOther(false);
         set(v => transition(v, { type: 'answer', step: 'q2', value: g }));
     } }}/>}
- {(s.step === 'q3' || (!!result && ['q4', 'pricing-confirm'].includes(s.step))) && <>{s.step === 'q3' && <Roving items={connectors} cards selected={s.connector} onSelect={id => void choose(id)}/>}{s.connector && <Card className="onboard-auth" padding={4}>
- {s.step === 'q3' && <>{/* ADR 0001: only the installed vendor CLI owns subscription login and tokens. */}
- {s.mode === 'cli-subscription' ? <>{!detection?.installed ? <p>Install the {s.connector === 'codex' ? 'Codex' : 'Claude'} CLI first, then come back.</p> : !detection.loggedIn ? <Button size="lg" label={s.connector === 'codex' ? 'Continue with ChatGPT' : 'Continue with Claude Code'} onClick={() => void work(() => window.zaos.startConnectorLogin(s.connector!))}/> : <p>Signed in through {s.connector === 'codex' ? 'Codex' : 'Claude Code'} CLI</p>}<Button size="lg" label="Check again" variant="secondary" onClick={() => void work(async () => { await detect(); })}/>{cliCaps()}</> : <>
+ {s.step === 'q3' && <><Roving items={connectors} cards selected={s.connector} onSelect={id => void choose(id)}/>{s.connector && <Card className="onboard-auth" padding={4}>
+ <>{/* ADR 0001: only the installed vendor CLI owns subscription login and tokens. */}
+ {s.mode === 'cli-subscription' ? <>{!detection?.installed ? <p>Install the {s.connector === 'codex' ? 'Codex app' : 'Claude Code'} first, then come back.</p> : !detection.loggedIn ? <Button size="lg" label={s.connector === 'codex' ? 'Continue in Codex' : 'Continue with Claude Code'} onClick={() => void work(() => window.zaos.startConnectorLogin(s.connector!))}/> : <p>Signed in through {s.connector === 'codex' ? 'Codex' : 'Claude Code'}</p>}<Button size="lg" label="Check again" variant="secondary" onClick={() => void work(async () => { await detect(); })}/>{cliCaps()}</> : <>
  {(s.connector === 'custom' || s.connector === 'hermes') && <TextInput size="lg" label="Base URL" type="url" value={s.baseUrl} onChange={baseUrl => patch({ baseUrl, connectorOk: false })}/>}
  {models.length ? <label>Model<select value={s.model} onChange={e => set(v => transition({ ...v, connectorOk: false }, { type: 'catalog', model: e.target.value, catalog: models }))}><option value="">Pick a listed model</option>{models.map(m => <option key={m.id} value={m.id}>{m.id}</option>)}</select></label> : <TextInput size="lg" label="Model" value={s.model} onChange={model => advanced({ model })}/>}
  {s.connector !== 'hermes' && <div className="onboard-key"><TextInput label="API key" size="lg" type={show ? 'text' : 'password'} value={key} onChange={value => { setKey(value); patch({ connectorOk: false }); }} autoComplete="off" hasAutoCorrect={false} hasSpellCheck={false} autoCapitalize="off"/><IconButton size="lg" label={show ? 'Hide' : 'Show'} icon={<span aria-hidden="true">{show ? '◉' : '◎'}</span>} variant="secondary" onClick={() => setShow(!show)}/></div>}</>}
  {s.connector === 'codex' && <button className="za-link" onClick={() => { patch({ mode: 'api-key', connectorOk: false }); }}>Use an OpenAI API key instead</button>}
  {s.connector === 'claude' && claudeCli && <button className="za-link" onClick={() => { patch({ mode: 'cli-subscription', connectorOk: false }); void work(async () => { await detect(); }); }}>Use my installed Claude Code (personal use)</button>}
- </>}
+ </>
  <Button size="lg" className="za-control za-primary" label={s.connector === 'hermes' ? 'Use local Hermes' : 'Test connection'} isDisabled={s.busy || !online || (s.mode === 'cli-subscription' && !detection?.loggedIn)} onClick={() => void test()}/>
  <div role="status" aria-live="polite" className="onboard-field-status">{s.busy ? <><Spinner /> Working…</> : result}</div>
  {error && <Banner status="error" role="alert" title={error}/>}
  </Card>}</>}
  {s.step === 'pricing-confirm' && <div>{prices()}<Button size="lg" className="za-primary" label="Continue" isDisabled={!pricingKnown(s)} onClick={() => set(v => transition(v, { type: 'answer', step: 'pricing-confirm' }))}/></div>}
  {s.step === 'q4' && <div className="cap-controls">{numeric('Monthly spend cap (USD)', s.capUsd, n => patch({ capUsd: n }), { inputMode: 'decimal', autoComplete: 'off', status: status('cap'), onBlur: () => validate('cap', !!capCents(s.capUsd), 'Enter a monthly cap greater than 0.') })}<Roving items={[10, 25, 50, 100].map(n => ({ id: String(n), title: `$${n}` }))} selected={String(s.capUsd)} onSelect={n => patch({ capUsd: Number(n) })}/><CheckboxInput label="I authorize paid execution within this cap. Provider charges are mine." value={s.consent} onChange={consent => patch({ consent })} aria-describedby={errors.consent ? 'onboard-consent-error' : undefined}/><p className="onboard-field-status" id="onboard-consent-error">{errors.consent}</p><Button size="lg" className="za-primary" label="Continue" onClick={() => { const c = validate('cap', !!capCents(s.capUsd), 'Enter a monthly cap greater than 0.'); const ok = validate('consent', s.consent, 'Authorize paid execution to continue.'); if (c && ok)
-        set(v => transition(v, { type: 'answer', step: 'q4', value: `$${v.capUsd.toFixed(2)} · Authorized` })); }}/></div>}
+        set(v => transition(v, { type: 'answer', step: 'q4', value: `$${v.capUsd!.toFixed(2)} · Authorized` })); }}/></div>}
  {(s.step === 'q1' || (s.step === 'q2' && other)) && <form onSubmit={e => { e.preventDefault(); send(); }}>
  {/* ChatComposerInput is contenteditable in 0.7.11, without organization autocomplete.
                 A native labeled textarea preserves field semantics and Enter/Shift+Enter behavior. */}
