@@ -1,12 +1,12 @@
 {
   "suite": "real Paperclip + mock provider",
-  "startedAt": "2026-11-09T14:36:39.484Z",
+  "startedAt": "2026-11-09T14:41:17.192Z",
   "passed": true,
   "unauthenticatedCompaniesStatus": 403,
   "loopbackListenerVerified": true,
   "disableSignUpHonoured": true,
   "reviewAcceptance": {
-    "interactionId": "1d8d3033-4ff0-4601-a99a-907442ddc6ab",
+    "interactionId": "fc7ac436-dca7-40fa-a45e-2931558800a3",
     "interactionStatus": "accepted",
     "issueStatus": "done"
   },
@@ -15,7 +15,7 @@
     "costCents": 1.4,
     "inReview": true,
     "summary": {
-      "companyId": "0a2591f5-b31b-4418-97ba-97cf8675db1e",
+      "companyId": "e74c7275-0d98-4257-993a-bb9d094240d8",
       "eventCount": 2,
       "unpricedEventCount": 0,
       "unknownBillingEventCount": 1,
@@ -24,14 +24,14 @@
       "pricingComplete": true,
       "spendCents": 1.4,
       "spendCentsExact": "1.4000000",
-      "budgetCents": 0,
-      "utilizationPercent": 0
+      "budgetCents": 100,
+      "utilizationPercent": 1.4
     },
     "agentPolicy": {
-      "policyId": "253d8634-3a6f-47e8-aada-75dd079f31e0",
-      "companyId": "0a2591f5-b31b-4418-97ba-97cf8675db1e",
+      "policyId": "481020d8-9695-4b31-8e13-188b02ac91c7",
+      "companyId": "e74c7275-0d98-4257-993a-bb9d094240d8",
       "scopeType": "agent",
-      "scopeId": "767a8b43-a7ff-4866-9eb7-962c5f173c33",
+      "scopeId": "fe7d1588-ee8d-4490-bd9c-510808e0d55c",
       "scopeName": "Researcher",
       "metric": "billed_cents",
       "windowKind": "calendar_month_utc",
@@ -56,16 +56,16 @@
     },
     "dataQualityEvents": [
       {
-        "id": "b2312319-e7f5-4cce-809e-1f91eff45d84",
-        "runId": "e8734d03-3c1e-407e-ad23-8a312dfb9cf1",
-        "agentId": "767a8b43-a7ff-4866-9eb7-962c5f173c33",
+        "id": "e54caa24-5a01-4e44-b533-3d490288530e",
+        "runId": "4a394647-12dc-4d19-90da-5539d13fa888",
+        "agentId": "fe7d1588-ee8d-4490-bd9c-510808e0d55c",
         "agentName": "Researcher",
         "agentAppearance": {
-          "paletteId": "turquoise-cherry",
+          "paletteId": "electric-grove",
           "schemaVersion": 1,
           "characterVersion": "cap-v1"
         },
-        "occurredAt": "2026-11-09T14:37:09.716Z",
+        "occurredAt": "2026-11-09T14:41:43.507Z",
         "provider": "unknown",
         "model": "unknown",
         "reason": "unknown_billing"
@@ -75,5 +75,5 @@
   },
   "zeroCapRejected": true,
   "lowBudgetNoProviderCall": true,
-  "finishedAt": "2026-11-09T14:37:39.023Z"
+  "finishedAt": "2026-11-09T14:42:12.526Z"
 }

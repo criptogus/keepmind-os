@@ -1,0 +1,27 @@
+
+> zero-agency-os@0.1.0 test
+> vitest run --project unit
+
+
+ RUN  v3.2.7 /workspace/zero-agency-os-mvp
+
+ ✓ |unit| test/evidence.test.ts (2 tests) 3ms
+stderr | test/runner.test.mjs > redacts thrown errors containing keys
+{"zaosError":{"step":"provider","method":"POST","path":"/chat/completions","status":null,"code":null,"message":null}}
+
+stderr | test/runner.test.mjs > missing usage leaves cost unknown and never marks review
+{"zaosError":{"step":"provider","method":"POST","path":"/chat/completions","status":null,"code":null,"message":null}}
+
+ ✓ |unit| test/supervisor.test.ts (4 tests) 34ms
+ ✓ |unit| test/runner.test.mjs (22 tests) 44ms
+ ✓ |unit| test/core.test.ts (21 tests) 16ms
+ ✓ |unit| test/orchestrator.test.ts (21 tests) 45ms
+ ✓ |unit| test/electron-shell.test.ts (6 tests) 45ms
+ ✓ |unit| test/services.test.ts (15 tests) 44ms
+ ✓ |unit| test/socket.test.mjs (2 tests) 330ms
+
+ Test Files  8 passed (8)
+      Tests  93 passed (93)
+   Start at  11:41:09
+   Duration  1.07s (transform 678ms, setup 0ms, collect 1.16s, tests 562ms, environment 1ms, prepare 1000ms)
+

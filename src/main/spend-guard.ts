@@ -67,6 +67,7 @@ export class SpendGuard {
         const amount = parseCap(cap);
         if (!Number.isFinite(reservationCents) || reservationCents <= 0 || reservationCents > amount)
             throw new Error('Reservation must be positive and within cap');
+        await this.api.request('PATCH', `/api/companies/${this.companyId}/budgets`, { budgetMonthlyCents: amount });
         await this.api.request('PATCH', `/api/agents/${agentId}/budgets`, { budgetMonthlyCents: amount });
         await this.api.request('POST', `/api/companies/${this.companyId}/budgets/policies`, { scopeType: 'agent', scopeId: agentId, amount, reservationCents, hardStopEnabled: true, unpricedUsagePolicy: 'block', warnPercent: 80, isActive: true });
     }

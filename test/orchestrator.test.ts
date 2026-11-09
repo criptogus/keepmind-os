@@ -30,12 +30,18 @@ it('setup keeps execution off until key, valid cap and explicit consent', async 
     expect(request.mock.calls.find(c => c[1].endsWith('/agents'))?.[2].adapterConfig.env.ZAOS_REVIEWER_USER_ID).toBe('operator-user');
     expect(o.getStatus()).toMatchObject({ paidExecution: false });
     await o.setSpendCap(100);
+    expect(request).toHaveBeenCalledWith('PATCH', '/api/companies/c/budgets', { budgetMonthlyCents: 100 });
     await expect(o.setPaidExecution(true, false)).rejects.toThrow();
     await o.setPaidExecution(true, true);
     expect(o.getStatus()).toMatchObject({ paidExecution: true });
     await o.setPaidExecution(false, false);
     expect(request.mock.calls.at(-1)?.[1]).toBe('/api/agents/a/pause');
     expect(state.cap).toBe(100);
+    const companyBudgets = request.mock.calls.filter(c => c[1] === '/api/companies/c/budgets');
+    expect(companyBudgets).toHaveLength(2); // Setting the cap and enabling execution.
+    expect(companyBudgets.every(c => c[2].budgetMonthlyCents === 100)).toBe(true);
+    await expect(o.setSpendCap(0)).rejects.toThrow();
+    expect(request.mock.calls.filter(c => c[1] === '/api/companies/c/budgets')).toEqual(companyBudgets);
 });
 it('rejects task before consent; telemetry persists without sending', async () => {
     const { o, request, save } = setup();

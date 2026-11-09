@@ -61,7 +61,7 @@ it('applies nonzero hard-stop cap and requires consent', async () => {
     const request = vi.fn().mockResolvedValue({});
     const guard = new SpendGuard({ request }, 'c');
     await guard.applyAgentCap('a', 100, 1);
-    expect(request.mock.calls[1][2]).toMatchObject({ amount: 100, hardStopEnabled: true, unpricedUsagePolicy: 'block', reservationCents: 1 });
+    expect(request.mock.calls[2][2]).toMatchObject({ amount: 100, hardStopEnabled: true, unpricedUsagePolicy: 'block', reservationCents: 1 });
     expect(() => assertPaidRequirements(undefined, false, 100, false)).toThrow();
 });
 it('adjusts only same-run unpriced process receipt with acknowledged ZAOS price', async () => {
@@ -114,4 +114,25 @@ it.each([0, 1, undefined])('verifies policy after idempotent reconciliation retr
     const adjustments = request.mock.calls.filter(c => c[0] === 'POST');
     expect(adjustments).toHaveLength(2);
     expect(adjustments.map(c => c[2].idempotencyKey)).toEqual(['zaos:reconcile:r:u', 'zaos:reconcile:r:u']);
+});
+
+it('syncs positive company and agent budgets; disabling never clears either budget', async () => {
+    const request = vi.fn().mockResolvedValue({});
+    const guard = new SpendGuard({ request }, 'c');
+    for (const cap of [1, 100, 100000]) {
+        await guard.applyAgentCap('a', cap, 1);
+        expect(request).toHaveBeenCalledWith('PATCH', '/api/companies/c/budgets', { budgetMonthlyCents: cap });
+        expect(request).toHaveBeenCalledWith('PATCH', '/api/agents/a/budgets', { budgetMonthlyCents: cap });
+    }
+    const beforeDisable = request.mock.calls.length;
+    await guard.disable('a');
+    expect(request.mock.calls.slice(beforeDisable)).toEqual([['POST', '/api/agents/a/pause', {}]]);
+    for (const cap of [0, -1, NaN, undefined]) {
+        const beforeInvalid = request.mock.calls.length;
+        await expect(guard.applyAgentCap('a', cap, 1)).rejects.toThrow();
+        expect(request.mock.calls.length).toBe(beforeInvalid);
+    }
+    const budgets = request.mock.calls.filter(call => call[1].endsWith('/budgets'));
+    expect(budgets).toHaveLength(6);
+    expect(budgets.every(call => call[2].budgetMonthlyCents > 0)).toBe(true);
 });
