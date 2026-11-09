@@ -1,9 +1,10 @@
+import { executeCli } from './cli.mjs';
 import { pathToFileURL } from 'node:url';
-export async function run(env = process.env, fetcher = fetch, log = console.log, errorLog = console.error) {
+export async function run(env = process.env, fetcher = fetch, log = console.log, errorLog = console.error, cliExecutor = executeCli) {
     let issue, checkedOut = false;
     let context = { step: 'configuration', method: null, path: null, status: null };
     const redact = value => {
-        for (const key of [env.PAPERCLIP_API_KEY, env.ZAOS_PROVIDER_API_KEY].filter(Boolean).sort((a, b) => b.length - a.length))
+        for (const key of Object.entries(env).filter(([key]) => /(?:KEY|TOKEN|SECRET)$/.test(key)).map(([, value]) => value).filter(Boolean).sort((a, b) => b.length - a.length))
             value = value.split(key).join('[redacted]');
         return value;
     };
@@ -47,39 +48,50 @@ export async function run(env = process.env, fetcher = fetch, log = console.log,
         const reviewerUserId = env.ZAOS_REVIEWER_USER_ID?.trim();
         if (!reviewerUserId)
             return await refuse('Human reviewer user ID is required');
+        const cli = env.ZAOS_CONNECTOR_MODE === 'cli-subscription';
         const inputPrice = Number(env.ZAOS_PRICE_INPUT_CENTS_PER_MTOK), outputPrice = Number(env.ZAOS_PRICE_OUTPUT_CENTS_PER_MTOK), maxOutput = Number(env.ZAOS_MAX_OUTPUT_TOKENS), maxRun = Number(env.ZAOS_MAX_RUN_CENTS);
-        if (![inputPrice, outputPrice, maxOutput, maxRun].every(n => Number.isFinite(n) && n > 0) || !Number.isSafeInteger(maxOutput))
+        if (!cli && (![inputPrice, outputPrice, maxOutput, maxRun].every(n => Number.isFinite(n) && n > 0) || !Number.isSafeInteger(maxOutput)))
             return await refuse('Known positive prices and run limits are required');
         const prompt = `${env.ZAOS_AGENT_INSTRUCTIONS || ''}\n${issue.title}\n${issue.description || ''}`;
-        const worst = (Math.ceil(prompt.length / 3) * inputPrice + maxOutput * outputPrice) / 1000000;
-        if (!Number.isFinite(worst) || worst > maxRun)
+        const worst = cli ? 0 : (Math.ceil(prompt.length / 3) * inputPrice + maxOutput * outputPrice) / 1000000;
+        if (!Number.isFinite(worst) || (!cli && worst > maxRun))
             return await refuse('Worst-case cost exceeds per-run maximum');
         const agent = await api('GET', '/api/agents/me');
         const budget = Number(agent.budgetMonthlyCents), spent = Number(agent.spentMonthlyCents);
         if (!Number.isFinite(budget) || budget <= 0 || !Number.isFinite(spent) || spent < 0 || budget - spent < worst)
             return await refuse('Insufficient capped budget');
-        if (!env.ZAOS_PROVIDER_API_KEY || !env.ZAOS_PROVIDER_MODEL)
-            return await refuse('Provider configuration missing');
-        const base = new URL(env.ZAOS_PROVIDER_BASE_URL || 'https://api.openai.com/v1');
-        if (base.username || base.password || base.search || base.hash || (base.protocol !== 'https:' && !(base.protocol === 'http:' && base.hostname === '127.0.0.1')))
-            return await refuse('Unsafe provider URL');
-        context = { step: 'provider', method: 'POST', path: '/chat/completions', status: null };
-        const response = await fetcher(`${base.href.replace(/\/$/, '')}/chat/completions`, { method: 'POST', headers: { Authorization: `Bearer ${env.ZAOS_PROVIDER_API_KEY}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ model: env.ZAOS_PROVIDER_MODEL, messages: [{ role: 'user', content: prompt }], max_tokens: maxOutput }), signal: AbortSignal.timeout(90000), redirect: 'error' });
-        if (!response.ok)
-            throw new Error('Provider request failed');
-        const data = await response.json();
-        const usage = data.usage;
-        if (!usage || ![usage.prompt_tokens, usage.completion_tokens].every(n => Number.isSafeInteger(n) && n >= 0))
-            throw new Error('Provider usage missing');
-        const cost = (usage.prompt_tokens * inputPrice + usage.completion_tokens * outputPrice) / 1000000;
-        if (!Number.isFinite(cost))
-            throw new Error('Invalid usage cost');
-        const result = data.choices?.[0]?.message?.content;
-        if (typeof result !== 'string')
-            throw new Error('Provider result missing');
-        const event = await api('POST', `/api/companies/${env.PAPERCLIP_COMPANY_ID}/cost-events`, { agentId: env.PAPERCLIP_AGENT_ID, issueId: issue.id, heartbeatRunId: env.PAPERCLIP_RUN_ID, provider: base.hostname, model: env.ZAOS_PROVIDER_MODEL, billingType: 'metered_api', costStatus: 'reported', inputTokens: usage.prompt_tokens, outputTokens: usage.completion_tokens, costCents: String(cost), occurredAt: new Date().toISOString(), idempotencyKey: `zaos:${env.PAPERCLIP_RUN_ID}` });
+        let result, cost, provider, model = env.ZAOS_PROVIDER_MODEL || 'cli-default', inputTokens, outputTokens;
+        const billingType = cli ? 'subscription_included' : 'metered_api';
+        if (cli) {
+            if (env.ZAOS_CONNECTOR === 'claude' && env.ZAOS_ENABLE_CLAUDE_SUBSCRIPTION !== '1') return await refuse('Subscription mode unavailable');
+            const data = await cliExecutor(env.ZAOS_CONNECTOR, env.ZAOS_CLI_BIN, env.ZAOS_PROVIDER_MODEL, prompt, Number(env.ZAOS_CLI_TIMEOUT_SEC), env);
+            result = data.result; cost = 0; inputTokens = data.inputTokens; outputTokens = data.outputTokens;
+            provider = env.ZAOS_CONNECTOR === 'codex' ? 'openai-codex-cli' : 'anthropic-claude-cli';
+        } else {
+            if ((!env.ZAOS_PROVIDER_API_KEY && env.ZAOS_CONNECTOR !== 'hermes') || !env.ZAOS_PROVIDER_MODEL)
+                return await refuse('Provider configuration missing');
+            const base = new URL(env.ZAOS_PROVIDER_BASE_URL || 'https://api.openai.com/v1');
+            if (base.username || base.password || base.search || base.hash || (base.protocol !== 'https:' && !(base.protocol === 'http:' && base.hostname === '127.0.0.1')))
+                return await refuse('Unsafe provider URL');
+            context = { step: 'provider', method: 'POST', path: '/chat/completions', status: null };
+            const response = await fetcher(`${base.href.replace(/\/$/, '')}/chat/completions`, { method: 'POST', headers: { ...(env.ZAOS_PROVIDER_API_KEY ? { Authorization: `Bearer ${env.ZAOS_PROVIDER_API_KEY}` } : {}), 'Content-Type': 'application/json' }, body: JSON.stringify({ model: env.ZAOS_PROVIDER_MODEL, messages: [{ role: 'user', content: prompt }], max_tokens: maxOutput }), signal: AbortSignal.timeout(90000), redirect: 'error' });
+            if (!response.ok)
+                throw new Error('Provider request failed');
+            const data = await response.json();
+            const usage = data.usage;
+            if (!usage || ![usage.prompt_tokens, usage.completion_tokens].every(n => Number.isSafeInteger(n) && n >= 0))
+                throw new Error('Provider usage missing');
+            cost = (usage.prompt_tokens * inputPrice + usage.completion_tokens * outputPrice) / 1000000;
+            if (!Number.isFinite(cost))
+                throw new Error('Invalid usage cost');
+            result = data.choices?.[0]?.message?.content;
+            if (typeof result !== 'string')
+                throw new Error('Provider result missing');
+            provider = base.hostname; inputTokens = usage.prompt_tokens; outputTokens = usage.completion_tokens;
+        }
+        const event = await api('POST', `/api/companies/${env.PAPERCLIP_COMPANY_ID}/cost-events`, { agentId: env.PAPERCLIP_AGENT_ID, issueId: issue.id, heartbeatRunId: env.PAPERCLIP_RUN_ID, provider, model, billingType, costStatus: 'reported', inputTokens, outputTokens, costCents: String(cost), occurredAt: new Date().toISOString(), idempotencyKey: `zaos:${env.PAPERCLIP_RUN_ID}` });
         // Bounded acknowledgement only: never echo provider content, errors, keys or environments.
-        log(JSON.stringify({ zaosReceipt: { eventId: event.id, runId: env.PAPERCLIP_RUN_ID, idempotencyKey: `zaos:${env.PAPERCLIP_RUN_ID}`, costCents: cost, costStatus: 'reported' } }));
+        log(JSON.stringify({ zaosReceipt: { eventId: event.id, runId: env.PAPERCLIP_RUN_ID, idempotencyKey: `zaos:${env.PAPERCLIP_RUN_ID}`, costCents: cost, costStatus: 'reported', billingType } }));
         await api('POST', `/api/issues/${issue.id}/comments`, { body: redact(result) }, 'comment');
         await api('POST', `/api/issues/${issue.id}/interactions`, {
             kind: 'request_confirmation', resolverPolicy: 'human_only', addresseeUserId: reviewerUserId,

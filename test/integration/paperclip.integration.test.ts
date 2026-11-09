@@ -1,6 +1,6 @@
 import { sanitizeEvidence } from './evidence';
 import { beforeAll, afterAll, it, expect } from 'vitest';
-import { mkdtemp, rm, readFile, mkdir, writeFile } from 'node:fs/promises';
+import { mkdtemp, rm, readFile, mkdir, writeFile, chmod } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { execFile } from 'node:child_process';
@@ -12,7 +12,7 @@ import { resolveNode } from '../../src/main/node-runtime';
 import { instanceSecrets } from '../../src/main/instance-secrets';
 import { authenticateOperator } from '../../src/main/operator-auth';
 import { PaperclipClient } from '../../src/main/paperclip-client';
-import { Orchestrator } from '../../src/main/orchestrator';
+import { Orchestrator, type WorkspaceState } from '../../src/main/orchestrator';
 import { SpendGuard } from '../../src/main/spend-guard';
 // @ts-expect-error Plain no-dependency ESM fixture.
 import { startMockProvider } from '../fixtures/mock-provider.mjs';
@@ -20,8 +20,8 @@ const evidenceSecrets: string[] = ['mock-provider-key-only', ...Object.entries(p
 const require = createRequire(import.meta.url);
 let dir: string, supervisor: Supervisor, api: PaperclipClient, orchestrator: Orchestrator, base: string;
 let provider: Awaited<ReturnType<typeof startMockProvider>>;
-const state = { managedAgentIds: [] as string[], telemetry: false, companyId: undefined as string | undefined, agentId: undefined as string | undefined };
-const report: Record<string, unknown> = { suite: 'real Paperclip + mock provider', startedAt: new Date().toISOString(), passed: false };
+const state: WorkspaceState = { managedAgentIds: [] as string[], telemetry: false, companyId: undefined as string | undefined, agentId: undefined as string | undefined };
+const report: Record<string, unknown> = { suite: 'real Paperclip + mock provider', startedAt: new Date().toISOString(), passed: false, connectorsExercised: ['custom'] };
 const encryptor = { encrypt: (s: string) => Buffer.from(s).toString('base64'), decrypt: (s: string) => Buffer.from(s, 'base64').toString() }; // test-only; never production storage
 beforeAll(async () => {
     dir = await mkdtemp(join(tmpdir(), 'zaos-integration-'));
@@ -187,6 +187,33 @@ it('executes, reconciles, leaves human review; refuses low budget without provid
     expect(policy!.remainingAmount).toBeCloseTo(98.6);
     expect(runQualityEvents.filter(e => e.reason !== 'unknown_billing')).toHaveLength(0);
     (report.happyPath as Record<string, unknown>).reconciled = true;
+    const previous = process.env.ZAOS_CODEX_BIN;
+    process.env.ZAOS_CODEX_BIN = resolve('test/fixtures/fake-codex.mjs');
+    await chmod(process.env.ZAOS_CODEX_BIN, 0o755);
+    try {
+        await orchestrator.configureConnector({ connectorId: 'codex', mode: 'cli-subscription', model: '', limits: { monthlyRunCap: 2, cliTimeoutSec: 30 } });
+        await orchestrator.setSpendCap(100);
+        await orchestrator.setPaidExecution(true, true);
+        const cliResult = await orchestrator.runTask('CLI fictional research', 'Draft a synthetic result for review.');
+        expect(cliResult.status).toBe('succeeded');
+        expect(cliResult.result).toContain('Fake Codex result');
+        expect(cliResult.costCents).toBe(0);
+        expect(state.monthlyRuns?.[new Date().toISOString().slice(0,7)]).toBe(1);
+        const cliRun = (await orchestrator.listRuns()).find(r => r.issueId === cliResult.issueId)!;
+        const log = await api.request<{ content: string }>('GET', `/api/heartbeat-runs/${cliRun.id}/log`);
+        expect(log.content).toContain('subscription_included');
+        report.connectorsExercised = ['custom','codex:cli-subscription'];
+        report.cliSubscription = { status: cliResult.status, costCents: cliResult.costCents, runCount: 1, billingType: 'subscription_included' };
+        await orchestrator.setPaidExecution(false, false);
+    } finally {
+        if (previous === undefined) delete process.env.ZAOS_CODEX_BIN; else process.env.ZAOS_CODEX_BIN = previous;
+    }
+    // Restore the API runner before testing its worst-case budget refusal.
+    await orchestrator.configureConnector({
+        connectorId: 'custom', mode: 'api', baseUrl: `http://127.0.0.1:${provider.port}/v1`, model: 'mock',
+        prices: { inputCentsPerMTok: 10000, outputCentsPerMTok: 20000 },
+        limits: { maxOutputTokens: 100, maxRunCents: 5 }
+    });
     await expect(orchestrator.setSpendCap(0)).rejects.toThrow('cap of 0');
     report.zeroCapRejected = true;
     await orchestrator.setPaidExecution(false, false);
@@ -209,5 +236,7 @@ it('executes, reconciles, leaves human review; refuses low budget without provid
     expect(comments.some(c => c.body.includes('ZAOS refused'))).toBe(true);
     expect(provider.state.calls).toBe(before);
     report.lowBudgetNoProviderCall = true;
+    await api.request('POST', `/api/agents/${state.agentId}/pause`, {});
+    await api.request('PATCH', `/api/issues/${issue.id}`, { status: 'cancelled' });
     report.passed = true;
 }, 300000);

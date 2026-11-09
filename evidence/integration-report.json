@@ -1,12 +1,16 @@
 {
   "suite": "real Paperclip + mock provider",
-  "startedAt": "2026-11-09T15:19:39.426Z",
+  "startedAt": "2026-11-09T16:07:10.313Z",
   "passed": true,
+  "connectorsExercised": [
+    "custom",
+    "codex:cli-subscription"
+  ],
   "unauthenticatedCompaniesStatus": 403,
   "loopbackListenerVerified": true,
   "disableSignUpHonoured": true,
   "reviewAcceptance": {
-    "interactionId": "9f641636-21b7-444d-b9a6-6df2e60f767b",
+    "interactionId": "05ef3582-6ef0-4ce6-932c-6e836dcacf86",
     "interactionStatus": "accepted",
     "issueStatus": "done"
   },
@@ -15,7 +19,7 @@
     "costCents": 1.4,
     "inReview": true,
     "summary": {
-      "companyId": "08fe13d5-8736-4556-b6ad-d3300e43af69",
+      "companyId": "66f2ac43-db11-45cd-b4bf-e6e7a49929ed",
       "eventCount": 2,
       "unpricedEventCount": 0,
       "unknownBillingEventCount": 1,
@@ -28,10 +32,10 @@
       "utilizationPercent": 1.4
     },
     "agentPolicy": {
-      "policyId": "f5febc09-0a16-4aa2-bd78-f07de0384037",
-      "companyId": "08fe13d5-8736-4556-b6ad-d3300e43af69",
+      "policyId": "c953f96b-d848-4d3f-8b50-221b8f75667f",
+      "companyId": "66f2ac43-db11-45cd-b4bf-e6e7a49929ed",
       "scopeType": "agent",
-      "scopeId": "74e1fcd6-207b-4b07-9329-5d4c5b7646fa",
+      "scopeId": "4f474582-99ab-44ad-8605-2ba314cc08c9",
       "scopeName": "Researcher",
       "metric": "billed_cents",
       "windowKind": "calendar_month_utc",
@@ -56,16 +60,16 @@
     },
     "dataQualityEvents": [
       {
-        "id": "98a1bf88-0328-403f-9e9b-b9f0efac7549",
-        "runId": "4b2dbe38-98dc-4ee7-a714-087005b005c8",
-        "agentId": "74e1fcd6-207b-4b07-9329-5d4c5b7646fa",
+        "id": "1710c1d5-4fd0-47a0-a914-ea902024a9fa",
+        "runId": "9fcb8467-280c-4872-a575-6536bc7f1f2d",
+        "agentId": "4f474582-99ab-44ad-8605-2ba314cc08c9",
         "agentName": "Researcher",
         "agentAppearance": {
-          "paletteId": "deep-tide",
+          "paletteId": "violet-ember",
           "schemaVersion": 1,
           "characterVersion": "cap-v1"
         },
-        "occurredAt": "2026-11-09T15:20:15.685Z",
+        "occurredAt": "2026-11-09T16:07:28.345Z",
         "provider": "unknown",
         "model": "unknown",
         "reason": "unknown_billing"
@@ -73,7 +77,13 @@
     ],
     "reconciled": true
   },
+  "cliSubscription": {
+    "status": "succeeded",
+    "costCents": 0,
+    "runCount": 1,
+    "billingType": "subscription_included"
+  },
   "zeroCapRejected": true,
   "lowBudgetNoProviderCall": true,
-  "finishedAt": "2026-11-09T15:20:44.665Z"
+  "finishedAt": "2026-11-09T16:08:27.429Z"
 }

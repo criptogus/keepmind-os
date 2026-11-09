@@ -2,6 +2,7 @@
   "steps": [
     "ZAOS_SMOKE: TEST-ONLY encryptor enabled; never use real credentials.",
     "Captured startup",
+    "Six connectors listed; fake Codex CLI detected and logged in",
     "Supervisor ready; operator authenticated; startup audit complete",
     "Captured setup-light",
     "Captured setup-dark",
@@ -13,10 +14,56 @@
     "Captured paperclip-board",
     "Supervisor stopped"
   ],
+  "connectorChecks": {
+    "connectors": [
+      {
+        "id": "custom",
+        "modes": [
+          "api"
+        ]
+      },
+      {
+        "id": "hermes",
+        "modes": [
+          "api"
+        ]
+      },
+      {
+        "id": "deepseek",
+        "modes": [
+          "api"
+        ]
+      },
+      {
+        "id": "openrouter",
+        "modes": [
+          "api"
+        ]
+      },
+      {
+        "id": "codex",
+        "modes": [
+          "api-key",
+          "cli-subscription"
+        ]
+      },
+      {
+        "id": "claude",
+        "modes": [
+          "api-key"
+        ]
+      }
+    ],
+    "codex": {
+      "installed": true,
+      "loggedIn": true,
+      "authMethod": "unknown"
+    }
+  },
   "results": {
     "ok": true,
     "task": {
-      "issueId": "c06091a7-b42e-42fa-ae3b-976e2afc21fd",
+      "issueId": "020c9485-c1ef-48d6-85b4-e79151bac100",
       "result": "Mock research result for human review.",
       "costCents": 0.014,
       "spent": 0.014,
@@ -26,11 +73,11 @@
     "supervisor": "stopped"
   },
   "screenshots": [
-    "/workspace/zaos-ive-fixes/evidence/screenshots/startup.png",
-    "/workspace/zaos-ive-fixes/evidence/screenshots/setup-light.png",
-    "/workspace/zaos-ive-fixes/evidence/screenshots/setup-dark.png",
-    "/workspace/zaos-ive-fixes/evidence/screenshots/workspace-light.png",
-    "/workspace/zaos-ive-fixes/evidence/screenshots/workspace-dark.png",
-    "/workspace/zaos-ive-fixes/evidence/screenshots/paperclip-board.png"
+    "/workspace/zaos-onboarding/evidence/screenshots/startup.png",
+    "/workspace/zaos-onboarding/evidence/screenshots/setup-light.png",
+    "/workspace/zaos-onboarding/evidence/screenshots/setup-dark.png",
+    "/workspace/zaos-onboarding/evidence/screenshots/workspace-light.png",
+    "/workspace/zaos-onboarding/evidence/screenshots/workspace-dark.png",
+    "/workspace/zaos-onboarding/evidence/screenshots/paperclip-board.png"
   ]
 }

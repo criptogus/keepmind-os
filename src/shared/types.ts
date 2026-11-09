@@ -1,3 +1,8 @@
+export type ConnectorId = 'custom' | 'openrouter' | 'deepseek' | 'hermes' | 'codex' | 'claude';
+export interface ConnectorModel { id: string; name: string; priceKnown: boolean; inputCentsPerMTok?: number; outputCentsPerMTok?: number; contextLength?: number; maxOutputTokens?: number; pricesRetrievedAt?: string; pricingSource?: string }
+export interface ConnectorDetection { installed: boolean; loggedIn: boolean; authMethod?: 'subscription' | 'api-key' | 'unknown' }
+export interface ConfigureConnector { connectorId: ConnectorId; mode: 'api' | 'api-key' | 'cli-subscription'; baseUrl?: string; model: string; prices?: { inputCentsPerMTok: number; outputCentsPerMTok: number }; limits: { maxOutputTokens?: number; maxRunCents?: number; monthlyRunCap?: number; cliTimeoutSec?: number } }
+export type ConnectorConfig = (ProviderConfig & { connectorId: ConnectorId; mode: 'api'; priceKnown: true; pricingSource?: string; pricesRetrievedAt?: string }) | { connectorId: 'codex' | 'claude'; mode: 'cli-subscription'; model: string; monthlyRunCap: number; cliTimeoutSec: number };
 export interface ReviewInteraction {
     id: string;
     kind: string;
@@ -53,6 +58,11 @@ export interface BoardApi {
     request<T = unknown>(method: string, path: string, body?: unknown): Promise<T>;
 }
 export interface ZaosAPI {
+    listConnectors(): Promise<{ id: ConnectorId; modes: string[] }[]>;
+    detectConnector(id: ConnectorId): Promise<ConnectorDetection>;
+    startConnectorLogin(id: ConnectorId): Promise<void>;
+    listConnectorModels(id: ConnectorId): Promise<ConnectorModel[]>;
+    configureConnector(config: ConfigureConnector): Promise<void>;
     getStatus(): Promise<{
         state: SupervisorState;
         lastError?: string;
@@ -79,6 +89,11 @@ export interface ZaosAPI {
     setTelemetry(enabled: boolean): Promise<void>;
 }
 export interface IpcPayloads {
+    listConnectors: Record<string, never>;
+    detectConnector: { id: ConnectorId };
+    startConnectorLogin: { id: ConnectorId };
+    listConnectorModels: { id: ConnectorId };
+    configureConnector: ConfigureConnector;
     getStatus: Record<string, never>;
     retryStartup: Record<string, never>;
     openBoard: Record<string, never>;

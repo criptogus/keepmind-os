@@ -1,4 +1,6 @@
-import type { Agent, BoardApi, ProviderConfig, Run, Issue, TaskResult, ReviewInteraction } from '../shared/types';
+import { registry, buildConfig, listConnectors, assertSubscription } from './connectors/registry';
+import { resolveCli, startCliLogin } from './connectors/cli';
+import type { ConnectorConfig, ConnectorId, ConfigureConnector, ConnectorDetection, Agent, BoardApi, ProviderConfig, Run, Issue, TaskResult, ReviewInteraction } from '../shared/types';
 import { SpendGuard, assertPaidRequirements, parseCap } from './spend-guard';
 import { templates } from './templates';
 import { validateAdapter } from './adapter-guard';
@@ -8,6 +10,8 @@ export interface WorkspaceState {
     agentId?: string;
     managedAgentIds: string[];
     provider?: ProviderConfig;
+    connector?: ConnectorConfig;
+    monthlyRuns?: Record<string, number>;
     secretId?: string;
     cap?: number;
     telemetry: boolean;
@@ -19,7 +23,35 @@ export class Orchestrator {
         node: string;
         runnerPath: string;
         cwd: string;
-    }, private save: (s: WorkspaceState) => Promise<void>, private status: () => unknown, private sleep = (ms: number) => new Promise<void>(r => setTimeout(r, ms))) {
+    }, private save: (s: WorkspaceState) => Promise<void>, private status: () => unknown, private sleep = (ms: number) => new Promise<void>(r => setTimeout(r, ms)), private detector = (id: ConnectorId): Promise<ConnectorDetection> => registry[id].detect()) {
+        if (!state.connector && state.provider) state.connector = { ...state.provider, connectorId: 'custom', mode: 'api', priceKnown: true };
+    }
+    listConnectors() { return listConnectors(); }
+    detectConnector(id: ConnectorId) { validatePayload('detectConnector', { id }); return this.detector(id); }
+    listConnectorModels(id: ConnectorId) { validatePayload('listConnectorModels', { id }); return registry[id].models(); }
+    async startConnectorLogin(id: ConnectorId) { assertSubscription(id); await startCliLogin(id as 'codex' | 'claude'); }
+    async configureConnector(payload: ConfigureConnector) {
+        validatePayload('configureConnector', payload);
+        await this.setPaidExecution(false, false);
+        const config = await buildConfig(payload);
+        if (this.state.agentId) {
+            const current = await this.api.request<{ adapterConfig: Record<string, unknown> & { env?: Record<string, unknown> } }>('GET', `/api/agents/${this.agent()}`);
+            validateAdapter('process', current.adapterConfig, this.runtime.runnerPath);
+            const env = await this.connectorEnv(config);
+            await this.api.request('PATCH', `/api/agents/${this.agent()}`, { adapterConfig: { ...current.adapterConfig, timeoutSec: config.mode === 'cli-subscription' ? config.cliTimeoutSec + 30 : 120, env: { ZAOS_REVIEWER_USER_ID: current.adapterConfig.env?.ZAOS_REVIEWER_USER_ID, ZAOS_AGENT_INSTRUCTIONS: current.adapterConfig.env?.ZAOS_AGENT_INSTRUCTIONS, ...env } } });
+        }
+        this.state.connector = config;
+        this.state.provider = config.mode === 'api' ? config : undefined;
+        await this.save(this.state);
+    }
+    private async connectorEnv(config: ConnectorConfig): Promise<Record<string, unknown>> {
+        const common = { ZAOS_CONNECTOR: config.connectorId, ZAOS_CONNECTOR_MODE: config.mode, ZAOS_PROVIDER_MODEL: config.model };
+        if (config.mode === 'cli-subscription') {
+            const bin = await resolveCli(config.connectorId);
+            if (!bin) throw new Error('CLI not installed');
+            return { ...common, ZAOS_CLI_BIN: bin, ...(config.connectorId === 'claude' ? { ZAOS_ENABLE_CLAUDE_SUBSCRIPTION: '1' } : {}), ZAOS_CLI_TIMEOUT_SEC: String(config.cliTimeoutSec) };
+        }
+        return { ...common, ZAOS_PROVIDER_BASE_URL: config.baseUrl, ...(this.state.secretId ? { ZAOS_PROVIDER_API_KEY: { type: 'secret_ref', secretId: this.state.secretId, version: 'latest' } } : {}), ZAOS_PRICE_INPUT_CENTS_PER_MTOK: String(config.inputCentsPerMTok), ZAOS_PRICE_OUTPUT_CENTS_PER_MTOK: String(config.outputCentsPerMTok), ZAOS_MAX_OUTPUT_TOKENS: String(config.maxOutputTokens), ZAOS_MAX_RUN_CENTS: String(config.maxRunCents) };
     }
     getStatus() {
         return { ...(this.status() as object), paidExecution: this.paid };
@@ -62,7 +94,7 @@ export class Orchestrator {
         const secret = await this.api.request<{
             id: string;
         }>('POST', `/api/companies/${this.company()}/secrets`, { name: `ZAOS provider ${Date.now()}`, value: key, provider: 'local_encrypted' });
-        if (this.state.agentId) {
+        if (this.state.agentId && this.state.connector?.mode !== 'cli-subscription') {
             const current = await this.api.request<{
                 adapterConfig: Record<string, unknown> & {
                     env?: Record<string, unknown>;
@@ -81,18 +113,20 @@ export class Orchestrator {
         const template = templates.find(t => t.id === templateId);
         if (!template)
             throw new Error('Unknown template');
-        if (!this.state.secretId)
+        if (!this.state.secretId && !this.state.connector)
             throw new Error('Set provider key first');
         const session = await this.api.request<{ userId: string }>('GET', '/api/cli-auth/me');
         if (typeof session.userId !== 'string' || !session.userId.trim())
             throw new Error('Human reviewer user ID is required');
-        const env = { ZAOS_REVIEWER_USER_ID: session.userId, ZAOS_PROVIDER_BASE_URL: provider.baseUrl, ZAOS_PROVIDER_MODEL: provider.model, ZAOS_PROVIDER_API_KEY: { type: 'secret_ref', secretId: this.state.secretId, version: 'latest' }, ZAOS_PRICE_INPUT_CENTS_PER_MTOK: String(provider.inputCentsPerMTok), ZAOS_PRICE_OUTPUT_CENTS_PER_MTOK: String(provider.outputCentsPerMTok), ZAOS_MAX_OUTPUT_TOKENS: String(provider.maxOutputTokens), ZAOS_MAX_RUN_CENTS: String(provider.maxRunCents), ZAOS_AGENT_INSTRUCTIONS: template.instructions };
-        const adapterConfig = { command: this.runtime.node, args: [this.runtime.runnerPath], cwd: this.runtime.cwd, timeoutSec: 120, env };
+        const connector = this.state.connector ?? { ...provider, connectorId: 'custom' as const, mode: 'api' as const, priceKnown: true as const };
+        const env = { ZAOS_REVIEWER_USER_ID: session.userId, ZAOS_AGENT_INSTRUCTIONS: template.instructions, ...await this.connectorEnv(connector) };
+        const adapterConfig = { command: this.runtime.node, args: [this.runtime.runnerPath], cwd: this.runtime.cwd, timeoutSec: connector.mode === 'cli-subscription' ? connector.cliTimeoutSec + 30 : 120, env };
         validateAdapter('process', adapterConfig, this.runtime.runnerPath);
         const agent = await this.api.request<Agent>('POST', `/api/companies/${this.company()}/agents`, { name: template.name, role: template.role, title: template.name, capabilities: template.instructions, adapterType: 'process', adapterConfig });
         this.state.agentId = agent.id;
         this.state.managedAgentIds.push(agent.id);
-        this.state.provider = provider;
+        this.state.connector = connector;
+        this.state.provider = connector.mode === 'api' ? connector : undefined;
         await this.save(this.state);
         await this.guard().disable(agent.id);
         return agent;
@@ -111,8 +145,11 @@ export class Orchestrator {
                 await this.guard().disable(this.state.agentId);
             return;
         }
-        assertPaidRequirements(this.state.provider, !!this.state.secretId, this.state.cap, consent);
-        await this.guard().applyAgentCap(this.agent(), this.state.cap, this.state.provider!.maxRunCents);
+        const config = this.state.connector ?? this.state.provider;
+        const detected = config && 'mode' in config && config.mode === 'cli-subscription' ? await this.detector(config.connectorId) : undefined;
+        if (config && 'mode' in config && config.mode === 'cli-subscription') assertSubscription(config.connectorId);
+        assertPaidRequirements(config, !!this.state.secretId, this.state.cap, consent, detected);
+        await this.guard().applyAgentCap(this.agent(), this.state.cap, this.state.provider?.maxRunCents ?? 1);
         await this.api.request('POST', `/api/agents/${this.agent()}/resume`, {});
         this.paid = true;
     }
@@ -127,12 +164,20 @@ export class Orchestrator {
             throw new Error('A task is already running');
         this.busy = true;
         try {
+            const config = this.state.connector;
+            if (config?.mode === 'cli-subscription') {
+                const month = new Date().toISOString().slice(0, 7);
+                const counts = this.state.monthlyRuns ??= {};
+                if ((counts[month] ?? 0) >= config.monthlyRunCap) throw new Error('Monthly run cap reached');
+                counts[month] = (counts[month] ?? 0) + 1;
+                await this.save(this.state);
+            }
             const before = new Set((await this.listRuns()).map(r => r.id));
             const issue = await this.api.request<Issue>('POST', `/api/companies/${this.company()}/issues`, { title, description, assigneeAgentId: this.agent(), status: 'todo' });
             let completed: Run | undefined;
             let currentIssue = issue;
             let terminalPolls = 0;
-            for (let i = 0; i < 240; i++) {
+            for (let i = 0; i < (config?.mode === 'cli-subscription' ? config.cliTimeoutSec + 90 : 240); i++) {
                 const [runs, latestIssue] = await Promise.all([
                     this.listRuns(), this.api.request<Issue>('GET', `/api/issues/${issue.id}`)
                 ]);

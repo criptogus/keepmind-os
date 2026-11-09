@@ -136,3 +136,45 @@ it.each(['todo', 'done', 'in_review'])('finishes accepted reviews returned to %s
     expect(patches).toEqual(status === 'todo' ? [['PATCH', '/api/issues/issue', { status: 'done' }]] : []);
     expect(request.mock.calls.some(c => c[1].endsWith('/wakeup') || c[1].endsWith('/resume'))).toBe(false);
 });
+
+it('migrates old provider state on construction', () => {
+    const state: WorkspaceState = { provider, managedAgentIds: [], telemetry: false };
+    new Orchestrator({ request: vi.fn() }, state, { node: '/node', runnerPath: '/runner', cwd: '/tmp' }, vi.fn(), () => ({}));
+    expect(state.connector).toMatchObject({ connectorId: 'custom', mode: 'api', priceKnown: true });
+});
+it('persists UTC run counts before issue creation and refuses exhausted caps', async () => {
+    const state: WorkspaceState = { companyId: 'c', agentId: 'a', managedAgentIds: ['a'], telemetry: false, cap: 100, connector: { connectorId: 'codex', mode: 'cli-subscription', model: '', monthlyRunCap: 1, cliTimeoutSec: 30 } };
+    const request = vi.fn(async (_method: string, path: string) => {
+        if (path.endsWith('/heartbeat-runs')) return [];
+        if (path.endsWith('/issues')) throw new Error('synthetic start failure');
+        return {};
+    });
+    const save = vi.fn(async () => {});
+    const detector = vi.fn(async () => ({ installed: true, loggedIn: true }));
+    const o = new Orchestrator({ request: request as import('../src/shared/types').BoardApi['request'] }, state, { node: '/node', runnerPath: '/runner', cwd: '/tmp' }, save, () => ({}), async () => {}, detector);
+    await o.setPaidExecution(true, true);
+    await expect(o.runTask('Task','Body')).rejects.toThrow('synthetic');
+    const month = new Date().toISOString().slice(0,7);
+    expect(state.monthlyRuns?.[month]).toBe(1);
+    expect(save).toHaveBeenCalled();
+    await o.setPaidExecution(true, true);
+    request.mockClear();
+    await expect(o.runTask('Task','Body')).rejects.toThrow('run cap');
+    expect(request.mock.calls.some(([,path]) => path.endsWith('/issues'))).toBe(false);
+});
+
+it('patches the allowlisted runner when switching to a subscription connector', async () => {
+    const { o, state, request } = setup();
+    state.companyId = 'c'; state.agentId = 'a';
+    request.mockImplementation(async () => ({ adapterConfig: { command: '/node', args: ['/runner.mjs'], env: { ZAOS_REVIEWER_USER_ID: 'human', ZAOS_PROVIDER_API_KEY: 'old' } } }));
+    const old = process.env.ZAOS_CODEX_BIN;
+    // Existing executable on PATH is trusted only via a launch env override; no process is invoked here.
+    process.env.ZAOS_CODEX_BIN = process.execPath;
+    try {
+        await o.configureConnector({ connectorId: 'codex', mode: 'cli-subscription', model: '', limits: { monthlyRunCap: 3, cliTimeoutSec: 60 } });
+        const patch = request.mock.calls.find(c => c[0] === 'PATCH')?.[2].adapterConfig;
+        expect(patch.timeoutSec).toBe(90);
+        expect(patch.env).toMatchObject({ ZAOS_CONNECTOR: 'codex', ZAOS_CLI_BIN: process.execPath });
+        expect(patch.env).not.toHaveProperty('ZAOS_PROVIDER_API_KEY');
+    } finally { if (old === undefined) delete process.env.ZAOS_CODEX_BIN; else process.env.ZAOS_CODEX_BIN = old; }
+});

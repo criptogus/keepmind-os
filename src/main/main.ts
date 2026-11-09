@@ -219,6 +219,7 @@ async function openBoard() {
     }
 }
 const api: ZaosAPI = {
+    listConnectors: async () => core().listConnectors(), detectConnector: id => core().detectConnector(id), startConnectorLogin: id => core().startConnectorLogin(id), listConnectorModels: id => core().listConnectorModels(id), configureConnector: config => core().configureConnector(config),
     getStatus: async () => ({ state: error ? 'unavailable' : ready ? supervisor!.state : booting ? 'starting' : supervisor?.state === 'ready' ? 'unavailable' : supervisor?.state ?? 'starting', lastError: error ?? supervisor?.lastError,
         paidExecution: ready && !!orchestrator?.getStatus().paidExecution, configured: !!workspace.agentId && !!workspace.cap, setupProgress: workspace.agentId ? 3 : workspace.secretId ? 2 : workspace.companyId ? 1 : 0, cap: workspace.cap,
         lastResult, logTail: error || supervisor?.state === 'crashed' ? await logTail() : '' }),
@@ -242,10 +243,17 @@ async function modeToggle() {
 }
 async function runSmoke(bootPromise: Promise<void>) {
     let failure: unknown;
+    let connectorChecks: unknown;
     try {
         await capture('startup');
         await bootPromise;
-        core(); steps.push('Supervisor ready; operator authenticated; startup audit complete');
+        core();
+        const connectors = await api.listConnectors();
+        const codexDetection = await api.detectConnector('codex');
+        connectorChecks = { connectors, codex: codexDetection };
+        if (connectors.length !== 6 || !codexDetection.loggedIn) throw new Error('Connector smoke detection failed');
+        steps.push('Six connectors listed; fake Codex CLI detected and logged in');
+        steps.push('Supervisor ready; operator authenticated; startup audit complete');
         window.setSize(1180, 1400);
         await capture('setup-light'); await modeToggle(); await capture('setup-dark'); await modeToggle();
         await api.createCompany('Northstar Fictional Studio');
@@ -264,7 +272,7 @@ async function runSmoke(bootPromise: Promise<void>) {
     await supervisor?.stop(); stopped = true;
     steps.push('Supervisor stopped');
     await mkdir(resolve('evidence'), { recursive: true });
-    await writeFile(resolve('evidence/smoke-report.json'), JSON.stringify({ steps, results: { ok: !failure, error: failure instanceof Error ? failure.message : failure ? String(failure) : undefined, task: lastResult, supervisor: supervisor?.state }, screenshots }, null, 2));
+    await writeFile(resolve('evidence/smoke-report.json'), JSON.stringify({ steps, connectorChecks, results: { ok: !failure, error: failure instanceof Error ? failure.message : failure ? String(failure) : undefined, task: lastResult, supervisor: supervisor?.state }, screenshots }, null, 2));
     app.exit(failure ? 1 : 0);
 }
 if (!app.requestSingleInstanceLock()) app.quit();

@@ -1,15 +1,21 @@
-import type { BoardApi, ProviderConfig } from '../shared/types';
+import type { BoardApi, ProviderConfig, ConnectorConfig, ConnectorDetection } from '../shared/types';
 export function parseCap(value: unknown): number {
     if (typeof value !== 'number' || !Number.isSafeInteger(value) || value <= 0 || value > 100000) {
         throw new Error('Cap must be integer cents from 1 to 100000. A cap of 0 would disable Paperclip\'s budget policy; to block spend, keep paid execution off');
     }
     return value;
 }
-export function assertPaidRequirements(provider: ProviderConfig | undefined, keyPresent: boolean, cap: unknown, consent: boolean) {
+export function assertPaidRequirements(provider: ProviderConfig | ConnectorConfig | undefined, keyPresent: boolean, cap: unknown, consent: boolean, detection?: ConnectorDetection) {
     parseCap(cap);
-    if (!provider || !keyPresent || consent !== true) {
+    if (provider && 'mode' in provider && provider.mode === 'cli-subscription') {
+        if (!consent || !detection?.installed || !detection.loggedIn || !Number.isInteger(provider.monthlyRunCap) || provider.monthlyRunCap < 1 || provider.monthlyRunCap > 1000 || !Number.isInteger(provider.cliTimeoutSec) || provider.cliTimeoutSec < 30 || provider.cliTimeoutSec > 1800) throw new Error('CLI login, consent and run limits required');
+        return;
+    }
+    if (!provider || (!keyPresent && !('connectorId' in provider && provider.connectorId === 'hermes')) || consent !== true) {
         throw new Error('Provider, BYOK key and explicit consent are required');
     }
+    if ('priceKnown' in provider && provider.priceKnown !== true) throw new Error('Known prices required');
+    if (!Number.isSafeInteger(provider.maxOutputTokens)) throw new Error('Invalid output limit');
     for (const n of [provider.inputCentsPerMTok, provider.outputCentsPerMTok, provider.maxRunCents, provider.maxOutputTokens]) {
         if (!Number.isFinite(n) || n <= 0)
             throw new Error('Provider prices and run limits must be positive');
@@ -37,6 +43,7 @@ interface Receipt {
     idempotencyKey: string;
     costCents: number;
     costStatus: 'reported' | 'estimated';
+    billingType?: 'metered_api' | 'subscription_included';
 }
 export function readZaosReceipt(content: string, runId: string): Receipt | undefined {
     // A child stdout write can be split across multiple Paperclip NDJSON chunks.

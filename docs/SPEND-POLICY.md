@@ -15,3 +15,22 @@ Paperclip's process adapter also writes an unknown/unpriced receipt. The board a
 The cap governs Paperclip's local ledger, not the provider's account-wide billing. Costs from other applications, rate errors, concurrent requests outside this orchestrator, provider overrun, or non-token fees may escape this model. Use provider-side limits as well. Disabling does not refund or necessarily cancel already-started requests. Never automatically replay uncertain runs.
 
 A process receipt may remain in `costs/data-quality` with provider `unknown`, reason `unknown_billing`, and zero cents after reconciliation. The event must still be adjusted even when its reason is `unknown_billing` and its cost is zero. Retries use the same per-event adjustment idempotency key; a duplicate/409 is acceptable. After adjustment, reconciliation returns `unknown cost` unless `budgets/overview` confirms the agent policy has `unpricedEventCount: 0`. Integration additionally verifies `costs/summary` (`unpricedEventCount: 0`, `pricingComplete: true`) and the agent policy in `budgets/overview` (`status: "ok"`, `unpricedEventCount: 0`), with no data-quality reason other than `unknown_billing` for the run. The real integration report records these fields and the remaining informational events. For the mock provider's happy path, spend is 1.4 cents and the 100-cent policy has 98.6 cents remaining.
+
+API connector estimates use the selected connector's positive rates with the
+same worst-case formula. Custom, Hermes, Codex API and Claude API require
+operator-supplied rates. OpenRouter live USD/token strings convert to cents per
+million by multiplying by 1e8. Missing, zero, negative (including -1 router
+sentinels) or invalid prices remain unknown and cannot activate paid execution.
+DeepSeek static rates retrieved 2026-11-09 from
+https://api-docs.deepseek.com/quick_start/pricing are PEAK cache-miss rates:
+deepseek-flash (DeepSeek-V4.1-Flash-1017) 30/120 input/output cents per million;
+deepseek-v4-pro 132/396. Off-peak is half; estimates use peak conservatively.
+
+CLI subscription mode still requires the positive monthly USD cap, fresh consent
+and Paperclip hard-stop policy. It additionally requires an integer monthly run
+cap 1..1000 and timeout 30..1800 seconds. The orchestrator persists a UTC-month
+counter before issue creation; restarts never reset it. Failed attempts consume
+a slot. The runner enforces timeout and the adapter allows timeout + 30 seconds.
+Subscription costs are unknown externally: local events report zero cents with
+billingType subscription_included and reported status, plus the usual receipt
+acknowledgement and idempotency key. Vendor plan usage/limits are authoritative.

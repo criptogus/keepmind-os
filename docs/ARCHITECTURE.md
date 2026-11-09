@@ -35,3 +35,12 @@ Packaged external Node entrypoints and their dependencies are unpacked from asar
 renderer, preload, and identity assets remain inside the app archive. The smoke
 uses the same API facade and Orchestrator as IPC, captures actual windows, accepts
 a review, disables execution, stops the supervisor, and writes a structured report.
+
+Provider connectors use `connectors/port.ts` and a trusted registry of six
+adapters. Legacy provider state migrates to custom. The existing setup remains
+available; typed connector IPC uses the same exact frame and payload validation.
+OpenRouter discovers models through injected fetch; other adapters use static or
+operator-specified models. API execution remains in the ZAOS runner. Subscription
+execution delegates to installed Codex/Claude binaries from that runner, never a
+new Paperclip adapter. Binary resolution is trusted main-process PATH discovery
+or launch-time ZAOS_CODEX_BIN / ZAOS_CLAUDE_BIN. See ADR 0001.

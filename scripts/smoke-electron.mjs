@@ -1,5 +1,5 @@
 import { spawn } from 'node:child_process';
-import { mkdtemp, mkdir, writeFile, rm, readFile } from 'node:fs/promises';
+import { mkdtemp, mkdir, writeFile, rm, readFile, chmod } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { startMockProvider } from '../test/fixtures/mock-provider.mjs';
@@ -9,10 +9,12 @@ let provider, child, timer;
 let failure;
 try {
     await rm('evidence/smoke-report.json', { force: true });
+    await chmod(resolve('test/fixtures/fake-codex.mjs'), 0o755);
+    await chmod(resolve('test/fixtures/fake-claude.mjs'), 0o755);
     provider = await startMockProvider();
     const args = ['.', ...(process.env.ZAOS_SMOKE_LINUX === '1' ? ['--no-sandbox'] : [])];
     child = spawn(resolve('node_modules/.bin/electron'), args, {
-        env: { ...process.env, ZAOS_SMOKE: '1', ZAOS_SMOKE_PROVIDER_URL: `http://127.0.0.1:${provider.port}/v1`, ZAOS_USER_DATA: temp, ZAOS_SMOKE_OUT: resolve('evidence/screenshots') },
+        env: { ...process.env, ZAOS_CODEX_BIN: resolve('test/fixtures/fake-codex.mjs'), ZAOS_CLAUDE_BIN: resolve('test/fixtures/fake-claude.mjs'), ZAOS_SMOKE: '1', ZAOS_SMOKE_PROVIDER_URL: `http://127.0.0.1:${provider.port}/v1`, ZAOS_USER_DATA: temp, ZAOS_SMOKE_OUT: resolve('evidence/screenshots') },
         stdio: 'inherit', detached: process.platform !== 'win32',
     });
     await new Promise((resolveExit, reject) => {

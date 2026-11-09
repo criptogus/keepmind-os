@@ -17,10 +17,25 @@ function text(v: unknown, max = 10000) {
 }
 export function validatePayload(channel: string, value: unknown) {
     const p = record(value);
-    const keys: Record<string, string[]> = { getStatus: [], retryStartup: [], openBoard: [], acceptReview: ['issueId'], createCompany: ['name'], createAgentFromTemplate: ['templateId', 'provider'], setProviderKey: ['key'], setSpendCap: ['cap'], setPaidExecution: ['enabled', 'consent'], runTask: ['title', 'description'], listRuns: [], getTelemetry: [], setTelemetry: ['enabled'] };
+    const keys: Record<string, string[]> = { listConnectors: [], detectConnector: ['id'], startConnectorLogin: ['id'], listConnectorModels: ['id'], configureConnector: ['connectorId','mode','baseUrl','model','prices','limits'], getStatus: [], retryStartup: [], openBoard: [], acceptReview: ['issueId'], createCompany: ['name'], createAgentFromTemplate: ['templateId', 'provider'], setProviderKey: ['key'], setSpendCap: ['cap'], setPaidExecution: ['enabled', 'consent'], runTask: ['title', 'description'], listRuns: [], getTelemetry: [], setTelemetry: ['enabled'] };
     if (!keys[channel] || Object.keys(p).some(k => !keys[channel].includes(k)))
         throw new Error('Unknown channel or payload field');
     switch (channel) {
+        case 'detectConnector': case 'startConnectorLogin': case 'listConnectorModels':
+            if (!['custom','openrouter','deepseek','hermes','codex','claude'].includes(String(p.id))) throw new Error('Unknown connector');
+            return p;
+        case 'configureConnector': {
+            validatePayload('detectConnector', { id: p.connectorId });
+            if (!['api','api-key','cli-subscription'].includes(String(p.mode))) throw new Error('Invalid mode');
+            if (typeof p.model !== 'string' || p.model.length > 200 || (p.mode !== 'cli-subscription' && !p.model.trim())) throw new Error('Invalid model');
+            if (p.baseUrl !== undefined) { const u = new URL(text(p.baseUrl)); if (u.username || u.password || u.search || u.hash || (u.protocol !== 'https:' && !(u.protocol === 'http:' && u.hostname === '127.0.0.1'))) throw new Error('Unsafe URL'); }
+            for (const [name, allowed] of [['prices',['inputCentsPerMTok','outputCentsPerMTok']], ['limits',['maxOutputTokens','maxRunCents','monthlyRunCap','cliTimeoutSec']]] as const) {
+                if (name === 'prices' && p[name] === undefined) continue;
+                const values = record(p[name]);
+                if (Object.keys(values).some(k => !(allowed as readonly string[]).includes(k)) || Object.values(values).some(v => typeof v !== 'number' || !Number.isFinite(v) || v <= 0)) throw new Error('Invalid connector limits');
+            }
+            return p;
+        }
         case 'acceptReview': return { issueId: text(p.issueId, 200) };
         case 'createCompany': return { name: text(p.name, 200) };
         case 'setProviderKey': return { key: text(p.key, 8192) };
@@ -37,6 +52,7 @@ export function validatePayload(channel: string, value: unknown) {
         case 'createAgentFromTemplate': {
             text(p.templateId, 100);
             const c = record(p.provider);
+            if (Object.keys(c).some(k => !['baseUrl','model','inputCentsPerMTok','outputCentsPerMTok','maxOutputTokens','maxRunCents'].includes(k))) throw new Error('Unknown provider field');
             const u = new URL(text(c.baseUrl));
             if (u.protocol !== 'https:' && !(u.protocol === 'http:' && u.hostname === '127.0.0.1'))
                 throw new Error('Provider URL must use HTTPS or loopback HTTP');

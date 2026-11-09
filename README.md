@@ -44,3 +44,10 @@ See [Architecture](docs/ARCHITECTURE.md), [Security model](docs/SECURITY-MODEL.m
 [Spend policy](docs/SPEND-POLICY.md), [Telemetry](docs/TELEMETRY.md), and
 [Run on macOS](docs/RUN-MACOS.md). Paperclip is MIT; Zero Agency OS does not copy
 CompanyOS code, UI, or assets. Dependency notices are in THIRD_PARTY_NOTICES.md.
+
+Backend connectors: Custom OpenAI-compatible, OpenRouter (live model pricing),
+DeepSeek (dated peak rates), Hermes local gateway, Codex, and Claude. Codex and
+Claude support API keys with explicit operator prices; installed CLI delegation
+uses the CLI's own login and run/timeout caps. Claude subscription delegation is
+personal/local opt-in only, hidden by default; ZAOS_ENABLE_CLAUDE_SUBSCRIPTION=1
+enables it. See [ADR 0001](docs/adr/0001-subscription-cli-delegation.md).

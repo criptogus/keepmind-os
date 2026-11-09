@@ -135,3 +135,21 @@ it('keeps the review interaction and succeeds when disposition is rejected', asy
     expect(JSON.parse(stderr.mock.calls[0][0]).zaosError).toMatchObject({step: 'review', status: 422});
     expect(s.mock.state.requests.some(r => r.path.endsWith('/release'))).toBe(false);
 });
+
+it('reports subscription receipts and reviews without provider access', async () => {
+    const s = setup(), log = vi.fn(), executor = vi.fn(async () => ({ result: 'CLI draft', inputTokens: 10, outputTokens: 20 }));
+    expect(await run({ ...env, ZAOS_CONNECTOR: 'codex', ZAOS_CONNECTOR_MODE: 'cli-subscription', ZAOS_CLI_BIN: '/trusted/codex', ZAOS_CLI_TIMEOUT_SEC: '30', ZAOS_PRICE_INPUT_CENTS_PER_MTOK: undefined }, s.fetcher, log, vi.fn(), executor)).toMatchObject({ ok: true, costCents: 0 });
+    expect(s.calls()).toBe(0);
+    expect(s.mock.state.events[0]).toMatchObject({ provider: 'openai-codex-cli', billingType: 'subscription_included', costCents: '0', costStatus: 'reported', inputTokens: 10 });
+    expect(JSON.parse(log.mock.calls[0][0]).zaosReceipt.billingType).toBe('subscription_included');
+    expect(s.mock.state.issue.status).toBe('in_review');
+});
+it('omits Authorization for keyless Hermes with injected fetch only', async () => {
+    const s = setup();
+    const fetcher = vi.fn((url, init) => {
+        expect(String(url)).not.toContain(':8642');
+        if (String(url).includes('12346')) expect(init.headers).not.toHaveProperty('Authorization');
+        return s.fetcher(url, init);
+    });
+    expect((await run({ ...env, ZAOS_CONNECTOR: 'hermes', ZAOS_PROVIDER_API_KEY: undefined }, fetcher, vi.fn())).ok).toBe(true);
+});
