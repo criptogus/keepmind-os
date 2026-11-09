@@ -64,3 +64,14 @@ workspace name and human-review intent to the description. The browser harness
 retains the configured cap in status, and smoke verifies real cap persistence.
 
 Pricing confirmation renders its assistant message once in the connection turn. Its dock actions use a spacing-3 gap and the shared secondary control border.
+
+Branding update: the shared BrandMark imports the supplied official PNG assets
+through Vite (64px and 128px srcset). The old letter-mark CSS is removed; the
+remaining logo geometry keeps top bar/avatars at 28px and landing at 40px.
+Powered by links use secondary text tokens (light #616161, dark #A0A0A0), a
+12px font, a 28px minimum target height and a visible 2px focus outline. These
+small shared CSS blocks size raster artwork and native external links. The
+link calls the validated preload method without navigating the renderer.
+The browser harness now checks those links on onboarding, workspace and startup
+in both themes, recording external calls separately from activation calls.
+These updated browser checks have not been run in the sandbox.

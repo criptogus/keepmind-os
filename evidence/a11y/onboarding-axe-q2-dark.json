@@ -13,7 +13,7 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-11-09T18:07:03.452Z",
+  "timestamp": "2026-11-09T18:24:56.230Z",
   "url": "http://zaos-renderer.test/",
   "toolOptions": {
     "runOnly": {
@@ -302,27 +302,6 @@
       "nodes": []
     },
     {
-      "id": "image-alt",
-      "impact": null,
-      "tags": [
-        "cat.text-alternatives",
-        "wcag2a",
-        "wcag111",
-        "section508",
-        "section508.22.a",
-        "TTv5",
-        "TT7.a",
-        "TT7.b",
-        "EN-301-549",
-        "EN-9.1.1.1",
-        "ACT"
-      ],
-      "description": "Ensure <img> elements have alternative text or a role of none or presentation",
-      "help": "Images must have alternative text",
-      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/image-alt?application=playwright",
-      "nodes": []
-    },
-    {
       "id": "input-button-name",
       "impact": null,
       "tags": [
@@ -382,23 +361,6 @@
       "description": "Ensure every form element has a label",
       "help": "Form elements must have labels",
       "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/label?application=playwright",
-      "nodes": []
-    },
-    {
-      "id": "link-in-text-block",
-      "impact": null,
-      "tags": [
-        "cat.color",
-        "wcag2a",
-        "wcag141",
-        "TTv5",
-        "TT13.a",
-        "EN-301-549",
-        "EN-9.1.4.1"
-      ],
-      "description": "Ensure links are distinguished from surrounding text in a way that does not rely on color",
-      "help": "Links must be distinguishable without relying on color",
-      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/link-in-text-block?application=playwright",
       "nodes": []
     },
     {
@@ -2171,9 +2133,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<span class=\"brand-mark\" aria-hidden=\"true\">K</span>",
+          "html": "<img class=\"brand-logo \" alt=\"\" aria-hidden=\"true\" srcset=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png 1x, http://zaos-renderer.test/assets/keepmind-mark-128-BmkJi_5m.png 2x\" src=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png\">",
           "target": [
-            ".app-brand > .brand-mark[aria-hidden=\"true\"]"
+            "img[alt=\"\"]"
           ]
         },
         {
@@ -2238,70 +2200,6 @@
           "html": "<svg aria-hidden=\"true\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\"><circle cx=\"12\" cy=\"12\" r=\"4\"></circle><path d=\"M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5\"></path></svg>",
           "target": [
             "svg[stroke-width=\"1.7\"]"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "focusable-modal-open",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements while a modal is open"
-            },
-            {
-              "id": "focusable-disabled",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements contained within element"
-            },
-            {
-              "id": "focusable-not-tabbable",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements contained within element"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">K</span>",
-          "target": [
-            ".onboard-turn > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"] > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "focusable-modal-open",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements while a modal is open"
-            },
-            {
-              "id": "focusable-disabled",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements contained within element"
-            },
-            {
-              "id": "focusable-not-tabbable",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements contained within element"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">K</span>",
-          "target": [
-            ".x1na6nto > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"] > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
           ]
         },
         {
@@ -5313,31 +5211,6 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#0a0a0a",
-                "bgColor": "#fafafa",
-                "contrastRatio": 18.96,
-                "fontSize": "12.0pt (16px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 18.96"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"brand-mark\" aria-hidden=\"true\">K</span>",
-          "target": [
-            ".app-brand > .brand-mark[aria-hidden=\"true\"]"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
                 "fgColor": "#fafafa",
                 "bgColor": "#0a0a0a",
                 "contrastRatio": 18.96,
@@ -5413,31 +5286,6 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#0a0a0a",
-                "bgColor": "#fafafa",
-                "contrastRatio": 18.96,
-                "fontSize": "11.3pt (15px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 18.96"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">K</span>",
-          "target": [
-            ".onboard-turn > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"] > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
                 "fgColor": "#fafafa",
                 "bgColor": "#0a0a0a",
                 "contrastRatio": 18.96,
@@ -5481,31 +5329,6 @@
           "html": "<div class=\"astryx-chat-message-bubble x78zum5 xdt5ytf xl6temz xashgol x9ynric xjm74w1 xw6l6zx x1mzt3pk x13faqbe xjbqb8w x1tgivj0 x1pzlopt xt970qd onboard-bubble\" data-sender=\"user\" data-variant=\"ghost\" data-density=\"balanced\">Northstar Fiction</div>",
           "target": [
             ".astryx-chat-message-bubble.xl6temz[data-sender=\"user\"]"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#0a0a0a",
-                "bgColor": "#fafafa",
-                "contrastRatio": 18.96,
-                "fontSize": "11.3pt (15px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 18.96"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">K</span>",
-          "target": [
-            ".x1na6nto > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"] > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
           ]
         },
         {
@@ -5832,6 +5655,31 @@
           "target": [
             "#onboard-disabled-reason"
           ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#a0a0a0",
+                "bgColor": "#141414",
+                "contrastRatio": 7.04,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 7.04"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<a class=\"powered-by\" href=\"https://zeroagency.ai\">Powered by Zeroagency.ai</a>",
+          "target": [
+            ".powered-by"
+          ]
         }
       ]
     },
@@ -6110,6 +5958,123 @@
       ]
     },
     {
+      "id": "image-alt",
+      "impact": null,
+      "tags": [
+        "cat.text-alternatives",
+        "wcag2a",
+        "wcag111",
+        "section508",
+        "section508.22.a",
+        "TTv5",
+        "TT7.a",
+        "TT7.b",
+        "EN-301-549",
+        "EN-9.1.1.1",
+        "ACT"
+      ],
+      "description": "Ensure <img> elements have alternative text or a role of none or presentation",
+      "help": "Images must have alternative text",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/image-alt?application=playwright",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "has-alt",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has an alt attribute"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "alt-space-value",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has a valid alt attribute value"
+            }
+          ],
+          "impact": null,
+          "html": "<img class=\"brand-logo transcript-mark\" alt=\"KeepMind\" srcset=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png 1x, http://zaos-renderer.test/assets/keepmind-mark-128-BmkJi_5m.png 2x\" src=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png\">",
+          "target": [
+            ".onboard-turn > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"] > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark[alt=\"KeepMind\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "has-alt",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has an alt attribute"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "alt-space-value",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has a valid alt attribute value"
+            }
+          ],
+          "impact": null,
+          "html": "<img class=\"brand-logo transcript-mark\" alt=\"KeepMind\" srcset=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png 1x, http://zaos-renderer.test/assets/keepmind-mark-128-BmkJi_5m.png 2x\" src=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png\">",
+          "target": [
+            ".x1na6nto > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"] > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark[alt=\"KeepMind\"]"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "link-in-text-block",
+      "impact": null,
+      "tags": [
+        "cat.color",
+        "wcag2a",
+        "wcag141",
+        "TTv5",
+        "TT13.a",
+        "EN-301-549",
+        "EN-9.1.4.1"
+      ],
+      "description": "Ensure links are distinguished from surrounding text in a way that does not rely on color",
+      "help": "Links must be distinguishable without relying on color",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/link-in-text-block?application=playwright",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "link-in-text-block-style",
+              "data": null,
+              "relatedNodes": [
+                {
+                  "html": "<div class=\"panel-footer\">",
+                  "target": [
+                    ".panel-footer"
+                  ]
+                }
+              ],
+              "impact": "serious",
+              "message": "Links can be distinguished from surrounding text by visual styling"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<a class=\"powered-by\" href=\"https://zeroagency.ai\">Powered by Zeroagency.ai</a>",
+          "target": [
+            ".powered-by"
+          ]
+        }
+      ]
+    },
+    {
       "id": "link-name",
       "impact": null,
       "tags": [
@@ -6153,7 +6118,33 @@
           "impact": null,
           "html": "<a class=\"za-skip\" href=\"#workspace-content\">Skip to content</a>",
           "target": [
-            "a"
+            ".za-skip"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has text that is visible to screen readers"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "focusable-no-name",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element is not in tab order or has accessible text"
+            }
+          ],
+          "impact": null,
+          "html": "<a class=\"powered-by\" href=\"https://zeroagency.ai\">Powered by Zeroagency.ai</a>",
+          "target": [
+            ".powered-by"
           ]
         }
       ]
@@ -6261,6 +6252,42 @@
           "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x1v15ycx xioom0i xnjsko4 xt970qd x2lah0s x1x1rfll x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 xjbqb8w x1tgivj0\" data-variant=\"ghost\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" data-mode-toggle=\"true\" aria-label=\"Use light mode\" data-astryx-edge-comp=\"\">",
           "target": [
             "button[data-mode-toggle=\"true\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "no-focusable-content",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have focusable descendants"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<img class=\"brand-logo transcript-mark\" alt=\"KeepMind\" srcset=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png 1x, http://zaos-renderer.test/assets/keepmind-mark-128-BmkJi_5m.png 2x\" src=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png\">",
+          "target": [
+            ".onboard-turn > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"] > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark[alt=\"KeepMind\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "no-focusable-content",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have focusable descendants"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<img class=\"brand-logo transcript-mark\" alt=\"KeepMind\" srcset=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png 1x, http://zaos-renderer.test/assets/keepmind-mark-128-BmkJi_5m.png 2x\" src=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png\">",
+          "target": [
+            ".x1na6nto > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"] > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark[alt=\"KeepMind\"]"
           ]
         },
         {
@@ -6507,7 +6534,7 @@
           "impact": null,
           "html": "<a class=\"za-skip\" href=\"#workspace-content\">Skip to content</a>",
           "target": [
-            "a"
+            ".za-skip"
           ]
         },
         {

@@ -41,6 +41,9 @@ describe('IPC registration', () => {
         expect(api.runTask).toHaveBeenCalledWith('Research', 'Draft a brief');
         await invoke('acceptReview', { issueId: 'issue' });
         expect(api.acceptReview).toHaveBeenCalledWith('issue');
+        await invoke('openExternal', { url: 'https://zeroagency.ai' });
+        expect(api.openExternal).toHaveBeenCalledWith('https://zeroagency.ai');
+        await expect(invoke('openExternal', { url: 'https://zeroagency.ai.evil.com' })).rejects.toThrow();
         await invoke('openBoard', {});
         expect(api.openBoard).toHaveBeenCalledWith();
     });

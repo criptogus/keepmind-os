@@ -8,6 +8,7 @@
     "node": ">=24.11.0"
   },
   "main": "dist/main/main.js",
+  "desktopName": "keepmind-os.desktop",
   "scripts": {
     "build": "vite build --configLoader runner && esbuild src/main/main.ts --bundle --platform=node --format=esm --packages=external --outfile=dist/main/main.js && esbuild src/preload/preload.ts --bundle --platform=node --format=cjs --external:electron --outfile=dist/main/preload.cjs",
     "dev": "npm run build && electron .",
@@ -16,10 +17,12 @@
     "test:integration": "vitest run --config vitest.config.ts --project integration --configLoader runner",
     "typecheck": "tsc --noEmit",
     "smoke:electron": "node scripts/smoke-electron.mjs",
-    "dist:mac": "npm run build && electron-builder --mac",
+    "dist:mac": "npm run build && electron-builder --mac --publish never",
     "astryx": "astryx",
     "scan:secrets": "node scripts/scan-secrets.mjs",
-    "a11y:onboarding": "node scripts/a11y-onboarding.mjs"
+    "a11y:onboarding": "node scripts/a11y-onboarding.mjs",
+    "dist:win": "npm run build && electron-builder --win nsis --x64 --publish never",
+    "dist:linux": "npm run build && electron-builder --linux AppImage deb --x64 --publish never"
   },
   "dependencies": {
     "paperclipai": "2026.1106.0",
@@ -47,14 +50,16 @@
     "appId": "agency.zero.os",
     "productName": "KeepMind OS",
     "directories": {
-      "output": "release"
+      "output": "release",
+      "buildResources": "build"
     },
     "files": [
       "dist/**/*",
       "assets/**/*",
       "package.json",
       "THIRD_PARTY_NOTICES.md",
-      "src/runner/**/*"
+      "src/runner/**/*",
+      "build/icons/512x512.png"
     ],
     "asar": true,
     "asarUnpack": [
@@ -78,7 +83,57 @@
           ]
         }
       ],
-      "identity": null
+      "identity": null,
+      "icon": "build/icon.icns",
+      "category": "public.app-category.productivity",
+      "hardenedRuntime": false,
+      "notarize": false
+    },
+    "artifactName": "KeepMind-OS-${version}-${os}-${arch}.${ext}",
+    "publish": null,
+    "win": {
+      "icon": "build/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": false
+    },
+    "linux": {
+      "syncDesktopName": true,
+      "icon": "build/icons",
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "deb",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "category": "Office",
+      "maintainer": "KeepMind contributors",
+      "synopsis": "A local-first desktop operating layer for human-governed agent teams.",
+      "description": "A local-first desktop operating layer for human-governed agent teams.",
+      "executableName": "keepmind-os"
     }
-  }
+  },
+  "author": {
+    "name": "KeepMind contributors"
+  },
+  "homepage": "https://zeroagency.ai",
+  "description": "A local-first desktop operating layer for human-governed agent teams."
 }

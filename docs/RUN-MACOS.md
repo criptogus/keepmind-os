@@ -8,7 +8,7 @@ Launch with `npm run dev` (build then Electron), or `npm run build && npm start`
 
 The app owns a dedicated Paperclip data directory and selects ephemeral loopback ports for HTTP and embedded PostgreSQL. Keep that directory private and back it up securely. Logs and database files may contain task content. Do not share them publicly.
 
-Packaging is intended through electron-builder using npm run dist:mac, producing unsigned arm64/x64 artifacts. The packaged application is `KeepMind OS.app`; DMG artifacts use the `KeepMind OS` product name. Open the DMG and copy `KeepMind OS.app` to Applications to install it. Signing and notarization are out of scope. Packaging and macOS execution are untested on this box and require operator packaging verification.
+Packaging is intended through electron-builder using npm run dist:mac, producing unsigned arm64/x64 artifacts. The packaged application is `KeepMind OS.app`; artifacts use the `KeepMind-OS-${version}-${os}-${arch}.${ext}` naming pattern. Open the DMG and copy `KeepMind OS.app` to Applications to install it. Signing and notarization are out of scope. Packaging and macOS execution are untested on this box and require operator packaging verification.
 
 On a Linux host with Electron prerequisites and Xvfb, run:
 
@@ -23,3 +23,5 @@ Smoke has an overall six minute limit and no paid provider calls. It writes
 Only the Linux smoke flag adds --no-sandbox. Its Linux encryption fallback is
 explicitly test-only and logged. Failed smoke instances are retained in the
 printed temporary directory for diagnosis; successful instances are removed.
+
+See [Packaging](PACKAGING.md) for all platform commands, manual CI, unsigned warnings, and external Node/PostgreSQL requirements.

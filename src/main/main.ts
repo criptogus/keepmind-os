@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, safeStorage, session, nativeTheme } from 'electron';
+import { app, BrowserWindow, ipcMain, safeStorage, session, nativeTheme, shell } from 'electron';
 import { readFile, readdir, mkdir, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -13,6 +13,7 @@ import { authenticateOperator } from './operator-auth';
 import { PaperclipClient } from './paperclip-client';
 import { Orchestrator } from './orchestrator';
 import type { WorkspaceState } from './orchestrator';
+import { isAllowedExternalUrl, openAllowedExternal } from './external-url';
 import { registerIpc } from './ipc';
 import type { Encryptor, ZaosAPI, TaskResult } from '../shared/types';
 
@@ -91,7 +92,10 @@ function core() {
     return orchestrator;
 }
 function secureWindow(target: BrowserWindow, allowed: (url: string) => boolean) {
-    target.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
+    target.webContents.setWindowOpenHandler(({ url }) => {
+        if (isAllowedExternalUrl(url)) void openAllowedExternal(url, value => shell.openExternal(value)).catch(console.error);
+        return { action: 'deny' };
+    });
     target.webContents.on('will-navigate', (event, url) => { if (!allowed(url)) event.preventDefault(); });
     target.webContents.on('will-frame-navigate', (event) => { if (!allowed(event.url)) event.preventDefault(); });
     target.webContents.on('will-redirect', (event, url) => { if (!allowed(url)) event.preventDefault(); });
@@ -109,7 +113,7 @@ async function openBoard() {
     if (!credentials) throw new Error('Operator credentials are unavailable');
     const response = await partition.fetch(`${origin}/api/auth/sign-in/email`, { method: 'POST', headers: { Origin: origin, 'Content-Type': 'application/json' }, credentials: 'include', body: JSON.stringify({ email: credentials.email, password: credentials.password }), redirect: 'error' });
     if (!response.ok) throw new Error(`Board sign-in failed (${response.status})`);
-    board = new BrowserWindow({ width: 1280, height: 900, title: 'Paperclip board', webPreferences: { partition: 'persist:zaos-board', contextIsolation: true, nodeIntegration: false, sandbox: true, webSecurity: true } });
+    board = new BrowserWindow({ width: 1280, height: 900, title: 'Paperclip board', icon: join(app.getAppPath(), 'build/icons/512x512.png'), webPreferences: { partition: 'persist:zaos-board', contextIsolation: true, nodeIntegration: false, sandbox: true, webSecurity: true } });
     const boardOrigin = origin;
     secureWindow(board, url => { try { return new URL(url).origin === boardOrigin; } catch { return false; } });
     const css = await readFile(paths.identity, 'utf8');
@@ -219,6 +223,7 @@ async function openBoard() {
     }
 }
 const api: ZaosAPI = {
+    openExternal: url => openAllowedExternal(url, value => shell.openExternal(value)),
     testConnector: payload => core().testConnector(payload),
     listConnectors: async () => core().listConnectors(), detectConnector: id => core().detectConnector(id), startConnectorLogin: id => core().startConnectorLogin(id), listConnectorModels: id => core().listConnectorModels(id), configureConnector: config => core().configureConnector(config),
     getStatus: async () => ({ state: error ? 'unavailable' : ready ? supervisor!.state : booting ? 'starting' : supervisor?.state === 'ready' ? 'unavailable' : supervisor?.state ?? 'starting', lastError: error ?? supervisor?.lastError,
@@ -293,7 +298,7 @@ else {
     void app.whenReady().then(async () => {
         if (smoke) { nativeTheme.themeSource = 'light'; const timeout = setTimeout(() => { error = 'Smoke timed out'; app.quit(); }, 350000); timeout.unref(); }
         const ownedUrl = pathToFileURL(paths.renderer).href;
-        window = new BrowserWindow({ width: 1280, height: 820, minWidth: 960, minHeight: 640, title: 'KeepMind OS', webPreferences: { preload: paths.preload, contextIsolation: true, nodeIntegration: false, sandbox: true, webSecurity: true } });
+        window = new BrowserWindow({ width: 1280, height: 820, minWidth: 960, minHeight: 640, title: 'KeepMind OS', icon: join(app.getAppPath(), 'build/icons/512x512.png'), webPreferences: { preload: paths.preload, contextIsolation: true, nodeIntegration: false, sandbox: true, webSecurity: true } });
         secureWindow(window, url => url === ownedUrl);
         window.webContents.session.webRequest.onHeadersReceived((details, callback) => {
             callback({ responseHeaders: { ...details.responseHeaders, ...(details.url.startsWith('file://') ? { 'Content-Security-Policy': [csp] } : {}) } });

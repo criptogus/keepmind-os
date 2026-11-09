@@ -1,3 +1,4 @@
+import { isAllowedExternalUrl } from './external-url';
 import { parseCap } from './spend-guard';
 export function validateSender(sender: {
     url: string;
@@ -17,10 +18,13 @@ function text(v: unknown, max = 10000) {
 }
 export function validatePayload(channel: string, value: unknown) {
     const p = record(value);
-    const keys: Record<string, string[]> = { testConnector: ["connectorId", "mode", "baseUrl", "key"], listConnectors: [], detectConnector: ['id'], startConnectorLogin: ['id'], listConnectorModels: ['id'], configureConnector: ['pricingSource','connectorId','mode','baseUrl','model','prices','limits'], getStatus: [], retryStartup: [], openBoard: [], acceptReview: ['issueId'], createCompany: ['name'], createAgentFromTemplate: ['templateId', 'provider'], setProviderKey: ['key'], setSpendCap: ['cap'], setPaidExecution: ['enabled', 'consent'], runTask: ['title', 'description'], listRuns: [], getTelemetry: [], setTelemetry: ['enabled'] };
+    const keys: Record<string, string[]> = { openExternal: ['url'], testConnector: ["connectorId", "mode", "baseUrl", "key"], listConnectors: [], detectConnector: ['id'], startConnectorLogin: ['id'], listConnectorModels: ['id'], configureConnector: ['pricingSource','connectorId','mode','baseUrl','model','prices','limits'], getStatus: [], retryStartup: [], openBoard: [], acceptReview: ['issueId'], createCompany: ['name'], createAgentFromTemplate: ['templateId', 'provider'], setProviderKey: ['key'], setSpendCap: ['cap'], setPaidExecution: ['enabled', 'consent'], runTask: ['title', 'description'], listRuns: [], getTelemetry: [], setTelemetry: ['enabled'] };
     if (!keys[channel] || Object.keys(p).some(k => !keys[channel].includes(k)))
         throw new Error('Unknown channel or payload field');
     switch (channel) {
+        case 'openExternal':
+            if (!isAllowedExternalUrl(p.url)) throw new Error('External URL is not allowed');
+            return { url: p.url };
         case 'detectConnector': case 'startConnectorLogin': case 'listConnectorModels':
             if (!['custom','openrouter','deepseek','hermes','codex','claude'].includes(String(p.id))) throw new Error('Unknown connector');
             return p;

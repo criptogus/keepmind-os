@@ -13,7 +13,7 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-11-09T18:07:09.932Z",
+  "timestamp": "2026-11-09T18:25:02.445Z",
   "url": "http://zaos-renderer.test/",
   "toolOptions": {
     "runOnly": {
@@ -360,23 +360,6 @@
       "description": "Ensure <input type=\"image\"> elements have alternative text",
       "help": "Image buttons must have alternative text",
       "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/input-image-alt?application=playwright",
-      "nodes": []
-    },
-    {
-      "id": "link-in-text-block",
-      "impact": null,
-      "tags": [
-        "cat.color",
-        "wcag2a",
-        "wcag141",
-        "TTv5",
-        "TT13.a",
-        "EN-301-549",
-        "EN-9.1.4.1"
-      ],
-      "description": "Ensure links are distinguished from surrounding text in a way that does not rely on color",
-      "help": "Links must be distinguishable without relying on color",
-      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/link-in-text-block?application=playwright",
       "nodes": []
     },
     {
@@ -1557,9 +1540,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<span class=\"brand-mark\" aria-hidden=\"true\">K</span>",
+          "html": "<img class=\"brand-logo \" alt=\"\" aria-hidden=\"true\" srcset=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png 1x, http://zaos-renderer.test/assets/keepmind-mark-128-BmkJi_5m.png 2x\" src=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png\">",
           "target": [
-            ".brand-mark"
+            "img"
           ]
         },
         {
@@ -3422,31 +3405,6 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#0a0a0a",
-                "bgColor": "#fafafa",
-                "contrastRatio": 18.96,
-                "fontSize": "12.0pt (16px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 18.96"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"brand-mark\" aria-hidden=\"true\">K</span>",
-          "target": [
-            ".brand-mark"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
                 "fgColor": "#fafafa",
                 "bgColor": "#0a0a0a",
                 "contrastRatio": 18.96,
@@ -3966,6 +3924,31 @@
           "target": [
             ".actions > .xce4md1.xrrkdod.x1ueg155:nth-child(2) > .x1iyjqo2.xs83m0k.xdl72j9 > .xlyipyv.xb3r6kr.xeuugli"
           ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#a0a0a0",
+                "bgColor": "#141414",
+                "contrastRatio": 7.04,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 7.04"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<a class=\"powered-by\" href=\"https://zeroagency.ai\">Powered by Zeroagency.ai</a>",
+          "target": [
+            ".powered-by"
+          ]
         }
       ]
     },
@@ -4439,6 +4422,49 @@
       ]
     },
     {
+      "id": "link-in-text-block",
+      "impact": null,
+      "tags": [
+        "cat.color",
+        "wcag2a",
+        "wcag141",
+        "TTv5",
+        "TT13.a",
+        "EN-301-549",
+        "EN-9.1.4.1"
+      ],
+      "description": "Ensure links are distinguished from surrounding text in a way that does not rely on color",
+      "help": "Links must be distinguishable without relying on color",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/link-in-text-block?application=playwright",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "link-in-text-block-style",
+              "data": null,
+              "relatedNodes": [
+                {
+                  "html": "<div class=\"astryx-card x2kkz0m x153u1i6 xeuugli x7giv3 x1p8z4y0 x1de1mus xw28qpl x9f619 x1vii845 xojybgt xjmlhfd x1ihxwbr x1rqz8me x1omyuck x14rzhog xjej9fs x4poyjn x1u1kw4e x1litavf x1y0btm7 x14i3s5s xs19ii7 x12frdag x1nex4ik xbv1mwh za-card\" data-variant=\"default\" data-elevation=\"none\">",
+                  "target": [
+                    "aside > .astryx-card.x2kkz0m.x153u1i6"
+                  ]
+                }
+              ],
+              "impact": "serious",
+              "message": "Links can be distinguished from surrounding text by visual styling"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<a class=\"powered-by\" href=\"https://zeroagency.ai\">Powered by Zeroagency.ai</a>",
+          "target": [
+            ".powered-by"
+          ]
+        }
+      ]
+    },
+    {
       "id": "link-name",
       "impact": null,
       "tags": [
@@ -4482,7 +4508,33 @@
           "impact": null,
           "html": "<a class=\"za-skip\" href=\"#workspace-content\">Skip to content</a>",
           "target": [
-            "a"
+            ".za-skip"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has text that is visible to screen readers"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "focusable-no-name",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element is not in tab order or has accessible text"
+            }
+          ],
+          "impact": null,
+          "html": "<a class=\"powered-by\" href=\"https://zeroagency.ai\">Powered by Zeroagency.ai</a>",
+          "target": [
+            ".powered-by"
           ]
         }
       ]
@@ -4710,7 +4762,7 @@
           "impact": null,
           "html": "<a class=\"za-skip\" href=\"#workspace-content\">Skip to content</a>",
           "target": [
-            "a"
+            ".za-skip"
           ]
         },
         {

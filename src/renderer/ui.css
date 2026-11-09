@@ -5,7 +5,6 @@ body { margin:0; }
 .app-topbar { height:64px; padding:0 var(--spacing-6); display:flex; align-items:center; justify-content:space-between; gap:var(--spacing-4); border-bottom:1px solid color-mix(in srgb,var(--color-border) 35%,transparent); }
 .app-brand,.topbar-actions,.status-line { display:flex; align-items:center; gap:var(--spacing-3); }
 .app-brand h1 { font-size:15px; font-weight:600; letter-spacing:-.03em; }
-.brand-mark { display:grid; place-items:center; width:32px; height:32px; border-radius:10px; background:var(--color-text-primary); color:var(--color-background-body); font-weight:600; }
 .status-line { font-size:12px; color:var(--color-text-secondary); }
 p { margin:var(--spacing-2) 0; }
 main { min-width:0; }
@@ -25,7 +24,6 @@ main { min-width:0; }
 .zero-agency-os .onboard-history > div { flex:0 0 auto; }
 .onboard-turn { display:grid; gap:var(--spacing-5); animation:message-in .2s ease-out; }
 .zero-agency-os .onboard-system { font-size:14px; line-height:1.6; color:var(--color-text-secondary); text-align:left; justify-content:flex-start; }
-.zero-agency-os .transcript-mark { width:28px; height:28px; border-radius:9px; font-size:15px; line-height:1; }
 .zero-agency-os .onboard-editing { width:100%; justify-content:center; text-align:center; color:var(--color-text-secondary); font-size:13px; }
 .onboard-editing > span { padding:var(--spacing-1) var(--spacing-3); border-radius:20px; background:var(--color-background-muted); }
 .zero-agency-os button.onboard-undo { justify-self:start; min-height:28px; }
@@ -36,7 +34,6 @@ main { min-width:0; }
 .zero-agency-os .onboard-user .onboard-bubble { background:var(--color-background-muted); color:var(--color-text-primary); border-radius:20px; padding:var(--spacing-3) 18px; }
 .onboard-controls { width:min(100%,744px); margin:0 auto; padding:var(--spacing-3) var(--spacing-5) var(--spacing-6); display:grid; gap:var(--spacing-4); }
 .onboard-landing { width:min(100%,720px); margin:auto; padding:var(--spacing-8); display:flex; flex-direction:column; align-items:flex-start; gap:var(--spacing-4); }
-.onboard-landing .landing-mark { width:48px; height:48px; border-radius:15px; margin-bottom:var(--spacing-2); font-size:22px; }
 .onboard-landing h2 { font-size:34px; line-height:1.2; font-weight:600; letter-spacing:-.045em; }
 .onboard-landing .onboard-controls { padding:var(--spacing-2) 0 0; width:100%; }
 /* Native composer retains organization autocomplete and multiline keyboard behavior. */
@@ -128,3 +125,8 @@ textarea { field-sizing:content; max-height:260px; }
 .zero-agency-os .astryx-field-label { flex-direction:row; align-items:center; justify-content:flex-start; }
 
 .pricing-actions { display:flex; flex-wrap:wrap; gap:var(--spacing-3); }
+
+.brand-logo { display:block; width:28px; height:28px; flex-shrink:0; object-fit:contain; }
+.onboard-landing .landing-mark { width:40px; height:40px; margin-bottom:var(--spacing-2); }
+.powered-by { display:inline-flex; align-items:center; min-height:28px; min-width:24px; font-size:12px; line-height:1.5; color:var(--color-text-secondary); border-radius:var(--spacing-1); }
+.zero-agency-os .powered-by:focus-visible { outline:2px solid var(--focus-outline-color); outline-offset:3px; }

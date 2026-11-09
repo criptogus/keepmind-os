@@ -51,6 +51,11 @@
       "count": 0
     },
     {
+      "step": "startup",
+      "mode": "light",
+      "count": 0
+    },
+    {
       "step": "q1",
       "mode": "dark",
       "count": 0
@@ -99,6 +104,11 @@
       "step": "workspace",
       "mode": "dark",
       "count": 0
+    },
+    {
+      "step": "startup",
+      "mode": "dark",
+      "count": 0
     }
   ],
   "checks": [
@@ -117,10 +127,44 @@
       }
     },
     {
+      "name": "light: onboarding Powered by target",
+      "pass": true,
+      "detail": {
+        "x": 965,
+        "y": 772,
+        "width": 152,
+        "height": 28
+      }
+    },
+    {
+      "name": "light: onboarding Powered by keyboard focus",
+      "pass": true
+    },
+    {
+      "name": "light: onboarding Powered by typography and focus",
+      "pass": true,
+      "detail": {
+        "size": 12,
+        "outline": "solid",
+        "outlineWidth": 2
+      }
+    },
+    {
+      "name": "light: onboarding Powered by IPC without navigation",
+      "pass": true,
+      "detail": {
+        "calls": [
+          "https://zeroagency.ai"
+        ],
+        "url": "http://zaos-renderer.test/",
+        "navigated": false
+      }
+    },
+    {
       "name": "light: q1 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 712
+        "elapsedMs": 953
       }
     },
     {
@@ -134,37 +178,37 @@
       "name": "light: capture q2 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 535
+        "elapsedMs": 571
       }
     },
     {
       "name": "light: q2 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 575
+        "elapsedMs": 611
       }
     },
     {
       "name": "light: capture q3 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 533
+        "elapsedMs": 548
       }
     },
     {
       "name": "light: answer confirmation question order",
       "pass": true,
       "detail": {
-        "answer": 221,
-        "confirmation": 238,
-        "question": 280
+        "answer": 219,
+        "confirmation": 235,
+        "question": 276
       }
     },
     {
       "name": "light: q3 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 576
+        "elapsedMs": 587
       }
     },
     {
@@ -218,7 +262,7 @@
       "name": "light: field focus completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 12
+        "elapsedMs": 14
       }
     },
     {
@@ -247,35 +291,35 @@
       "name": "light: advanced labels completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 81
+        "elapsedMs": 82
       }
     },
     {
       "name": "light: capture q3-auth completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 522
+        "elapsedMs": 553
       }
     },
     {
       "name": "light: q3-auth completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 739
+        "elapsedMs": 772
       }
     },
     {
       "name": "light: capture connection-error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 526
+        "elapsedMs": 529
       }
     },
     {
       "name": "light: connection-error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 564
+        "elapsedMs": 570
       }
     },
     {
@@ -307,21 +351,21 @@
       "name": "light: capture q4 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 509
+        "elapsedMs": 519
       }
     },
     {
       "name": "light: q4 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 578
+        "elapsedMs": 567
       }
     },
     {
       "name": "light: capture error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 553
+        "elapsedMs": 589
       }
     },
     {
@@ -339,7 +383,7 @@
       "name": "light: error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 580
+        "elapsedMs": 652
       }
     },
     {
@@ -350,7 +394,7 @@
       "name": "light: capture q3-pricing-confirm completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 508
+        "elapsedMs": 510
       }
     },
     {
@@ -374,7 +418,7 @@
       "name": "light: q3-pricing-confirm completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 651
+        "elapsedMs": 673
       }
     },
     {
@@ -418,21 +462,21 @@
       "name": "light: capture summary completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 515
+        "elapsedMs": 508
       }
     },
     {
       "name": "light: summary completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 761
+        "elapsedMs": 733
       }
     },
     {
       "name": "light: tab-test completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 1024
+        "elapsedMs": 1109
       }
     },
     {
@@ -453,14 +497,14 @@
       "name": "light: resume completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 145
+        "elapsedMs": 151
       }
     },
     {
       "name": "light: capture workspace completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 488
+        "elapsedMs": 453
       }
     },
     {
@@ -468,6 +512,40 @@
       "pass": true,
       "detail": {
         "observed": true
+      }
+    },
+    {
+      "name": "light: workspace Powered by target",
+      "pass": true,
+      "detail": {
+        "x": 885,
+        "y": 601.78125,
+        "width": 152,
+        "height": 28
+      }
+    },
+    {
+      "name": "light: workspace Powered by keyboard focus",
+      "pass": true
+    },
+    {
+      "name": "light: workspace Powered by typography and focus",
+      "pass": true,
+      "detail": {
+        "size": 12,
+        "outline": "solid",
+        "outlineWidth": 2
+      }
+    },
+    {
+      "name": "light: workspace Powered by IPC without navigation",
+      "pass": true,
+      "detail": {
+        "calls": [
+          "https://zeroagency.ai"
+        ],
+        "url": "http://zaos-renderer.test/",
+        "navigated": false
       }
     },
     {
@@ -485,7 +563,49 @@
       "name": "light: workspace completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 831
+        "elapsedMs": 844
+      }
+    },
+    {
+      "name": "light: startup Powered by target",
+      "pass": true,
+      "detail": {
+        "x": 564,
+        "y": 427.390625,
+        "width": 152,
+        "height": 28
+      }
+    },
+    {
+      "name": "light: startup Powered by keyboard focus",
+      "pass": true
+    },
+    {
+      "name": "light: startup Powered by typography and focus",
+      "pass": true,
+      "detail": {
+        "size": 12,
+        "outline": "solid",
+        "outlineWidth": 2
+      }
+    },
+    {
+      "name": "light: startup Powered by IPC without navigation",
+      "pass": true,
+      "detail": {
+        "calls": [
+          "https://zeroagency.ai",
+          "https://zeroagency.ai"
+        ],
+        "url": "http://zaos-renderer.test/",
+        "navigated": false
+      }
+    },
+    {
+      "name": "light: startup Powered by completed",
+      "pass": true,
+      "detail": {
+        "elapsedMs": 680
       }
     },
     {
@@ -511,14 +631,48 @@
       "name": "dark: capture q1 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 601
+        "elapsedMs": 537
+      }
+    },
+    {
+      "name": "dark: onboarding Powered by target",
+      "pass": true,
+      "detail": {
+        "x": 965,
+        "y": 772,
+        "width": 152,
+        "height": 28
+      }
+    },
+    {
+      "name": "dark: onboarding Powered by keyboard focus",
+      "pass": true
+    },
+    {
+      "name": "dark: onboarding Powered by typography and focus",
+      "pass": true,
+      "detail": {
+        "size": 12,
+        "outline": "solid",
+        "outlineWidth": 2
+      }
+    },
+    {
+      "name": "dark: onboarding Powered by IPC without navigation",
+      "pass": true,
+      "detail": {
+        "calls": [
+          "https://zeroagency.ai"
+        ],
+        "url": "http://zaos-renderer.test/",
+        "navigated": false
       }
     },
     {
       "name": "dark: q1 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 756
+        "elapsedMs": 827
       }
     },
     {
@@ -532,37 +686,37 @@
       "name": "dark: capture q2 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 613
+        "elapsedMs": 539
       }
     },
     {
       "name": "dark: q2 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 651
+        "elapsedMs": 571
       }
     },
     {
       "name": "dark: capture q3 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 501
+        "elapsedMs": 513
       }
     },
     {
       "name": "dark: answer confirmation question order",
       "pass": true,
       "detail": {
-        "answer": 221,
-        "confirmation": 238,
-        "question": 280
+        "answer": 219,
+        "confirmation": 235,
+        "question": 276
       }
     },
     {
       "name": "dark: q3 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 525
+        "elapsedMs": 532
       }
     },
     {
@@ -616,7 +770,7 @@
       "name": "dark: field focus completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 12
+        "elapsedMs": 10
       }
     },
     {
@@ -645,35 +799,35 @@
       "name": "dark: advanced labels completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 85
+        "elapsedMs": 88
       }
     },
     {
       "name": "dark: capture q3-auth completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 609
+        "elapsedMs": 522
       }
     },
     {
       "name": "dark: q3-auth completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 783
+        "elapsedMs": 705
       }
     },
     {
       "name": "dark: capture connection-error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 564
+        "elapsedMs": 526
       }
     },
     {
       "name": "dark: connection-error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 598
+        "elapsedMs": 558
       }
     },
     {
@@ -705,21 +859,21 @@
       "name": "dark: capture q4 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 527
+        "elapsedMs": 492
       }
     },
     {
       "name": "dark: q4 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 573
+        "elapsedMs": 528
       }
     },
     {
       "name": "dark: capture error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 507
+        "elapsedMs": 493
       }
     },
     {
@@ -737,7 +891,7 @@
       "name": "dark: error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 531
+        "elapsedMs": 520
       }
     },
     {
@@ -748,7 +902,7 @@
       "name": "dark: capture q3-pricing-confirm completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 497
+        "elapsedMs": 495
       }
     },
     {
@@ -772,7 +926,7 @@
       "name": "dark: q3-pricing-confirm completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 635
+        "elapsedMs": 646
       }
     },
     {
@@ -816,21 +970,21 @@
       "name": "dark: capture summary completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 514
+        "elapsedMs": 513
       }
     },
     {
       "name": "dark: summary completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 757
+        "elapsedMs": 814
       }
     },
     {
       "name": "dark: tab-test completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 1136
+        "elapsedMs": 1081
       }
     },
     {
@@ -851,14 +1005,14 @@
       "name": "dark: resume completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 129
+        "elapsedMs": 120
       }
     },
     {
       "name": "dark: capture workspace completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 567
+        "elapsedMs": 457
       }
     },
     {
@@ -866,6 +1020,40 @@
       "pass": true,
       "detail": {
         "observed": true
+      }
+    },
+    {
+      "name": "dark: workspace Powered by target",
+      "pass": true,
+      "detail": {
+        "x": 885,
+        "y": 601.78125,
+        "width": 152,
+        "height": 28
+      }
+    },
+    {
+      "name": "dark: workspace Powered by keyboard focus",
+      "pass": true
+    },
+    {
+      "name": "dark: workspace Powered by typography and focus",
+      "pass": true,
+      "detail": {
+        "size": 12,
+        "outline": "solid",
+        "outlineWidth": 2
+      }
+    },
+    {
+      "name": "dark: workspace Powered by IPC without navigation",
+      "pass": true,
+      "detail": {
+        "calls": [
+          "https://zeroagency.ai"
+        ],
+        "url": "http://zaos-renderer.test/",
+        "navigated": false
       }
     },
     {
@@ -883,7 +1071,49 @@
       "name": "dark: workspace completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 798
+        "elapsedMs": 844
+      }
+    },
+    {
+      "name": "dark: startup Powered by target",
+      "pass": true,
+      "detail": {
+        "x": 564,
+        "y": 427.390625,
+        "width": 152,
+        "height": 28
+      }
+    },
+    {
+      "name": "dark: startup Powered by keyboard focus",
+      "pass": true
+    },
+    {
+      "name": "dark: startup Powered by typography and focus",
+      "pass": true,
+      "detail": {
+        "size": 12,
+        "outline": "solid",
+        "outlineWidth": 2
+      }
+    },
+    {
+      "name": "dark: startup Powered by IPC without navigation",
+      "pass": true,
+      "detail": {
+        "calls": [
+          "https://zeroagency.ai",
+          "https://zeroagency.ai"
+        ],
+        "url": "http://zaos-renderer.test/",
+        "navigated": false
+      }
+    },
+    {
+      "name": "dark: startup Powered by completed",
+      "pass": true,
+      "detail": {
+        "elapsedMs": 677
       }
     },
     {
@@ -932,6 +1162,10 @@
             "step": "workspace"
           },
           {
+            "mode": "light",
+            "step": "startup"
+          },
+          {
             "mode": "dark",
             "step": "q1"
           },
@@ -970,6 +1204,10 @@
           {
             "mode": "dark",
             "step": "workspace"
+          },
+          {
+            "mode": "dark",
+            "step": "startup"
           }
         ],
         "requiredSteps": [
@@ -982,7 +1220,8 @@
           "error",
           "q3-pricing-confirm",
           "summary",
-          "workspace"
+          "workspace",
+          "startup"
         ]
       }
     },
@@ -1042,6 +1281,11 @@
             "count": 0
           },
           {
+            "step": "startup",
+            "mode": "light",
+            "count": 0
+          },
+          {
             "step": "q1",
             "mode": "dark",
             "count": 0
@@ -1088,6 +1332,11 @@
           },
           {
             "step": "workspace",
+            "mode": "dark",
+            "count": 0
+          },
+          {
+            "step": "startup",
             "mode": "dark",
             "count": 0
           }
@@ -1965,6 +2214,12 @@
             "targets": []
           },
           {
+            "step": "startup",
+            "mode": "light",
+            "inputs": [],
+            "targets": []
+          },
+          {
             "step": "q1",
             "mode": "dark",
             "inputs": [
@@ -2825,6 +3080,12 @@
           },
           {
             "step": "workspace",
+            "mode": "dark",
+            "inputs": [],
+            "targets": []
+          },
+          {
+            "step": "startup",
             "mode": "dark",
             "inputs": [],
             "targets": []
@@ -3703,6 +3964,12 @@
             "targets": []
           },
           {
+            "step": "startup",
+            "mode": "light",
+            "inputs": [],
+            "targets": []
+          },
+          {
             "step": "q1",
             "mode": "dark",
             "inputs": [
@@ -4563,6 +4830,12 @@
           },
           {
             "step": "workspace",
+            "mode": "dark",
+            "inputs": [],
+            "targets": []
+          },
+          {
+            "step": "startup",
             "mode": "dark",
             "inputs": [],
             "targets": []
@@ -5441,6 +5714,12 @@
             "targets": []
           },
           {
+            "step": "startup",
+            "mode": "light",
+            "inputs": [],
+            "targets": []
+          },
+          {
             "step": "q1",
             "mode": "dark",
             "inputs": [
@@ -6304,6 +6583,12 @@
             "mode": "dark",
             "inputs": [],
             "targets": []
+          },
+          {
+            "step": "startup",
+            "mode": "dark",
+            "inputs": [],
+            "targets": []
           }
         ]
       }
@@ -6351,7 +6636,7 @@
             "name": "Change Workspace",
             "box": {
               "x": 1196,
-              "y": 199.5,
+              "y": 171.5,
               "width": 60,
               "height": 28
             },
@@ -6367,7 +6652,7 @@
             "name": "Change Agent role",
             "box": {
               "x": 1196,
-              "y": 288.5,
+              "y": 260.5,
               "width": 60,
               "height": 28
             },
@@ -6383,7 +6668,7 @@
             "name": "Change First task",
             "box": {
               "x": 1196,
-              "y": 377.5,
+              "y": 349.5,
               "width": 60,
               "height": 28
             },
@@ -6399,7 +6684,7 @@
             "name": "Change Connector",
             "box": {
               "x": 1196,
-              "y": 472,
+              "y": 444,
               "width": 60,
               "height": 28
             },
@@ -6415,7 +6700,7 @@
             "name": "Change Model",
             "box": {
               "x": 1196,
-              "y": 566.5,
+              "y": 538.5,
               "width": 60,
               "height": 28
             },
@@ -6431,7 +6716,7 @@
             "name": "Change Monthly cap",
             "box": {
               "x": 1196,
-              "y": 655.5,
+              "y": 627.5,
               "width": 60,
               "height": 28
             },
@@ -6447,7 +6732,7 @@
             "name": "Change Est. max / run",
             "box": {
               "x": 1196,
-              "y": 512.5,
+              "y": 484.5,
               "width": 60,
               "height": 28
             },
@@ -6463,7 +6748,7 @@
             "name": "Change Consent",
             "box": {
               "x": 1196,
-              "y": 601.5,
+              "y": 573.5,
               "width": 60,
               "height": 28
             },
@@ -6479,7 +6764,7 @@
             "name": "Advanced",
             "box": {
               "x": 965,
-              "y": 662.5,
+              "y": 634.5,
               "width": 291,
               "height": 44
             },
@@ -6495,9 +6780,25 @@
             "name": "Activate agent",
             "box": {
               "x": 965,
-              "y": 756,
+              "y": 728,
               "width": 291,
               "height": 44
+            },
+            "visible": true,
+            "unobscured": true,
+            "viewportHeight": 820,
+            "oversized": false,
+            "outline": "solid"
+          },
+          {
+            "mode": "light",
+            "tag": "A",
+            "name": "Powered by Zeroagency.ai",
+            "box": {
+              "x": 965,
+              "y": 772,
+              "width": 152,
+              "height": 28
             },
             "visible": true,
             "unobscured": true,
@@ -6591,7 +6892,7 @@
             "name": "Change Workspace",
             "box": {
               "x": 1196,
-              "y": 199.5,
+              "y": 171.5,
               "width": 60,
               "height": 28
             },
@@ -6607,7 +6908,7 @@
             "name": "Change Agent role",
             "box": {
               "x": 1196,
-              "y": 288.5,
+              "y": 260.5,
               "width": 60,
               "height": 28
             },
@@ -6623,7 +6924,7 @@
             "name": "Change First task",
             "box": {
               "x": 1196,
-              "y": 377.5,
+              "y": 349.5,
               "width": 60,
               "height": 28
             },
@@ -6639,7 +6940,7 @@
             "name": "Change Connector",
             "box": {
               "x": 1196,
-              "y": 472,
+              "y": 444,
               "width": 60,
               "height": 28
             },
@@ -6655,7 +6956,7 @@
             "name": "Change Model",
             "box": {
               "x": 1196,
-              "y": 566.5,
+              "y": 538.5,
               "width": 60,
               "height": 28
             },
@@ -6671,7 +6972,7 @@
             "name": "Change Monthly cap",
             "box": {
               "x": 1196,
-              "y": 655.5,
+              "y": 627.5,
               "width": 60,
               "height": 28
             },
@@ -6687,7 +6988,7 @@
             "name": "Change Est. max / run",
             "box": {
               "x": 1196,
-              "y": 512.5,
+              "y": 484.5,
               "width": 60,
               "height": 28
             },
@@ -6703,7 +7004,7 @@
             "name": "Change Consent",
             "box": {
               "x": 1196,
-              "y": 601.5,
+              "y": 573.5,
               "width": 60,
               "height": 28
             },
@@ -6719,7 +7020,7 @@
             "name": "Advanced",
             "box": {
               "x": 965,
-              "y": 662.5,
+              "y": 634.5,
               "width": 291,
               "height": 44
             },
@@ -6735,9 +7036,25 @@
             "name": "Activate agent",
             "box": {
               "x": 965,
-              "y": 756,
+              "y": 728,
               "width": 291,
               "height": 44
+            },
+            "visible": true,
+            "unobscured": true,
+            "viewportHeight": 820,
+            "oversized": false,
+            "outline": "solid"
+          },
+          {
+            "mode": "dark",
+            "tag": "A",
+            "name": "Powered by Zeroagency.ai",
+            "box": {
+              "x": 965,
+              "y": 772,
+              "width": 152,
+              "height": 28
             },
             "visible": true,
             "unobscured": true,

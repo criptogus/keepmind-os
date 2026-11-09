@@ -13,7 +13,7 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-11-09T18:07:07.890Z",
+  "timestamp": "2026-11-09T18:25:00.508Z",
   "url": "http://zaos-renderer.test/",
   "toolOptions": {
     "runOnly": {
@@ -299,27 +299,6 @@
       "description": "Ensure that HTML elements with both valid lang and xml:lang attributes agree on the base language of the page",
       "help": "HTML elements with lang and xml:lang must have the same base language",
       "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/html-xml-lang-mismatch?application=playwright",
-      "nodes": []
-    },
-    {
-      "id": "image-alt",
-      "impact": null,
-      "tags": [
-        "cat.text-alternatives",
-        "wcag2a",
-        "wcag111",
-        "section508",
-        "section508.22.a",
-        "TTv5",
-        "TT7.a",
-        "TT7.b",
-        "EN-301-549",
-        "EN-9.1.1.1",
-        "ACT"
-      ],
-      "description": "Ensure <img> elements have alternative text or a role of none or presentation",
-      "help": "Images must have alternative text",
-      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/image-alt?application=playwright",
       "nodes": []
     },
     {
@@ -2590,9 +2569,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<span class=\"brand-mark\" aria-hidden=\"true\">K</span>",
+          "html": "<img class=\"brand-logo \" alt=\"\" aria-hidden=\"true\" srcset=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png 1x, http://zaos-renderer.test/assets/keepmind-mark-128-BmkJi_5m.png 2x\" src=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png\">",
           "target": [
-            ".app-brand > .brand-mark[aria-hidden=\"true\"]"
+            "img[alt=\"\"]"
           ]
         },
         {
@@ -2657,294 +2636,6 @@
           "html": "<svg aria-hidden=\"true\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\"><circle cx=\"12\" cy=\"12\" r=\"4\"></circle><path d=\"M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5\"></path></svg>",
           "target": [
             "svg[stroke-width=\"1.7\"]"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "focusable-modal-open",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements while a modal is open"
-            },
-            {
-              "id": "focusable-disabled",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements contained within element"
-            },
-            {
-              "id": "focusable-not-tabbable",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements contained within element"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">K</span>",
-          "target": [
-            ".onboard-turn:nth-child(2) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"] > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "focusable-modal-open",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements while a modal is open"
-            },
-            {
-              "id": "focusable-disabled",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements contained within element"
-            },
-            {
-              "id": "focusable-not-tabbable",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements contained within element"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">K</span>",
-          "target": [
-            ".onboard-turn:nth-child(3) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(1) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "focusable-modal-open",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements while a modal is open"
-            },
-            {
-              "id": "focusable-disabled",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements contained within element"
-            },
-            {
-              "id": "focusable-not-tabbable",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements contained within element"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">K</span>",
-          "target": [
-            ".onboard-turn:nth-child(3) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(3) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "focusable-modal-open",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements while a modal is open"
-            },
-            {
-              "id": "focusable-disabled",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements contained within element"
-            },
-            {
-              "id": "focusable-not-tabbable",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements contained within element"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">K</span>",
-          "target": [
-            ".onboard-turn:nth-child(4) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(1) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "focusable-modal-open",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements while a modal is open"
-            },
-            {
-              "id": "focusable-disabled",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements contained within element"
-            },
-            {
-              "id": "focusable-not-tabbable",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements contained within element"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">K</span>",
-          "target": [
-            ".onboard-turn:nth-child(4) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(3) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "focusable-modal-open",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements while a modal is open"
-            },
-            {
-              "id": "focusable-disabled",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements contained within element"
-            },
-            {
-              "id": "focusable-not-tabbable",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements contained within element"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">K</span>",
-          "target": [
-            ".onboard-turn:nth-child(6) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(1) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "focusable-modal-open",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements while a modal is open"
-            },
-            {
-              "id": "focusable-disabled",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements contained within element"
-            },
-            {
-              "id": "focusable-not-tabbable",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements contained within element"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">K</span>",
-          "target": [
-            ".onboard-turn:nth-child(6) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(3) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "focusable-modal-open",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements while a modal is open"
-            },
-            {
-              "id": "focusable-disabled",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements contained within element"
-            },
-            {
-              "id": "focusable-not-tabbable",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements contained within element"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">K</span>",
-          "target": [
-            ".onboard-turn:nth-child(7) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"] > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "focusable-modal-open",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements while a modal is open"
-            },
-            {
-              "id": "focusable-disabled",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements contained within element"
-            },
-            {
-              "id": "focusable-not-tabbable",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "No focusable elements contained within element"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">K</span>",
-          "target": [
-            ".x1na6nto > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"] > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
           ]
         },
         {
@@ -6597,31 +6288,6 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#0a0a0a",
-                "bgColor": "#fafafa",
-                "contrastRatio": 18.96,
-                "fontSize": "12.0pt (16px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 18.96"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"brand-mark\" aria-hidden=\"true\">K</span>",
-          "target": [
-            ".app-brand > .brand-mark[aria-hidden=\"true\"]"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
                 "fgColor": "#fafafa",
                 "bgColor": "#0a0a0a",
                 "contrastRatio": 18.96,
@@ -6665,31 +6331,6 @@
           "html": "<div class=\"status-line\" role=\"status\" aria-live=\"polite\"><span role=\"img\" aria-label=\"Ready\" class=\"astryx-status-dot x3nfvp2 x6s0dn4 xl56j7k x16rqkct x2lah0s x1xc55vz xdk7pt x1q5y3ey xrkvqaz\" data-variant=\"neutral\"></span>Paid execution disabled · Local service ready</div>",
           "target": [
             ".status-line"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#0a0a0a",
-                "bgColor": "#fafafa",
-                "contrastRatio": 18.96,
-                "fontSize": "11.3pt (15px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 18.96"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">K</span>",
-          "target": [
-            ".onboard-turn:nth-child(4) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(1) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
           ]
         },
         {
@@ -6747,31 +6388,6 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#0a0a0a",
-                "bgColor": "#fafafa",
-                "contrastRatio": 18.96,
-                "fontSize": "11.3pt (15px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 18.96"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">K</span>",
-          "target": [
-            ".onboard-turn:nth-child(4) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(3) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
                 "fgColor": "#fafafa",
                 "bgColor": "#0a0a0a",
                 "contrastRatio": 18.96,
@@ -6815,31 +6431,6 @@
           "html": "<span>Editing Connector.</span>",
           "target": [
             ".x1s4dlld.x3nfvp2.x6s0dn4 > span"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#0a0a0a",
-                "bgColor": "#fafafa",
-                "contrastRatio": 18.96,
-                "fontSize": "11.3pt (15px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 18.96"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">K</span>",
-          "target": [
-            ".onboard-turn:nth-child(6) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(1) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
           ]
         },
         {
@@ -6897,31 +6488,6 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#0a0a0a",
-                "bgColor": "#fafafa",
-                "contrastRatio": 18.96,
-                "fontSize": "11.3pt (15px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 18.96"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">K</span>",
-          "target": [
-            ".onboard-turn:nth-child(6) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(3) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
                 "fgColor": "#fafafa",
                 "bgColor": "#0a0a0a",
                 "contrastRatio": 18.96,
@@ -6940,31 +6506,6 @@
           "html": "<div class=\"astryx-chat-message-bubble x78zum5 xdt5ytf xl6temz xashgol x9ynric xjm74w1 xw6l6zx x1mzt3pk x13faqbe xjbqb8w x1tgivj0 x1pzlopt xt970qd onboard-bubble\" data-sender=\"assistant\" data-variant=\"ghost\" data-density=\"balanced\">I need the price for this model. Open Advanced to add it.</div>",
           "target": [
             ".onboard-turn:nth-child(6) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(3) > .x98rzlu.x1cy8zhl.xeuugli > .xzye2dw.xh8yej3.x1cy8zhl > .astryx-chat-message-bubble.xl6temz.xashgol"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#0a0a0a",
-                "bgColor": "#fafafa",
-                "contrastRatio": 18.96,
-                "fontSize": "11.3pt (15px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 18.96"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">K</span>",
-          "target": [
-            ".onboard-turn:nth-child(7) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"] > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
           ]
         },
         {
@@ -7022,31 +6563,6 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#0a0a0a",
-                "bgColor": "#fafafa",
-                "contrastRatio": 18.96,
-                "fontSize": "11.3pt (15px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 18.96"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">K</span>",
-          "target": [
-            ".x1na6nto > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"] > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
                 "fgColor": "#fafafa",
                 "bgColor": "#0a0a0a",
                 "contrastRatio": 18.96,
@@ -7089,32 +6605,7 @@
           "impact": null,
           "html": "<span class=\"xb3r6kr xlyipyv xeuugli\">Undo last answer</span>",
           "target": [
-            ".x6k0iem > .xs83m0k.xkh2ocl.x1beo9mf > .xlyipyv.xb3r6kr.xeuugli"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#fafafa",
-                "bgColor": "#141414",
-                "contrastRatio": 17.65,
-                "fontSize": "12.8pt (17px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 17.65"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<h3 class=\"astryx-heading x1tgivj0 xii13ha xwjzt0u x1jcxfy8 x1lliihq xh015us\" data-level=\"3\" data-color=\"primary\">What I’ll configure</h3>",
-          "target": [
-            "h3"
+            ".x6k0iem > .xs83m0k.xkh2ocl.x1beo9mf > .xlyipyv.xb3r6kr"
           ]
         },
         {
@@ -7672,6 +7163,31 @@
             {
               "id": "color-contrast",
               "data": {
+                "fgColor": "#a0a0a0",
+                "bgColor": "#141414",
+                "contrastRatio": 7.04,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 7.04"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<dt class=\"xv1l7n4 xjm74w1 xw6l6zx x1e4wzip x78zum5 x6s0dn4 x1txdalj x1ghz6dp x1717udv\">Consent</dt>",
+          "target": [
+            ".astryx-metadata-list-item.x1lsbc85.xdt5ytf:nth-child(8) > dt"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
                 "fgColor": "#0a0a0a",
                 "bgColor": "#c8ff00",
                 "contrastRatio": 16.74,
@@ -7689,7 +7205,32 @@
           "impact": null,
           "html": "<span class=\"xb3r6kr xlyipyv xeuugli\">Activate agent</span>",
           "target": [
-            ".x17x4s8c > .xs83m0k.xkh2ocl.x1beo9mf > .xlyipyv.xb3r6kr.xeuugli"
+            ".x17x4s8c > .xs83m0k.xkh2ocl.x1beo9mf > .xlyipyv.xb3r6kr"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#a0a0a0",
+                "bgColor": "#141414",
+                "contrastRatio": 7.04,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 7.04"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<a class=\"powered-by\" href=\"https://zeroagency.ai\">Powered by Zeroagency.ai</a>",
+          "target": [
+            ".powered-by"
           ]
         }
       ]
@@ -8203,6 +7744,262 @@
       ]
     },
     {
+      "id": "image-alt",
+      "impact": null,
+      "tags": [
+        "cat.text-alternatives",
+        "wcag2a",
+        "wcag111",
+        "section508",
+        "section508.22.a",
+        "TTv5",
+        "TT7.a",
+        "TT7.b",
+        "EN-301-549",
+        "EN-9.1.1.1",
+        "ACT"
+      ],
+      "description": "Ensure <img> elements have alternative text or a role of none or presentation",
+      "help": "Images must have alternative text",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/image-alt?application=playwright",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "has-alt",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has an alt attribute"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "alt-space-value",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has a valid alt attribute value"
+            }
+          ],
+          "impact": null,
+          "html": "<img class=\"brand-logo transcript-mark\" alt=\"KeepMind\" srcset=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png 1x, http://zaos-renderer.test/assets/keepmind-mark-128-BmkJi_5m.png 2x\" src=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png\">",
+          "target": [
+            ".onboard-turn:nth-child(2) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"] > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark[alt=\"KeepMind\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "has-alt",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has an alt attribute"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "alt-space-value",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has a valid alt attribute value"
+            }
+          ],
+          "impact": null,
+          "html": "<img class=\"brand-logo transcript-mark\" alt=\"KeepMind\" srcset=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png 1x, http://zaos-renderer.test/assets/keepmind-mark-128-BmkJi_5m.png 2x\" src=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png\">",
+          "target": [
+            ".onboard-turn:nth-child(3) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(1) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark[alt=\"KeepMind\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "has-alt",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has an alt attribute"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "alt-space-value",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has a valid alt attribute value"
+            }
+          ],
+          "impact": null,
+          "html": "<img class=\"brand-logo transcript-mark\" alt=\"KeepMind\" srcset=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png 1x, http://zaos-renderer.test/assets/keepmind-mark-128-BmkJi_5m.png 2x\" src=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png\">",
+          "target": [
+            ".onboard-turn:nth-child(3) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(3) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark[alt=\"KeepMind\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "has-alt",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has an alt attribute"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "alt-space-value",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has a valid alt attribute value"
+            }
+          ],
+          "impact": null,
+          "html": "<img class=\"brand-logo transcript-mark\" alt=\"KeepMind\" srcset=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png 1x, http://zaos-renderer.test/assets/keepmind-mark-128-BmkJi_5m.png 2x\" src=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png\">",
+          "target": [
+            ".onboard-turn:nth-child(4) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(1) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark[alt=\"KeepMind\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "has-alt",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has an alt attribute"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "alt-space-value",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has a valid alt attribute value"
+            }
+          ],
+          "impact": null,
+          "html": "<img class=\"brand-logo transcript-mark\" alt=\"KeepMind\" srcset=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png 1x, http://zaos-renderer.test/assets/keepmind-mark-128-BmkJi_5m.png 2x\" src=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png\">",
+          "target": [
+            ".onboard-turn:nth-child(4) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(3) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark[alt=\"KeepMind\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "has-alt",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has an alt attribute"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "alt-space-value",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has a valid alt attribute value"
+            }
+          ],
+          "impact": null,
+          "html": "<img class=\"brand-logo transcript-mark\" alt=\"KeepMind\" srcset=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png 1x, http://zaos-renderer.test/assets/keepmind-mark-128-BmkJi_5m.png 2x\" src=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png\">",
+          "target": [
+            ".onboard-turn:nth-child(6) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(1) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark[alt=\"KeepMind\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "has-alt",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has an alt attribute"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "alt-space-value",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has a valid alt attribute value"
+            }
+          ],
+          "impact": null,
+          "html": "<img class=\"brand-logo transcript-mark\" alt=\"KeepMind\" srcset=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png 1x, http://zaos-renderer.test/assets/keepmind-mark-128-BmkJi_5m.png 2x\" src=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png\">",
+          "target": [
+            ".onboard-turn:nth-child(6) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(3) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark[alt=\"KeepMind\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "has-alt",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has an alt attribute"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "alt-space-value",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has a valid alt attribute value"
+            }
+          ],
+          "impact": null,
+          "html": "<img class=\"brand-logo transcript-mark\" alt=\"KeepMind\" srcset=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png 1x, http://zaos-renderer.test/assets/keepmind-mark-128-BmkJi_5m.png 2x\" src=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png\">",
+          "target": [
+            ".onboard-turn:nth-child(7) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"] > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark[alt=\"KeepMind\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "has-alt",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has an alt attribute"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "alt-space-value",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has a valid alt attribute value"
+            }
+          ],
+          "impact": null,
+          "html": "<img class=\"brand-logo transcript-mark\" alt=\"KeepMind\" srcset=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png 1x, http://zaos-renderer.test/assets/keepmind-mark-128-BmkJi_5m.png 2x\" src=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png\">",
+          "target": [
+            ".x1na6nto > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"] > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark[alt=\"KeepMind\"]"
+          ]
+        }
+      ]
+    },
+    {
       "id": "link-name",
       "impact": null,
       "tags": [
@@ -8246,7 +8043,33 @@
           "impact": null,
           "html": "<a class=\"za-skip\" href=\"#workspace-content\">Skip to content</a>",
           "target": [
-            "a"
+            ".za-skip"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has text that is visible to screen readers"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "focusable-no-name",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element is not in tab order or has accessible text"
+            }
+          ],
+          "impact": null,
+          "html": "<a class=\"powered-by\" href=\"https://zeroagency.ai\">Powered by Zeroagency.ai</a>",
+          "target": [
+            ".powered-by"
           ]
         }
       ]
@@ -8354,6 +8177,168 @@
           "html": "<button type=\"button\" class=\"astryx-button x1k57tk5 x1vidyx5 x1t137rt x1jhp3zv xx47ajj x16bblx1 x1wfwxd8 x13aywxo x1n2onr6 x3nfvp2 x6s0dn4 xl56j7k x1txdalj xc342km xng3xce x1jxw6zd xjb2p0i xcr08ib x1kq96og x1e4wzip xuxw1ft xeuugli x1ypdohk x16khyan xrafxwg xuedmi6 x12w9bfk xlr8y92 xssyfek x1v15ycx xioom0i xnjsko4 xt970qd x2lah0s x1x1rfll x11z29ks xli5ek3 xem8lmn xogcwkh x1t1ddl7 xziyay6 xz2mauf x1l7afqf x14e4jsf x6su2wr xif6eam x1ocadqd x1ukh9kf xrkptjy xjscm90 x1kec4ew x13r5q6d x1dn949c xw7rim2 xr9xsjc x1bxn267 x1osot8d xbkwwzw x10t12yn x1dn5vsf x7uyq82 x3f84ok x7ngsy6 x10ogxw0 xubczrd x18xnkjv xmvprkv xetgvay x1mrddfy x3oybdh x8ppqj x1249l8d xbht4k1 x1ex9uxt x3y5scg xg3abmg xoigjuk x1gnnqk1 xjbqb8w x1tgivj0\" data-variant=\"ghost\" data-size=\"lg\" data-elevation=\"none\" data-astryx-pressable=\"\" data-mode-toggle=\"true\" aria-label=\"Use light mode\" data-astryx-edge-comp=\"\">",
           "target": [
             "button[data-mode-toggle=\"true\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "no-focusable-content",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have focusable descendants"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<img class=\"brand-logo transcript-mark\" alt=\"KeepMind\" srcset=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png 1x, http://zaos-renderer.test/assets/keepmind-mark-128-BmkJi_5m.png 2x\" src=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png\">",
+          "target": [
+            ".onboard-turn:nth-child(2) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"] > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark[alt=\"KeepMind\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "no-focusable-content",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have focusable descendants"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<img class=\"brand-logo transcript-mark\" alt=\"KeepMind\" srcset=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png 1x, http://zaos-renderer.test/assets/keepmind-mark-128-BmkJi_5m.png 2x\" src=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png\">",
+          "target": [
+            ".onboard-turn:nth-child(3) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(1) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark[alt=\"KeepMind\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "no-focusable-content",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have focusable descendants"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<img class=\"brand-logo transcript-mark\" alt=\"KeepMind\" srcset=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png 1x, http://zaos-renderer.test/assets/keepmind-mark-128-BmkJi_5m.png 2x\" src=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png\">",
+          "target": [
+            ".onboard-turn:nth-child(3) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(3) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark[alt=\"KeepMind\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "no-focusable-content",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have focusable descendants"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<img class=\"brand-logo transcript-mark\" alt=\"KeepMind\" srcset=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png 1x, http://zaos-renderer.test/assets/keepmind-mark-128-BmkJi_5m.png 2x\" src=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png\">",
+          "target": [
+            ".onboard-turn:nth-child(4) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(1) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark[alt=\"KeepMind\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "no-focusable-content",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have focusable descendants"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<img class=\"brand-logo transcript-mark\" alt=\"KeepMind\" srcset=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png 1x, http://zaos-renderer.test/assets/keepmind-mark-128-BmkJi_5m.png 2x\" src=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png\">",
+          "target": [
+            ".onboard-turn:nth-child(4) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(3) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark[alt=\"KeepMind\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "no-focusable-content",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have focusable descendants"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<img class=\"brand-logo transcript-mark\" alt=\"KeepMind\" srcset=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png 1x, http://zaos-renderer.test/assets/keepmind-mark-128-BmkJi_5m.png 2x\" src=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png\">",
+          "target": [
+            ".onboard-turn:nth-child(6) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(1) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark[alt=\"KeepMind\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "no-focusable-content",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have focusable descendants"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<img class=\"brand-logo transcript-mark\" alt=\"KeepMind\" srcset=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png 1x, http://zaos-renderer.test/assets/keepmind-mark-128-BmkJi_5m.png 2x\" src=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png\">",
+          "target": [
+            ".onboard-turn:nth-child(6) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(3) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark[alt=\"KeepMind\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "no-focusable-content",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have focusable descendants"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<img class=\"brand-logo transcript-mark\" alt=\"KeepMind\" srcset=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png 1x, http://zaos-renderer.test/assets/keepmind-mark-128-BmkJi_5m.png 2x\" src=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png\">",
+          "target": [
+            ".onboard-turn:nth-child(7) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"] > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark[alt=\"KeepMind\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "no-focusable-content",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have focusable descendants"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<img class=\"brand-logo transcript-mark\" alt=\"KeepMind\" srcset=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png 1x, http://zaos-renderer.test/assets/keepmind-mark-128-BmkJi_5m.png 2x\" src=\"http://zaos-renderer.test/assets/keepmind-mark-64-DOnUeJso.png\">",
+          "target": [
+            ".x1na6nto > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"] > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark[alt=\"KeepMind\"]"
           ]
         },
         {
@@ -8710,7 +8695,7 @@
           "impact": null,
           "html": "<a class=\"za-skip\" href=\"#workspace-content\">Skip to content</a>",
           "target": [
-            "a"
+            ".za-skip"
           ]
         },
         {
@@ -9128,6 +9113,38 @@
           "target": [
             ".x17x4s8c"
           ]
+        },
+        {
+          "any": [
+            {
+              "id": "target-size",
+              "data": {
+                "minSize": 24,
+                "width": 152,
+                "height": 28
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Control has sufficient size (152px by 28px, should be at least 24px by 24px)"
+            },
+            {
+              "id": "target-offset",
+              "data": {
+                "closestOffset": 24,
+                "minOffset": 24
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Target has sufficient space from its closest neighbors. Safe clickable space has a diameter of 24px which is at least 24px."
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<a class=\"powered-by\" href=\"https://zeroagency.ai\">Powered by Zeroagency.ai</a>",
+          "target": [
+            ".powered-by"
+          ]
         }
       ]
     }
@@ -9156,7 +9173,7 @@
               "id": "color-contrast",
               "data": {
                 "contrastRatio": 0,
-                "fontSize": "9.0pt (12px)",
+                "fontSize": "12.8pt (17px)",
                 "fontWeight": "normal",
                 "messageKey": "elmPartiallyObscured",
                 "expectedContrastRatio": "4.5:1"
@@ -9176,9 +9193,9 @@
           "all": [],
           "none": [],
           "impact": "serious",
-          "html": "<dt class=\"xv1l7n4 xjm74w1 xw6l6zx x1e4wzip x78zum5 x6s0dn4 x1txdalj x1ghz6dp x1717udv\">Consent</dt>",
+          "html": "<h3 class=\"astryx-heading x1tgivj0 xii13ha xwjzt0u x1jcxfy8 x1lliihq xh015us\" data-level=\"3\" data-color=\"primary\">What I’ll configure</h3>",
           "target": [
-            ".astryx-metadata-list-item.x1lsbc85.xdt5ytf:nth-child(8) > dt"
+            "h3"
           ],
           "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element"
         },

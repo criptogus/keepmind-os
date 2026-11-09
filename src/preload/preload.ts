@@ -2,6 +2,7 @@ import { contextBridge, ipcRenderer } from 'electron';
 import type { ZaosAPI } from '../shared/types';
 const invoke = (channel: string, payload: unknown = {}) => ipcRenderer.invoke(`zaos:${channel}`, payload);
 const api: ZaosAPI = {
+    openExternal: url => invoke('openExternal', { url }),
     testConnector: payload => invoke("testConnector", payload),
     listConnectors: () => invoke('listConnectors'), detectConnector: id => invoke('detectConnector', { id }), startConnectorLogin: id => invoke('startConnectorLogin', { id }), listConnectorModels: id => invoke('listConnectorModels', { id }), configureConnector: config => invoke('configureConnector', config),
     getStatus: () => invoke('getStatus'), retryStartup: () => invoke('retryStartup'), openBoard: () => invoke('openBoard'),

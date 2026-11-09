@@ -28,9 +28,11 @@ try {
    const calls = []; let configured = false, paidExecution = false, cap = 0;
    const ids = ['codex','claude','openrouter','deepseek','hermes','custom'];
    window.__ipcCalls = calls;
+   window.__externalCalls = [];
    const record = name => async (...args) => { calls.push({ name, args }); if (name === 'setSpendCap') cap = args[0]; if (name === 'setPaidExecution') { paidExecution = args[0]; configured = args[0]; } return { id: name + '-id' }; };
    window.zaos = {
-    getStatus: async () => ({ state: 'ready', configured, paidExecution, cap, spent: 0, setupProgress: 0 }),
+    openExternal: async url => { window.__externalCalls.push(url); },
+    getStatus: async () => ({ state: window.__startup ? 'starting' : 'ready', configured, paidExecution, cap, spent: 0, setupProgress: 0 }),
     listConnectors: async () => ids.map(id => ({ id, modes: id === 'codex' ? ['api-key','cli-subscription'] : ['api'] })),
     detectConnector: async () => ({ installed: true, loggedIn: true }),
     startConnectorLogin: record('startConnectorLogin'),
@@ -51,6 +53,36 @@ try {
   async function step(name, action) {
    try { const started = Date.now(); await action(); check(`${mode}: ${name} completed`, true, { elapsedMs: Date.now() - started }); }
    catch (e) { check(`${mode}: ${name} completed`, false, { error: String(e.stack ?? e) }); console.error(`${mode}: ${name}`, e); }
+  }
+  async function checkPoweredBy(screen) {
+   const link = page.getByRole('link', { name: 'Powered by Zeroagency.ai', exact: true });
+   await link.waitFor({ state: 'visible' });
+   const box = await link.boundingBox();
+   check(`${mode}: ${screen} Powered by target`, !!box && box.height >= 24 && box.width >= 24, box);
+   // Use real keyboard navigation: programmatic focus after a click need not
+   // match :focus-visible for links in Chromium.
+   const tabLimit = await page.locator('body *').count() + 1;
+   let keyboardFocused = false;
+   for (let i = 0; i < tabLimit; i++) {
+    await page.keyboard.press('Tab');
+    if (await link.evaluate(e => e === document.activeElement && e.matches(':focus-visible'))) {
+     keyboardFocused = true;
+     break;
+    }
+   }
+   check(`${mode}: ${screen} Powered by keyboard focus`, keyboardFocused);
+   const style = await link.evaluate(e => { const s = getComputedStyle(e); return { size: parseFloat(s.fontSize), outline: s.outlineStyle, outlineWidth: parseFloat(s.outlineWidth) }; });
+   check(`${mode}: ${screen} Powered by typography and focus`, style.size >= 12 && style.outline !== 'none' && style.outlineWidth >= 2, style);
+   const beforeUrl = page.url();
+   const before = await page.evaluate(() => window.__externalCalls.length);
+   let navigated = false;
+   const navigation = () => { navigated = true; };
+   page.on('framenavigated', navigation);
+   await link.click();
+   await page.waitForTimeout(100);
+   page.off('framenavigated', navigation);
+   const calls = await page.evaluate(() => window.__externalCalls);
+   check(`${mode}: ${screen} Powered by IPC without navigation`, !navigated && page.url() === beforeUrl && calls.length === before + 1 && calls.at(-1) === 'https://zeroagency.ai', { calls, url: page.url(), navigated });
   }
   async function checkAuthUnmounted(step) {
    const observed = {
@@ -85,6 +117,9 @@ try {
    check(`${mode}: disabled Activate is neutral with a reason`, disabled.disabled === 'true' && !!disabled.reason && disabled.background === 'rgb(42, 42, 42)' && disabled.color === 'rgb(115, 115, 115)' && disabled.border !== 'rgb(200, 255, 0)' && disabled.cursor === 'default', disabled);
   }
   await step('capture q1', () => capture('q1'));
+  // Tab navigation blurs the empty composer and triggers validation. Keep the
+  // initial screenshots and axe scan pristine before exercising keyboard focus.
+  await checkPoweredBy('onboarding');
   });
   await step('q2', async () => {
   await chat.getByLabel('Workspace name').fill('Northstar Fiction'); await chat.getByLabel('Workspace name').press('Enter');
@@ -204,15 +239,22 @@ try {
   await chat.getByLabel('Workspace name').press('Enter'); await page.getByRole('radio', { name:'Research a topic', exact:true }).click(); await page.getByRole('radio', { name:'OpenRouter One key, many models' }).click(); await chat.getByLabel('API key', { exact:true }).fill('mock-secret-7f2a'); await page.getByRole('button', { name:'Test connection', exact:true }).click(); await page.getByRole('button', { name:'Continue', exact:true }).click();
   await page.getByRole('button', { name:'Activate agent', exact:true }).click(); await page.getByRole('heading', { name:'Give your agent a task' }).waitFor(); await step('capture workspace', () => capture('workspace'));
   { const observed17 = await page.getByLabel('Task title').inputValue() === 'Research a topic' && await page.getByLabel('Task description (required)').inputValue() === 'Research a topic for Northstar Fiction and draft findings for human review.'; check(`${mode}: task prefill`, observed17, { observed: observed17 }); }
+  await checkPoweredBy('workspace');
   check(`${mode}: workspace Monthly cap retains $25.00`, await page.locator('.control-metadata').getByText('$25.00', { exact: true }).isVisible());
   { const observed18 = (await page.evaluate(() => window.__ipcCalls.map(c => c.name))).join(','); check(`${mode}: activation IPC sequence`, observed18 === 'createCompany,setProviderKey,configureConnector,createAgentFromTemplate,setSpendCap,setTelemetry,setPaidExecution', { observed: observed18 }); }
+  });
+  await step('startup Powered by', async () => {
+   await page.evaluate(() => { window.__startup = true; });
+   await page.getByRole('heading', { name: 'Preparing your local workspace' }).waitFor();
+   await checkPoweredBy('startup');
+   await capture('startup');
   });
   } catch (e) { check(`${mode}: theme completed`, false, { error: String(e.stack ?? e) }); }
   finally { await context.close(); }
  }
 } catch (e) { check('script completed', false, { error: String(e.stack ?? e) }); console.error(e); }
 finally { await browser?.close(); }
-const requiredSteps = ['q1','q2','q3','q3-auth','connection-error','q4','error','q3-pricing-confirm','summary','workspace'];
+const requiredSteps = ['q1','q2','q3','q3-auth','connection-error','q4','error','q3-pricing-confirm','summary','workspace','startup'];
 { const observed19 = ['light','dark'].every(mode => requiredSteps.every(step => violations.some(v => v.mode === mode && v.step === step))); check('all required light/dark captures', observed19, { captures: violations.map(({ mode, step }) => ({ mode, step })), requiredSteps }); }
 { const observed20 = violations.length >= 20 && violations.every(v => v.count === 0); check('all axe scans clean', observed20, { scans: violations }); }
 { const observed21 = measurements.every(m => m.targets.every(t => (!t.primary && !t.reveal) || (t.height >= 44 && (!t.reveal || t.width >= 44)))); check('primary and reveal targets at least 44px', observed21, { measurements }); }

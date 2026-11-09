@@ -37,7 +37,7 @@
     "name": "Change Workspace",
     "box": {
       "x": 1196,
-      "y": 199.5,
+      "y": 171.5,
       "width": 60,
       "height": 28
     },
@@ -53,7 +53,7 @@
     "name": "Change Agent role",
     "box": {
       "x": 1196,
-      "y": 288.5,
+      "y": 260.5,
       "width": 60,
       "height": 28
     },
@@ -69,7 +69,7 @@
     "name": "Change First task",
     "box": {
       "x": 1196,
-      "y": 377.5,
+      "y": 349.5,
       "width": 60,
       "height": 28
     },
@@ -85,7 +85,7 @@
     "name": "Change Connector",
     "box": {
       "x": 1196,
-      "y": 472,
+      "y": 444,
       "width": 60,
       "height": 28
     },
@@ -101,7 +101,7 @@
     "name": "Change Model",
     "box": {
       "x": 1196,
-      "y": 566.5,
+      "y": 538.5,
       "width": 60,
       "height": 28
     },
@@ -117,7 +117,7 @@
     "name": "Change Monthly cap",
     "box": {
       "x": 1196,
-      "y": 655.5,
+      "y": 627.5,
       "width": 60,
       "height": 28
     },
@@ -133,7 +133,7 @@
     "name": "Change Est. max / run",
     "box": {
       "x": 1196,
-      "y": 512.5,
+      "y": 484.5,
       "width": 60,
       "height": 28
     },
@@ -149,7 +149,7 @@
     "name": "Change Consent",
     "box": {
       "x": 1196,
-      "y": 601.5,
+      "y": 573.5,
       "width": 60,
       "height": 28
     },
@@ -165,7 +165,7 @@
     "name": "Advanced",
     "box": {
       "x": 965,
-      "y": 662.5,
+      "y": 634.5,
       "width": 291,
       "height": 44
     },
@@ -181,9 +181,25 @@
     "name": "Activate agent",
     "box": {
       "x": 965,
-      "y": 756,
+      "y": 728,
       "width": 291,
       "height": 44
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 820,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "light",
+    "tag": "A",
+    "name": "Powered by Zeroagency.ai",
+    "box": {
+      "x": 965,
+      "y": 772,
+      "width": 152,
+      "height": 28
     },
     "visible": true,
     "unobscured": true,
@@ -277,7 +293,7 @@
     "name": "Change Workspace",
     "box": {
       "x": 1196,
-      "y": 199.5,
+      "y": 171.5,
       "width": 60,
       "height": 28
     },
@@ -293,7 +309,7 @@
     "name": "Change Agent role",
     "box": {
       "x": 1196,
-      "y": 288.5,
+      "y": 260.5,
       "width": 60,
       "height": 28
     },
@@ -309,7 +325,7 @@
     "name": "Change First task",
     "box": {
       "x": 1196,
-      "y": 377.5,
+      "y": 349.5,
       "width": 60,
       "height": 28
     },
@@ -325,7 +341,7 @@
     "name": "Change Connector",
     "box": {
       "x": 1196,
-      "y": 472,
+      "y": 444,
       "width": 60,
       "height": 28
     },
@@ -341,7 +357,7 @@
     "name": "Change Model",
     "box": {
       "x": 1196,
-      "y": 566.5,
+      "y": 538.5,
       "width": 60,
       "height": 28
     },
@@ -357,7 +373,7 @@
     "name": "Change Monthly cap",
     "box": {
       "x": 1196,
-      "y": 655.5,
+      "y": 627.5,
       "width": 60,
       "height": 28
     },
@@ -373,7 +389,7 @@
     "name": "Change Est. max / run",
     "box": {
       "x": 1196,
-      "y": 512.5,
+      "y": 484.5,
       "width": 60,
       "height": 28
     },
@@ -389,7 +405,7 @@
     "name": "Change Consent",
     "box": {
       "x": 1196,
-      "y": 601.5,
+      "y": 573.5,
       "width": 60,
       "height": 28
     },
@@ -405,7 +421,7 @@
     "name": "Advanced",
     "box": {
       "x": 965,
-      "y": 662.5,
+      "y": 634.5,
       "width": 291,
       "height": 44
     },
@@ -421,9 +437,25 @@
     "name": "Activate agent",
     "box": {
       "x": 965,
-      "y": 756,
+      "y": 728,
       "width": 291,
       "height": 44
+    },
+    "visible": true,
+    "unobscured": true,
+    "viewportHeight": 820,
+    "oversized": false,
+    "outline": "solid"
+  },
+  {
+    "mode": "dark",
+    "tag": "A",
+    "name": "Powered by Zeroagency.ai",
+    "box": {
+      "x": 965,
+      "y": 772,
+      "width": 152,
+      "height": 28
     },
     "visible": true,
     "unobscured": true,

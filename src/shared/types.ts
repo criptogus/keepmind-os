@@ -60,6 +60,7 @@ export interface BoardApi {
 export interface TestConnector { connectorId: ConnectorId; mode: ConfigureConnector["mode"]; baseUrl?: string; key?: string }
 export interface ConnectorTestResult { ok: boolean; models?: number; error?: "unavailable" | "http" | "invalid-response"; installed?: boolean; loggedIn?: boolean }
 export interface ZaosAPI {
+    openExternal(url: string): Promise<void>;
     testConnector(payload: TestConnector): Promise<ConnectorTestResult>;
     listConnectors(): Promise<{ id: ConnectorId; modes: string[] }[]>;
     detectConnector(id: ConnectorId): Promise<ConnectorDetection>;
@@ -92,6 +93,7 @@ export interface ZaosAPI {
     setTelemetry(enabled: boolean): Promise<void>;
 }
 export interface IpcPayloads {
+    openExternal: { url: string };
     testConnector: TestConnector;
     listConnectors: Record<string, never>;
     detectConnector: { id: ConnectorId };

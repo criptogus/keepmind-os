@@ -865,6 +865,12 @@
     "targets": []
   },
   {
+    "step": "startup",
+    "mode": "light",
+    "inputs": [],
+    "targets": []
+  },
+  {
     "step": "q1",
     "mode": "dark",
     "inputs": [
@@ -1725,6 +1731,12 @@
   },
   {
     "step": "workspace",
+    "mode": "dark",
+    "inputs": [],
+    "targets": []
+  },
+  {
+    "step": "startup",
     "mode": "dark",
     "inputs": [],
     "targets": []
