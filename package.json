@@ -45,7 +45,7 @@
   },
   "build": {
     "appId": "agency.zero.os",
-    "productName": "Zero Agency OS",
+    "productName": "KeepMind OS",
     "directories": {
       "output": "release"
     },

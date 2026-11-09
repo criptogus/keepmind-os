@@ -13,7 +13,7 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-11-09T18:00:40.452Z",
+  "timestamp": "2026-11-09T18:07:05.960Z",
   "url": "http://zaos-renderer.test/",
   "toolOptions": {
     "runOnly": {
@@ -2681,7 +2681,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<span class=\"brand-mark\" aria-hidden=\"true\">Z</span>",
+          "html": "<span class=\"brand-mark\" aria-hidden=\"true\">K</span>",
           "target": [
             ".app-brand > .brand-mark[aria-hidden=\"true\"]"
           ]
@@ -2777,7 +2777,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">Z</span>",
+          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">K</span>",
           "target": [
             ".onboard-turn:nth-child(2) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"] > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
           ]
@@ -2809,7 +2809,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">Z</span>",
+          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">K</span>",
           "target": [
             ".onboard-turn:nth-child(3) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(1) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
           ]
@@ -2841,7 +2841,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">Z</span>",
+          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">K</span>",
           "target": [
             ".onboard-turn:nth-child(3) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(3) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
           ]
@@ -2873,7 +2873,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">Z</span>",
+          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">K</span>",
           "target": [
             ".onboard-turn:nth-child(4) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(1) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
           ]
@@ -2905,7 +2905,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">Z</span>",
+          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">K</span>",
           "target": [
             ".onboard-turn:nth-child(4) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(3) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
           ]
@@ -2937,7 +2937,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">Z</span>",
+          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">K</span>",
           "target": [
             ".x1na6nto > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"] > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
           ]
@@ -7072,7 +7072,7 @@
               "data": null,
               "relatedNodes": [
                 {
-                  "html": "<h1>Zero Agency OS</h1>",
+                  "html": "<h1>KeepMind OS</h1>",
                   "target": [
                     "h1"
                   ]
@@ -7149,7 +7149,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span class=\"brand-mark\" aria-hidden=\"true\">Z</span>",
+          "html": "<span class=\"brand-mark\" aria-hidden=\"true\">K</span>",
           "target": [
             ".app-brand > .brand-mark[aria-hidden=\"true\"]"
           ]
@@ -7174,7 +7174,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h1>Zero Agency OS</h1>",
+          "html": "<h1>KeepMind OS</h1>",
           "target": [
             "h1"
           ]
@@ -7249,7 +7249,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">Z</span>",
+          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">K</span>",
           "target": [
             ".onboard-turn:nth-child(3) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(3) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
           ]
@@ -7299,7 +7299,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">Z</span>",
+          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">K</span>",
           "target": [
             ".onboard-turn:nth-child(4) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(1) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
           ]
@@ -7374,7 +7374,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">Z</span>",
+          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">K</span>",
           "target": [
             ".onboard-turn:nth-child(4) > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"]:nth-child(3) > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
           ]
@@ -7424,7 +7424,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">Z</span>",
+          "html": "<span class=\"brand-mark transcript-mark\" aria-hidden=\"true\">K</span>",
           "target": [
             ".x1na6nto > .x1q0g3np.onboard-assistant[aria-label=\"Message from assistant\"] > .xjl7jj.xb1t4hs.x2lah0s > .transcript-mark.brand-mark[aria-hidden=\"true\"]"
           ]

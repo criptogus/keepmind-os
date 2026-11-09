@@ -113,14 +113,14 @@
       "name": "light: capture q1 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 514
+        "elapsedMs": 537
       }
     },
     {
       "name": "light: q1 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 691
+        "elapsedMs": 712
       }
     },
     {
@@ -134,21 +134,21 @@
       "name": "light: capture q2 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 547
+        "elapsedMs": 535
       }
     },
     {
       "name": "light: q2 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 585
+        "elapsedMs": 575
       }
     },
     {
       "name": "light: capture q3 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 562
+        "elapsedMs": 533
       }
     },
     {
@@ -164,7 +164,7 @@
       "name": "light: q3 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 598
+        "elapsedMs": 576
       }
     },
     {
@@ -218,7 +218,7 @@
       "name": "light: field focus completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 13
+        "elapsedMs": 12
       }
     },
     {
@@ -247,35 +247,35 @@
       "name": "light: advanced labels completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 85
+        "elapsedMs": 81
       }
     },
     {
       "name": "light: capture q3-auth completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 588
+        "elapsedMs": 522
       }
     },
     {
       "name": "light: q3-auth completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 791
+        "elapsedMs": 739
       }
     },
     {
       "name": "light: capture connection-error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 537
+        "elapsedMs": 526
       }
     },
     {
       "name": "light: connection-error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 576
+        "elapsedMs": 564
       }
     },
     {
@@ -307,21 +307,21 @@
       "name": "light: capture q4 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 572
+        "elapsedMs": 509
       }
     },
     {
       "name": "light: q4 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 615
+        "elapsedMs": 578
       }
     },
     {
       "name": "light: capture error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 533
+        "elapsedMs": 553
       }
     },
     {
@@ -339,7 +339,7 @@
       "name": "light: error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 561
+        "elapsedMs": 580
       }
     },
     {
@@ -350,7 +350,7 @@
       "name": "light: capture q3-pricing-confirm completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 510
+        "elapsedMs": 508
       }
     },
     {
@@ -374,7 +374,7 @@
       "name": "light: q3-pricing-confirm completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 655
+        "elapsedMs": 651
       }
     },
     {
@@ -418,21 +418,21 @@
       "name": "light: capture summary completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 508
+        "elapsedMs": 515
       }
     },
     {
       "name": "light: summary completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 753
+        "elapsedMs": 761
       }
     },
     {
       "name": "light: tab-test completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 1069
+        "elapsedMs": 1024
       }
     },
     {
@@ -453,14 +453,14 @@
       "name": "light: resume completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 139
+        "elapsedMs": 145
       }
     },
     {
       "name": "light: capture workspace completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 471
+        "elapsedMs": 488
       }
     },
     {
@@ -485,7 +485,7 @@
       "name": "light: workspace completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 717
+        "elapsedMs": 831
       }
     },
     {
@@ -511,14 +511,14 @@
       "name": "dark: capture q1 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 527
+        "elapsedMs": 601
       }
     },
     {
       "name": "dark: q1 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 692
+        "elapsedMs": 756
       }
     },
     {
@@ -532,21 +532,21 @@
       "name": "dark: capture q2 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 556
+        "elapsedMs": 613
       }
     },
     {
       "name": "dark: q2 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 590
+        "elapsedMs": 651
       }
     },
     {
       "name": "dark: capture q3 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 573
+        "elapsedMs": 501
       }
     },
     {
@@ -562,7 +562,7 @@
       "name": "dark: q3 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 604
+        "elapsedMs": 525
       }
     },
     {
@@ -616,7 +616,7 @@
       "name": "dark: field focus completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 14
+        "elapsedMs": 12
       }
     },
     {
@@ -645,35 +645,35 @@
       "name": "dark: advanced labels completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 95
+        "elapsedMs": 85
       }
     },
     {
       "name": "dark: capture q3-auth completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 544
+        "elapsedMs": 609
       }
     },
     {
       "name": "dark: q3-auth completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 746
+        "elapsedMs": 783
       }
     },
     {
       "name": "dark: capture connection-error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 541
+        "elapsedMs": 564
       }
     },
     {
       "name": "dark: connection-error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 575
+        "elapsedMs": 598
       }
     },
     {
@@ -705,21 +705,21 @@
       "name": "dark: capture q4 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 547
+        "elapsedMs": 527
       }
     },
     {
       "name": "dark: q4 completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 593
+        "elapsedMs": 573
       }
     },
     {
       "name": "dark: capture error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 557
+        "elapsedMs": 507
       }
     },
     {
@@ -737,7 +737,7 @@
       "name": "dark: error completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 581
+        "elapsedMs": 531
       }
     },
     {
@@ -748,7 +748,7 @@
       "name": "dark: capture q3-pricing-confirm completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 505
+        "elapsedMs": 497
       }
     },
     {
@@ -772,7 +772,7 @@
       "name": "dark: q3-pricing-confirm completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 645
+        "elapsedMs": 635
       }
     },
     {
@@ -816,21 +816,21 @@
       "name": "dark: capture summary completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 534
+        "elapsedMs": 514
       }
     },
     {
       "name": "dark: summary completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 782
+        "elapsedMs": 757
       }
     },
     {
       "name": "dark: tab-test completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 1078
+        "elapsedMs": 1136
       }
     },
     {
@@ -851,14 +851,14 @@
       "name": "dark: resume completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 109
+        "elapsedMs": 129
       }
     },
     {
       "name": "dark: capture workspace completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 482
+        "elapsedMs": 567
       }
     },
     {
@@ -883,7 +883,7 @@
       "name": "dark: workspace completed",
       "pass": true,
       "detail": {
-        "elapsedMs": 723
+        "elapsedMs": 798
       }
     },
     {
@@ -1213,7 +1213,7 @@
                 "reveal": false
               },
               {
-                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside KeepMind.",
                 "width": 346,
                 "height": 82.5,
                 "primary": false,
@@ -1323,7 +1323,7 @@
                 "reveal": false
               },
               {
-                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside KeepMind.",
                 "width": 346,
                 "height": 82.5,
                 "primary": false,
@@ -1461,7 +1461,7 @@
                 "reveal": false
               },
               {
-                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside KeepMind.",
                 "width": 346,
                 "height": 82.5,
                 "primary": false,
@@ -2078,7 +2078,7 @@
                 "reveal": false
               },
               {
-                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside KeepMind.",
                 "width": 346,
                 "height": 82.5,
                 "primary": false,
@@ -2188,7 +2188,7 @@
                 "reveal": false
               },
               {
-                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside KeepMind.",
                 "width": 346,
                 "height": 82.5,
                 "primary": false,
@@ -2326,7 +2326,7 @@
                 "reveal": false
               },
               {
-                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside KeepMind.",
                 "width": 346,
                 "height": 82.5,
                 "primary": false,
@@ -2951,7 +2951,7 @@
                 "reveal": false
               },
               {
-                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside KeepMind.",
                 "width": 346,
                 "height": 82.5,
                 "primary": false,
@@ -3061,7 +3061,7 @@
                 "reveal": false
               },
               {
-                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside KeepMind.",
                 "width": 346,
                 "height": 82.5,
                 "primary": false,
@@ -3199,7 +3199,7 @@
                 "reveal": false
               },
               {
-                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside KeepMind.",
                 "width": 346,
                 "height": 82.5,
                 "primary": false,
@@ -3816,7 +3816,7 @@
                 "reveal": false
               },
               {
-                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside KeepMind.",
                 "width": 346,
                 "height": 82.5,
                 "primary": false,
@@ -3926,7 +3926,7 @@
                 "reveal": false
               },
               {
-                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside KeepMind.",
                 "width": 346,
                 "height": 82.5,
                 "primary": false,
@@ -4064,7 +4064,7 @@
                 "reveal": false
               },
               {
-                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside KeepMind.",
                 "width": 346,
                 "height": 82.5,
                 "primary": false,
@@ -4689,7 +4689,7 @@
                 "reveal": false
               },
               {
-                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside KeepMind.",
                 "width": 346,
                 "height": 82.5,
                 "primary": false,
@@ -4799,7 +4799,7 @@
                 "reveal": false
               },
               {
-                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside KeepMind.",
                 "width": 346,
                 "height": 82.5,
                 "primary": false,
@@ -4937,7 +4937,7 @@
                 "reveal": false
               },
               {
-                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside KeepMind.",
                 "width": 346,
                 "height": 82.5,
                 "primary": false,
@@ -5554,7 +5554,7 @@
                 "reveal": false
               },
               {
-                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside KeepMind.",
                 "width": 346,
                 "height": 82.5,
                 "primary": false,
@@ -5664,7 +5664,7 @@
                 "reveal": false
               },
               {
-                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside KeepMind.",
                 "width": 346,
                 "height": 82.5,
                 "primary": false,
@@ -5802,7 +5802,7 @@
                 "reveal": false
               },
               {
-                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.",
+                "name": "Codex Uses the Codex app already on this Mac. You sign in there, not inside KeepMind.",
                 "width": 346,
                 "height": 82.5,
                 "primary": false,

@@ -13,7 +13,7 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-11-09T18:00:44.428Z",
+  "timestamp": "2026-11-09T18:07:09.932Z",
   "url": "http://zaos-renderer.test/",
   "toolOptions": {
     "runOnly": {
@@ -1557,7 +1557,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<span class=\"brand-mark\" aria-hidden=\"true\">Z</span>",
+          "html": "<span class=\"brand-mark\" aria-hidden=\"true\">K</span>",
           "target": [
             ".brand-mark"
           ]
@@ -3348,7 +3348,7 @@
               "data": null,
               "relatedNodes": [
                 {
-                  "html": "<h1>Zero Agency OS</h1>",
+                  "html": "<h1>KeepMind OS</h1>",
                   "target": [
                     "h1"
                   ]
@@ -3437,7 +3437,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span class=\"brand-mark\" aria-hidden=\"true\">Z</span>",
+          "html": "<span class=\"brand-mark\" aria-hidden=\"true\">K</span>",
           "target": [
             ".brand-mark"
           ]
@@ -3462,7 +3462,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h1>Zero Agency OS</h1>",
+          "html": "<h1>KeepMind OS</h1>",
           "target": [
             "h1"
           ]

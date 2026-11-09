@@ -139,7 +139,7 @@ function App() {
     const operational = status.state === 'ready';
     return <div className="zero-agency-os"><Theme theme={neutralTheme} mode={mode}><div className="za-screen" ref={screenRef}>
         <a className="za-skip" href="#workspace-content">Skip to content</a>
-        <header className="app-topbar"><div className="app-brand"><span className="brand-mark" aria-hidden="true">Z</span><h1>Zero Agency OS</h1></div>
+        <header className="app-topbar"><div className="app-brand"><span className="brand-mark" aria-hidden="true">K</span><h1>KeepMind OS</h1></div>
         <div className="topbar-actions"><div className="status-line" role="status" aria-live="polite"><StatusDot variant={operational ? 'neutral' : 'warning'} label={operational ? 'Ready' : 'Starting'}/>{operational ? `${status.paidExecution ? 'Paid execution enabled' : 'Paid execution disabled'} · ${busy ? message : 'Local service ready'}` : `Local service: ${status.state}`}</div>
         <span id="configuration-toggle"/><IconButton size="lg" data-mode-toggle label={mode === 'light' ? 'Use dark mode' : 'Use light mode'} icon={<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7">{mode === 'light' ? <path d="M20 15.5A8.5 8.5 0 0 1 8.5 4 8.5 8.5 0 1 0 20 15.5Z"/> : <><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></>}</svg>} variant="ghost" onClick={() => { setManual(true); setMode(mode === 'light' ? 'dark' : 'light'); }}/></div></header>
         {error && <p id="action-error" className="notice" role="alert">{error}</p>}

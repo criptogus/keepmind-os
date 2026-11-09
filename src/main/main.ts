@@ -293,7 +293,7 @@ else {
     void app.whenReady().then(async () => {
         if (smoke) { nativeTheme.themeSource = 'light'; const timeout = setTimeout(() => { error = 'Smoke timed out'; app.quit(); }, 350000); timeout.unref(); }
         const ownedUrl = pathToFileURL(paths.renderer).href;
-        window = new BrowserWindow({ width: 1280, height: 820, minWidth: 960, minHeight: 640, title: 'Zero Agency OS', webPreferences: { preload: paths.preload, contextIsolation: true, nodeIntegration: false, sandbox: true, webSecurity: true } });
+        window = new BrowserWindow({ width: 1280, height: 820, minWidth: 960, minHeight: 640, title: 'KeepMind OS', webPreferences: { preload: paths.preload, contextIsolation: true, nodeIntegration: false, sandbox: true, webSecurity: true } });
         secureWindow(window, url => url === ownedUrl);
         window.webContents.session.webRequest.onHeadersReceived((details, callback) => {
             callback({ responseHeaders: { ...details.responseHeaders, ...(details.url.startsWith('file://') ? { 'Content-Security-Policy': [csp] } : {}) } });

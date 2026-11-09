@@ -8,7 +8,7 @@ Launch with `npm run dev` (build then Electron), or `npm run build && npm start`
 
 The app owns a dedicated Paperclip data directory and selects ephemeral loopback ports for HTTP and embedded PostgreSQL. Keep that directory private and back it up securely. Logs and database files may contain task content. Do not share them publicly.
 
-Packaging is intended through electron-builder using npm run dist:mac, producing unsigned arm64/x64 artifacts. Signing and notarization are out of scope. Packaging and macOS execution are untested on this box and require operator packaging verification.
+Packaging is intended through electron-builder using npm run dist:mac, producing unsigned arm64/x64 artifacts. The packaged application is `KeepMind OS.app`; DMG artifacts use the `KeepMind OS` product name. Open the DMG and copy `KeepMind OS.app` to Applications to install it. Signing and notarization are out of scope. Packaging and macOS execution are untested on this box and require operator packaging verification.
 
 On a Linux host with Electron prerequisites and Xvfb, run:
 

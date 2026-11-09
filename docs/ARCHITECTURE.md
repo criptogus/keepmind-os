@@ -44,3 +44,17 @@ operator-specified models. API execution remains in the ZAOS runner. Subscriptio
 execution delegates to installed Codex/Claude binaries from that runner, never a
 new Paperclip adapter. Binary resolution is trusted main-process PATH discovery
 or launch-time ZAOS_CODEX_BIN / ZAOS_CLAUDE_BIN. See ADR 0001.
+
+## Naming
+
+The product is KeepMind OS; its short name is KeepMind. Legacy internal names
+remain for data compatibility: package `name` (`zero-agency-os`) preserves
+Electron's development userData location, and `agency.zero.os` preserves app
+identity. `ZAOS_*` environment variables, `window.zaos` and IPC identifiers,
+`zaos/` state files (`workspace.json`, `operator.json`, `instance-secrets.json`),
+`zaos.onboard.v1`, keyring/safeStorage names and `persist:zaos-board` keep existing
+configuration, credentials and drafts accessible. The `zaos-*` runner filenames,
+`.zero-agency-os` / `za-*` CSS classes and `zero-agency-theme.css` stay stable,
+as do test fixture names and Paperclip-side identifiers. The GitHub repository
+name and URLs remain `criptogus/ZeroAgencyOS`. Existing operators retain their
+stored display name; newly created operators use KeepMind Operator.

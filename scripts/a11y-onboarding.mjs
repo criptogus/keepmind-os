@@ -102,7 +102,7 @@ try {
   });
   await step('q3-auth', async () => {
   const cards = page.getByRole('radiogroup', { name: 'Connector', exact: true }).getByRole('radio');
-  check(`${mode}: Codex card copy`, await page.getByRole('radio', { name: 'Codex Uses the Codex app already on this Mac. You sign in there, not inside Zero Agency.', exact: true }).count() === 1);
+  check(`${mode}: Codex card copy`, await page.getByRole('radio', { name: 'Codex Uses the Codex app already on this Mac. You sign in there, not inside KeepMind.', exact: true }).count() === 1);
   check(`${mode}: Claude card copy`, await page.getByRole('radio', { name: 'Claude Paste an API key from the Anthropic Console.', exact: true }).count() === 1);
   { const observed5 = await cards.count(); check(`${mode}: six connector cards`, observed5 === 6, { observed: observed5 }); }
   await cards.first().focus(); await page.keyboard.press('ArrowRight'); { const observed6 = await cards.nth(1).evaluate(e => e === document.activeElement); check(`${mode}: arrow right`, observed6, { observed: observed6 }); }

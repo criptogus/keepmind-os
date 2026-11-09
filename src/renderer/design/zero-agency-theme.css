@@ -1,4 +1,4 @@
-/* Zero Agency · Neutral 0.7.11. Only verified upstream custom properties.
+/* KeepMind · Neutral 0.7.11. Only verified upstream custom properties.
    Apply to owned screens only. Import after upstream CSS. Light success text uses brand ink; other semantic roles unchanged. */
 @font-face { font-family: Inter; src: url("../../../assets/fonts/InterVariable.ttf") format("truetype"); font-style: normal; font-weight: 100 900; font-display: swap; }
 @scope (.zero-agency-os) to ([data-astryx-theme]:not([data-astryx-theme="neutral"])) {

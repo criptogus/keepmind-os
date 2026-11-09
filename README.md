@@ -1,9 +1,9 @@
-# Zero Agency OS
+# KeepMind OS
 
 MVP v0.1 — private, pre-release
 
 A local-first desktop operating layer for human-governed agent teams, maintained
-by Zero Agency and built on Paperclip (MIT). macOS is the first target.
+by KeepMind and built on Paperclip (MIT). macOS is the first target.
 
 License: TBD (pending owner decision)
 
@@ -42,7 +42,7 @@ Runner output goes to human review, never automatic completion or publication.
 
 See [Architecture](docs/ARCHITECTURE.md), [Security model](docs/SECURITY-MODEL.md),
 [Spend policy](docs/SPEND-POLICY.md), [Telemetry](docs/TELEMETRY.md), and
-[Run on macOS](docs/RUN-MACOS.md). Paperclip is MIT; Zero Agency OS does not copy
+[Run on macOS](docs/RUN-MACOS.md). Paperclip is MIT; KeepMind OS does not copy
 CompanyOS code, UI, or assets. Dependency notices are in THIRD_PARTY_NOTICES.md.
 
 Backend connectors: Custom OpenAI-compatible, OpenRouter (live model pricing),

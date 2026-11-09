@@ -11,7 +11,7 @@ export async function authenticateOperator(api: BoardApi, userData: string, encr
     }>(path, encryptor);
     if (!credentials) {
         credentials = { email: `operator-${randomBytes(8).toString('hex')}@zaos.local`, password: randomBytes(32).toString('hex') };
-        await api.request('POST', '/api/auth/sign-up/email', { ...credentials, name: 'Zero Agency Operator' });
+        await api.request('POST', '/api/auth/sign-up/email', { ...credentials, name: 'KeepMind Operator' });
         await writeEncrypted(path, credentials, encryptor);
     }
     else

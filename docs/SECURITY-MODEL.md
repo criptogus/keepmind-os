@@ -8,7 +8,7 @@ Only the process adapter with the exact ZAOS runner argument is supported by the
 
 BYOK keys are sent only to Paperclip's local secret endpoint and the selected provider. Adapter environments reference secret IDs. Provider endpoints require HTTPS, with HTTP allowed only for 127.0.0.1 mock services. Redirects are refused. Raw fetch errors and response bodies are not surfaced in logs. Runner results are redacted for the two API keys before posting comments. Unavailable OS encryption fails closed, including Linux basic_text. Only ZAOS_SMOKE=1 on Linux permits a logged test-only base64 encryptor. Never use real credentials in smoke mode.
 
-Paid execution defaults off. A zero budget disables upstream enforcement, so Zero Agency OS rejects zero caps and pauses agents when execution is disabled. Unknown costs block further work. See SPEND-POLICY.md.
+Paid execution defaults off. A zero budget disables upstream enforcement, so KeepMind OS rejects zero caps and pauses agents when execution is disabled. Unknown costs block further work. See SPEND-POLICY.md.
 
 Residual risks: another process running as the same OS user can read or modify local files and logs; file permissions are not a defense against that user. Embedded PostgreSQL is not encrypted. The runner is not OS-sandboxed in v0.1. The runner acknowledgement is trusted local execution evidence, not a signed provider receipt. A malicious replacement runner or modified log can undermine reconciliation. Provider usage may exceed estimates, and external provider billing is authoritative. Pausing an agent prevents future execution but does not guarantee cancellation of a provider request already in flight. A forced server kill can interrupt accounting and must lead to review rather than automatic replay.
 

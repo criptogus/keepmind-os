@@ -8,5 +8,5 @@ export function selectEncryptor(storage: { isEncryptionAvailable(): boolean; get
         log('ZAOS_SMOKE: TEST-ONLY encryptor enabled; never use real credentials.');
         return { encrypt: v => Buffer.from(v).toString('base64'), decrypt: v => Buffer.from(v, 'base64').toString() };
     }
-    throw new Error('Secure credential encryption is unavailable. Enable the OS keychain or secret service and restart Zero Agency OS.');
+    throw new Error('Secure credential encryption is unavailable. Enable the OS keychain or secret service and restart KeepMind OS.');
 }

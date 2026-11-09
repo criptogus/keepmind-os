@@ -1,6 +1,6 @@
 # Third-party notices
 
-This file does not assign a license to Zero Agency OS. License: TBD (pending owner decision).
+This file does not assign a license to KeepMind OS. License: TBD (pending owner decision).
 
 ## Paperclip — paperclipai 2026.1106.0
 
