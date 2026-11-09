@@ -1,0 +1,82 @@
+{
+  "name": "zero-agency-os",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=24.11.0"
+  },
+  "main": "dist/main/main.js",
+  "scripts": {
+    "build": "vite build && esbuild src/main/main.ts --bundle --platform=node --format=esm --packages=external --outfile=dist/main/main.js && esbuild src/preload/preload.ts --bundle --platform=node --format=cjs --external:electron --outfile=dist/main/preload.cjs",
+    "dev": "vite --host 127.0.0.1 --port 0",
+    "start": "electron .",
+    "test": "vitest run",
+    "test:integration": "vitest run --config vitest.config.ts --project integration",
+    "typecheck": "tsc --noEmit",
+    "smoke:electron": "node scripts/smoke-electron.mjs",
+    "dist:mac": "npm run build && electron-builder --mac",
+    "astryx": "astryx",
+    "scan:secrets": "node scripts/scan-secrets.mjs"
+  },
+  "dependencies": {
+    "paperclipai": "2026.1106.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "@astryxdesign/core": "0.7.11",
+    "@astryxdesign/theme-neutral": "0.7.11",
+    "@stylexjs/stylex": "0.19.1"
+  },
+  "devDependencies": {
+    "electron": "45.2.3",
+    "typescript": "~5.9.3",
+    "vite": "^7",
+    "@vitejs/plugin-react": "^5",
+    "vitest": "^3",
+    "@types/node": "^24",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "esbuild": "0.28.2",
+    "electron-builder": "^26",
+    "@astryxdesign/cli": "0.7.11",
+    "zod": "^3.25"
+  },
+  "build": {
+    "appId": "agency.zero.os",
+    "productName": "Zero Agency OS",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "assets/**/*",
+      "package.json",
+      "THIRD_PARTY_NOTICES.md"
+    ],
+    "asar": true,
+    "asarUnpack": [
+      "node_modules/paperclipai/**",
+      "node_modules/@embedded-postgres/**"
+    ],
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
+      ],
+      "identity": null
+    }
+  }
+}
