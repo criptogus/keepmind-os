@@ -56,18 +56,63 @@ fails at NSIS without Wine (`spawn wine ENOENT`). Even with Wine, the
 
 - `@embedded-postgres/linux-x64`
 - `@img/sharp-linux-x64`
-- `@cursor/sdk-linux-x64`
-- Paperclip Copilot `linux-x64` prebuilds
 
 Such a cross-built Windows app would not work. Install dependencies and build
 on each destination OS and architecture. The local `dist:mac` command retains
 both targets, but x64 output built on Apple Silicon would carry arm64 native
 dependencies; generating both archives does not make both runnable. CI uses
 separate native macOS runners for this reason. Do not omit optional dependencies.
-Paperclip's installed production dependencies remain unpacked through the
-existing `asarUnpack` rule, alongside `src/runner`. Application assets, notices,
+Only reviewed dependencies in `scripts/bundle-allowlist.json` can ship. The
+explicit `asarUnpack` list keeps their runtime files and `src/runner` outside
+ASAR for standalone Node; unrestricted `node_modules/**/*` unpacking is forbidden. Application assets, notices,
 renderer, main process, preload and Node are packaged; provider credentials,
 user data and provider subscriptions are not bundled.
+
+## Bundle license policy and optional adapters
+
+`scripts/bundle-license-policy.mjs` is the policy
+source; `scripts/bundle-allowlist.json` records reviewed production package names.
+After reviewing a dependency change, update that list and run
+`node scripts/bundle-license-policy.mjs --write` to synchronize electron-builder's
+`files` and `asarUnpack`. Run `npm run check:bundle-licenses` and `npm test` to check
+configuration drift, the installed dependency tree, and nested exclusion fixtures.
+These checks do not create installers. New package names are excluded by default.
+
+The shipped app excludes `@anthropic-ai/claude-agent-sdk` and its platform
+packages, `@cursor/sdk` and its platform packages, and all `@github/copilot` /
+`@github/copilot-*` packages because their licenses restrict redistribution.
+Exclusions apply to nested `node_modules` too. Paperclip's vendored
+`@paperclipai/server/provider-assets/copilot` tree is also excluded.
+The default ZAOS process runner / BYOK path does not need these SDKs.
+
+Paperclip's registry eagerly imports Cursor Cloud. The `afterPack` hook guards
+that adapter's staged server entry with lazy imports and structured unavailable
+responses; it never changes the workspace dependencies. It checks both ASAR and
+unpacked output for forbidden paths and fails if the upstream entry changes.
+The remaining Paperclip Copilot integration code resolves its provider assets
+when used; it is not a supported MVP adapter. Residual risk: deeper bundled
+Paperclip code could embed Copilot payloads under other names. Path checks are
+not a full license/content audit. Native packaged process startup still needs
+verification after this policy change; the historical smoke below predates it.
+
+Operators who accept upstream terms can install the SDKs themselves into a
+user-writable directory (or a development tree), for example:
+
+```sh
+mkdir -p "$HOME/.keepmind-optional"
+npm install --prefix "$HOME/.keepmind-optional" @anthropic-ai/claude-agent-sdk @cursor/sdk @github/copilot
+export KEEPMIND_OPTIONAL_PACKAGES_DIR="$HOME/.keepmind-optional"
+```
+
+Install only the packages you need. KeepMind's `optionalAdapterStatus` /
+`loadOptionalAdapter` helpers detect them dynamically through that directory's
+`node_modules`, returning `available: false` and installation guidance if loading
+fails. Without the variable they resolve from the app/development tree. For
+Cursor Cloud status outside the packaged shim, install
+`@paperclipai/adapter-cursor-cloud` there too. This detection does not enable
+non-process adapters in the MVP or automatically configure Paperclip's separate
+SDK resolution; advanced Paperclip use requires its own upstream configuration.
+Never copy these local installations into a redistributed application.
 
 ## Verified Linux results
 

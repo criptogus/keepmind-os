@@ -33,7 +33,7 @@ On Linux with an X server, run `xvfb-run -a env ZAOS_SMOKE_LINUX=1 npm run smoke
 after building. The smoke uses a temporary instance and a local mock provider,
 captures six PNGs in `evidence/screenshots`, and writes `evidence/smoke-report.json`.
 Electron and real Paperclip execution must be verified by the operator outside
-the restricted sandbox. Cross-platform packaging is unsigned and untested; see [Packaging](docs/PACKAGING.md).
+the restricted sandbox. Cross-platform packaging is unsigned and untested; see [Packaging](docs/PACKAGING.md). Restricted Claude Agent, Cursor, and Copilot SDKs are excluded from shipped apps; the default process-runner / BYOK path does not require them.
 
 Paid execution defaults off. Enabling requires a BYOK secret, known prices,
 positive monthly cap, and explicit consent. A cap of zero is rejected because
