@@ -1,0 +1,152 @@
+import React, { useEffect, useState } from 'react';
+import { Badge, Button, Card, Group, Progress, Stack, Text, Title } from '@mantine/core';
+import { useAgentStore } from '../../store/agentStore';
+import { useTeamStore } from '../../store/teamStore';
+
+interface Props {
+  onNavigate?: (section: string) => void;
+}
+
+
+
+export default function AnalyticsDashboard({ onNavigate }: Props) {
+  const { agents, fetchAgents } = useAgentStore();
+  const { teams, fetchTeams } = useTeamStore();
+  const [executions, setExecutions] = useState(0);
+  const [pendingApprovals, setPendingApprovals] = useState(0);
+  const [providerConnected, setProviderConnected] = useState(false);
+  const [companyName, setCompanyName] = useState('');
+  const [secondBrain, setSecondBrain] = useState<{ enabled: boolean; hasToken: boolean } | null>(null);
+
+  useEffect(() => {
+    const load = async () => {
+      await Promise.all([fetchAgents(), fetchTeams()]);
+      try {
+        const [openai, anthropic] = await Promise.all([
+          window.electronAPI.oauthIsAuthenticated('openai'),
+          window.electronAPI.oauthIsAuthenticated('anthropic'),
+        ]);
+        setProviderConnected(openai || anthropic);
+      } catch { /* oauth status unavailable */ }
+      try {
+        const state = await window.electronAPI.getGovernanceState();
+        setPendingApprovals(state.pendingApprovals.length);
+      } catch { /* governance unavailable */ }
+      try {
+        const execs = await window.electronAPI.getAgentExecutions();
+        setExecutions(execs.length);
+      } catch { /* executions unavailable */ }
+      try {
+        const company = await window.electronAPI.getCompany();
+        setCompanyName(company.name);
+      } catch { /* company unavailable */ }
+      try {
+        const sb = await window.electronAPI.secondBrainGetConfig();
+        setSecondBrain(sb);
+      } catch { /* second brain unavailable */ }
+    };
+    load();
+  }, [fetchAgents, fetchTeams]);
+
+  const checklist = [
+    { label: 'Connect an AI provider (API key or OAuth)', done: providerConnected, target: 'advanced' },
+    { label: 'Create your first agent', done: agents.length > 0, target: 'agents' },
+    { label: 'Create a team', done: teams.length > 0, target: 'teams' },
+    { label: 'Run an agent execution', done: executions > 0, target: 'agents' },
+    { label: 'Connect your second brain (KeepMind Corp)', done: !!secondBrain?.enabled && !!secondBrain?.hasToken, target: 'advanced' },
+  ];
+  const doneCount = checklist.filter((c) => c.done).length;
+  const progress = Math.round((doneCount / checklist.length) * 100);
+
+  const recentAgents = [...agents]
+    .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+    .slice(0, 5);
+
+  const stats = [
+    { label: 'Agents', value: agents.length },
+    { label: 'Teams', value: teams.length },
+    { label: 'Executions', value: executions },
+    { label: 'Pending Approvals', value: pendingApprovals, warn: pendingApprovals > 0 },
+  ];
+
+  return (
+    <Stack gap="xl">
+      <Group justify="space-between" align="flex-start">
+        <div>
+          <Title order={1}>Dashboard</Title>
+          <Text c="dimmed" size="sm">
+            {companyName ? `${companyName} — ` : ''}your local agent workspace at a glance.
+          </Text>
+        </div>
+        <Group gap="sm">
+          <Button variant="default" onClick={() => onNavigate?.('advanced')}>Connect Provider</Button>
+          <Button onClick={() => onNavigate?.('agents')}>New Agent</Button>
+        </Group>
+      </Group>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
+        {stats.map((s) => (
+          <Card key={s.label} withBorder padding="lg" radius="md">
+            <Stack gap="xs">
+              <Text size="sm" c="dimmed">{s.label}</Text>
+              <span style={{ fontSize: 32, fontWeight: 700, lineHeight: 1.1 }}>{s.value}</span>
+            </Stack>
+          </Card>
+        ))}
+      </div>
+
+      <Card withBorder padding="lg" radius="md">
+        <Stack gap="md">
+          <Group justify="space-between">
+            <Title order={3}>Getting started</Title>
+            <Badge color="dark" variant="light">
+              {doneCount}/{checklist.length}
+            </Badge>
+          </Group>
+          <Progress value={progress} />
+          {checklist.map((item) => (
+            <div
+              key={item.label}
+              onClick={() => !item.done && onNavigate?.(item.target)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 10,
+                padding: '10px 12px', borderRadius: 8,
+                cursor: item.done ? 'default' : 'pointer',
+              }}
+              onMouseEnter={(e) => { if (!item.done) (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--mantine-color-gray-1)'; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent'; }}
+            >
+              <Badge size="sm" color={item.done ? 'dark' : 'gray'} variant="light">
+                {item.done ? 'Done' : 'To do'}
+              </Badge>
+              <Text size="sm" c={item.done ? 'dimmed' : undefined}>{item.label}</Text>
+            </div>
+          ))}
+        </Stack>
+      </Card>
+
+      <Stack gap="sm">
+        <Title order={3}>Recent agents</Title>
+        {recentAgents.length === 0 ? (
+          <Card withBorder padding="xl" radius="md">
+            <Stack align="center" gap="sm">
+              <Text c="dimmed">No agents yet.</Text>
+              <Text size="sm" c="dimmed">Create one to get started — pick a model, write a system prompt, and run it.</Text>
+              <Button onClick={() => onNavigate?.('agents')}>Create your first agent</Button>
+            </Stack>
+          </Card>
+        ) : (
+          recentAgents.map((agent) => (
+            <div key={agent.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', borderRadius: 8, border: '1px solid var(--mantine-color-gray-3)', backgroundColor: 'var(--mantine-color-body)' }}>
+              <Text size="sm" fw={500}>{agent.name}</Text>
+              <Group gap="sm">
+                <Badge size="sm" color="gray" variant="light">{agent.config.model}</Badge>
+                <Text size="xs" c="dimmed">{new Date(agent.createdAt).toLocaleDateString()}</Text>
+              </Group>
+            </div>
+          ))
+        )}
+      </Stack>
+    </Stack>
+  );
+}

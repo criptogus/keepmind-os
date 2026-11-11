@@ -1,0 +1,323 @@
+import { contextBridge, ipcRenderer } from 'electron';
+import type { Agent, Team, Approval, GovernanceRule, AuditEntry, AgentExecution, AgentConfig, CreateAgentInput, TeamConfig, AppSettings, Skill, AgentTrigger, LocalUser, UserRole, ComputerAccessLevel } from '../shared/types.js';
+import type { ModelCatalogResponse } from '../shared/models.js';
+
+contextBridge.exposeInMainWorld('electronAPI', {
+  // App info
+  getVersion: () => ipcRenderer.invoke('app:getVersion'),
+  getPath: (name: string) => ipcRenderer.invoke('app:getPath', name),
+
+  // Window controls
+  minimizeWindow: () => ipcRenderer.invoke('window:minimize'),
+  maximizeWindow: () => ipcRenderer.invoke('window:maximize'),
+  closeWindow: () => ipcRenderer.invoke('window:close'),
+
+  // Agents
+  getAgents: () => ipcRenderer.invoke('agents:getList') as Promise<Agent[]>,
+  getAgent: (id: string) => ipcRenderer.invoke('agents:get', id) as Promise<Agent | null>,
+  createAgent: (input: CreateAgentInput) => ipcRenderer.invoke('agents:create', input) as Promise<Agent>,
+  updateAgent: (id: string, config: Partial<AgentConfig>) => ipcRenderer.invoke('agents:update', id, config) as Promise<Agent>,
+  deleteAgent: (id: string) => ipcRenderer.invoke('agents:delete', id) as Promise<void>,
+  executeAgent: (id: string, input: Record<string, unknown>) => ipcRenderer.invoke('agents:execute', id, input) as Promise<AgentExecution>,
+  cancelExecution: (executionId: string) => ipcRenderer.invoke('agents:cancelExecution', executionId) as Promise<void>,
+  getAgentExecutions: (agentId?: string) => ipcRenderer.invoke('agents:getExecutions', agentId) as Promise<AgentExecution[]>,
+
+  // Teams
+  getTeams: () => ipcRenderer.invoke('teams:getList') as Promise<Team[]>,
+  getTeam: (id: string) => ipcRenderer.invoke('teams:get', id) as Promise<Team | null>,
+  createTeam: (config: TeamConfig) => ipcRenderer.invoke('teams:create', config) as Promise<Team>,
+  updateTeam: (id: string, config: Partial<TeamConfig>) => ipcRenderer.invoke('teams:update', id, config) as Promise<Team>,
+  deleteTeam: (id: string) => ipcRenderer.invoke('teams:delete', id) as Promise<void>,
+  addAgentToTeam: (teamId: string, agentId: string) => ipcRenderer.invoke('teams:addAgent', teamId, agentId) as Promise<Team>,
+  removeAgentFromTeam: (teamId: string, agentId: string) => ipcRenderer.invoke('teams:removeAgent', teamId, agentId) as Promise<Team>,
+  executeTeam: (teamId: string, input: Record<string, unknown>) => ipcRenderer.invoke('teams:execute', teamId, input) as Promise<{
+    teamId: string;
+    status: 'completed' | 'failed' | 'partial';
+    results: Array<{
+      agentId: string;
+      agentName: string;
+      status: 'completed' | 'failed';
+      output?: Record<string, unknown>;
+      error?: string;
+    }>;
+    duration: number;
+  }>,
+
+  // Governance
+  getGovernanceState: () => ipcRenderer.invoke('governance:getState') as Promise<{ pendingApprovals: Approval[]; rules: GovernanceRule[] }>,
+  getPendingApprovals: () => ipcRenderer.invoke('governance:getPendingApprovals') as Promise<Approval[]>,
+  approveAction: (actionId: string) => ipcRenderer.invoke('governance:approve', actionId) as Promise<void>,
+  rejectAction: (actionId: string, reason: string) => ipcRenderer.invoke('governance:reject', actionId, reason) as Promise<void>,
+  setGovernanceRule: (rule: GovernanceRule) => ipcRenderer.invoke('governance:setRule', rule) as Promise<void>,
+  getGovernanceRules: () => ipcRenderer.invoke('governance:getRules') as Promise<GovernanceRule[]>,
+  deleteGovernanceRule: (ruleId: string) => ipcRenderer.invoke('governance:deleteRule', ruleId) as Promise<void>,
+
+  // Audit Logs
+  getAuditLogs: (limit?: number, offset?: number) => ipcRenderer.invoke('audit:getLogs', limit, offset) as Promise<AuditEntry[]>,
+
+  // Settings
+  getSettings: () => ipcRenderer.invoke('settings:get') as Promise<AppSettings>,
+  updateSettings: (settings: Partial<AppSettings>) => ipcRenderer.invoke('settings:update', settings) as Promise<Record<string, string>>,
+
+  // Model catalog
+  listModels: () => ipcRenderer.invoke('models:list') as Promise<ModelCatalogResponse>,
+  refreshModels: () => ipcRenderer.invoke('models:refresh') as Promise<ModelCatalogResponse & { errors?: Record<string, string> }>,
+
+  // API Keys
+  setApiKey: (provider: 'openai' | 'anthropic', key: string) => ipcRenderer.invoke('api:setKey', provider, key) as Promise<void>,
+  clearApiKey: (provider: 'openai' | 'anthropic') => ipcRenderer.invoke('api:clearKey', provider) as Promise<void>,
+  hasApiKey: (provider: 'openai' | 'anthropic') => ipcRenderer.invoke('api:hasKey', provider) as Promise<boolean>,
+
+  // OAuth Authentication
+  oauthAuthenticate: (provider: 'openai' | 'anthropic') => ipcRenderer.invoke('oauth:authenticate', provider) as Promise<{
+    success: boolean;
+    tokens?: {
+      accessToken: string;
+      refreshToken?: string;
+      expiresAt?: number;
+      tokenType: string;
+    };
+    error?: string;
+  }>,
+  oauthIsAuthenticated: (provider: 'openai' | 'anthropic') => ipcRenderer.invoke('oauth:isAuthenticated', provider) as Promise<boolean>,
+  oauthIsConfigured: (provider: 'openai' | 'anthropic') => ipcRenderer.invoke('oauth:isConfigured', provider) as Promise<boolean>,
+  oauthGetToken: (provider: 'openai' | 'anthropic') => ipcRenderer.invoke('oauth:getToken', provider) as Promise<string | null>,
+  oauthLogout: (provider: 'openai' | 'anthropic') => ipcRenderer.invoke('oauth:logout', provider) as Promise<void>,
+
+  // Second Brain (KeepMind Corp)
+  secondBrainGetConfig: () => ipcRenderer.invoke('secondbrain:getConfig') as Promise<{ enabled: boolean; url: string; hasToken: boolean; access?: string; blockPii?: boolean }>,
+  secondBrainSetConfig: (config: { enabled?: boolean; url?: string; token?: string; access?: 'read' | 'write'; blockPii?: boolean }) =>
+    ipcRenderer.invoke('secondbrain:setConfig', config) as Promise<{ enabled: boolean; url: string; hasToken: boolean; access?: string; blockPii?: boolean }>,
+  secondBrainTest: () => ipcRenderer.invoke('secondbrain:test') as Promise<{ ok: boolean; error?: string }>,
+
+  // Skills
+  getSkills: () => ipcRenderer.invoke('skills:getAll') as Promise<Skill[]>,
+  getSkill: (id: string) => ipcRenderer.invoke('skills:get', id) as Promise<Skill | null>,
+  createSkill: (skill: Omit<Skill, 'id' | 'createdAt' | 'updatedAt'>) => ipcRenderer.invoke('skills:create', skill) as Promise<Skill>,
+  updateSkill: (id: string, updates: Partial<Omit<Skill, 'id' | 'createdAt'>>) => ipcRenderer.invoke('skills:update', id, updates) as Promise<Skill>,
+  deleteSkill: (id: string) => ipcRenderer.invoke('skills:delete', id) as Promise<void>,
+  listSkillTools: () => ipcRenderer.invoke('skills:listTools') as Promise<Array<{ name: string; description: string }>>,
+  improveSkill: (id: string) => ipcRenderer.invoke('skills:improve', id) as Promise<{ improvedPrompt: string }>,
+  importSkillFromGitHub: (url: string) => ipcRenderer.invoke('skills:importGitHub', url) as Promise<{ name: string; description: string; prompt: string; toolNames: string[]; source: string }>,
+  onAgentEvent: (callback: (event: { executionId: string; type: string; data?: unknown }) => void) => {
+    const listener = (_event: Electron.IpcRendererEvent, payload: any) => callback(payload);
+    ipcRenderer.on('agents:event', listener);
+    return () => ipcRenderer.removeListener('agents:event', listener);
+  },
+
+  // WhatsApp (Baileys)
+  whatsappGetStatus: () => ipcRenderer.invoke('whatsapp:getStatus') as Promise<{ status: 'disconnected' | 'connecting' | 'qr' | 'connected' | 'error'; phone: string }>,
+  whatsappStart: () => ipcRenderer.invoke('whatsapp:start') as Promise<{ status: string; phone: string }>,
+  whatsappStop: () => ipcRenderer.invoke('whatsapp:stop') as Promise<{ status: string; phone: string }>,
+  whatsappSendMessage: (to: string, text: string) => ipcRenderer.invoke('whatsapp:sendMessage', to, text) as Promise<{ ok: boolean }>,
+  whatsappGetMessages: (limit?: number, remote?: string) =>
+    ipcRenderer.invoke('whatsapp:getMessages', limit, remote) as Promise<Array<{ id: string; direction: string; remote: string; text: string; timestamp: number }>>,
+  whatsappClearMessages: () => ipcRenderer.invoke('whatsapp:clearMessages') as Promise<{ ok: boolean }>,
+  agentReachStatus: () =>
+    ipcRenderer.invoke('agentreach:status') as Promise<{ ok: boolean; installed: boolean; channels: Array<{ name: string; status: string; backend: string | null }>; error?: string }>,
+  onWhatsAppEvent: (callback: (event: {
+    type: 'status' | 'qr' | 'message' | 'error';
+    status?: string;
+    qrDataUrl?: string;
+    phone?: string;
+    error?: string;
+    message?: { from: string; text: string; timestamp: number };
+  }) => void) => {
+    const listener = (_event: Electron.IpcRendererEvent, payload: any) => callback(payload);
+    ipcRenderer.on('whatsapp:event', listener);
+    return () => ipcRenderer.removeListener('whatsapp:event', listener);
+  },
+
+  // Company profile
+  getCompany: () => ipcRenderer.invoke('company:get') as Promise<{ name: string; description: string; industry: string; website: string }>,
+  updateCompany: (profile: Record<string, string>) => ipcRenderer.invoke('company:update', profile) as Promise<Record<string, string>>,
+
+  // Auto-update
+  updateCheck: () => ipcRenderer.invoke('update:check') as Promise<{ ok: boolean; updateInfo?: { version: string } | null; error?: string }>,
+  updateDownload: () => ipcRenderer.invoke('update:download') as Promise<{ ok: boolean; error?: string }>,
+  updateInstall: () => ipcRenderer.invoke('update:install') as Promise<{ ok: boolean }>,
+  onDeepLink: (callback: (event: { section: string }) => void) => {
+    const listener = (_event: Electron.IpcRendererEvent, payload: any) => callback(payload);
+    ipcRenderer.on('app:deepLink', listener);
+    return () => ipcRenderer.removeListener('app:deepLink', listener);
+  },
+  onUpdateEvent: (callback: (event: { type: string; version?: string; percent?: number }) => void) => {
+    const listener = (_event: Electron.IpcRendererEvent, payload: any) => callback(payload);
+    ipcRenderer.on('update:event', listener);
+    return () => ipcRenderer.removeListener('update:event', listener);
+  },
+
+  // Automation triggers
+  triggersList: () => ipcRenderer.invoke('triggers:list') as Promise<AgentTrigger[]>,
+  triggersCreate: (input: Omit<AgentTrigger, 'id' | 'createdAt' | 'lastRunAt'>) =>
+    ipcRenderer.invoke('triggers:create', input) as Promise<AgentTrigger>,
+  triggersUpdate: (id: string, updates: Partial<Omit<AgentTrigger, 'id' | 'createdAt'>>) =>
+    ipcRenderer.invoke('triggers:update', id, updates) as Promise<AgentTrigger | null>,
+  triggersDelete: (id: string) => ipcRenderer.invoke('triggers:delete', id) as Promise<{ ok: boolean }>,
+  triggersSetWhatsAppAgent: (agentId: string) =>
+    ipcRenderer.invoke('triggers:setWhatsAppAgent', agentId) as Promise<{ ok: boolean }>,
+  triggersGetWhatsAppAgent: () => ipcRenderer.invoke('triggers:getWhatsAppAgent') as Promise<{ agentId: string }>,
+  dataExport: () => ipcRenderer.invoke('data:export') as Promise<{ ok: boolean; canceled?: boolean; path?: string; error?: string }>,
+  dataImport: () => ipcRenderer.invoke('data:import') as Promise<{ ok: boolean; canceled?: boolean; error?: string }>,
+
+  // Local auth / users (RBAC)
+  authGetState: () => ipcRenderer.invoke('auth:getState') as Promise<{ hasUsers: boolean; currentUser: LocalUser | null }>,
+  authSetupOwner: (input: { email: string; name: string; password: string }) => ipcRenderer.invoke('auth:setupOwner', input) as Promise<LocalUser>,
+  authLogin: (email: string, password: string) => ipcRenderer.invoke('auth:login', email, password) as Promise<LocalUser>,
+  authLogout: () => ipcRenderer.invoke('auth:logout') as Promise<{ ok: boolean }>,
+  authListUsers: () => ipcRenderer.invoke('auth:listUsers') as Promise<LocalUser[]>,
+  authCreateUser: (input: { email: string; name: string; role: UserRole; password: string }) => ipcRenderer.invoke('auth:createUser', input) as Promise<LocalUser>,
+  authUpdateRole: (userId: string, role: UserRole) => ipcRenderer.invoke('auth:updateRole', userId, role) as Promise<{ ok: boolean }>,
+  authDeleteUser: (userId: string) => ipcRenderer.invoke('auth:deleteUser', userId) as Promise<{ ok: boolean }>,
+  authChangePassword: (userId: string, newPassword: string) => ipcRenderer.invoke('auth:changePassword', userId, newPassword) as Promise<{ ok: boolean }>,
+  shareAgent: (id: string, shared: boolean) => ipcRenderer.invoke('agents:share', id, shared) as Promise<{ ok: boolean }>,
+
+  // Computer access control
+  computerGetSettings: () => ipcRenderer.invoke('computer:getSettings') as Promise<{ level: ComputerAccessLevel; allowedRoots: string[]; shellAllow: string[]; shellDeny: string[] }>,
+  computerUpdateSettings: (s: { level?: ComputerAccessLevel; allowedRoots?: string[]; shellAllow?: string[]; shellDeny?: string[] }) =>
+    ipcRenderer.invoke('computer:updateSettings', s) as Promise<{ level: ComputerAccessLevel; allowedRoots: string[]; shellAllow: string[]; shellDeny: string[] }>,
+
+  // Personal brain (local vault)
+  personalBrainStatus: () => ipcRenderer.invoke('personalbrain:status') as Promise<{ dir: string; files: string[] }>,
+  personalBrainOpenFolder: () => ipcRenderer.invoke('personalbrain:openFolder') as Promise<{ ok: boolean }>,
+
+  // Brain access requests (corporate GitHub + personal repo)
+  brainRequestCorporateAccess: (input: { scope?: 'read' | 'write'; reason?: string }) =>
+    ipcRenderer.invoke('brain:requestCorporateAccess', input) as Promise<Record<string, unknown>>,
+  brainListRequests: () => ipcRenderer.invoke('brain:listRequests') as Promise<Array<Record<string, unknown>>>,
+  brainDecideRequest: (id: string, decision: 'approved' | 'rejected') =>
+    ipcRenderer.invoke('brain:decideRequest', id, decision) as Promise<{ ok: boolean; status: string }>,
+  brainCreatePersonalRepo: (repoName?: string) =>
+    ipcRenderer.invoke('brain:createPersonalRepo', repoName) as Promise<{ ok: boolean; repo?: string; url?: string; dir?: string; error?: string }>,
+});
+
+// Type declarations for the exposed API
+declare global {
+  interface Window {
+    electronAPI: {
+      getVersion: () => Promise<string>;
+      getPath: (name: string) => Promise<string>;
+      minimizeWindow: () => Promise<void>;
+      maximizeWindow: () => Promise<void>;
+      closeWindow: () => Promise<void>;
+      getAgents: () => Promise<Agent[]>;
+      getAgent: (id: string) => Promise<Agent | null>;
+      createAgent: (input: CreateAgentInput) => Promise<Agent>;
+      updateAgent: (id: string, config: Partial<AgentConfig>) => Promise<Agent>;
+      deleteAgent: (id: string) => Promise<void>;
+      executeAgent: (id: string, input: Record<string, unknown>) => Promise<AgentExecution>;
+      cancelExecution: (executionId: string) => Promise<void>;
+      getAgentExecutions: (agentId?: string) => Promise<AgentExecution[]>;
+      getTeams: () => Promise<Team[]>;
+      getTeam: (id: string) => Promise<Team | null>;
+      createTeam: (config: TeamConfig) => Promise<Team>;
+      updateTeam: (id: string, config: Partial<TeamConfig>) => Promise<Team>;
+      deleteTeam: (id: string) => Promise<void>;
+      addAgentToTeam: (teamId: string, agentId: string) => Promise<Team>;
+      removeAgentFromTeam: (teamId: string, agentId: string) => Promise<Team>;
+      executeTeam: (teamId: string, input: Record<string, unknown>) => Promise<{
+        teamId: string;
+        status: 'completed' | 'failed' | 'partial';
+        results: Array<{
+          agentId: string;
+          agentName: string;
+          status: 'completed' | 'failed';
+          output?: Record<string, unknown>;
+          error?: string;
+        }>;
+        duration: number;
+      }>;
+      getGovernanceState: () => Promise<{ pendingApprovals: Approval[]; rules: GovernanceRule[] }>;
+      getPendingApprovals: () => Promise<Approval[]>;
+      approveAction: (actionId: string) => Promise<void>;
+      rejectAction: (actionId: string, reason: string) => Promise<void>;
+      setGovernanceRule: (rule: GovernanceRule) => Promise<void>;
+      getGovernanceRules: () => Promise<GovernanceRule[]>;
+      deleteGovernanceRule: (ruleId: string) => Promise<void>;
+      getAuditLogs: (limit?: number, offset?: number) => Promise<AuditEntry[]>;
+      getSettings: () => Promise<AppSettings>;
+      updateSettings: (settings: Partial<AppSettings>) => Promise<Record<string, string>>;
+      setApiKey: (provider: 'openai' | 'anthropic', key: string) => Promise<void>;
+      clearApiKey: (provider: 'openai' | 'anthropic') => Promise<void>;
+      hasApiKey: (provider: 'openai' | 'anthropic') => Promise<boolean>;
+      listModels: () => Promise<import('../shared/models.js').ModelCatalogResponse>;
+      refreshModels: () => Promise<import('../shared/models.js').ModelCatalogResponse & { errors?: Record<string, string> }>;
+      oauthAuthenticate: (provider: 'openai' | 'anthropic') => Promise<{
+        success: boolean;
+        tokens?: {
+          accessToken: string;
+          refreshToken?: string;
+          expiresAt?: number;
+          tokenType: string;
+        };
+        error?: string;
+      }>;
+      oauthIsAuthenticated: (provider: 'openai' | 'anthropic') => Promise<boolean>;
+      oauthIsConfigured: (provider: 'openai' | 'anthropic') => Promise<boolean>;
+      oauthGetToken: (provider: 'openai' | 'anthropic') => Promise<string | null>;
+      oauthLogout: (provider: 'openai' | 'anthropic') => Promise<void>;
+      secondBrainGetConfig: () => Promise<{ enabled: boolean; url: string; hasToken: boolean; access?: string; blockPii?: boolean }>;
+      secondBrainSetConfig: (config: { enabled?: boolean; url?: string; token?: string; access?: 'read' | 'write'; blockPii?: boolean }) =>
+        Promise<{ enabled: boolean; url: string; hasToken: boolean; access?: string; blockPii?: boolean }>;
+      secondBrainTest: () => Promise<{ ok: boolean; error?: string }>;
+      whatsappGetStatus: () => Promise<{ status: 'disconnected' | 'connecting' | 'qr' | 'connected' | 'error'; phone: string }>;
+      whatsappStart: () => Promise<{ status: string; phone: string }>;
+      whatsappStop: () => Promise<{ status: string; phone: string }>;
+      whatsappSendMessage: (to: string, text: string) => Promise<{ ok: boolean }>;
+      whatsappGetMessages: (limit?: number, remote?: string) => Promise<Array<{ id: string; direction: string; remote: string; text: string; timestamp: number }>>;
+      whatsappClearMessages: () => Promise<{ ok: boolean }>;
+      agentReachStatus: () => Promise<{ ok: boolean; installed: boolean; channels: Array<{ name: string; status: string; backend: string | null }>; error?: string }>;
+      onWhatsAppEvent: (callback: (event: {
+        type: 'status' | 'qr' | 'message' | 'error';
+        status?: string;
+        qrDataUrl?: string;
+        phone?: string;
+        error?: string;
+        message?: { from: string; text: string; timestamp: number };
+      }) => void) => () => void;
+      getSkills: () => Promise<Skill[]>;
+      getSkill: (id: string) => Promise<Skill | null>;
+      createSkill: (skill: Omit<Skill, 'id' | 'createdAt' | 'updatedAt'>) => Promise<Skill>;
+      updateSkill: (id: string, updates: Partial<Omit<Skill, 'id' | 'createdAt'>>) => Promise<Skill>;
+      deleteSkill: (id: string) => Promise<void>;
+      listSkillTools: () => Promise<Array<{ name: string; description: string }>>;
+      improveSkill: (id: string) => Promise<{ improvedPrompt: string }>;
+      importSkillFromGitHub: (url: string) => Promise<{ name: string; description: string; prompt: string; toolNames: string[]; source: string }>;
+      onAgentEvent: (callback: (event: { executionId: string; type: string; data?: unknown }) => void) => () => void;
+      getCompany: () => Promise<{ name: string; description: string; industry: string; website: string }>;
+      updateCompany: (profile: Record<string, string>) => Promise<Record<string, string>>;
+      updateCheck: () => Promise<{ ok: boolean; updateInfo?: { version: string } | null; error?: string }>;
+      updateDownload: () => Promise<{ ok: boolean; error?: string }>;
+      updateInstall: () => Promise<{ ok: boolean }>;
+      onUpdateEvent: (callback: (event: { type: string; version?: string; percent?: number }) => void) => () => void;
+      onDeepLink: (callback: (event: { section: string }) => void) => () => void;
+      triggersList: () => Promise<AgentTrigger[]>;
+      triggersCreate: (input: Omit<AgentTrigger, 'id' | 'createdAt' | 'lastRunAt'>) => Promise<AgentTrigger>;
+      triggersUpdate: (id: string, updates: Partial<Omit<AgentTrigger, 'id' | 'createdAt'>>) => Promise<AgentTrigger | null>;
+      triggersDelete: (id: string) => Promise<{ ok: boolean }>;
+      triggersSetWhatsAppAgent: (agentId: string) => Promise<{ ok: boolean }>;
+      triggersGetWhatsAppAgent: () => Promise<{ agentId: string }>;
+      dataExport: () => Promise<{ ok: boolean; canceled?: boolean; path?: string; error?: string }>;
+      dataImport: () => Promise<{ ok: boolean; canceled?: boolean; error?: string }>;
+      authGetState: () => Promise<{ hasUsers: boolean; currentUser: LocalUser | null }>;
+      authSetupOwner: (input: { email: string; name: string; password: string }) => Promise<LocalUser>;
+      authLogin: (email: string, password: string) => Promise<LocalUser>;
+      authLogout: () => Promise<{ ok: boolean }>;
+      authListUsers: () => Promise<LocalUser[]>;
+      authCreateUser: (input: { email: string; name: string; role: UserRole; password: string }) => Promise<LocalUser>;
+      authUpdateRole: (userId: string, role: UserRole) => Promise<{ ok: boolean }>;
+      authDeleteUser: (userId: string) => Promise<{ ok: boolean }>;
+      authChangePassword: (userId: string, newPassword: string) => Promise<{ ok: boolean }>;
+      shareAgent: (id: string, shared: boolean) => Promise<{ ok: boolean }>;
+      computerGetSettings: () => Promise<{ level: ComputerAccessLevel; allowedRoots: string[]; shellAllow: string[]; shellDeny: string[] }>;
+      computerUpdateSettings: (s: { level?: ComputerAccessLevel; allowedRoots?: string[]; shellAllow?: string[]; shellDeny?: string[] }) =>
+        Promise<{ level: ComputerAccessLevel; allowedRoots: string[]; shellAllow: string[]; shellDeny: string[] }>;
+      personalBrainStatus: () => Promise<{ dir: string; files: string[] }>;
+      personalBrainOpenFolder: () => Promise<{ ok: boolean }>;
+      brainRequestCorporateAccess: (input: { scope?: 'read' | 'write'; reason?: string }) => Promise<Record<string, unknown>>;
+      brainListRequests: () => Promise<Array<Record<string, unknown>>>;
+      brainDecideRequest: (id: string, decision: 'approved' | 'rejected') => Promise<{ ok: boolean; status: string }>;
+      brainCreatePersonalRepo: (repoName?: string) => Promise<{ ok: boolean; repo?: string; url?: string; dir?: string; error?: string }>;
+    };
+  }
+}
