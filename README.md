@@ -44,6 +44,27 @@ Agent teams need a workspace where people can configure their tools, review sens
 - English and Brazilian Portuguese interface strings, onboarding, theme settings, and an analytics dashboard.
 - Local SQLite persistence for agents, teams, settings, approvals, and execution records.
 
+## Screenshots
+
+<img src="docs/screenshots/dashboard.png" alt="Home dashboard with an ask-an-agent prompt, connections, agent, team, execution, and approval counters, and a getting-started checklist" width="100%">
+
+Ask an agent, monitor workspace activity, and follow the getting-started checklist from Home.
+
+<table>
+  <tr>
+    <td width="33%"><img src="docs/screenshots/onboarding.png" alt="First-run onboarding wizard for configuring a company, LLM provider, second brain, and first agent" width="100%"></td>
+    <td width="33%"><img src="docs/screenshots/agents.png" alt="Agents page displaying configured agents as cards" width="100%"></td>
+    <td width="33%"><img src="docs/screenshots/settings.png" alt="Settings page with appearance, language, governance and approvals, execution model, and data retention options" width="100%"></td>
+  </tr>
+  <tr>
+    <td>Set up your company, LLM provider, second brain, and first agent.</td>
+    <td>Browse and manage your agents from their cards.</td>
+    <td>Configure appearance, language, governance, execution, and data retention.</td>
+  </tr>
+</table>
+
+*Screenshots use fictional demo data.*
+
 ## Download
 
 Get the [latest macOS release](https://github.com/criptogus/keepmind-os/releases/latest).
