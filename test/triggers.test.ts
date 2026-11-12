@@ -91,6 +91,33 @@ describe('TriggerManager', () => {
     expect(await ctx.tm.dispatchWebhook('tok', {})).toBe(false);
   });
 
+  it('daily trigger respects daysOfWeek', async () => {
+    const today = new Date().getDay();
+    const otherDay = (today + 1) % 7;
+    const pastTime = '00:01'; // already past today, so a matching day would fire
+
+    ctx.tm.create({
+      agentId: 'a1', name: 'weekdays-only', kind: 'daily',
+      timeOfDay: pastTime, daysOfWeek: [otherDay], prompt: 'no', enabled: true,
+    });
+    ctx.tm.create({
+      agentId: 'a1', name: 'today-only', kind: 'daily',
+      timeOfDay: pastTime, daysOfWeek: [today], prompt: 'yes', enabled: true,
+    });
+    await (ctx.tm as any).tick();
+    expect(ctx.ran).toHaveLength(1);
+    expect(ctx.ran[0].input.task).toBe('yes');
+  });
+
+  it('daily trigger without daysOfWeek fires every day', async () => {
+    ctx.tm.create({
+      agentId: 'a1', name: 'everyday', kind: 'daily',
+      timeOfDay: '00:01', prompt: 'daily', enabled: true,
+    });
+    await (ctx.tm as any).tick();
+    expect(ctx.ran).toHaveLength(1);
+  });
+
   it('update and delete', () => {
     const t = ctx.tm.create({ agentId: 'a1', name: 't', kind: 'daily', timeOfDay: '08:00', prompt: 'p', enabled: true });
     ctx.tm.update(t.id, { enabled: false });

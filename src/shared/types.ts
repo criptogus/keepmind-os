@@ -193,6 +193,8 @@ export interface AgentTrigger {
   intervalMinutes?: number;
   /** HH:MM local time (kind='daily'). */
   timeOfDay?: string;
+  /** Weekdays the daily trigger fires on, 0=Sun..6=Sat. Empty/undefined = every day. */
+  daysOfWeek?: number[];
   /** Secret token in the webhook URL path (kind='webhook'). */
   webhookToken?: string;
   /** Task description sent to the agent on each run. */

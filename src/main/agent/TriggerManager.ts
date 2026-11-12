@@ -214,7 +214,10 @@ export class TriggerManager {
       if (!rule.lastRunAt) return true;
       return now.getTime() - new Date(rule.lastRunAt).getTime() >= minutes * 60_000;
     }
-    // daily at HH:MM local; fires once per day after that time
+    // daily at HH:MM local; fires once per day after that time.
+    // daysOfWeek (0=Sun..6=Sat) restricts which days it may fire on.
+    const days = rule.daysOfWeek?.filter((d) => d >= 0 && d <= 6);
+    if (days && days.length > 0 && !days.includes(now.getDay())) return false;
     const [h, m] = (rule.timeOfDay || '09:00').split(':').map(Number);
     const dueToday = new Date(now);
     dueToday.setHours(h || 0, m || 0, 0, 0);
