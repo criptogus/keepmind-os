@@ -8,6 +8,7 @@ const AuditLogs = lazy(() => import('./components/logs/AuditLogs'));
 const SettingsPanel = lazy(() => import('./components/settings/SettingsPanel'));
 const AdvancedSettings = lazy(() => import('./components/settings/AdvancedSettings'));
 const SkillsPanel = lazy(() => import('./components/skills/SkillsPanel'));
+const AutomationPanel = lazy(() => import('./components/automation/AutomationPanel'));
 const AnalyticsDashboard = lazy(() => import('./components/dashboard/AnalyticsDashboard'));
 const OnboardingWizard = lazy(() => import('./components/onboarding/OnboardingWizard'));
 const LoginScreen = lazy(() => import('./components/auth/LoginScreen'));
@@ -79,7 +80,7 @@ export default function App() {
     fetchApprovals();
     const interval = setInterval(fetchApprovals, 5000);
     const unsubDeepLink = window.electronAPI.onDeepLink?.(({ section }) => {
-      if (['dashboard', 'agents', 'teams', 'skills', 'governance', 'logs', 'settings', 'advanced'].includes(section)) {
+      if (['dashboard', 'agents', 'teams', 'automations', 'skills', 'governance', 'logs', 'settings', 'advanced'].includes(section)) {
         setActiveSection(section);
       }
     });
@@ -90,6 +91,7 @@ export default function App() {
     { id: 'dashboard', label: t('nav.dashboard') },
     { id: 'agents', label: t('nav.agents') },
     { id: 'teams', label: t('nav.teams') },
+    { id: 'automations', label: t('nav.automations') },
     { id: 'skills', label: t('nav.skills') },
     { id: 'governance', label: t('nav.governance') },
     { id: 'logs', label: t('nav.logs') },
@@ -111,6 +113,8 @@ export default function App() {
         return <AgentList />;
       case 'teams':
         return <TeamList />;
+      case 'automations':
+        return <AutomationPanel />;
       case 'skills':
         return <SkillsPanel />;
       case 'governance':

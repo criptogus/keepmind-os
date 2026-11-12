@@ -144,3 +144,31 @@ describe('ToolRegistry new tools', () => {
     expect(out).toContain('T'); // ISO timestamp
   });
 });
+
+describe('agent hierarchy tools', () => {
+  it('create_agent passes caller id and spec to the callback', async () => {
+    const reg = new ToolRegistry();
+    let seen: { caller?: string; spec?: Record<string, unknown> } = {};
+    reg.setContext({
+      callerAgentId: 'agent-1',
+      createAgent: async (caller, spec) => {
+        seen = { caller, spec: spec as Record<string, unknown> };
+        return 'created';
+      },
+    });
+    const out = await reg.execute('create_agent', { name: 'Engenheiro', description: 'obras' });
+    expect(out).toBe('created');
+    expect(seen.caller).toBe('agent-1');
+    expect(seen.spec?.name).toBe('Engenheiro');
+  });
+
+  it('review_agent clamps rating to 1-5', async () => {
+    const reg = new ToolRegistry();
+    let rating = 0;
+    reg.setContext({
+      reviewAgent: async (_c, _a, r) => { rating = r; return 'ok'; },
+    });
+    await reg.execute('review_agent', { agent: 'Maria', rating: 9, note: 'great' });
+    expect(rating).toBe(5);
+  });
+});

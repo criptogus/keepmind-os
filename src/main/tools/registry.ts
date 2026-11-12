@@ -36,6 +36,12 @@ export interface ToolContext {
   personalBrainRemember?: (content: string, file?: string) => Promise<string>;
   /** Collects ids of memory items returned to the model (outcome attribution). */
   memoryUsage?: Set<string>;
+  /** Id of the agent running this execution (set per-execution via policy). */
+  callerAgentId?: string;
+  /** Creates a subordinate agent reporting to the caller; returns a summary. */
+  createAgent?: (callerAgentId: string | undefined, spec: { name: string; description?: string; systemPrompt?: string }) => Promise<string>;
+  /** Records a structured review/rating of another agent in the audit log. */
+  reviewAgent?: (callerAgentId: string | undefined, agent: string, rating: number, note: string) => Promise<string>;
 }
 
 /** Per-execution policy computed from install settings + agent config + caller role. */
@@ -47,6 +53,8 @@ export interface ExecutionPolicy {
   shellDeny?: string[];
   /** Collects ids of memory items returned to the model (outcome attribution). */
   memoryUsage?: Set<string>;
+  /** Id of the agent running this execution. */
+  callerAgentId?: string;
 }
 
 export interface ToolDefinition {
@@ -236,6 +244,49 @@ export class ToolRegistry {
         if (!ctx.delegateTask) throw new Error('Agent delegation is not available');
         const result = await ctx.delegateTask(String(args.agent), String(args.task));
         return result.slice(0, 8000);
+      },
+    });
+
+    this.register({
+      name: 'create_agent',
+      description: 'Creates a new subordinate agent that reports to you. Use when a recurring sub-area of work deserves its own specialist. The new agent starts with basic tools; a human admin can extend it later.',
+      parameters: {
+        type: 'object',
+        properties: {
+          name: { type: 'string', description: 'Display name for the new agent' },
+          description: { type: 'string', description: 'One-line description of its role' },
+          systemPrompt: { type: 'string', description: 'Instructions defining the agent persona and boundaries' },
+        },
+        required: ['name'],
+      },
+      handler: async (args, ctx) => {
+        if (!ctx.createAgent) throw new Error('Agent creation is not available');
+        const result = await ctx.createAgent(ctx.callerAgentId, {
+          name: String(args.name),
+          description: args.description ? String(args.description) : undefined,
+          systemPrompt: args.systemPrompt ? String(args.systemPrompt) : undefined,
+        });
+        return result.slice(0, 4000);
+      },
+    });
+
+    this.register({
+      name: 'review_agent',
+      description: 'Records a structured review (rating 1-5 plus notes) of another agent\'s work. Use after delegating or observing an agent\'s output to feed the team\'s quality history.',
+      parameters: {
+        type: 'object',
+        properties: {
+          agent: { type: 'string', description: 'Target agent name or ID' },
+          rating: { type: 'number', description: 'Quality rating from 1 (poor) to 5 (excellent)' },
+          note: { type: 'string', description: 'What went well or what to improve' },
+        },
+        required: ['agent', 'rating'],
+      },
+      handler: async (args, ctx) => {
+        if (!ctx.reviewAgent) throw new Error('Agent review is not available');
+        const rating = Math.max(1, Math.min(5, Math.round(Number(args.rating) || 0)));
+        const result = await ctx.reviewAgent(ctx.callerAgentId, String(args.agent), rating, String(args.note ?? ''));
+        return result.slice(0, 2000);
       },
     });
 

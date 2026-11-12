@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Badge, Button, Card, Group, SimpleGrid, Stack, Stepper, Text, Textarea, TextInput, Title, UnstyledButton } from '@mantine/core';
+import { Badge, Button, Card, Group, Select, SimpleGrid, Stack, Stepper, Text, Textarea, TextInput, Title, UnstyledButton } from '@mantine/core';
 import { useAgentStore } from '../../store/agentStore';
+import BotAvatar from '../common/BotAvatar';
+import { AVATAR_PRESETS, avatarJson, presetAvatarFor } from '../../../shared/avatars';
 import { AGENT_TEMPLATES, type AgentTemplate } from '../../lib/agentTemplates';
 import { describeTool } from '../../lib/plainLanguage';
 import { useLang } from '../../lib/i18n';
@@ -47,6 +49,7 @@ export default function AgentWizard({ onClose, onCreated, onAdvanced }: AgentWiz
   const { createAgent, loading, error } = useAgentStore();
   const [step, setStep] = useState(0);
   const [template, setTemplate] = useState<AgentTemplate | null>(null);
+  const [avatarId, setAvatarId] = useState('auto');
   const [name, setName] = useState('');
   const [extra, setExtra] = useState('');
   const [skillIds, setSkillIds] = useState<string[]>([]);
@@ -87,6 +90,10 @@ export default function AgentWizard({ onClose, onCreated, onAdvanced }: AgentWiz
     return items;
   }, [template, lang]);
 
+  const avatarDef = avatarId === 'auto'
+    ? presetAvatarFor(`tpl:${template?.id ?? 'blank'}:${name || 'agent'}`)
+    : (AVATAR_PRESETS.find((p) => p.id === avatarId) ?? presetAvatarFor('agent'));
+
   const handleCreate = async () => {
     try {
       const agent = await createAgent({
@@ -94,6 +101,7 @@ export default function AgentWizard({ onClose, onCreated, onAdvanced }: AgentWiz
         name: name.trim() || template?.name || undefined,
         description: template?.description || undefined,
         capabilities: template?.capabilities,
+        avatar: avatarJson(avatarDef),
       });
       onCreated?.(agent);
       onClose();
@@ -140,13 +148,16 @@ export default function AgentWizard({ onClose, onCreated, onAdvanced }: AgentWiz
                     style={{ cursor: 'pointer' }}
                     onClick={() => pickTemplate(tpl)}
                   >
-                    <Stack gap={4}>
-                      <Text fw={600} size="sm">{tpl.name}</Text>
-                      <Text size="xs" c="dimmed">{tpl.tagline}</Text>
-                      {tpl.skillNames.length > 0 && (
-                        <Text size="xs" c="dimmed">{t('nav.skills')}: {tpl.skillNames.join(', ')}</Text>
-                      )}
-                    </Stack>
+                    <Group gap="sm" wrap="nowrap" align="flex-start">
+                      <BotAvatar definition={presetAvatarFor(`tpl:${tpl.id}`)} size={40} />
+                      <Stack gap={4} style={{ minWidth: 0 }}>
+                        <Text fw={600} size="sm">{tpl.name}</Text>
+                        <Text size="xs" c="dimmed">{tpl.tagline}</Text>
+                        {tpl.skillNames.length > 0 && (
+                          <Text size="xs" c="dimmed">{t('nav.skills')}: {tpl.skillNames.join(', ')}</Text>
+                        )}
+                      </Stack>
+                    </Group>
                   </Card>
                 ))}
               </SimpleGrid>
@@ -185,6 +196,21 @@ export default function AgentWizard({ onClose, onCreated, onAdvanced }: AgentWiz
             value={extra}
             onChange={(e) => setExtra(e.currentTarget.value)}
           />
+          <Group gap="sm" align="flex-end" wrap="nowrap">
+            <Select
+              style={{ flex: 1 }}
+              label={t('af.avatar')}
+              description={t('af.avatarDesc')}
+              data={[
+                { value: 'auto', label: t('af.avatarAuto') },
+                ...AVATAR_PRESETS.map((p) => ({ value: p.id, label: p.name })),
+              ]}
+              value={avatarId}
+              onChange={(v) => setAvatarId(v || 'auto')}
+              allowDeselect={false}
+            />
+            <BotAvatar definition={avatarDef} size={44} />
+          </Group>
         </Stack>
       )}
 
@@ -192,7 +218,7 @@ export default function AgentWizard({ onClose, onCreated, onAdvanced }: AgentWiz
         <Stack gap="md">
           <Card withBorder padding="md" radius="md">
             <Stack gap="xs">
-              <Text size="sm"><Text span c="dimmed">{t('common.name')}: </Text><Text span fw={600}>{name.trim() || template.name || '—'}</Text></Text>
+              <Group gap="xs"><BotAvatar definition={avatarDef} size={28} /><Text size="sm"><Text span c="dimmed">{t('common.name')}: </Text><Text span fw={600}>{name.trim() || template.name || '—'}</Text></Text></Group>
               {template.id !== 'blank' && (
                 <Text size="sm"><Text span c="dimmed">{t('wiz.role')}: </Text>{template.role}</Text>
               )}

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Badge, Button, Card, Group, Image, PasswordInput, Select, Stack, Switch, Text, TextInput, Title, NumberInput } from '@mantine/core';
+import { Badge, Button, Card, Group, Image, PasswordInput, Select, Stack, Switch, Text, TextInput, Title } from '@mantine/core';
 import { useThemeStore } from '../../store/themeStore';
 import { useSettingsStore } from '../../store/settingsStore';
 import { useLang } from '../../lib/i18n';
-import type { Agent, AgentTrigger, LocalUser, UserRole, ComputerAccessLevel } from '../../../shared/types.js';
+import type { Agent, LocalUser, UserRole, ComputerAccessLevel } from '../../../shared/types.js';
+import AgentSelect from '../common/AgentSelect';
 
 
 
@@ -33,10 +34,8 @@ export default function AdvancedSettings() {
   const [waSendText, setWaSendText] = useState('');
   const [updateState, setUpdateState] = useState<string>('');
   const [updateVersion, setUpdateVersion] = useState<string>('');
-  const [triggers, setTriggers] = useState<AgentTrigger[]>([]);
   const [agents, setAgents] = useState<Agent[]>([]);
   const [waAgentId, setWaAgentId] = useState('');
-  const [newTrigger, setNewTrigger] = useState({ name: '', agentId: '', kind: 'interval' as 'interval' | 'daily' | 'webhook', intervalMinutes: 60, timeOfDay: '09:00', prompt: '' });
   const [arStatus, setArStatus] = useState<{ ok: boolean; installed: boolean; channels: Array<{ name: string; status: string; backend: string | null }>; error?: string } | null>(null);
   const [authInfo, setAuthInfo] = useState<{ hasUsers: boolean; currentUser: LocalUser | null } | null>(null);
   const [users, setUsers] = useState<LocalUser[]>([]);
@@ -89,7 +88,6 @@ export default function AdvancedSettings() {
         setWaError(event.error);
       }
     });
-    void window.electronAPI.triggersList().then(setTriggers).catch(() => {});
     void window.electronAPI.getAgents().then(setAgents).catch(() => {});
     void window.electronAPI.triggersGetWhatsAppAgent().then((r) => setWaAgentId(r.agentId)).catch(() => {});
     window.electronAPI.authGetState().then(async (s) => {
@@ -870,13 +868,13 @@ export default function AdvancedSettings() {
           />
         </Stack>
         <Stack gap="sm">
-          <Select
+          <AgentSelect
             size="xs"
             label={t('adv2.waAgent')}
             description={t('adv2.waAgentDesc')}
             placeholder={t('adv2.disabledPh')}
             clearable
-            data={agents.map((a) => ({ value: a.id, label: a.name }))}
+            agents={agents}
             value={waAgentId || null}
             onChange={(v) => {
               const id = v || '';
@@ -884,85 +882,9 @@ export default function AdvancedSettings() {
               void window.electronAPI.triggersSetWhatsAppAgent(id);
             }}
           />
-          {triggers.map((tr) => (
-            <Group key={tr.id} justify="space-between" wrap="nowrap">
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <Text size="sm" fw={500}>{tr.name}</Text>
-                <Text size="xs" c="dimmed">
-                  {tr.kind === 'interval' ? `${t('adv2.every')} ${tr.intervalMinutes}min` : tr.kind === 'daily' ? `${t('adv2.dailyAt')} ${tr.timeOfDay}` : t('adv2.webhookTrigger')}
-                  {tr.lastRunAt ? ` · ${t('adv2.lastRun')} ${new Date(tr.lastRunAt).toLocaleString()}` : ''}
-                </Text>
-                {tr.kind === 'webhook' && tr.webhookToken && (
-                  <Text size="xs" ff="monospace" c="dimmed" style={{ wordBreak: 'break-all' }}>
-                    POST http://127.0.0.1:47821/webhook/{tr.webhookToken}
-                  </Text>
-                )}
-              </div>
-              <Switch
-                size="xs"
-                checked={tr.enabled}
-                onChange={(e) => {
-                  void window.electronAPI.triggersUpdate(tr.id, { enabled: e.currentTarget.checked }).then(() =>
-                    window.electronAPI.triggersList().then(setTriggers)
-                  );
-                }}
-              />
-              <Button size="compact-xs" variant="subtle" color="gray" onClick={async () => {
-                await window.electronAPI.triggersDelete(tr.id);
-                setTriggers(await window.electronAPI.triggersList());
-              }}>{t('common.delete')}</Button>
-            </Group>
-          ))}
-          <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
-            <Stack gap="xs">
-              <Text size="xs" fw={600}>{t('adv2.newTrigger')}</Text>
-              <TextInput size="xs" placeholder={t('common.name')} value={newTrigger.name} onChange={(e) => setNewTrigger({ ...newTrigger, name: e.currentTarget.value })} />
-              <Select
-                size="xs"
-                placeholder={t('common.agent')}
-                data={agents.map((a) => ({ value: a.id, label: a.name }))}
-                value={newTrigger.agentId || null}
-                onChange={(v) => setNewTrigger({ ...newTrigger, agentId: v || '' })}
-              />
-              <Group gap="xs">
-                <Select
-                  size="xs"
-                  value={newTrigger.kind}
-                  onChange={(v) => setNewTrigger({ ...newTrigger, kind: (v || 'interval') as 'interval' | 'daily' | 'webhook' })}
-                  data={[{ value: 'interval', label: t('adv2.triggerKind.interval') }, { value: 'daily', label: t('adv2.triggerKind.daily') }, { value: 'webhook', label: t('adv2.triggerKind.webhook') }]}
-                  allowDeselect={false}
-                  style={{ width: 160 }}
-                />
-                {newTrigger.kind === 'interval' ? (
-                  <NumberInput size="xs" min={1} max={10080} value={newTrigger.intervalMinutes} onChange={(v) => setNewTrigger({ ...newTrigger, intervalMinutes: Number(v) || 60 })} style={{ width: 110 }} />
-                ) : newTrigger.kind === 'daily' ? (
-                  <TextInput size="xs" type="time" value={newTrigger.timeOfDay} onChange={(e) => setNewTrigger({ ...newTrigger, timeOfDay: e.currentTarget.value })} style={{ width: 110 }} />
-                ) : null}
-              </Group>
-              <TextInput size="xs" placeholder={t('adv2.taskPromptPh')} value={newTrigger.prompt} onChange={(e) => setNewTrigger({ ...newTrigger, prompt: e.currentTarget.value })} />
-              <Group justify="flex-end">
-                <Button
-                  size="xs"
-                  disabled={!newTrigger.name || !newTrigger.agentId || !newTrigger.prompt}
-                  onClick={async () => {
-                    await window.electronAPI.triggersCreate({
-                      agentId: newTrigger.agentId,
-                      name: newTrigger.name,
-                      kind: newTrigger.kind,
-                      intervalMinutes: newTrigger.kind === 'interval' ? newTrigger.intervalMinutes : undefined,
-                      timeOfDay: newTrigger.kind === 'daily' ? newTrigger.timeOfDay : undefined,
-                      prompt: newTrigger.prompt,
-                      enabled: true,
-                    });
-                    setTriggers(await window.electronAPI.triggersList());
-                    setNewTrigger({ name: '', agentId: '', kind: 'interval', intervalMinutes: 60, timeOfDay: '09:00', prompt: '' });
-                  }}
-                >
-                  {t('adv2.addTrigger')}
-                </Button>
-              </Group>
-            </Stack>
-          </Card>
+          <Text size="xs" c="dimmed">
+            {t('adv2.triggersMoved')}
+          </Text>
         </Stack>
       </Card>
 

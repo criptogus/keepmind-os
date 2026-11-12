@@ -7,6 +7,7 @@ import type { AgentConfig, Skill } from '../../../shared/types.js';
 import { useLang } from '../../lib/i18n';
 import { AVATAR_PRESETS, avatarForAgent, avatarJson, parseAvatarDefinition, presetAvatarFor } from '../../../shared/avatars';
 import BotAvatar from '../common/BotAvatar';
+import AgentSelect from '../common/AgentSelect';
 import { sfxStart } from '../../lib/sfx';
 
 interface AgentEditorProps {
@@ -16,10 +17,11 @@ interface AgentEditorProps {
 
 export default function AgentEditor({ agentId, onClose }: AgentEditorProps) {
   const { t } = useLang();
-  const { selectedAgent, loading, error, updateAgent, deleteAgent, executeAgent, selectAgent } = useAgentStore();
+  const { selectedAgent, loading, error, updateAgent, deleteAgent, executeAgent, selectAgent, agents } = useAgentStore();
   const [activeTab, setActiveTab] = useState<string | null>('config');
   const [config, setConfig] = useState<AgentConfig | null>(null);
   const [avatarSel, setAvatarSel] = useState('auto');
+  const [managerId, setManagerId] = useState<string | null>(null);
   const [executionInput, setExecutionInput] = useState('{}');
   const [availableSkills, setAvailableSkills] = useState<Skill[]>([]);
   const { groups: modelGroups } = useModelOptions();
@@ -36,6 +38,7 @@ export default function AgentEditor({ agentId, onClose }: AgentEditorProps) {
       const stored = parseAvatarDefinition(selectedAgent.avatar);
       const match = stored ? AVATAR_PRESETS.find((p) => JSON.stringify(p) === JSON.stringify(stored)) : undefined;
       setAvatarSel(match?.id ?? (stored ? '__custom' : 'auto'));
+      setManagerId(selectedAgent.managerId ?? null);
     }
   }, [selectedAgent]);
 
@@ -46,7 +49,7 @@ export default function AgentEditor({ agentId, onClose }: AgentEditorProps) {
         avatarSel === 'auto' ? null
         : avatarSel === '__custom' ? selectedAgent?.avatar ?? null
         : avatarJson(AVATAR_PRESETS.find((p) => p.id === avatarSel) ?? avatarForAgent(selectedAgent!));
-      await updateAgent(agentId, { ...config, avatar });
+      await updateAgent(agentId, { ...config, avatar, managerId });
     } catch (err) {
       console.error('Failed to update agent:', err);
     }
@@ -140,6 +143,17 @@ export default function AgentEditor({ agentId, onClose }: AgentEditorProps) {
                 size={44}
               />
             </Group>
+
+            <AgentSelect
+              label={t('af.manager')}
+              description={t('af.managerDesc')}
+              placeholder={t('af.managerNone')}
+              clearable
+              agents={agents.filter((a) => a.id !== agentId)}
+              value={managerId}
+              onChange={setManagerId}
+              searchable
+            />
 
             <Textarea
               label={t('af.systemPrompt')}

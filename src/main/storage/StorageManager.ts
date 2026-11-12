@@ -235,6 +235,7 @@ export class StorageManager {
       'shared_by TEXT',
       'shared_at TEXT',
       'avatar TEXT',
+      'manager_id TEXT',
     ]) {
       try { this.db.exec(`ALTER TABLE agents ADD COLUMN ${col}`); } catch { /* exists */ }
     }
@@ -264,8 +265,8 @@ export class StorageManager {
   saveAgent(agent: Agent): void {
     const stmt = this.db.prepare(`
       INSERT OR REPLACE INTO agents
-      (id, name, description, config, capabilities, permissions, is_shared, shared_by, shared_at, avatar, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      (id, name, description, config, capabilities, permissions, is_shared, shared_by, shared_at, avatar, manager_id, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
     stmt.run(
       agent.id,
@@ -278,6 +279,7 @@ export class StorageManager {
       agent.sharedBy ?? null,
       agent.sharedAt ?? null,
       agent.avatar ?? null,
+      agent.managerId ?? null,
       agent.createdAt,
       agent.updatedAt
     );
@@ -295,6 +297,7 @@ export class StorageManager {
       sharedBy: row.shared_by ?? undefined,
       sharedAt: row.shared_at ?? undefined,
       avatar: row.avatar ?? undefined,
+      managerId: row.manager_id ?? undefined,
       createdAt: row.created_at,
       updatedAt: row.updated_at,
     };

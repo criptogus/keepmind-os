@@ -290,9 +290,11 @@ export class AgentManager {
         systemPrompt: await this.buildSystemPrompt(config, input, skills),
       };
 
-      const execPolicy: ExecutionPolicy | undefined = constraints?.policy
-        ? { ...constraints.policy, memoryUsage: memoryIds }
-        : { memoryUsage: memoryIds };
+      const execPolicy: ExecutionPolicy = {
+        ...(constraints?.policy ?? {}),
+        memoryUsage: memoryIds,
+        callerAgentId: agentId,
+      };
 
       // Monthly budget gate — refuse before any provider call is billed.
       if (this.budgetChecker && config.monthlyBudgetUsd && config.monthlyBudgetUsd > 0) {

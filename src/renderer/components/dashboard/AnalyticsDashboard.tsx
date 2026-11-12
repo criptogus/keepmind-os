@@ -5,6 +5,7 @@ import { sfxStart } from '../../lib/sfx';
 import { useTeamStore } from '../../store/teamStore';
 import { useLang } from '../../lib/i18n';
 import BotAvatar from '../common/BotAvatar';
+import AgentSelect from '../common/AgentSelect';
 import PixelSpinner from '../common/PixelSpinner';
 import { avatarForAgent } from '../../../shared/avatars';
 import type { AgentExecution } from '../../../shared/types.js';
@@ -170,10 +171,10 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
           <Stack gap="sm">
             <Text fw={600} size="sm">{t('dash2.askAgent')}</Text>
             <Group align="flex-end" gap="sm" wrap="nowrap">
-              <Select
+              <AgentSelect
                 style={{ width: 220, flexShrink: 0 }}
                 placeholder={t('dash2.pickAgent')}
-                data={agents.map((a) => ({ value: a.id, label: a.name }))}
+                agents={agents}
                 value={askAgentId}
                 onChange={setAskAgentId}
                 searchable

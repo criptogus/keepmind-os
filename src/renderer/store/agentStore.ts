@@ -11,7 +11,7 @@ interface AgentStore {
   fetchAgents: () => Promise<void>;
   selectAgent: (id: string) => void;
   createAgent: (input: CreateAgentInput) => Promise<Agent>;
-  updateAgent: (id: string, updates: Partial<AgentConfig> & { avatar?: string | null }) => Promise<void>;
+  updateAgent: (id: string, updates: Partial<AgentConfig> & { avatar?: string | null; managerId?: string | null }) => Promise<void>;
   deleteAgent: (id: string) => Promise<void>;
   executeAgent: (id: string, input: Record<string, unknown>) => Promise<void>;
   fetchExecutions: (agentId?: string) => Promise<void>;
@@ -52,7 +52,7 @@ export const useAgentStore = create<AgentStore>((set, get) => ({
     }
   },
 
-  updateAgent: async (id: string, updates: Partial<AgentConfig> & { avatar?: string | null }) => {
+  updateAgent: async (id: string, updates: Partial<AgentConfig> & { avatar?: string | null; managerId?: string | null }) => {
     set({ loading: true, error: null });
     try {
       const updated = await window.electronAPI.updateAgent(id, updates);

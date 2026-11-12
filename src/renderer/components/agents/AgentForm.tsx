@@ -7,6 +7,7 @@ import { DEFAULT_MODEL } from '../../../shared/models.js';
 import type { Agent, AgentConfig, Skill, ToolConfig } from '../../../shared/types.js';
 import { AVATAR_PRESETS, avatarJson, presetAvatarFor } from '../../../shared/avatars';
 import BotAvatar from '../common/BotAvatar';
+import AgentSelect from '../common/AgentSelect';
 import { useLang } from '../../lib/i18n';
 
 interface ToolInfo {
@@ -25,7 +26,7 @@ interface AgentFormProps {
 
 export default function AgentForm({ onClose, template, onCreated }: AgentFormProps) {
   const { t } = useLang();
-  const { createAgent, loading, error } = useAgentStore();
+  const { createAgent, loading, error, agents } = useAgentStore();
   const { groups: modelGroups } = useModelOptions();
   const [name, setName] = useState(template?.name ?? '');
   const [description, setDescription] = useState(template?.description ?? '');
@@ -49,6 +50,7 @@ export default function AgentForm({ onClose, template, onCreated }: AgentFormPro
   const [registryTools, setRegistryTools] = useState<ToolInfo[]>([]);
   const [avatarId, setAvatarId] = useState('auto');
   const [budgetUsd, setBudgetUsd] = useState<number | string>('');
+  const [managerId, setManagerId] = useState<string | null>(null);
 
   useEffect(() => {
     window.electronAPI.listSkillTools?.().then(setRegistryTools).catch(() => {});
@@ -94,6 +96,7 @@ export default function AgentForm({ onClose, template, onCreated }: AgentFormPro
         capabilities: template?.capabilities,
         avatar: avatarId === 'auto' ? undefined : avatarJson(AVATAR_PRESETS.find((p) => p.id === avatarId) ?? presetAvatarFor(name || 'agent')),
         monthlyBudgetUsd: budgetUsd === '' ? undefined : Number(budgetUsd),
+        managerId: managerId || undefined,
       });
       onCreated?.(agent);
       onClose();
@@ -162,6 +165,19 @@ export default function AgentForm({ onClose, template, onCreated }: AgentFormPro
           value={budgetUsd}
           onChange={setBudgetUsd}
         />
+
+        {agents.length > 0 && (
+          <AgentSelect
+            label={t('af.manager')}
+            description={t('af.managerDesc')}
+            placeholder={t('af.managerNone')}
+            clearable
+            agents={agents}
+            value={managerId}
+            onChange={setManagerId}
+            searchable
+          />
+        )}
 
         <Textarea
           label={t('af.systemPrompt')}

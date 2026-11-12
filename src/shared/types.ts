@@ -24,6 +24,8 @@ export interface Agent {
   sharedAt?: string;
   /** open-bot-avatar JSON definition (geometry only); auto-assigned when absent. */
   avatar?: string;
+  /** Agent this one reports to (org hierarchy). Undefined = top level. */
+  managerId?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -64,6 +66,8 @@ export interface CreateAgentInput extends AgentConfig {
   capabilities?: string[];
   /** open-bot-avatar JSON definition; auto-assigned from presets when absent. */
   avatar?: string;
+  /** Agent this one reports to; must exist and must not create a cycle. */
+  managerId?: string;
 }
 
 export interface ToolConfig {

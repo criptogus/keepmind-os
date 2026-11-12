@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Badge, Button, Card, Group, Modal, SimpleGrid, Stack, Text } from '@mantine/core';
+import { Badge, Button, Card, Group, Modal, SegmentedControl, SimpleGrid, Stack, Text } from '@mantine/core';
 import { useAgentStore } from '../../store/agentStore';
 import AgentForm from './AgentForm';
 import AgentWizard from './AgentWizard';
@@ -11,6 +11,7 @@ import BotAvatar from '../common/BotAvatar';
 import { avatarForAgent } from '../../../shared/avatars';
 import type { AvatarMotion } from 'open-bot-avatar';
 import PixelSpinner from '../common/PixelSpinner';
+import OrgChart from './OrgChart';
 import { IconAgent } from '../common/icons.js';
 
 export default function AgentList() {
@@ -19,6 +20,7 @@ export default function AgentList() {
   const [createMode, setCreateMode] = useState<'wizard' | 'advanced' | null>(null);
   const [advancedTemplate, setAdvancedTemplate] = useState<AgentTemplate | null>(null);
   const [editingAgentId, setEditingAgentId] = useState<string | null>(null);
+  const [view, setView] = useState<'list' | 'org'>('list');
 
   useEffect(() => {
     fetchAgents();
@@ -65,7 +67,22 @@ export default function AgentList() {
         title={t('ph.agents.title')}
         subtitle={t('ph.agents.sub')}
         help={t('ph.agents.help')}
-        actions={<Button data-tour="agents-new" size="xs" variant="default" onClick={() => setCreateMode('wizard')}>{t('agents.new')}</Button>}
+        actions={
+          <Group gap="xs">
+            {agents.length > 1 && (
+              <SegmentedControl
+                size="xs"
+                value={view}
+                onChange={(v) => setView(v as 'list' | 'org')}
+                data={[
+                  { value: 'list', label: t('agents.viewList') },
+                  { value: 'org', label: t('agents.viewOrg') },
+                ]}
+              />
+            )}
+            <Button data-tour="agents-new" size="xs" variant="default" onClick={() => setCreateMode('wizard')}>{t('agents.new')}</Button>
+          </Group>
+        }
       />
 
       {agents.length === 0 ? (
@@ -77,6 +94,8 @@ export default function AgentList() {
             <Button size="xs" variant="default" mt="xs" onClick={() => setCreateMode('wizard')}>{t('agents.createAgent')}</Button>
           </Stack>
         </Card>
+      ) : view === 'org' ? (
+        <OrgChart agents={agents} onSelect={(a) => selectAgent(a.id)} />
       ) : (
         <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="md">
           {agents.map((agent) => (

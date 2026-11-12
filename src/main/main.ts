@@ -84,7 +84,7 @@ const currentUserId = (): string | undefined => localAuth?.getCurrentUser()?.id;
 const currentUserEmail = (): string => localAuth?.getCurrentUser()?.email ?? 'system';
 
 /** Gated tools a member must never see offered to the model. */
-const MEMBER_DENIED_TOOLS = ['shell_exec', 'file_write', 'open_url', 'whatsapp_send_message', 'delegate_to_agent', 'secondbrain_remember', 'personalbrain_remember', 'composio_execute'];
+const MEMBER_DENIED_TOOLS = ['shell_exec', 'file_write', 'open_url', 'whatsapp_send_message', 'delegate_to_agent', 'create_agent', 'review_agent', 'secondbrain_remember', 'personalbrain_remember', 'composio_execute'];
 
 const ACCESS_RANK: Record<ComputerAccessLevel, number> = { workspace: 0, authorized: 1, full: 2 };
 function computerSettings() {
@@ -197,9 +197,9 @@ function seedBuiltInSkills() {
     },
     {
       name: 'Agent Delegation',
-      description: 'Delegate sub-tasks to other agents by name or ID and receive their results.',
-      prompt: 'You can hand off work to other agents with delegate_to_agent(agent, task). Use it when a sub-task benefits from a different agent persona or when work can be parallelized. Delegate focused, self-contained tasks and incorporate the returned results into your final answer.',
-      toolNames: ['delegate_to_agent'],
+      description: 'Delegate sub-tasks to other agents, create subordinate specialists, and review their work.',
+      prompt: 'You can hand off work to other agents with delegate_to_agent(agent, task). Use it when a sub-task benefits from a different agent persona or when work can be parallelized. Delegate focused, self-contained tasks and incorporate the returned results into your final answer. You can create a new specialist reporting to you with create_agent(name, description, systemPrompt) when a recurring sub-area deserves its own agent — a human approves each creation. After delegating, record a quality review with review_agent(agent, rating, note) so the team learns which agents perform well.',
+      toolNames: ['delegate_to_agent', 'create_agent', 'review_agent'],
     },
     {
       name: 'Second Brain',
@@ -658,6 +658,69 @@ app.whenReady().then(async () => {
         activeDelegationDepth--;
       }
     },
+    createAgent: async (callerAgentId, spec) => {
+      const caller = callerAgentId ? storageManager.getAgent(callerAgentId) : null;
+      const name = spec.name.trim();
+      if (!name) throw new Error('Agent name is required');
+      if (storageManager.getAllAgents().some((a) => a.name.toLowerCase() === name.toLowerCase())) {
+        throw new Error(`An agent named "${name}" already exists`);
+      }
+      const now = new Date().toISOString();
+      const agent = {
+        id: uuidv4(),
+        avatar: avatarJson(presetAvatarFor(`agent:${name}`)),
+        name,
+        description: spec.description?.slice(0, 300) || `Created by ${caller?.name ?? 'an agent'}`,
+        config: {
+          model: DEFAULT_MODEL.openai,
+          temperature: 0.7,
+          maxTokens: 2048,
+          systemPrompt: spec.systemPrompt?.slice(0, 8000) || `You are ${name}, a specialist agent. ${spec.description ?? ''}`.trim(),
+          tools: [{ name: 'delegate_to_agent', type: 'custom' as const, config: {} }],
+          skillIds: [],
+        },
+        capabilities: ['text_generation', 'reasoning'],
+        managerId: caller?.id,
+        permissions: {
+          canAccessNetwork: true,
+          canAccessFileSystem: false,
+          canExecuteCode: false,
+          maxExecutionTime: 300,
+        },
+        createdAt: now,
+        updatedAt: now,
+      };
+      storageManager.saveAgent(agent);
+      storageManager.saveAuditLog({
+        id: uuidv4(),
+        timestamp: now,
+        agentId: caller?.id ?? 'system',
+        agentName: caller?.name ?? 'system',
+        action: 'agent_created_by_agent',
+        input: { spec },
+        output: { agentId: agent.id, name: agent.name },
+        metadata: {},
+      });
+      return `Created agent "${agent.name}" (id: ${agent.id})${caller ? ` reporting to ${caller.name}` : ''}. A human admin can configure its model, skills and tools.`;
+    },
+    reviewAgent: async (callerAgentId, agentRef, rating, note) => {
+      const caller = callerAgentId ? storageManager.getAgent(callerAgentId) : null;
+      const agents = storageManager.getAllAgents();
+      const target = agents.find((a) => a.id === agentRef || a.name.toLowerCase() === agentRef.toLowerCase());
+      if (!target) throw new Error(`Agent not found: ${agentRef}`);
+      const now = new Date().toISOString();
+      storageManager.saveAuditLog({
+        id: uuidv4(),
+        timestamp: now,
+        agentId: caller?.id ?? 'system',
+        agentName: caller?.name ?? 'system',
+        action: 'agent_review',
+        input: { agent: target.name, rating, note: note.slice(0, 2000) },
+        output: { ok: true },
+        metadata: { targetAgentId: target.id },
+      });
+      return `Review recorded for "${target.name}": ${rating}/5${note ? ` — ${note.slice(0, 200)}` : ''}`;
+    },
   });
 
   // Cost ledger + budget gate + memory outcome scoring — all best-effort;
@@ -718,7 +781,7 @@ app.whenReady().then(async () => {
   // is on or the gate is disabled ('gov.toolApproval'='false'). The tool call
   // waits (polling) for a decision; approval lets it proceed, rejection or
   // timeout returns an error string to the model as the tool result.
-  const GATED_TOOLS = new Set(['shell_exec', 'file_write', 'open_url', 'whatsapp_send_message', 'delegate_to_agent', 'composio_execute', 'secondbrain_remember']);
+  const GATED_TOOLS = new Set(['shell_exec', 'file_write', 'open_url', 'whatsapp_send_message', 'delegate_to_agent', 'create_agent', 'composio_execute', 'secondbrain_remember']);
   const APPROVAL_TIMEOUT_MS = 120_000;
   const sanitizeArg = (v: unknown): unknown => {
     if (typeof v === 'string') return v.length > 500 ? v.slice(0, 500) + '…[truncated]' : v;
@@ -1068,9 +1131,27 @@ handle('agents:get', (_event, id: string) => {
   return agent;
 });
 
+/** Rejects a manager assignment that would create a reporting cycle. */
+function assertNoManagerCycle(agentId: string | undefined, managerId: string | null | undefined): void {
+  if (!managerId) return;
+  if (agentId && managerId === agentId) throw new Error('An agent cannot manage itself');
+  const seen = new Set<string>();
+  let cursor: string | undefined = managerId;
+  while (cursor) {
+    if (agentId && cursor === agentId) throw new Error('Manager assignment would create a reporting cycle');
+    if (seen.has(cursor)) break;
+    seen.add(cursor);
+    cursor = storageManager.getAgent(cursor)?.managerId;
+  }
+}
+
 handle('agents:create', async (_event, input: CreateAgentInput) => {
   requireRole('admin');
-  const { name, description, capabilities, avatar, ...config } = input;
+  const { name, description, capabilities, avatar, managerId, ...config } = input;
+  if (managerId) {
+    if (!storageManager.getAgent(managerId)) throw new Error('Manager agent not found');
+    assertNoManagerCycle(undefined, managerId);
+  }
   const agentId = uuidv4();
   const now = new Date().toISOString();
 
@@ -1081,6 +1162,7 @@ handle('agents:create', async (_event, input: CreateAgentInput) => {
     description: description || config.systemPrompt.substring(0, 200),
     config,
     capabilities: capabilities?.length ? capabilities : ['text_generation', 'reasoning'],
+    managerId: managerId || undefined,
     permissions: {
       canAccessNetwork: true,
       canAccessFileSystem: false,
@@ -1095,12 +1177,16 @@ handle('agents:create', async (_event, input: CreateAgentInput) => {
   return agent;
 });
 
-handle('agents:update', (_event, id: string, updates: Partial<AgentConfig> & { avatar?: string | null }) => {
+handle('agents:update', (_event, id: string, updates: Partial<AgentConfig> & { avatar?: string | null; managerId?: string | null }) => {
   requireRole('admin');
   const agent = storageManager.getAgent(id);
   if (!agent) throw new Error('Agent not found');
 
-  const { avatar, ...config } = updates;
+  const { avatar, managerId, ...config } = updates;
+  if (managerId !== undefined) {
+    if (managerId && !storageManager.getAgent(managerId)) throw new Error('Manager agent not found');
+    assertNoManagerCycle(id, managerId);
+  }
   let nextAvatar = agent.avatar;
   if (avatar !== undefined) {
     if (avatar === null || avatar === '') {
@@ -1115,6 +1201,7 @@ handle('agents:update', (_event, id: string, updates: Partial<AgentConfig> & { a
   const updated = {
     ...agent,
     avatar: nextAvatar,
+    managerId: managerId === undefined ? agent.managerId : (managerId || undefined),
     config: { ...agent.config, ...config },
     updatedAt: new Date().toISOString(),
   };
@@ -1124,6 +1211,10 @@ handle('agents:update', (_event, id: string, updates: Partial<AgentConfig> & { a
 
 handle('agents:delete', (_event, id: string) => {
   requireRole('admin');
+  // Orphaned reports become top-level instead of pointing at a dead manager.
+  for (const a of storageManager.getAllAgents()) {
+    if (a.managerId === id) storageManager.saveAgent({ ...a, managerId: undefined, updatedAt: new Date().toISOString() });
+  }
   storageManager.deleteAgent(id);
 });
 
