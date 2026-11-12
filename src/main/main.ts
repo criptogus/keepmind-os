@@ -1753,6 +1753,7 @@ handle('settings:get', () => {
     llmAutoRoute: settings['llm.autoRoute'] !== 'false',
     toolApprovalRequired: settings['gov.toolApproval'] !== 'false',
     soundEffects: settings.soundEffects === 'true',
+    soundEvents: settings.soundEvents || 'attention,done,error,start',
   };
 });
 

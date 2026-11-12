@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Badge, Button, Card, Group, Progress, Stack, Text, Title } from '@mantine/core';
+import { Badge, Button, Card, Group, Progress, Select, Stack, Text, Textarea, Title } from '@mantine/core';
 import { useAgentStore } from '../../store/agentStore';
+import { sfxStart } from '../../lib/sfx';
 import { useTeamStore } from '../../store/teamStore';
 import { useLang } from '../../lib/i18n';
 import BotAvatar from '../common/BotAvatar';
@@ -20,7 +21,7 @@ interface ConnectionStatus {
 
 export default function AnalyticsDashboard({ onNavigate }: Props) {
   const { t } = useLang();
-  const { agents, fetchAgents } = useAgentStore();
+  const { agents, fetchAgents, executeAgent } = useAgentStore();
   const { teams, fetchTeams } = useTeamStore();
   const [executions, setExecutions] = useState(0);
   const [runningExecs, setRunningExecs] = useState<AgentExecution[]>([]);
@@ -31,6 +32,13 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
   const [companyName, setCompanyName] = useState('');
   const [secondBrain, setSecondBrain] = useState<{ enabled: boolean; hasToken: boolean } | null>(null);
   const [monthlySpend, setMonthlySpend] = useState<Array<{ agentId: string; agentName: string; costUsd: number; calls: number; monthlyBudgetUsd?: number }>>([]);
+  const [askAgentId, setAskAgentId] = useState<string | null>(null);
+  const [askText, setAskText] = useState('');
+  const [asking, setAsking] = useState(false);
+  const [askError, setAskError] = useState('');
+  const [tipDismissed, setTipDismissed] = useState(() => {
+    try { return localStorage.getItem('km.tipDismissed') === new Date().toDateString(); } catch { return false; }
+  });
 
   useEffect(() => {
     const load = async () => {
@@ -107,6 +115,41 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
   ];
   const allConnected = connections.every((c) => c.ok);
 
+  const handleAsk = async () => {
+    if (!askAgentId || !askText.trim() || asking) return;
+    setAsking(true);
+    setAskError('');
+    try {
+      // Plain text becomes {message}; valid JSON is sent as-is.
+      let input: Record<string, unknown>;
+      try {
+        const parsed = JSON.parse(askText);
+        input = parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : { message: askText };
+      } catch {
+        input = { message: askText };
+      }
+      await executeAgent(askAgentId, input);
+      sfxStart();
+      setAskText('');
+      // Refresh presence strip immediately.
+      try {
+        const execs = await window.electronAPI.getAgentExecutions();
+        setRunningExecs(execs.filter((e) => e.status === 'running'));
+      } catch { /* next poll catches it */ }
+    } catch (err) {
+      setAskError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setAsking(false);
+    }
+  };
+
+  // One tip per day, deterministic rotation.
+  const tipIndex = Math.floor(Date.now() / 86400000) % 8;
+  const dismissTip = () => {
+    setTipDismissed(true);
+    try { localStorage.setItem('km.tipDismissed', new Date().toDateString()); } catch { /* ignore */ }
+  };
+
   return (
     <Stack gap="xl">
       <Group justify="space-between" align="flex-start">
@@ -121,6 +164,39 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
           <Button onClick={() => onNavigate?.('agents')}>{t('agents.new')}</Button>
         </Group>
       </Group>
+
+      {agents.length > 0 && (
+        <Card withBorder padding="lg" radius="md">
+          <Stack gap="sm">
+            <Text fw={600} size="sm">{t('dash2.askAgent')}</Text>
+            <Group align="flex-end" gap="sm" wrap="nowrap">
+              <Select
+                style={{ width: 220, flexShrink: 0 }}
+                placeholder={t('dash2.pickAgent')}
+                data={agents.map((a) => ({ value: a.id, label: a.name }))}
+                value={askAgentId}
+                onChange={setAskAgentId}
+                searchable
+              />
+              <Textarea
+                style={{ flex: 1 }}
+                placeholder={t('dash2.askAgentPh')}
+                minRows={1}
+                autosize
+                maxRows={4}
+                value={askText}
+                onChange={(e) => setAskText(e.currentTarget.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) void handleAsk(); }}
+              />
+              <Button onClick={() => void handleAsk()} loading={asking} disabled={!askAgentId || !askText.trim()}>
+                {t('dash2.askAgentBtn')}
+              </Button>
+            </Group>
+            {askError && <Text size="xs" c="red">{askError}</Text>}
+            <Text size="xs" c="dimmed">{t('dash2.askAgentHint')}</Text>
+          </Stack>
+        </Card>
+      )}
 
       {pendingApprovals > 0 && (
         <Card withBorder padding="lg" radius="md" style={{ borderColor: 'var(--mantine-color-dark-4)' }}>
@@ -278,6 +354,32 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
           ))
         )}
       </Stack>
+
+      {!tipDismissed && (
+        <Card withBorder padding="md" radius="md" style={{ borderStyle: 'dashed' }}>
+          <Group justify="space-between" wrap="nowrap">
+            <Group gap="sm" wrap="nowrap">
+              <span
+                aria-hidden="true"
+                style={{
+                  width: 24, height: 24, borderRadius: '50%', flexShrink: 0,
+                  border: '1.5px solid #111', color: '#111',
+                  fontSize: 13, fontWeight: 700, lineHeight: '21px', textAlign: 'center',
+                }}
+              >
+                i
+              </span>
+              <div>
+                <Text size="xs" fw={600} tt="uppercase" c="dimmed">{t('dash2.tip')}</Text>
+                <Text size="sm">{t(`dash2.tips.${tipIndex}`)}</Text>
+              </div>
+            </Group>
+            <Button size="compact-xs" variant="subtle" color="gray" onClick={dismissTip}>
+              {t('dash2.tip.dismiss')}
+            </Button>
+          </Group>
+        </Card>
+      )}
     </Stack>
   );
 }

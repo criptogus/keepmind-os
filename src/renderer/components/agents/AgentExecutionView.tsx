@@ -26,6 +26,24 @@ function fmtElapsed(ms: number): string {
   return m > 0 ? `${m}m ${String(s % 60).padStart(2, '0')}s` : `${s}s`;
 }
 
+/** One row of the live plan (agentes.chat WorkPlan pattern, monochrome). */
+function PlanStep({ state, label }: { state: 'todo' | 'doing' | 'done' | 'failed'; label: string }) {
+  return (
+    <Group gap={6} wrap="nowrap" align="flex-start">
+      <span style={{ width: 14, display: 'inline-flex', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
+        {state === 'doing' ? <PixelSpinner size={14} /> : state === 'done' ? (
+          <Text span size="xs" fw={700}>✓</Text>
+        ) : state === 'failed' ? (
+          <Text span size="xs" fw={700}>!</Text>
+        ) : (
+          <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: 'var(--mantine-color-gray-5)', display: 'inline-block', marginTop: 4 }} />
+        )}
+      </span>
+      <Text size="xs" c={state === 'todo' ? 'dimmed' : undefined} ff="monospace" style={{ wordBreak: 'break-all' }}>{label}</Text>
+    </Group>
+  );
+}
+
 export default function AgentExecutionView({ agentId }: AgentExecutionViewProps) {
   const { t } = useLang();
   const { executions, loading, error, fetchExecutions, cancelExecution } = useAgentStore();
@@ -131,6 +149,28 @@ export default function AgentExecutionView({ agentId }: AgentExecutionViewProps)
               )}
             </Group>
             <div className="km-progress" style={{ height: 4, backgroundColor: 'var(--mantine-color-gray-3)', borderRadius: 2 }} />
+            {/* Live plan: request → each tool → response (WorkPlan pattern). */}
+            <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
+              <Text size="xs" fw={600} mb={4}>{t('aex.plan')}</Text>
+              <Stack gap={2}>
+                <PlanStep state="done" label={t('aex.stepStart')} />
+                {live.tools.slice(0, 6).map((tool, i) => (
+                  <PlanStep
+                    key={i}
+                    state={tool.result !== undefined || tool.error !== undefined ? (tool.error ? 'failed' : 'done') : 'doing'}
+                    label={tool.name}
+                  />
+                ))}
+                {live.tools.length > 6 && (
+                  <Text size="xs" c="dimmed">+{live.tools.length - 6}</Text>
+                )}
+                <PlanStep
+                  state={live.done ? 'done' : live.text ? 'doing' : 'todo'}
+                  label={t('aex.stepRespond')}
+                />
+              </Stack>
+            </Card>
+
             {live.tools.length > 0 && (
               <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
                 <Text size="xs" fw={600} mb={4}>{t('aex.toolCalls')}</Text>

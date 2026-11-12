@@ -262,4 +262,6 @@ export interface AppSettings {
   toolApprovalRequired?: boolean;
   /** Subtle synthesized UI sounds (approvals, completions, errors). Default off. */
   soundEffects?: boolean;
+  /** Comma-separated enabled sound events; undefined/empty = all enabled. */
+  soundEvents?: string;
 }

@@ -7,6 +7,7 @@ import type { AgentConfig, Skill } from '../../../shared/types.js';
 import { useLang } from '../../lib/i18n';
 import { AVATAR_PRESETS, avatarForAgent, avatarJson, parseAvatarDefinition, presetAvatarFor } from '../../../shared/avatars';
 import BotAvatar from '../common/BotAvatar';
+import { sfxStart } from '../../lib/sfx';
 
 interface AgentEditorProps {
   agentId: string;
@@ -62,6 +63,7 @@ export default function AgentEditor({ agentId, onClose }: AgentEditorProps) {
     try {
       const input = JSON.parse(executionInput);
       await executeAgent(agentId, input);
+      sfxStart();
       setActiveTab('executions');
     } catch (err) {
       alert(t('ae.invalidJson'));

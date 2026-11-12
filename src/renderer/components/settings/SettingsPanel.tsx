@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import { Button, Card, Group, Select, Slider, Stack, Switch, Text, TextInput } from '@mantine/core';
+import { Button, Card, Checkbox, Group, Select, Slider, Stack, Switch, Text, TextInput } from '@mantine/core';
 import { useSettingsStore } from '../../store/settingsStore';
 import { useModelOptions } from '../../lib/useModelOptions';
 import { DEFAULT_MODEL } from '../../../shared/models.js';
 import { useLang, type Lang } from '../../lib/i18n';
 import PageHeader from '../common/PageHeader';
-import { setSfxEnabled } from '../../lib/sfx';
+import { setSfxEnabled, setSfxEvent, type SfxEvent } from '../../lib/sfx';
 
 export default function SettingsPanel() {
   const { lang, setLang, t } = useLang();
@@ -16,9 +16,13 @@ export default function SettingsPanel() {
     fetchSettings();
   }, [fetchSettings]);
 
+  const SFX_EVENTS: SfxEvent[] = ['attention', 'done', 'error', 'start'];
+  const soundEvents = new Set((settings.soundEvents || 'attention,done,error,start').split(',').filter(Boolean));
+
   useEffect(() => {
     setSfxEnabled(settings.soundEffects === true);
-  }, [settings.soundEffects]);
+    for (const ev of SFX_EVENTS) setSfxEvent(ev, soundEvents.has(ev));
+  }, [settings.soundEffects, settings.soundEvents]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleChange = (key: keyof typeof settings, value: unknown) => {
     updateSettings({ [key]: value });
@@ -73,7 +77,7 @@ export default function SettingsPanel() {
               onChange={(e) => handleChange('autoApprove', e.currentTarget.checked)}
             />
           </Group>
-          <Group justify="space-between">
+          <Group justify="space-between" align="flex-start">
             <div>
               <Text size="sm" fw={500}>{t('settings.sound')}</Text>
               <Text size="xs" c="dimmed">{t('settings.soundHint')}</Text>
@@ -83,6 +87,23 @@ export default function SettingsPanel() {
               onChange={(e) => handleChange('soundEffects', e.currentTarget.checked)}
             />
           </Group>
+          {settings.soundEffects === true && (
+            <Stack gap={4} pl="md">
+              {SFX_EVENTS.map((ev) => (
+                <Checkbox
+                  key={ev}
+                  size="sm"
+                  label={t(`settings.sfx.${ev}`)}
+                  checked={soundEvents.has(ev)}
+                  onChange={(e) => {
+                    const next = new Set(soundEvents);
+                    if (e.currentTarget.checked) next.add(ev); else next.delete(ev);
+                    handleChange('soundEvents', [...next].join(','));
+                  }}
+                />
+              ))}
+            </Stack>
+          )}
         </Stack>
       </Card>
 
