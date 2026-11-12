@@ -1,6 +1,6 @@
 {
   "name": "zero-agency-os",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "private": true,
   "type": "module",
   "license": "MIT",
@@ -18,7 +18,8 @@
     "smoke:electron": "node scripts/smoke-electron.mjs",
     "dist:mac": "npm run build && electron-builder --mac",
     "astryx": "astryx",
-    "scan:secrets": "node scripts/scan-secrets.mjs"
+    "scan:secrets": "node scripts/scan-secrets.mjs",
+    "dist:win": "npm run build && electron-builder --win"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.1",
@@ -106,7 +107,30 @@
         "owner": "criptogus",
         "repo": "keepmind-os"
       }
-    ]
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
   },
   "description": "KeepMind OS — local agent workspace",
   "author": "KeepMind",

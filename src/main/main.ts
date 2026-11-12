@@ -415,10 +415,13 @@ app.whenReady().then(async () => {
   }, async (url) => {
     logOAuth(`openExternal attempt: ${url.slice(0, 90)}`);
     // shell.openExternal can hang silently in packaged builds; the platform
-    // `open` command is deterministic on macOS (the only ship target).
-    const cmd = process.platform === 'darwin' ? 'open' : process.platform === 'win32' ? 'start' : 'xdg-open';
+    // command is deterministic. On Windows `start` treats the first quoted
+    // arg as a window title, so an empty title arg is required.
+    const cmd = process.platform === 'darwin' ? `open ${JSON.stringify(url)}`
+      : process.platform === 'win32' ? `cmd /c start "" ${JSON.stringify(url)}`
+      : `xdg-open ${JSON.stringify(url)}`;
     await new Promise<void>((resolve, reject) => {
-      exec(`${cmd} ${JSON.stringify(url)}`, (err) => (err ? reject(err) : resolve()));
+      exec(cmd, (err) => (err ? reject(err) : resolve()));
     });
     logOAuth('openExternal done via platform command');
   });
