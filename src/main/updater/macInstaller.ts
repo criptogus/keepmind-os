@@ -19,7 +19,9 @@ function updaterPendingDir(): string | null {
     for (const entry of readdirSync(caches)) {
       if (!entry.endsWith('-updater')) continue;
       const dir = path.join(caches, entry, 'pending');
-      if (existsSync(dir)) return dir;
+      // Only consider caches that actually hold a completed download —
+      // a random *-updater dir may belong to a different application.
+      if (existsSync(path.join(dir, 'update-info.json'))) return dir;
     }
   } catch { /* no caches dir */ }
   return null;
@@ -37,6 +39,15 @@ function sha512Base64(file: string): Promise<string> {
 
 function shellQuote(value: string): string {
   return `'${value.replace(/'/g, `'\\''`)}'`;
+}
+
+function bundleIdOf(appPath: string): string | null {
+  try {
+    const plist = readFileSync(path.join(appPath, 'Contents', 'Info.plist'), 'utf8');
+    return plist.match(/<key>CFBundleIdentifier<\/key>\s*<string>([^<]+)<\/string>/)?.[1] ?? null;
+  } catch {
+    return null;
+  }
 }
 
 export interface MacInstallResult {
@@ -100,6 +111,18 @@ export async function installDownloadedMacUpdate(): Promise<MacInstallResult> {
       execFileSync('codesign', ['--verify', '--deep', '--strict', stagedApp], { stdio: 'pipe' });
     } catch {
       return { ok: false, error: 'Update app failed code signature verification' };
+    }
+
+    // Last line of defense: the staged bundle must be the same app we are.
+    // updaterPendingDir() can fall back to scanning ~/Library/Caches/*-updater,
+    // which could belong to a different application entirely.
+    const currentId = bundleIdOf(appPath);
+    const stagedId = bundleIdOf(stagedApp);
+    if (!currentId || !stagedId || currentId !== stagedId) {
+      return {
+        ok: false,
+        error: `Refusing to install: bundle identifier mismatch (current=${currentId ?? '?'}, update=${stagedId ?? '?'})`,
+      };
     }
 
     // The script must live outside the staging dir: the script deletes staging

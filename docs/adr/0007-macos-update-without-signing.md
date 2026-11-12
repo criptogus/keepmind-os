@@ -27,7 +27,12 @@ zip download into the updater cache all work fine unsigned). Replace only the
 2. Recompute sha512 of the zip and compare (integrity check).
 3. Extract with `ditto -x -k` to a temp staging dir.
 4. `codesign --verify --deep --strict` the staged `.app`.
-5. Write a detached `swap.sh` that waits for this process to exit, `rm -rf`s the old
+5. **Bundle-identifier check**: the staged app's `CFBundleIdentifier` must equal
+   the installed app's. The pending-dir lookup has a fallback that scans
+   `~/Library/Caches/*-updater`; without this check a foreign app's cache could
+   theoretically supply the payload. Added after a field incident where an
+   unrelated app bundle was found at the install path.
+6. Write a detached `swap.sh` that waits for this process to exit, `rm -rf`s the old
    bundle, moves the new one into place and `open`s it.
 6. `app.quit()`.
 
