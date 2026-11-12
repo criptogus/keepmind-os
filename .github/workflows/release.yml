@@ -43,6 +43,12 @@ jobs:
       - name: Publish assets to release
         run: |
           shopt -s nullglob
+          for file in release/*.dmg release/*.zip release/*.blockmap; do
+            basename=${file##*/}
+            if [[ "$basename" == *" "* ]]; then
+              mv -v "$file" "release/${basename// /-}"
+            fi
+          done
           FILES=(release/*.dmg release/*.zip release/*.blockmap release/latest-mac.yml)
           if [ ${#FILES[@]} -lt 9 ]; then echo "Expected 9 assets, got ${#FILES[@]}: ${FILES[*]}"; exit 1; fi
           if ! gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
