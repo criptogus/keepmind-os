@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Badge, Button, Card, Checkbox, Group, Modal, Stack, Text, Textarea, TextInput } from '@mantine/core';
+import { Badge, Button, Card, Checkbox, Group, Modal, Select, Stack, Text, Textarea, TextInput } from '@mantine/core';
 import type { Skill } from '../../../shared/types';
 import { useLang } from '../../lib/i18n';
 import PageHeader from '../common/PageHeader';
@@ -21,7 +21,8 @@ export default function SkillsPanel() {
   const [importOpen, setImportOpen] = useState(false);
   const [importUrl, setImportUrl] = useState('');
   const [importing, setImporting] = useState(false);
-  const [importPreview, setImportPreview] = useState<{ name: string; description: string; prompt: string; toolNames: string[]; source: string } | null>(null);
+  const [importPreview, setImportPreview] = useState<{ skills: Array<{ name: string; description: string; prompt: string; toolNames: string[]; source: string; sourceRef?: string; files?: string[]; ignored?: string[] }>; skipped: Array<{ name: string; reason: string }> } | null>(null);
+  const [importSel, setImportSel] = useState(0);
 
   const load = async () => {
     const [s, t] = await Promise.all([window.electronAPI.getSkills(), window.electronAPI.listSkillTools()]);
@@ -84,7 +85,7 @@ export default function SkillsPanel() {
         help={t('ph.skills.help')}
         actions={
           <Group gap="xs">
-            <Button size="xs" variant="default" onClick={() => { setImportOpen(true); setImportPreview(null); setImportUrl(''); }}>{t('skills.importGithub')}</Button>
+            <Button size="xs" variant="default" onClick={() => { setImportOpen(true); setImportPreview(null); setImportSel(0); setImportUrl(''); }}>{t('skills.importGithub')}</Button>
             <Button size="xs" variant="default" onClick={openNew}>{t('skills.new')}</Button>
           </Group>
         }
@@ -148,17 +149,36 @@ export default function SkillsPanel() {
           <TextInput
             placeholder="https://github.com/owner/repo"
             value={importUrl}
-            onChange={(e) => { setImportUrl(e.currentTarget.value); setImportPreview(null); }}
+            onChange={(e) => { setImportUrl(e.currentTarget.value); setImportPreview(null); setImportSel(0); }}
           />
           {importPreview && (
             <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
               <Stack gap={4}>
-                <Text size="sm" fw={600}>{importPreview.name}</Text>
-                <Text size="xs" c="dimmed">{importPreview.description}</Text>
-                {importPreview.toolNames.length > 0 && (
-                  <Text size="xs" c="dimmed">{t('skills.toolsPrefix')}: {importPreview.toolNames.join(', ')}</Text>
+                {importPreview.skills.length > 1 && (
+                  <Select
+                    size="xs"
+                    label={t('skills.pickSkill')}
+                    data={importPreview.skills.map((s, i) => ({ value: String(i), label: s.name }))}
+                    value={String(importSel)}
+                    onChange={(v) => setImportSel(Number(v ?? 0))}
+                  />
                 )}
-                <Text size="xs" c="dimmed" lineClamp={3} style={{ whiteSpace: 'pre-wrap' }}>{importPreview.prompt}</Text>
+                {importPreview.skills[importSel] && (
+                  <>
+                    <Text size="sm" fw={600}>{importPreview.skills[importSel].name}</Text>
+                    <Text size="xs" c="dimmed">{importPreview.skills[importSel].description}</Text>
+                    {importPreview.skills[importSel].toolNames.length > 0 && (
+                      <Text size="xs" c="dimmed">{t('skills.toolsPrefix')}: {importPreview.skills[importSel].toolNames.join(', ')}</Text>
+                    )}
+                    <Text size="xs" c="dimmed" lineClamp={3} style={{ whiteSpace: 'pre-wrap' }}>{importPreview.skills[importSel].prompt}</Text>
+                    {importPreview.skills[importSel].ignored && importPreview.skills[importSel].ignored!.length > 0 && (
+                      <Text size="xs" c="dimmed">{t('skills.ignoredFiles')}: {importPreview.skills[importSel].ignored!.slice(0, 5).join(', ')}{importPreview.skills[importSel].ignored!.length > 5 ? '…' : ''}</Text>
+                    )}
+                  </>
+                )}
+                {importPreview.skipped.length > 0 && (
+                  <Text size="xs" c="dimmed">{t('skills.skippedItems')}: {importPreview.skipped.map((s) => s.name).join(', ')}</Text>
+                )}
               </Stack>
             </Card>
           )}
@@ -174,7 +194,9 @@ export default function SkillsPanel() {
                   setImporting(true); setError('');
                   try {
                     const draft = await window.electronAPI.importSkillFromGitHub(importUrl.trim());
+                    if (!draft.skills.length) throw new Error(t('skills.importFailed'));
                     setImportPreview(draft);
+                    setImportSel(0);
                   } catch (e) {
                     setError(e instanceof Error ? e.message : t('skills.importFailed'));
                   } finally { setImporting(false); }
@@ -186,11 +208,15 @@ export default function SkillsPanel() {
               <Button
                 size="xs"
                 onClick={async () => {
+                  const sel = importPreview.skills[importSel];
                   await window.electronAPI.createSkill({
-                    name: importPreview.name,
-                    description: importPreview.description,
-                    prompt: importPreview.prompt,
-                    toolNames: importPreview.toolNames.filter((n) => tools.some((t) => t.name === n)),
+                    name: sel.name,
+                    description: sel.description,
+                    prompt: sel.prompt,
+                    toolNames: sel.toolNames.filter((n) => tools.some((t) => t.name === n)),
+                    source: sel.source,
+                    sourceRef: sel.sourceRef,
+                    version: 1,
                   });
                   setImportOpen(false);
                   setImportPreview(null);

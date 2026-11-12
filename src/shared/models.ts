@@ -174,6 +174,59 @@ export function modelsForProvider(models: ModelInfo[], provider: ModelProvider):
     .sort((a, b) => order(b.tier) - order(a.tier) || a.label.localeCompare(b.label));
 }
 
+// ---------------------------------------------------------------------------
+// Pricing (USD per 1M tokens) — used for the per-agent budget ledger.
+// Values are list-price approximations; unknown models fall back by tier.
+// ---------------------------------------------------------------------------
+
+export interface ModelPricing {
+  input: number;   // USD per 1M prompt tokens
+  output: number;  // USD per 1M completion tokens
+}
+
+const PRICING_EXACT: Record<string, ModelPricing> = {
+  'gpt-6-astra': { input: 15, output: 60 },
+  'gpt-6.1-sol': { input: 5, output: 20 },
+  'gpt-6.1-terra': { input: 2.5, output: 10 },
+  'gpt-6.1-luna': { input: 0.5, output: 2 },
+  'gpt-5.6-sol': { input: 5, output: 20 },
+  'gpt-5.6-terra': { input: 2.5, output: 10 },
+  'gpt-5.6-luna': { input: 0.5, output: 2 },
+  'gpt-5.3-codex': { input: 2.5, output: 10 },
+  'gpt-5.2-codex': { input: 1.75, output: 7 },
+  'gpt-5.1-codex': { input: 1.25, output: 5 },
+  'claude-fable-5-2': { input: 15, output: 75 },
+  'claude-opus-5-5': { input: 15, output: 75 },
+  'claude-sonnet-5-5': { input: 3, output: 15 },
+  'claude-haiku-5-5': { input: 0.8, output: 4 },
+  'claude-opus-4-8': { input: 15, output: 75 },
+  'claude-sonnet-4-6': { input: 3, output: 15 },
+};
+
+const PRICING_BY_TIER: Record<ModelTier, ModelPricing> = {
+  flagship: { input: 15, output: 75 },
+  complex: { input: 5, output: 20 },
+  medium: { input: 3, output: 15 },
+  simple: { input: 0.8, output: 4 },
+};
+
+export function pricingForModel(model: string): ModelPricing {
+  return PRICING_EXACT[model] ?? PRICING_BY_TIER[tierForModel(model) ?? 'medium'];
+}
+
+/** Estimated USD cost of one call. */
+export function estimateCallCost(model: string, promptChars: number, maxOutputTokens: number): number {
+  const p = pricingForModel(model);
+  const promptTokens = promptChars / 4; // ~4 chars/token, rounded up for safety
+  return (promptTokens * p.input + maxOutputTokens * p.output) / 1_000_000;
+}
+
+/** Actual USD cost from provider-reported token usage. */
+export function costFromUsage(model: string, promptTokens: number, completionTokens: number): number {
+  const p = pricingForModel(model);
+  return (promptTokens * p.input + completionTokens * p.output) / 1_000_000;
+}
+
 /** Prettify a raw provider model id into a display label. */
 export function prettifyModelId(id: string): string {
   return id

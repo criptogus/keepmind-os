@@ -14,16 +14,21 @@ import { ComposioManager } from './integrations/ComposioManager.js';
 import { judgePii } from './integrations/PiiJudge.js';
 import { TriggerManager } from './agent/TriggerManager.js';
 import { LocalAuth } from './auth/LocalAuth.js';
-import { importSkillFromGitHub } from './integrations/SkillImporter.js';
+import { importSkillsFromGitHub } from './integrations/SkillImporter.js';
+import { MemoryManager } from './integrations/MemoryManager.js';
+import { createMemoryJudge } from './integrations/MemoryJudge.js';
 import { getCachedCatalog, isCacheFresh, knownModelIds, refreshModelCatalog, type ProviderCredentials } from './integrations/ModelCatalog.js';
-import { routeModelForTask, DEFAULT_MODEL, type ModelProvider } from '../shared/models.js';
+import { routeModelForTask, DEFAULT_MODEL, costFromUsage, type ModelProvider } from '../shared/models.js';
+import { createServer, type Server } from 'node:http';
 import { autoUpdater } from 'electron-updater';
 import { exec } from 'node:child_process';
+import { createHash, randomBytes } from 'node:crypto';
 import * as fs from 'node:fs/promises';
 import { appendFileSync } from 'node:fs';
 import type { Skill } from '../shared/types.js';
 import { v4 as uuidv4 } from 'uuid';
 import type { AgentConfig, CreateAgentInput, TeamConfig, GovernanceRule, AppSettings, AgentTrigger, Approval, LocalUser, UserRole, ComputerAccessLevel } from '../shared/types.js';
+import { presetAvatarFor, avatarJson } from '../shared/avatars.js';
 
 let mainWindow: BrowserWindow | null = null;
 let storageManager: StorageManager;
@@ -33,6 +38,8 @@ let oauthManager: OAuthManager;
 let credentialStore: CredentialStore;
 let secondBrainManager: SecondBrainManager;
 let personalBrainManager: PersonalBrainManager;
+let memoryManager: MemoryManager;
+let webhookServer: Server | null = null;
 let whatsAppManager: WhatsAppManager;
 let composioManager: ComposioManager;
 let triggerManager: TriggerManager;
@@ -389,6 +396,11 @@ app.whenReady().then(async () => {
   credentialStore = new CredentialStore(storageManager);
   localAuth = new LocalAuth(storageManager);
   personalBrainManager = new PersonalBrainManager(app.getPath('userData'));
+  memoryManager = new MemoryManager(storageManager);
+  memoryManager.setJudge(createMemoryJudge(() => ({
+    openai: providerApiKeys.openai ?? credentialStore.getApiKey('openai') ?? undefined,
+    anthropic: providerApiKeys.anthropic ?? credentialStore.getApiKey('anthropic') ?? undefined,
+  })));
   seedBuiltInSkills();
   agentManager = new AgentManager();
   teamExecutionEngine = new TeamExecutionEngine();
@@ -497,6 +509,7 @@ app.whenReady().then(async () => {
     runAgent: (agentId, input) => runAgentExecution(agentId, input),
     getAgentName: (agentId) => storageManager.getAgent(agentId)?.name,
   });
+  startWebhookServer();
   agentManager.setContextProvider(async (query) => {
     if (!secondBrainManager.isConfigured()) return '';
     return secondBrainManager.search(query, 5);
@@ -511,12 +524,12 @@ app.whenReady().then(async () => {
 
   // Skill auto-router: activates up to 2 extra skills whose name/description
   // matches the task text. Disable with setting 'skills.autoRoute' = 'false'.
-  agentManager.setAutoSkillSelector((input, assigned) => {
+  agentManager.setAutoSkillSelector((input, assigned, agentId) => {
     if (storageManager.getSetting('skills.autoRoute') === 'false') return [];
     const text = JSON.stringify(input).toLowerCase();
     const tokens = text.match(/[a-zá-ú]{4,}/g) || [];
     const assignedIds = new Set(assigned.map((s) => s.id));
-    return storageManager.getAllSkills()
+    const scored = storageManager.getAllSkills()
       .filter((s) => !assignedIds.has(s.id))
       .map((s) => {
         const haystack = `${s.name} ${s.description}`.toLowerCase();
@@ -524,19 +537,43 @@ app.whenReady().then(async () => {
         let score = 0;
         for (const t of tokens) if (skillTokens.has(t)) score++;
         return { skill: s, score };
-      })
+      });
+    const picked = scored
       .filter((x) => x.score >= 2)
       .sort((a, b) => b.score - a.score)
-      .slice(0, 2)
-      .map((x) => x.skill);
+      .slice(0, 2);
+    try {
+      storageManager.saveRoutingDecision({
+        kind: 'skill',
+        agentId,
+        subject: text.slice(0, 200),
+        candidates: scored.map((x) => ({ id: x.skill.name, score: x.score })).slice(0, 20),
+        decision: picked.map((x) => x.skill.name),
+        reason: 'keyword-overlap heuristic (score >= 2, max 2 skills)',
+      });
+    } catch { /* routing audit is best-effort */ }
+    return picked.map((x) => x.skill);
   });
 
   // LLM model router: picks a cheaper or stronger model within the same
   // provider family based on task complexity, using the shared catalog
   // (bundled + live-fetched). Disable with 'llm.autoRoute'='false'.
-  agentManager.setModelRouter((model, input) => {
+  agentManager.setModelRouter((model, input, agentId) => {
     if (storageManager.getSetting('llm.autoRoute') === 'false') return model;
-    return routeModelForTask(model, JSON.stringify(input), knownModelIds(storageManager));
+    const routed = routeModelForTask(model, JSON.stringify(input), knownModelIds(storageManager));
+    if (routed !== model) {
+      try {
+        storageManager.saveRoutingDecision({
+          kind: 'model',
+          agentId,
+          subject: JSON.stringify(input).slice(0, 200),
+          candidates: [{ id: model, score: 0 }, { id: routed, score: 1 }],
+          decision: [routed],
+          reason: 'task-complexity heuristic within provider family',
+        });
+      } catch { /* routing audit is best-effort */ }
+    }
+    return routed;
   });
   agentManager.getToolRegistry().setContext({
     sendWhatsApp: async (to, text) => {
@@ -588,8 +625,16 @@ app.whenReady().then(async () => {
       try { args = JSON.parse(argsJson); } catch { throw new Error('args must be a JSON object string'); }
       return composioManager.execute(slug, args);
     },
-    personalBrainSearch: (query, limit) => personalBrainManager.search(query, limit),
-    personalBrainRemember: (content, file) => personalBrainManager.remember(content, file),
+    personalBrainSearch: async (query, limit) => {
+      const r = memoryManager.search(query, limit);
+      if (r.text) return { text: r.text, ids: r.ids };
+      return { text: await personalBrainManager.search(query, limit), ids: [] };
+    },
+    personalBrainRemember: async (content, file) => {
+      const summary = await memoryManager.remember(content, file ?? 'fact');
+      void personalBrainManager.remember(content, file).catch(() => {});
+      return summary;
+    },
     delegateTask: async (agent, task) => {
       if (activeDelegationDepth >= MAX_DELEGATION_DEPTH) {
         throw new Error(`Delegation depth limit (${MAX_DELEGATION_DEPTH}) reached`);
@@ -610,6 +655,41 @@ app.whenReady().then(async () => {
         activeDelegationDepth--;
       }
     },
+  });
+
+  // Cost ledger + budget gate + memory outcome scoring — all best-effort;
+  // none of them may break an agent run.
+  agentManager.setUsageRecorder((rec) => {
+    try {
+      storageManager.saveLlmUsage({
+        agentId: rec.agentId,
+        executionId: rec.executionId,
+        model: rec.model,
+        provider: rec.provider,
+        promptTokens: rec.usage.promptTokens,
+        completionTokens: rec.usage.completionTokens,
+        costUsd: costFromUsage(rec.model, rec.usage.promptTokens, rec.usage.completionTokens),
+        partial: false,
+      });
+    } catch (e) { console.error('[usage] ledger write failed:', e); }
+  });
+  agentManager.setBudgetChecker((agentId, _model, est) => {
+    const agent = storageManager.getAgent(agentId);
+    const cap = agent?.config.monthlyBudgetUsd;
+    if (!cap || cap <= 0) return;
+    const monthStart = new Date();
+    monthStart.setUTCDate(1); monthStart.setUTCHours(0, 0, 0, 0);
+    const spent = storageManager.getAgentSpendSince(agentId, monthStart.toISOString());
+    if (spent + est > cap) {
+      throw new Error(
+        `Monthly budget exceeded for "${agent?.name ?? agentId}": $${spent.toFixed(2)} spent this month ` +
+        `+ ~$${est.toFixed(4)} estimated > $${cap.toFixed(2)} cap`
+      );
+    }
+  });
+  agentManager.setMemoryOutcomeRecorder((_executionId, memoryIds, succeeded) => {
+    try { memoryManager.recordOutcome(memoryIds, succeeded); }
+    catch (e) { console.error('[memory] outcome record failed:', e); }
   });
 
   // Per-execution constraints: install computer-access ceiling + agent cap +
@@ -645,6 +725,15 @@ app.whenReady().then(async () => {
     }
     return v;
   };
+  // Canonical JSON (sorted keys, recursively) → sha256. Binds an approval to
+  // the exact arguments the reviewer saw, so a mutated payload can never ride
+  // on a stale approval (TOCTOU).
+  const canonicalJson = (v: unknown): string => JSON.stringify(v, (_k, val) =>
+    val && typeof val === 'object' && !Array.isArray(val)
+      ? Object.fromEntries(Object.entries(val as Record<string, unknown>).sort(([a], [b]) => a.localeCompare(b)))
+      : val);
+  const argsFingerprint = (args: Record<string, unknown>) =>
+    createHash('sha256').update(canonicalJson(args)).digest('hex').slice(0, 16);
   agentManager.getToolRegistry().setGate(async (name, args) => {
     if (!GATED_TOOLS.has(name)) return null;
     if (storageManager.getSetting('gov.toolApproval') === 'false') return null;
@@ -658,7 +747,12 @@ app.whenReady().then(async () => {
       agentId,
       agentName: agent?.name || 'unknown',
       action: `tool:${name}`,
-      context: { tool: name, args: sanitizeArg(args) },
+      context: {
+        tool: name,
+        args: sanitizeArg(args),
+        argsHash: argsFingerprint(args),
+        argsTruncated: canonicalJson(sanitizeArg(args)) !== canonicalJson(args),
+      },
       status: 'pending',
       createdAt: new Date().toISOString(),
     };
@@ -973,12 +1067,13 @@ handle('agents:get', (_event, id: string) => {
 
 handle('agents:create', async (_event, input: CreateAgentInput) => {
   requireRole('admin');
-  const { name, description, capabilities, ...config } = input;
+  const { name, description, capabilities, avatar, ...config } = input;
   const agentId = uuidv4();
   const now = new Date().toISOString();
 
   const agent = {
     id: agentId,
+    avatar: avatar ?? avatarJson(presetAvatarFor(agentId)),
     name: name || config.systemPrompt.split('\n')[0].substring(0, 50) || 'Untitled Agent',
     description: description || config.systemPrompt.substring(0, 200),
     config,
@@ -1063,7 +1158,12 @@ handle('skills:get', (_event, id: string) => {
 handle('skills:create', (_event, skill: Omit<Skill, 'id' | 'createdAt' | 'updatedAt'>) => {
   requireRole('admin');
   const now = new Date().toISOString();
-  const full: Skill = { ...skill, id: uuidv4(), createdAt: now, updatedAt: now };
+  // Re-import of a skill with the same name bumps its version instead of
+  // duplicating — the source link + ref are preserved for update checks.
+  const existing = storageManager.findSkillByName(skill.name);
+  const full: Skill = existing
+    ? { ...existing, ...skill, id: existing.id, createdAt: existing.createdAt, updatedAt: now, version: (existing.version ?? 1) + 1 }
+    : { ...skill, id: uuidv4(), createdAt: now, updatedAt: now, version: 1 };
   storageManager.saveSkill(full);
   return full;
 });
@@ -1088,7 +1188,7 @@ handle('skills:listTools', () => {
 
 handle('skills:importGitHub', async (_event, url: string) => {
   requireRole('admin');
-  return importSkillFromGitHub(url);
+  return importSkillsFromGitHub(url);
 });
 
 // AI-assisted skill improvement: rewrites a skill prompt using the default
@@ -1505,7 +1605,10 @@ handle('triggers:list', () => {
 
 handle('triggers:create', (_event, input: Omit<AgentTrigger, 'id' | 'createdAt' | 'lastRunAt'>) => {
   requireRole('admin');
-  return triggerManager.create(input);
+  const withToken = input.kind === 'webhook' && !input.webhookToken
+    ? { ...input, webhookToken: randomBytes(16).toString('hex') }
+    : input;
+  return triggerManager.create(withToken);
 });
 
 handle('triggers:update', (_event, id: string, updates: Partial<Omit<AgentTrigger, 'id' | 'createdAt'>>) => {
@@ -1527,6 +1630,51 @@ handle('triggers:setWhatsAppAgent', (_event, agentId: string) => {
 handle('triggers:getWhatsAppAgent', () => {
   return { agentId: triggerManager.getWhatsAppAgentId() };
 });
+
+// Local webhook receiver — POST /webhook/<token> fires the matching trigger.
+// Bound to 127.0.0.1 only; the unguessable token is the auth. Port is fixed
+// via setting 'webhook.port' (default 47821) so firewalls/routers can whitelist.
+function startWebhookServer(): void {
+  if (webhookServer) return;
+  const port = Number(storageManager.getSetting('webhook.port')) || 47821;
+  webhookServer = createServer((req, res) => {
+    const send = (code: number, body: string) => {
+      res.writeHead(code, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ok: code < 300, message: body }));
+    };
+    if (req.method !== 'POST' || !req.url?.startsWith('/webhook/')) {
+      send(404, 'not found');
+      return;
+    }
+    const token = decodeURIComponent(req.url.slice('/webhook/'.length).split('?')[0]);
+    let body = '';
+    req.on('data', (c) => { body += c; if (body.length > 256 * 1024) req.destroy(); });
+    req.on('end', async () => {
+      let payload: unknown = null;
+      try { payload = body ? JSON.parse(body) : null; } catch { payload = body.slice(0, 4000); }
+      const ok = await triggerManager.dispatchWebhook(token, payload);
+      send(ok ? 202 : 404, ok ? 'triggered' : 'unknown or disabled webhook token');
+    });
+  });
+  webhookServer.on('error', (e) => console.error('[webhook] server error:', e));
+  webhookServer.listen(port, '127.0.0.1', () => {
+    console.log(`[webhook] listening on http://127.0.0.1:${port}/webhook/<token>`);
+  });
+}
+
+// Cost/memory/routing inspection for the UI.
+handle('usage:getMonthlySpend', () => {
+  const agents = new Map(storageManager.getAllAgents().map((a) => [a.id, a.name]));
+  return storageManager.getMonthlySpendByAgent().map((r) => ({
+    ...r,
+    agentName: agents.get(r.agentId) ?? r.agentId,
+    monthlyBudgetUsd: storageManager.getAgent(r.agentId)?.config.monthlyBudgetUsd,
+  }));
+});
+handle('usage:list', (_event, limit?: number) => storageManager.getLlmUsage(limit ?? 100));
+handle('routing:list', (_event, limit?: number) => storageManager.getRoutingDecisions(limit ?? 50));
+handle('memory:list', (_event, limit?: number) => memoryManager.list(limit ?? 100));
+handle('memory:retire', (_event, id: string) => ({ ok: memoryManager.retire(id) }));
 
 // Data export/import — full SQLite backup as a single file.
 handle('data:export', async () => {

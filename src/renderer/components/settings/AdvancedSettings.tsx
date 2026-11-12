@@ -36,7 +36,7 @@ export default function AdvancedSettings() {
   const [triggers, setTriggers] = useState<AgentTrigger[]>([]);
   const [agents, setAgents] = useState<Agent[]>([]);
   const [waAgentId, setWaAgentId] = useState('');
-  const [newTrigger, setNewTrigger] = useState({ name: '', agentId: '', kind: 'interval' as 'interval' | 'daily', intervalMinutes: 60, timeOfDay: '09:00', prompt: '' });
+  const [newTrigger, setNewTrigger] = useState({ name: '', agentId: '', kind: 'interval' as 'interval' | 'daily' | 'webhook', intervalMinutes: 60, timeOfDay: '09:00', prompt: '' });
   const [arStatus, setArStatus] = useState<{ ok: boolean; installed: boolean; channels: Array<{ name: string; status: string; backend: string | null }>; error?: string } | null>(null);
   const [authInfo, setAuthInfo] = useState<{ hasUsers: boolean; currentUser: LocalUser | null } | null>(null);
   const [users, setUsers] = useState<LocalUser[]>([]);
@@ -889,9 +889,14 @@ export default function AdvancedSettings() {
               <div style={{ flex: 1, minWidth: 0 }}>
                 <Text size="sm" fw={500}>{tr.name}</Text>
                 <Text size="xs" c="dimmed">
-                  {tr.kind === 'interval' ? `${t('adv2.every')} ${tr.intervalMinutes}min` : `${t('adv2.dailyAt')} ${tr.timeOfDay}`}
+                  {tr.kind === 'interval' ? `${t('adv2.every')} ${tr.intervalMinutes}min` : tr.kind === 'daily' ? `${t('adv2.dailyAt')} ${tr.timeOfDay}` : t('adv2.webhookTrigger')}
                   {tr.lastRunAt ? ` · ${t('adv2.lastRun')} ${new Date(tr.lastRunAt).toLocaleString()}` : ''}
                 </Text>
+                {tr.kind === 'webhook' && tr.webhookToken && (
+                  <Text size="xs" ff="monospace" c="dimmed" style={{ wordBreak: 'break-all' }}>
+                    POST http://127.0.0.1:47821/webhook/{tr.webhookToken}
+                  </Text>
+                )}
               </div>
               <Switch
                 size="xs"
@@ -923,16 +928,16 @@ export default function AdvancedSettings() {
                 <Select
                   size="xs"
                   value={newTrigger.kind}
-                  onChange={(v) => setNewTrigger({ ...newTrigger, kind: (v || 'interval') as 'interval' | 'daily' })}
-                  data={[{ value: 'interval', label: t('adv2.triggerKind.interval') }, { value: 'daily', label: t('adv2.triggerKind.daily') }]}
+                  onChange={(v) => setNewTrigger({ ...newTrigger, kind: (v || 'interval') as 'interval' | 'daily' | 'webhook' })}
+                  data={[{ value: 'interval', label: t('adv2.triggerKind.interval') }, { value: 'daily', label: t('adv2.triggerKind.daily') }, { value: 'webhook', label: t('adv2.triggerKind.webhook') }]}
                   allowDeselect={false}
                   style={{ width: 160 }}
                 />
                 {newTrigger.kind === 'interval' ? (
                   <NumberInput size="xs" min={1} max={10080} value={newTrigger.intervalMinutes} onChange={(v) => setNewTrigger({ ...newTrigger, intervalMinutes: Number(v) || 60 })} style={{ width: 110 }} />
-                ) : (
+                ) : newTrigger.kind === 'daily' ? (
                   <TextInput size="xs" type="time" value={newTrigger.timeOfDay} onChange={(e) => setNewTrigger({ ...newTrigger, timeOfDay: e.currentTarget.value })} style={{ width: 110 }} />
-                )}
+                ) : null}
               </Group>
               <TextInput size="xs" placeholder={t('adv2.taskPromptPh')} value={newTrigger.prompt} onChange={(e) => setNewTrigger({ ...newTrigger, prompt: e.currentTarget.value })} />
               <Group justify="flex-end">

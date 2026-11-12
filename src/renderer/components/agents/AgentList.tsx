@@ -7,18 +7,34 @@ import AgentEditor from './AgentEditor';
 import type { AgentTemplate } from '../../lib/agentTemplates';
 import { useLang } from '../../lib/i18n';
 import PageHeader from '../common/PageHeader';
+import BotAvatar from '../common/BotAvatar';
+import { avatarForAgent } from '../../../shared/avatars';
+import type { AvatarMotion } from 'open-bot-avatar';
 import { IconAgent } from '../common/icons.js';
 
 export default function AgentList() {
   const { t } = useLang();
-  const { agents, loading, error, fetchAgents, selectAgent, deleteAgent } = useAgentStore();
+  const { agents, executions, loading, error, fetchAgents, selectAgent, deleteAgent } = useAgentStore();
   const [createMode, setCreateMode] = useState<'wizard' | 'advanced' | null>(null);
   const [advancedTemplate, setAdvancedTemplate] = useState<AgentTemplate | null>(null);
   const [editingAgentId, setEditingAgentId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchAgents();
+    void useAgentStore.getState().fetchExecutions();
   }, [fetchAgents]);
+
+  /** Avatar mood mirrors real execution state: thinking while running,
+   *  happy briefly after a success, idle otherwise. */
+  const moodFor = (agentId: string): AvatarMotion => {
+    const execs = executions.filter((e) => e.agentId === agentId);
+    if (execs.some((e) => e.status === 'running')) return 'thinking';
+    const last = execs[0];
+    if (last?.status === 'completed' && Date.now() - new Date(last.completedAt ?? last.startedAt ?? 0).getTime() < 30_000) {
+      return 'happy';
+    }
+    return 'idle';
+  };
 
   const handleDelete = async (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
@@ -65,7 +81,10 @@ export default function AgentList() {
               onClick={() => selectAgent(agent.id)}
             >
               <Stack gap="xs">
-                <Text fw={600}>{agent.name}</Text>
+                <Group gap="sm" wrap="nowrap">
+                  <BotAvatar definition={avatarForAgent(agent)} mood={moodFor(agent.id)} size={44} />
+                  <Text fw={600}>{agent.name}</Text>
+                </Group>
                 <Text size="sm" c="dimmed" lineClamp={2}>{agent.description}</Text>
                 {agent.capabilities.length > 0 && (
                   <Group gap={4}>

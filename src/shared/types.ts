@@ -22,6 +22,8 @@ export interface Agent {
   isShared?: boolean;
   sharedBy?: string;
   sharedAt?: string;
+  /** open-bot-avatar JSON definition (geometry only); auto-assigned when absent. */
+  avatar?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -37,6 +39,10 @@ export interface Skill {
   /** Times this skill was injected into an execution (auto-improvement signal). */
   usageCount?: number;
   lastUsedAt?: string;
+  /** Import provenance: URL the skill was imported from, git ref, schema version. */
+  source?: string;
+  sourceRef?: string;
+  version?: number;
 }
 
 export interface AgentConfig {
@@ -48,12 +54,16 @@ export interface AgentConfig {
   skillIds?: string[];
   /** Per-agent computer access ceiling — can only narrow the install level. */
   computerAccess?: ComputerAccessLevel;
+  /** Monthly LLM spend cap in USD; unset = unlimited. Enforced before each call. */
+  monthlyBudgetUsd?: number;
 }
 
 export interface CreateAgentInput extends AgentConfig {
   name?: string;
   description?: string;
   capabilities?: string[];
+  /** open-bot-avatar JSON definition; auto-assigned from presets when absent. */
+  avatar?: string;
 }
 
 export interface ToolConfig {
@@ -174,16 +184,68 @@ export interface AgentTrigger {
   id: string;
   agentId: string;
   name: string;
-  kind: 'interval' | 'daily';
+  kind: 'interval' | 'daily' | 'webhook';
   /** Minutes between runs (kind='interval'). */
   intervalMinutes?: number;
   /** HH:MM local time (kind='daily'). */
   timeOfDay?: string;
+  /** Secret token in the webhook URL path (kind='webhook'). */
+  webhookToken?: string;
   /** Task description sent to the agent on each run. */
   prompt: string;
   enabled: boolean;
   lastRunAt?: string;
   createdAt: string;
+}
+
+/** One recorded LLM call for cost accounting (USD, estimated from catalog prices). */
+export interface LlmUsageRecord {
+  id: string;
+  agentId: string;
+  executionId?: string;
+  model: string;
+  provider: string;
+  promptTokens: number;
+  completionTokens: number;
+  costUsd: number;
+  /** True when the provider stream died mid-call — billed anyway. */
+  partial?: boolean;
+  createdAt: string;
+}
+
+/** Every auto-routing decision, stored so strategies stay comparable/auditable. */
+export interface RoutingDecision {
+  id: string;
+  kind: 'skill' | 'model';
+  agentId?: string;
+  /** Short summary of what was being routed (task text excerpt). */
+  subject: string;
+  /** Candidates considered with their scores, e.g. [{id, score}]. */
+  candidates: Array<{ id: string; score: number }>;
+  /** What was picked (may be empty = nobody/nothing). */
+  decision: string[];
+  reason?: string;
+  createdAt: string;
+}
+
+/** Personal-brain memory item with temporal validity and outcome weighting. */
+export interface MemoryItem {
+  id: string;
+  kind: string;
+  content: string;
+  validFrom: string;
+  /** Set when superseded — the item stays as history but leaves active recall. */
+  validUntil?: string;
+  supersededBy?: string;
+  relatedIds?: string[];
+  /** Outcome stats: uses counted when returned by search, good/bad by run result. */
+  uses: number;
+  good: number;
+  bad: number;
+  /** Set when outcomes are consistently bad — demoted from recall. */
+  demoted?: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface AppSettings {

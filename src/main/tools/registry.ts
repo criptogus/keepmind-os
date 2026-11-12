@@ -32,8 +32,10 @@ export interface ToolContext {
   /** Composio: executes an action slug with a JSON args string. */
   composioExecute?: (slug: string, argsJson: string) => Promise<string>;
   /** Personal brain (local vault, never leaves the machine). */
-  personalBrainSearch?: (query: string, limit?: number) => Promise<string>;
+  personalBrainSearch?: (query: string, limit?: number) => Promise<{ text: string; ids: string[] }>;
   personalBrainRemember?: (content: string, file?: string) => Promise<string>;
+  /** Collects ids of memory items returned to the model (outcome attribution). */
+  memoryUsage?: Set<string>;
 }
 
 /** Per-execution policy computed from install settings + agent config + caller role. */
@@ -43,6 +45,8 @@ export interface ExecutionPolicy {
   shellAccess?: 'disabled' | 'allowlist' | 'full';
   shellAllow?: string[];
   shellDeny?: string[];
+  /** Collects ids of memory items returned to the model (outcome attribution). */
+  memoryUsage?: Set<string>;
 }
 
 export interface ToolDefinition {
@@ -128,7 +132,9 @@ export class ToolRegistry {
       },
       handler: async (args, ctx) => {
         if (!ctx.personalBrainSearch) throw new Error('Personal brain is not available');
-        return (await ctx.personalBrainSearch(String(args.query), Number(args.limit) || 5)).slice(0, 8000) || 'No matches in personal brain';
+        const r = await ctx.personalBrainSearch(String(args.query), Number(args.limit) || 5);
+        for (const id of r.ids || []) ctx.memoryUsage?.add(id);
+        return r.text.slice(0, 8000) || 'No matches in personal brain';
       },
     });
 

@@ -1,7 +1,7 @@
 import OpenAI from 'openai';
 import Anthropic from '@anthropic-ai/sdk';
 import type { AgentConfig, AgentExecution, Skill } from '../../shared/types.js';
-import { CODEX_DEFAULT_MODEL, providerForModel } from '../../shared/models.js';
+import { CODEX_DEFAULT_MODEL, providerForModel, estimateCallCost, costFromUsage } from '../../shared/models.js';
 import { ToolRegistry, type ExecutionPolicy } from '../tools/registry.js';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -17,6 +17,27 @@ export interface ExecutionConstraints {
   /** Tool names hidden from the model for this execution (e.g. member role). */
   denyTools?: string[];
 }
+
+/** Normalized token usage reported by a provider call. */
+export interface TokenUsage {
+  promptTokens: number;
+  completionTokens: number;
+}
+
+/** Usage record emitted after each provider call for the cost ledger. */
+export interface UsageRecord {
+  agentId: string;
+  executionId?: string;
+  model: string;
+  provider: string;
+  usage: TokenUsage;
+}
+
+/** Budget gate: throws when the agent's monthly spend + estimate exceeds its cap. */
+export type BudgetChecker = (agentId: string, model: string, estimatedCostUsd: number) => void;
+
+/** Called when an execution settles so memory items it used can be scored. */
+export type MemoryOutcomeRecorder = (executionId: string, memoryIds: string[], succeeded: boolean) => void;
 
 interface CodexCompletedEvent {
   response?: {
@@ -36,8 +57,11 @@ export class AgentManager {
   private activeExecutions: Map<string, AgentExecution> = new Map();
   private contextProvider?: (query: string) => Promise<string>;
   private skillLoader?: (skillIds: string[]) => Skill[];
-  private autoSkillSelector?: (input: Record<string, unknown>, assigned: Skill[]) => Skill[];
-  private modelRouter?: (model: string, input: Record<string, unknown>) => string;
+  private autoSkillSelector?: (input: Record<string, unknown>, assigned: Skill[], agentId?: string) => Skill[];
+  private modelRouter?: (model: string, input: Record<string, unknown>, agentId?: string) => string;
+  private usageRecorder?: (rec: UsageRecord) => void;
+  private budgetChecker?: BudgetChecker;
+  private memoryOutcomeRecorder?: MemoryOutcomeRecorder;
   private currentAgentId?: string;
   private toolRegistry = new ToolRegistry();
 
@@ -136,7 +160,7 @@ export class AgentManager {
    * Optional auto-router: given the task input and the agent's assigned skills,
    * returns additional skills to activate automatically (deduped by caller).
    */
-  setAutoSkillSelector(selector?: (input: Record<string, unknown>, assigned: Skill[]) => Skill[]) {
+  setAutoSkillSelector(selector?: (input: Record<string, unknown>, assigned: Skill[], agentId?: string) => Skill[]) {
     this.autoSkillSelector = selector;
   }
 
@@ -144,8 +168,23 @@ export class AgentManager {
    * Optional model router: given the configured model and task input, returns
    * the model actually used for this execution (same provider family).
    */
-  setModelRouter(router?: (model: string, input: Record<string, unknown>) => string) {
+  setModelRouter(router?: (model: string, input: Record<string, unknown>, agentId?: string) => string) {
     this.modelRouter = router;
+  }
+
+  /** Receives normalized token usage after every provider call (cost ledger). */
+  setUsageRecorder(recorder?: (rec: UsageRecord) => void) {
+    this.usageRecorder = recorder;
+  }
+
+  /** Enforces per-agent monthly LLM budgets before a call is made. */
+  setBudgetChecker(checker?: BudgetChecker) {
+    this.budgetChecker = checker;
+  }
+
+  /** Scores memory items an execution used once it completes or fails. */
+  setMemoryOutcomeRecorder(recorder?: MemoryOutcomeRecorder) {
+    this.memoryOutcomeRecorder = recorder;
   }
 
   getToolRegistry(): ToolRegistry {
@@ -162,12 +201,12 @@ export class AgentManager {
   }
 
   /** Assigned skills + auto-routed skills, deduped by id. */
-  private resolveSkills(config: AgentConfig, input: Record<string, unknown>): Skill[] {
+  private resolveSkills(config: AgentConfig, input: Record<string, unknown>, agentId?: string): Skill[] {
     const assigned = this.loadSkills(config);
     if (!this.autoSkillSelector) return assigned;
     try {
       const assignedIds = new Set(assigned.map((s) => s.id));
-      const extra = this.autoSkillSelector(input, assigned).filter((s) => !assignedIds.has(s.id));
+      const extra = this.autoSkillSelector(input, assigned, agentId).filter((s) => !assignedIds.has(s.id));
       return [...assigned, ...extra];
     } catch {
       return assigned;
@@ -229,6 +268,9 @@ export class AgentManager {
     this.activeExecutions.set(executionId, execution);
     const prevAgentId = this.currentAgentId;
     this.currentAgentId = agentId;
+    // Per-execution memory sink: brain search tools tag the items they
+    // returned so outcomes can be attributed when the run settles.
+    const memoryIds = new Set<string>();
 
     try {
       execution.status = 'running';
@@ -237,16 +279,27 @@ export class AgentManager {
       onProgress?.(10);
 
       let output: Record<string, unknown>;
-      const skills = this.resolveSkills(config, input);
+      const skills = this.resolveSkills(config, input, agentId);
       const constraints = this.constraintsProvider?.(config);
       const denied = constraints?.denyTools?.length ? new Set(constraints.denyTools) : undefined;
       const toolNames = this.enabledToolNames(config, skills, denied);
-      const routedModel = this.modelRouter ? this.modelRouter(config.model, input) : config.model;
+      const routedModel = this.modelRouter ? this.modelRouter(config.model, input, agentId) : config.model;
       const effectiveConfig: AgentConfig = {
         ...config,
         model: routedModel,
         systemPrompt: await this.buildSystemPrompt(config, input, skills),
       };
+
+      const execPolicy: ExecutionPolicy | undefined = constraints?.policy
+        ? { ...constraints.policy, memoryUsage: memoryIds }
+        : { memoryUsage: memoryIds };
+
+      // Monthly budget gate — refuse before any provider call is billed.
+      if (this.budgetChecker && config.monthlyBudgetUsd && config.monthlyBudgetUsd > 0) {
+        const promptChars = effectiveConfig.systemPrompt.length + JSON.stringify(input).length;
+        const est = estimateCallCost(routedModel, promptChars, config.maxTokens);
+        this.budgetChecker(agentId, routedModel, est);
+      }
 
       const emit = (type: AgentStreamEvent['type'], data?: unknown) => {
         try { onEvent?.({ type, data }); } catch { /* renderer gone */ }
@@ -257,14 +310,28 @@ export class AgentManager {
         output = await this.executeOpenAI(effectiveConfig, input, toolNames, emit, (progress) => {
           execution.progress = 10 + progress * 0.8;
           onProgress?.(execution.progress);
-        }, constraints?.policy);
+        }, execPolicy);
       } else if (provider === 'anthropic') {
         output = await this.executeAnthropic(effectiveConfig, input, toolNames, emit, (progress) => {
           execution.progress = 10 + progress * 0.8;
           onProgress?.(execution.progress);
-        }, constraints?.policy);
+        }, execPolicy);
       } else {
         throw new Error(`Unsupported model: ${config.model}`);
+      }
+
+      // Record normalized usage for the cost ledger (best-effort).
+      const usage = output.usage as TokenUsage | undefined;
+      if (this.usageRecorder && usage && (usage.promptTokens > 0 || usage.completionTokens > 0)) {
+        try {
+          this.usageRecorder({
+            agentId,
+            executionId,
+            model: String(output.model || routedModel),
+            provider: provider || 'unknown',
+            usage,
+          });
+        } catch { /* ledger must never break a run */ }
       }
 
       execution.status = 'completed';
@@ -281,6 +348,11 @@ export class AgentManager {
     } finally {
       this.activeExecutions.delete(executionId);
       this.currentAgentId = prevAgentId;
+      if (memoryIds.size > 0 && (execution.status === 'completed' || execution.status === 'failed')) {
+        try {
+          this.memoryOutcomeRecorder?.(executionId, [...memoryIds], execution.status === 'completed');
+        } catch { /* outcome scoring is best-effort */ }
+      }
     }
   }
 
@@ -339,6 +411,7 @@ export class AgentManager {
         temperature: config.temperature,
         max_tokens: config.maxTokens,
         stream: true,
+        stream_options: { include_usage: true },
       });
 
       onProgress?.(60);
@@ -346,6 +419,7 @@ export class AgentManager {
       let content = '';
       let model = config.model;
       let finishReason: string | null = null;
+      let usage: TokenUsage | undefined;
       for await (const chunk of stream) {
         const delta = chunk.choices[0]?.delta?.content;
         if (delta) {
@@ -353,10 +427,12 @@ export class AgentManager {
           emit('chunk', delta);
         }
         if (chunk.choices[0]?.finish_reason) finishReason = chunk.choices[0].finish_reason;
+        const u = chunk.usage as { prompt_tokens?: number; completion_tokens?: number } | null | undefined;
+        if (u) usage = { promptTokens: u.prompt_tokens ?? 0, completionTokens: u.completion_tokens ?? 0 };
       }
 
       onProgress?.(90);
-      return { content, model, finishReason };
+      return { content, model, finishReason, usage };
     }
 
     // Tools enabled → non-streaming tool-call loop.
@@ -366,6 +442,7 @@ export class AgentManager {
     }));
 
     let lastResponse: OpenAI.Chat.Completions.ChatCompletion | null = null;
+    const usage: TokenUsage = { promptTokens: 0, completionTokens: 0 };
     for (let i = 0; i < MAX_TOOL_ITERATIONS; i++) {
       onProgress?.(20 + i * 10);
       const response = await client.chat.completions.create({
@@ -377,6 +454,10 @@ export class AgentManager {
         tool_choice: 'auto',
       });
       lastResponse = response;
+      if (response.usage) {
+        usage.promptTokens += response.usage.prompt_tokens ?? 0;
+        usage.completionTokens += response.usage.completion_tokens ?? 0;
+      }
 
       const msg = response.choices[0]?.message;
       if (!msg) break;
@@ -405,7 +486,7 @@ export class AgentManager {
     return {
       content: finalMsg?.content || '',
       model: lastResponse?.model,
-      usage: lastResponse?.usage,
+      usage,
       finishReason: lastResponse?.choices[0]?.finish_reason,
     };
   }
@@ -463,9 +544,18 @@ export class AgentManager {
       content: [{ type: 'input_text', text: JSON.stringify(input) }],
     }];
 
-    let lastUsage: unknown;
+    const usage: TokenUsage = { promptTokens: 0, completionTokens: 0 };
     let lastModel = model;
     let finalContent = '';
+
+    const absorbUsage = (u: unknown) => {
+      const r = u as Record<string, unknown> | null | undefined;
+      if (!r || typeof r !== 'object') return;
+      const prompt = Number(r.input_tokens ?? r.prompt_tokens ?? 0);
+      const completion = Number(r.output_tokens ?? r.completion_tokens ?? 0);
+      usage.promptTokens += prompt;
+      usage.completionTokens += completion;
+    };
 
     for (let i = 0; i < MAX_TOOL_ITERATIONS; i++) {
       onProgress?.(20 + i * 10);
@@ -527,7 +617,7 @@ export class AgentManager {
       if (!response) {
         throw new Error('Codex stream ended without response.completed');
       }
-      lastUsage = response.usage;
+      absorbUsage(response.usage);
       if (response.model) lastModel = response.model;
 
       // Collect function calls from the completed output items.
@@ -561,7 +651,7 @@ export class AgentManager {
     return {
       content: finalContent,
       model: lastModel,
-      usage: lastUsage,
+      usage,
     };
   }
 
@@ -608,7 +698,10 @@ export class AgentManager {
       return {
         content,
         model: finalMessage.model,
-        usage: finalMessage.usage,
+        usage: {
+          promptTokens: finalMessage.usage?.input_tokens ?? 0,
+          completionTokens: finalMessage.usage?.output_tokens ?? 0,
+        },
         stopReason: finalMessage.stop_reason,
       };
     }
@@ -625,6 +718,7 @@ export class AgentManager {
     ];
 
     let lastMessage: Anthropic.Message | null = null;
+    const usage: TokenUsage = { promptTokens: 0, completionTokens: 0 };
     for (let i = 0; i < MAX_TOOL_ITERATIONS; i++) {
       onProgress?.(20 + i * 10);
       const response = await client.messages.create(
@@ -638,6 +732,8 @@ export class AgentManager {
         requestOpts
       );
       lastMessage = response;
+      usage.promptTokens += response.usage?.input_tokens ?? 0;
+      usage.completionTokens += response.usage?.output_tokens ?? 0;
 
       const toolUses = response.content.filter(
         (b): b is Anthropic.ToolUseBlock => b.type === 'tool_use'
@@ -671,7 +767,7 @@ export class AgentManager {
     return {
       content: text,
       model: lastMessage?.model,
-      usage: lastMessage?.usage,
+      usage,
       stopReason: lastMessage?.stop_reason,
     };
   }

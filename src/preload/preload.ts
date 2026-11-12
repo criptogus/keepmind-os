@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron';
-import type { Agent, Team, Approval, GovernanceRule, AuditEntry, AgentExecution, AgentConfig, CreateAgentInput, TeamConfig, AppSettings, Skill, AgentTrigger, LocalUser, UserRole, ComputerAccessLevel } from '../shared/types.js';
+import type { Agent, Team, Approval, GovernanceRule, AuditEntry, AgentExecution, AgentConfig, CreateAgentInput, TeamConfig, AppSettings, Skill, AgentTrigger, LocalUser, UserRole, ComputerAccessLevel, LlmUsageRecord, RoutingDecision, MemoryItem } from '../shared/types.js';
 import type { ModelCatalogResponse } from '../shared/models.js';
 
 contextBridge.exposeInMainWorld('electronAPI', {
@@ -98,7 +98,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
   deleteSkill: (id: string) => ipcRenderer.invoke('skills:delete', id) as Promise<void>,
   listSkillTools: () => ipcRenderer.invoke('skills:listTools') as Promise<Array<{ name: string; description: string }>>,
   improveSkill: (id: string) => ipcRenderer.invoke('skills:improve', id) as Promise<{ improvedPrompt: string }>,
-  importSkillFromGitHub: (url: string) => ipcRenderer.invoke('skills:importGitHub', url) as Promise<{ name: string; description: string; prompt: string; toolNames: string[]; source: string }>,
+  importSkillFromGitHub: (url: string) => ipcRenderer.invoke('skills:importGitHub', url) as Promise<{
+    skills: Array<{ name: string; description: string; prompt: string; toolNames: string[]; source: string; sourceRef?: string; files?: string[]; ignored?: string[] }>;
+    skipped: Array<{ name: string; reason: string }>;
+  }>,
   onAgentEvent: (callback: (event: { executionId: string; type: string; data?: unknown }) => void) => {
     const listener = (_event: Electron.IpcRendererEvent, payload: any) => callback(payload);
     ipcRenderer.on('agents:event', listener);
@@ -165,6 +168,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
   triggersSetWhatsAppAgent: (agentId: string) =>
     ipcRenderer.invoke('triggers:setWhatsAppAgent', agentId) as Promise<{ ok: boolean }>,
   triggersGetWhatsAppAgent: () => ipcRenderer.invoke('triggers:getWhatsAppAgent') as Promise<{ agentId: string }>,
+  getMonthlySpend: () => ipcRenderer.invoke('usage:getMonthlySpend') as Promise<Array<{ agentId: string; agentName: string; costUsd: number; calls: number; monthlyBudgetUsd?: number }>>,
+  getLlmUsage: (limit?: number) => ipcRenderer.invoke('usage:list', limit) as Promise<LlmUsageRecord[]>,
+  getRoutingDecisions: (limit?: number) => ipcRenderer.invoke('routing:list', limit) as Promise<RoutingDecision[]>,
+  getMemoryItems: (limit?: number) => ipcRenderer.invoke('memory:list', limit) as Promise<MemoryItem[]>,
+  retireMemory: (id: string) => ipcRenderer.invoke('memory:retire', id) as Promise<{ ok: boolean }>,
   dataExport: () => ipcRenderer.invoke('data:export') as Promise<{ ok: boolean; canceled?: boolean; path?: string; error?: string }>,
   dataImport: () => ipcRenderer.invoke('data:import') as Promise<{ ok: boolean; canceled?: boolean; error?: string }>,
 
@@ -298,7 +306,10 @@ declare global {
       deleteSkill: (id: string) => Promise<void>;
       listSkillTools: () => Promise<Array<{ name: string; description: string }>>;
       improveSkill: (id: string) => Promise<{ improvedPrompt: string }>;
-      importSkillFromGitHub: (url: string) => Promise<{ name: string; description: string; prompt: string; toolNames: string[]; source: string }>;
+      importSkillFromGitHub: (url: string) => Promise<{
+        skills: Array<{ name: string; description: string; prompt: string; toolNames: string[]; source: string; sourceRef?: string; files?: string[]; ignored?: string[] }>;
+        skipped: Array<{ name: string; reason: string }>;
+      }>;
       onAgentEvent: (callback: (event: { executionId: string; type: string; data?: unknown }) => void) => () => void;
       getCompany: () => Promise<{ name: string; description: string; industry: string; website: string }>;
       updateCompany: (profile: Record<string, string>) => Promise<Record<string, string>>;
@@ -313,6 +324,11 @@ declare global {
       triggersDelete: (id: string) => Promise<{ ok: boolean }>;
       triggersSetWhatsAppAgent: (agentId: string) => Promise<{ ok: boolean }>;
       triggersGetWhatsAppAgent: () => Promise<{ agentId: string }>;
+      getMonthlySpend: () => Promise<Array<{ agentId: string; agentName: string; costUsd: number; calls: number; monthlyBudgetUsd?: number }>>;
+      getLlmUsage: (limit?: number) => Promise<LlmUsageRecord[]>;
+      getRoutingDecisions: (limit?: number) => Promise<RoutingDecision[]>;
+      getMemoryItems: (limit?: number) => Promise<MemoryItem[]>;
+      retireMemory: (id: string) => Promise<{ ok: boolean }>;
       dataExport: () => Promise<{ ok: boolean; canceled?: boolean; path?: string; error?: string }>;
       dataImport: () => Promise<{ ok: boolean; canceled?: boolean; error?: string }>;
       authGetState: () => Promise<{ hasUsers: boolean; currentUser: LocalUser | null }>;

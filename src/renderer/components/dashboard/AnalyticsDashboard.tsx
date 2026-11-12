@@ -24,6 +24,7 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
   const [whatsappConnected, setWhatsappConnected] = useState(false);
   const [companyName, setCompanyName] = useState('');
   const [secondBrain, setSecondBrain] = useState<{ enabled: boolean; hasToken: boolean } | null>(null);
+  const [monthlySpend, setMonthlySpend] = useState<Array<{ agentId: string; agentName: string; costUsd: number; calls: number; monthlyBudgetUsd?: number }>>([]);
 
   useEffect(() => {
     const load = async () => {
@@ -55,6 +56,9 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
         const sb = await window.electronAPI.secondBrainGetConfig();
         setSecondBrain(sb);
       } catch { /* second brain unavailable */ }
+      try {
+        setMonthlySpend(await window.electronAPI.getMonthlySpend());
+      } catch { /* usage ledger unavailable */ }
     };
     load();
   }, [fetchAgents, fetchTeams]);
@@ -154,6 +158,34 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
           </Card>
         ))}
       </div>
+
+      {monthlySpend.length > 0 && (
+        <Card withBorder padding="lg" radius="md">
+          <Stack gap="sm">
+            <Group justify="space-between">
+              <Text fw={600} size="sm">{t('dash2.aiSpend')}</Text>
+              <Text size="xs" c="dimmed">{t('dash2.aiSpendHint')}</Text>
+            </Group>
+            {monthlySpend.map((s) => {
+              const pct = s.monthlyBudgetUsd && s.monthlyBudgetUsd > 0
+                ? Math.min(100, Math.round((s.costUsd / s.monthlyBudgetUsd) * 100))
+                : null;
+              const over = pct !== null && pct >= 100;
+              return (
+                <div key={s.agentId}>
+                  <Group justify="space-between" mb={4}>
+                    <Text size="sm">{s.agentName}</Text>
+                    <Text size="xs" c={over ? 'red' : 'dimmed'}>
+                      ${s.costUsd.toFixed(2)}{s.monthlyBudgetUsd ? ` / $${s.monthlyBudgetUsd.toFixed(2)}` : ''} · {s.calls} {t('dash2.calls')}
+                    </Text>
+                  </Group>
+                  {pct !== null && <Progress value={pct} color={over ? 'red' : pct > 80 ? 'yellow' : 'dark'} size="sm" />}
+                </div>
+              );
+            })}
+          </Stack>
+        </Card>
+      )}
 
       <Card withBorder padding="lg" radius="md">
         <Stack gap="md">

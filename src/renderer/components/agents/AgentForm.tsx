@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Checkbox, Group, Select, Slider, Stack, Text, Textarea, TextInput, Title } from '@mantine/core';
+import { Button, Checkbox, Group, NumberInput, Select, Slider, Stack, Text, Textarea, TextInput, Title } from '@mantine/core';
 import { useAgentStore } from '../../store/agentStore';
 import { useModelOptions } from '../../lib/useModelOptions';
 import type { AgentTemplate } from '../../lib/agentTemplates';
 import { DEFAULT_MODEL } from '../../../shared/models.js';
 import type { Agent, AgentConfig, Skill, ToolConfig } from '../../../shared/types.js';
+import { AVATAR_PRESETS, avatarJson, presetAvatarFor } from '../../../shared/avatars';
+import BotAvatar from '../common/BotAvatar';
 import { useLang } from '../../lib/i18n';
 
 interface ToolInfo {
@@ -45,6 +47,8 @@ export default function AgentForm({ onClose, template, onCreated }: AgentFormPro
   });
   const [availableSkills, setAvailableSkills] = useState<Skill[]>([]);
   const [registryTools, setRegistryTools] = useState<ToolInfo[]>([]);
+  const [avatarId, setAvatarId] = useState('auto');
+  const [budgetUsd, setBudgetUsd] = useState<number | string>('');
 
   useEffect(() => {
     window.electronAPI.listSkillTools?.().then(setRegistryTools).catch(() => {});
@@ -88,6 +92,8 @@ export default function AgentForm({ onClose, template, onCreated }: AgentFormPro
         name: name.trim() || undefined,
         description: description.trim() || undefined,
         capabilities: template?.capabilities,
+        avatar: avatarId === 'auto' ? undefined : avatarJson(AVATAR_PRESETS.find((p) => p.id === avatarId) ?? presetAvatarFor(name || 'agent')),
+        monthlyBudgetUsd: budgetUsd === '' ? undefined : Number(budgetUsd),
       });
       onCreated?.(agent);
       onClose();
@@ -125,6 +131,36 @@ export default function AgentForm({ onClose, template, onCreated }: AgentFormPro
           onChange={(v) => setConfig({ ...config, model: v || DEFAULT_MODEL.openai })}
           allowDeselect={false}
           searchable
+        />
+
+        <Group gap="sm" align="flex-end" wrap="nowrap">
+          <Select
+            style={{ flex: 1 }}
+            label={t('af.avatar')}
+            description={t('af.avatarDesc')}
+            data={[
+              { value: 'auto', label: t('af.avatarAuto') },
+              ...AVATAR_PRESETS.map((p) => ({ value: p.id, label: p.name })),
+            ]}
+            value={avatarId}
+            onChange={(v) => setAvatarId(v || 'auto')}
+            allowDeselect={false}
+          />
+          <BotAvatar
+            definition={avatarId === 'auto' ? presetAvatarFor(name || 'agent') : (AVATAR_PRESETS.find((p) => p.id === avatarId) ?? presetAvatarFor('agent'))}
+            size={44}
+          />
+        </Group>
+
+        <NumberInput
+          label={t('af.monthlyBudget')}
+          description={t('af.monthlyBudgetDesc')}
+          placeholder={t('af.monthlyBudgetPh')}
+          min={0}
+          step={5}
+          prefix="$"
+          value={budgetUsd}
+          onChange={setBudgetUsd}
         />
 
         <Textarea

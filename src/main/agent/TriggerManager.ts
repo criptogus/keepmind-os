@@ -153,6 +153,26 @@ export class TriggerManager {
     this.setSetting(WA_QUEUE_KEY, JSON.stringify(this.waQueue.slice(-50)));
   }
 
+  /**
+   * Event-driven entry point: the local webhook server calls this when a
+   * POST arrives with a trigger's token. Returns false for unknown tokens
+   * or disabled rules — the HTTP layer maps that to 404.
+   */
+  async dispatchWebhook(token: string, payload: unknown): Promise<boolean> {
+    this.load();
+    const rule = this.rules.find((r) => r.enabled && r.kind === 'webhook' && r.webhookToken === token);
+    if (!rule || !this.ctx) return false;
+    rule.lastRunAt = new Date().toISOString();
+    this.save();
+    await this.fire(rule.agentId, {
+      channel: 'webhook',
+      triggerId: rule.id,
+      task: rule.prompt,
+      webhookPayload: payload,
+    }, `webhook:${rule.id}`);
+    return true;
+  }
+
   private async tryRun(agentId: string, input: Record<string, unknown>, source: string): Promise<boolean> {
     if (!this.ctx) return true;
     if (!this.ctx.getAgentName(agentId)) return true; // agent deleted — nothing to retry
@@ -187,6 +207,7 @@ export class TriggerManager {
   }
 
   private isDue(rule: AgentTrigger, now: Date): boolean {
+    if (rule.kind === 'webhook') return false; // event-driven, never polled
     if (rule.kind === 'interval') {
       const minutes = rule.intervalMinutes ?? 60;
       if (minutes < 1) return false;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Badge, Button, Card, Checkbox, Group, Select, Slider, Stack, Tabs, Text, Textarea, Title } from '@mantine/core';
+import { Badge, Button, Card, Checkbox, Group, NumberInput, Select, Slider, Stack, Tabs, Text, Textarea, Title } from '@mantine/core';
 import { useAgentStore } from '../../store/agentStore';
 import { useModelOptions } from '../../lib/useModelOptions';
 import AgentExecutionView from './AgentExecutionView';
@@ -134,6 +134,17 @@ export default function AgentEditor({ agentId, onClose }: AgentEditorProps) {
                 mb="xs"
               />
             </div>
+
+            <NumberInput
+              label={t('af.monthlyBudget')}
+              description={t('af.monthlyBudgetDesc')}
+              placeholder={t('af.monthlyBudgetPh')}
+              min={0}
+              step={5}
+              prefix="$"
+              value={config.monthlyBudgetUsd ?? ''}
+              onChange={(v) => setConfig({ ...config, monthlyBudgetUsd: v === '' ? undefined : Number(v) })}
+            />
 
             {availableSkills.length > 0 && (
               <div>

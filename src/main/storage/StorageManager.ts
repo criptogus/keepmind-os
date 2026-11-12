@@ -3,7 +3,7 @@ import { randomUUID } from 'node:crypto';
 import * as path from 'path';
 import * as fs from 'fs';
 import { app } from 'electron';
-import type { Agent, Team, Approval, GovernanceRule, AuditEntry, AgentExecution, Skill, LocalUser, UserRole } from '../../shared/types.js';
+import type { Agent, Team, Approval, GovernanceRule, AuditEntry, AgentExecution, Skill, LocalUser, UserRole, LlmUsageRecord, RoutingDecision, MemoryItem } from '../../shared/types.js';
 
 export class StorageManager {
   private db: DatabaseSync;
@@ -180,13 +180,66 @@ export class StorageManager {
       )
     `);
 
+    // LLM usage ledger — one row per provider call, cost in USD.
+    this.db.exec(`
+      CREATE TABLE IF NOT EXISTS llm_usage (
+        id TEXT PRIMARY KEY,
+        agent_id TEXT NOT NULL,
+        execution_id TEXT,
+        model TEXT NOT NULL,
+        provider TEXT NOT NULL,
+        prompt_tokens INTEGER NOT NULL DEFAULT 0,
+        completion_tokens INTEGER NOT NULL DEFAULT 0,
+        cost_usd REAL NOT NULL DEFAULT 0,
+        partial INTEGER NOT NULL DEFAULT 0,
+        created_at TEXT NOT NULL
+      )
+    `);
+
+    // Routing decisions — every auto-route choice is recorded for auditability.
+    this.db.exec(`
+      CREATE TABLE IF NOT EXISTS routing_decisions (
+        id TEXT PRIMARY KEY,
+        kind TEXT NOT NULL,
+        agent_id TEXT,
+        subject TEXT NOT NULL,
+        candidates TEXT NOT NULL,
+        decision TEXT NOT NULL,
+        reason TEXT,
+        created_at TEXT NOT NULL
+      )
+    `);
+
+    // Personal-brain memory items — temporal validity + outcome weighting.
+    this.db.exec(`
+      CREATE TABLE IF NOT EXISTS memory_items (
+        id TEXT PRIMARY KEY,
+        kind TEXT NOT NULL DEFAULT 'fact',
+        content TEXT NOT NULL,
+        valid_from TEXT NOT NULL,
+        valid_until TEXT,
+        superseded_by TEXT,
+        related_ids TEXT,
+        uses INTEGER NOT NULL DEFAULT 0,
+        good INTEGER NOT NULL DEFAULT 0,
+        bad INTEGER NOT NULL DEFAULT 0,
+        demoted INTEGER NOT NULL DEFAULT 0,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      )
+    `);
+
     // Columns added after initial release — safe no-ops if present
     for (const col of [
       'is_shared INTEGER DEFAULT 0',
       'shared_by TEXT',
       'shared_at TEXT',
+      'avatar TEXT',
     ]) {
       try { this.db.exec(`ALTER TABLE agents ADD COLUMN ${col}`); } catch { /* exists */ }
+    }
+    for (const col of ['source TEXT', 'source_ref TEXT', 'version INTEGER DEFAULT 1']) {
+      try { this.db.exec(`ALTER TABLE skills ADD COLUMN ${col}`); } catch { /* exists */ }
     }
     try { this.db.exec('ALTER TABLE whatsapp_messages ADD COLUMN indexed_at TEXT'); } catch { /* exists */ }
     for (const col of ['user_id TEXT']) {
@@ -201,6 +254,9 @@ export class StorageManager {
       CREATE INDEX IF NOT EXISTS idx_executions_agent ON agent_executions(agent_id);
       CREATE INDEX IF NOT EXISTS idx_whatsapp_timestamp ON whatsapp_messages(timestamp);
       CREATE INDEX IF NOT EXISTS idx_whatsapp_remote ON whatsapp_messages(remote);
+      CREATE INDEX IF NOT EXISTS idx_llm_usage_agent ON llm_usage(agent_id, created_at);
+      CREATE INDEX IF NOT EXISTS idx_routing_created ON routing_decisions(created_at);
+      CREATE INDEX IF NOT EXISTS idx_memory_active ON memory_items(valid_until, demoted);
     `);
   }
 
@@ -208,8 +264,8 @@ export class StorageManager {
   saveAgent(agent: Agent): void {
     const stmt = this.db.prepare(`
       INSERT OR REPLACE INTO agents
-      (id, name, description, config, capabilities, permissions, is_shared, shared_by, shared_at, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      (id, name, description, config, capabilities, permissions, is_shared, shared_by, shared_at, avatar, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
     stmt.run(
       agent.id,
@@ -221,6 +277,7 @@ export class StorageManager {
       agent.isShared ? 1 : 0,
       agent.sharedBy ?? null,
       agent.sharedAt ?? null,
+      agent.avatar ?? null,
       agent.createdAt,
       agent.updatedAt
     );
@@ -237,6 +294,7 @@ export class StorageManager {
       isShared: !!row.is_shared,
       sharedBy: row.shared_by ?? undefined,
       sharedAt: row.shared_at ?? undefined,
+      avatar: row.avatar ?? undefined,
       createdAt: row.created_at,
       updatedAt: row.updated_at,
     };
@@ -567,10 +625,11 @@ export class StorageManager {
   // Skills
   saveSkill(skill: Skill): void {
     const stmt = this.db.prepare(`
-      INSERT OR REPLACE INTO skills (id, name, description, prompt, tool_names, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
+      INSERT OR REPLACE INTO skills (id, name, description, prompt, tool_names, created_at, updated_at, usage_count, last_used_at, source, source_ref, version)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
-    stmt.run(skill.id, skill.name, skill.description, skill.prompt, JSON.stringify(skill.toolNames), skill.createdAt, skill.updatedAt);
+    stmt.run(skill.id, skill.name, skill.description, skill.prompt, JSON.stringify(skill.toolNames), skill.createdAt, skill.updatedAt,
+      skill.usageCount ?? 0, skill.lastUsedAt ?? null, skill.source ?? null, skill.sourceRef ?? null, skill.version ?? 1);
   }
 
   getSkill(id: string): Skill | null {
@@ -582,6 +641,12 @@ export class StorageManager {
   getAllSkills(): Skill[] {
     const stmt = this.db.prepare('SELECT * FROM skills ORDER BY created_at DESC');
     return (stmt.all() as any[]).map((row) => this.rowToSkill(row));
+  }
+
+  /** Finds a skill by name (case-insensitive) — used for version bumps on re-import. */
+  findSkillByName(name: string): Skill | null {
+    const row = this.db.prepare('SELECT * FROM skills WHERE lower(name) = lower(?) LIMIT 1').get(name) as any;
+    return row ? this.rowToSkill(row) : null;
   }
 
   deleteSkill(id: string): void {
@@ -606,7 +671,131 @@ export class StorageManager {
       updatedAt: row.updated_at,
       usageCount: row.usage_count ?? 0,
       lastUsedAt: row.last_used_at ?? undefined,
+      source: row.source ?? undefined,
+      sourceRef: row.source_ref ?? undefined,
+      version: row.version ?? 1,
     };
+  }
+
+  // LLM usage ledger
+  saveLlmUsage(rec: Omit<LlmUsageRecord, 'id' | 'createdAt'> & { id?: string; createdAt?: string }): LlmUsageRecord {
+    const full: LlmUsageRecord = {
+      id: rec.id ?? randomUUID(),
+      agentId: rec.agentId,
+      executionId: rec.executionId,
+      model: rec.model,
+      provider: rec.provider,
+      promptTokens: rec.promptTokens,
+      completionTokens: rec.completionTokens,
+      costUsd: rec.costUsd,
+      partial: rec.partial,
+      createdAt: rec.createdAt ?? new Date().toISOString(),
+    };
+    this.db.prepare(`
+      INSERT INTO llm_usage (id, agent_id, execution_id, model, provider, prompt_tokens, completion_tokens, cost_usd, partial, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(full.id, full.agentId, full.executionId ?? null, full.model, full.provider,
+      full.promptTokens, full.completionTokens, full.costUsd, full.partial ? 1 : 0, full.createdAt);
+    return full;
+  }
+
+  private rowToUsage(row: any): LlmUsageRecord {
+    return {
+      id: row.id, agentId: row.agent_id, executionId: row.execution_id ?? undefined,
+      model: row.model, provider: row.provider,
+      promptTokens: row.prompt_tokens, completionTokens: row.completion_tokens,
+      costUsd: row.cost_usd, partial: !!row.partial, createdAt: row.created_at,
+    };
+  }
+
+  /** Total USD spent by an agent since `sinceISO` (month start for budgets). */
+  getAgentSpendSince(agentId: string, sinceISO: string): number {
+    const row = this.db.prepare(
+      'SELECT COALESCE(SUM(cost_usd), 0) AS total FROM llm_usage WHERE agent_id = ? AND created_at >= ?'
+    ).get(agentId, sinceISO) as any;
+    return Number(row?.total ?? 0);
+  }
+
+  /** Per-agent spend for the current calendar month (UTC), for dashboards. */
+  getMonthlySpendByAgent(): Array<{ agentId: string; costUsd: number; calls: number }> {
+    const monthStart = new Date();
+    monthStart.setUTCDate(1); monthStart.setUTCHours(0, 0, 0, 0);
+    const rows = this.db.prepare(`
+      SELECT agent_id, SUM(cost_usd) AS cost, COUNT(*) AS calls
+      FROM llm_usage WHERE created_at >= ? GROUP BY agent_id ORDER BY cost DESC
+    `).all(monthStart.toISOString()) as any[];
+    return rows.map((r) => ({ agentId: r.agent_id, costUsd: Number(r.cost), calls: Number(r.calls) }));
+  }
+
+  getLlmUsage(limit = 100): LlmUsageRecord[] {
+    const rows = this.db.prepare('SELECT * FROM llm_usage ORDER BY created_at DESC LIMIT ?').all(limit) as any[];
+    return rows.map((r) => this.rowToUsage(r));
+  }
+
+  // Routing decisions
+  saveRoutingDecision(d: Omit<RoutingDecision, 'id' | 'createdAt'> & { id?: string; createdAt?: string }): RoutingDecision {
+    const full: RoutingDecision = {
+      id: d.id ?? randomUUID(),
+      kind: d.kind, agentId: d.agentId, subject: d.subject,
+      candidates: d.candidates, decision: d.decision, reason: d.reason,
+      createdAt: d.createdAt ?? new Date().toISOString(),
+    };
+    this.db.prepare(`
+      INSERT INTO routing_decisions (id, kind, agent_id, subject, candidates, decision, reason, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(full.id, full.kind, full.agentId ?? null, full.subject,
+      JSON.stringify(full.candidates), JSON.stringify(full.decision), full.reason ?? null, full.createdAt);
+    return full;
+  }
+
+  getRoutingDecisions(limit = 50): RoutingDecision[] {
+    const rows = this.db.prepare('SELECT * FROM routing_decisions ORDER BY created_at DESC LIMIT ?').all(limit) as any[];
+    return rows.map((r) => ({
+      id: r.id, kind: r.kind, agentId: r.agent_id ?? undefined, subject: r.subject,
+      candidates: JSON.parse(r.candidates), decision: JSON.parse(r.decision),
+      reason: r.reason ?? undefined, createdAt: r.created_at,
+    }));
+  }
+
+  // Memory items (personal brain)
+  saveMemoryItem(item: MemoryItem): void {
+    this.db.prepare(`
+      INSERT OR REPLACE INTO memory_items
+      (id, kind, content, valid_from, valid_until, superseded_by, related_ids, uses, good, bad, demoted, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(item.id, item.kind, item.content, item.validFrom, item.validUntil ?? null,
+      item.supersededBy ?? null, item.relatedIds ? JSON.stringify(item.relatedIds) : null,
+      item.uses, item.good, item.bad, item.demoted ? 1 : 0, item.createdAt, item.updatedAt);
+  }
+
+  getMemoryItem(id: string): MemoryItem | null {
+    const row = this.db.prepare('SELECT * FROM memory_items WHERE id = ?').get(id) as any;
+    return row ? this.rowToMemory(row) : null;
+  }
+
+  private rowToMemory(row: any): MemoryItem {
+    return {
+      id: row.id, kind: row.kind, content: row.content, validFrom: row.valid_from,
+      validUntil: row.valid_until ?? undefined, supersededBy: row.superseded_by ?? undefined,
+      relatedIds: row.related_ids ? JSON.parse(row.related_ids) : undefined,
+      uses: row.uses, good: row.good, bad: row.bad, demoted: !!row.demoted,
+      createdAt: row.created_at, updatedAt: row.updated_at,
+    };
+  }
+
+  /** Active (non-superseded, non-demoted) memory items for consolidation candidates. */
+  getActiveMemoryItems(limit = 500): MemoryItem[] {
+    const rows = this.db.prepare(`
+      SELECT * FROM memory_items
+      WHERE valid_until IS NULL AND demoted = 0
+      ORDER BY updated_at DESC LIMIT ?
+    `).all(limit) as any[];
+    return rows.map((r) => this.rowToMemory(r));
+  }
+
+  getAllMemoryItems(limit = 200): MemoryItem[] {
+    const rows = this.db.prepare('SELECT * FROM memory_items ORDER BY updated_at DESC LIMIT ?').all(limit) as any[];
+    return rows.map((r) => this.rowToMemory(r));
   }
 
   // Settings

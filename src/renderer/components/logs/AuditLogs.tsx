@@ -3,11 +3,12 @@ import { Badge, Button, Card, Group, Stack, Table, Text } from '@mantine/core';
 import { IconLogs } from '../common/icons.js';
 import { useLang } from '../../lib/i18n';
 import PageHeader from '../common/PageHeader';
-import type { AuditEntry } from '../../../shared/types.js';
+import type { AuditEntry, RoutingDecision } from '../../../shared/types.js';
 
 export default function AuditLogs() {
   const { t } = useLang();
   const [logs, setLogs] = useState<AuditEntry[]>([]);
+  const [routing, setRouting] = useState<RoutingDecision[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -21,6 +22,7 @@ export default function AuditLogs() {
     try {
       const data = await window.electronAPI.getAuditLogs(50);
       setLogs(data);
+      setRouting(await window.electronAPI.getRoutingDecisions(30).catch(() => []));
     } catch (err) {
       setError(err instanceof Error ? err.message : t('logs.loadFailed'));
     } finally {
@@ -90,6 +92,39 @@ export default function AuditLogs() {
             </Table.Tbody>
           </Table>
         </Card>
+      )}
+
+      {routing.length > 0 && (
+        <>
+          <Text fw={600} size="sm" mt="md">{t('logs.routingTitle')}</Text>
+          <Text size="xs" c="dimmed" mb="xs">{t('logs.routingDesc')}</Text>
+          <Card withBorder padding={0} radius="md">
+            <Table striped highlightOnHover>
+              <Table.Thead>
+                <Table.Tr>
+                  <Table.Th>{t('logs.timestamp')}</Table.Th>
+                  <Table.Th>{t('logs.routingKind')}</Table.Th>
+                  <Table.Th>{t('logs.routingSubject')}</Table.Th>
+                  <Table.Th>{t('logs.routingPicked')}</Table.Th>
+                  <Table.Th>{t('logs.routingReason')}</Table.Th>
+                </Table.Tr>
+              </Table.Thead>
+              <Table.Tbody>
+                {routing.map((r) => (
+                  <Table.Tr key={r.id}>
+                    <Table.Td style={{ whiteSpace: 'nowrap' }}>
+                      <Text size="sm" c="dimmed">{new Date(r.createdAt).toLocaleString()}</Text>
+                    </Table.Td>
+                    <Table.Td><Badge size="sm" variant="light" color="gray">{r.kind}</Badge></Table.Td>
+                    <Table.Td><Text size="xs" c="dimmed" lineClamp={1}>{r.subject}</Text></Table.Td>
+                    <Table.Td><Text size="xs" ff="monospace">{r.decision.join(', ') || '—'}</Text></Table.Td>
+                    <Table.Td><Text size="xs" c="dimmed">{r.reason ?? '—'}</Text></Table.Td>
+                  </Table.Tr>
+                ))}
+              </Table.Tbody>
+            </Table>
+          </Card>
+        </>
       )}
     </Stack>
   );
