@@ -31,6 +31,7 @@ describe('SecondBrainManager.remember governance', () => {
 
   afterEach(() => {
     vi.unstubAllGlobals();
+    storage.close();
     fs.rmSync(dir, { recursive: true, force: true });
   });
 
