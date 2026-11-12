@@ -237,6 +237,9 @@ const dict: Record<string, { en: string; pt: string }> = {
   'aex.streaming': { en: 'streaming', pt: 'transmitindo' },
   'aex.toolCalls': { en: 'Tool calls', pt: 'Chamadas de ferramenta' },
   'aex.notStarted': { en: 'Not started', pt: 'Não iniciada' },
+  'aex.elapsed': { en: 'elapsed', pt: 'decorrido' },
+  'aex.lastTool': { en: 'last tool', pt: 'última ferramenta' },
+  'agents.working': { en: 'working…', pt: 'trabalhando…' },
   'tex.executeTeam': { en: 'Execute Team', pt: 'Executar Equipe' },
   'tex.input': { en: 'Input (JSON)', pt: 'Entrada (JSON)' },
   'tex.duration': { en: 'Duration', pt: 'Duração' },
@@ -566,6 +569,11 @@ const dict: Record<string, { en: string; pt: string }> = {
   'ap2.details': { en: 'Technical details', pt: 'Detalhes técnicos' },
   'ap2.hideDetails': { en: 'Hide details', pt: 'Ocultar detalhes' },
   'ap2.sensitiveHint': { en: 'This action can affect real people or data — check the details before approving.', pt: 'Esta ação pode afetar pessoas ou dados reais — confira os detalhes antes de aprovar.' },
+  'ap2.waitingYou': { en: 'Waiting for you', pt: 'Aguardando você' },
+  'ap2.expiresIn': { en: 'expires in', pt: 'expira em' },
+  'ap2.expired': { en: 'expired', pt: 'expirou' },
+  'settings.sound': { en: 'Interface sounds', pt: 'Sons da interface' },
+  'settings.soundHint': { en: 'Soft sounds when an approval arrives, work finishes or something fails. Off by default.', pt: 'Sons suaves quando chega uma aprovação, um trabalho termina ou algo falha. Desligado por padrão.' },
 
   // Agent wizard
   'wiz.title': { en: 'New agent', pt: 'Novo agente' },

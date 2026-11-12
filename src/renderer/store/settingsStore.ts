@@ -19,6 +19,7 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
     defaultModel: DEFAULT_MODEL.openai,
     maxConcurrentExecutions: 5,
     auditRetentionDays: 30,
+    soundEffects: false,
   },
   loading: false,
   error: null,

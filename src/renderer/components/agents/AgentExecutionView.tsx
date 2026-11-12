@@ -4,6 +4,8 @@ import { useAgentStore } from '../../store/agentStore';
 import type { AgentExecution } from '../../../shared/types.js';
 import { IconBolt } from '../common/icons.js';
 import { useLang } from '../../lib/i18n';
+import PixelSpinner from '../common/PixelSpinner';
+import { sfxDone, sfxError } from '../../lib/sfx';
 
 interface AgentExecutionViewProps {
   agentId: string;
@@ -14,12 +16,28 @@ interface LiveExecution {
   text: string;
   tools: Array<{ name: string; result?: string; error?: string }>;
   done: boolean;
+  startedAt: number;
+  failed: boolean;
+}
+
+function fmtElapsed(ms: number): string {
+  const s = Math.max(0, Math.floor(ms / 1000));
+  const m = Math.floor(s / 60);
+  return m > 0 ? `${m}m ${String(s % 60).padStart(2, '0')}s` : `${s}s`;
 }
 
 export default function AgentExecutionView({ agentId }: AgentExecutionViewProps) {
   const { t } = useLang();
   const { executions, loading, error, fetchExecutions, cancelExecution } = useAgentStore();
   const [live, setLive] = useState<LiveExecution | null>(null);
+  const [now, setNow] = useState(Date.now());
+
+  // 1s tick for the elapsed-time readout while work is live.
+  useEffect(() => {
+    if (!live || live.done) return;
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, [live?.done]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     fetchExecutions(agentId);
@@ -28,7 +46,7 @@ export default function AgentExecutionView({ agentId }: AgentExecutionViewProps)
       setLive((prev) => {
         const base = prev && prev.executionId === event.executionId
           ? prev
-          : { executionId: event.executionId, text: '', tools: [], done: false };
+          : { executionId: event.executionId, text: '', tools: [], done: false, startedAt: Date.now(), failed: false };
         if (event.type === 'chunk' && typeof event.data === 'string') {
           return { ...base, text: base.text + event.data };
         }
@@ -48,7 +66,10 @@ export default function AgentExecutionView({ agentId }: AgentExecutionViewProps)
           return { ...base, tools };
         }
         if (event.type === 'done' || event.type === 'error') {
-          return { ...base, done: true };
+          if (!base.done) {
+            if (event.type === 'error') sfxError(); else sfxDone();
+          }
+          return { ...base, done: true, failed: event.type === 'error' };
         }
         return base;
       });
@@ -63,7 +84,12 @@ export default function AgentExecutionView({ agentId }: AgentExecutionViewProps)
   const agentExecutions = executions.filter(e => e.agentId === agentId);
 
   if (loading && agentExecutions.length === 0 && !live) {
-    return <Text c="dimmed" ta="center" py="xl">{t('aex.loading')}</Text>;
+    return (
+      <Stack align="center" gap="sm" py="xl">
+        <PixelSpinner size={24} />
+        <Text c="dimmed">{t('aex.loading')}</Text>
+      </Stack>
+    );
   }
 
   if (error) {
@@ -90,11 +116,21 @@ export default function AgentExecutionView({ agentId }: AgentExecutionViewProps)
       </Group>
 
       {live && !live.done && (
-        <Card withBorder padding="md" radius="md">
+        <Card withBorder padding="md" radius="md" className="km-enter">
           <Stack gap="sm">
-            <Group gap="xs">
-              <Badge size="sm" variant="light" color="gray">{t('aex.streaming')}</Badge>
+            <Group justify="space-between">
+              <Group gap="xs">
+                <PixelSpinner size={16} label={t('aex.streaming')} />
+                <Badge size="sm" variant="light" color="gray">{t('aex.streaming')}</Badge>
+                <Text size="xs" c="dimmed">{t('aex.elapsed')} {fmtElapsed(now - live.startedAt)}</Text>
+              </Group>
+              {live.tools.length > 0 && (
+                <Text size="xs" c="dimmed">
+                  {t('aex.lastTool')}: <Text span ff="monospace">{live.tools[live.tools.length - 1].name}</Text>
+                </Text>
+              )}
             </Group>
+            <div className="km-progress" style={{ height: 4, backgroundColor: 'var(--mantine-color-gray-3)', borderRadius: 2 }} />
             {live.tools.length > 0 && (
               <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
                 <Text size="xs" fw={600} mb={4}>{t('aex.toolCalls')}</Text>
@@ -117,7 +153,7 @@ export default function AgentExecutionView({ agentId }: AgentExecutionViewProps)
       )}
 
       {agentExecutions.map((execution) => (
-        <Card key={execution.id} withBorder padding="md" radius="md">
+        <Card key={execution.id} withBorder padding="md" radius="md" className="km-enter">
           <Stack gap="sm">
             <Group justify="space-between">
               <Badge size="sm" variant="light" color="gray">{execution.status}</Badge>
@@ -127,9 +163,14 @@ export default function AgentExecutionView({ agentId }: AgentExecutionViewProps)
             </Group>
 
             {execution.status === 'running' && (
-              <div style={{ height: 4, backgroundColor: 'var(--mantine-color-gray-3)', borderRadius: 2, overflow: 'hidden' }}>
-                <div style={{ height: '100%', width: `${execution.progress}%`, backgroundColor: '#111', transition: 'width 0.3s ease' }} />
-              </div>
+              <>
+                <div className="km-progress" style={{ height: 4, backgroundColor: 'var(--mantine-color-gray-3)', borderRadius: 2, overflow: 'hidden' }}>
+                  <div style={{ height: '100%', width: `${execution.progress}%`, backgroundColor: '#111', transition: 'width 0.3s ease' }} />
+                </div>
+                <Text size="xs" c="dimmed">
+                  {t('aex.elapsed')} {execution.startedAt ? fmtElapsed(now - new Date(execution.startedAt).getTime()) : '—'}
+                </Text>
+              </>
             )}
 
             <div>

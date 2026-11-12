@@ -260,4 +260,6 @@ export interface AppSettings {
   llmAutoRoute?: boolean;
   /** When true (default), sensitive tools wait for human approval. */
   toolApprovalRequired?: boolean;
+  /** Subtle synthesized UI sounds (approvals, completions, errors). Default off. */
+  soundEffects?: boolean;
 }

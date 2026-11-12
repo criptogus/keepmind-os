@@ -1739,6 +1739,7 @@ handle('settings:get', () => {
     skillsAutoRoute: settings['skills.autoRoute'] !== 'false',
     llmAutoRoute: settings['llm.autoRoute'] !== 'false',
     toolApprovalRequired: settings['gov.toolApproval'] !== 'false',
+    soundEffects: settings.soundEffects === 'true',
   };
 });
 

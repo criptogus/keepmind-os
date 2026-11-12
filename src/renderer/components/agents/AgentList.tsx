@@ -10,6 +10,7 @@ import PageHeader from '../common/PageHeader';
 import BotAvatar from '../common/BotAvatar';
 import { avatarForAgent } from '../../../shared/avatars';
 import type { AvatarMotion } from 'open-bot-avatar';
+import PixelSpinner from '../common/PixelSpinner';
 import { IconAgent } from '../common/icons.js';
 
 export default function AgentList() {
@@ -43,8 +44,15 @@ export default function AgentList() {
     }
   };
 
+  const isRunning = (agentId: string) => executions.some((e) => e.agentId === agentId && e.status === 'running');
+
   if (loading) {
-    return <Text c="dimmed" ta="center" py="xl">{t('agents.loading')}</Text>;
+    return (
+      <Stack align="center" gap="sm" py="xl">
+        <PixelSpinner size={24} />
+        <Text c="dimmed">{t('agents.loading')}</Text>
+      </Stack>
+    );
   }
 
   if (error) {
@@ -77,13 +85,22 @@ export default function AgentList() {
               withBorder
               padding="md"
               radius="md"
+              className="km-enter"
               style={{ cursor: 'pointer' }}
               onClick={() => selectAgent(agent.id)}
             >
               <Stack gap="xs">
                 <Group gap="sm" wrap="nowrap">
                   <BotAvatar definition={avatarForAgent(agent)} mood={moodFor(agent.id)} size={44} />
-                  <Text fw={600}>{agent.name}</Text>
+                  <div>
+                    <Text fw={600}>{agent.name}</Text>
+                    {isRunning(agent.id) && (
+                      <Group gap={4} wrap="nowrap">
+                        <PixelSpinner size={14} />
+                        <Text size="xs" c="dimmed">{t('agents.working')}</Text>
+                      </Group>
+                    )}
+                  </div>
                 </Group>
                 <Text size="sm" c="dimmed" lineClamp={2}>{agent.description}</Text>
                 {agent.capabilities.length > 0 && (

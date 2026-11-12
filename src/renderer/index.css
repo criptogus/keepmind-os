@@ -41,3 +41,46 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #98a2b3;
 }
+
+/* ---- Motion (inspired by agentes.chat's token system, monochrome) ---- */
+:root {
+  --km-spring: cubic-bezier(0.34, 1.4, 0.5, 1);
+  --km-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --km-dur-fast: 140ms;
+  --km-dur-base: 180ms;
+  --km-dur-panel: 240ms;
+}
+
+/* Cards/rows arriving: a short rise + fade, like their ac-msg-enter. */
+@keyframes km-enter {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.km-enter {
+  animation: km-enter var(--km-dur-panel) var(--km-out) both;
+}
+
+/* Live progress bar: a soft sheen sweeping while work runs. */
+@keyframes km-progress-sheen {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(250%); }
+}
+.km-progress {
+  position: relative;
+  overflow: hidden;
+}
+.km-progress::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  animation: km-progress-sheen 1.4s var(--km-out) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .km-enter,
+  .km-progress::after {
+    animation: none;
+  }
+}

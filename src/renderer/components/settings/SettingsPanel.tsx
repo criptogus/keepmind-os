@@ -5,6 +5,7 @@ import { useModelOptions } from '../../lib/useModelOptions';
 import { DEFAULT_MODEL } from '../../../shared/models.js';
 import { useLang, type Lang } from '../../lib/i18n';
 import PageHeader from '../common/PageHeader';
+import { setSfxEnabled } from '../../lib/sfx';
 
 export default function SettingsPanel() {
   const { lang, setLang, t } = useLang();
@@ -14,6 +15,10 @@ export default function SettingsPanel() {
   useEffect(() => {
     fetchSettings();
   }, [fetchSettings]);
+
+  useEffect(() => {
+    setSfxEnabled(settings.soundEffects === true);
+  }, [settings.soundEffects]);
 
   const handleChange = (key: keyof typeof settings, value: unknown) => {
     updateSettings({ [key]: value });
@@ -66,6 +71,16 @@ export default function SettingsPanel() {
             <Switch
               checked={settings.autoApprove}
               onChange={(e) => handleChange('autoApprove', e.currentTarget.checked)}
+            />
+          </Group>
+          <Group justify="space-between">
+            <div>
+              <Text size="sm" fw={500}>{t('settings.sound')}</Text>
+              <Text size="xs" c="dimmed">{t('settings.soundHint')}</Text>
+            </div>
+            <Switch
+              checked={settings.soundEffects === true}
+              onChange={(e) => handleChange('soundEffects', e.currentTarget.checked)}
             />
           </Group>
         </Stack>
