@@ -4,7 +4,7 @@ import { useAgentStore } from '../../store/agentStore';
 import { useModelOptions } from '../../lib/useModelOptions';
 import type { AgentTemplate } from '../../lib/agentTemplates';
 import { DEFAULT_MODEL } from '../../../shared/models.js';
-import type { AgentConfig, Skill, ToolConfig } from '../../../shared/types.js';
+import type { Agent, AgentConfig, Skill, ToolConfig } from '../../../shared/types.js';
 
 interface ToolInfo {
   name: string;
@@ -16,9 +16,11 @@ const toToolConfig = (name: string): ToolConfig => ({ name, type: 'custom', conf
 interface AgentFormProps {
   onClose: () => void;
   template?: AgentTemplate | null;
+  /** Called with the created agent (e.g. to add it to a workflow step). */
+  onCreated?: (agent: Agent) => void;
 }
 
-export default function AgentForm({ onClose, template }: AgentFormProps) {
+export default function AgentForm({ onClose, template, onCreated }: AgentFormProps) {
   const { createAgent, loading, error } = useAgentStore();
   const { groups: modelGroups } = useModelOptions();
   const [name, setName] = useState(template?.name ?? '');
@@ -79,12 +81,13 @@ export default function AgentForm({ onClose, template }: AgentFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await createAgent({
+      const agent = await createAgent({
         ...config,
         name: name.trim() || undefined,
         description: description.trim() || undefined,
         capabilities: template?.capabilities,
       });
+      onCreated?.(agent);
       onClose();
     } catch (err) {
       console.error('Failed to create agent:', err);

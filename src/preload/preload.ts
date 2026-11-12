@@ -113,6 +113,14 @@ contextBridge.exposeInMainWorld('electronAPI', {
   whatsappGetMessages: (limit?: number, remote?: string) =>
     ipcRenderer.invoke('whatsapp:getMessages', limit, remote) as Promise<Array<{ id: string; direction: string; remote: string; text: string; timestamp: number }>>,
   whatsappClearMessages: () => ipcRenderer.invoke('whatsapp:clearMessages') as Promise<{ ok: boolean }>,
+  composioGetStatus: () => ipcRenderer.invoke('composio:getStatus') as Promise<{ configured: boolean; keyHint: string | null }>,
+  composioSetApiKey: (key: string) => ipcRenderer.invoke('composio:setApiKey', key) as Promise<{ configured: boolean; keyHint: string | null }>,
+  composioClearApiKey: () => ipcRenderer.invoke('composio:clearApiKey') as Promise<{ configured: boolean; keyHint: string | null }>,
+  composioTest: () => ipcRenderer.invoke('composio:test') as Promise<{ ok: boolean; error?: string }>,
+  composioListToolkits: () => ipcRenderer.invoke('composio:listToolkits') as Promise<Array<{ slug: string; name: string }>>,
+  composioListConnections: () => ipcRenderer.invoke('composio:listConnections') as Promise<Array<{ toolkit: string; connectedAccountId: string; status: string }>>,
+  composioConnect: (toolkit: string) => ipcRenderer.invoke('composio:connect', toolkit) as Promise<{ id: string; redirectUrl: string | null }>,
+  composioDisconnect: (id: string) => ipcRenderer.invoke('composio:disconnect', id) as Promise<{ ok: boolean }>,
   agentReachStatus: () =>
     ipcRenderer.invoke('agentreach:status') as Promise<{ ok: boolean; installed: boolean; channels: Array<{ name: string; status: string; backend: string | null }>; error?: string }>,
   onWhatsAppEvent: (callback: (event: {
@@ -136,7 +144,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   updateCheck: () => ipcRenderer.invoke('update:check') as Promise<{ ok: boolean; updateInfo?: { version: string } | null; error?: string }>,
   updateDownload: () => ipcRenderer.invoke('update:download') as Promise<{ ok: boolean; error?: string }>,
   updateInstall: () => ipcRenderer.invoke('update:install') as Promise<{ ok: boolean }>,
-  onDeepLink: (callback: (event: { section: string }) => void) => {
+  onDeepLink: (callback: (event: { section: string; invite?: { org?: string; error?: string } }) => void) => {
     const listener = (_event: Electron.IpcRendererEvent, payload: any) => callback(payload);
     ipcRenderer.on('app:deepLink', listener);
     return () => ipcRenderer.removeListener('app:deepLink', listener);
@@ -266,6 +274,14 @@ declare global {
       whatsappSendMessage: (to: string, text: string) => Promise<{ ok: boolean }>;
       whatsappGetMessages: (limit?: number, remote?: string) => Promise<Array<{ id: string; direction: string; remote: string; text: string; timestamp: number }>>;
       whatsappClearMessages: () => Promise<{ ok: boolean }>;
+      composioGetStatus: () => Promise<{ configured: boolean; keyHint: string | null }>;
+      composioSetApiKey: (key: string) => Promise<{ configured: boolean; keyHint: string | null }>;
+      composioClearApiKey: () => Promise<{ configured: boolean; keyHint: string | null }>;
+      composioTest: () => Promise<{ ok: boolean; error?: string }>;
+      composioListToolkits: () => Promise<Array<{ slug: string; name: string }>>;
+      composioListConnections: () => Promise<Array<{ toolkit: string; connectedAccountId: string; status: string }>>;
+      composioConnect: (toolkit: string) => Promise<{ id: string; redirectUrl: string | null }>;
+      composioDisconnect: (id: string) => Promise<{ ok: boolean }>;
       agentReachStatus: () => Promise<{ ok: boolean; installed: boolean; channels: Array<{ name: string; status: string; backend: string | null }>; error?: string }>;
       onWhatsAppEvent: (callback: (event: {
         type: 'status' | 'qr' | 'message' | 'error';
@@ -290,7 +306,7 @@ declare global {
       updateDownload: () => Promise<{ ok: boolean; error?: string }>;
       updateInstall: () => Promise<{ ok: boolean }>;
       onUpdateEvent: (callback: (event: { type: string; version?: string; percent?: number }) => void) => () => void;
-      onDeepLink: (callback: (event: { section: string }) => void) => () => void;
+      onDeepLink: (callback: (event: { section: string; invite?: { org?: string; error?: string } }) => void) => () => void;
       triggersList: () => Promise<AgentTrigger[]>;
       triggersCreate: (input: Omit<AgentTrigger, 'id' | 'createdAt' | 'lastRunAt'>) => Promise<AgentTrigger>;
       triggersUpdate: (id: string, updates: Partial<Omit<AgentTrigger, 'id' | 'createdAt'>>) => Promise<AgentTrigger | null>;

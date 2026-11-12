@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 const TICK_MS = 30_000;
 const SETTINGS_KEY = 'triggers.rules';
 const WHATSAPP_AGENT_KEY = 'trigger.whatsappAgentId';
+const WA_QUEUE_KEY = 'whatsapp.retryQueue';
 
 export interface TriggerRunContext {
   runAgent: (agentId: string, input: Record<string, unknown>) => Promise<unknown>;
@@ -92,16 +93,76 @@ export class TriggerManager {
     this.setSetting(WHATSAPP_AGENT_KEY, agentId);
   }
 
-  /** Called when a WhatsApp message arrives; runs the configured agent. */
+  /**
+   * Called when a WhatsApp message arrives; runs the configured agent.
+   * If the run fails (e.g. LLM offline), the message is queued and retried
+   * on the next connection or incoming message — nothing is lost offline.
+   */
   async onWhatsAppMessage(from: string, text: string): Promise<void> {
     const agentId = this.getWhatsAppAgentId();
     if (!agentId || !this.ctx) return;
-    await this.fire(agentId, {
+    const ok = await this.tryRun(agentId, {
       channel: 'whatsapp',
       from,
       message: text,
       task: `Respond to this WhatsApp message from ${from}: "${text}". Keep the reply concise and send it back via the whatsapp_send_message tool if a reply is appropriate.`,
     }, `whatsapp:${from}`);
+    if (!ok) {
+      this.loadWaQueue();
+      this.waQueue.push({ from, text, at: Date.now() });
+      this.saveWaQueue();
+    }
+  }
+
+  /** Retries WhatsApp replies that failed while the LLM was unreachable. */
+  async retryWhatsAppQueue(): Promise<void> {
+    this.loadWaQueue();
+    if (!this.waQueue.length || !this.ctx) return;
+    const agentId = this.getWhatsAppAgentId();
+    if (!agentId) { this.waQueue = []; this.saveWaQueue(); return; }
+    const pending = this.waQueue;
+    this.waQueue = [];
+    this.saveWaQueue();
+    for (const item of pending) {
+      const ok = await this.tryRun(agentId, {
+        channel: 'whatsapp',
+        from: item.from,
+        message: item.text,
+        task: `Respond to this WhatsApp message from ${item.from}: "${item.text}". Keep the reply concise and send it back via the whatsapp_send_message tool if a reply is appropriate. (This is a queued retry — the original message may be old.)`,
+      }, `whatsapp-retry:${item.from}`);
+      if (!ok) {
+        // LLM still down — keep the rest queued for the next attempt.
+        this.waQueue = [item, ...pending.slice(pending.indexOf(item) + 1), ...this.waQueue];
+        this.saveWaQueue();
+        return;
+      }
+    }
+  }
+
+  private waQueue: Array<{ from: string; text: string; at: number }> = [];
+
+  private loadWaQueue(): void {
+    try {
+      this.waQueue = JSON.parse(this.getSetting(WA_QUEUE_KEY) || '[]');
+    } catch {
+      this.waQueue = [];
+    }
+  }
+
+  private saveWaQueue(): void {
+    this.setSetting(WA_QUEUE_KEY, JSON.stringify(this.waQueue.slice(-50)));
+  }
+
+  private async tryRun(agentId: string, input: Record<string, unknown>, source: string): Promise<boolean> {
+    if (!this.ctx) return true;
+    if (!this.ctx.getAgentName(agentId)) return true; // agent deleted — nothing to retry
+    try {
+      await this.ctx.runAgent(agentId, input);
+      return true;
+    } catch (error) {
+      console.error(`[triggers] ${source} run failed:`, error);
+      return false;
+    }
   }
 
   private async tick(): Promise<void> {

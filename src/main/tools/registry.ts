@@ -1,5 +1,7 @@
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
+import * as XLSX from 'xlsx';
+import { extractText } from 'unpdf';
 
 export interface ToolContext {
   sendWhatsApp?: (to: string, text: string) => Promise<void>;
@@ -25,6 +27,10 @@ export interface ToolContext {
   shellAccess?: 'disabled' | 'allowlist' | 'full';
   shellAllow?: string[];
   shellDeny?: string[];
+  /** Composio: semantic search over connected-app actions. */
+  composioSearch?: (query: string) => Promise<string>;
+  /** Composio: executes an action slug with a JSON args string. */
+  composioExecute?: (slug: string, argsJson: string) => Promise<string>;
   /** Personal brain (local vault, never leaves the machine). */
   personalBrainSearch?: (query: string, limit?: number) => Promise<string>;
   personalBrainRemember?: (content: string, file?: string) => Promise<string>;
@@ -308,6 +314,122 @@ export class ToolRegistry {
         }
         const out = await ctx.shellExec(command);
         return out.slice(0, 20000);
+      },
+    });
+
+    this.register({
+      name: 'pdf_read',
+      description: 'Extracts text from a PDF file in the workspace (proposals, contracts, reports, invoices).',
+      parameters: {
+        type: 'object',
+        properties: {
+          path: { type: 'string', description: 'Path to the .pdf file relative to the workspace' },
+          maxPages: { type: 'number', description: 'Max pages to extract (default 20)' },
+        },
+        required: ['path'],
+      },
+      handler: async (args, ctx) => {
+        const p = resolveInWorkspace(ctx, String(args.path));
+        const buf = await fs.readFile(p);
+        const { text, totalPages } = await extractText(new Uint8Array(buf), { mergePages: true });
+        const merged = Array.isArray(text) ? text.join('\n\n') : String(text ?? '');
+        const max = Math.min(Number(args.maxPages) || 20, totalPages || 20);
+        return `PDF (${totalPages} pages, showing ${max}):\n${merged.slice(0, 30000) || '(no extractable text — may be scanned/image-only)'}`;
+      },
+    });
+
+    this.register({
+      name: 'sheet_read',
+      description: 'Reads a spreadsheet (.xlsx, .xls, .csv) from the workspace and returns rows as text. Use for budgets, schedules and tabular data.',
+      parameters: {
+        type: 'object',
+        properties: {
+          path: { type: 'string', description: 'Path to the spreadsheet relative to the workspace' },
+          sheet: { type: 'string', description: 'Sheet name (default: first sheet)' },
+          maxRows: { type: 'number', description: 'Max rows to return (default 100)' },
+        },
+        required: ['path'],
+      },
+      handler: async (args, ctx) => {
+        const p = resolveInWorkspace(ctx, String(args.path));
+        const buf = await fs.readFile(p);
+        const wb = XLSX.read(buf, { type: 'buffer' });
+        const name = args.sheet ? String(args.sheet) : wb.SheetNames[0];
+        const ws = wb.Sheets[name];
+        if (!ws) throw new Error(`Sheet "${name}" not found. Available: ${wb.SheetNames.join(', ')}`);
+        const rows = XLSX.utils.sheet_to_json<unknown[]>(ws, { header: 1, defval: '' });
+        const max = Math.min(Number(args.maxRows) || 100, rows.length);
+        const shown = rows.slice(0, max).map((r) => (r as unknown[]).map((c) => String(c ?? '')).join(' | ')).join('\n');
+        return `Sheet "${name}" (${rows.length} rows, showing ${max}):\n${shown.slice(0, 20000)}`;
+      },
+    });
+
+    this.register({
+      name: 'sheet_write',
+      description: 'Writes tabular data to a .csv or .xlsx file in the workspace. rows is a 2D array (first row = headers).',
+      parameters: {
+        type: 'object',
+        properties: {
+          path: { type: 'string', description: 'Output path relative to workspace (.csv or .xlsx)' },
+          rows: { type: 'array', items: { type: 'array' }, description: '2D array of cell values; first row should be headers' },
+          sheet: { type: 'string', description: 'Sheet name for .xlsx (default: Sheet1)' },
+        },
+        required: ['path', 'rows'],
+      },
+      handler: async (args, ctx) => {
+        const p = resolveInWorkspace(ctx, String(args.path));
+        const rows = args.rows;
+        if (!Array.isArray(rows) || !rows.every((r) => Array.isArray(r))) {
+          throw new Error('rows must be a 2D array');
+        }
+        await fs.mkdir(path.dirname(p), { recursive: true });
+        if (/\.csv$/i.test(p)) {
+          const esc = (v: unknown) => {
+            const s = String(v ?? '');
+            return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+          };
+          await fs.writeFile(p, rows.map((r) => (r as unknown[]).map(esc).join(',')).join('\n'), 'utf8');
+        } else {
+          const ws = XLSX.utils.aoa_to_sheet(rows as unknown[][]);
+          const wb = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(wb, ws, String(args.sheet || 'Sheet1').slice(0, 31));
+          const out = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' }) as Buffer;
+          await fs.writeFile(p, out);
+        }
+        return `Wrote ${(rows as unknown[][]).length} rows to ${args.path}`;
+      },
+    });
+
+    this.register({
+      name: 'composio_search_tools',
+      description: 'Searches available Composio actions (Gmail, Calendar, Slack, etc.) by describing what you need. Returns action slugs to use with composio_execute. Requires Composio to be configured and the app connected in Settings.',
+      parameters: {
+        type: 'object',
+        properties: {
+          query: { type: 'string', description: 'What you want to do, e.g. "send an email" or "list calendar events"' },
+        },
+        required: ['query'],
+      },
+      handler: async (args, ctx) => {
+        if (!ctx.composioSearch) throw new Error('Composio is not configured');
+        return ctx.composioSearch(String(args.query));
+      },
+    });
+
+    this.register({
+      name: 'composio_execute',
+      description: 'Executes a Composio action (e.g. GMAIL_SEND_EMAIL) found via composio_search_tools. args is a JSON object string with the action parameters.',
+      parameters: {
+        type: 'object',
+        properties: {
+          slug: { type: 'string', description: 'Action slug from composio_search_tools' },
+          args: { type: 'string', description: 'JSON object string of action arguments' },
+        },
+        required: ['slug', 'args'],
+      },
+      handler: async (args, ctx) => {
+        if (!ctx.composioExecute) throw new Error('Composio is not configured');
+        return ctx.composioExecute(String(args.slug), String(args.args ?? '{}'));
       },
     });
 

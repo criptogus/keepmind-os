@@ -32,10 +32,15 @@ describe('PersonalBrainManager', () => {
 });
 
 describe('containsPii', () => {
-  it('flags CPF, phone and card numbers', () => {
+  it('flags CPF, RG, phone and card numbers', () => {
     expect(containsPii('cpf 123.456.789-09 aqui')).toBe(true);
+    expect(containsPii('rg 12.345.678-9 do titular')).toBe(true);
     expect(containsPii('liga (11) 99999-8888')).toBe(true);
     expect(containsPii('cartão 4111 1111 1111 1111')).toBe(true);
+  });
+  it('flags labeled bank agency/account', () => {
+    expect(containsPii('depósito na ag 1234 cc 56789-0')).toBe(true);
+    expect(containsPii('agência: 4321 conta corrente 99887-6')).toBe(true);
   });
   it('allows corporate text and emails', () => {
     expect(containsPii('Reunião de pipeline com joao@corp.com dia 12/05')).toBe(false);

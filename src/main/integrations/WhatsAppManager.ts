@@ -9,7 +9,16 @@ export interface WhatsAppEvent {
   qrDataUrl?: string;
   phone?: string;
   error?: string;
-  message?: { id?: string; from: string; text: string; timestamp: number };
+  message?: {
+    id?: string;
+    from: string;
+    text: string;
+    timestamp: number;
+    isGroup?: boolean;
+    chat?: string;
+    chatName?: string;
+    senderName?: string;
+  };
 }
 
 type BaileysModule = typeof import('@whiskeysockets/baileys');
@@ -23,6 +32,8 @@ type WASocket = ReturnType<BaileysModule['default']>;
  */
 export class WhatsAppManager {
   private sock: WASocket | null = null;
+  private transcriber: { transcribe(audio: Buffer, mimetype?: string): Promise<string | null> } | null = null;
+  private groupNames = new Map<string, string>();
   private authDir: string;
   private status: WhatsAppStatus = 'disconnected';
   private phone = '';
@@ -36,6 +47,10 @@ export class WhatsAppManager {
 
   setEventHandler(handler: (event: WhatsAppEvent) => void): void {
     this.onEvent = handler;
+  }
+
+  setTranscriber(transcriber: { transcribe(audio: Buffer, mimetype?: string): Promise<string | null> } | null): void {
+    this.transcriber = transcriber;
   }
 
   getStatus(): { status: WhatsAppStatus; phone: string } {
@@ -116,23 +131,52 @@ export class WhatsAppManager {
 
       this.sock.ev.on('messages.upsert', (m) => {
         if (m.type !== 'notify') return;
-        for (const msg of m.messages) {
-          if (msg.key.fromMe) continue;
-          const text =
-            msg.message?.conversation ||
-            msg.message?.extendedTextMessage?.text ||
-            '';
-          if (!text) continue;
-          const message = {
-            id: msg.key.id,
-            from: msg.key.remoteJid?.split('@')[0] || 'unknown',
-            text: text.slice(0, 500),
-            timestamp: msg.messageTimestamp
-              ? Number(msg.messageTimestamp) * 1000
-              : Date.now(),
-          };
-          this.emit({ type: 'message', message });
-        }
+        void (async () => {
+          for (const msg of m.messages) {
+            if (msg.key.fromMe) continue;
+            const jid = msg.key.remoteJid || '';
+            if (jid.endsWith('@broadcast') || jid === 'status@broadcast') continue;
+            const isGroup = jid.endsWith('@g.us');
+            let text =
+              msg.message?.conversation ||
+              msg.message?.extendedTextMessage?.text ||
+              '';
+            if (!text && msg.message?.audioMessage && this.transcriber) {
+              try {
+                const sock = this.sock;
+                if (!sock) continue;
+                const audio = await this.baileys!.downloadMediaMessage(
+                  msg, 'buffer', {},
+                  {
+                    logger: { level: 'silent', child() { return this; } } as never,
+                    reuploadRequest: sock.updateMediaMessage,
+                  },
+                );
+                const buf = Buffer.isBuffer(audio) ? audio : Buffer.from(audio as Uint8Array);
+                const transcript = await this.transcriber.transcribe(buf, msg.message.audioMessage.mimetype ?? 'audio/ogg');
+                text = transcript ? `[áudio] ${transcript}` : '[mensagem de voz — transcrição indisponível]';
+              } catch {
+                text = '[mensagem de voz — falha ao baixar áudio]';
+              }
+            }
+            if (!text) continue;
+            const senderJid = isGroup ? (msg.key.participant || '') : jid;
+            const chatName = isGroup ? await this.groupName(jid) : undefined;
+            const message = {
+              id: msg.key.id ?? undefined,
+              from: senderJid.split('@')[0] || 'unknown',
+              text: text.slice(0, 500),
+              timestamp: msg.messageTimestamp
+                ? Number(msg.messageTimestamp) * 1000
+                : Date.now(),
+              isGroup,
+              chat: jid || undefined,
+              chatName,
+              senderName: msg.pushName || undefined,
+            };
+            this.emit({ type: 'message', message });
+          }
+        })().catch(() => {});
       });
     } catch (error) {
       this.sock = null;
@@ -152,6 +196,19 @@ export class WhatsAppManager {
     this.sock = null;
     this.phone = '';
     this.setStatus('disconnected');
+  }
+
+  private async groupName(jid: string): Promise<string | undefined> {
+    const cached = this.groupNames.get(jid);
+    if (cached) return cached;
+    try {
+      const meta = await this.sock?.groupMetadata(jid);
+      const name = meta?.subject || jid.split('@')[0];
+      this.groupNames.set(jid, name);
+      return name;
+    } catch {
+      return jid.split('@')[0];
+    }
   }
 
   async sendMessage(to: string, text: string): Promise<void> {

@@ -1,16 +1,37 @@
 import React, { useState } from 'react';
-import { Button, Card, Group, Select, Stack, Text, Textarea, Title } from '@mantine/core';
+import { Button, Card, Group, Modal, Select, SimpleGrid, Stack, Text, Title } from '@mantine/core';
 import { v4 as uuidv4 } from 'uuid';
-import type { Workflow, WorkflowStep } from '../../../shared/types.js';
+import type { Agent, Workflow, WorkflowStep } from '../../../shared/types.js';
+import { useAgentStore } from '../../store/agentStore';
+import AgentForm from '../agents/AgentForm';
+import { AGENT_TEMPLATES, type AgentTemplate } from '../../lib/agentTemplates';
 
 interface WorkflowBuilderProps {
   workflow: Workflow;
   agents: Array<{ id: string; name: string }>;
   onChange: (workflow: Workflow) => void;
+  /** Called after an agent is created inside the flow (e.g. to attach it to the team). */
+  onAgentCreated?: (agent: Agent) => void | Promise<void>;
 }
 
-export default function WorkflowBuilder({ workflow, agents, onChange }: WorkflowBuilderProps) {
+export default function WorkflowBuilder({ workflow, agents, onChange, onAgentCreated }: WorkflowBuilderProps) {
   const [newStepAgentId, setNewStepAgentId] = useState('');
+  const [showAgentPicker, setShowAgentPicker] = useState(false);
+  const [pickedTemplate, setPickedTemplate] = useState<AgentTemplate | null>(null);
+  const { fetchAgents } = useAgentStore();
+
+  const addStepForAgent = (agentId: string) => {
+    const newStep: WorkflowStep = { id: uuidv4(), agentId, inputs: {} };
+    onChange({ ...workflow, steps: [...workflow.steps, newStep] });
+  };
+
+  const handleAgentCreated = async (agent: Agent) => {
+    await onAgentCreated?.(agent);
+    await fetchAgents();
+    addStepForAgent(agent.id);
+    setShowAgentPicker(false);
+    setPickedTemplate(null);
+  };
 
   const addStep = () => {
     if (!newStepAgentId) return;
@@ -162,7 +183,52 @@ export default function WorkflowBuilder({ workflow, agents, onChange }: Workflow
           style={{ flex: 1 }}
         />
         <Button size="sm" onClick={addStep} disabled={!newStepAgentId}>Add Step</Button>
+        <Button size="sm" variant="default" onClick={() => { setPickedTemplate(null); setShowAgentPicker(true); }}>
+          + New agent
+        </Button>
       </Group>
+
+      <Modal
+        opened={showAgentPicker}
+        onClose={() => { setShowAgentPicker(false); setPickedTemplate(null); }}
+        title={pickedTemplate ? 'Configure agent for this step' : 'New thematic agent'}
+        size="lg"
+      >
+        {pickedTemplate ? (
+          <AgentForm
+            template={pickedTemplate}
+            onClose={() => { setShowAgentPicker(false); setPickedTemplate(null); }}
+            onCreated={handleAgentCreated}
+          />
+        ) : (
+          <Stack gap="sm">
+            <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="sm">
+              {AGENT_TEMPLATES.map((t) => (
+                <Card
+                  key={t.id}
+                  withBorder
+                  padding="md"
+                  radius="md"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => setPickedTemplate(t)}
+                >
+                  <Stack gap={4}>
+                    <Text fw={600} size="sm">{t.name}</Text>
+                    <Text size="xs" c="dimmed">{t.tagline}</Text>
+                  </Stack>
+                </Card>
+              ))}
+            </SimpleGrid>
+            <Button
+              variant="default"
+              size="xs"
+              onClick={() => setPickedTemplate({ id: 'blank', name: '', group: '', role: 'Custom', tagline: '', description: '', capabilities: [], skillNames: [], toolNames: [], config: { model: '', temperature: 0.7, maxTokens: 2048, systemPrompt: '', tools: [], skillIds: [] } })}
+            >
+              Start from blank
+            </Button>
+          </Stack>
+        )}
+      </Modal>
     </Stack>
   );
 }

@@ -102,7 +102,7 @@ export default function AgentList() {
         opened={showCreateModal}
         onClose={() => { setShowCreateModal(false); setSelectedTemplate(null); }}
         title={selectedTemplate ? 'Configure Agent' : 'New Agent — choose a template'}
-        size="lg"
+        size="xl"
       >
         {selectedTemplate ? (
           <AgentForm
@@ -110,34 +110,44 @@ export default function AgentList() {
             onClose={() => { setShowCreateModal(false); setSelectedTemplate(null); }}
           />
         ) : (
-          <Stack gap="sm">
-            <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="sm">
-              {AGENT_TEMPLATES.map((t) => (
-                <Card
-                  key={t.id}
-                  withBorder
-                  padding="md"
-                  radius="md"
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => setSelectedTemplate(t)}
-                >
-                  <Stack gap={4}>
-                    <Text fw={600} size="sm">{t.name}</Text>
-                    <Text size="xs" c="dimmed">{t.tagline}</Text>
-                    {t.skillNames.length > 0 && (
-                      <Text size="xs" c="dimmed">Skills: {t.skillNames.join(', ')}</Text>
-                    )}
-                    {t.toolNames.length > 0 && (
-                      <Text size="xs" c="dimmed">{t.toolNames.length} tools</Text>
-                    )}
-                  </Stack>
-                </Card>
-              ))}
-            </SimpleGrid>
+          <Stack gap="md">
+            {Object.entries(
+              AGENT_TEMPLATES.reduce<Record<string, AgentTemplate[]>>((acc, t) => {
+                (acc[t.group] ||= []).push(t);
+                return acc;
+              }, {})
+            ).map(([group, templates]) => (
+              <div key={group}>
+                <Text size="xs" fw={600} tt="uppercase" c="dimmed" mb={6}>{group}</Text>
+                <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="sm">
+                  {templates.map((t) => (
+                    <Card
+                      key={t.id}
+                      withBorder
+                      padding="md"
+                      radius="md"
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => setSelectedTemplate(t)}
+                    >
+                      <Stack gap={4}>
+                        <Text fw={600} size="sm">{t.name}</Text>
+                        <Text size="xs" c="dimmed">{t.tagline}</Text>
+                        {t.skillNames.length > 0 && (
+                          <Text size="xs" c="dimmed">Skills: {t.skillNames.join(', ')}</Text>
+                        )}
+                        {t.toolNames.length > 0 && (
+                          <Text size="xs" c="dimmed">{t.toolNames.length} tools</Text>
+                        )}
+                      </Stack>
+                    </Card>
+                  ))}
+                </SimpleGrid>
+              </div>
+            ))}
             <Button
               variant="default"
               size="xs"
-              onClick={() => setSelectedTemplate({ id: 'blank', name: '', role: 'Custom', tagline: '', description: '', capabilities: [], skillNames: [], toolNames: [], config: { model: '', temperature: 0.7, maxTokens: 2048, systemPrompt: '', tools: [], skillIds: [] } })}
+              onClick={() => setSelectedTemplate({ id: 'blank', name: '', group: '', role: 'Custom', tagline: '', description: '', capabilities: [], skillNames: [], toolNames: [], config: { model: '', temperature: 0.7, maxTokens: 2048, systemPrompt: '', tools: [], skillIds: [] } })}
             >
               Start from blank
             </Button>

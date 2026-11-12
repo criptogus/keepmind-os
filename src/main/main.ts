@@ -9,6 +9,9 @@ import { readCodexCliAuth, codexAuthToOAuthTokens } from './auth/CodexCliAuth.js
 import { SecondBrainManager } from './integrations/SecondBrainManager.js';
 import { PersonalBrainManager } from './integrations/PersonalBrainManager.js';
 import { WhatsAppManager } from './integrations/WhatsAppManager.js';
+import { AudioTranscriber } from './integrations/AudioTranscriber.js';
+import { ComposioManager } from './integrations/ComposioManager.js';
+import { judgePii } from './integrations/PiiJudge.js';
 import { TriggerManager } from './agent/TriggerManager.js';
 import { LocalAuth } from './auth/LocalAuth.js';
 import { importSkillFromGitHub } from './integrations/SkillImporter.js';
@@ -31,6 +34,7 @@ let credentialStore: CredentialStore;
 let secondBrainManager: SecondBrainManager;
 let personalBrainManager: PersonalBrainManager;
 let whatsAppManager: WhatsAppManager;
+let composioManager: ComposioManager;
 let triggerManager: TriggerManager;
 let localAuth: LocalAuth;
 let workspaceDir = '';
@@ -73,7 +77,7 @@ const currentUserId = (): string | undefined => localAuth?.getCurrentUser()?.id;
 const currentUserEmail = (): string => localAuth?.getCurrentUser()?.email ?? 'system';
 
 /** Gated tools a member must never see offered to the model. */
-const MEMBER_DENIED_TOOLS = ['shell_exec', 'file_write', 'open_url', 'whatsapp_send_message', 'delegate_to_agent', 'secondbrain_remember', 'personalbrain_remember'];
+const MEMBER_DENIED_TOOLS = ['shell_exec', 'file_write', 'open_url', 'whatsapp_send_message', 'delegate_to_agent', 'secondbrain_remember', 'personalbrain_remember', 'composio_execute'];
 
 const ACCESS_RANK: Record<ComputerAccessLevel, number> = { workspace: 0, authorized: 1, full: 2 };
 function computerSettings() {
@@ -216,6 +220,56 @@ Agent Reach is a router/doctor layer — it does NOT wrap calls; you invoke the 
 
 These are READ-ONLY research capabilities: never post, reply, like, follow or write to these platforms. Combine multiple platforms for research tasks (search + social discussion + video subtitles) and cite which source each fact came from.`,
       toolNames: ['shell_exec', 'file_read', 'web_read_url', 'agent_reach_status'],
+    },
+    {
+      name: 'Diário de Obra',
+      description: 'Registra e consulta o Relatório Diário de Obra (RDO): clima, efetivo por função, serviços executados, ocorrências, fotos e pendências.',
+      prompt: `Você mantém o Diário de Obra (RDO) da construtora. Para cada registro inclua: data, clima (e efeito no trabalho), efetivo por função (pedreiro, servente, operador etc.), serviços executados por ambiente/andar, ocorrências (atrasos, falta de material, acidentes, paradas), equipamentos em uso e pendências para o dia seguinte.
+
+Regras:
+- Seja factual e cronológico; não invente dados — pergunte o que faltar
+- Aponte sempre o que bloqueou a produtividade (falta de material, projeto, condição climática)
+- Ao final do dia, gere um resumo executivo de 5 linhas para a diretoria
+- Persista decisões e fatos importantes no second brain com secondbrain_remember`,
+      toolNames: ['file_read', 'file_write', 'file_list', 'sheet_read', 'sheet_write', 'pdf_read', 'secondbrain_search', 'secondbrain_remember', 'get_current_time'],
+    },
+    {
+      name: 'Orçamento e Planejamento',
+      description: 'Composição de orçamento de obras: quantitativos, composições, BDI, curva ABC de insumos, cronograma físico-financeiro.',
+      prompt: `Você é um orçamentista de obras. Ao montar ou revisar orçamentos:
+
+- Separe sempre quantitativo → composição de custos → BDI → preço de venda
+- Referencie composições SINAPI/ORSE quando aplicável e indique a fonte
+- Aponte itens com maior impacto no custo total (curva ABC) antes de micro-otimizar
+- Considere desperdícios por serviço (argamassa, aço, cerâmica) e custos indiretos de canteiro
+- Use sheet_read/sheet_write para ler e atualizar planilhas de orçamento e cronograma
+- Sinalize riscos: variações de preço de insumos, itens com quantitativo duvidoso, pendências de projeto`,
+      toolNames: ['sheet_read', 'sheet_write', 'pdf_read', 'file_read', 'file_write', 'file_list', 'secondbrain_search', 'secondbrain_remember', 'web_read_url', 'get_current_time'],
+    },
+    {
+      name: 'Segurança do Trabalho (NR)',
+      description: 'Checklists de segurança conforme NRs (18, 35, 4, 33 etc.), PPRA, EPIs, ocorrências e não-conformidades.',
+      prompt: `Você é um técnico de segurança do trabalho em construção civil. Ao avaliar ou gerar checklists:
+
+- Baseie-se nas NRs aplicáveis: NR-18 (condições e meio ambiente de trabalho na indústria da construção), NR-35 (trabalho em altura), NR-4 (EPI), NR-33 (espaços confinados), NR-10 quando houver parte elétrica
+- Verifique: guarda-corpos, andaimes, escadas, isolamento de áreas, EPIs por função, sinalização, condições do canteiro
+- Classifique cada não-conformidade: crítica / maior / menor, com ação corretiva e prazo
+- Nunca minimize risco — na dúvida, classifique como crítica e recomende paralisar a atividade
+- Documente ocorrências e comunique imediatamente ao responsável pela obra`,
+      toolNames: ['file_read', 'file_write', 'file_list', 'pdf_read', 'sheet_read', 'sheet_write', 'secondbrain_search', 'secondbrain_remember', 'get_current_time'],
+    },
+    {
+      name: 'Documentos e Licitações',
+      description: 'Leitura e análise de documentos de obra: ART, alvarás, memoriais, editais, propostas e contratos.',
+      prompt: `Você analisa documentos da construção civil. Ao ler editais, propostas ou contratos:
+
+- ART: verifique responsável técnico, endereço da obra, prazo de vigência e cobertura
+- Edital de licitação: extraia prazos, critérios de habilitação, penalidades, retenções e garantias exigidas
+- Contratos: aponte cláusulas de reajuste, medições, retenção, seguro e rescisão
+- Propostas: compare preço global vs. composição de custos e identifique exclusões
+- Use pdf_read para extrair texto de PDFs e sheet_read para planilhas de quantitativos
+- Sempre cite a página/seção do documento que embasa cada conclusão`,
+      toolNames: ['pdf_read', 'sheet_read', 'file_read', 'file_write', 'file_list', 'web_read_url', 'secondbrain_search', 'secondbrain_remember', 'get_current_time'],
     },
   ];
   for (const s of seeds) {
@@ -384,26 +438,53 @@ app.whenReady().then(async () => {
   await syncCodexCliAuth();
 
   secondBrainManager = new SecondBrainManager(storageManager, credentialStore);
+  secondBrainManager.setPiiJudge((text) =>
+    judgePii(text, () => ({ openai: providerApiKeys.openai, anthropic: providerApiKeys.anthropic }))
+  );
+  applyUpdateFeed();
+  void refreshCorpLlmKeys();
   whatsAppManager = new WhatsAppManager(app.getPath('userData'));
+  whatsAppManager.setTranscriber(new AudioTranscriber(
+    path.join(app.getPath('userData'), 'whisper-models'),
+    () => providerApiKeys.openai ?? credentialStore.getApiKey('openai')
+  ));
   whatsAppManager.setEventHandler((event) => {
     mainWindow?.webContents.send('whatsapp:event', event);
     if (event.type === 'message' && event.message) {
       const m = event.message;
+      // Groups: remote = group chat JID, text prefixed with group + sender
+      // context; auto-responder stays DM-only (a bot replying in a group is unsafe).
+      const remote = m.isGroup ? (m.chat || m.from) : m.from;
+      const text = m.isGroup
+        ? `[${m.chatName || 'grupo'}] ${m.senderName || m.from}: ${m.text}`
+        : m.text;
       let storedId: string | undefined;
       try {
         storedId = storageManager.saveWhatsAppMessage({
-          direction: 'in', remote: m.from, text: m.text, timestamp: m.timestamp, waId: m.id,
+          direction: 'in', remote, text, timestamp: m.timestamp, waId: m.id,
         });
       } catch (error) {
         console.error('[whatsapp] failed to persist message:', error);
       }
-      void triggerManager?.onWhatsAppMessage(m.from, m.text);
-      void indexWhatsAppMessageToSecondBrain(m.from, m.text, m.timestamp, storedId);
+      if (!m.isGroup) void triggerManager?.onWhatsAppMessage(m.from, m.text);
+      void indexWhatsAppMessageToSecondBrain(remote, text, m.timestamp, storedId);
     } else if (event.type === 'status' && event.status === 'connected') {
-      // Catch up on messages that failed to index earlier (e.g. brain was down).
+      // Catch up on messages that failed to index earlier (e.g. brain was down)
+      // and retry WhatsApp replies queued while the LLM was unreachable.
       void retryWhatsAppIndexing();
+      void triggerManager?.retryWhatsAppQueue();
     }
   });
+
+  composioManager = new ComposioManager(
+    credentialStore,
+    storageManager,
+    async (url) => {
+      await new Promise<void>((resolve, reject) => {
+        exec(`open ${JSON.stringify(url)}`, (err) => (err ? reject(err) : resolve()));
+      });
+    }
+  );
 
   workspaceDir = path.join(app.getPath('userData'), 'workspace');
   await fs.mkdir(workspaceDir, { recursive: true });
@@ -495,6 +576,18 @@ app.whenReady().then(async () => {
       return res.text();
     },
     agentReachStatus: () => getAgentReachStatus(),
+    composioSearch: async (query) => {
+      if (!composioManager.isConfigured()) throw new Error('Composio is not configured');
+      const tools = await composioManager.searchTools(query);
+      if (!tools.length) return 'No Composio tools found for that query (or no apps connected)';
+      return tools.map((t) => `${t.slug}: ${t.name} — ${t.description}`).join('\n');
+    },
+    composioExecute: async (slug, argsJson) => {
+      if (!composioManager.isConfigured()) throw new Error('Composio is not configured');
+      let args: Record<string, unknown> = {};
+      try { args = JSON.parse(argsJson); } catch { throw new Error('args must be a JSON object string'); }
+      return composioManager.execute(slug, args);
+    },
     personalBrainSearch: (query, limit) => personalBrainManager.search(query, limit),
     personalBrainRemember: (content, file) => personalBrainManager.remember(content, file),
     delegateTask: async (agent, task) => {
@@ -542,7 +635,7 @@ app.whenReady().then(async () => {
   // is on or the gate is disabled ('gov.toolApproval'='false'). The tool call
   // waits (polling) for a decision; approval lets it proceed, rejection or
   // timeout returns an error string to the model as the tool result.
-  const GATED_TOOLS = new Set(['shell_exec', 'file_write', 'open_url', 'whatsapp_send_message', 'delegate_to_agent']);
+  const GATED_TOOLS = new Set(['shell_exec', 'file_write', 'open_url', 'whatsapp_send_message', 'delegate_to_agent', 'composio_execute', 'secondbrain_remember']);
   const APPROVAL_TIMEOUT_MS = 120_000;
   const sanitizeArg = (v: unknown): unknown => {
     if (typeof v === 'string') return v.length > 500 ? v.slice(0, 500) + '…[truncated]' : v;
@@ -641,13 +734,107 @@ function sectionFromDeepLink(url: string): string | null {
   }
 }
 
+/**
+ * Points electron-updater at the corp-hosted releases feed. The feed URL
+ * embeds the employee's sync token (path-scoped on the server), so we store
+ * only the base in settings and rebuild the full URL from the secret store.
+ */
+function applyUpdateFeed(): void {
+  try {
+    const feedBase = storageManager.getSetting('update.feedBase');
+    const token = credentialStore.getSecret('secondbrain');
+    if (!feedBase || !token) return;
+    autoUpdater.setFeedURL({ provider: 'generic', url: `${feedBase}/${token}` });
+  } catch (error) {
+    console.error('[update] failed to set feed URL:', error);
+  }
+}
+
+/**
+ * Fetches the caller's resolved corporate LLM keys (user > title > team >
+ * role > org on the server) and installs them for agent execution. Runs in
+ * memory only — local keys remain the fallback when the corp has none or is
+ * unreachable. Works the same whether the corp is localhost or remote.
+ */
+async function refreshCorpLlmKeys(): Promise<void> {
+  try {
+    const cfg = secondBrainManager?.getConfig();
+    if (!cfg?.enabled || !cfg.url || !cfg.token) return;
+    for (const provider of ['openai', 'anthropic'] as const) {
+      try {
+        const res = await fetch(`${cfg.url}/api/llm/token?provider=${provider}`, {
+          headers: { Authorization: `Bearer ${cfg.token}` },
+          signal: AbortSignal.timeout(10_000),
+        });
+        if (!res.ok) continue;
+        const body = (await res.json()) as { ok?: boolean; key?: string };
+        if (body.ok && body.key) {
+          agentManager.setApiKey(provider, body.key);
+          providerApiKeys[provider] = body.key;
+        }
+      } catch {
+        // Provider unreachable or no key — keep whatever local credential exists.
+      }
+    }
+  } catch {
+    // Second brain not configured — nothing to do.
+  }
+}
+
+/**
+ * Applies a corporate invite (keepmind://join?server=…&token=…): validates the
+ * sync token against the corp's /api/client-config, then configures the second
+ * brain (read-only by default — an admin can raise it to read+write later).
+ */
+async function applyCorpInvite(server: string, token: string): Promise<void> {
+  try {
+    const base = server.replace(/\/+$/, '');
+    if (!/^https?:\/\//.test(base)) throw new Error('Invalid server URL');
+    const res = await fetch(`${base}/api/client-config`, {
+      headers: { Authorization: `Bearer ${token}` },
+      signal: AbortSignal.timeout(15_000),
+    });
+    if (!res.ok) throw new Error(`Invite validation failed (HTTP ${res.status})`);
+    const cfg = (await res.json()) as { org?: string };
+    secondBrainManager.setConfig({ enabled: true, url: base, token, access: 'read' });
+    storageManager.setSetting('update.feedBase', `${base}/releases`);
+    applyUpdateFeed();
+    void refreshCorpLlmKeys();
+    storageManager.saveAuditLog({
+      id: uuidv4(), timestamp: new Date().toISOString(),
+      agentId: 'system', agentName: 'Invite', action: 'corp_invite_applied',
+      input: { server: base, org: cfg.org }, output: {}, metadata: {},
+      userId: currentUserId(),
+    });
+    mainWindow?.webContents.send('app:deepLink', { section: 'advanced', invite: { org: cfg.org } });
+  } catch (error) {
+    mainWindow?.webContents.send('app:deepLink', {
+      section: 'advanced',
+      invite: { error: error instanceof Error ? error.message : String(error) },
+    });
+  }
+}
+
 function handleDeepLink(url: string) {
   if (!url.startsWith('keepmind://')) return;
   console.log('Deep link received:', url);
   showMainWindow();
-  const section = sectionFromDeepLink(url);
-  if (section) {
-    mainWindow?.webContents.send('app:deepLink', { section });
+  try {
+    const u = new URL(url);
+    const section = u.hostname || u.pathname.replace(/^\//, '');
+    if (section === 'join') {
+      const server = u.searchParams.get('server');
+      const token = u.searchParams.get('token');
+      if (server && token) {
+        void applyCorpInvite(server, token);
+        return;
+      }
+    }
+    if (DEEP_LINK_SECTIONS.has(section)) {
+      mainWindow?.webContents.send('app:deepLink', { section });
+    }
+  } catch {
+    // Malformed deep link — ignore.
   }
 }
 
@@ -1218,6 +1405,7 @@ handle('secondbrain:getConfig', () => {
 handle('secondbrain:setConfig', (_event, config: { enabled?: boolean; url?: string; token?: string; access?: 'read' | 'write'; blockPii?: boolean }) => {
   requireRole('admin');
   secondBrainManager.setConfig(config);
+  void refreshCorpLlmKeys();
   const { token, ...rest } = secondBrainManager.getConfig();
   return { ...rest, hasToken: token.length > 0 };
 });
@@ -1260,6 +1448,49 @@ handle('whatsapp:getMessages', (_event, limit?: number, remote?: string) => {
 
 handle('whatsapp:clearMessages', () => {
   storageManager.clearWhatsAppMessages();
+  return { ok: true };
+});
+
+// Composio integrations — the company API key is admin-managed; each user
+// connects their own SaaS accounts through Composio's hosted auth.
+handle('composio:getStatus', () => {
+  return { configured: composioManager.isConfigured(), keyHint: composioManager.keyHint() };
+});
+
+handle('composio:setApiKey', (_event, key: string) => {
+  requireRole('admin');
+  if (!key?.trim()) throw new Error('API key is required');
+  composioManager.setApiKey(key);
+  return { configured: true, keyHint: composioManager.keyHint() };
+});
+
+handle('composio:clearApiKey', () => {
+  requireRole('admin');
+  composioManager.clearApiKey();
+  return { configured: false, keyHint: null };
+});
+
+handle('composio:test', async () => {
+  return composioManager.testConnection();
+});
+
+handle('composio:listToolkits', async () => {
+  requireRole('admin');
+  return composioManager.listToolkits();
+});
+
+handle('composio:listConnections', async () => {
+  return composioManager.refreshConnections();
+});
+
+handle('composio:connect', async (_event, toolkit: string) => {
+  requireRole('admin');
+  return composioManager.connect(String(toolkit));
+});
+
+handle('composio:disconnect', async (_event, connectedAccountId: string) => {
+  requireRole('admin');
+  await composioManager.disconnect(String(connectedAccountId));
   return { ok: true };
 });
 
@@ -1384,7 +1615,11 @@ handle('update:check', async () => {
     const result = await autoUpdater.checkForUpdates();
     return { ok: true, updateInfo: result?.updateInfo ?? null };
   } catch (error) {
-    return { ok: false, error: error instanceof Error ? error.message : String(error) };
+    const message = error instanceof Error ? error.message : String(error);
+    // A 404 from the feed (e.g. repo without published releases, or a corp
+    // that hasn't uploaded installers yet) means "no update", not a failure.
+    if (message.includes('404')) return { ok: true, updateInfo: null };
+    return { ok: false, error: message };
   }
 });
 

@@ -150,6 +150,7 @@ export default function TeamEditor({ teamId, onClose }: TeamEditorProps) {
                 return agent || { id, name: 'Unknown' };
               })}
               onChange={setWorkflow}
+              onAgentCreated={(agent) => addAgentToTeam(teamId, agent.id)}
             />
           )}
         </Tabs.Panel>

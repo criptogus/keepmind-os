@@ -15,6 +15,7 @@ const LoginScreen = lazy(() => import('./components/auth/LoginScreen'));
 import type { LocalUser } from '../shared/types.js';
 import { Badge, Button, Text } from '@mantine/core';
 import { useThemeStore } from './store/themeStore';
+import { useLang } from './lib/i18n';
 
 const sectionLabel: React.CSSProperties = {
   fontSize: 12,
@@ -30,6 +31,7 @@ export default function App() {
   const [version, setVersion] = useState<string>('');
   const [pendingApprovals, setPendingApprovals] = useState(0);
   const { initTheme } = useThemeStore();
+  const { t } = useLang();
   const [needsOnboarding, setNeedsOnboarding] = useState<boolean | null>(null);
   const [authState, setAuthState] = useState<{ hasUsers: boolean; currentUser: LocalUser | null } | null>(null);
 
@@ -61,19 +63,19 @@ export default function App() {
   }, [initTheme]);
 
   const sidebarItems = [
-    { id: 'dashboard', label: 'Dashboard' },
-    { id: 'agents', label: 'Agents' },
-    { id: 'teams', label: 'Teams' },
-    { id: 'skills', label: 'Skills' },
-    { id: 'governance', label: 'Governance' },
-    { id: 'logs', label: 'Activity Logs' },
-    { id: 'settings', label: 'Settings' },
-    { id: 'advanced', label: 'Advanced' },
+    { id: 'dashboard', label: t('nav.dashboard') },
+    { id: 'agents', label: t('nav.agents') },
+    { id: 'teams', label: t('nav.teams') },
+    { id: 'skills', label: t('nav.skills') },
+    { id: 'governance', label: t('nav.governance') },
+    { id: 'logs', label: t('nav.logs') },
+    { id: 'settings', label: t('nav.settings') },
+    { id: 'advanced', label: t('nav.advanced') },
   ];
 
   const governanceTabs = [
-    { id: 'approvals', label: 'Pending Approvals' },
-    { id: 'rules', label: 'Rules' },
+    { id: 'approvals', label: t('gov.pending') },
+    { id: 'rules', label: t('gov.rules') },
   ];
   const [governanceTab, setGovernanceTab] = useState('approvals');
 
@@ -159,7 +161,7 @@ export default function App() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: '12px 24px 12px 84px',
+          padding: '6px 24px 6px 84px',
           borderBottom: '1px solid var(--mantine-color-gray-3)',
           backgroundColor: 'var(--mantine-color-body)',
           WebkitAppRegion: 'drag',
@@ -186,7 +188,7 @@ export default function App() {
           flexDirection: 'column',
         }}>
           <div style={{ marginBottom: 24 }}>
-            <h2 style={{ ...sectionLabel, margin: 0 }}>Navigation</h2>
+            <h2 style={{ ...sectionLabel, margin: 0 }}>{t('nav.navigation')}</h2>
             <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 2 }}>
               {sidebarItems.map((item) => (
                 <Button
@@ -208,8 +210,8 @@ export default function App() {
           </div>
 
           <div style={{ marginBottom: 24 }}>
-            <div style={sectionLabel}>System</div>
-            <Text size="sm" c="dimmed">Version: {version || 'Loading...'}</Text>
+            <div style={sectionLabel}>{t('nav.system')}</div>
+            <Text size="sm" c="dimmed">{t('nav.version')}: {version || t('nav.loading')}</Text>
             {authState.currentUser && (
               <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
                 <Badge size="sm" variant="light" color="dark">
@@ -223,7 +225,7 @@ export default function App() {
                     setAuthState(s);
                   }}
                 >
-                  Sign out
+                  {t('nav.signout')}
                 </Button>
               </div>
             )}
@@ -231,7 +233,7 @@ export default function App() {
 
           <div style={{ marginTop: 'auto', paddingTop: 24, borderTop: '1px solid var(--mantine-color-gray-3)' }}>
             <Text size="xs" c="dimmed">
-              Powered by{' '}
+              {t('nav.poweredBy')}{' '}
               <a
                 href="https://zeroagency.ai"
                 target="_blank"
@@ -245,7 +247,7 @@ export default function App() {
         </aside>
 
         <div style={{ flex: 1, padding: 24, overflowY: 'auto' }}>
-          <Suspense fallback={<Text size="sm" c="dimmed" ta="center" py="xl">Loading…</Text>}>
+          <Suspense fallback={<Text size="sm" c="dimmed" ta="center" py="xl">{t('nav.loading')}</Text>}>
             {renderContent()}
           </Suspense>
         </div>

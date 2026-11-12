@@ -21,9 +21,11 @@ interface McpCallResponse {
 /** Obvious personal identifiers — CPF, BR mobile/landline, card numbers. Emails allowed (corporate addresses are legitimate). */
 export function containsPii(text: string): boolean {
   return /\d{3}\.\d{3}\.\d{3}-\d{2}/.test(text)          // CPF
+    || /\b\d{2}\.\d{3}\.\d{3}-[\dXx]\b/.test(text)     // RG
     || /\(\d{2}\)\s?9?\d{4,5}-\d{4}/.test(text)          // (11) 99999-9999
     || /(?:\+?55\s?)?9?\d{2}\s?9?\d{4}-\d{4}/.test(text) // 11999999999 / +55 11 99999-9999
-    || /\b\d{4}[ -]?\d{4}[ -]?\d{4}[ -]?\d{4}\b/.test(text); // card-like
+    || /\b\d{4}[ -]?\d{4}[ -]?\d{4}[ -]?\d{4}\b/.test(text) // card-like
+    || /\b(?:ag(?:ência)?|cc|c\/c)\s*:?\s*\d{3,5}\b.{0,20}\b(?:c?c?\.?\s*)?\d{4,10}\b/i.test(text); // bank agency+account labeled
 }
 
 /**
@@ -36,10 +38,16 @@ export class SecondBrainManager {
   private storage: StorageManager;
   private credentials?: CredentialStore;
   private migrated = false;
+  /** Optional LLM second-layer PII check (regex runs first regardless). */
+  private piiJudge?: (text: string) => Promise<boolean>;
 
   constructor(storage: StorageManager, credentials?: CredentialStore) {
     this.storage = storage;
     this.credentials = credentials;
+  }
+
+  setPiiJudge(judge: (text: string) => Promise<boolean>): void {
+    this.piiJudge = judge;
   }
 
   getConfig(): SecondBrainConfig {
@@ -136,8 +144,13 @@ export class SecondBrainManager {
     if (cfg.access === 'read') {
       throw new Error('Second brain is configured read-only — writes are not allowed');
     }
-    if (cfg.blockPii && containsPii(content)) {
-      throw new Error('Blocked: content looks like personal data (CPF/phone/card). Store it in the personal brain instead.');
+    if (cfg.blockPii) {
+      if (containsPii(content)) {
+        throw new Error('Blocked: content looks like personal data (CPF/phone/card). Store it in the personal brain instead.');
+      }
+      if (this.piiJudge && await this.piiJudge(content)) {
+        throw new Error('Blocked: content looks like personal data about an identifiable person. Store it in the personal brain instead.');
+      }
     }
     return this.call('sb_append', {
       path: 'inbox/keepmind-os-captures.md',

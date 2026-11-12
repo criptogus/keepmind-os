@@ -3,12 +3,14 @@ import {
   Button, Card, Group, Modal, Stack, Stepper, Switch, Text, TextInput, Title,
 } from '@mantine/core';
 import { DEFAULT_MODEL } from '../../../shared/models.js';
+import { useLang } from '../../lib/i18n';
 
-const STEPS = ['Company', 'LLM Provider', 'Second Brain', 'First Agent'];
+const STEP_KEYS = ['ob.step.company', 'ob.step.llm', 'ob.step.brain', 'ob.step.agent'];
 
 type Provider = 'openai' | 'anthropic';
 
 export default function OnboardingWizard({ onComplete }: { onComplete: () => void }) {
+  const { t } = useLang();
   const [step, setStep] = useState(0);
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState('');
@@ -41,17 +43,17 @@ export default function OnboardingWizard({ onComplete }: { onComplete: () => voi
 
   const connectOauth = async (p: Provider) => {
     setBusy(true);
-    setStatus(`Opening ${p === 'openai' ? 'OpenAI' : 'Anthropic'} sign-in…`);
+    setStatus(`${t('ob.signinWith')} ${p === 'openai' ? 'OpenAI' : 'Anthropic'}…`);
     try {
       const res = await window.electronAPI.oauthAuthenticate(p);
       if (res.success) {
         setOauthDone((s) => ({ ...s, [p]: true }));
-        setStatus(`${p === 'openai' ? 'OpenAI' : 'Anthropic'} connected.`);
+        setStatus(`${p === 'openai' ? 'OpenAI' : 'Anthropic'} ${t('ob.connected')}`);
       } else {
-        setStatus(res.error || 'Authentication failed.');
+        setStatus(res.error || `${t('ob.failed')} ${t('login.failed')}`);
       }
     } catch {
-      setStatus('Authentication failed.');
+      setStatus(t('login.failed'));
     } finally {
       setBusy(false);
     }
@@ -59,7 +61,7 @@ export default function OnboardingWizard({ onComplete }: { onComplete: () => voi
 
   const testBrain = async () => {
     setBusy(true);
-    setStatus('Testing connection…');
+    setStatus(t('ob.testing'));
     try {
       await window.electronAPI.secondBrainSetConfig({
         enabled: true,
@@ -67,7 +69,7 @@ export default function OnboardingWizard({ onComplete }: { onComplete: () => voi
         token: brainToken.trim() || undefined,
       });
       const res = await window.electronAPI.secondBrainTest();
-      setStatus(res.ok ? 'Connected to KeepMind Corp.' : `Connection failed: ${res.error || 'unknown error'}`);
+      setStatus(res.ok ? t('ob.connectedCorp') : `Connection failed: ${res.error || 'unknown error'}`);
     } catch (e) {
       setStatus(`Connection failed: ${e instanceof Error ? e.message : 'unknown error'}`);
     } finally {
@@ -77,7 +79,7 @@ export default function OnboardingWizard({ onComplete }: { onComplete: () => voi
 
   const finish = async () => {
     setBusy(true);
-    setStatus('Saving configuration…');
+    setStatus(t('ob.saving'));
     try {
       await window.electronAPI.updateCompany(company);
       if (apiKey.trim()) {
@@ -114,7 +116,7 @@ export default function OnboardingWizard({ onComplete }: { onComplete: () => voi
   };
 
   const next = () => {
-    if (step === STEPS.length - 1) {
+    if (step === STEP_KEYS.length - 1) {
       finish();
     } else {
       setStep(step + 1);
@@ -133,22 +135,22 @@ export default function OnboardingWizard({ onComplete }: { onComplete: () => voi
     >
       <Stack gap="lg">
         <div>
-          <Title order={2}>Welcome to KeepMind OS</Title>
-          <Text c="dimmed" size="sm">Set up your workspace in a few steps.</Text>
+          <Title order={2}>{t('ob.welcome')}</Title>
+          <Text c="dimmed" size="sm">{t('ob.subtitle')}</Text>
         </div>
 
         <Stepper active={step} size="sm">
-          {STEPS.map((label) => (
-            <Stepper.Step key={label} label={label} />
+          {STEP_KEYS.map((key) => (
+            <Stepper.Step key={key} label={t(key)} />
           ))}
         </Stepper>
 
         {step === 0 && (
           <Stack gap="sm">
-            <TextInput label="Company name" required value={company.name} onChange={(e) => setCompany({ ...company, name: e.currentTarget.value })} />
-            <TextInput label="Industry" value={company.industry} onChange={(e) => setCompany({ ...company, industry: e.currentTarget.value })} />
-            <TextInput label="Website" value={company.website} onChange={(e) => setCompany({ ...company, website: e.currentTarget.value })} />
-            <TextInput label="What does your company do?" value={company.description} onChange={(e) => setCompany({ ...company, description: e.currentTarget.value })} />
+            <TextInput label={t('ob.companyName')} required value={company.name} onChange={(e) => setCompany({ ...company, name: e.currentTarget.value })} />
+            <TextInput label={t('ob.industry')} value={company.industry} onChange={(e) => setCompany({ ...company, industry: e.currentTarget.value })} />
+            <TextInput label={t('ob.website')} value={company.website} onChange={(e) => setCompany({ ...company, website: e.currentTarget.value })} />
+            <TextInput label={t('ob.companyDoes')} value={company.description} onChange={(e) => setCompany({ ...company, description: e.currentTarget.value })} />
           </Stack>
         )}
 
@@ -175,7 +177,7 @@ export default function OnboardingWizard({ onComplete }: { onComplete: () => voi
               type="password"
               value={apiKey}
               onChange={(e) => setApiKey(e.currentTarget.value)}
-              description="Or sign in with OAuth below."
+              description={t('ob.apiKeyDesc')}
             />
             <Button
               variant="light"
@@ -183,7 +185,7 @@ export default function OnboardingWizard({ onComplete }: { onComplete: () => voi
               disabled={oauthDone[provider] || busy || !oauthConfigured[provider]}
               onClick={() => connectOauth(provider)}
             >
-              {oauthDone[provider] ? 'Connected via OAuth' : `Sign in with ${provider === 'openai' ? 'OpenAI' : 'Anthropic'}`}
+              {oauthDone[provider] ? t('ob.connected') : `${t('ob.signinWith')} ${provider === 'openai' ? 'OpenAI' : 'Anthropic'}`}
             </Button>
             {!oauthConfigured[provider] && (
               <Text size="xs" c="dimmed">
@@ -196,38 +198,38 @@ export default function OnboardingWizard({ onComplete }: { onComplete: () => voi
         {step === 2 && (
           <Stack gap="sm">
             <Switch
-              label="Connect KeepMind Corp (second brain)"
-              description="Optional. Lets agents read and write shared company knowledge via your local KeepMind Corp server."
+              label={t('ob.connectBrain')}
+              description={t('ob.connectBrainDesc')}
               checked={brainEnabled}
               onChange={(e) => setBrainEnabled(e.currentTarget.checked)}
             />
             {brainEnabled ? (
               <>
-                <TextInput label="Server URL" value={brainUrl} onChange={(e) => setBrainUrl(e.currentTarget.value)} />
-                <TextInput label="Access token" type="password" value={brainToken} onChange={(e) => setBrainToken(e.currentTarget.value)} description="KEEPMIND_CORP_TOKEN from your corp server." />
+                <TextInput label={t('ob.serverUrl')} value={brainUrl} onChange={(e) => setBrainUrl(e.currentTarget.value)} />
+                <TextInput label={t('ob.accessToken')} type="password" value={brainToken} onChange={(e) => setBrainToken(e.currentTarget.value)} description={t('ob.tokenDesc')} />
                 <div>
-                  <Button variant="light" disabled={busy} onClick={testBrain}>Test connection</Button>
+                  <Button variant="light" disabled={busy} onClick={testBrain}>{t('ob.testConnection')}</Button>
                 </div>
               </>
             ) : (
-              <Text size="sm" c="dimmed">You can skip this and connect later in Settings.</Text>
+              <Text size="sm" c="dimmed">{t('ob.skipLater')}</Text>
             )}
           </Stack>
         )}
 
         {step === 3 && (
           <Stack gap="sm">
-            <TextInput label="Agent name" required value={agentName} onChange={(e) => setAgentName(e.currentTarget.value)} />
+            <TextInput label={t('ob.agentName')} required value={agentName} onChange={(e) => setAgentName(e.currentTarget.value)} />
             <TextInput
-              label="Role / responsibilities"
+              label={t('ob.agentRole')}
               required
               value={agentRole}
               onChange={(e) => setAgentRole(e.currentTarget.value)}
-              description="e.g. 'Content strategist', 'Customer support lead'"
+              description={t('ob.agentRoleDesc')}
             />
             <Text size="sm" c="dimmed">
-              This agent will use your {provider === 'openai' ? 'OpenAI' : 'Anthropic'} connection
-              {brainEnabled ? ' and the KeepMind Corp second brain' : ''}.
+              {t('ob.agentUses')} {provider === 'openai' ? 'OpenAI' : 'Anthropic'}
+              {brainEnabled ? ` ${t('ob.andBrain')}` : ''}.
             </Text>
           </Stack>
         )}
@@ -236,10 +238,10 @@ export default function OnboardingWizard({ onComplete }: { onComplete: () => voi
           <Text size="xs" c="dimmed" mih={18}>{status}</Text>
           <Group gap="xs">
             {step > 0 && (
-              <Button variant="default" disabled={busy} onClick={() => setStep(step - 1)}>Back</Button>
+              <Button variant="default" disabled={busy} onClick={() => setStep(step - 1)}>{t('ob.back')}</Button>
             )}
             <Button disabled={!canNext() || busy} loading={busy} onClick={next}>
-              {step === STEPS.length - 1 ? 'Finish setup' : 'Continue'}
+              {step === STEP_KEYS.length - 1 ? 'Finish setup' : 'Continue'}
             </Button>
           </Group>
         </Group>

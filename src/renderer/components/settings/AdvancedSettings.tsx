@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Badge, Button, Card, Group, Image, PasswordInput, Select, Stack, Switch, Text, TextInput, Title, NumberInput } from '@mantine/core';
 import { useThemeStore } from '../../store/themeStore';
 import { useSettingsStore } from '../../store/settingsStore';
+import { useLang } from '../../lib/i18n';
 import type { Agent, AgentTrigger, LocalUser, UserRole, ComputerAccessLevel } from '../../../shared/types.js';
 
 
 
 
 export default function AdvancedSettings() {
+  const { t } = useLang();
   const { settings, updateSettings } = useSettingsStore();
   const { theme, setTheme } = useThemeStore();
   const [openaiKey, setOpenaiKey] = useState('');
@@ -46,6 +48,12 @@ export default function AdvancedSettings() {
   const [brainRequests, setBrainRequests] = useState<Array<Record<string, unknown>>>([]);
   const [personalBrain, setPersonalBrain] = useState<{ dir: string; files: string[] } | null>(null);
   const [brainMsg, setBrainMsg] = useState('');
+  const [composio, setComposio] = useState<{ configured: boolean; keyHint: string | null } | null>(null);
+  const [composioKey, setComposioKey] = useState('');
+  const [composioMsg, setComposioMsg] = useState('');
+  const [composioToolkits, setComposioToolkits] = useState<Array<{ slug: string; name: string }>>([]);
+  const [composioConnections, setComposioConnections] = useState<Array<{ toolkit: string; connectedAccountId: string; status: string }>>([]);
+  const [composioToolkit, setComposioToolkit] = useState('');
 
   useEffect(() => {
     checkAuthStatus();
@@ -98,6 +106,8 @@ export default function AdvancedSettings() {
     })).catch(() => {});
     window.electronAPI.brainListRequests().then(setBrainRequests).catch(() => {});
     window.electronAPI.personalBrainStatus().then(setPersonalBrain).catch(() => {});
+    window.electronAPI.composioGetStatus().then(setComposio).catch(() => {});
+    window.electronAPI.composioListConnections().then(setComposioConnections).catch(() => {});
     const unsubUpdate = window.electronAPI.onUpdateEvent((event) => {
       if (event.type === 'available') setUpdateState(`Update available: v${event.version}`);
       else if (event.type === 'not-available') setUpdateState('You are on the latest version.');
@@ -163,7 +173,7 @@ export default function AdvancedSettings() {
 
   return (
     <Stack gap="lg">
-      <Title order={2} size="h3">Advanced Settings</Title>
+      <Title order={2} size="h3">{t('adv.title')}</Title>
 
       <Card withBorder padding="md" radius="md">
         <Title order={2} size="h4">AI Provider Authentication</Title>
@@ -244,7 +254,7 @@ export default function AdvancedSettings() {
       </Card>
 
       <Card withBorder padding="md" radius="md">
-        <Title order={2} size="h4">Second Brain (KeepMind Corp)</Title>
+        <Title order={2} size="h4">{t('adv.secondBrain')}</Title>
         <Text size="sm" c="dimmed">
           Optional integration with your local KeepMind Corp server. Agents can search and store shared company knowledge.
         </Text>
@@ -336,7 +346,7 @@ export default function AdvancedSettings() {
       </Card>
 
       <Card withBorder padding="md" radius="md">
-        <Title order={2} size="h4">WhatsApp</Title>
+        <Title order={2} size="h4">{t('adv.whatsapp')}</Title>
         <Text size="sm" c="dimmed">
           Connect WhatsApp by scanning a QR code with your phone (WhatsApp → Settings → Linked devices). Uses the unofficial Baileys client.
         </Text>
@@ -430,6 +440,157 @@ export default function AdvancedSettings() {
       </Card>
 
       <Card withBorder padding="md" radius="md">
+        <Title order={2} size="h4">Composio Integrations</Title>
+        <Text size="sm" c="dimmed">
+          Connect company apps (Gmail, Calendar, Slack, Notion…) via Composio. Each person connects their own account — the company API key is entered once here by an admin.
+        </Text>
+        <Card withBorder padding="md" radius="md">
+          <Stack gap="sm">
+            <Group justify="space-between">
+              <Text fw={600}>API key</Text>
+              {composio && (
+                <Badge color={composio.configured ? 'dark' : 'gray'} variant="light">
+                  {composio.configured ? `Configured ${composio.keyHint || ''}` : 'Not configured'}
+                </Badge>
+              )}
+            </Group>
+            <Group gap="xs" align="flex-end">
+              <PasswordInput
+                style={{ flex: 1 }}
+                size="xs"
+                label="Composio project API key"
+                placeholder="ak_…"
+                value={composioKey}
+                onChange={(e) => setComposioKey(e.currentTarget.value)}
+              />
+              <Button
+                size="xs"
+                disabled={!composioKey.trim()}
+                onClick={async () => {
+                  setComposioMsg('');
+                  try {
+                    const r = await window.electronAPI.composioSetApiKey(composioKey);
+                    setComposio(r);
+                    setComposioKey('');
+                    setComposioMsg('Key saved.');
+                  } catch (e) {
+                    setComposioMsg(e instanceof Error ? e.message : 'Failed to save key');
+                  }
+                }}
+              >
+                Save
+              </Button>
+              {composio?.configured && (
+                <Button
+                  size="xs"
+                  variant="subtle"
+                  color="gray"
+                  onClick={async () => {
+                    const r = await window.electronAPI.composioClearApiKey();
+                    setComposio(r);
+                    setComposioConnections([]);
+                  }}
+                >
+                  Remove
+                </Button>
+              )}
+            </Group>
+            {composio?.configured && (
+              <Group gap="xs">
+                <Button
+                  size="compact-xs"
+                  variant="default"
+                  onClick={async () => {
+                    setComposioMsg('');
+                    const r = await window.electronAPI.composioTest();
+                    setComposioMsg(r.ok ? 'Connection OK.' : `Failed: ${r.error || 'unknown'}`);
+                  }}
+                >
+                  Test connection
+                </Button>
+              </Group>
+            )}
+            {composioMsg && <Text size="xs" c="dimmed">{composioMsg}</Text>}
+
+            {composio?.configured && (
+              <>
+                <Group gap="xs" align="flex-end">
+                  <Select
+                    style={{ flex: 1 }}
+                    size="xs"
+                    label="Connect an app"
+                    placeholder={composioToolkits.length ? 'Choose an app…' : 'Type slug (e.g. gmail)'}
+                    data={composioToolkits.map((t) => ({ value: t.slug, label: t.name }))}
+                    value={composioToolkit || null}
+                    onChange={(v) => setComposioToolkit(v || '')}
+                    searchable
+                    onFocus={async () => {
+                      if (!composioToolkits.length) {
+                        const list = await window.electronAPI.composioListToolkits().catch(() => []);
+                        setComposioToolkits(list);
+                      }
+                    }}
+                  />
+                  <Button
+                    size="xs"
+                    variant="light"
+                    disabled={!composioToolkit}
+                    onClick={async () => {
+                      setComposioMsg('');
+                      try {
+                        await window.electronAPI.composioConnect(composioToolkit);
+                        setComposioMsg('Authorization opened in your browser — finish it there, then refresh.');
+                        const conns = await window.electronAPI.composioListConnections();
+                        setComposioConnections(conns);
+                      } catch (e) {
+                        setComposioMsg(e instanceof Error ? e.message : 'Connect failed');
+                      }
+                    }}
+                  >
+                    Connect
+                  </Button>
+                  <Button
+                    size="compact-xs"
+                    variant="subtle"
+                    color="gray"
+                    onClick={async () => setComposioConnections(await window.electronAPI.composioListConnections())}
+                  >
+                    Refresh
+                  </Button>
+                </Group>
+                {composioConnections.length > 0 && (
+                  <Stack gap={4}>
+                    {composioConnections.map((c) => (
+                      <Group key={c.connectedAccountId} justify="space-between">
+                        <Group gap={6}>
+                          <Text size="xs" fw={500}>{c.toolkit}</Text>
+                          <Badge size="xs" color={c.status === 'ACTIVE' ? 'dark' : 'gray'} variant="light">{c.status}</Badge>
+                        </Group>
+                        <Button
+                          size="compact-xs"
+                          variant="subtle"
+                          color="gray"
+                          onClick={async () => {
+                            await window.electronAPI.composioDisconnect(c.connectedAccountId);
+                            setComposioConnections(await window.electronAPI.composioListConnections());
+                          }}
+                        >
+                          Disconnect
+                        </Button>
+                      </Group>
+                    ))}
+                  </Stack>
+                )}
+                <Text size="xs" c="dimmed">
+                  Agents can then use composio_search_tools / composio_execute — the execute tool requires approval in Governance.
+                </Text>
+              </>
+            )}
+          </Stack>
+        </Card>
+      </Card>
+
+      <Card withBorder padding="md" radius="md">
         <Group justify="space-between" mb={4}>
           <Title order={2} size="h4">Agent Reach</Title>
           {arStatus && (
@@ -462,7 +623,7 @@ export default function AdvancedSettings() {
 
       {authInfo && !authInfo.hasUsers && (
         <Card withBorder padding="md" radius="md">
-          <Title order={3} size="h5" mb="md">Users &amp; Roles</Title>
+          <Title order={3} size="h5" mb="md">{t('adv.users')}</Title>
           <Text size="sm" c="dimmed" mb="md">
             Enable multi-user mode: create the owner account, then invite members and admins. Once enabled, everyone must sign in.
           </Text>
@@ -485,7 +646,7 @@ export default function AdvancedSettings() {
 
       {authInfo?.hasUsers && authInfo.currentUser && authInfo.currentUser.role !== 'member' && (
         <Card withBorder padding="md" radius="md">
-          <Title order={3} size="h5" mb="md">Users &amp; Roles</Title>
+          <Title order={3} size="h5" mb="md">{t('adv.users')}</Title>
           <Stack gap="xs">
             {users.map((u) => (
               <Group key={u.id} justify="space-between" wrap="nowrap">
@@ -539,7 +700,7 @@ export default function AdvancedSettings() {
 
       {computer && authInfo?.currentUser && authInfo.currentUser.role !== 'member' && (
         <Card withBorder padding="md" radius="md">
-          <Title order={3} size="h5" mb="md">Computer Access</Title>
+          <Title order={3} size="h5" mb="md">{t('adv.computerAccess')}</Title>
           <Text size="sm" c="dimmed" mb="md">
             Maximum access agents get on this machine. Agents can only reduce it via their own computer access setting; members are always capped at workspace.
           </Text>
@@ -577,7 +738,7 @@ export default function AdvancedSettings() {
       )}
 
       <Card withBorder padding="md" radius="md">
-        <Title order={3} size="h5" mb="md">Brains &amp; GitHub Access</Title>
+        <Title order={3} size="h5" mb="md">{t('adv.brainsGithub')}</Title>
         <Text size="sm" c="dimmed" mb="md">
           The <b>corporate brain</b> (KeepMind Corp) holds shared company knowledge. Your <b>personal brain</b> is a local vault on this machine — personal data never goes to the corporate brain.
         </Text>
@@ -650,7 +811,7 @@ export default function AdvancedSettings() {
       </Card>
 
       <Card withBorder padding="md" radius="md">
-        <Title order={3} size="h5" mb="md">Appearance</Title>
+        <Title order={3} size="h5" mb="md">{t('adv.appearance')}</Title>
         <Select
           label="Theme"
           value={theme}
@@ -678,7 +839,7 @@ export default function AdvancedSettings() {
       </Card>
 
       <Card withBorder padding="md" radius="md">
-        <Title order={3} size="h5" mb="md">Automation</Title>
+        <Title order={3} size="h5" mb="md">{t('adv.automation')}</Title>
         <Text size="sm" c="dimmed" mb="md">
           Scheduled triggers run agents autonomously. WhatsApp auto-responder answers incoming messages with a chosen agent.
         </Text>
@@ -798,7 +959,7 @@ export default function AdvancedSettings() {
       </Card>
 
       <Card withBorder padding="md" radius="md">
-        <Title order={3} size="h5" mb="md">Updates</Title>
+        <Title order={3} size="h5" mb="md">{t('adv.updates')}</Title>
         <Group gap="xs">
           <Button
             size="xs"
@@ -821,7 +982,7 @@ export default function AdvancedSettings() {
       </Card>
 
       <Card withBorder padding="md" radius="md">
-        <Title order={3} size="h5" mb="md">Data Management</Title>
+        <Title order={3} size="h5" mb="md">{t('adv.data')}</Title>
         <Group gap="xs">
           <Button
             size="xs"

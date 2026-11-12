@@ -10,7 +10,7 @@ interface AgentStore {
 
   fetchAgents: () => Promise<void>;
   selectAgent: (id: string) => void;
-  createAgent: (input: CreateAgentInput) => Promise<void>;
+  createAgent: (input: CreateAgentInput) => Promise<Agent>;
   updateAgent: (id: string, config: Partial<AgentConfig>) => Promise<void>;
   deleteAgent: (id: string) => Promise<void>;
   executeAgent: (id: string, input: Record<string, unknown>) => Promise<void>;
@@ -45,6 +45,7 @@ export const useAgentStore = create<AgentStore>((set, get) => ({
     try {
       const agent = await window.electronAPI.createAgent(input);
       set(state => ({ agents: [...state.agents, agent], loading: false }));
+      return agent;
     } catch (error) {
       set({ error: error instanceof Error ? error.message : 'Failed to create agent', loading: false });
       throw error;
