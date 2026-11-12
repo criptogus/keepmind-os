@@ -14,6 +14,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
   // Agents
   getAgents: () => ipcRenderer.invoke('agents:getList') as Promise<Agent[]>,
+  getAgentReputations: () => ipcRenderer.invoke('agents:reputations') as Promise<Record<string, { avg: number; count: number }>>,
   getAgent: (id: string) => ipcRenderer.invoke('agents:get', id) as Promise<Agent | null>,
   createAgent: (input: CreateAgentInput) => ipcRenderer.invoke('agents:create', input) as Promise<Agent>,
   updateAgent: (id: string, updates: Partial<AgentConfig> & { avatar?: string | null; managerId?: string | null }) => ipcRenderer.invoke('agents:update', id, updates) as Promise<Agent>,
@@ -217,6 +218,7 @@ declare global {
       maximizeWindow: () => Promise<void>;
       closeWindow: () => Promise<void>;
       getAgents: () => Promise<Agent[]>;
+      getAgentReputations: () => Promise<Record<string, { avg: number; count: number }>>;
       getAgent: (id: string) => Promise<Agent | null>;
       createAgent: (input: CreateAgentInput) => Promise<Agent>;
       updateAgent: (id: string, updates: Partial<AgentConfig> & { avatar?: string | null; managerId?: string | null }) => Promise<Agent>;

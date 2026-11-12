@@ -10,7 +10,7 @@ export interface ToolContext {
   secondBrainSearch?: (query: string, limit?: number) => Promise<string>;
   secondBrainRemember?: (content: string) => Promise<unknown>;
   /** Runs another agent with a task description; returns its text output. */
-  delegateTask?: (agent: string, task: string, input?: Record<string, unknown>) => Promise<string>;
+  delegateTask?: (callerAgentId: string | undefined, agent: string, task: string, input?: Record<string, unknown>) => Promise<string>;
   /** Root directory the file tools are confined to. */
   workspaceDir?: string;
   /** Executes a shell command; returns combined stdout+stderr (truncated). */
@@ -39,7 +39,7 @@ export interface ToolContext {
   /** Id of the agent running this execution (set per-execution via policy). */
   callerAgentId?: string;
   /** Creates a subordinate agent reporting to the caller; returns a summary. */
-  createAgent?: (callerAgentId: string | undefined, spec: { name: string; description?: string; systemPrompt?: string }) => Promise<string>;
+  createAgent?: (callerAgentId: string | undefined, spec: { name: string; description?: string; systemPrompt?: string; model?: string; skillNames?: string[] }) => Promise<string>;
   /** Records a structured review/rating of another agent in the audit log. */
   reviewAgent?: (callerAgentId: string | undefined, agent: string, rating: number, note: string) => Promise<string>;
 }
@@ -242,7 +242,7 @@ export class ToolRegistry {
       },
       handler: async (args, ctx) => {
         if (!ctx.delegateTask) throw new Error('Agent delegation is not available');
-        const result = await ctx.delegateTask(String(args.agent), String(args.task));
+        const result = await ctx.delegateTask(ctx.callerAgentId, String(args.agent), String(args.task));
         return result.slice(0, 8000);
       },
     });
@@ -256,6 +256,8 @@ export class ToolRegistry {
           name: { type: 'string', description: 'Display name for the new agent' },
           description: { type: 'string', description: 'One-line description of its role' },
           systemPrompt: { type: 'string', description: 'Instructions defining the agent persona and boundaries' },
+          model: { type: 'string', description: 'Optional model id (e.g. gpt-4o-mini, claude-haiku). Defaults to the workspace model.' },
+          skillNames: { type: 'array', items: { type: 'string' }, description: 'Optional names of existing skills to attach' },
         },
         required: ['name'],
       },
@@ -265,6 +267,8 @@ export class ToolRegistry {
           name: String(args.name),
           description: args.description ? String(args.description) : undefined,
           systemPrompt: args.systemPrompt ? String(args.systemPrompt) : undefined,
+          model: args.model ? String(args.model) : undefined,
+          skillNames: Array.isArray(args.skillNames) ? args.skillNames.map(String) : undefined,
         });
         return result.slice(0, 4000);
       },

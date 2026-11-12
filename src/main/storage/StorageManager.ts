@@ -535,6 +535,27 @@ export class StorageManager {
     );
   }
 
+  /** Aggregates agent_review audit entries into per-agent rating stats. */
+  getAgentReviewStats(): Record<string, { avg: number; count: number }> {
+    const rows = this.db.prepare(`SELECT input, metadata FROM audit_logs WHERE action = 'agent_review'`).all() as any[];
+    const acc: Record<string, { sum: number; count: number }> = {};
+    for (const row of rows) {
+      try {
+        const meta = JSON.parse(row.metadata || '{}');
+        const input = JSON.parse(row.input || '{}');
+        const id = meta.targetAgentId as string | undefined;
+        const rating = Number(input.rating);
+        if (!id || !Number.isFinite(rating)) continue;
+        const s = (acc[id] ??= { sum: 0, count: 0 });
+        s.sum += rating;
+        s.count += 1;
+      } catch { /* skip malformed rows */ }
+    }
+    const out: Record<string, { avg: number; count: number }> = {};
+    for (const [id, s] of Object.entries(acc)) out[id] = { avg: s.sum / s.count, count: s.count };
+    return out;
+  }
+
   getAuditLogs(limit = 100, offset = 0, userId?: string): AuditEntry[] {
     const stmt = userId
       ? this.db.prepare(`SELECT * FROM audit_logs WHERE user_id = ? ORDER BY timestamp DESC LIMIT ? OFFSET ?`)

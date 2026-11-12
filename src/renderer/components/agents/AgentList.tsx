@@ -21,10 +21,12 @@ export default function AgentList() {
   const [advancedTemplate, setAdvancedTemplate] = useState<AgentTemplate | null>(null);
   const [editingAgentId, setEditingAgentId] = useState<string | null>(null);
   const [view, setView] = useState<'list' | 'org'>('list');
+  const [reputations, setReputations] = useState<Record<string, { avg: number; count: number }>>({});
 
   useEffect(() => {
     fetchAgents();
     void useAgentStore.getState().fetchExecutions();
+    window.electronAPI.getAgentReputations?.().then(setReputations).catch(() => {});
   }, [fetchAgents]);
 
   /** Avatar mood mirrors real execution state: thinking while running,
@@ -95,7 +97,7 @@ export default function AgentList() {
           </Stack>
         </Card>
       ) : view === 'org' ? (
-        <OrgChart agents={agents} onSelect={(a) => selectAgent(a.id)} />
+        <OrgChart agents={agents} reputations={reputations} onSelect={(a) => selectAgent(a.id)} />
       ) : (
         <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="md">
           {agents.map((agent) => (

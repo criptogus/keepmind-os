@@ -7,6 +7,7 @@ import type { Agent } from '../../../shared/types';
 
 interface OrgChartProps {
   agents: Agent[];
+  reputations?: Record<string, { avg: number; count: number }>;
   onSelect?: (agent: Agent) => void;
 }
 
@@ -15,7 +16,7 @@ interface OrgChartProps {
  * managerId nests its reports underneath. Cycles are impossible via the
  * IPC validation, but the visited set keeps rendering safe regardless.
  */
-export default function OrgChart({ agents, onSelect }: OrgChartProps) {
+export default function OrgChart({ agents, reputations = {}, onSelect }: OrgChartProps) {
   const { t } = useLang();
   const byId = useMemo(() => new Map(agents.map((a) => [a.id, a])), [agents]);
 
@@ -48,7 +49,14 @@ export default function OrgChart({ agents, onSelect }: OrgChartProps) {
           <Group gap="sm" wrap="nowrap">
             <BotAvatar definition={avatarForAgent(agent)} size={30} showBadge={false} />
             <div style={{ minWidth: 0 }}>
-              <Text size="sm" fw={600} lineClamp={1}>{agent.name}</Text>
+              <Group gap={6} wrap="nowrap">
+                <Text size="sm" fw={600} lineClamp={1}>{agent.name}</Text>
+                {reputations[agent.id] && (
+                  <Text size="xs" c="dimmed" style={{ whiteSpace: 'nowrap' }}>
+                    ★ {reputations[agent.id].avg.toFixed(1)} ({reputations[agent.id].count})
+                  </Text>
+                )}
+              </Group>
               <Text size="xs" c="dimmed" lineClamp={1}>
                 {manager ? `${t('org.reportsTo')} ${manager.name}` : t('org.topLevel')}
                 {agent.description ? ` · ${agent.description}` : ''}

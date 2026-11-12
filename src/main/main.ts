@@ -198,7 +198,7 @@ function seedBuiltInSkills() {
     {
       name: 'Agent Delegation',
       description: 'Delegate sub-tasks to other agents, create subordinate specialists, and review their work.',
-      prompt: 'You can hand off work to other agents with delegate_to_agent(agent, task). Use it when a sub-task benefits from a different agent persona or when work can be parallelized. Delegate focused, self-contained tasks and incorporate the returned results into your final answer. You can create a new specialist reporting to you with create_agent(name, description, systemPrompt) when a recurring sub-area deserves its own agent — a human approves each creation. After delegating, record a quality review with review_agent(agent, rating, note) so the team learns which agents perform well.',
+      prompt: 'You can hand off work to other agents with delegate_to_agent(agent, task). Use it when a sub-task benefits from a different agent persona or when work can be parallelized. Delegate focused, self-contained tasks and incorporate the returned results into your final answer. You can create a new specialist reporting to you with create_agent(name, description, systemPrompt, model?, skillNames?) when a recurring sub-area deserves its own agent — a human approves each creation. After delegating, record a quality review with review_agent(agent, rating, note) so the team learns which agents perform well.',
       toolNames: ['delegate_to_agent', 'create_agent', 'review_agent'],
     },
     {
@@ -638,10 +638,11 @@ app.whenReady().then(async () => {
       void personalBrainManager.remember(content, file).catch(() => {});
       return summary;
     },
-    delegateTask: async (agent, task) => {
+    delegateTask: async (callerAgentId, agent, task) => {
       if (activeDelegationDepth >= MAX_DELEGATION_DEPTH) {
         throw new Error(`Delegation depth limit (${MAX_DELEGATION_DEPTH}) reached`);
       }
+      const caller = callerAgentId ? storageManager.getAgent(callerAgentId) : null;
       const agents = storageManager.getAllAgents();
       const target = agents.find((a) => a.id === agent || a.name.toLowerCase() === agent.toLowerCase());
       if (!target) throw new Error(`Agent not found: ${agent}`);
@@ -650,9 +651,22 @@ app.whenReady().then(async () => {
         const execution = await runAgentExecution(target.id, {
           channel: 'delegation',
           task,
-          delegatedBy: 'agent',
+          delegatedBy: caller?.name ?? 'agent',
         });
         const content = execution.output?.content;
+        // Record the delegation edge for auditability and future org insights.
+        try {
+          storageManager.saveAuditLog({
+            id: uuidv4(),
+            timestamp: new Date().toISOString(),
+            agentId: caller?.id ?? 'system',
+            agentName: caller?.name ?? 'system',
+            action: 'agent_delegation',
+            input: { to: target.name, task: String(task).slice(0, 500) },
+            output: { executionId: execution.id, status: execution.status },
+            metadata: { targetAgentId: target.id },
+          });
+        } catch { /* delegation audit is best-effort */ }
         return typeof content === 'string' ? content : JSON.stringify(execution.output ?? {});
       } finally {
         activeDelegationDepth--;
@@ -665,6 +679,9 @@ app.whenReady().then(async () => {
       if (storageManager.getAllAgents().some((a) => a.name.toLowerCase() === name.toLowerCase())) {
         throw new Error(`An agent named "${name}" already exists`);
       }
+      const skillIds = (spec.skillNames ?? [])
+        .map((n) => storageManager.getAllSkills().find((s) => s.name.toLowerCase() === n.toLowerCase())?.id)
+        .filter((x): x is string => !!x);
       const now = new Date().toISOString();
       const agent = {
         id: uuidv4(),
@@ -672,12 +689,12 @@ app.whenReady().then(async () => {
         name,
         description: spec.description?.slice(0, 300) || `Created by ${caller?.name ?? 'an agent'}`,
         config: {
-          model: DEFAULT_MODEL.openai,
+          model: spec.model?.trim() || DEFAULT_MODEL.openai,
           temperature: 0.7,
           maxTokens: 2048,
           systemPrompt: spec.systemPrompt?.slice(0, 8000) || `You are ${name}, a specialist agent. ${spec.description ?? ''}`.trim(),
           tools: [{ name: 'delegate_to_agent', type: 'custom' as const, config: {} }],
-          skillIds: [],
+          skillIds,
         },
         capabilities: ['text_generation', 'reasoning'],
         managerId: caller?.id,
@@ -1118,6 +1135,11 @@ ipcMain.handle('auth:changePassword', (_event, userId: string, newPassword: stri
 });
 
 // Agents
+handle('agents:reputations', () => {
+  requireRole('member');
+  return storageManager.getAgentReviewStats();
+});
+
 handle('agents:getList', () => {
   const all = storageManager.getAllAgents();
   // Members only see agents shared with them (hides private system prompts).
