@@ -109,10 +109,10 @@ export default function AdvancedSettings() {
     window.electronAPI.composioGetStatus().then(setComposio).catch(() => {});
     window.electronAPI.composioListConnections().then(setComposioConnections).catch(() => {});
     const unsubUpdate = window.electronAPI.onUpdateEvent((event) => {
-      if (event.type === 'available') setUpdateState(`Update available: v${event.version}`);
-      else if (event.type === 'not-available') setUpdateState('You are on the latest version.');
-      else if (event.type === 'progress') setUpdateState(`Downloading… ${event.percent}%`);
-      else if (event.type === 'downloaded') { setUpdateState(`Update v${event.version} downloaded`); setUpdateVersion(event.version || ''); }
+      if (event.type === 'available') setUpdateState(`${t('adv2.updateAvail')}: v${event.version}`);
+      else if (event.type === 'not-available') setUpdateState(t('adv2.latestVersion'));
+      else if (event.type === 'progress') setUpdateState(`${t('adv2.downloading')} ${event.percent}%`);
+      else if (event.type === 'downloaded') { setUpdateState(`v${event.version} ${t('adv2.updateDownloaded').toLowerCase()}`); setUpdateVersion(event.version || ''); }
     });
     return () => { unsubscribe(); unsubUpdate(); };
   }, []);
@@ -142,18 +142,18 @@ export default function AdvancedSettings() {
     try {
       const result = await window.electronAPI.oauthAuthenticate(provider);
       if (result.success) {
-        alert(`${provider === 'openai' ? 'OpenAI' : 'Anthropic'} authentication successful!`);
+        alert(`${provider === 'openai' ? 'OpenAI' : 'Anthropic'} ${t('adv2.authSuccess')}`);
         checkAuthStatus();
       } else {
-        alert(`Authentication failed: ${result.error}`);
+        alert(`${t('adv2.authFailed')}: ${result.error}`);
       }
     } catch (error) {
-      alert('Authentication failed');
+      alert(t('adv2.authFailed'));
     }
   };
 
   const handleOAuthLogout = async (provider: 'openai' | 'anthropic') => {
-    if (confirm(`Logout from ${provider === 'openai' ? 'OpenAI' : 'Anthropic'}?`)) {
+    if (confirm(`${t('adv2.logout')} ${provider === 'openai' ? 'OpenAI' : 'Anthropic'}?`)) {
       await window.electronAPI.oauthLogout(provider);
       checkAuthStatus();
     }
@@ -163,11 +163,11 @@ export default function AdvancedSettings() {
     if (!key) return;
     try {
       await window.electronAPI.setApiKey(provider, key);
-      alert(`${provider === 'openai' ? 'OpenAI' : 'Anthropic'} API key saved`);
+      alert(`${provider === 'openai' ? 'OpenAI' : 'Anthropic'} ${t('adv2.keySavedAlert').toLowerCase()}`);
       if (provider === 'openai') { setOpenaiKey(''); setOpenaiHasKey(true); }
       else { setAnthropicKey(''); setAnthropicHasKey(true); }
     } catch (error) {
-      alert('Failed to save API key');
+      alert(t('adv2.keySaveFailed'));
     }
   };
 
@@ -176,9 +176,9 @@ export default function AdvancedSettings() {
       <Title order={2} size="h3">{t('adv.title')}</Title>
 
       <Card withBorder padding="md" radius="md">
-        <Title order={2} size="h4">AI Provider Authentication</Title>
+        <Title order={2} size="h4">{t('adv2.providerTitle')}</Title>
         <Text size="sm" c="dimmed">
-          Connect to AI providers using OAuth or API keys. API keys are the most reliable option.
+          {t('adv2.providerDesc')}
         </Text>
 
         <Stack gap="md">
@@ -191,7 +191,7 @@ export default function AdvancedSettings() {
                 <Group justify="space-between">
                   <Text fw={600}>{p.label}</Text>
                   <Badge color={p.auth || p.hasKey ? 'dark' : 'gray'} variant="light">
-                    {p.auth ? 'OAuth connected' : p.hasKey ? 'API key saved' : 'Not connected'}
+                    {p.auth ? t('adv2.oauthConnected') : p.hasKey ? t('adv2.keySaved') : t('adv2.notConnected')}
                   </Badge>
                 </Group>
                 <Group gap="xs">
@@ -201,17 +201,17 @@ export default function AdvancedSettings() {
                     disabled={p.auth || !p.configured}
                     onClick={() => handleOAuthLogin(p.provider)}
                   >
-                    Login with OAuth
+                    {t('adv2.loginOAuth')}
                   </Button>
                   {p.auth && (
                     <Button size="xs" variant="subtle" color="gray" onClick={() => handleOAuthLogout(p.provider)}>
-                      Logout
+                      {t('adv2.logout')}
                     </Button>
                   )}
                 </Group>
                 {!p.configured && (
                   <Text size="xs" c="dimmed">
-                    OAuth unavailable — requires a provider-approved client ID. Use an API key instead.
+                    {t('adv2.oauthUnavailable')}
                   </Text>
                 )}
                 <Group gap="xs" align="flex-end">
@@ -219,7 +219,7 @@ export default function AdvancedSettings() {
                     style={{ flex: 1 }}
                     size="xs"
                     type="password"
-                    placeholder={p.hasKey ? 'API key saved — enter a new one to replace' : `API key (${p.placeholder})`}
+                    placeholder={p.hasKey ? t('adv2.keyReplace') : `${t('adv2.apiKey')} (${p.placeholder})`}
                     value={p.key}
                     onChange={(e) => p.setKey(e.currentTarget.value)}
                   />
@@ -229,7 +229,7 @@ export default function AdvancedSettings() {
                     disabled={!p.key}
                     onClick={() => handleApiKeySave(p.provider, p.key)}
                   >
-                    Save
+                    {t('common.save')}
                   </Button>
                   {p.hasKey && (
                     <Button
@@ -237,13 +237,13 @@ export default function AdvancedSettings() {
                       variant="subtle"
                       color="gray"
                       onClick={async () => {
-                        if (confirm(`Remove the saved ${p.label} API key?`)) {
+                        if (confirm(`${t('adv2.removeKeyConfirm')} (${p.label})`)) {
                           await window.electronAPI.clearApiKey(p.provider);
                           p.setHasKey(false);
                         }
                       }}
                     >
-                      Remove
+                      {t('common.remove')}
                     </Button>
                   )}
                 </Group>
@@ -256,47 +256,47 @@ export default function AdvancedSettings() {
       <Card withBorder padding="md" radius="md">
         <Title order={2} size="h4">{t('adv.secondBrain')}</Title>
         <Text size="sm" c="dimmed">
-          Optional integration with your local KeepMind Corp server. Agents can search and store shared company knowledge.
+          {t('adv2.sbDesc')}
         </Text>
         <Card withBorder padding="md" radius="md">
           <Stack gap="sm">
             <Group justify="space-between">
-              <Text fw={600}>Status</Text>
+              <Text fw={600}>{t('adv2.status')}</Text>
               <Badge color={secondBrain?.enabled && secondBrain.hasToken ? 'dark' : 'gray'} variant="light">
-                {secondBrain?.enabled && secondBrain.hasToken ? 'Connected' : 'Not connected'}
+                {secondBrain?.enabled && secondBrain.hasToken ? t('adv2.connected') : t('adv2.notConnected')}
               </Badge>
             </Group>
             <TextInput
               size="xs"
-              label="Server URL"
+              label={t('adv2.serverUrl')}
               value={brainUrl}
               onChange={(e) => setBrainUrl(e.currentTarget.value)}
               placeholder="http://127.0.0.1:8787"
             />
             <TextInput
               size="xs"
-              label="Access token"
+              label={t('adv2.accessToken')}
               type="password"
               value={brainToken}
               onChange={(e) => setBrainToken(e.currentTarget.value)}
-              description="Leave empty to keep the existing token."
+              description={t('adv2.tokenKeepDesc')}
             />
             <Select
               size="xs"
-              label="Brain access"
-              description="Read-only blocks all writes to the corporate brain, even if the token allows them."
+              label={t('adv2.brainAccess')}
+              description={t('adv2.brainAccessDesc')}
               value={secondBrain?.access === 'read' ? 'read' : 'write'}
               onChange={(v) => {
                 const access = (v || 'write') as 'read' | 'write';
                 void window.electronAPI.secondBrainSetConfig({ access }).then(setSecondBrain).catch(() => {});
               }}
-              data={[{ value: 'read', label: 'Read-only' }, { value: 'write', label: 'Read & write' }]}
+              data={[{ value: 'read', label: t('adv2.readOnly') }, { value: 'write', label: t('adv2.readWrite') }]}
               allowDeselect={false}
             />
             <Switch
               size="xs"
-              label="Block personal data (PII guard)"
-              description="Rejects writes that look like CPF, phone or card numbers — personal info belongs in the personal brain."
+              label={t('adv2.piiGuard')}
+              description={t('adv2.piiGuardDesc')}
               checked={secondBrain?.blockPii !== false}
               onChange={(e) => {
                 void window.electronAPI.secondBrainSetConfig({ blockPii: e.currentTarget.checked }).then(setSecondBrain).catch(() => {});
@@ -307,7 +307,7 @@ export default function AdvancedSettings() {
                 size="xs"
                 variant="default"
                 onClick={async () => {
-                  setBrainStatus('Saving…');
+                  setBrainStatus(t('adv2.saving'));
                   try {
                     await window.electronAPI.secondBrainSetConfig({
                       enabled: true,
@@ -315,15 +315,15 @@ export default function AdvancedSettings() {
                       token: brainToken.trim() || undefined,
                     });
                     const res = await window.electronAPI.secondBrainTest();
-                    setBrainStatus(res.ok ? 'Connected successfully.' : `Failed: ${res.error || 'unknown error'}`);
+                    setBrainStatus(res.ok ? t('adv2.connectedOk') : `${t('adv2.failed')}: ${res.error || t('adv2.unknownErr')}`);
                     setSecondBrain(await window.electronAPI.secondBrainGetConfig());
                     setBrainToken('');
                   } catch (e) {
-                    setBrainStatus(`Failed: ${e instanceof Error ? e.message : 'unknown error'}`);
+                    setBrainStatus(`${t('adv2.failed')}: ${e instanceof Error ? e.message : t('adv2.unknownErr')}`);
                   }
                 }}
               >
-                Save &amp; test
+                {t('adv2.saveTest')}
               </Button>
               {secondBrain?.enabled && (
                 <Button
@@ -333,10 +333,10 @@ export default function AdvancedSettings() {
                   onClick={async () => {
                     await window.electronAPI.secondBrainSetConfig({ enabled: false });
                     setSecondBrain(await window.electronAPI.secondBrainGetConfig());
-                    setBrainStatus('Disabled.');
+                    setBrainStatus(t('adv2.disabled'));
                   }}
                 >
-                  Disconnect
+                  {t('adv2.disconnect')}
                 </Button>
               )}
             </Group>
@@ -348,14 +348,14 @@ export default function AdvancedSettings() {
       <Card withBorder padding="md" radius="md">
         <Title order={2} size="h4">{t('adv.whatsapp')}</Title>
         <Text size="sm" c="dimmed">
-          Connect WhatsApp by scanning a QR code with your phone (WhatsApp → Settings → Linked devices). Uses the unofficial Baileys client.
+          {t('adv2.waDesc')}
         </Text>
         <Card withBorder padding="md" radius="md">
           <Stack gap="sm">
             <Group justify="space-between">
-              <Text fw={600}>Connection</Text>
+              <Text fw={600}>{t('adv2.connection')}</Text>
               <Badge color={waStatus === 'connected' ? 'dark' : 'gray'} variant="light">
-                {waStatus === 'connected' ? `Connected${waPhone ? ` · +${waPhone}` : ''}` : waStatus}
+                {waStatus === 'connected' ? `${t('adv2.connected')}${waPhone ? ` · +${waPhone}` : ''}` : waStatus}
               </Badge>
             </Group>
             {waStatus === 'qr' && waQr && (
@@ -363,17 +363,17 @@ export default function AdvancedSettings() {
                 <Image src={waQr} w={240} h={240} radius="md" alt="WhatsApp QR code" />
               </div>
             )}
-            {waStatus === 'connecting' && <Text size="xs" c="dimmed">Connecting…</Text>}
+            {waStatus === 'connecting' && <Text size="xs" c="dimmed">{t('adv2.connecting')}</Text>}
             {waError && <Text size="xs" c="dimmed">Error: {waError}</Text>}
             <Group gap="xs">
               {waStatus !== 'connected' && waStatus !== 'connecting' && (
                 <Button size="xs" variant="default" onClick={() => { setWaQr(''); setWaError(''); void window.electronAPI.whatsappStart(); }}>
-                  Connect
+                  {t('adv2.connect')}
                 </Button>
               )}
               {(waStatus === 'connected' || waStatus === 'connecting' || waStatus === 'qr') && (
                 <Button size="xs" variant="subtle" color="gray" onClick={() => void window.electronAPI.whatsappStop()}>
-                  Disconnect
+                  {t('adv2.disconnect')}
                 </Button>
               )}
             </Group>
@@ -381,7 +381,7 @@ export default function AdvancedSettings() {
               <>
                 <TextInput
                   size="xs"
-                  label="Send message to (phone with country code)"
+                  label={t('adv2.sendTo')}
                   placeholder="5511999999999"
                   value={waSendTo}
                   onChange={(e) => setWaSendTo(e.currentTarget.value)}
@@ -390,7 +390,7 @@ export default function AdvancedSettings() {
                   <TextInput
                     style={{ flex: 1 }}
                     size="xs"
-                    label="Message"
+                    label={t('adv2.message')}
                     value={waSendText}
                     onChange={(e) => setWaSendText(e.currentTarget.value)}
                     onKeyDown={(e) => {
@@ -408,11 +408,11 @@ export default function AdvancedSettings() {
                         await window.electronAPI.whatsappSendMessage(waSendTo, waSendText);
                         setWaSendText('');
                       } catch (e) {
-                        setWaError(e instanceof Error ? e.message : 'send failed');
+                        setWaError(e instanceof Error ? e.message : t('adv2.sendFailed'));
                       }
                     }}
                   >
-                    Send
+                    {t('adv2.send')}
                   </Button>
                 </Group>
               </>
@@ -420,17 +420,17 @@ export default function AdvancedSettings() {
             {waMessages.length > 0 && (
               <div>
                 <Group justify="space-between" mb={4}>
-                  <Text size="xs" fw={600}>Message history (stored locally)</Text>
+                  <Text size="xs" fw={600}>{t('adv2.history')}</Text>
                   <Button size="compact-xs" variant="subtle" color="gray" onClick={() => {
                     void window.electronAPI.whatsappClearMessages().then(() => setWaMessages([]));
-                  }}>Clear</Button>
+                  }}>{t('adv2.clear')}</Button>
                 </Group>
                 <Text size="xs" c="dimmed" mb={4}>
-                  Incoming WhatsApp messages are saved to the local database and indexed into the second brain when the auto-responder agent has second-brain tools.
+                  {t('adv2.historyDesc')}
                 </Text>
                 {waMessages.slice(0, 20).map((m, i) => (
                   <Text key={i} size="xs" c="dimmed">
-                    {m.direction === 'out' ? 'You' : `+${m.from}`}: {m.text}
+                    {m.direction === 'out' ? t('adv2.you') : `+${m.from}`}: {m.text}
                   </Text>
                 ))}
               </div>
@@ -440,17 +440,17 @@ export default function AdvancedSettings() {
       </Card>
 
       <Card withBorder padding="md" radius="md">
-        <Title order={2} size="h4">Composio Integrations</Title>
+        <Title order={2} size="h4">{t('adv2.composioTitle')}</Title>
         <Text size="sm" c="dimmed">
-          Connect company apps (Gmail, Calendar, Slack, Notion…) via Composio. Each person connects their own account — the company API key is entered once here by an admin.
+          {t('adv2.composioDesc')}
         </Text>
         <Card withBorder padding="md" radius="md">
           <Stack gap="sm">
             <Group justify="space-between">
-              <Text fw={600}>API key</Text>
+              <Text fw={600}>{t('adv2.apiKey')}</Text>
               {composio && (
                 <Badge color={composio.configured ? 'dark' : 'gray'} variant="light">
-                  {composio.configured ? `Configured ${composio.keyHint || ''}` : 'Not configured'}
+                  {composio.configured ? `${t('adv2.configured')} ${composio.keyHint || ''}` : t('adv2.notConfigured')}
                 </Badge>
               )}
             </Group>
@@ -458,7 +458,7 @@ export default function AdvancedSettings() {
               <PasswordInput
                 style={{ flex: 1 }}
                 size="xs"
-                label="Composio project API key"
+                label={t('adv2.composioKeyLabel')}
                 placeholder="ak_…"
                 value={composioKey}
                 onChange={(e) => setComposioKey(e.currentTarget.value)}
@@ -472,13 +472,13 @@ export default function AdvancedSettings() {
                     const r = await window.electronAPI.composioSetApiKey(composioKey);
                     setComposio(r);
                     setComposioKey('');
-                    setComposioMsg('Key saved.');
+                    setComposioMsg(t('adv2.keySavedMsg'));
                   } catch (e) {
-                    setComposioMsg(e instanceof Error ? e.message : 'Failed to save key');
+                    setComposioMsg(e instanceof Error ? e.message : t('adv2.saveKeyFailed'));
                   }
                 }}
               >
-                Save
+                {t('common.save')}
               </Button>
               {composio?.configured && (
                 <Button
@@ -491,7 +491,7 @@ export default function AdvancedSettings() {
                     setComposioConnections([]);
                   }}
                 >
-                  Remove
+                  {t('common.remove')}
                 </Button>
               )}
             </Group>
@@ -503,10 +503,10 @@ export default function AdvancedSettings() {
                   onClick={async () => {
                     setComposioMsg('');
                     const r = await window.electronAPI.composioTest();
-                    setComposioMsg(r.ok ? 'Connection OK.' : `Failed: ${r.error || 'unknown'}`);
+                    setComposioMsg(r.ok ? t('adv2.connOk') : `${t('adv2.failed')}: ${r.error || t('adv2.unknownErr')}`);
                   }}
                 >
-                  Test connection
+                  {t('adv2.testConn')}
                 </Button>
               </Group>
             )}
@@ -518,8 +518,8 @@ export default function AdvancedSettings() {
                   <Select
                     style={{ flex: 1 }}
                     size="xs"
-                    label="Connect an app"
-                    placeholder={composioToolkits.length ? 'Choose an app…' : 'Type slug (e.g. gmail)'}
+                    label={t('adv2.connectApp')}
+                    placeholder={composioToolkits.length ? t('adv2.chooseApp') : t('adv2.typeSlug')}
                     data={composioToolkits.map((t) => ({ value: t.slug, label: t.name }))}
                     value={composioToolkit || null}
                     onChange={(v) => setComposioToolkit(v || '')}
@@ -539,15 +539,15 @@ export default function AdvancedSettings() {
                       setComposioMsg('');
                       try {
                         await window.electronAPI.composioConnect(composioToolkit);
-                        setComposioMsg('Authorization opened in your browser — finish it there, then refresh.');
+                        setComposioMsg(t('adv2.authOpened'));
                         const conns = await window.electronAPI.composioListConnections();
                         setComposioConnections(conns);
                       } catch (e) {
-                        setComposioMsg(e instanceof Error ? e.message : 'Connect failed');
+                        setComposioMsg(e instanceof Error ? e.message : t('adv2.connectFailed'));
                       }
                     }}
                   >
-                    Connect
+                    {t('adv2.connect')}
                   </Button>
                   <Button
                     size="compact-xs"
@@ -555,7 +555,7 @@ export default function AdvancedSettings() {
                     color="gray"
                     onClick={async () => setComposioConnections(await window.electronAPI.composioListConnections())}
                   >
-                    Refresh
+                    {t('common.refresh')}
                   </Button>
                 </Group>
                 {composioConnections.length > 0 && (
@@ -575,14 +575,14 @@ export default function AdvancedSettings() {
                             setComposioConnections(await window.electronAPI.composioListConnections());
                           }}
                         >
-                          Disconnect
+                          {t('adv2.disconnect')}
                         </Button>
                       </Group>
                     ))}
                   </Stack>
                 )}
                 <Text size="xs" c="dimmed">
-                  Agents can then use composio_search_tools / composio_execute — the execute tool requires approval in Governance.
+                  {t('adv2.composioHint')}
                 </Text>
               </>
             )}
@@ -592,15 +592,15 @@ export default function AdvancedSettings() {
 
       <Card withBorder padding="md" radius="md">
         <Group justify="space-between" mb={4}>
-          <Title order={2} size="h4">Agent Reach</Title>
+          <Title order={2} size="h4">{t('adv2.arTitle')}</Title>
           {arStatus && (
             <Badge color={arStatus.installed ? 'dark' : 'gray'} variant="light">
-              {arStatus.installed ? 'Installed' : 'Not installed'}
+              {arStatus.installed ? t('adv2.installed') : t('adv2.notInstalled')}
             </Badge>
           )}
         </Group>
         <Text size="sm" c="dimmed" mb="sm">
-          Multi-platform read/search for agents (X, Reddit, YouTube, GitHub, LinkedIn, web…) via the local agent-reach CLI and real session credentials — content is fetched as the user, not as a bot.
+          {t('adv2.arDesc')}
         </Text>
         {arStatus?.installed && arStatus.channels.length > 0 && (
           <Group gap={6} mb="sm">
@@ -613,11 +613,11 @@ export default function AdvancedSettings() {
         )}
         {!arStatus?.installed && (
           <Text size="xs" c="dimmed">
-            Install: <Text span ff="monospace">pip install agent-reach</Text> then run <Text span ff="monospace">agent-reach doctor</Text>. The "Agent Reach — Internet Access" skill teaches agents the per-platform commands.
+            {t('adv2.arInstall')} <Text span ff="monospace">pip install agent-reach</Text> {t('adv2.arThen')} <Text span ff="monospace">agent-reach doctor</Text>. {t('adv2.arSkillHint')}
           </Text>
         )}
         <Button size="xs" variant="default" onClick={() => void window.electronAPI.agentReachStatus().then(setArStatus)}>
-          Re-check status
+          {t('adv2.recheck')}
         </Button>
       </Card>
 
@@ -625,19 +625,19 @@ export default function AdvancedSettings() {
         <Card withBorder padding="md" radius="md">
           <Title order={3} size="h5" mb="md">{t('adv.users')}</Title>
           <Text size="sm" c="dimmed" mb="md">
-            Enable multi-user mode: create the owner account, then invite members and admins. Once enabled, everyone must sign in.
+            {t('adv2.ownerDesc')}
           </Text>
           <Stack gap="xs" maw={420}>
-            <TextInput size="xs" label="Your name" value={ownerForm.name} onChange={(e) => setOwnerForm({ ...ownerForm, name: e.currentTarget.value })} />
-            <TextInput size="xs" label="Email" type="email" value={ownerForm.email} onChange={(e) => setOwnerForm({ ...ownerForm, email: e.currentTarget.value })} />
-            <PasswordInput size="xs" label="Password (min 6 chars)" value={ownerForm.password} onChange={(e) => setOwnerForm({ ...ownerForm, password: e.currentTarget.value })} />
+            <TextInput size="xs" label={t('adv2.yourName')} value={ownerForm.name} onChange={(e) => setOwnerForm({ ...ownerForm, name: e.currentTarget.value })} />
+            <TextInput size="xs" label={t('login.email')} type="email" value={ownerForm.email} onChange={(e) => setOwnerForm({ ...ownerForm, email: e.currentTarget.value })} />
+            <PasswordInput size="xs" label={t('adv2.passwordMin')} value={ownerForm.password} onChange={(e) => setOwnerForm({ ...ownerForm, password: e.currentTarget.value })} />
             <Group justify="flex-end">
               <Button size="xs" disabled={!ownerForm.name || !ownerForm.email || ownerForm.password.length < 6}
                 onClick={async () => {
                   await window.electronAPI.authSetupOwner(ownerForm);
                   window.location.reload();
                 }}>
-                Create owner &amp; enable users
+                {t('adv2.createOwner')}
               </Button>
             </Group>
           </Stack>
@@ -666,23 +666,23 @@ export default function AdvancedSettings() {
                 <Button size="compact-xs" variant="subtle" color="gray"
                   disabled={u.id === authInfo.currentUser?.id}
                   onClick={async () => {
-                    if (!confirm(`Remove ${u.email}?`)) return;
+                    if (!confirm(`${t('adv2.removeUserConfirm')}: ${u.email}?`)) return;
                     await window.electronAPI.authDeleteUser(u.id).catch((e) => alert(e.message));
                     setUsers(await window.electronAPI.authListUsers());
-                  }}>Remove</Button>
+                  }}>{t('common.remove')}</Button>
               </Group>
             ))}
             <Card withBorder padding="sm" radius="sm" mt="xs" style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
-              <Text size="xs" fw={600} mb={6}>Invite user</Text>
+              <Text size="xs" fw={600} mb={6}>{t('adv2.inviteUser')}</Text>
               <Stack gap={6}>
                 <Group gap={6} grow>
-                  <TextInput size="xs" placeholder="Name" value={newUser.name} onChange={(e) => setNewUser({ ...newUser, name: e.currentTarget.value })} />
-                  <TextInput size="xs" placeholder="Email" value={newUser.email} onChange={(e) => setNewUser({ ...newUser, email: e.currentTarget.value })} />
+                  <TextInput size="xs" placeholder={t('common.name')} value={newUser.name} onChange={(e) => setNewUser({ ...newUser, name: e.currentTarget.value })} />
+                  <TextInput size="xs" placeholder={t('login.email')} value={newUser.email} onChange={(e) => setNewUser({ ...newUser, email: e.currentTarget.value })} />
                 </Group>
                 <Group gap={6} grow>
                   <Select size="xs" data={['member', 'admin']} value={newUser.role} allowDeselect={false}
                     onChange={(v) => setNewUser({ ...newUser, role: (v || 'member') as UserRole })} />
-                  <PasswordInput size="xs" placeholder="Password" value={newUser.password} onChange={(e) => setNewUser({ ...newUser, password: e.currentTarget.value })} />
+                  <PasswordInput size="xs" placeholder={t('login.password')} value={newUser.password} onChange={(e) => setNewUser({ ...newUser, password: e.currentTarget.value })} />
                 </Group>
                 <Group justify="flex-end">
                   <Button size="xs" disabled={!newUser.name || !newUser.email || newUser.password.length < 6}
@@ -690,7 +690,7 @@ export default function AdvancedSettings() {
                       await window.electronAPI.authCreateUser(newUser).catch((e) => alert(e.message));
                       setNewUser({ name: '', email: '', role: 'member', password: '' });
                       setUsers(await window.electronAPI.authListUsers());
-                    }}>Add user</Button>
+                    }}>{t('adv2.addUser')}</Button>
                 </Group>
               </Stack>
             </Card>
@@ -702,24 +702,24 @@ export default function AdvancedSettings() {
         <Card withBorder padding="md" radius="md">
           <Title order={3} size="h5" mb="md">{t('adv.computerAccess')}</Title>
           <Text size="sm" c="dimmed" mb="md">
-            Maximum access agents get on this machine. Agents can only reduce it via their own computer access setting; members are always capped at workspace.
+            {t('adv2.caDesc')}
           </Text>
           <Stack gap="xs" maw={520}>
             <Select
-              size="xs" label="Access level" allowDeselect={false}
+              size="xs" label={t('adv2.accessLevel')} allowDeselect={false}
               data={[
-                { value: 'workspace', label: 'Workspace only — files inside the app workspace, no shell' },
-                { value: 'authorized', label: 'Authorized — approved folders + shell allowlist' },
-                { value: 'full', label: 'Full — whole disk + unrestricted shell' },
+                { value: 'workspace', label: t('adv2.level.workspace') },
+                { value: 'authorized', label: t('adv2.level.authorized') },
+                { value: 'full', label: t('adv2.level.full') },
               ]}
               value={computer.level}
               onChange={(v) => setComputer({ ...computer, level: (v || 'workspace') as ComputerAccessLevel })}
             />
-            <TextInput size="xs" label="Allowed roots (comma-separated paths)" description="Used by 'Authorized' level."
+            <TextInput size="xs" label={t('adv2.allowedRoots')} description={t('adv2.allowedRootsDesc')}
               value={computer.allowedRoots} onChange={(e) => setComputer({ ...computer, allowedRoots: e.currentTarget.value })} />
-            <TextInput size="xs" label="Shell allowlist (command prefixes)" description="Used by 'Authorized' level; empty = no shell commands."
+            <TextInput size="xs" label={t('adv2.shellAllow')} description={t('adv2.shellAllowDesc')}
               value={computer.shellAllow} onChange={(e) => setComputer({ ...computer, shellAllow: e.currentTarget.value })} />
-            <TextInput size="xs" label="Shell denylist (patterns)" description="Always blocked regardless of level."
+            <TextInput size="xs" label={t('adv2.shellDeny')} description={t('adv2.shellDenyDesc')}
               value={computer.shellDeny} onChange={(e) => setComputer({ ...computer, shellDeny: e.currentTarget.value })} />
             <Group justify="flex-end">
               <Button size="xs" onClick={async () => {
@@ -731,7 +731,7 @@ export default function AdvancedSettings() {
                   shellDeny: parse(computer.shellDeny),
                 }).catch((e) => { alert(e.message); return null; });
                 if (res) setBrainMsg('');
-              }}>Save</Button>
+              }}>{t('common.save')}</Button>
             </Group>
           </Stack>
         </Card>
@@ -740,26 +740,26 @@ export default function AdvancedSettings() {
       <Card withBorder padding="md" radius="md">
         <Title order={3} size="h5" mb="md">{t('adv.brainsGithub')}</Title>
         <Text size="sm" c="dimmed" mb="md">
-          The <b>corporate brain</b> (KeepMind Corp) holds shared company knowledge. Your <b>personal brain</b> is a local vault on this machine — personal data never goes to the corporate brain.
+          {t('adv2.brainsDescPre')} <b>{t('adv2.corpBrain')}</b> {t('adv2.brainsDescMid')} <b>{t('adv2.personalBrain')}</b> {t('adv2.brainsDescPost')}
         </Text>
         <Stack gap="md">
           <Card withBorder padding="sm" radius="sm">
-            <Text size="xs" fw={600} mb={6}>Corporate brain — request GitHub access</Text>
+            <Text size="xs" fw={600} mb={6}>{t('adv2.corpBrainReq')}</Text>
             <Text size="xs" c="dimmed" mb={8}>
-              Requests access to <Text span ff="monospace">criptogus/keepmind-corp</Text>. An admin approves here; the actual GitHub invite is granted by the repo owner.
+              {t('adv2.corpBrainDescPre')} <Text span ff="monospace">criptogus/keepmind-corp</Text>. {t('adv2.corpBrainDescPost')}
             </Text>
             <Group gap={6} align="flex-end">
-              <Select size="xs" w={130} label="Scope" value={brainAccess} allowDeselect={false}
+              <Select size="xs" w={130} label={t('govr.scope')} value={brainAccess} allowDeselect={false}
                 onChange={(v) => setBrainAccess((v || 'read') as 'read' | 'write')}
-                data={[{ value: 'read', label: 'Read' }, { value: 'write', label: 'Read & write' }]} />
-              <TextInput size="xs" style={{ flex: 1 }} placeholder="Reason (optional)" value={brainReason}
+                data={[{ value: 'read', label: t('adv2.read') }, { value: 'write', label: t('adv2.readWrite') }]} />
+              <TextInput size="xs" style={{ flex: 1 }} placeholder={t('adv2.reasonPh')} value={brainReason}
                 onChange={(e) => setBrainReason(e.currentTarget.value)} />
               <Button size="xs" variant="default"
                 onClick={async () => {
                   await window.electronAPI.brainRequestCorporateAccess({ scope: brainAccess, reason: brainReason || undefined }).catch((e) => alert(e.message));
                   setBrainRequests(await window.electronAPI.brainListRequests());
                   setBrainReason('');
-                }}>Request access</Button>
+                }}>{t('adv2.requestAccess')}</Button>
             </Group>
             {brainRequests.length > 0 && (
               <Stack gap={4} mt="xs">
@@ -776,12 +776,12 @@ export default function AdvancedSettings() {
                           onClick={async () => {
                             await window.electronAPI.brainDecideRequest(String(r.id), 'approved').catch((e) => alert(e.message));
                             setBrainRequests(await window.electronAPI.brainListRequests());
-                          }}>Approve</Button>
+                          }}>{t('common.approve')}</Button>
                         <Button size="compact-xs" variant="subtle" color="gray"
                           onClick={async () => {
                             await window.electronAPI.brainDecideRequest(String(r.id), 'rejected').catch((e) => alert(e.message));
                             setBrainRequests(await window.electronAPI.brainListRequests());
-                          }}>Reject</Button>
+                          }}>{t('common.reject')}</Button>
                       </Group>
                     )}
                   </Group>
@@ -791,19 +791,19 @@ export default function AdvancedSettings() {
           </Card>
 
           <Card withBorder padding="sm" radius="sm">
-            <Text size="xs" fw={600} mb={6}>Personal brain — private GitHub repo</Text>
+            <Text size="xs" fw={600} mb={6}>{t('adv2.personalRepo')}</Text>
             <Text size="xs" c="dimmed" mb={8}>
-              {personalBrain ? <>Local vault: <Text span ff="monospace">{personalBrain.dir}</Text> ({personalBrain.files.length} files)</> : 'Local vault on this machine.'}
+              {personalBrain ? <>{t('adv2.localVault')}: <Text span ff="monospace">{personalBrain.dir}</Text> ({personalBrain.files.length} {t('adv2.files')})</> : t('adv2.vaultLocal')}
             </Text>
             <Group gap={6}>
-              <Button size="xs" variant="default" onClick={() => void window.electronAPI.personalBrainOpenFolder()}>Open folder</Button>
+              <Button size="xs" variant="default" onClick={() => void window.electronAPI.personalBrainOpenFolder()}>{t('adv2.openFolder')}</Button>
               <Button size="xs" variant="default"
                 onClick={async () => {
-                  setBrainMsg('Creating private repo via gh…');
+                  setBrainMsg(t('adv2.creatingRepo'));
                   const res = await window.electronAPI.brainCreatePersonalRepo().catch((e): { ok: boolean; repo?: string; url?: string; error?: string } => ({ ok: false, error: e instanceof Error ? e.message : String(e) }));
-                  setBrainMsg(res.ok ? `Created ${res.repo} → ${res.url}` : `Failed: ${res.error || 'unknown'}`);
+                  setBrainMsg(res.ok ? `${t('adv2.created')} ${res.repo} → ${res.url}` : `${t('adv2.failed')}: ${res.error || t('adv2.unknownErr')}`);
                   setPersonalBrain(await window.electronAPI.personalBrainStatus().catch(() => personalBrain));
-                }}>Create private GitHub repo</Button>
+                }}>{t('adv2.createRepo')}</Button>
             </Group>
             {brainMsg && <Text size="xs" c="dimmed" mt={6}>{brainMsg}</Text>}
           </Card>
@@ -813,13 +813,13 @@ export default function AdvancedSettings() {
       <Card withBorder padding="md" radius="md">
         <Title order={3} size="h5" mb="md">{t('adv.appearance')}</Title>
         <Select
-          label="Theme"
+          label={t('adv2.theme')}
           value={theme}
           onChange={(v) => setTheme((v || 'light') as typeof theme)}
           data={[
-            { value: 'light', label: 'Light' },
-            { value: 'dark', label: 'Dark' },
-            { value: 'auto', label: 'Auto (System)' },
+            { value: 'light', label: t('adv2.themeLight') },
+            { value: 'dark', label: t('adv2.themeDark') },
+            { value: 'auto', label: t('adv2.themeAuto') },
           ]}
           allowDeselect={false}
           style={{ maxWidth: 280 }}
@@ -827,41 +827,41 @@ export default function AdvancedSettings() {
       </Card>
 
       <Card withBorder padding="md" radius="md">
-        <Title order={3} size="h5" mb="md">Execution</Title>
+        <Title order={3} size="h5" mb="md">{t('adv2.execution')}</Title>
         <Switch
-          label="Auto-approve actions"
+          label={t('adv2.autoApprove')}
           checked={settings.autoApprove}
           onChange={(e) => updateSettings({ autoApprove: e.currentTarget.checked })}
         />
         <Text size="xs" c="dimmed" mt={4}>
-          Warning: Disabling manual approval reduces security oversight
+          {t('adv2.autoApproveWarn')}
         </Text>
       </Card>
 
       <Card withBorder padding="md" radius="md">
         <Title order={3} size="h5" mb="md">{t('adv.automation')}</Title>
         <Text size="sm" c="dimmed" mb="md">
-          Scheduled triggers run agents autonomously. WhatsApp auto-responder answers incoming messages with a chosen agent.
+          {t('adv2.automationDesc')}
         </Text>
         <Stack gap={4} mb="md">
           <Switch
             size="xs"
-            label="Auto-route skills"
-            description="Automatically activates relevant skills based on each task."
+            label={t('adv2.autoSkills')}
+            description={t('adv2.autoSkillsDesc')}
             checked={settings.skillsAutoRoute !== false}
             onChange={(e) => updateSettings({ skillsAutoRoute: e.currentTarget.checked })}
           />
           <Switch
             size="xs"
-            label="Auto-route LLM model"
-            description="Picks a cheaper or stronger model per task within the same provider."
+            label={t('adv2.autoModel')}
+            description={t('adv2.autoModelDesc')}
             checked={settings.llmAutoRoute !== false}
             onChange={(e) => updateSettings({ llmAutoRoute: e.currentTarget.checked })}
           />
           <Switch
             size="xs"
-            label="Require approval for sensitive tools"
-            description="Shell commands, file writes, URL opens, WhatsApp messages and agent delegation wait for human approval."
+            label={t('adv2.approvalSensitive')}
+            description={t('adv2.approvalSensitiveDesc')}
             checked={settings.toolApprovalRequired !== false}
             onChange={(e) => updateSettings({ toolApprovalRequired: e.currentTarget.checked })}
           />
@@ -869,9 +869,9 @@ export default function AdvancedSettings() {
         <Stack gap="sm">
           <Select
             size="xs"
-            label="WhatsApp auto-responder agent"
-            description="When connected, incoming WhatsApp messages are answered by this agent."
-            placeholder="Disabled"
+            label={t('adv2.waAgent')}
+            description={t('adv2.waAgentDesc')}
+            placeholder={t('adv2.disabledPh')}
             clearable
             data={agents.map((a) => ({ value: a.id, label: a.name }))}
             value={waAgentId || null}
@@ -881,37 +881,37 @@ export default function AdvancedSettings() {
               void window.electronAPI.triggersSetWhatsAppAgent(id);
             }}
           />
-          {triggers.map((t) => (
-            <Group key={t.id} justify="space-between" wrap="nowrap">
+          {triggers.map((tr) => (
+            <Group key={tr.id} justify="space-between" wrap="nowrap">
               <div style={{ flex: 1, minWidth: 0 }}>
-                <Text size="sm" fw={500}>{t.name}</Text>
+                <Text size="sm" fw={500}>{tr.name}</Text>
                 <Text size="xs" c="dimmed">
-                  {t.kind === 'interval' ? `every ${t.intervalMinutes}min` : `daily at ${t.timeOfDay}`}
-                  {t.lastRunAt ? ` · last run ${new Date(t.lastRunAt).toLocaleString()}` : ''}
+                  {tr.kind === 'interval' ? `${t('adv2.every')} ${tr.intervalMinutes}min` : `${t('adv2.dailyAt')} ${tr.timeOfDay}`}
+                  {tr.lastRunAt ? ` · ${t('adv2.lastRun')} ${new Date(tr.lastRunAt).toLocaleString()}` : ''}
                 </Text>
               </div>
               <Switch
                 size="xs"
-                checked={t.enabled}
+                checked={tr.enabled}
                 onChange={(e) => {
-                  void window.electronAPI.triggersUpdate(t.id, { enabled: e.currentTarget.checked }).then(() =>
+                  void window.electronAPI.triggersUpdate(tr.id, { enabled: e.currentTarget.checked }).then(() =>
                     window.electronAPI.triggersList().then(setTriggers)
                   );
                 }}
               />
               <Button size="compact-xs" variant="subtle" color="gray" onClick={async () => {
-                await window.electronAPI.triggersDelete(t.id);
+                await window.electronAPI.triggersDelete(tr.id);
                 setTriggers(await window.electronAPI.triggersList());
-              }}>Delete</Button>
+              }}>{t('common.delete')}</Button>
             </Group>
           ))}
           <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
             <Stack gap="xs">
-              <Text size="xs" fw={600}>New trigger</Text>
-              <TextInput size="xs" placeholder="Name" value={newTrigger.name} onChange={(e) => setNewTrigger({ ...newTrigger, name: e.currentTarget.value })} />
+              <Text size="xs" fw={600}>{t('adv2.newTrigger')}</Text>
+              <TextInput size="xs" placeholder={t('common.name')} value={newTrigger.name} onChange={(e) => setNewTrigger({ ...newTrigger, name: e.currentTarget.value })} />
               <Select
                 size="xs"
-                placeholder="Agent"
+                placeholder={t('common.agent')}
                 data={agents.map((a) => ({ value: a.id, label: a.name }))}
                 value={newTrigger.agentId || null}
                 onChange={(v) => setNewTrigger({ ...newTrigger, agentId: v || '' })}
@@ -921,7 +921,7 @@ export default function AdvancedSettings() {
                   size="xs"
                   value={newTrigger.kind}
                   onChange={(v) => setNewTrigger({ ...newTrigger, kind: (v || 'interval') as 'interval' | 'daily' })}
-                  data={[{ value: 'interval', label: 'Every N minutes' }, { value: 'daily', label: 'Daily at time' }]}
+                  data={[{ value: 'interval', label: t('adv2.triggerKind.interval') }, { value: 'daily', label: t('adv2.triggerKind.daily') }]}
                   allowDeselect={false}
                   style={{ width: 160 }}
                 />
@@ -931,7 +931,7 @@ export default function AdvancedSettings() {
                   <TextInput size="xs" type="time" value={newTrigger.timeOfDay} onChange={(e) => setNewTrigger({ ...newTrigger, timeOfDay: e.currentTarget.value })} style={{ width: 110 }} />
                 )}
               </Group>
-              <TextInput size="xs" placeholder="Task prompt (what the agent should do each run)" value={newTrigger.prompt} onChange={(e) => setNewTrigger({ ...newTrigger, prompt: e.currentTarget.value })} />
+              <TextInput size="xs" placeholder={t('adv2.taskPromptPh')} value={newTrigger.prompt} onChange={(e) => setNewTrigger({ ...newTrigger, prompt: e.currentTarget.value })} />
               <Group justify="flex-end">
                 <Button
                   size="xs"
@@ -950,7 +950,7 @@ export default function AdvancedSettings() {
                     setNewTrigger({ name: '', agentId: '', kind: 'interval', intervalMinutes: 60, timeOfDay: '09:00', prompt: '' });
                   }}
                 >
-                  Add trigger
+                  {t('adv2.addTrigger')}
                 </Button>
               </Group>
             </Stack>
@@ -965,16 +965,16 @@ export default function AdvancedSettings() {
             size="xs"
             variant="default"
             onClick={async () => {
-              setUpdateState('Checking…');
+              setUpdateState(t('adv2.checking'));
               const res = await window.electronAPI.updateCheck();
-              if (!res.ok) setUpdateState(`Update check failed: ${res.error || 'no update feed configured'}`);
+              if (!res.ok) setUpdateState(`${t('adv2.updateCheckFailed')}: ${res.error || t('adv2.noFeed')}`);
             }}
           >
-            Check for updates
+            {t('adv2.checkUpdates')}
           </Button>
           {updateVersion && (
             <Button size="xs" onClick={() => void window.electronAPI.updateInstall()}>
-              Restart &amp; install
+              {t('adv2.restartInstall')}
             </Button>
           )}
         </Group>
@@ -989,23 +989,23 @@ export default function AdvancedSettings() {
             variant="default"
             onClick={async () => {
               const res = await window.electronAPI.dataExport();
-              if (res.ok && res.path) alert(`Backup saved to:\n${res.path}`);
-              else if (res.error) alert(`Export failed: ${res.error}`);
+              if (res.ok && res.path) alert(`${t('adv2.backupSaved')}\n${res.path}`);
+              else if (res.error) alert(`${t('adv2.exportFailed')}: ${res.error}`);
             }}
           >
-            Export Data
+            {t('adv2.exportData')}
           </Button>
           <Button
             size="xs"
             variant="default"
             onClick={async () => {
-              if (!confirm('Import will REPLACE all current data with the backup file. Continue?')) return;
+              if (!confirm(t('adv2.importConfirm'))) return;
               const res = await window.electronAPI.dataImport();
-              if (res.ok) alert('Data imported. Restart the app to see changes.');
-              else if (res.error) alert(`Import failed: ${res.error}`);
+              if (res.ok) alert(t('adv2.imported'));
+              else if (res.error) alert(`${t('adv2.importFailed')}: ${res.error}`);
             }}
           >
-            Import Data
+            {t('adv2.importData')}
           </Button>
         </Group>
       </Card>

@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { Button, Card, Group, Stack, Text, Title } from '@mantine/core';
 import { useTeamStore } from '../../store/teamStore';
 import type { Team } from '../../../shared/types.js';
+import { useLang } from '../../lib/i18n';
 
 interface TeamExecutionViewProps {
   team: Team;
 }
 
 export default function TeamExecutionView({ team }: TeamExecutionViewProps) {
+  const { t } = useLang();
   const { executeTeam, loading, error } = useTeamStore();
   const [input, setInput] = useState('{}');
   const [result, setResult] = useState<{
@@ -29,22 +31,22 @@ export default function TeamExecutionView({ team }: TeamExecutionViewProps) {
       const executionResult = await executeTeam(team.id, parsedInput);
       setResult(executionResult);
     } catch (err) {
-      alert('Invalid JSON input');
+      alert(t('ae.invalidJson'));
     }
   };
 
   return (
     <Stack gap="md">
       <Group justify="space-between">
-        <Title order={3} size="h5">Execute Team: {team.name}</Title>
-        <Button size="xs" onClick={handleExecute} loading={loading}>Execute Team</Button>
+        <Title order={3} size="h5">{t('tex.executeTeam')}: {team.name}</Title>
+        <Button size="xs" onClick={handleExecute} loading={loading}>{t('tex.executeTeam')}</Button>
       </Group>
 
       {error && <Text size="sm" c="dimmed">{error}</Text>}
 
       <Card withBorder padding="md" radius="md">
         <Stack gap="sm">
-          <Text size="sm" fw={600}>Input (JSON)</Text>
+          <Text size="sm" fw={600}>{t('tex.input')}</Text>
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -92,7 +94,7 @@ export default function TeamExecutionView({ team }: TeamExecutionViewProps) {
             ))}
           </Stack>
           <Text size="sm" c="dimmed">
-            Duration: {result.duration}ms | Status: {result.status}
+            {t('tex.duration')}: {result.duration}ms | {t('common.status')}: {result.status}
           </Text>
         </>
       )}

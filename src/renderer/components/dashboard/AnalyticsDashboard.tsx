@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Badge, Button, Card, Group, Progress, Stack, Text, Title } from '@mantine/core';
 import { useAgentStore } from '../../store/agentStore';
 import { useTeamStore } from '../../store/teamStore';
+import { useLang } from '../../lib/i18n';
 
 interface Props {
   onNavigate?: (section: string) => void;
@@ -10,6 +11,7 @@ interface Props {
 
 
 export default function AnalyticsDashboard({ onNavigate }: Props) {
+  const { t } = useLang();
   const { agents, fetchAgents } = useAgentStore();
   const { teams, fetchTeams } = useTeamStore();
   const [executions, setExecutions] = useState(0);
@@ -49,11 +51,11 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
   }, [fetchAgents, fetchTeams]);
 
   const checklist = [
-    { label: 'Connect an AI provider (API key or OAuth)', done: providerConnected, target: 'advanced' },
-    { label: 'Create your first agent', done: agents.length > 0, target: 'agents' },
-    { label: 'Create a team', done: teams.length > 0, target: 'teams' },
-    { label: 'Run an agent execution', done: executions > 0, target: 'agents' },
-    { label: 'Connect your second brain (KeepMind Corp)', done: !!secondBrain?.enabled && !!secondBrain?.hasToken, target: 'advanced' },
+    { label: t('dash.step.provider'), done: providerConnected, target: 'advanced' },
+    { label: t('dash.step.agent'), done: agents.length > 0, target: 'agents' },
+    { label: t('dash.step.team'), done: teams.length > 0, target: 'teams' },
+    { label: t('dash.step.run'), done: executions > 0, target: 'agents' },
+    { label: t('dash.step.brain'), done: !!secondBrain?.enabled && !!secondBrain?.hasToken, target: 'advanced' },
   ];
   const doneCount = checklist.filter((c) => c.done).length;
   const progress = Math.round((doneCount / checklist.length) * 100);
@@ -63,24 +65,24 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
     .slice(0, 5);
 
   const stats = [
-    { label: 'Agents', value: agents.length },
-    { label: 'Teams', value: teams.length },
-    { label: 'Executions', value: executions },
-    { label: 'Pending Approvals', value: pendingApprovals, warn: pendingApprovals > 0 },
+    { label: t('nav.agents'), value: agents.length },
+    { label: t('nav.teams'), value: teams.length },
+    { label: t('dash.executions'), value: executions },
+    { label: t('dash.approvals'), value: pendingApprovals, warn: pendingApprovals > 0 },
   ];
 
   return (
     <Stack gap="xl">
       <Group justify="space-between" align="flex-start">
         <div>
-          <Title order={1}>Dashboard</Title>
+          <Title order={1}>{t('dash.title')}</Title>
           <Text c="dimmed" size="sm">
-            {companyName ? `${companyName} — ` : ''}your local agent workspace at a glance.
+            {companyName ? `${companyName} — ` : ''}{t('dash.subtitle')}
           </Text>
         </div>
         <Group gap="sm">
-          <Button variant="default" onClick={() => onNavigate?.('advanced')}>Connect Provider</Button>
-          <Button onClick={() => onNavigate?.('agents')}>New Agent</Button>
+          <Button variant="default" onClick={() => onNavigate?.('advanced')}>{t('dash.connectProvider')}</Button>
+          <Button onClick={() => onNavigate?.('agents')}>{t('agents.new')}</Button>
         </Group>
       </Group>
 
@@ -98,7 +100,7 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
       <Card withBorder padding="lg" radius="md">
         <Stack gap="md">
           <Group justify="space-between">
-            <Title order={3}>Getting started</Title>
+            <Title order={3}>{t('dash.gettingStarted')}</Title>
             <Badge color="dark" variant="light">
               {doneCount}/{checklist.length}
             </Badge>
@@ -117,7 +119,7 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
               onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent'; }}
             >
               <Badge size="sm" color={item.done ? 'dark' : 'gray'} variant="light">
-                {item.done ? 'Done' : 'To do'}
+                {item.done ? t('common.done') : t('dash.todo')}
               </Badge>
               <Text size="sm" c={item.done ? 'dimmed' : undefined}>{item.label}</Text>
             </div>
@@ -126,13 +128,13 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
       </Card>
 
       <Stack gap="sm">
-        <Title order={3}>Recent agents</Title>
+        <Title order={3}>{t('dash.recentAgents')}</Title>
         {recentAgents.length === 0 ? (
           <Card withBorder padding="xl" radius="md">
             <Stack align="center" gap="sm">
-              <Text c="dimmed">No agents yet.</Text>
-              <Text size="sm" c="dimmed">Create one to get started — pick a model, write a system prompt, and run it.</Text>
-              <Button onClick={() => onNavigate?.('agents')}>Create your first agent</Button>
+              <Text c="dimmed">{t('dash.noAgents')}</Text>
+              <Text size="sm" c="dimmed">{t('dash.noAgentsHint')}</Text>
+              <Button onClick={() => onNavigate?.('agents')}>{t('dash.firstAgent')}</Button>
             </Stack>
           </Card>
         ) : (

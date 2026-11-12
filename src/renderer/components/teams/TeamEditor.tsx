@@ -5,6 +5,7 @@ import { useAgentStore } from '../../store/agentStore';
 import WorkflowBuilder from './WorkflowBuilder';
 import TeamExecutionView from './TeamExecutionView';
 import type { Team, Workflow } from '../../../shared/types.js';
+import { useLang } from '../../lib/i18n';
 
 interface TeamEditorProps {
   teamId: string;
@@ -12,6 +13,7 @@ interface TeamEditorProps {
 }
 
 export default function TeamEditor({ teamId, onClose }: TeamEditorProps) {
+  const { t } = useLang();
   const { selectedTeam, loading, error, updateTeam, deleteTeam, addAgentToTeam, removeAgentFromTeam, selectTeam } = useTeamStore();
   const { agents } = useAgentStore();
   const [activeTab, setActiveTab] = useState<string | null>('config');
@@ -46,7 +48,7 @@ export default function TeamEditor({ teamId, onClose }: TeamEditorProps) {
   };
 
   const handleDelete = async () => {
-    if (confirm('Are you sure you want to delete this team?')) {
+    if (confirm(t('teams.deleteConfirm'))) {
       await deleteTeam(teamId);
       onClose();
     }
@@ -63,11 +65,11 @@ export default function TeamEditor({ teamId, onClose }: TeamEditorProps) {
   };
 
   if (loading) {
-    return <Text c="dimmed" ta="center" py="xl">Loading team...</Text>;
+    return <Text c="dimmed" ta="center" py="xl">{t('te.loading')}</Text>;
   }
 
   if (!selectedTeam) {
-    return <Text c="dimmed" ta="center" py="xl">Team not found</Text>;
+    return <Text c="dimmed" ta="center" py="xl">{t('te.notFound')}</Text>;
   }
 
   const availableAgents = agents.filter(a => !selectedTeam.agentIds.includes(a.id));
@@ -75,11 +77,11 @@ export default function TeamEditor({ teamId, onClose }: TeamEditorProps) {
   return (
     <Stack gap="md">
       <Group justify="space-between">
-        <Title order={3} size="h5">Edit Team: {selectedTeam.name}</Title>
+        <Title order={3} size="h5">{t('teams.editTitle')}: {selectedTeam.name}</Title>
         <Group gap="xs">
-          <Button variant="default" size="xs" onClick={onClose}>Back</Button>
-          <Button variant="default" size="xs" onClick={handleDelete}>Delete</Button>
-          <Button size="xs" onClick={handleSave}>Save</Button>
+          <Button variant="default" size="xs" onClick={onClose}>{t('common.back')}</Button>
+          <Button variant="default" size="xs" onClick={handleDelete}>{t('common.delete')}</Button>
+          <Button size="xs" onClick={handleSave}>{t('common.save')}</Button>
         </Group>
       </Group>
 
@@ -87,16 +89,16 @@ export default function TeamEditor({ teamId, onClose }: TeamEditorProps) {
 
       <Tabs value={activeTab} onChange={setActiveTab}>
         <Tabs.List>
-          <Tabs.Tab value="config">Configuration</Tabs.Tab>
-          <Tabs.Tab value="workflow" disabled={!workflow}>Workflow</Tabs.Tab>
-          <Tabs.Tab value="execute">Execute</Tabs.Tab>
+          <Tabs.Tab value="config">{t('ae.tabConfig')}</Tabs.Tab>
+          <Tabs.Tab value="workflow" disabled={!workflow}>{t('te.tabWorkflow')}</Tabs.Tab>
+          <Tabs.Tab value="execute">{t('te.tabExecute')}</Tabs.Tab>
         </Tabs.List>
 
         <Tabs.Panel value="config" pt="md">
           <Stack gap="md">
-            <TextInput_ label="Team Name" value={name} onChange={(v) => setName(v)} />
+            <TextInput_ label={t('te.nameLabel')} value={name} onChange={(v) => setName(v)} />
             <Textarea
-              label="Description"
+              label={t('common.description')}
               minRows={3}
               value={description}
               onChange={(e) => setDescription(e.currentTarget.value)}
@@ -104,9 +106,9 @@ export default function TeamEditor({ teamId, onClose }: TeamEditorProps) {
 
             <Card withBorder padding="md" radius="md">
               <Stack gap="sm">
-                <Text size="sm" fw={600}>Assigned Agents</Text>
+                <Text size="sm" fw={600}>{t('te.assigned')}</Text>
                 <Group gap="xs">
-                  {selectedTeam.agentIds.length === 0 && <Text size="sm" c="dimmed">No agents assigned</Text>}
+                  {selectedTeam.agentIds.length === 0 && <Text size="sm" c="dimmed">{t('teams.noAgents')}</Text>}
                   {selectedTeam.agentIds.map(agentId => {
                     const agent = agents.find(a => a.id === agentId);
                     return agent ? (
@@ -126,14 +128,14 @@ export default function TeamEditor({ teamId, onClose }: TeamEditorProps) {
                 {availableAgents.length > 0 && (
                   <Group gap="xs">
                     <Select
-                      placeholder="Add agent..."
+                      placeholder={t('te.addAgentPh')}
                       data={availableAgents.map(a => ({ value: a.id, label: a.name }))}
                       value={selectedAgentId || null}
                       onChange={(v) => setSelectedAgentId(v || '')}
                       searchable
                       style={{ flex: 1 }}
                     />
-                    <Button size="xs" onClick={handleAddAgent} disabled={!selectedAgentId}>Add</Button>
+                    <Button size="xs" onClick={handleAddAgent} disabled={!selectedAgentId}>{t('te.add')}</Button>
                   </Group>
                 )}
               </Stack>
@@ -147,7 +149,7 @@ export default function TeamEditor({ teamId, onClose }: TeamEditorProps) {
               workflow={workflow}
               agents={selectedTeam.agentIds.map(id => {
                 const agent = agents.find(a => a.id === id);
-                return agent || { id, name: 'Unknown' };
+                return agent || { id, name: t('te.unknown') };
               })}
               onChange={setWorkflow}
               onAgentCreated={(agent) => addAgentToTeam(teamId, agent.id)}

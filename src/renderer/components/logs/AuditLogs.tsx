@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Badge, Button, Card, Group, Stack, Table, Text, Title } from '@mantine/core';
 import { IconLogs } from '../common/icons.js';
+import { useLang } from '../../lib/i18n';
 import type { AuditEntry } from '../../../shared/types.js';
 
 export default function AuditLogs() {
+  const { t } = useLang();
   const [logs, setLogs] = useState<AuditEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -19,33 +21,33 @@ export default function AuditLogs() {
       const data = await window.electronAPI.getAuditLogs(50);
       setLogs(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load logs');
+      setError(err instanceof Error ? err.message : t('logs.loadFailed'));
     } finally {
       setLoading(false);
     }
   };
 
   if (loading) {
-    return <Text c="dimmed" ta="center" py="xl">Loading audit logs...</Text>;
+    return <Text c="dimmed" ta="center" py="xl">{t('logs.loading')}</Text>;
   }
 
   if (error) {
-    return <Text c="dimmed">Error: {error}</Text>;
+    return <Text c="dimmed">{t('common.error')}: {error}</Text>;
   }
 
   return (
     <Stack gap="md">
       <Group justify="space-between">
-        <Title order={2} size="h4">Activity Logs</Title>
-        <Button size="xs" variant="default" onClick={loadLogs}>Refresh</Button>
+        <Title order={2} size="h4">{t('nav.logs')}</Title>
+        <Button size="xs" variant="default" onClick={loadLogs}>{t('common.refresh')}</Button>
       </Group>
 
       {logs.length === 0 ? (
         <Card withBorder padding="xl" radius="md">
           <Stack align="center" gap="sm">
             <IconLogs />
-            <Text fw={500}>No audit logs yet</Text>
-            <Text size="sm" c="dimmed">Activity will be logged here as agents execute</Text>
+            <Text fw={500}>{t('logs.empty')}</Text>
+            <Text size="sm" c="dimmed">{t('logs.emptyHint')}</Text>
           </Stack>
         </Card>
       ) : (
@@ -53,11 +55,11 @@ export default function AuditLogs() {
           <Table striped highlightOnHover>
             <Table.Thead>
               <Table.Tr>
-                <Table.Th>Timestamp</Table.Th>
-                <Table.Th>Agent</Table.Th>
-                <Table.Th>Action</Table.Th>
-                <Table.Th>Input</Table.Th>
-                <Table.Th>Output</Table.Th>
+                <Table.Th>{t('logs.timestamp')}</Table.Th>
+                <Table.Th>{t('logs.agent')}</Table.Th>
+                <Table.Th>{t('logs.action')}</Table.Th>
+                <Table.Th>{t('logs.input')}</Table.Th>
+                <Table.Th>{t('logs.output')}</Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>

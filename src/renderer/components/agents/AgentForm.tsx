@@ -5,6 +5,7 @@ import { useModelOptions } from '../../lib/useModelOptions';
 import type { AgentTemplate } from '../../lib/agentTemplates';
 import { DEFAULT_MODEL } from '../../../shared/models.js';
 import type { Agent, AgentConfig, Skill, ToolConfig } from '../../../shared/types.js';
+import { useLang } from '../../lib/i18n';
 
 interface ToolInfo {
   name: string;
@@ -21,6 +22,7 @@ interface AgentFormProps {
 }
 
 export default function AgentForm({ onClose, template, onCreated }: AgentFormProps) {
+  const { t } = useLang();
   const { createAgent, loading, error } = useAgentStore();
   const { groups: modelGroups } = useModelOptions();
   const [name, setName] = useState(template?.name ?? '');
@@ -97,27 +99,27 @@ export default function AgentForm({ onClose, template, onCreated }: AgentFormPro
   return (
     <form onSubmit={handleSubmit}>
       <Stack gap="md">
-        <Title order={3} size="h5">{template ? `Create: ${template.role}` : 'Create New Agent'}</Title>
+        <Title order={3} size="h5">{template ? `${t('common.create')}: ${template.role}` : t('af.newTitle')}</Title>
         {template && (
           <Text size="sm" c="dimmed">{template.tagline}</Text>
         )}
 
         <TextInput
-          label="Name"
-          placeholder="Agent name"
+          label={t('common.name')}
+          placeholder={t('af.namePh')}
           value={name}
           onChange={(e) => setName(e.currentTarget.value)}
         />
 
         <TextInput
-          label="Description"
-          placeholder="Short description shown in the agents list"
+          label={t('common.description')}
+          placeholder={t('af.descPh')}
           value={description}
           onChange={(e) => setDescription(e.currentTarget.value)}
         />
 
         <Select
-          label="Model"
+          label={t('af.model')}
           data={modelGroups}
           value={config.model}
           onChange={(v) => setConfig({ ...config, model: v || DEFAULT_MODEL.openai })}
@@ -126,17 +128,17 @@ export default function AgentForm({ onClose, template, onCreated }: AgentFormPro
         />
 
         <Textarea
-          label="System prompt"
-          description="Defines the agent's role, capabilities, and constraints."
+          label={t('af.systemPrompt')}
+          description={t('af.systemPromptDesc')}
           minRows={5}
           value={config.systemPrompt}
           onChange={(e) => setConfig({ ...config, systemPrompt: e.currentTarget.value })}
-          placeholder="Describe the agent's role, capabilities, and constraints..."
+          placeholder={t('af.systemPromptPh')}
           required
         />
 
         <div>
-          <Text size="sm" fw={500}>Temperature: {config.temperature}</Text>
+          <Text size="sm" fw={500}>{t('af.temperature')}: {config.temperature}</Text>
           <Slider
             min={0}
             max={2}
@@ -145,11 +147,11 @@ export default function AgentForm({ onClose, template, onCreated }: AgentFormPro
             onChange={(v) => setConfig({ ...config, temperature: v })}
             mb="xs"
           />
-          <Text size="xs" c="dimmed">Lower values are more deterministic, higher values more creative.</Text>
+          <Text size="xs" c="dimmed">{t('af.tempHint')}</Text>
         </div>
 
         <div>
-          <Text size="sm" fw={500}>Max tokens: {config.maxTokens}</Text>
+          <Text size="sm" fw={500}>{t('af.maxTokens')}: {config.maxTokens}</Text>
           <Slider
             min={256}
             max={4096}
@@ -158,14 +160,14 @@ export default function AgentForm({ onClose, template, onCreated }: AgentFormPro
             onChange={(v) => setConfig({ ...config, maxTokens: v })}
             mb="xs"
           />
-          <Text size="xs" c="dimmed">Maximum length of the agent's response.</Text>
+          <Text size="xs" c="dimmed">{t('af.maxTokensHint')}</Text>
         </div>
 
         {registryTools.length > 0 && (
           <div>
-            <Text size="sm" fw={500} mb={4}>Tools</Text>
+            <Text size="sm" fw={500} mb={4}>{t('skills.toolsLabel')}</Text>
             <Text size="xs" c="dimmed" mb={8}>
-              Direct tool access for this agent. Sensitive tools still require approval in Governance.
+              {t('af.toolsDesc')}
             </Text>
             <Stack gap={4}>
               {registryTools.map((t) => (
@@ -188,9 +190,9 @@ export default function AgentForm({ onClose, template, onCreated }: AgentFormPro
 
         {availableSkills.length > 0 && (
           <div>
-            <Text size="sm" fw={500} mb={4}>Skills</Text>
+            <Text size="sm" fw={500} mb={4}>{t('nav.skills')}</Text>
             <Text size="xs" c="dimmed" mb={8}>
-              Skills inject specialized instructions and tool access into this agent.
+              {t('af.skillsDesc')}
             </Text>
             <Stack gap={4}>
               {availableSkills.map((skill) => (
@@ -201,7 +203,7 @@ export default function AgentForm({ onClose, template, onCreated }: AgentFormPro
                     <Text size="sm">
                       <Text span fw={600}>{skill.name}</Text>
                       {skill.description ? ` — ${skill.description}` : ''}
-                      {skill.toolNames.length > 0 ? ` (${skill.toolNames.length} tools)` : ''}
+                      {skill.toolNames.length > 0 ? ` (${skill.toolNames.length} ${t('agents.tools')})` : ''}
                     </Text>
                   }
                   checked={(config.skillIds || []).includes(skill.id)}
@@ -215,8 +217,8 @@ export default function AgentForm({ onClose, template, onCreated }: AgentFormPro
         {error && <Text size="sm" c="dimmed">{error}</Text>}
 
         <Group justify="flex-end" gap="xs">
-          <Button variant="default" onClick={onClose} disabled={loading}>Cancel</Button>
-          <Button type="submit" loading={loading}>{loading ? 'Creating...' : 'Create Agent'}</Button>
+          <Button variant="default" onClick={onClose} disabled={loading}>{t('common.cancel')}</Button>
+          <Button type="submit" loading={loading}>{loading ? t('af.creating') : t('agents.createAgent')}</Button>
         </Group>
       </Stack>
     </form>

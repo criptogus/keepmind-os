@@ -4,6 +4,7 @@ import { useAgentStore } from '../../store/agentStore';
 import { useModelOptions } from '../../lib/useModelOptions';
 import AgentExecutionView from './AgentExecutionView';
 import type { AgentConfig, Skill } from '../../../shared/types.js';
+import { useLang } from '../../lib/i18n';
 
 interface AgentEditorProps {
   agentId: string;
@@ -11,6 +12,7 @@ interface AgentEditorProps {
 }
 
 export default function AgentEditor({ agentId, onClose }: AgentEditorProps) {
+  const { t } = useLang();
   const { selectedAgent, loading, error, updateAgent, deleteAgent, executeAgent, selectAgent } = useAgentStore();
   const [activeTab, setActiveTab] = useState<string | null>('config');
   const [config, setConfig] = useState<AgentConfig | null>(null);
@@ -39,7 +41,7 @@ export default function AgentEditor({ agentId, onClose }: AgentEditorProps) {
   };
 
   const handleDelete = async () => {
-    if (confirm('Are you sure you want to delete this agent?')) {
+    if (confirm(t('agents.deleteConfirm'))) {
       await deleteAgent(agentId);
       onClose();
     }
@@ -51,7 +53,7 @@ export default function AgentEditor({ agentId, onClose }: AgentEditorProps) {
       await executeAgent(agentId, input);
       setActiveTab('executions');
     } catch (err) {
-      alert('Invalid JSON input');
+      alert(t('ae.invalidJson'));
     }
   };
 
@@ -65,21 +67,21 @@ export default function AgentEditor({ agentId, onClose }: AgentEditorProps) {
   };
 
   if (loading) {
-    return <Text c="dimmed" ta="center" py="xl">Loading agent...</Text>;
+    return <Text c="dimmed" ta="center" py="xl">{t('ae.loading')}</Text>;
   }
 
   if (!selectedAgent || !config) {
-    return <Text c="dimmed" ta="center" py="xl">Agent not found</Text>;
+    return <Text c="dimmed" ta="center" py="xl">{t('ae.notFound')}</Text>;
   }
 
   return (
     <Stack gap="md">
       <Group justify="space-between">
-        <Title order={3} size="h5">Edit Agent: {selectedAgent.name}</Title>
+        <Title order={3} size="h5">{t('agents.edit')}: {selectedAgent.name}</Title>
         <Group gap="xs">
-          <Button variant="default" size="xs" onClick={onClose}>Back</Button>
-          <Button variant="default" size="xs" onClick={handleDelete}>Delete</Button>
-          <Button size="xs" onClick={handleSave}>Save</Button>
+          <Button variant="default" size="xs" onClick={onClose}>{t('common.back')}</Button>
+          <Button variant="default" size="xs" onClick={handleDelete}>{t('common.delete')}</Button>
+          <Button size="xs" onClick={handleSave}>{t('common.save')}</Button>
         </Group>
       </Group>
 
@@ -87,14 +89,14 @@ export default function AgentEditor({ agentId, onClose }: AgentEditorProps) {
 
       <Tabs value={activeTab} onChange={setActiveTab}>
         <Tabs.List>
-          <Tabs.Tab value="config">Configuration</Tabs.Tab>
-          <Tabs.Tab value="executions">Executions</Tabs.Tab>
+          <Tabs.Tab value="config">{t('ae.tabConfig')}</Tabs.Tab>
+          <Tabs.Tab value="executions">{t('ae.tabExecutions')}</Tabs.Tab>
         </Tabs.List>
 
         <Tabs.Panel value="config" pt="md">
           <Stack gap="md">
             <Select
-              label="Model"
+              label={t('af.model')}
               data={modelGroups}
               value={config.model}
               onChange={(v) => setConfig({ ...config, model: v || config.model })}
@@ -103,14 +105,14 @@ export default function AgentEditor({ agentId, onClose }: AgentEditorProps) {
             />
 
             <Textarea
-              label="System prompt"
+              label={t('af.systemPrompt')}
               minRows={5}
               value={config.systemPrompt}
               onChange={(e) => setConfig({ ...config, systemPrompt: e.currentTarget.value })}
             />
 
             <div>
-              <Text size="sm" fw={500}>Temperature: {config.temperature}</Text>
+              <Text size="sm" fw={500}>{t('af.temperature')}: {config.temperature}</Text>
               <Slider
                 min={0}
                 max={2}
@@ -122,7 +124,7 @@ export default function AgentEditor({ agentId, onClose }: AgentEditorProps) {
             </div>
 
             <div>
-              <Text size="sm" fw={500}>Max tokens: {config.maxTokens}</Text>
+              <Text size="sm" fw={500}>{t('af.maxTokens')}: {config.maxTokens}</Text>
               <Slider
                 min={256}
                 max={4096}
@@ -135,7 +137,7 @@ export default function AgentEditor({ agentId, onClose }: AgentEditorProps) {
 
             {availableSkills.length > 0 && (
               <div>
-                <Text size="sm" fw={500} mb={4}>Skills</Text>
+                <Text size="sm" fw={500} mb={4}>{t('nav.skills')}</Text>
                 <Stack gap={4}>
                   {availableSkills.map((skill) => (
                     <Checkbox
@@ -145,7 +147,7 @@ export default function AgentEditor({ agentId, onClose }: AgentEditorProps) {
                         <Text size="sm">
                           <Text span fw={600}>{skill.name}</Text>
                           {skill.description ? ` — ${skill.description}` : ''}
-                          {skill.toolNames.length > 0 ? ` (${skill.toolNames.length} tools)` : ''}
+                          {skill.toolNames.length > 0 ? ` (${skill.toolNames.length} ${t('agents.tools')})` : ''}
                         </Text>
                       }
                       checked={(config.skillIds || []).includes(skill.id)}
@@ -158,7 +160,7 @@ export default function AgentEditor({ agentId, onClose }: AgentEditorProps) {
 
             <Card withBorder padding="md" radius="md">
               <Stack gap="sm">
-                <Text size="sm" fw={600}>Quick execute</Text>
+                <Text size="sm" fw={600}>{t('ae.quickExecute')}</Text>
                 <Textarea
                   placeholder='{"message": "Hello"}'
                   minRows={4}
@@ -168,7 +170,7 @@ export default function AgentEditor({ agentId, onClose }: AgentEditorProps) {
                   onChange={(e) => setExecutionInput(e.currentTarget.value)}
                 />
                 <Group justify="flex-end">
-                  <Button size="xs" onClick={handleExecute}>Execute</Button>
+                  <Button size="xs" onClick={handleExecute}>{t('agents.run')}</Button>
                 </Group>
               </Stack>
             </Card>

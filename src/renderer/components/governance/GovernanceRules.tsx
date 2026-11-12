@@ -5,6 +5,7 @@ import { useAgentStore } from '../../store/agentStore';
 import { useTeamStore } from '../../store/teamStore';
 import { v4 as uuidv4 } from 'uuid';
 import type { GovernanceRule, RuleCondition, RuleAction } from '../../../shared/types.js';
+import { useLang } from '../../lib/i18n';
 
 const emptyRule: Partial<GovernanceRule> = {
   name: '',
@@ -16,6 +17,7 @@ const emptyRule: Partial<GovernanceRule> = {
 };
 
 export default function GovernanceRules() {
+  const { t } = useLang();
   const { rules, loading, error, fetchRules, setRule, deleteRule } = useGovernanceStore();
   const { agents } = useAgentStore();
   const { teams } = useTeamStore();
@@ -45,26 +47,26 @@ export default function GovernanceRules() {
   };
 
   const handleDeleteRule = async (ruleId: string) => {
-    if (confirm('Are you sure you want to delete this rule?')) {
+    if (confirm(t('govr.deleteConfirm'))) {
       await deleteRule(ruleId);
     }
   };
 
   const getScopeName = (scope: string, scopeId?: string) => {
-    if (!scopeId) return 'Global';
+    if (!scopeId) return t('govr.global');
     if (scope === 'agent') {
       const agent = agents.find(a => a.id === scopeId);
-      return agent?.name || 'Unknown Agent';
+      return agent?.name || t('teams.unknownAgent');
     }
     if (scope === 'team') {
       const team = teams.find(t => t.id === scopeId);
-      return team?.name || 'Unknown Team';
+      return team?.name || t('govr.unknownTeam');
     }
     return scopeId;
   };
 
   if (loading) {
-    return <Text c="dimmed" ta="center" py="xl">Loading rules...</Text>;
+    return <Text c="dimmed" ta="center" py="xl">{t('govr.loading')}</Text>;
   }
 
   const scopeOptions = newRule.scope === 'agent'
@@ -73,37 +75,37 @@ export default function GovernanceRules() {
 
   return (
     <Stack gap="md">
-      <Title order={2} size="h4">Governance Rules</Title>
+      <Title order={2} size="h4">{t('govr.title')}</Title>
 
       {error && <Text size="sm" c="dimmed">{error}</Text>}
 
       <Card withBorder padding="md" radius="md">
         <Stack gap="sm">
-          <Text fw={600}>Add new rule</Text>
+          <Text fw={600}>{t('govr.addTitle')}</Text>
           <TextInput
-            label="Rule name"
-            placeholder="e.g., Require approval for file deletion"
+            label={t('govr.ruleName')}
+            placeholder={t('govr.ruleNamePh')}
             value={newRule.name || ''}
             onChange={(e) => setNewRule({ ...newRule, name: e.currentTarget.value })}
           />
           <Select
-            label="Rule type"
+            label={t('govr.ruleType')}
             data={[
-              { value: 'approval_required', label: 'Approval Required' },
-              { value: 'rate_limit', label: 'Rate Limit' },
-              { value: 'resource_constraint', label: 'Resource Constraint' },
-              { value: 'content_filter', label: 'Content Filter' },
+              { value: 'approval_required', label: t('govr.type.approval') },
+              { value: 'rate_limit', label: t('govr.type.rate') },
+              { value: 'resource_constraint', label: t('govr.type.resource') },
+              { value: 'content_filter', label: t('govr.type.content') },
             ]}
             value={newRule.type}
             onChange={(v) => setNewRule({ ...newRule, type: (v || 'approval_required') as any })}
             allowDeselect={false}
           />
           <Select
-            label="Scope"
+            label={t('govr.scope')}
             data={[
-              { value: 'global', label: 'Global' },
-              { value: 'agent', label: 'Agent' },
-              { value: 'team', label: 'Team' },
+              { value: 'global', label: t('govr.scope.global') },
+              { value: 'agent', label: t('govr.scope.agent') },
+              { value: 'team', label: t('govr.scope.team') },
             ]}
             value={newRule.scope}
             onChange={(v) => setNewRule({ ...newRule, scope: (v || 'global') as any, scopeId: undefined })}
@@ -111,20 +113,20 @@ export default function GovernanceRules() {
           />
           {newRule.scope !== 'global' && (
             <Select
-              label={newRule.scope === 'agent' ? 'Select agent' : 'Select team'}
+              label={newRule.scope === 'agent' ? t('govr.selectAgent') : t('govr.selectTeam')}
               data={scopeOptions}
               value={newRule.scopeId || null}
               onChange={(v) => setNewRule({ ...newRule, scopeId: v || undefined })}
-              placeholder="Select..."
+              placeholder={t('govr.selectPh')}
             />
           )}
           <Select
-            label="Condition field"
+            label={t('govr.condField')}
             data={[
-              { value: 'action', label: 'Action' },
-              { value: 'input', label: 'Input' },
-              { value: 'output', label: 'Output' },
-              { value: 'agent', label: 'Agent' },
+              { value: 'action', label: t('govr.field.action') },
+              { value: 'input', label: t('govr.field.input') },
+              { value: 'output', label: t('govr.field.output') },
+              { value: 'agent', label: t('govr.field.agent') },
             ]}
             value={newRule.condition?.field || 'action'}
             onChange={(v) => setNewRule({
@@ -134,13 +136,13 @@ export default function GovernanceRules() {
             allowDeselect={false}
           />
           <Select
-            label="Condition operator"
+            label={t('govr.condOp')}
             data={[
-              { value: 'equals', label: 'Equals' },
-              { value: 'contains', label: 'Contains' },
-              { value: 'greater_than', label: 'Greater Than' },
-              { value: 'less_than', label: 'Less Than' },
-              { value: 'regex', label: 'Regex' },
+              { value: 'equals', label: t('govr.op.equals') },
+              { value: 'contains', label: t('govr.op.contains') },
+              { value: 'greater_than', label: t('govr.op.gt') },
+              { value: 'less_than', label: t('govr.op.lt') },
+              { value: 'regex', label: t('govr.op.regex') },
             ]}
             value={newRule.condition?.operator || 'contains'}
             onChange={(v) => setNewRule({
@@ -150,8 +152,8 @@ export default function GovernanceRules() {
             allowDeselect={false}
           />
           <TextInput
-            label="Condition value"
-            placeholder="e.g., delete, send, execute"
+            label={t('govr.condValue')}
+            placeholder={t('govr.condValuePh')}
             value={String(newRule.condition?.value || '')}
             onChange={(e) => setNewRule({
               ...newRule,
@@ -159,12 +161,12 @@ export default function GovernanceRules() {
             })}
           />
           <Select
-            label="Action type"
+            label={t('govr.actionType')}
             data={[
-              { value: 'block', label: 'Block' },
-              { value: 'require_approval', label: 'Require Approval' },
-              { value: 'limit', label: 'Limit' },
-              { value: 'warn', label: 'Warn' },
+              { value: 'block', label: t('govr.act.block') },
+              { value: 'require_approval', label: t('govr.act.approval') },
+              { value: 'limit', label: t('govr.act.limit') },
+              { value: 'warn', label: t('govr.act.warn') },
             ]}
             value={newRule.action?.type || 'require_approval'}
             onChange={(v) => setNewRule({
@@ -174,16 +176,16 @@ export default function GovernanceRules() {
             allowDeselect={false}
           />
           <Group justify="flex-end">
-            <Button size="xs" onClick={handleAddRule} disabled={!newRule.name}>Add rule</Button>
+            <Button size="xs" onClick={handleAddRule} disabled={!newRule.name}>{t('govr.addRule')}</Button>
           </Group>
         </Stack>
       </Card>
 
       <Card withBorder padding="md" radius="md">
         <Stack gap="sm">
-          <Text fw={600}>Existing rules</Text>
+          <Text fw={600}>{t('govr.existing')}</Text>
           {rules.length === 0 ? (
-            <Text size="sm" c="dimmed">No governance rules configured</Text>
+            <Text size="sm" c="dimmed">{t('govr.none')}</Text>
           ) : (
             rules.map((rule) => (
               <Card key={rule.id} withBorder padding="sm" radius="sm">
@@ -191,7 +193,7 @@ export default function GovernanceRules() {
                   <div>
                     <Group gap="xs">
                       <Text size="sm" fw={600}>{rule.name}</Text>
-                      <Badge size="sm" variant="light" color="gray">{rule.enabled ? 'enabled' : 'disabled'}</Badge>
+                      <Badge size="sm" variant="light" color="gray">{rule.enabled ? t('govr.enabled') : t('govr.disabled')}</Badge>
                     </Group>
                     <Text size="xs" c="dimmed" mt={4}>
                       {rule.type} · {rule.scope} ({getScopeName(rule.scope, rule.scopeId)})
@@ -201,7 +203,7 @@ export default function GovernanceRules() {
                     </Text>
                   </div>
                   <Button size="compact-xs" variant="subtle" color="gray" onClick={() => handleDeleteRule(rule.id)}>
-                    Delete
+                    {t('common.delete')}
                   </Button>
                 </Group>
               </Card>

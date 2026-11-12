@@ -5,6 +5,7 @@ import type { Agent, Workflow, WorkflowStep } from '../../../shared/types.js';
 import { useAgentStore } from '../../store/agentStore';
 import AgentForm from '../agents/AgentForm';
 import { AGENT_TEMPLATES, type AgentTemplate } from '../../lib/agentTemplates';
+import { useLang } from '../../lib/i18n';
 
 interface WorkflowBuilderProps {
   workflow: Workflow;
@@ -15,6 +16,7 @@ interface WorkflowBuilderProps {
 }
 
 export default function WorkflowBuilder({ workflow, agents, onChange, onAgentCreated }: WorkflowBuilderProps) {
+  const { t } = useLang();
   const [newStepAgentId, setNewStepAgentId] = useState('');
   const [showAgentPicker, setShowAgentPicker] = useState(false);
   const [pickedTemplate, setPickedTemplate] = useState<AgentTemplate | null>(null);
@@ -61,17 +63,17 @@ export default function WorkflowBuilder({ workflow, agents, onChange, onAgentCre
   return (
     <Stack gap="md">
       <Group justify="space-between">
-        <Title order={4} size="h5">Workflow Builder</Title>
+        <Title order={4} size="h5">{t('wf.title')}</Title>
         <Group gap="xs">
-          <Text size="sm" fw={500}>Execution Mode:</Text>
+          <Text size="sm" fw={500}>{t('wf.execMode')}</Text>
           <Select
             size="xs"
             value={workflow.executionMode}
             onChange={(v) => onChange({ ...workflow, executionMode: (v || 'sequential') as Workflow['executionMode'] })}
             data={[
-              { value: 'sequential', label: 'Sequential' },
-              { value: 'parallel', label: 'Parallel' },
-              { value: 'conditional', label: 'Conditional' },
+              { value: 'sequential', label: t('wf.mode.sequential') },
+              { value: 'parallel', label: t('wf.mode.parallel') },
+              { value: 'conditional', label: t('wf.mode.conditional') },
             ]}
             allowDeselect={false}
             style={{ width: 160 }}
@@ -82,7 +84,7 @@ export default function WorkflowBuilder({ workflow, agents, onChange, onAgentCre
       <Stack gap="sm">
         {workflow.steps.length === 0 ? (
           <Card withBorder padding="lg" radius="md" style={{ borderStyle: 'dashed', backgroundColor: 'var(--mantine-color-gray-0)' }}>
-            <Text size="sm" c="dimmed" ta="center">No steps added yet</Text>
+            <Text size="sm" c="dimmed" ta="center">{t('wf.empty')}</Text>
           </Card>
         ) : (
           workflow.steps.map((step, index) => (
@@ -98,7 +100,7 @@ export default function WorkflowBuilder({ workflow, agents, onChange, onAgentCre
                     }}>
                       {index + 1}
                     </div>
-                    <Text size="sm" fw={500}>Step {index + 1}</Text>
+                    <Text size="sm" fw={500}>{t('wf.step')} {index + 1}</Text>
                   </Group>
                   <Group gap="xs">
                     {index > 0 && (
@@ -107,12 +109,12 @@ export default function WorkflowBuilder({ workflow, agents, onChange, onAgentCre
                     {index < workflow.steps.length - 1 && (
                       <Button size="compact-xs" variant="default" onClick={() => moveStep(index, index + 1)}>↓</Button>
                     )}
-                    <Button size="compact-xs" variant="default" onClick={() => deleteStep(step.id)}>Delete</Button>
+                    <Button size="compact-xs" variant="default" onClick={() => deleteStep(step.id)}>{t('common.delete')}</Button>
                   </Group>
                 </Group>
 
                 <Select
-                  label="Agent"
+                  label={t('govr.scope.agent')}
                   size="sm"
                   value={step.agentId}
                   onChange={(v) => updateStep(step.id, { agentId: v || step.agentId })}
@@ -121,7 +123,7 @@ export default function WorkflowBuilder({ workflow, agents, onChange, onAgentCre
                 />
 
                 <div>
-                  <Text size="sm" fw={500} mb={4}>Input (JSON)</Text>
+                  <Text size="sm" fw={500} mb={4}>{t('tex.input')}</Text>
                   <textarea
                     value={JSON.stringify(step.inputs, null, 2)}
                     onChange={(e) => {
@@ -148,12 +150,12 @@ export default function WorkflowBuilder({ workflow, agents, onChange, onAgentCre
 
                 {workflow.executionMode === 'conditional' && (
                   <div>
-                    <Text size="sm" fw={500} mb={4}>Condition</Text>
+                    <Text size="sm" fw={500} mb={4}>{t('wf.condition')}</Text>
                     <input
                       type="text"
                       value={step.condition || ''}
                       onChange={(e) => updateStep(step.id, { condition: e.target.value })}
-                      placeholder="e.g., input.success === true"
+                      placeholder={t('wf.conditionPh')}
                       style={{
                         width: '100%',
                         padding: '8px 12px',
@@ -175,23 +177,23 @@ export default function WorkflowBuilder({ workflow, agents, onChange, onAgentCre
 
       <Group gap="xs">
         <Select
-          placeholder="Select agent to add..."
+          placeholder={t('wf.selectAgentPh')}
           data={agents.map(agent => ({ value: agent.id, label: agent.name }))}
           value={newStepAgentId || null}
           onChange={(v) => setNewStepAgentId(v || '')}
           searchable
           style={{ flex: 1 }}
         />
-        <Button size="sm" onClick={addStep} disabled={!newStepAgentId}>Add Step</Button>
+        <Button size="sm" onClick={addStep} disabled={!newStepAgentId}>{t('wf.addStep')}</Button>
         <Button size="sm" variant="default" onClick={() => { setPickedTemplate(null); setShowAgentPicker(true); }}>
-          + New agent
+          {t('wf.newAgent')}
         </Button>
       </Group>
 
       <Modal
         opened={showAgentPicker}
         onClose={() => { setShowAgentPicker(false); setPickedTemplate(null); }}
-        title={pickedTemplate ? 'Configure agent for this step' : 'New thematic agent'}
+        title={pickedTemplate ? t('wf.configureStep') : t('wf.newThematic')}
         size="lg"
       >
         {pickedTemplate ? (
@@ -203,18 +205,18 @@ export default function WorkflowBuilder({ workflow, agents, onChange, onAgentCre
         ) : (
           <Stack gap="sm">
             <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="sm">
-              {AGENT_TEMPLATES.map((t) => (
+              {AGENT_TEMPLATES.map((tpl) => (
                 <Card
-                  key={t.id}
+                  key={tpl.id}
                   withBorder
                   padding="md"
                   radius="md"
                   style={{ cursor: 'pointer' }}
-                  onClick={() => setPickedTemplate(t)}
+                  onClick={() => setPickedTemplate(tpl)}
                 >
                   <Stack gap={4}>
-                    <Text fw={600} size="sm">{t.name}</Text>
-                    <Text size="xs" c="dimmed">{t.tagline}</Text>
+                    <Text fw={600} size="sm">{tpl.name}</Text>
+                    <Text size="xs" c="dimmed">{tpl.tagline}</Text>
                   </Stack>
                 </Card>
               ))}
@@ -224,7 +226,7 @@ export default function WorkflowBuilder({ workflow, agents, onChange, onAgentCre
               size="xs"
               onClick={() => setPickedTemplate({ id: 'blank', name: '', group: '', role: 'Custom', tagline: '', description: '', capabilities: [], skillNames: [], toolNames: [], config: { model: '', temperature: 0.7, maxTokens: 2048, systemPrompt: '', tools: [], skillIds: [] } })}
             >
-              Start from blank
+              {t('agents.startBlank')}
             </Button>
           </Stack>
         )}

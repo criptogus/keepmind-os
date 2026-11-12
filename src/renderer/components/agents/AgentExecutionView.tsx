@@ -3,6 +3,7 @@ import { Badge, Button, Card, Group, Stack, Text, Title } from '@mantine/core';
 import { useAgentStore } from '../../store/agentStore';
 import type { AgentExecution } from '../../../shared/types.js';
 import { IconBolt } from '../common/icons.js';
+import { useLang } from '../../lib/i18n';
 
 interface AgentExecutionViewProps {
   agentId: string;
@@ -16,6 +17,7 @@ interface LiveExecution {
 }
 
 export default function AgentExecutionView({ agentId }: AgentExecutionViewProps) {
+  const { t } = useLang();
   const { executions, loading, error, fetchExecutions, cancelExecution } = useAgentStore();
   const [live, setLive] = useState<LiveExecution | null>(null);
 
@@ -61,11 +63,11 @@ export default function AgentExecutionView({ agentId }: AgentExecutionViewProps)
   const agentExecutions = executions.filter(e => e.agentId === agentId);
 
   if (loading && agentExecutions.length === 0 && !live) {
-    return <Text c="dimmed" ta="center" py="xl">Loading executions...</Text>;
+    return <Text c="dimmed" ta="center" py="xl">{t('aex.loading')}</Text>;
   }
 
   if (error) {
-    return <Text c="dimmed">Error: {error}</Text>;
+    return <Text c="dimmed">{t('common.error')}: {error}</Text>;
   }
 
   if (agentExecutions.length === 0 && !live) {
@@ -73,8 +75,8 @@ export default function AgentExecutionView({ agentId }: AgentExecutionViewProps)
       <Card withBorder padding="xl" radius="md">
         <Stack align="center" gap="sm">
           <IconBolt />
-          <Text fw={500}>No executions yet</Text>
-          <Text size="sm" c="dimmed">Execute this agent to see execution history</Text>
+          <Text fw={500}>{t('aex.empty')}</Text>
+          <Text size="sm" c="dimmed">{t('aex.emptyHint')}</Text>
         </Stack>
       </Card>
     );
@@ -83,19 +85,19 @@ export default function AgentExecutionView({ agentId }: AgentExecutionViewProps)
   return (
     <Stack gap="md">
       <Group justify="space-between">
-        <Title order={3} size="h5">Execution History</Title>
-        <Button size="xs" variant="default" onClick={() => fetchExecutions(agentId)}>Refresh</Button>
+        <Title order={3} size="h5">{t('aex.history')}</Title>
+        <Button size="xs" variant="default" onClick={() => fetchExecutions(agentId)}>{t('common.refresh')}</Button>
       </Group>
 
       {live && !live.done && (
         <Card withBorder padding="md" radius="md">
           <Stack gap="sm">
             <Group gap="xs">
-              <Badge size="sm" variant="light" color="gray">streaming</Badge>
+              <Badge size="sm" variant="light" color="gray">{t('aex.streaming')}</Badge>
             </Group>
             {live.tools.length > 0 && (
               <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
-                <Text size="xs" fw={600} mb={4}>Tool calls</Text>
+                <Text size="xs" fw={600} mb={4}>{t('aex.toolCalls')}</Text>
                 {live.tools.map((t, i) => (
                   <Text key={i} size="xs" ff="monospace" c="dimmed">
                     → {t.name}
@@ -120,7 +122,7 @@ export default function AgentExecutionView({ agentId }: AgentExecutionViewProps)
             <Group justify="space-between">
               <Badge size="sm" variant="light" color="gray">{execution.status}</Badge>
               <Text size="xs" c="dimmed">
-                {execution.startedAt ? new Date(execution.startedAt).toLocaleString() : 'Not started'}
+                {execution.startedAt ? new Date(execution.startedAt).toLocaleString() : t('aex.notStarted')}
               </Text>
             </Group>
 
@@ -131,7 +133,7 @@ export default function AgentExecutionView({ agentId }: AgentExecutionViewProps)
             )}
 
             <div>
-              <Text size="xs" fw={600} tt="uppercase" c="dimmed" mb={4}>Input</Text>
+              <Text size="xs" fw={600} tt="uppercase" c="dimmed" mb={4}>{t('logs.input')}</Text>
               <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
                 <Text size="xs" ff="monospace" style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
                   {JSON.stringify(execution.input, null, 2)}
@@ -141,7 +143,7 @@ export default function AgentExecutionView({ agentId }: AgentExecutionViewProps)
 
             {execution.output && (
               <div>
-                <Text size="xs" fw={600} tt="uppercase" c="dimmed" mb={4}>Output</Text>
+                <Text size="xs" fw={600} tt="uppercase" c="dimmed" mb={4}>{t('logs.output')}</Text>
                 <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-gray-0)', maxHeight: 200, overflow: 'auto' }}>
                   <Text size="xs" ff="monospace" style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
                     {typeof execution.output === 'string'
@@ -154,7 +156,7 @@ export default function AgentExecutionView({ agentId }: AgentExecutionViewProps)
 
             {execution.error && (
               <div>
-                <Text size="xs" fw={600} tt="uppercase" c="dimmed" mb={4}>Error</Text>
+                <Text size="xs" fw={600} tt="uppercase" c="dimmed" mb={4}>{t('common.error')}</Text>
                 <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
                   <Text size="xs" ff="monospace">{execution.error}</Text>
                 </Card>
@@ -163,7 +165,7 @@ export default function AgentExecutionView({ agentId }: AgentExecutionViewProps)
 
             {execution.status === 'running' && (
               <Group justify="flex-end">
-                <Button size="compact-xs" variant="default" onClick={() => handleCancel(execution.id)}>Cancel</Button>
+                <Button size="compact-xs" variant="default" onClick={() => handleCancel(execution.id)}>{t('common.cancel')}</Button>
               </Group>
             )}
           </Stack>

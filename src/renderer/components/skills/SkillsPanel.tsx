@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Badge, Button, Card, Checkbox, Group, Modal, Stack, Text, Textarea, TextInput, Title } from '@mantine/core';
 import type { Skill } from '../../../shared/types';
+import { useLang } from '../../lib/i18n';
 
 interface ToolInfo {
   name: string;
@@ -8,6 +9,7 @@ interface ToolInfo {
 }
 
 export default function SkillsPanel() {
+  const { t } = useLang();
   const [skills, setSkills] = useState<Skill[]>([]);
   const [tools, setTools] = useState<ToolInfo[]>([]);
   const [editing, setEditing] = useState<Skill | null>(null);
@@ -42,7 +44,7 @@ export default function SkillsPanel() {
 
   const save = async () => {
     if (!form.name.trim() || !form.prompt.trim()) {
-      setError('Name and prompt are required');
+      setError(t('skills.required'));
       return;
     }
     setError('');
@@ -65,7 +67,7 @@ export default function SkillsPanel() {
       setEditing(skill);
       setIsNew(false);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Improvement failed');
+      setError(e instanceof Error ? e.message : t('skills.improveFailed'));
     } finally {
       setImproving(null);
     }
@@ -77,14 +79,14 @@ export default function SkillsPanel() {
     <Stack gap="md">
       <Group justify="space-between">
         <div>
-          <Title order={2} size="h4">Skills</Title>
+          <Title order={2} size="h4">{t('skills.title')}</Title>
           <Text size="sm" c="dimmed">
-            Reusable prompt modules with tool access. Assign skills to agents in the agent editor.
+            {t('skills.subtitle')}
           </Text>
         </div>
         <Group gap="xs">
-          <Button size="xs" variant="default" onClick={() => { setImportOpen(true); setImportPreview(null); setImportUrl(''); }}>Import from GitHub</Button>
-          <Button size="xs" variant="default" onClick={openNew}>New skill</Button>
+          <Button size="xs" variant="default" onClick={() => { setImportOpen(true); setImportPreview(null); setImportUrl(''); }}>{t('skills.importGithub')}</Button>
+          <Button size="xs" variant="default" onClick={openNew}>{t('skills.new')}</Button>
         </Group>
       </Group>
 
@@ -92,7 +94,7 @@ export default function SkillsPanel() {
 
       {skills.length === 0 ? (
         <Card withBorder padding="xl" radius="md">
-          <Text size="sm" c="dimmed" ta="center">No skills yet. Create one to give agents specialized capabilities.</Text>
+          <Text size="sm" c="dimmed" ta="center">{t('skills.empty2')}</Text>
         </Card>
       ) : (
         skills.map((skill) => (
@@ -102,11 +104,11 @@ export default function SkillsPanel() {
                 <Group gap="xs">
                   <Text fw={600}>{skill.name}</Text>
                   {skill.toolNames.length > 0 && (
-                    <Badge size="sm" variant="light" color="gray">{skill.toolNames.length} tool{skill.toolNames.length > 1 ? 's' : ''}</Badge>
+                    <Badge size="sm" variant="light" color="gray">{skill.toolNames.length} {t('agents.tools')}</Badge>
                   )}
                   {(skill.usageCount ?? 0) > 0 && (
-                    <Badge size="sm" variant="outline" color="gray" title={skill.lastUsedAt ? `Last used ${new Date(skill.lastUsedAt).toLocaleString()}` : undefined}>
-                      used {skill.usageCount}×
+                    <Badge size="sm" variant="outline" color="gray" title={skill.lastUsedAt ? `${t('skills.lastUsed')} ${new Date(skill.lastUsedAt).toLocaleString()}` : undefined}>
+                      {skill.usageCount}× {t('skills.uses')}
                     </Badge>
                   )}
                 </Group>
@@ -114,7 +116,7 @@ export default function SkillsPanel() {
                 <Text size="xs" c="dimmed" lineClamp={2} mt={4} style={{ whiteSpace: 'pre-wrap' }}>{skill.prompt}</Text>
               </div>
               <Group gap="xs">
-                <Button size="xs" variant="subtle" color="gray" onClick={() => openEdit(skill)}>Edit</Button>
+                <Button size="xs" variant="subtle" color="gray" onClick={() => openEdit(skill)}>{t('common.edit')}</Button>
                 <Button
                   size="xs"
                   variant="subtle"
@@ -122,15 +124,15 @@ export default function SkillsPanel() {
                   loading={improving === skill.id}
                   onClick={() => improve(skill)}
                 >
-                  Improve with AI
+                  {t('skills.improve')}
                 </Button>
                 <Button
                   size="xs"
                   variant="subtle"
                   color="gray"
-                  onClick={async () => { if (confirm(`Delete skill "${skill.name}"?`)) { await window.electronAPI.deleteSkill(skill.id); await load(); } }}
+                  onClick={async () => { if (confirm(`${t('skills.deleteConfirm')} "${skill.name}"?`)) { await window.electronAPI.deleteSkill(skill.id); await load(); } }}
                 >
-                  Delete
+                  {t('common.delete')}
                 </Button>
               </Group>
             </Group>
@@ -138,10 +140,10 @@ export default function SkillsPanel() {
         ))
       )}
 
-      <Modal opened={importOpen} onClose={() => setImportOpen(false)} title="Import skill from GitHub" size="lg">
+      <Modal opened={importOpen} onClose={() => setImportOpen(false)} title={t('skills.importTitle')} size="lg">
         <Stack gap="sm">
           <Text size="sm" c="dimmed">
-            Paste a GitHub repo or file URL containing a SKILL.md (with optional frontmatter: name, description, tools).
+            {t('skills.importHint')}
           </Text>
           <TextInput
             placeholder="https://github.com/owner/repo"
@@ -154,7 +156,7 @@ export default function SkillsPanel() {
                 <Text size="sm" fw={600}>{importPreview.name}</Text>
                 <Text size="xs" c="dimmed">{importPreview.description}</Text>
                 {importPreview.toolNames.length > 0 && (
-                  <Text size="xs" c="dimmed">Tools: {importPreview.toolNames.join(', ')}</Text>
+                  <Text size="xs" c="dimmed">{t('skills.toolsPrefix')}: {importPreview.toolNames.join(', ')}</Text>
                 )}
                 <Text size="xs" c="dimmed" lineClamp={3} style={{ whiteSpace: 'pre-wrap' }}>{importPreview.prompt}</Text>
               </Stack>
@@ -162,7 +164,7 @@ export default function SkillsPanel() {
           )}
           {error && <Text size="sm" c="dimmed">{error}</Text>}
           <Group justify="flex-end" gap="xs">
-            <Button variant="default" size="xs" onClick={() => setImportOpen(false)}>Cancel</Button>
+            <Button variant="default" size="xs" onClick={() => setImportOpen(false)}>{t('common.cancel')}</Button>
             {!importPreview ? (
               <Button
                 size="xs"
@@ -174,11 +176,11 @@ export default function SkillsPanel() {
                     const draft = await window.electronAPI.importSkillFromGitHub(importUrl.trim());
                     setImportPreview(draft);
                   } catch (e) {
-                    setError(e instanceof Error ? e.message : 'Import failed');
+                    setError(e instanceof Error ? e.message : t('skills.importFailed'));
                   } finally { setImporting(false); }
                 }}
               >
-                Fetch
+                {t('skills.fetch')}
               </Button>
             ) : (
               <Button
@@ -195,36 +197,36 @@ export default function SkillsPanel() {
                   await load();
                 }}
               >
-                Save skill
+                {t('skills.saveSkill')}
               </Button>
             )}
           </Group>
         </Stack>
       </Modal>
 
-      <Modal opened={modalOpen} onClose={() => { setEditing(null); setIsNew(false); }} title={isNew ? 'New skill' : `Edit: ${editing?.name}`} size="lg">
+      <Modal opened={modalOpen} onClose={() => { setEditing(null); setIsNew(false); }} title={isNew ? t('skills.new') : `${t('common.edit')}: ${editing?.name}`} size="lg">
         <Stack gap="sm">
           <TextInput
-            label="Name"
+            label={t('common.name')}
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.currentTarget.value })}
           />
           <TextInput
-            label="Description"
+            label={t('common.description')}
             value={form.description}
             onChange={(e) => setForm({ ...form, description: e.currentTarget.value })}
           />
           <Textarea
-            label="Prompt"
-            description="Instructions injected into the agent's system prompt when this skill is active."
+            label={t('skills.promptLabel')}
+            description={t('skills.promptDesc')}
             minRows={8}
             value={form.prompt}
             onChange={(e) => setForm({ ...form, prompt: e.currentTarget.value })}
           />
           {tools.length > 0 && (
             <div>
-              <Text size="sm" fw={500} mb={4}>Tools</Text>
-              <Text size="xs" c="dimmed" mb={8}>The LLM can call these during execution.</Text>
+              <Text size="sm" fw={500} mb={4}>{t('skills.toolsLabel')}</Text>
+              <Text size="xs" c="dimmed" mb={8}>{t('skills.toolsDesc')}</Text>
               {tools.map((t) => (
                 <Checkbox
                   key={t.name}
@@ -246,8 +248,8 @@ export default function SkillsPanel() {
           )}
           {error && <Text size="sm" c="dimmed">{error}</Text>}
           <Group justify="flex-end">
-            <Button variant="default" onClick={() => { setEditing(null); setIsNew(false); }}>Cancel</Button>
-            <Button onClick={save}>Save</Button>
+            <Button variant="default" onClick={() => { setEditing(null); setIsNew(false); }}>{t('common.cancel')}</Button>
+            <Button onClick={save}>{t('common.save')}</Button>
           </Group>
         </Stack>
       </Modal>

@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
 import { Badge, Button, Card, Group, Stack, Text, Title } from '@mantine/core';
 import { useGovernanceStore } from '../../store/governanceStore';
+import { useLang } from '../../lib/i18n';
 import { IconShield } from '../common/icons.js';
 
 export default function ApprovalQueue() {
+  const { t } = useLang();
   const { pendingApprovals, loading, error, fetchPendingApprovals, approveAction, rejectAction } = useGovernanceStore();
 
   useEffect(() => {
@@ -17,27 +19,27 @@ export default function ApprovalQueue() {
   };
 
   const handleReject = async (id: string) => {
-    const reason = prompt('Reason for rejection:');
+    const reason = prompt(t('ap.rejectReason'));
     if (reason) {
       await rejectAction(id, reason);
     }
   };
 
   if (loading) {
-    return <Text c="dimmed" ta="center" py="xl">Loading approvals...</Text>;
+    return <Text c="dimmed" ta="center" py="xl">{t('ap.loading')}</Text>;
   }
 
   if (error) {
-    return <Text c="dimmed">Error: {error}</Text>;
+    return <Text c="dimmed">{t('common.error')}: {error}</Text>;
   }
 
   return (
     <Stack gap="md">
       <Group justify="space-between">
         <Group gap="sm">
-          <Title order={2} size="h4">Pending Approvals</Title>
+          <Title order={2} size="h4">{t('ap.title')}</Title>
           {pendingApprovals.length > 0 && (
-            <Badge size="sm" variant="light" color="gray">{pendingApprovals.length} pending</Badge>
+            <Badge size="sm" variant="light" color="gray">{pendingApprovals.length} {t('common.pending')}</Badge>
           )}
         </Group>
         {pendingApprovals.length > 1 && (
@@ -50,7 +52,7 @@ export default function ApprovalQueue() {
               }
             }}
           >
-            Approve all
+            {t('ap.approveAll')}
           </Button>
         )}
       </Group>
@@ -59,8 +61,8 @@ export default function ApprovalQueue() {
         <Card withBorder padding="xl" radius="md">
           <Stack align="center" gap="sm">
             <IconShield />
-            <Text fw={500}>No pending approvals</Text>
-            <Text size="sm" c="dimmed">All actions have been reviewed</Text>
+            <Text fw={500}>{t('ap.empty')}</Text>
+            <Text size="sm" c="dimmed">{t('ap.emptyHint')}</Text>
           </Stack>
         </Card>
       ) : (
@@ -81,8 +83,8 @@ export default function ApprovalQueue() {
                 </Text>
               </Card>
               <Group justify="flex-end" gap="xs">
-                <Button size="xs" variant="default" onClick={() => handleApprove(approval.id)}>Approve</Button>
-                <Button size="xs" variant="default" onClick={() => handleReject(approval.id)}>Reject</Button>
+                <Button size="xs" variant="default" onClick={() => handleApprove(approval.id)}>{t('common.approve')}</Button>
+                <Button size="xs" variant="default" onClick={() => handleReject(approval.id)}>{t('common.reject')}</Button>
               </Group>
             </Stack>
           </Card>
