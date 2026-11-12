@@ -78,6 +78,13 @@ body {
   animation: km-progress-sheen 1.4s var(--km-out) infinite;
 }
 
+/* Keyboard focus: a solid ring offset from the control (WCAG 2.4.7). */
+:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .km-enter,
   .km-progress::after {

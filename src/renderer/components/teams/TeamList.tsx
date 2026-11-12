@@ -5,6 +5,9 @@ import { useAgentStore } from '../../store/agentStore';
 import TeamEditor from './TeamEditor';
 import { useLang } from '../../lib/i18n';
 import PageHeader from '../common/PageHeader';
+import PixelSpinner from '../common/PixelSpinner';
+import BotAvatar from '../common/BotAvatar';
+import { avatarForAgent } from '../../../shared/avatars';
 import { IconTeam } from '../common/icons.js';
 
 export default function TeamList() {
@@ -28,13 +31,16 @@ export default function TeamList() {
     }
   };
 
-  const getAgentName = (agentId: string) => {
-    const agent = agents.find(a => a.id === agentId);
-    return agent?.name || t('teams.unknownAgent');
-  };
+  const getAgent = (agentId: string) => agents.find(a => a.id === agentId);
+  const getAgentName = (agentId: string) => getAgent(agentId)?.name || t('teams.unknownAgent');
 
   if (loading) {
-    return <Text c="dimmed" ta="center" py="xl">{t('teams.loading')}</Text>;
+    return (
+      <Stack align="center" gap="sm" py="xl">
+        <PixelSpinner size={24} />
+        <Text c="dimmed">{t('teams.loading')}</Text>
+      </Stack>
+    );
   }
 
   if (error) {
@@ -66,6 +72,7 @@ export default function TeamList() {
               withBorder
               padding="md"
               radius="md"
+              className="km-enter"
               style={{ cursor: 'pointer' }}
               onClick={() => selectTeam(team.id)}
             >
@@ -77,9 +84,15 @@ export default function TeamList() {
                 </Text>
                 <Group gap={6}>
                   {team.agentIds.length > 0 ? (
-                    team.agentIds.map((agentId) => (
-                      <Badge key={agentId} size="sm" variant="light" color="gray">{getAgentName(agentId)}</Badge>
-                    ))
+                    team.agentIds.map((agentId) => {
+                      const agent = getAgent(agentId);
+                      return (
+                        <Group key={agentId} gap={4} wrap="nowrap" title={getAgentName(agentId)}>
+                          {agent && <BotAvatar definition={avatarForAgent(agent)} size={22} />}
+                          <Text size="xs" c="dimmed">{getAgentName(agentId)}</Text>
+                        </Group>
+                      );
+                    })
                   ) : (
                     <Text size="sm" c="dimmed">{t('teams.noAgents')}</Text>
                   )}

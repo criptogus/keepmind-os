@@ -5,6 +5,8 @@ import { useModelOptions } from '../../lib/useModelOptions';
 import AgentExecutionView from './AgentExecutionView';
 import type { AgentConfig, Skill } from '../../../shared/types.js';
 import { useLang } from '../../lib/i18n';
+import { AVATAR_PRESETS, avatarForAgent, avatarJson, parseAvatarDefinition, presetAvatarFor } from '../../../shared/avatars';
+import BotAvatar from '../common/BotAvatar';
 
 interface AgentEditorProps {
   agentId: string;
@@ -16,6 +18,7 @@ export default function AgentEditor({ agentId, onClose }: AgentEditorProps) {
   const { selectedAgent, loading, error, updateAgent, deleteAgent, executeAgent, selectAgent } = useAgentStore();
   const [activeTab, setActiveTab] = useState<string | null>('config');
   const [config, setConfig] = useState<AgentConfig | null>(null);
+  const [avatarSel, setAvatarSel] = useState('auto');
   const [executionInput, setExecutionInput] = useState('{}');
   const [availableSkills, setAvailableSkills] = useState<Skill[]>([]);
   const { groups: modelGroups } = useModelOptions();
@@ -28,13 +31,21 @@ export default function AgentEditor({ agentId, onClose }: AgentEditorProps) {
   useEffect(() => {
     if (selectedAgent) {
       setConfig(selectedAgent.config);
+      // Match the stored avatar JSON against presets; unknown/custom → 'auto' preview of stored def.
+      const stored = parseAvatarDefinition(selectedAgent.avatar);
+      const match = stored ? AVATAR_PRESETS.find((p) => JSON.stringify(p) === JSON.stringify(stored)) : undefined;
+      setAvatarSel(match?.id ?? (stored ? '__custom' : 'auto'));
     }
   }, [selectedAgent]);
 
   const handleSave = async () => {
     if (!config) return;
     try {
-      await updateAgent(agentId, config);
+      const avatar =
+        avatarSel === 'auto' ? null
+        : avatarSel === '__custom' ? selectedAgent?.avatar ?? null
+        : avatarJson(AVATAR_PRESETS.find((p) => p.id === avatarSel) ?? avatarForAgent(selectedAgent!));
+      await updateAgent(agentId, { ...config, avatar });
     } catch (err) {
       console.error('Failed to update agent:', err);
     }
@@ -103,6 +114,30 @@ export default function AgentEditor({ agentId, onClose }: AgentEditorProps) {
               allowDeselect={false}
               searchable
             />
+
+            <Group gap="sm" align="flex-end" wrap="nowrap">
+              <Select
+                style={{ flex: 1 }}
+                label={t('af.avatar')}
+                description={t('af.avatarDesc')}
+                data={[
+                  { value: 'auto', label: t('af.avatarAuto') },
+                  ...(avatarSel === '__custom' ? [{ value: '__custom', label: `${t('af.avatar')} (custom)` }] : []),
+                  ...AVATAR_PRESETS.map((p) => ({ value: p.id, label: p.name })),
+                ]}
+                value={avatarSel}
+                onChange={(v) => setAvatarSel(v || 'auto')}
+                allowDeselect={false}
+              />
+              <BotAvatar
+                definition={
+                  avatarSel === 'auto' ? presetAvatarFor(selectedAgent.id)
+                  : avatarSel === '__custom' ? avatarForAgent(selectedAgent)
+                  : (AVATAR_PRESETS.find((p) => p.id === avatarSel) ?? avatarForAgent(selectedAgent))
+                }
+                size={44}
+              />
+            </Group>
 
             <Textarea
               label={t('af.systemPrompt')}

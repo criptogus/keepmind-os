@@ -99,7 +99,7 @@ export default function SkillsPanel() {
         </Card>
       ) : (
         skills.map((skill) => (
-          <Card key={skill.id} withBorder padding="md" radius="md">
+          <Card key={skill.id} withBorder padding="md" radius="md" className="km-enter">
             <Group justify="space-between" align="flex-start">
               <div style={{ flex: 1 }}>
                 <Group gap="xs">

@@ -240,6 +240,8 @@ const dict: Record<string, { en: string; pt: string }> = {
   'aex.elapsed': { en: 'elapsed', pt: 'decorrido' },
   'aex.lastTool': { en: 'last tool', pt: 'última ferramenta' },
   'agents.working': { en: 'working…', pt: 'trabalhando…' },
+  'dash2.workingNow': { en: 'Working now', pt: 'Trabalhando agora' },
+  'dash2.unknownAgent': { en: 'Agent', pt: 'Agente' },
   'tex.executeTeam': { en: 'Execute Team', pt: 'Executar Equipe' },
   'tex.input': { en: 'Input (JSON)', pt: 'Entrada (JSON)' },
   'tex.duration': { en: 'Duration', pt: 'Duração' },

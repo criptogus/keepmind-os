@@ -134,13 +134,31 @@ export default function AgentExecutionView({ agentId }: AgentExecutionViewProps)
             {live.tools.length > 0 && (
               <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
                 <Text size="xs" fw={600} mb={4}>{t('aex.toolCalls')}</Text>
-                {live.tools.map((t, i) => (
-                  <Text key={i} size="xs" ff="monospace" c="dimmed">
-                    → {t.name}
-                    {t.result !== undefined && `\n   ${t.result.slice(0, 300)}`}
-                    {t.error && `\n   error: ${t.error}`}
-                  </Text>
-                ))}
+                <Stack gap={2}>
+                  {live.tools.map((tool, i) => {
+                    const pending = tool.result === undefined && tool.error === undefined;
+                    const failed = tool.error !== undefined;
+                    return (
+                      <Group key={i} gap={6} wrap="nowrap" align="flex-start">
+                        <span style={{ width: 14, display: 'inline-flex', justifyContent: 'center', flexShrink: 0, marginTop: 2 }}>
+                          {pending ? <PixelSpinner size={14} /> : failed ? (
+                            <Text span size="xs" fw={700} c="dark">!</Text>
+                          ) : (
+                            <Text span size="xs" fw={700}>✓</Text>
+                          )}
+                        </span>
+                        <div style={{ minWidth: 0 }}>
+                          <Text size="xs" ff="monospace" fw={500} style={{ wordBreak: 'break-all' }}>{tool.name}</Text>
+                          {(tool.result !== undefined || tool.error) && (
+                            <Text size="xs" c={failed ? 'dark' : 'dimmed'} ff="monospace" style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }} lineClamp={3}>
+                              {tool.error ? `error: ${tool.error}` : tool.result}
+                            </Text>
+                          )}
+                        </div>
+                      </Group>
+                    );
+                  })}
+                </Stack>
               </Card>
             )}
             {live.text && (

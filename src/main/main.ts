@@ -28,7 +28,7 @@ import { appendFileSync } from 'node:fs';
 import type { Skill } from '../shared/types.js';
 import { v4 as uuidv4 } from 'uuid';
 import type { AgentConfig, CreateAgentInput, TeamConfig, GovernanceRule, AppSettings, AgentTrigger, Approval, LocalUser, UserRole, ComputerAccessLevel } from '../shared/types.js';
-import { presetAvatarFor, avatarJson } from '../shared/avatars.js';
+import { presetAvatarFor, avatarJson, parseAvatarDefinition } from '../shared/avatars.js';
 
 let mainWindow: BrowserWindow | null = null;
 let storageManager: StorageManager;
@@ -1092,13 +1092,26 @@ handle('agents:create', async (_event, input: CreateAgentInput) => {
   return agent;
 });
 
-handle('agents:update', (_event, id: string, config: Partial<AgentConfig>) => {
+handle('agents:update', (_event, id: string, updates: Partial<AgentConfig> & { avatar?: string | null }) => {
   requireRole('admin');
   const agent = storageManager.getAgent(id);
   if (!agent) throw new Error('Agent not found');
-  
+
+  const { avatar, ...config } = updates;
+  let nextAvatar = agent.avatar;
+  if (avatar !== undefined) {
+    if (avatar === null || avatar === '') {
+      nextAvatar = undefined;
+    } else {
+      const parsed = parseAvatarDefinition(avatar);
+      if (!parsed) throw new Error('Invalid avatar definition');
+      nextAvatar = avatarJson(parsed);
+    }
+  }
+
   const updated = {
     ...agent,
+    avatar: nextAvatar,
     config: { ...agent.config, ...config },
     updatedAt: new Date().toISOString(),
   };

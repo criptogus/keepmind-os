@@ -16,7 +16,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getAgents: () => ipcRenderer.invoke('agents:getList') as Promise<Agent[]>,
   getAgent: (id: string) => ipcRenderer.invoke('agents:get', id) as Promise<Agent | null>,
   createAgent: (input: CreateAgentInput) => ipcRenderer.invoke('agents:create', input) as Promise<Agent>,
-  updateAgent: (id: string, config: Partial<AgentConfig>) => ipcRenderer.invoke('agents:update', id, config) as Promise<Agent>,
+  updateAgent: (id: string, updates: Partial<AgentConfig> & { avatar?: string | null }) => ipcRenderer.invoke('agents:update', id, updates) as Promise<Agent>,
   deleteAgent: (id: string) => ipcRenderer.invoke('agents:delete', id) as Promise<void>,
   executeAgent: (id: string, input: Record<string, unknown>) => ipcRenderer.invoke('agents:execute', id, input) as Promise<AgentExecution>,
   cancelExecution: (executionId: string) => ipcRenderer.invoke('agents:cancelExecution', executionId) as Promise<void>,
@@ -219,7 +219,7 @@ declare global {
       getAgents: () => Promise<Agent[]>;
       getAgent: (id: string) => Promise<Agent | null>;
       createAgent: (input: CreateAgentInput) => Promise<Agent>;
-      updateAgent: (id: string, config: Partial<AgentConfig>) => Promise<Agent>;
+      updateAgent: (id: string, updates: Partial<AgentConfig> & { avatar?: string | null }) => Promise<Agent>;
       deleteAgent: (id: string) => Promise<void>;
       executeAgent: (id: string, input: Record<string, unknown>) => Promise<AgentExecution>;
       cancelExecution: (executionId: string) => Promise<void>;

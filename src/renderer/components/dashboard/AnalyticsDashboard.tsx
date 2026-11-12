@@ -3,6 +3,10 @@ import { Badge, Button, Card, Group, Progress, Stack, Text, Title } from '@manti
 import { useAgentStore } from '../../store/agentStore';
 import { useTeamStore } from '../../store/teamStore';
 import { useLang } from '../../lib/i18n';
+import BotAvatar from '../common/BotAvatar';
+import PixelSpinner from '../common/PixelSpinner';
+import { avatarForAgent } from '../../../shared/avatars';
+import type { AgentExecution } from '../../../shared/types.js';
 
 interface Props {
   onNavigate?: (section: string) => void;
@@ -19,6 +23,8 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
   const { agents, fetchAgents } = useAgentStore();
   const { teams, fetchTeams } = useTeamStore();
   const [executions, setExecutions] = useState(0);
+  const [runningExecs, setRunningExecs] = useState<AgentExecution[]>([]);
+  const [now, setNow] = useState(Date.now());
   const [pendingApprovals, setPendingApprovals] = useState(0);
   const [providerConnected, setProviderConnected] = useState(false);
   const [whatsappConnected, setWhatsappConnected] = useState(false);
@@ -47,6 +53,7 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
       try {
         const execs = await window.electronAPI.getAgentExecutions();
         setExecutions(execs.length);
+        setRunningExecs(execs.filter((e) => e.status === 'running'));
       } catch { /* executions unavailable */ }
       try {
         const company = await window.electronAPI.getCompany();
@@ -61,6 +68,15 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
       } catch { /* usage ledger unavailable */ }
     };
     load();
+    // Presence strip: refresh running executions + elapsed clock every 5s.
+    const poll = setInterval(async () => {
+      try {
+        const execs = await window.electronAPI.getAgentExecutions();
+        setRunningExecs(execs.filter((e) => e.status === 'running'));
+        setNow(Date.now());
+      } catch { /* ignore */ }
+    }, 5000);
+    return () => clearInterval(poll);
   }, [fetchAgents, fetchTeams]);
 
   const checklist = [
@@ -147,6 +163,29 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
           ))}
         </Group>
       </Card>
+
+      {runningExecs.length > 0 && (
+        <Card withBorder padding="md" radius="md" className="km-enter">
+          <Stack gap="xs">
+            <Text size="xs" fw={600} tt="uppercase" c="dimmed">{t('dash2.workingNow')}</Text>
+            {runningExecs.map((exec) => {
+              const agent = agents.find((a) => a.id === exec.agentId);
+              const elapsed = exec.startedAt ? Math.max(0, Math.floor((now - new Date(exec.startedAt).getTime()) / 1000)) : 0;
+              const mm = Math.floor(elapsed / 60);
+              const ss = String(elapsed % 60).padStart(2, '0');
+              return (
+                <Group key={exec.id} gap="sm" wrap="nowrap">
+                  {agent ? <BotAvatar definition={avatarForAgent(agent)} mood="thinking" size={28} /> : <PixelSpinner size={16} />}
+                  <div style={{ minWidth: 0 }}>
+                    <Text size="sm" fw={500} lineClamp={1}>{agent?.name ?? t('dash2.unknownAgent')}</Text>
+                    <Text size="xs" c="dimmed">{mm > 0 ? `${mm}m ${ss}s` : `${ss}s`} · {exec.progress}%</Text>
+                  </div>
+                </Group>
+              );
+            })}
+          </Stack>
+        </Card>
+      )}
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
         {stats.map((s) => (
