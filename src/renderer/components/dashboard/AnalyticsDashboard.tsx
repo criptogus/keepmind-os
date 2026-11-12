@@ -8,7 +8,11 @@ interface Props {
   onNavigate?: (section: string) => void;
 }
 
-
+interface ConnectionStatus {
+  key: 'provider' | 'whatsapp' | 'brain';
+  label: string;
+  ok: boolean;
+}
 
 export default function AnalyticsDashboard({ onNavigate }: Props) {
   const { t } = useLang();
@@ -17,6 +21,7 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
   const [executions, setExecutions] = useState(0);
   const [pendingApprovals, setPendingApprovals] = useState(0);
   const [providerConnected, setProviderConnected] = useState(false);
+  const [whatsappConnected, setWhatsappConnected] = useState(false);
   const [companyName, setCompanyName] = useState('');
   const [secondBrain, setSecondBrain] = useState<{ enabled: boolean; hasToken: boolean } | null>(null);
 
@@ -30,6 +35,10 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
         ]);
         setProviderConnected(openai || anthropic);
       } catch { /* oauth status unavailable */ }
+      try {
+        const wa = await window.electronAPI.whatsappGetStatus();
+        setWhatsappConnected(wa.status === 'connected');
+      } catch { /* whatsapp status unavailable */ }
       try {
         const state = await window.electronAPI.getGovernanceState();
         setPendingApprovals(state.pendingApprovals.length);
@@ -71,6 +80,13 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
     { label: t('dash.approvals'), value: pendingApprovals, warn: pendingApprovals > 0 },
   ];
 
+  const connections: ConnectionStatus[] = [
+    { key: 'provider', label: t('dash2.intProvider'), ok: providerConnected },
+    { key: 'whatsapp', label: t('dash2.intWhatsapp'), ok: whatsappConnected },
+    { key: 'brain', label: t('dash2.intBrain'), ok: !!secondBrain?.enabled && !!secondBrain?.hasToken },
+  ];
+  const allConnected = connections.every((c) => c.ok);
+
   return (
     <Stack gap="xl">
       <Group justify="space-between" align="flex-start">
@@ -85,6 +101,48 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
           <Button onClick={() => onNavigate?.('agents')}>{t('agents.new')}</Button>
         </Group>
       </Group>
+
+      {pendingApprovals > 0 && (
+        <Card withBorder padding="lg" radius="md" style={{ borderColor: 'var(--mantine-color-dark-4)' }}>
+          <Group justify="space-between">
+            <Group gap="sm">
+              <Badge color="dark" variant="filled">{pendingApprovals}</Badge>
+              <div>
+                <Text fw={600}>{t('dash2.attention')}</Text>
+                <Text size="sm" c="dimmed">
+                  {pendingApprovals} {t('dash2.approvalsWaiting')}
+                </Text>
+              </div>
+            </Group>
+            <Button size="sm" onClick={() => onNavigate?.('governance')}>{t('dash2.reviewNow')}</Button>
+          </Group>
+        </Card>
+      )}
+
+      <Card withBorder padding="lg" radius="md">
+        <Group justify="space-between" mb="sm">
+          <Text fw={600} size="sm">{t('dash2.integrations')}</Text>
+          {allConnected && <Text size="xs" c="dimmed">{t('dash2.allGood')}</Text>}
+        </Group>
+        <Group gap="md" wrap="wrap">
+          {connections.map((c) => (
+            <Group key={c.key} gap={8} wrap="nowrap">
+              <span
+                style={{
+                  width: 10, height: 10, borderRadius: '50%', flexShrink: 0,
+                  backgroundColor: c.ok ? '#2f9e44' : 'var(--mantine-color-gray-5)',
+                }}
+              />
+              <Text size="sm">{c.label}</Text>
+              {!c.ok && (
+                <Button size="compact-xs" variant="subtle" onClick={() => onNavigate?.('advanced')}>
+                  {t('dash2.connect')}
+                </Button>
+              )}
+            </Group>
+          ))}
+        </Group>
+      </Card>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
         {stats.map((s) => (

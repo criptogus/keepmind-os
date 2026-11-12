@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Button, Card, Group, Modal, Select, SimpleGrid, Stack, Text, Title } from '@mantine/core';
+import { Button, Card, Group, Modal, Select, Stack, Text, Title } from '@mantine/core';
 import { v4 as uuidv4 } from 'uuid';
 import type { Agent, Workflow, WorkflowStep } from '../../../shared/types.js';
 import { useAgentStore } from '../../store/agentStore';
 import AgentForm from '../agents/AgentForm';
-import { AGENT_TEMPLATES, type AgentTemplate } from '../../lib/agentTemplates';
+import AgentWizard from '../agents/AgentWizard';
+import type { AgentTemplate } from '../../lib/agentTemplates';
 import { useLang } from '../../lib/i18n';
 
 interface WorkflowBuilderProps {
@@ -18,8 +19,8 @@ interface WorkflowBuilderProps {
 export default function WorkflowBuilder({ workflow, agents, onChange, onAgentCreated }: WorkflowBuilderProps) {
   const { t } = useLang();
   const [newStepAgentId, setNewStepAgentId] = useState('');
-  const [showAgentPicker, setShowAgentPicker] = useState(false);
-  const [pickedTemplate, setPickedTemplate] = useState<AgentTemplate | null>(null);
+  const [agentMode, setAgentMode] = useState<'wizard' | 'advanced' | null>(null);
+  const [advancedTemplate, setAdvancedTemplate] = useState<AgentTemplate | null>(null);
   const { fetchAgents } = useAgentStore();
 
   const addStepForAgent = (agentId: string) => {
@@ -31,8 +32,8 @@ export default function WorkflowBuilder({ workflow, agents, onChange, onAgentCre
     await onAgentCreated?.(agent);
     await fetchAgents();
     addStepForAgent(agent.id);
-    setShowAgentPicker(false);
-    setPickedTemplate(null);
+    setAgentMode(null);
+    setAdvancedTemplate(null);
   };
 
   const addStep = () => {
@@ -185,50 +186,29 @@ export default function WorkflowBuilder({ workflow, agents, onChange, onAgentCre
           style={{ flex: 1 }}
         />
         <Button size="sm" onClick={addStep} disabled={!newStepAgentId}>{t('wf.addStep')}</Button>
-        <Button size="sm" variant="default" onClick={() => { setPickedTemplate(null); setShowAgentPicker(true); }}>
+        <Button size="sm" variant="default" onClick={() => { setAdvancedTemplate(null); setAgentMode('wizard'); }}>
           {t('wf.newAgent')}
         </Button>
       </Group>
 
       <Modal
-        opened={showAgentPicker}
-        onClose={() => { setShowAgentPicker(false); setPickedTemplate(null); }}
-        title={pickedTemplate ? t('wf.configureStep') : t('wf.newThematic')}
-        size="lg"
+        opened={agentMode !== null}
+        onClose={() => { setAgentMode(null); setAdvancedTemplate(null); }}
+        title={agentMode === 'advanced' ? t('wiz.advanced') : t('wiz.title')}
+        size="xl"
       >
-        {pickedTemplate ? (
+        {agentMode === 'advanced' ? (
           <AgentForm
-            template={pickedTemplate}
-            onClose={() => { setShowAgentPicker(false); setPickedTemplate(null); }}
+            template={advancedTemplate}
+            onClose={() => { setAgentMode(null); setAdvancedTemplate(null); }}
             onCreated={handleAgentCreated}
           />
         ) : (
-          <Stack gap="sm">
-            <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="sm">
-              {AGENT_TEMPLATES.map((tpl) => (
-                <Card
-                  key={tpl.id}
-                  withBorder
-                  padding="md"
-                  radius="md"
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => setPickedTemplate(tpl)}
-                >
-                  <Stack gap={4}>
-                    <Text fw={600} size="sm">{tpl.name}</Text>
-                    <Text size="xs" c="dimmed">{tpl.tagline}</Text>
-                  </Stack>
-                </Card>
-              ))}
-            </SimpleGrid>
-            <Button
-              variant="default"
-              size="xs"
-              onClick={() => setPickedTemplate({ id: 'blank', name: '', group: '', role: 'Custom', tagline: '', description: '', capabilities: [], skillNames: [], toolNames: [], config: { model: '', temperature: 0.7, maxTokens: 2048, systemPrompt: '', tools: [], skillIds: [] } })}
-            >
-              {t('agents.startBlank')}
-            </Button>
-          </Stack>
+          <AgentWizard
+            onClose={() => setAgentMode(null)}
+            onCreated={handleAgentCreated}
+            onAdvanced={(tpl) => { setAdvancedTemplate(tpl); setAgentMode('advanced'); }}
+          />
         )}
       </Modal>
     </Stack>

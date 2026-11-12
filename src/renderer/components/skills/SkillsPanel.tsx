@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Badge, Button, Card, Checkbox, Group, Modal, Stack, Text, Textarea, TextInput, Title } from '@mantine/core';
+import { Badge, Button, Card, Checkbox, Group, Modal, Stack, Text, Textarea, TextInput } from '@mantine/core';
 import type { Skill } from '../../../shared/types';
 import { useLang } from '../../lib/i18n';
+import PageHeader from '../common/PageHeader';
 
 interface ToolInfo {
   name: string;
@@ -77,18 +78,17 @@ export default function SkillsPanel() {
 
   return (
     <Stack gap="md">
-      <Group justify="space-between">
-        <div>
-          <Title order={2} size="h4">{t('skills.title')}</Title>
-          <Text size="sm" c="dimmed">
-            {t('skills.subtitle')}
-          </Text>
-        </div>
-        <Group gap="xs">
-          <Button size="xs" variant="default" onClick={() => { setImportOpen(true); setImportPreview(null); setImportUrl(''); }}>{t('skills.importGithub')}</Button>
-          <Button size="xs" variant="default" onClick={openNew}>{t('skills.new')}</Button>
-        </Group>
-      </Group>
+      <PageHeader
+        title={t('ph.skills.title')}
+        subtitle={t('ph.skills.sub')}
+        help={t('ph.skills.help')}
+        actions={
+          <Group gap="xs">
+            <Button size="xs" variant="default" onClick={() => { setImportOpen(true); setImportPreview(null); setImportUrl(''); }}>{t('skills.importGithub')}</Button>
+            <Button size="xs" variant="default" onClick={openNew}>{t('skills.new')}</Button>
+          </Group>
+        }
+      />
 
       {error && <Text size="sm" c="dimmed">{error}</Text>}
 

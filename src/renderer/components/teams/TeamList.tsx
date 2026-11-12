@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Badge, Button, Card, Group, Modal, SimpleGrid, Stack, Text, TextInput, Textarea, Title } from '@mantine/core';
+import { Badge, Button, Card, Group, Modal, SimpleGrid, Stack, Text, TextInput, Textarea } from '@mantine/core';
 import { useTeamStore } from '../../store/teamStore';
 import { useAgentStore } from '../../store/agentStore';
 import TeamEditor from './TeamEditor';
 import { useLang } from '../../lib/i18n';
+import PageHeader from '../common/PageHeader';
 import { IconTeam } from '../common/icons.js';
 
 export default function TeamList() {
@@ -42,10 +43,12 @@ export default function TeamList() {
 
   return (
     <Stack gap="md">
-      <Group justify="space-between">
-        <Title order={2} size="h4">{t('teams.title')}</Title>
-        <Button size="xs" variant="default" onClick={() => setCreating(true)}>{t('teams.new')}</Button>
-      </Group>
+      <PageHeader
+        title={t('ph.teams.title')}
+        subtitle={t('ph.teams.sub')}
+        help={t('ph.teams.help')}
+        actions={<Button size="xs" variant="default" onClick={() => setCreating(true)}>{t('teams.new')}</Button>}
+      />
 
       {teams.length === 0 ? (
         <Card withBorder padding="xl" radius="md">

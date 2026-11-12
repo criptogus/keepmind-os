@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
-import { Button, Card, Group, Select, Slider, Stack, Switch, Text, TextInput, Title } from '@mantine/core';
+import { Button, Card, Group, Select, Slider, Stack, Switch, Text, TextInput } from '@mantine/core';
 import { useSettingsStore } from '../../store/settingsStore';
 import { useModelOptions } from '../../lib/useModelOptions';
 import { DEFAULT_MODEL } from '../../../shared/models.js';
 import { useLang, type Lang } from '../../lib/i18n';
+import PageHeader from '../common/PageHeader';
 
 export default function SettingsPanel() {
   const { lang, setLang, t } = useLang();
@@ -24,7 +25,7 @@ export default function SettingsPanel() {
 
   return (
     <Stack gap="md" maw={640}>
-      <Title order={2} size="h4">{t('settings.title')}</Title>
+      <PageHeader title={t('ph.settings.title')} subtitle={t('ph.settings.sub')} />
 
       <Card withBorder padding="md" radius="md">
         <Stack gap="sm">

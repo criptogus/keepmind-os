@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Badge, Button, Card, Group, Stack, Table, Text, Title } from '@mantine/core';
+import { Badge, Button, Card, Group, Stack, Table, Text } from '@mantine/core';
 import { IconLogs } from '../common/icons.js';
 import { useLang } from '../../lib/i18n';
+import PageHeader from '../common/PageHeader';
 import type { AuditEntry } from '../../../shared/types.js';
 
 export default function AuditLogs() {
@@ -37,10 +38,12 @@ export default function AuditLogs() {
 
   return (
     <Stack gap="md">
-      <Group justify="space-between">
-        <Title order={2} size="h4">{t('nav.logs')}</Title>
-        <Button size="xs" variant="default" onClick={loadLogs}>{t('common.refresh')}</Button>
-      </Group>
+      <PageHeader
+        title={t('ph.logs.title')}
+        subtitle={t('ph.logs.sub')}
+        help={t('ph.logs.help')}
+        actions={<Button size="xs" variant="default" onClick={loadLogs}>{t('common.refresh')}</Button>}
+      />
 
       {logs.length === 0 ? (
         <Card withBorder padding="xl" radius="md">

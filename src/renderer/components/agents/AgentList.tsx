@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { Badge, Button, Card, Group, Modal, SimpleGrid, Stack, Text, Title } from '@mantine/core';
+import { Badge, Button, Card, Group, Modal, SimpleGrid, Stack, Text } from '@mantine/core';
 import { useAgentStore } from '../../store/agentStore';
 import AgentForm from './AgentForm';
+import AgentWizard from './AgentWizard';
 import AgentEditor from './AgentEditor';
-import { AGENT_TEMPLATES, type AgentTemplate } from '../../lib/agentTemplates';
+import type { AgentTemplate } from '../../lib/agentTemplates';
 import { useLang } from '../../lib/i18n';
+import PageHeader from '../common/PageHeader';
 import { IconAgent } from '../common/icons.js';
 
 export default function AgentList() {
   const { t } = useLang();
   const { agents, loading, error, fetchAgents, selectAgent, deleteAgent } = useAgentStore();
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [selectedTemplate, setSelectedTemplate] = useState<AgentTemplate | null>(null);
+  const [createMode, setCreateMode] = useState<'wizard' | 'advanced' | null>(null);
+  const [advancedTemplate, setAdvancedTemplate] = useState<AgentTemplate | null>(null);
   const [editingAgentId, setEditingAgentId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -35,10 +37,12 @@ export default function AgentList() {
 
   return (
     <Stack gap="md">
-      <Group justify="space-between">
-        <Title order={2} size="h4">{t('agents.title')}</Title>
-        <Button size="xs" variant="default" onClick={() => setShowCreateModal(true)}>{t('agents.new')}</Button>
-      </Group>
+      <PageHeader
+        title={t('ph.agents.title')}
+        subtitle={t('ph.agents.sub')}
+        help={t('ph.agents.help')}
+        actions={<Button data-tour="agents-new" size="xs" variant="default" onClick={() => setCreateMode('wizard')}>{t('agents.new')}</Button>}
+      />
 
       {agents.length === 0 ? (
         <Card withBorder padding="xl" radius="md">
@@ -46,7 +50,7 @@ export default function AgentList() {
             <IconAgent />
             <Text fw={500}>{t('agents.empty')}</Text>
             <Text size="sm" c="dimmed">{t('agents.emptyHint')}</Text>
-            <Button size="xs" variant="default" mt="xs" onClick={() => setShowCreateModal(true)}>{t('agents.createAgent')}</Button>
+            <Button size="xs" variant="default" mt="xs" onClick={() => setCreateMode('wizard')}>{t('agents.createAgent')}</Button>
           </Stack>
         </Card>
       ) : (
@@ -101,59 +105,21 @@ export default function AgentList() {
       )}
 
       <Modal
-        opened={showCreateModal}
-        onClose={() => { setShowCreateModal(false); setSelectedTemplate(null); }}
-        title={selectedTemplate ? t('agents.configure') : t('agents.chooseTemplate')}
+        opened={createMode !== null}
+        onClose={() => { setCreateMode(null); setAdvancedTemplate(null); }}
+        title={createMode === 'advanced' ? t('wiz.advanced') : t('wiz.title')}
         size="xl"
       >
-        {selectedTemplate ? (
+        {createMode === 'advanced' ? (
           <AgentForm
-            template={selectedTemplate}
-            onClose={() => { setShowCreateModal(false); setSelectedTemplate(null); }}
+            template={advancedTemplate}
+            onClose={() => { setCreateMode(null); setAdvancedTemplate(null); }}
           />
         ) : (
-          <Stack gap="md">
-            {Object.entries(
-              AGENT_TEMPLATES.reduce<Record<string, AgentTemplate[]>>((acc, t) => {
-                (acc[t.group] ||= []).push(t);
-                return acc;
-              }, {})
-            ).map(([group, templates]) => (
-              <div key={group}>
-                <Text size="xs" fw={600} tt="uppercase" c="dimmed" mb={6}>{group}</Text>
-                <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="sm">
-                  {templates.map((tpl) => (
-                    <Card
-                      key={tpl.id}
-                      withBorder
-                      padding="md"
-                      radius="md"
-                      style={{ cursor: 'pointer' }}
-                      onClick={() => setSelectedTemplate(tpl)}
-                    >
-                      <Stack gap={4}>
-                        <Text fw={600} size="sm">{tpl.name}</Text>
-                        <Text size="xs" c="dimmed">{tpl.tagline}</Text>
-                        {tpl.skillNames.length > 0 && (
-                          <Text size="xs" c="dimmed">{t('nav.skills')}: {tpl.skillNames.join(', ')}</Text>
-                        )}
-                        {tpl.toolNames.length > 0 && (
-                          <Text size="xs" c="dimmed">{tpl.toolNames.length} {t('agents.tools')}</Text>
-                        )}
-                      </Stack>
-                    </Card>
-                  ))}
-                </SimpleGrid>
-              </div>
-            ))}
-            <Button
-              variant="default"
-              size="xs"
-              onClick={() => setSelectedTemplate({ id: 'blank', name: '', group: '', role: 'Custom', tagline: '', description: '', capabilities: [], skillNames: [], toolNames: [], config: { model: '', temperature: 0.7, maxTokens: 2048, systemPrompt: '', tools: [], skillIds: [] } })}
-            >
-              {t('agents.startBlank')}
-            </Button>
-          </Stack>
+          <AgentWizard
+            onClose={() => setCreateMode(null)}
+            onAdvanced={(tpl) => { setAdvancedTemplate(tpl); setCreateMode('advanced'); }}
+          />
         )}
       </Modal>
 

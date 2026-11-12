@@ -680,10 +680,13 @@ export default function AdvancedSettings() {
                   <TextInput size="xs" placeholder={t('login.email')} value={newUser.email} onChange={(e) => setNewUser({ ...newUser, email: e.currentTarget.value })} />
                 </Group>
                 <Group gap={6} grow>
-                  <Select size="xs" data={['member', 'admin']} value={newUser.role} allowDeselect={false}
+                  <Select size="xs" label={t('adv2.userRole')} data={['member', 'admin']} value={newUser.role} allowDeselect={false}
                     onChange={(v) => setNewUser({ ...newUser, role: (v || 'member') as UserRole })} />
                   <PasswordInput size="xs" placeholder={t('login.password')} value={newUser.password} onChange={(e) => setNewUser({ ...newUser, password: e.currentTarget.value })} />
                 </Group>
+                <Text size="xs" c="dimmed">
+                  {newUser.role === 'admin' ? t('role.admin') : t('role.member')}
+                </Text>
                 <Group justify="flex-end">
                   <Button size="xs" disabled={!newUser.name || !newUser.email || newUser.password.length < 6}
                     onClick={async () => {

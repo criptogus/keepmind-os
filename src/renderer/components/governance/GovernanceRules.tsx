@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Badge, Button, Card, Group, Select, Stack, Switch, Text, TextInput, Title } from '@mantine/core';
+import { Badge, Button, Card, Group, Select, Stack, Switch, Text, TextInput } from '@mantine/core';
 import { useGovernanceStore } from '../../store/governanceStore';
 import { useAgentStore } from '../../store/agentStore';
 import { useTeamStore } from '../../store/teamStore';
 import { v4 as uuidv4 } from 'uuid';
 import type { GovernanceRule, RuleCondition, RuleAction } from '../../../shared/types.js';
 import { useLang } from '../../lib/i18n';
+import PageHeader from '../common/PageHeader';
 
 const emptyRule: Partial<GovernanceRule> = {
   name: '',
@@ -75,7 +76,7 @@ export default function GovernanceRules() {
 
   return (
     <Stack gap="md">
-      <Title order={2} size="h4">{t('govr.title')}</Title>
+      <PageHeader title={t('govr.title')} subtitle={t('ph.gov.sub')} help={t('ph.gov.help')} />
 
       {error && <Text size="sm" c="dimmed">{error}</Text>}
 

@@ -5,12 +5,12 @@ const STORAGE_KEY = 'km-lang';
 
 const dict: Record<string, { en: string; pt: string }> = {
   // Shell / navigation
-  'nav.dashboard': { en: 'Dashboard', pt: 'Painel' },
+  'nav.dashboard': { en: 'Home', pt: 'Início' },
   'nav.agents': { en: 'Agents', pt: 'Agentes' },
   'nav.teams': { en: 'Teams', pt: 'Equipes' },
   'nav.skills': { en: 'Skills', pt: 'Habilidades' },
-  'nav.governance': { en: 'Governance', pt: 'Governança' },
-  'nav.logs': { en: 'Activity Logs', pt: 'Logs de Atividade' },
+  'nav.governance': { en: 'Approvals', pt: 'Aprovações' },
+  'nav.logs': { en: 'History', pt: 'Histórico' },
   'nav.settings': { en: 'Settings', pt: 'Configurações' },
   'nav.advanced': { en: 'Advanced', pt: 'Avançado' },
   'nav.navigation': { en: 'Navigation', pt: 'Navegação' },
@@ -21,6 +21,7 @@ const dict: Record<string, { en: string; pt: string }> = {
   'nav.poweredBy': { en: 'Powered by', pt: 'Desenvolvido por' },
   'gov.pending': { en: 'Pending Approvals', pt: 'Aprovações Pendentes' },
   'gov.rules': { en: 'Rules', pt: 'Regras' },
+  'gov.sensitive': { en: 'sensitive', pt: 'sensível' },
 
   // Login
   'login.subtitle': { en: 'Sign in to continue', pt: 'Entre para continuar' },
@@ -332,11 +333,11 @@ const dict: Record<string, { en: string; pt: string }> = {
   'dash.noAgents': { en: 'No agents yet.', pt: 'Nenhum agente ainda.' },
   'dash.noAgentsHint': { en: 'Create one to get started — pick a model, write a system prompt, and run it.', pt: 'Crie um para começar — escolha um modelo, escreva um prompt e execute.' },
   'dash.firstAgent': { en: 'Create your first agent', pt: 'Crie seu primeiro agente' },
-  'dash.step.provider': { en: 'Connect an AI provider (API key or OAuth)', pt: 'Conecte um provedor de IA (chave de API ou OAuth)' },
+  'dash.step.provider': { en: 'Connect an AI (ChatGPT or Claude)', pt: 'Conecte uma IA (ChatGPT ou Claude)' },
   'dash.step.agent': { en: 'Create your first agent', pt: 'Crie seu primeiro agente' },
-  'dash.step.team': { en: 'Create a team', pt: 'Crie uma equipe' },
-  'dash.step.run': { en: 'Run an agent execution', pt: 'Execute um agente' },
-  'dash.step.brain': { en: 'Connect your second brain (KeepMind Corp)', pt: 'Conecte seu segundo cérebro (KeepMind Corp)' },
+  'dash.step.team': { en: 'Optional: create a team of agents', pt: 'Opcional: crie uma equipe de agentes' },
+  'dash.step.run': { en: 'Run your agent once', pt: 'Execute seu agente uma vez' },
+  'dash.step.brain': { en: 'Optional: connect the company brain', pt: 'Opcional: conecte o cérebro da empresa' },
 
   // Advanced settings — provider auth
   'adv2.providerTitle': { en: 'AI Provider Authentication', pt: 'Autenticação de Provedores de IA' },
@@ -504,6 +505,92 @@ const dict: Record<string, { en: string; pt: string }> = {
   'adv2.themeLight': { en: 'Light', pt: 'Claro' },
   'adv2.themeDark': { en: 'Dark', pt: 'Escuro' },
   'adv2.themeAuto': { en: 'Auto (System)', pt: 'Automático (Sistema)' },
+
+  // Page headers (plain-language subtitles)
+  'ph.agents.title': { en: 'Agents', pt: 'Agentes' },
+  'ph.agents.sub': { en: 'AI helpers that do tasks for you — each has a role, instructions and tools.', pt: 'Assistentes de IA que fazem tarefas por você — cada um tem um papel, instruções e ferramentas.' },
+  'ph.agents.help': { en: 'An agent is an AI with a job description. It can read files, search memory, send WhatsApp messages and more — depending on what you allow.', pt: 'Um agente é uma IA com um cargo. Ele pode ler arquivos, buscar na memória, enviar WhatsApp e mais — conforme o que você permitir.' },
+  'ph.teams.title': { en: 'Teams', pt: 'Equipes' },
+  'ph.teams.sub': { en: 'Groups of agents that work together on workflows, step by step.', pt: 'Grupos de agentes que trabalham juntos em fluxos, passo a passo.' },
+  'ph.teams.help': { en: 'A team chains agents into a workflow: each step hands its result to the next agent.', pt: 'Uma equipe encadeia agentes num fluxo: cada etapa passa o resultado para o próximo agente.' },
+  'ph.skills.title': { en: 'Skills', pt: 'Habilidades' },
+  'ph.skills.sub': { en: 'Reusable instruction packs that teach agents how to do specific jobs.', pt: 'Pacotes de instruções reutilizáveis que ensinam os agentes a fazer trabalhos específicos.' },
+  'ph.skills.help': { en: 'A skill is a recipe: it adds knowledge and tools to any agent that uses it.', pt: 'Uma habilidade é uma receita: ela adiciona conhecimento e ferramentas a qualquer agente que a use.' },
+  'ph.gov.title': { en: 'Approvals', pt: 'Aprovações' },
+  'ph.gov.sub': { en: 'Review what agents want to do before it happens — nothing sensitive runs without your OK.', pt: 'Revise o que os agentes querem fazer antes que aconteça — nada sensível roda sem o seu OK.' },
+  'ph.gov.help': { en: 'When an agent wants to send a message, change a file or run a command, it asks you first. You can approve, reject, or turn off approvals in Settings.', pt: 'Quando um agente quer enviar mensagem, alterar arquivo ou rodar comando, ele pede sua permissão. Você aprova, recusa ou desativa aprovações em Configurações.' },
+  'ph.logs.title': { en: 'History', pt: 'Histórico' },
+  'ph.logs.sub': { en: 'A record of everything agents did — who, what, when and the result.', pt: 'Registro de tudo que os agentes fizeram — quem, o quê, quando e o resultado.' },
+  'ph.logs.help': { en: 'Every action is logged so you can audit what happened. Use it to answer "who did what".', pt: 'Toda ação fica registrada para você auditar o que aconteceu. Use para responder "quem fez o quê".' },
+  'ph.settings.title': { en: 'Settings', pt: 'Configurações' },
+  'ph.settings.sub': { en: 'Appearance, language, AI provider and day-to-day preferences.', pt: 'Aparência, idioma, provedor de IA e preferências do dia a dia.' },
+  'ph.advanced.title': { en: 'Advanced', pt: 'Avançado' },
+  'ph.advanced.sub': { en: 'Integrations and power settings: WhatsApp, company brain, Composio, users, triggers, updates.', pt: 'Integrações e configurações avançadas: WhatsApp, cérebro da empresa, Composio, usuários, gatilhos, atualizações.' },
+
+  // Dashboard — attention + integrations
+  'dash2.attention': { en: 'Needs your attention', pt: 'Precisa da sua atenção' },
+  'dash2.approvalsWaiting': { en: 'actions waiting for your approval', pt: 'ações esperando sua aprovação' },
+  'dash2.reviewNow': { en: 'Review now', pt: 'Revisar agora' },
+  'dash2.integrations': { en: 'Connections', pt: 'Conexões' },
+  'dash2.intProvider': { en: 'AI provider', pt: 'Provedor de IA' },
+  'dash2.intWhatsapp': { en: 'WhatsApp', pt: 'WhatsApp' },
+  'dash2.intBrain': { en: 'Company brain', pt: 'Cérebro da empresa' },
+  'dash2.connected': { en: 'Connected', pt: 'Conectado' },
+  'dash2.notConnected': { en: 'Not connected', pt: 'Não conectado' },
+  'dash2.connect': { en: 'Connect', pt: 'Conectar' },
+  'dash2.allGood': { en: 'Everything is connected — nice!', pt: 'Tudo conectado — ótimo!' },
+
+  // Approval cards (plain language)
+  'ap2.agentWants': { en: 'wants to', pt: 'quer' },
+  'ap2.for': { en: 'for', pt: 'para' },
+  'ap2.details': { en: 'Technical details', pt: 'Detalhes técnicos' },
+  'ap2.hideDetails': { en: 'Hide details', pt: 'Ocultar detalhes' },
+  'ap2.sensitiveHint': { en: 'This action can affect real people or data — check the details before approving.', pt: 'Esta ação pode afetar pessoas ou dados reais — confira os detalhes antes de aprovar.' },
+
+  // Agent wizard
+  'wiz.title': { en: 'New agent', pt: 'Novo agente' },
+  'wiz.step1': { en: 'Pick a role', pt: 'Escolha a função' },
+  'wiz.step1hint': { en: 'Templates already come with the right instructions and tools for the job.', pt: 'Os modelos já vêm com as instruções e ferramentas certas para o trabalho.' },
+  'wiz.step2': { en: 'Name it', pt: 'Dê um nome' },
+  'wiz.step2hint': { en: 'Give it a name people will recognize, and optionally extra instructions in your own words.', pt: 'Dê um nome que as pessoas reconheçam e, se quiser, instruções extras com suas palavras.' },
+  'wiz.namePh': { en: 'e.g. Maria — WhatsApp Support', pt: 'ex.: Maria — Atendimento WhatsApp' },
+  'wiz.extraLabel': { en: 'Extra instructions (optional)', pt: 'Instruções extras (opcional)' },
+  'wiz.extraHint': { en: 'Anything specific to your company — tone, rules, things to never do.', pt: 'Tudo que for específico da sua empresa — tom, regras, o que nunca fazer.' },
+  'wiz.step3': { en: 'Review & create', pt: 'Revisar e criar' },
+  'wiz.canDo': { en: 'What it can do', pt: 'O que ele pode fazer' },
+  'wiz.model': { en: 'AI model', pt: 'Modelo de IA' },
+  'wiz.create': { en: 'Create agent', pt: 'Criar agente' },
+  'wiz.advanced': { en: 'Advanced mode', pt: 'Modo avançado' },
+  'wiz.advancedHint': { en: 'Tune model, temperature, tools and skills manually.', pt: 'Ajuste modelo, temperatura, ferramentas e habilidades manualmente.' },
+  'wiz.blank': { en: 'Start from scratch', pt: 'Começar do zero' },
+  'wiz.role': { en: 'Role', pt: 'Função' },
+  'wiz.instructions': { en: 'Instructions', pt: 'Instruções' },
+
+  // Guided tour
+  'tour.welcome.title': { en: 'Welcome to KeepMind OS', pt: 'Bem-vindo ao KeepMind OS' },
+  'tour.welcome.text': { en: 'In 1 minute we\'ll show you around: agents, approvals and settings. You can skip anytime.', pt: 'Em 1 minuto mostramos o essencial: agentes, aprovações e configurações. Você pode pular quando quiser.' },
+  'tour.start': { en: 'Start tour', pt: 'Iniciar tour' },
+  'tour.skip': { en: 'Skip', pt: 'Pular' },
+  'tour.finish': { en: 'Finish', pt: 'Concluir' },
+  'tour.stepOf': { en: 'of', pt: 'de' },
+  'tour.nav.title': { en: 'This is the menu', pt: 'Este é o menu' },
+  'tour.nav.text': { en: 'Everything lives here: Home, Agents, Teams, Skills, Approvals, History, Settings and Advanced.', pt: 'Tudo fica aqui: Início, Agentes, Equipes, Habilidades, Aprovações, Histórico, Configurações e Avançado.' },
+  'tour.home.title': { en: 'Home shows what needs attention', pt: 'O Início mostra o que precisa de atenção' },
+  'tour.home.text': { en: 'Pending approvals and connection status appear here first — it tells you what to do next.', pt: 'Aprovações pendentes e status das conexões aparecem aqui primeiro — ele diz o que fazer a seguir.' },
+  'tour.agents.title': { en: 'Agents are your AI helpers', pt: 'Agentes são seus assistentes de IA' },
+  'tour.agents.text': { en: 'Create agents for jobs like "answer customers on WhatsApp" or "write the daily site report". Each one has its own instructions and tools.', pt: 'Crie agentes para trabalhos como "responder clientes no WhatsApp" ou "escrever o relatório diário da obra". Cada um tem instruções e ferramentas próprias.' },
+  'tour.approvals.title': { en: 'You stay in control', pt: 'Você mantém o controle' },
+  'tour.approvals.text': { en: 'Sensitive actions — sending messages, changing files, running commands — wait for your approval here. Nothing happens without your OK.', pt: 'Ações sensíveis — enviar mensagens, alterar arquivos, rodar comandos — esperam sua aprovação aqui. Nada acontece sem o seu OK.' },
+  'tour.settings.title': { en: 'Connect your tools here', pt: 'Conecte suas ferramentas aqui' },
+  'tour.settings.text': { en: 'Settings and Advanced is where you connect the AI provider, WhatsApp, the company brain and Composio apps.', pt: 'Em Configurações e Avançado você conecta o provedor de IA, WhatsApp, o cérebro da empresa e apps do Composio.' },
+  'tour.replay': { en: 'Take the tour again', pt: 'Ver o tour novamente' },
+
+  'adv2.userRole': { en: 'Role', pt: 'Papel' },
+
+  // Role hints (admin user management)
+  'role.member': { en: 'Uses agents and teams. Cannot change settings or sensitive tools.', pt: 'Usa agentes e equipes. Não altera configurações nem ferramentas sensíveis.' },
+  'role.admin': { en: 'Everything a member can do, plus manage users, agents and settings.', pt: 'Tudo que um membro faz, mais gerenciar usuários, agentes e configurações.' },
+  'role.owner': { en: 'Full control, including billing-level decisions and user management.', pt: 'Controle total, incluindo decisões de nível administrativo e gestão de usuários.' },
 };
 
 interface LangContextValue {

@@ -13,9 +13,12 @@ const OnboardingWizard = lazy(() => import('./components/onboarding/OnboardingWi
 const LoginScreen = lazy(() => import('./components/auth/LoginScreen'));
 
 import type { LocalUser } from '../shared/types.js';
-import { Badge, Button, Text } from '@mantine/core';
+import { Badge, Button, Group, Text, ActionIcon } from '@mantine/core';
 import { useThemeStore } from './store/themeStore';
 import { useLang } from './lib/i18n';
+import TourOverlay, { type TourStep } from './components/tour/TourOverlay';
+
+const TOUR_DONE_KEY = 'km-tour-done';
 
 const sectionLabel: React.CSSProperties = {
   fontSize: 12,
@@ -34,6 +37,21 @@ export default function App() {
   const { t } = useLang();
   const [needsOnboarding, setNeedsOnboarding] = useState<boolean | null>(null);
   const [authState, setAuthState] = useState<{ hasUsers: boolean; currentUser: LocalUser | null } | null>(null);
+  const [tourActive, setTourActive] = useState(false);
+
+  const tourSteps = (tt: (k: string) => string): TourStep[] => [
+    { title: tt('tour.welcome.title'), text: tt('tour.welcome.text') },
+    { target: '[data-tour="sidebar"]', title: tt('tour.nav.title'), text: tt('tour.nav.text') },
+    { target: '[data-tour="content"]', section: 'dashboard', title: tt('tour.home.title'), text: tt('tour.home.text') },
+    { target: '[data-tour="agents-new"]', section: 'agents', title: tt('tour.agents.title'), text: tt('tour.agents.text') },
+    { target: '[data-tour="content"]', section: 'governance', title: tt('tour.approvals.title'), text: tt('tour.approvals.text') },
+    { target: '[data-tour="content"]', section: 'advanced', title: tt('tour.settings.title'), text: tt('tour.settings.text') },
+  ];
+
+  const finishTour = () => {
+    localStorage.setItem(TOUR_DONE_KEY, '1');
+    setTourActive(false);
+  };
 
   useEffect(() => {
     window.electronAPI.authGetState()
@@ -45,7 +63,13 @@ export default function App() {
     window.electronAPI.getVersion().then(setVersion);
     initTheme();
     window.electronAPI.getSettings()
-      .then((s) => setNeedsOnboarding(!s.onboardingCompleted))
+      .then((s) => {
+        setNeedsOnboarding(!s.onboardingCompleted);
+        // Auto-start the guided tour once, after onboarding is done.
+        if (s.onboardingCompleted && localStorage.getItem(TOUR_DONE_KEY) !== '1') {
+          setTimeout(() => setTourActive(true), 800);
+        }
+      })
       .catch(() => setNeedsOnboarding(false));
 
     const fetchApprovals = async () => {
@@ -178,7 +202,7 @@ export default function App() {
       </header>
 
       <main style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
-        <aside style={{
+        <aside data-tour="sidebar" style={{
           width: 260,
           backgroundColor: 'var(--mantine-color-gray-0)',
           borderRight: '1px solid var(--mantine-color-gray-3)',
@@ -193,6 +217,7 @@ export default function App() {
               {sidebarItems.map((item) => (
                 <Button
                   key={item.id}
+                  data-tour={`nav-${item.id}`}
                   variant={activeSection === item.id ? 'light' : 'subtle'}
                   color="dark"
                   size="sm"
@@ -232,6 +257,19 @@ export default function App() {
           </div>
 
           <div style={{ marginTop: 'auto', paddingTop: 24, borderTop: '1px solid var(--mantine-color-gray-3)' }}>
+            <Group gap={6} mb={8}>
+              <ActionIcon
+                size="sm"
+                variant="subtle"
+                color="gray"
+                radius="xl"
+                aria-label={t('tour.replay')}
+                onClick={() => setTourActive(true)}
+              >
+                ?
+              </ActionIcon>
+              <Text size="xs" c="dimmed">{t('tour.replay')}</Text>
+            </Group>
             <Text size="xs" c="dimmed">
               {t('nav.poweredBy')}{' '}
               <a
@@ -246,12 +284,20 @@ export default function App() {
           </div>
         </aside>
 
-        <div style={{ flex: 1, padding: 24, overflowY: 'auto' }}>
+        <div data-tour="content" style={{ flex: 1, padding: 24, overflowY: 'auto' }}>
           <Suspense fallback={<Text size="sm" c="dimmed" ta="center" py="xl">{t('nav.loading')}</Text>}>
             {renderContent()}
           </Suspense>
         </div>
       </main>
+
+      {tourActive && (
+        <TourOverlay
+          steps={tourSteps(t)}
+          onDone={finishTour}
+          onNavigate={setActiveSection}
+        />
+      )}
     </div>
   );
 }
