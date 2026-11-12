@@ -21,6 +21,7 @@ import { getCachedCatalog, isCacheFresh, knownModelIds, refreshModelCatalog, typ
 import { routeModelForTask, DEFAULT_MODEL, costFromUsage, type ModelProvider } from '../shared/models.js';
 import { createServer, type Server } from 'node:http';
 import { autoUpdater } from 'electron-updater';
+import { installDownloadedMacUpdate } from './updater/macInstaller.js';
 import { exec } from 'node:child_process';
 import { createHash, randomBytes } from 'node:crypto';
 import * as fs from 'node:fs/promises';
@@ -1886,6 +1887,19 @@ handle('settings:update', (_event, settings: Partial<AppSettings>) => {
   return storageManager.getAllSettings();
 });
 
+function logUpdater(message: string) {
+  try {
+    const file = path.join(app.getPath('userData'), 'updater-debug.log');
+    appendFileSync(file, `${new Date().toISOString()} ${message}\n`);
+  } catch { /* logging must never break updates */ }
+}
+autoUpdater.logger = {
+  info: (m) => logUpdater(`[info] ${m}`),
+  warn: (m) => logUpdater(`[warn] ${m}`),
+  error: (m) => logUpdater(`[error] ${m}`),
+  debug: (m) => logUpdater(`[debug] ${m}`),
+};
+
 // Auto-update (electron-updater). Requires a configured publish feed
 // (e.g. GitHub releases) in the packaged app; reports errors honestly.
 handle('update:check', async () => {
@@ -1911,7 +1925,15 @@ handle('update:download', async () => {
   }
 });
 
-handle('update:install', () => {
+handle('update:install', async () => {
+  // Squirrel.Mac cannot update unsigned/ad-hoc apps (designated requirement is
+  // the per-build cdhash), so on macOS we swap the bundle ourselves. Other
+  // platforms keep the standard electron-updater path.
+  if (process.platform === 'darwin' && app.isPackaged) {
+    const result = await installDownloadedMacUpdate();
+    if (!result.ok) return result;
+    return { ok: true };
+  }
   autoUpdater.quitAndInstall();
   return { ok: true };
 });

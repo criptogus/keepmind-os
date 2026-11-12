@@ -540,6 +540,8 @@ const dict: Record<string, { en: string; pt: string }> = {
   'adv2.downloading': { en: 'Downloading…', pt: 'Baixando…' },
   'adv2.updateDownloaded': { en: 'Update downloaded', pt: 'Atualização baixada' },
   'adv2.restartInstall': { en: 'Restart & install', pt: 'Reiniciar e instalar' },
+  'adv2.installing': { en: 'Installing update and restarting…', pt: 'Instalando atualização e reiniciando…' },
+  'adv2.installFailed': { en: 'Update install failed', pt: 'Falha ao instalar atualização' },
   'adv2.exportData': { en: 'Export Data', pt: 'Exportar Dados' },
   'adv2.backupSaved': { en: 'Backup saved to:', pt: 'Backup salvo em:' },
   'adv2.exportFailed': { en: 'Export failed', pt: 'Falha na exportação' },

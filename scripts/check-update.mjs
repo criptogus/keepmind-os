@@ -36,7 +36,7 @@ const ws = new WebSocket(pageWs);
 await new Promise((res, rej) => { ws.onopen = res; ws.onerror = rej; });
 
 const result = await new Promise((resolve, reject) => {
-  const timer = setTimeout(() => reject(new Error('eval timeout')), 60_000);
+  const timer = setTimeout(() => reject(new Error('eval timeout')), 300_000);
   ws.onmessage = (ev) => {
     const msg = JSON.parse(ev.data);
     if (msg.id === 1) {
@@ -53,6 +53,8 @@ const result = await new Promise((resolve, reject) => {
 
 console.log(JSON.stringify(result, null, 2));
 ws.close();
+// Give quitAndInstall time to swap the bundle before we touch the process.
+await delay(8000);
 child.kill('SIGTERM');
-await delay(500);
+await delay(1000);
 if (child.exitCode === null) child.kill('SIGKILL');

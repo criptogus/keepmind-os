@@ -903,7 +903,11 @@ export default function AdvancedSettings() {
             {t('adv2.checkUpdates')}
           </Button>
           {updateVersion && (
-            <Button size="xs" onClick={() => void window.electronAPI.updateInstall()}>
+            <Button size="xs" onClick={async () => {
+              setUpdateState(t('adv2.installing'));
+              const res = await window.electronAPI.updateInstall();
+              if (!res.ok && res.error) setUpdateState(`${t('adv2.installFailed')}: ${res.error}`);
+            }}>
               {t('adv2.restartInstall')}
             </Button>
           )}

@@ -147,7 +147,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // Auto-update
   updateCheck: () => ipcRenderer.invoke('update:check') as Promise<{ ok: boolean; updateInfo?: { version: string } | null; error?: string }>,
   updateDownload: () => ipcRenderer.invoke('update:download') as Promise<{ ok: boolean; error?: string }>,
-  updateInstall: () => ipcRenderer.invoke('update:install') as Promise<{ ok: boolean }>,
+  updateInstall: () => ipcRenderer.invoke('update:install') as Promise<{ ok: boolean; error?: string }>,
   onDeepLink: (callback: (event: { section: string; invite?: { org?: string; error?: string } }) => void) => {
     const listener = (_event: Electron.IpcRendererEvent, payload: any) => callback(payload);
     ipcRenderer.on('app:deepLink', listener);
@@ -317,7 +317,7 @@ declare global {
       updateCompany: (profile: Record<string, string>) => Promise<Record<string, string>>;
       updateCheck: () => Promise<{ ok: boolean; updateInfo?: { version: string } | null; error?: string }>;
       updateDownload: () => Promise<{ ok: boolean; error?: string }>;
-      updateInstall: () => Promise<{ ok: boolean }>;
+      updateInstall: () => Promise<{ ok: boolean; error?: string }>;
       onUpdateEvent: (callback: (event: { type: string; version?: string; percent?: number }) => void) => () => void;
       onDeepLink: (callback: (event: { section: string; invite?: { org?: string; error?: string } }) => void) => () => void;
       triggersList: () => Promise<AgentTrigger[]>;
