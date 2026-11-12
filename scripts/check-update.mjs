@@ -36,7 +36,7 @@ const ws = new WebSocket(pageWs);
 await new Promise((res, rej) => { ws.onopen = res; ws.onerror = rej; });
 
 const result = await new Promise((resolve, reject) => {
-  const timer = setTimeout(() => reject(new Error('eval timeout')), 300_000);
+  const timer = setTimeout(() => reject(new Error('eval timeout')), 900_000);
   ws.onmessage = (ev) => {
     const msg = JSON.parse(ev.data);
     if (msg.id === 1) {
