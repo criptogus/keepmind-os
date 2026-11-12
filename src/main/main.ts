@@ -1899,6 +1899,11 @@ autoUpdater.logger = {
   error: (m) => logUpdater(`[error] ${m}`),
   debug: (m) => logUpdater(`[debug] ${m}`),
 };
+// On macOS, quitAndInstall is replaced by our own bundle swap
+// (installDownloadedMacUpdate) because Squirrel.Mac rejects unsigned builds.
+// autoInstallOnAppQuit would make downloadUpdate() hand the zip to native
+// Squirrel anyway — a guaranteed signature failure — so keep it off.
+autoUpdater.autoInstallOnAppQuit = false;
 
 // Auto-update (electron-updater). Requires a configured publish feed
 // (e.g. GitHub releases) in the packaged app; reports errors honestly.
