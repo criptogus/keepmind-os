@@ -1,6 +1,6 @@
 # Third-party notices
 
-This file does not assign a license to Zero Agency OS. License: TBD (pending owner decision).
+KeepMind OS is licensed under the MIT License (see LICENSE).
 
 ## Paperclip — REMOVED
 
