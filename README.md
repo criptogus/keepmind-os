@@ -1,200 +1,111 @@
-# Zero Agency OS
+# KeepMind OS
 
-MVP v0.2 — private, pre-release
+A local-first desktop workspace for human-governed AI agent teams.
 
-A local-first desktop operating layer for human-governed agent teams. macOS is the first target.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Latest release](https://img.shields.io/github/v/release/criptogus/keepmind-os)](https://github.com/criptogus/keepmind-os/releases/latest)
+![Platform: macOS](https://img.shields.io/badge/platform-macOS-lightgrey.svg)
 
-License: TBD (pending owner decision)
+[Homepage](https://keepmind.io)
 
-The package metadata uses UNLICENSED until the owner decides the project license.
-See THIRD_PARTY_NOTICES.md for dependency notices and pending license checks.
+## Why
 
-## Current Status (v0.2)
-
-Phase 2 implementation includes:
-- ✅ SQLite database with StorageManager
-- ✅ Custom AgentManager with OpenAI and Anthropic support (replaces Paperclipai)
-- ✅ OAuth 2.0 authentication for AI providers
-- ✅ Complete IPC communication layer
-- ✅ React UI with Zustand state management
-- ✅ Agent management (create, list, delete, execute)
-- ✅ Team management with workflow builder
-- ✅ Team execution engine
-- ✅ Governance approval queue
-- ✅ Governance rules editor
-- ✅ Audit logging viewer
-- ✅ Settings panel with API key management
-- ✅ Analytics dashboard
-- ✅ Dark mode support
-- ✅ Styled components with Astryx/StyleX
-
-## Authentication
-
-Zero Agency OS supports two authentication methods for AI providers:
-
-### OAuth 2.0 (Recommended)
-- Secure, token-based authentication
-- No API keys stored locally
-- Automatic token refresh
-- Better security and user experience
-
-### API Keys
-- Direct API key authentication
-- Simpler setup for development
-- Suitable for testing and prototyping
-
-See [OAuth Setup Guide](docs/OAUTH_SETUP.md) for detailed configuration instructions.
-
-## Setup
-
-Use Node >=24.11.0. Run `npm install` to install dependencies.
-
-### Configure Authentication
-
-Choose one of the following methods:
-
-**Option A: OAuth (Recommended)**
-```bash
-# Copy environment template
-cp .env.example .env
-
-# Edit .env and add your OAuth credentials
-# See docs/OAUTH_SETUP.md for details
-```
-
-**Option B: API Keys**
-```bash
-# Set API keys as environment variables
-export OPENAI_API_KEY=your_key
-export ANTHROPIC_API_KEY=your_key
-```
-
-## Development
-
-- `npm run dev`: Start Vite development server (renderer only)
-- `npm run build`: Build renderer and main processes
-- `npm start`: Launch Electron from built output
-- `npm test`: Run unit tests with Vitest
-- `npm run typecheck`: TypeScript type checking
-- `npm run dist:mac`: Build DMG and ZIP for macOS
+Agent teams need a workspace where people can configure their tools, review sensitive actions, and inspect what happened. KeepMind OS brings execution, governance, memory, and integrations into a desktop app with local SQLite storage. Model calls and enabled integrations use external services.
 
 ## Features
 
-### Agent Management
-- Create agents with custom configurations
-- Configure model, temperature, max tokens, and system prompts
-- List, edit, and delete agents
-- Execute agents with input/output tracking
-- Execution history viewer
-- Cancel running executions
+**Agents and teams**
 
-### Team Coordination
-- Create teams of agents
-- Assign agents to teams
-- Visual workflow builder
-- Sequential/parallel/conditional execution modes
-- Team execution engine
-- Execute teams with input/output tracking
+- Configure agents with prompts, models, tools, skills, and distinct avatars.
+- Build team workflows with sequential, parallel, or conditional steps.
+- Run agents and teams, inspect execution history, and cancel agent runs.
+- Use OpenAI and Anthropic through OAuth or API keys.
 
-### Governance
-- Approval queue for sensitive actions
-- Real-time pending approval notifications
-- Governance rules editor
-- Rule types: approval_required, rate_limit, resource_constraint, content_filter
-- Scope: global, agent, team
+**Governance and visibility**
 
-### Audit Logging
-- Complete audit trail of all agent actions
-- Activity log viewer with filtering
-- Configurable retention policies
+- Review sensitive tool actions in a human approval queue and edit governance rules.
+- Inspect audit logs and model/skill routing decisions, including selection reasons.
+- Track estimated token costs per agent and configure monthly budgets checked before execution. Estimates are not provider invoices; a running execution can exceed its budget.
 
-### Settings
-- Theme configuration (light/dark/auto)
-- Language selection
-- Auto-approval toggle
-- Default model selection
-- Execution limits
-- Data retention settings
-- API key management
-- OAuth authentication status
+**Memory and skills**
 
-### Analytics
-- Real-time metrics dashboard
-- Agent/team/execution counts
-- Pending approvals tracking
+- Keep a personal Markdown memory vault with a local SQLite retrieval index.
+- Consolidate memories, retain superseded history, and weight recall using execution outcomes.
+- Create skills or import them from GitHub with provenance and text-only import restrictions.
+
+**Automation and integrations**
+
+- Schedule interval or daily triggers, or start agents through token-protected local webhooks.
+- Connect WhatsApp through Baileys and external application tools through Composio.
+- Connect to a Second Brain / KeepMind Corp server to search, read, and capture shared knowledge, with configurable write access and PII checks.
+
+**Desktop workspace**
+
+- English and Brazilian Portuguese interface strings, onboarding, theme settings, and an analytics dashboard.
+- Local SQLite persistence for agents, teams, settings, approvals, and execution records.
+
+## Download
+
+Get the [latest macOS release](https://github.com/criptogus/keepmind-os/releases/latest).
+
+| Mac | DMG filename |
+| --- | --- |
+| Apple Silicon | `KeepMind-OS-<version>-arm64.dmg` |
+| Intel | `KeepMind-OS-<version>.dmg` |
+
+Replace `<version>` with the release version. ZIP variants are also available.
+
+Builds are currently unsigned and not notarized. On first launch, macOS Gatekeeper may block the app. Right-click the app and choose **Open**, or use **System Settings > Privacy & Security > Open Anyway**.
+
+## Build from source
+
+Requires Node.js **>= 24.11.0** and npm. From the repository root:
+
+```bash
+npm ci
+npm run build
+npm start
+```
+
+Available commands:
+
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Start the Vite renderer development server only |
+| `npm run build` | Build the renderer, main process, and preload bridge |
+| `npm start` | Launch Electron using the built output |
+| `npm test` | Run unit tests |
+| `npm run typecheck` | Check TypeScript types |
+| `npm run dist:mac` | Build macOS DMG and ZIP packages |
+
+## Configuration
+
+Configure OpenAI and Anthropic in the app's settings using OAuth or API keys. The `OPENAI_API_KEY` and `ANTHROPIC_API_KEY` environment variables are also supported. Configure optional integrations in the app before enabling them.
 
 ## Architecture
 
-See `docs/ARCHITECTURE.md` for detailed architecture documentation.
+Electron and TypeScript separate privileged operations from the React interface:
 
-### Key Components
+- **Main:** window lifecycle, agent/team execution, integrations, credentials, and SQLite storage.
+- **Preload:** a typed IPC bridge between the renderer and main process.
+- **Renderer:** React views and workspace state.
+- **Runner:** reserved directory; execution currently lives in the main process.
+- **Shared:** common types, model metadata, and avatar utilities.
 
-**Main Process:**
-- `src/main/main.ts` - Electron main process with IPC handlers
-- `src/main/storage/StorageManager.ts` - SQLite database operations
-- `src/main/agent/AgentManager.ts` - Custom agent execution engine
-- `src/main/agent/TeamExecutionEngine.ts` - Team workflow execution
-- `src/main/auth/OAuthManager.ts` - OAuth authentication manager
-
-**Renderer Process:**
-- `src/renderer/App.tsx` - Main application
-- `src/renderer/store/` - Zustand state management
-- `src/renderer/components/` - React components
-
-**Shared:**
-- `src/shared/types.ts` - TypeScript type definitions
-
-## Layout
-
-Source directories separate Electron main, preload, runner, renderer, and shared
-types. Tests belong in test/; optional integration tests belong in test/integration/.
-Scripts, documentation, application assets, and local evidence have dedicated
-folders. Runtime data, credentials, build outputs, and evidence logs are ignored.
-
-The supplied theme uses Astryx's neutral theme with StyleX for styling. The font
-URL points to the copied assets/fonts/Inter-Regular.ttf so Vite can bundle the asset.
-
-## Roadmap
-
-See `docs/ROADMAP.md` for the complete development roadmap from v0.2 to v1.0.
+See [Architecture](docs/ARCHITECTURE.md) and the [architecture decisions](docs/adr/). The architecture document includes design proposals; the source is authoritative for current behavior.
 
 ## Security
 
-- Process isolation between main and renderer
-- No direct Node.js access in renderer
-- All file system operations via IPC
-- Secure storage for sensitive data
-- Input validation on all IPC calls
-- OAuth 2.0 with PKCE for enhanced security
-- Context isolation enabled
-- Sandbox mode enabled
+See [SECURITY.md](SECURITY.md) for the security model and private vulnerability reporting.
 
-## Dependencies
+## Contributing
 
-### Runtime
-- electron 45.2.3
-- react 19.2.0
-- react-dom 19.2.0
-- openai ^4.73.0
-- @anthropic-ai/sdk ^0.32.1
-- zustand 5.0.2
-- @tanstack/react-query 5.62.0
-- @astryxdesign/core 0.7.11
-- @astryxdesign/theme-neutral 0.7.11
-- @stylexjs/stylex 0.19.1
+See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, checks, and pull request guidelines.
 
-### Development
-- typescript ~5.9.3
-- vite ^7
-- @vitejs/plugin-react ^5
-- vitest ^3
-- esbuild 0.28.2
-- electron-builder ^26
-- @astryxdesign/cli 0.7.11
-- zod ^3.25
+## Roadmap
 
-## Notes
+See the [development roadmap](docs/ROADMAP.md) for planned work.
 
-- **Paperclip Replacement**: The original `paperclipai` dependency was replaced with a custom `AgentManager` implementation using OpenAI and Anthropic SDKs for better control and maintainability.
-- **OAuth Support**: OAuth 2.0 authentication is now supported for both OpenAI and Anthropic providers.
-- **License**: Project license is TBD pending owner decision.
+## License
+
+[MIT](LICENSE). See [third-party notices](THIRD_PARTY_NOTICES.md) for dependency notices.
