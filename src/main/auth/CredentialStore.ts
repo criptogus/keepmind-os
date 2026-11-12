@@ -7,26 +7,30 @@ import type { OAuthTokens } from './OAuthManager.js';
  * SQLite settings table as base64 ciphertext — never plaintext when OS
  * encryption is available. Falls back to a 'plain:' prefix only when the OS
  * offers no encryption (rare dev environments).
+ *
+ * Reads go through an in-memory cache warmed once at startup with the
+ * async safeStorage API — the sync decryptString/encryptString are
+ * deprecated in Electron 45 and log a warning on every call.
  */
 
 interface SettingsStore {
   getSetting(key: string): string | null | undefined;
   setSetting(key: string, value: string): void;
   deleteSetting?(key: string): void;
+  getAllSettings?(): Record<string, string>;
 }
 
 type Provider = 'openai' | 'anthropic';
 
 const keyFor = (kind: 'apikey' | 'oauth' | 'secret', name: string) => `cred.${kind}.${name}`;
+const CRED_PREFIX = 'cred.';
 
-function encrypt(plain: string): string {
-  if (safeStorage.isEncryptionAvailable()) {
-    return 'enc:' + safeStorage.encryptString(plain).toString('base64');
-  }
+function encode(plain: string): string {
   return 'plain:' + Buffer.from(plain, 'utf8').toString('base64');
 }
 
-function decrypt(stored: string): string | null {
+/** Sync fallback for values written after warm() — deprecated API, warns once. */
+function decryptSync(stored: string): string | null {
   try {
     if (stored.startsWith('enc:')) {
       return safeStorage.decryptString(Buffer.from(stored.slice(4), 'base64'));
@@ -41,22 +45,103 @@ function decrypt(stored: string): string | null {
 }
 
 export class CredentialStore {
+  /** setting key → decrypted plaintext (null = undecryptable). */
+  private cache = new Map<string, string | null>();
+  private warmed = false;
+  private encAvailable: boolean | null = null;
+  /** Serializes async encrypt+persist per key so writes can't land out of order. */
+  private persistChain = new Map<string, Promise<void>>();
+  /** Bumped on every write/clear so a stale persist can't resurrect a cleared key. */
+  private writeGen = new Map<string, number>();
+
   constructor(private storage: SettingsStore) {}
+
+  private async encryptionAvailable(): Promise<boolean> {
+    if (this.encAvailable === null) {
+      this.encAvailable = await safeStorage.isAsyncEncryptionAvailable();
+    }
+    return this.encAvailable;
+  }
+
+  /**
+   * Decrypt every stored credential once via the async API so the sync
+   * getters never touch the deprecated decryptString. Call once at boot,
+   * before the window loads.
+   */
+  async warm(): Promise<void> {
+    await this.encryptionAvailable();
+    const all = this.storage.getAllSettings?.() ?? {};
+    await Promise.all(
+      Object.entries(all)
+        .filter(([k, v]) => k.startsWith(CRED_PREFIX) && v)
+        .map(async ([k, v]) => {
+          try {
+            if (v.startsWith('enc:') && this.encAvailable) {
+              const { result } = await safeStorage.decryptStringAsync(Buffer.from(v.slice(4), 'base64'));
+              this.cache.set(k, result);
+            } else {
+              this.cache.set(k, decryptSync(v));
+            }
+          } catch {
+            this.cache.set(k, null);
+          }
+        })
+    );
+    this.warmed = true;
+  }
+
+  private read(key: string): string | null {
+    const stored = this.storage.getSetting(key);
+    if (!stored) return null;
+    if (this.warmed && this.cache.has(key)) return this.cache.get(key) ?? null;
+    const plain = decryptSync(stored);
+    if (this.warmed) this.cache.set(key, plain);
+    return plain;
+  }
+
+  /**
+   * Cache the plaintext synchronously (reads stay sync) and persist the
+   * ciphertext asynchronously via the non-deprecated encryptStringAsync.
+   * Writes to the same key are chained so ciphertext always matches the
+   * newest value.
+   */
+  private write(key: string, plain: string): void {
+    this.cache.set(key, plain);
+    const gen = (this.writeGen.get(key) ?? 0) + 1;
+    this.writeGen.set(key, gen);
+    const prev = this.persistChain.get(key) ?? Promise.resolve();
+    const next = prev.then(async () => {
+      if (this.writeGen.get(key) !== gen) return;
+      try {
+        const stored = (await this.encryptionAvailable())
+          ? 'enc:' + (await safeStorage.encryptStringAsync(plain)).toString('base64')
+          : encode(plain);
+        this.storage.setSetting(key, stored);
+      } catch {
+        // Persistence failure must not lose the in-memory credential.
+      }
+    });
+    this.persistChain.set(key, next);
+  }
 
   // ---- API keys ----
 
   getApiKey(provider: Provider): string | null {
-    const stored = this.storage.getSetting(keyFor('apikey', provider));
-    if (!stored) return null;
-    return decrypt(stored);
+    return this.read(keyFor('apikey', provider));
   }
 
   setApiKey(provider: Provider, key: string): void {
-    this.storage.setSetting(keyFor('apikey', provider), encrypt(key));
+    this.write(keyFor('apikey', provider), key);
+  }
+
+  private clear(key: string): void {
+    this.writeGen.set(key, (this.writeGen.get(key) ?? 0) + 1);
+    this.cache.delete(key);
+    this.storage.setSetting(key, '');
   }
 
   clearApiKey(provider: Provider): void {
-    this.storage.setSetting(keyFor('apikey', provider), '');
+    this.clear(keyFor('apikey', provider));
   }
 
   hasApiKey(provider: Provider): boolean {
@@ -66,9 +151,7 @@ export class CredentialStore {
   // ---- OAuth tokens ----
 
   getOAuth(provider: Provider): OAuthTokens | null {
-    const stored = this.storage.getSetting(keyFor('oauth', provider));
-    if (!stored) return null;
-    const plain = decrypt(stored);
+    const plain = this.read(keyFor('oauth', provider));
     if (!plain) return null;
     try {
       return JSON.parse(plain) as OAuthTokens;
@@ -78,11 +161,11 @@ export class CredentialStore {
   }
 
   setOAuth(provider: Provider, tokens: OAuthTokens): void {
-    this.storage.setSetting(keyFor('oauth', provider), encrypt(JSON.stringify(tokens)));
+    this.write(keyFor('oauth', provider), JSON.stringify(tokens));
   }
 
   clearOAuth(provider: Provider): void {
-    this.storage.setSetting(keyFor('oauth', provider), '');
+    this.clear(keyFor('oauth', provider));
   }
 
   hasOAuth(provider: Provider): boolean {
@@ -93,17 +176,15 @@ export class CredentialStore {
   // ---- Generic secrets (e.g. second-brain token) ----
 
   getSecret(name: string): string | null {
-    const stored = this.storage.getSetting(keyFor('secret', name));
-    if (!stored) return null;
-    return decrypt(stored);
+    return this.read(keyFor('secret', name));
   }
 
   setSecret(name: string, value: string): void {
-    this.storage.setSetting(keyFor('secret', name), encrypt(value));
+    this.write(keyFor('secret', name), value);
   }
 
   clearSecret(name: string): void {
-    this.storage.setSetting(keyFor('secret', name), '');
+    this.clear(keyFor('secret', name));
   }
 
   hasSecret(name: string): boolean {

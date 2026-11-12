@@ -394,6 +394,9 @@ app.whenReady().then(async () => {
   // Initialize managers
   storageManager = new StorageManager();
   credentialStore = new CredentialStore(storageManager);
+  // Decrypt stored credentials once via the async safeStorage API — avoids
+  // the per-call deprecation warning from the sync decryptString.
+  await credentialStore.warm();
   localAuth = new LocalAuth(storageManager);
   personalBrainManager = new PersonalBrainManager(app.getPath('userData'));
   memoryManager = new MemoryManager(storageManager);
