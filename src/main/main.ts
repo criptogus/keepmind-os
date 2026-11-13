@@ -2250,3 +2250,14 @@ handle('work:reconcile', (_event, id: string, key: string, result: string) => {
   checkpoints.reconcile(task.executionId, key, result, currentUserId() ?? 'local-admin');
   workManager.change(id, 'comment', `Verified external result for ${key}: ${result}`);
 });
+
+handle('work:preview', (_event, id: string) => {
+  const task = requireWorkAccess(id);
+  const agent = storageManager.getAgent(task.agentId);
+  if (!agent || (currentRole() === 'member' && !agent.isShared)) throw new Error('Agent unavailable');
+  return { agentName: agent.name, model: agent.config.model,
+    tools: agentManager.previewTools(agent.id, agent.config,
+      (task.status === 'blocked' && task.executionId ? storageManager.getAgentExecution(task.executionId)?.input : undefined) ?? workManager.executionInput(id)),
+    monthlyBudgetUsd: agent.config.monthlyBudgetUsd,
+    dependencies: task.dependencies.map(dep => { const t = requireWorkAccess(dep); return { id: t.id, title: t.title, accepted: t.status === 'done' }; }) };
+});

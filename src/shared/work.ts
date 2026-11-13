@@ -19,3 +19,8 @@ export const WORK_TEMPLATES = [
   { id: 'release', title: 'Prepare a release', titlePt: 'Preparar uma release', goal: 'Prepare a release readiness report for [repository]. Inspect changes, tests, compatibility, migration steps and documentation. Draft release notes. Do not publish or tag.', criteria: 'Include evidence for checks, blockers, upgrade instructions and release notes. Never claim a check passed unless it was executed.' },
   { id: 'docs', title: 'Improve developer docs', titlePt: 'Melhorar documentação', goal: 'Audit the getting-started experience for [repository]. Identify missing prerequisites, broken commands and confusing steps. Propose a concise documentation patch.', criteria: 'A new contributor can follow the documented steps. Include the proposed changes and which commands were actually verified.' },
 ] as const;
+
+export interface WorkPreview {
+  agentName: string; model: string; tools: string[]; monthlyBudgetUsd?: number;
+  dependencies: Array<{ id: string; title: string; accepted: boolean }>;
+}

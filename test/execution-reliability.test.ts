@@ -45,3 +45,12 @@ it('resolves symlinks before allowing workspace reads', async () => {
     await expect(registry.execute('file_read', { path: 'link.txt' })).rejects.toThrow('escapes');
   } finally { await fs.rm(root, { recursive: true, force: true }); }
 });
+
+it('previews assigned and routed tools while enforcing current role restrictions without executing', () => {
+  const manager = new AgentManager(); let ran = false;
+  manager.getToolRegistry().register({ name: 'effect', description: '', parameters: {}, handler: async () => { ran = true; return ''; } });
+  manager.setAutoSkillSelector(() => [{ id: 'skill', name: 'Skill', description: '', prompt: '', toolNames: ['effect','file_read'], createdAt: '', updatedAt: '' }]);
+  manager.setConstraintsProvider(() => ({ denyTools: ['effect'] }));
+  expect(manager.previewTools('a', config, { task: 'read' })).toEqual(['file_read']);
+  expect(ran).toBe(false);
+});

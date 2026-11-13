@@ -135,10 +135,22 @@ try {
   }
   const rendered = await evaluate('document.body?.innerText ?? ""');
   if (!rendered?.includes('Your work, moving forward.') || !rendered.includes('Review repository documentation')) fail('workspace did not render persisted task');
-  await evaluate(`document.querySelector('.km-task').click()`);
+  if (!rendered.includes('Need your decision') || !rendered.includes('Now')) fail('focus overview not rendered');
+  mkdirSync(path.join(root, 'evidence'), { recursive: true });
+  const overview = await send('Page.captureScreenshot', { format: 'png' });
+  writeFileSync(path.join(root, 'evidence/focus-desktop.png'), Buffer.from(overview.result.data, 'base64'));
+  await evaluate(`window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, bubbles: true }))`);
+  for (let i = 0; i < 50; i++) {
+    if (await evaluate(`[...document.querySelectorAll('[data-command-result]')].some(el => el.textContent.includes('Review repository documentation'))`)) break;
+    await delay(100);
+  }
+  const openedTask = await evaluate(`(() => { const button = [...document.querySelectorAll('[data-command-result]')].find(el => el.textContent.includes('Review repository documentation')); if (!button) return false; button.click(); return true; })()`);
+  if (!openedTask) fail('command search could not open persisted task');
   await delay(400);
   const detail = await evaluate('document.body?.innerText ?? ""');
   if (!detail.includes('Include file references and reproducible steps.')) fail('task drawer missing criteria');
+  const plan = await evaluate(`window.electronAPI.workPreview(${JSON.stringify(task.id)})`);
+  if (plan.agentName !== 'Maintainer' || !Array.isArray(plan.tools)) fail('execution plan unavailable');
   await evaluate(`window.electronAPI.workAction(${JSON.stringify(task.id)}, 'run')`);
   let cp;
   for (let i = 0; i < 50; i++) {
@@ -159,6 +171,13 @@ try {
   mkdirSync(path.join(root, 'evidence'), { recursive: true });
   const screenshot = await send('Page.captureScreenshot', { format: 'png' });
   if (screenshot.result?.data) writeFileSync(path.join(root, 'evidence/workspace-smoke.png'), Buffer.from(screenshot.result.data, 'base64'));
+  await send('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Escape', code: 'Escape', windowsVirtualKeyCode: 27 });
+  await send('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Escape', code: 'Escape', windowsVirtualKeyCode: 27 });
+  await send('Emulation.setDeviceMetricsOverride', { width: 780, height: 900, deviceScaleFactor: 1, mobile: false });
+  await delay(500);
+  if (await evaluate(`getComputedStyle(document.querySelector('.km-sidebar')).display !== 'none'`)) fail('narrow screen sidebar not collapsed');
+  const narrow = await send('Page.captureScreenshot', { format: 'png' });
+  writeFileSync(path.join(root, 'evidence/focus-narrow.png'), Buffer.from(narrow.result.data, 'base64'));
   console.log(`SMOKE PASS: electronAPI OK (version=${version}, agents=${Array.isArray(agents) ? agents.length : '?'}, rootChildren=${rootChildren}, uiRendered=true)`);
 } catch (err) {
   fail(`CDP evaluation failed: ${err.message}\n${stderrBuf.slice(-2000)}`);

@@ -230,6 +230,13 @@ export class AgentManager {
     return this.toolRegistry;
   }
 
+  previewTools(agentId: string, config: AgentConfig, input: Record<string, unknown>) {
+    const skills = this.resolveSkills(config, input, agentId);
+    const constraints = this.constraintsProvider?.(config);
+    const denied = constraints?.denyTools?.length ? new Set(constraints.denyTools) : undefined;
+    return this.enabledToolNames(config, skills, denied);
+  }
+
   private loadSkills(config: AgentConfig): Skill[] {
     if (!this.skillLoader || !config.skillIds?.length) return [];
     try {

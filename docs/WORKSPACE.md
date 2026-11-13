@@ -142,3 +142,24 @@ This is not feature parity with their cloud computers, collaboration or plugins.
 
 These are not advertised as shipped features. keepmind.io should describe the
 released version until a tested release includes this work.
+
+## Focused interface
+
+The default **Now** view puts decisions and blocked work first. Completed and
+cancelled work stays available through **Include completed**. Overview counters
+filter the list; search and project filters apply together. **Board** remains an
+optional view and omits empty columns. The task composer opens only for the first
+task or **New task**; creation never starts execution automatically.
+
+The task drawer shows an execution plan with the assigned agent, configured
+model, currently available tools, monthly budget (when configured) and dependency
+status. Auto-routing can change the model; this is not a cost quotation or a
+permission grant. Dependencies must be accepted before running. Uncertain effects
+must be reconciled before the resume button becomes available. Missing provider
+credentials offer a direct route to connection settings.
+
+**Cmd/Ctrl K** opens task/page search. Arrow Down moves into results; Tab and
+Enter navigate and activate, Escape closes. The sidebar has four daily destinations
+and a **More tools** disclosure for configuration and specialist screens. Narrow
+windows collapse the sidebar behind **Menu**. Core content uses theme-aware colors,
+visible keyboard focus and responsive task cards; activity history is expandable.
