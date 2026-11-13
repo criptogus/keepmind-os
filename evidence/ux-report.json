@@ -42,11 +42,18 @@
     "request-to-delivery-over-provider-http",
     "single-send-revision-v2",
     "approve-version-with-history",
+    "configuration-chat-clarification-preview-apply",
+    "configuration-keeps-delivery-unchanged",
+    "project-isolated-team-and-work",
+    "project-pagination-and-accordion",
+    "project-objective-and-access-ui",
+    "project-access-narrow-layout",
+    "configuration-bootstrap-without-persisted-agent",
     "shared-workspace-isolation",
     "checkpoint-recovery",
     "persisted-task-search"
   ],
   "failure": null,
   "fixture": "synthetic; no live providers",
-  "timestamp": "2026-11-13T19:58:10.534Z"
+  "timestamp": "2026-11-13T21:14:15.866Z"
 }

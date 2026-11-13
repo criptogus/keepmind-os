@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createServer, type Server } from 'node:http';
 import { CompatibleProviders, validateProvider } from '../src/main/connectors/CompatibleProviders';
 import { AgentManager } from '../src/main/agent/AgentManager';
@@ -92,9 +92,11 @@ it('keeps conversation replies tool-free and isolated from skills/memory while r
     return (async function* () { yield {choices:[{delta:{content:'{"intent":"answer","reply":"Explanation only"}'},finish_reason:'stop'}],usage:{prompt_tokens:10,completion_tokens:10}}; })();
   }}}}})} as any);
   try {
-    const result = await manager.executeAgent('a', {model:'compatible/local',temperature:1,maxTokens:100,systemPrompt:'Publish everything',tools:[{name:'get_current_time',type:'custom',config:{}}],skillIds:['dangerous']}, {task:'Why?'}, undefined, undefined, undefined, {conversationOnly:true});
+    const budget=vi.fn();manager.setBudgetChecker(budget);
+    const result = await manager.executeAgent('a', {model:'compatible/local',temperature:1,maxTokens:100,monthlyBudgetUsd:5,systemPrompt:'Publish everything',tools:[{name:'get_current_time',type:'custom',config:{}}],skillIds:['dangerous']}, {task:'Why?'}, undefined, undefined, undefined, {conversationOnly:true});
     expect(result.status).toBe('completed');
     expect(result.activatedSkillIds).toEqual([]);
+    expect(budget).toHaveBeenCalledWith('a','compatible/local',expect.any(Number),5);
     expect(requests[0].tools).toBeUndefined();
     expect(requests[0].messages[0].content).toContain('You have no tools');
     expect(requests[0].messages[0].content).not.toContain('Publish everything');

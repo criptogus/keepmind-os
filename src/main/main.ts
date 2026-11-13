@@ -1,3 +1,11 @@
+import { ProjectConnections } from './projects/ProjectConnections.js';
+import { projectPolicySchema, patchProjectAccess } from '../shared/projects.js';
+import { ProjectManager } from './projects/ProjectManager.js';
+import type { ProjectInput } from '../shared/projects.js';
+import { monthlyBudgetChecker } from './agent/monthlyBudget.js';
+import type { Agent } from '../shared/types.js';
+import { ConfigurationAssistant } from './configuration/ConfigurationAssistant.js';
+import { type ConfigurationAction } from '../shared/configuration.js';
 import { installLifecycle } from './lifecycle.js';
 import { WorkConversation } from './work/WorkConversation.js';
 import type { ConversationInput } from '../shared/conversation.js';
@@ -61,7 +69,7 @@ import type { AgentConfig, CreateAgentInput, TeamConfig, GovernanceRule, AppSett
 import { presetAvatarFor, avatarJson, parseAvatarDefinition } from '../shared/avatars.js';
 import { buildAuditReceipt, renderReceiptHtml } from './audit/receipts.js';
 
-if (process.env.KEEPMIND_DATA_DIR) app.setPath('userData', path.resolve(process.env.KEEPMIND_DATA_DIR));
+app.setPath('userData', process.env.KEEPMIND_DATA_DIR ? path.resolve(process.env.KEEPMIND_DATA_DIR) : path.join(app.getPath('appData'), 'zero-agency-os'));
 
 let mainWindow: BrowserWindow | null = null;
 let storageManager: StorageManager;
@@ -84,6 +92,8 @@ let webClipper: WebClipper;
 let triggerManager: TriggerManager;
 let localAuth: LocalAuth;
 let workManager: WorkManager;
+let projectManager: ProjectManager;
+let projectConnections: ProjectConnections;
 let checkpoints: CheckpointStore;
 let mcpManager: McpManager;
 const remoteKey = () => `workspace.remote.${currentUserId() ?? "local"}`;
@@ -120,7 +130,9 @@ function requireRole(min: UserRole): void {
  * every non-auth channel requires a logged-in user. Role checks happen
  * inside individual handlers via requireRole().
  */
+const configurationHandlers = new Map<string, (event: Electron.IpcMainInvokeEvent, ...args: any[]) => unknown>();
 function handle(channel: string, listener: (event: Electron.IpcMainInvokeEvent, ...args: any[]) => unknown) {
+  configurationHandlers.set(channel, listener);
   ipcMain.handle(channel, (event, ...args) => {
     if (channel.startsWith('auth:')) return listener(event, ...args);
     if (localAuth?.hasUsers() && !localAuth.getCurrentUser()) {
@@ -214,9 +226,22 @@ async function syncCodexCliAuth(): Promise<void> {
 let activeDelegationDepth = 0;
 
 /** Runs an agent execution end-to-end: streams events, persists the result. */
-async function runAgentExecution(agentId: string, input: Record<string, unknown>, opts?: { userId?: string; resumeId?: string; dryRun?: boolean; conversationOnly?: boolean }) {
-  const agent = storageManager.getAgent(agentId);
+async function runAgentExecution(agentId: string, input: Record<string, unknown>, opts?: { userId?: string; resumeId?: string; dryRun?: boolean; conversationOnly?: boolean; configurationOnly?: boolean; configurationAgent?: Pick<Agent,'config'|'name'|'isShared'> }) {
+  const agent = storageManager.getAgent(agentId) ?? (opts?.configurationOnly ? opts.configurationAgent : undefined);
   if (!agent) throw new Error('Agent not found');
+  const projectScope = opts?.configurationOnly ? undefined : projectManager.forAgent(agentId);
+  if (typeof input.workTaskId === 'string') {
+    const work = workManager.get(input.workTaskId);
+    if (work.projectId !== projectScope?.id) throw new Error('Project execution scope mismatch');
+  }
+  agent.config={...agent.config,projectId:projectScope?.id};
+  if(!opts?.configurationOnly && (agent.config.skillIds||[]).some(id=>projectManager.list().some(p=>p.id!==projectScope?.id&&p.skillIds.includes(id))))throw new Error('Skill belongs to another project');
+  if (projectScope) {
+    if ((agent.config.skillIds || []).some(id => !projectManager.effective(projectScope).skillIds.includes(id))) throw new Error('Skill belongs to another project');
+    input = {...input, projectContext: projectManager.context(projectScope),projectProgress:workManager.snapshot().tasks.filter(t=>t.projectId===projectScope.id).slice(0,20).map(t=>({title:t.title,status:t.status,delivery:t.output?.slice(0,1200)}))};
+    const policy=projectManager.effective(projectScope);
+    agent.config={...agent.config,projectId:projectScope.id,skillIds:[...new Set([...(agent.config.skillIds||[]),...policy.skillIds])],tools:projectToolNames(projectScope.id).map(name=>({name,type:'custom' as const,config:{}}))};
+  }
   // Members may only execute agents explicitly shared by an admin.
   if (currentRole() === 'member' && !agent.isShared) {
     throw new Error('This agent is not shared with members');
@@ -239,7 +264,7 @@ async function runAgentExecution(agentId: string, input: Record<string, unknown>
       storageManager.updateAgentExecutionProgress(executionId, progress);
     }, executionId, (event) => {
       mainWindow?.webContents.send('agents:event', { executionId, ...event });
-    }, { conversationOnly: opts?.conversationOnly, dryRun: opts?.dryRun === true, onSkillsResolved: (ids) => {
+    }, { conversationOnly: opts?.conversationOnly, configurationOnly: opts?.configurationOnly, dryRun: opts?.dryRun === true, onSkillsResolved: (ids) => {
       const record = storageManager.getAgentExecution(executionId);
       if (record) storageManager.saveAgentExecution({ ...record, activatedSkillIds: ids });
     } });
@@ -639,10 +664,14 @@ app.whenReady().then(async () => {
   storageManager = new StorageManager(path.join(app.getPath('userData'), 'data'));
   storageManager.recoverInterruptedExecutions();
   workManager = new WorkManager(storageManager);
+  projectManager = new ProjectManager(storageManager);
   credentialStore = new CredentialStore(storageManager);
+  projectConnections = new ProjectConnections(storageManager,credentialStore,app.getPath('userData'),url=>shell.openExternal(url));
+
   // Decrypt stored credentials once via the async safeStorage API — avoids
   // the per-call deprecation warning from the sync decryptString.
   await credentialStore.warm();
+  void projectConnections.restore().catch(()=>console.error('[projects] Could not restore a connection'));
   compatibleProviders = new CompatibleProviders(storageManager, credentialStore);
   companyBrains = new CompanyBrains(storageManager);
   localAuth = new LocalAuth(storageManager);
@@ -770,7 +799,7 @@ app.whenReady().then(async () => {
     runAgent: async (agentId, input) => {
       const trigger = typeof input.triggerId === 'string' ? triggerManager.list().find(t => t.id === input.triggerId) : undefined;
       if (!trigger) return runAgentExecution(agentId, input);
-      const { task, duplicate } = workManager.createRoutine({ agentId, goal: String(input.task ?? trigger.prompt), project: 'Automations' }, 'system', { triggerId: trigger.id, channel: String(input.channel ?? 'schedule'), receivedAt: new Date().toISOString(), eventId: typeof input.eventId === 'string' ? input.eventId : undefined, payload: input.webhookPayload });
+      const { task, duplicate } = workManager.createRoutine({ agentId, goal: String(input.task ?? trigger.prompt), project: projectManager.forAgent(agentId)?.name || 'Automations', projectId: projectManager.forAgent(agentId)?.id }, 'system', { triggerId: trigger.id, channel: String(input.channel ?? 'schedule'), receivedAt: new Date().toISOString(), eventId: typeof input.eventId === 'string' ? input.eventId : undefined, payload: input.webhookPayload });
       if (duplicate || trigger.autonomy === 'draft') return task;
       return workManager.run(task.id, (id, workInput) => runAgentExecution(id, workInput));
     },
@@ -779,6 +808,10 @@ app.whenReady().then(async () => {
   startWebhookServer();
   void startRemoteApprovalsIfEnabled().catch(() => console.error('[remote] approval server failed to start'));
   agentManager.setContextProvider(async (query, agentId) => {
+    if (agentId && projectManager.forAgent(agentId)) {
+      const connection=projectConnectionFor(agentId,'secondbrain');
+      return connection ? projectConnections.brain(connection.id).search(query,5) : '';
+    }
     if (agentId && companyBrains.binding(agentId)) return companyBrains.search(agentId, query);
     if (!secondBrainManager.isConfigured()) return '';
     return secondBrainManager.search(query, 5);
@@ -800,7 +833,7 @@ app.whenReady().then(async () => {
     const assignedIds = new Set(assigned.map((s) => s.id));
     const outcomes = storageManager.getOutcomeStats(agentId ?? '', input, 'skill');
     const scored = storageManager.getAllSkills()
-      .filter((s) => !assignedIds.has(s.id) && !s.id.startsWith('mcp-'))
+      .filter((s) => !projectManager.list().some(p=>p.skillIds.includes(s.id)) && !assignedIds.has(s.id) && !s.id.startsWith('mcp-'))
       .map((s) => {
         const haystack = `${s.name} ${s.description}`.toLowerCase();
         const skillTokens = new Set(haystack.match(/[a-zá-ú]{4,}/g) || []);
@@ -876,6 +909,8 @@ app.whenReady().then(async () => {
   });
   agentManager.getToolRegistry().setContext({
     sendWhatsApp: async (to, text) => {
+      const scoped = activeProjectConnection('whatsapp');
+      if(scoped){await projectConnections.whatsapp(scoped.id).sendMessage(to,text);return;}
       if (whatsAppManager.getStatus().status !== 'connected') {
         throw new Error('WhatsApp is not connected');
       }
@@ -886,17 +921,21 @@ app.whenReady().then(async () => {
         console.error('[whatsapp] failed to persist outgoing message:', error);
       }
     },
-    getWhatsAppMessages: (limit = 20) =>
-      storageManager.getWhatsAppMessages(limit, undefined, 'in')
+    getWhatsAppMessages: (limit = 20) => { const scoped=activeProjectConnection('whatsapp');if(scoped)return projectConnections.messages(scoped.id,limit);return storageManager.getWhatsAppMessages(limit, undefined, 'in')
         .reverse()
-        .map((m) => ({ from: m.remote, text: m.text, timestamp: m.timestamp })),
+        .map((m) => ({ from: m.remote, text: m.text, timestamp: m.timestamp }));},
     secondBrainSearch: async (query, limit) => {
       const agentId = agentManager.getActiveAgentId();
-      if (agentId && companyBrains.binding(agentId)) return companyBrains.search(agentId, query);
+      if (agentId && projectManager.forAgent(agentId)) {
+      const connection=projectConnectionFor(agentId,'secondbrain');
+      return connection ? projectConnections.brain(connection.id).search(query,5) : '';
+    }
+    if (agentId && companyBrains.binding(agentId)) return companyBrains.search(agentId, query);
       if (!secondBrainManager.isConfigured()) throw new Error('Second brain is not configured');
       return secondBrainManager.search(query, limit);
     },
     secondBrainRemember: async (content) => {
+      const scoped=activeProjectConnection('secondbrain');if(scoped)return projectConnections.brain(scoped.id).remember(content);
       if (companyBrains.binding(agentManager.getActiveAgentId())) throw new Error('Company memory is read-only');
       if (!secondBrainManager.isConfigured()) throw new Error('Second brain is not configured');
       return secondBrainManager.remember(content);
@@ -922,12 +961,16 @@ app.whenReady().then(async () => {
     },
     agentReachStatus: () => getAgentReachStatus(),
     composioSearch: async (query) => {
+      const scope=projectManager.forAgent(agentManager.getActiveAgentId()||'');
+      if(scope){const connections=projectManager.effective(scope).connectionIds.map(id=>projectConnections.get(id)).filter(c=>['gmail','outlook'].includes(c.kind));if(!connections.length)throw new Error('No app connected to this project');return JSON.stringify((await Promise.all(connections.map(c=>projectConnections.app(c.id).searchTools(query)))).flat());}
       if (!composioManager.isConfigured()) throw new Error('Composio is not configured');
       const tools = await composioManager.searchTools(query);
       if (!tools.length) return 'No Composio tools found for that query (or no apps connected)';
       return tools.map((t) => `${t.slug}: ${t.name} — ${t.description}`).join('\n');
     },
     composioExecute: async (slug, argsJson) => {
+      const scope=projectManager.forAgent(agentManager.getActiveAgentId()||'');
+      if(scope){const kind=slug.toLowerCase().startsWith('gmail_')?'gmail':slug.toLowerCase().startsWith('outlook_')?'outlook':undefined;if(!kind)throw new Error('Action is not available in this project');const c=activeProjectConnection(kind);if(!c)throw new Error('Missing project connection');return projectConnections.app(c.id).execute(slug,JSON.parse(argsJson));}
       if (!composioManager.isConfigured()) throw new Error('Composio is not configured');
       let args: Record<string, unknown> = {};
       try { args = JSON.parse(argsJson); } catch { throw new Error('args must be a JSON object string'); }
@@ -959,7 +1002,8 @@ app.whenReady().then(async () => {
         throw new Error(`Delegation depth limit (${MAX_DELEGATION_DEPTH}) reached`);
       }
       const caller = callerAgentId ? storageManager.getAgent(callerAgentId) : null;
-      const agents = storageManager.getAllAgents();
+      const callerProject = callerAgentId ? projectManager.forAgent(callerAgentId) : undefined;
+      const agents = storageManager.getAllAgents().filter(a => projectManager.forAgent(a.id)?.id === callerProject?.id);
       const target = agents.find((a) => a.id === agent || a.name.toLowerCase() === agent.toLowerCase());
       if (!target) throw new Error(`Agent not found: ${agent}`);
       activeDelegationDepth++;
@@ -1038,7 +1082,8 @@ app.whenReady().then(async () => {
     },
     reviewAgent: async (callerAgentId, agentRef, rating, note) => {
       const caller = callerAgentId ? storageManager.getAgent(callerAgentId) : null;
-      const agents = storageManager.getAllAgents();
+      const callerProject = callerAgentId ? projectManager.forAgent(callerAgentId) : undefined;
+      const agents = storageManager.getAllAgents().filter(a => projectManager.forAgent(a.id)?.id === callerProject?.id);
       const target = agents.find((a) => a.id === agentRef || a.name.toLowerCase() === agentRef.toLowerCase());
       if (!target) throw new Error(`Agent not found: ${agentRef}`);
       const now = new Date().toISOString();
@@ -1072,20 +1117,7 @@ app.whenReady().then(async () => {
       });
     } catch (e) { console.error('[usage] ledger write failed:', e); }
   });
-  agentManager.setBudgetChecker((agentId, _model, est) => {
-    const agent = storageManager.getAgent(agentId);
-    const cap = agent?.config.monthlyBudgetUsd;
-    if (!cap || cap <= 0) return;
-    const monthStart = new Date();
-    monthStart.setUTCDate(1); monthStart.setUTCHours(0, 0, 0, 0);
-    const spent = storageManager.getAgentSpendSince(agentId, monthStart.toISOString());
-    if (spent + est > cap) {
-      throw new Error(
-        `Monthly budget exceeded for "${agent?.name ?? agentId}": $${spent.toFixed(2)} spent this month ` +
-        `+ ~$${est.toFixed(4)} estimated > $${cap.toFixed(2)} cap`
-      );
-    }
-  });
+  agentManager.setBudgetChecker(monthlyBudgetChecker(storageManager));
   agentManager.setMemoryOutcomeRecorder((_executionId, memoryIds, succeeded) => {
     try { memoryManager.recordOutcome(memoryIds, succeeded); }
     catch (e) { console.error('[memory] outcome record failed:', e); }
@@ -1102,7 +1134,7 @@ app.whenReady().then(async () => {
   agentManager.setConstraintsProvider((config) => {
     const cs = computerSettings();
     const eff = effectiveComputerAccess(config.computerAccess);
-    const denyTools = currentRole() === 'member' ? [...MEMBER_DENIED_TOOLS, ...agentManager.getToolRegistry().list().map(t => t.name).filter(n => n.startsWith('mcp_'))] : undefined;
+    const denyTools = config.projectId ? agentManager.getToolRegistry().list().map(t=>t.name).filter(n=>!projectToolNames(config.projectId!).includes(n)) : currentRole() === 'member' ? [...MEMBER_DENIED_TOOLS, ...agentManager.getToolRegistry().list().map(t => t.name).filter(n => n.startsWith('mcp_'))] : undefined;
     return {
       denyTools,
       policy: {
@@ -1792,11 +1824,12 @@ handle('skills:improve', async (_event, id: string) => {
 });
 
 // API Keys (persisted encrypted via safeStorage/OS keychain)
-handle('api:setKey', (_event, provider: 'openai' | 'anthropic', key: string) => {
+handle('api:setKey', async (_event, provider: 'openai' | 'anthropic', key: string) => {
   requireRole('admin');
   agentManager.setApiKey(provider, key);
   providerApiKeys[provider] = key;
   credentialStore.setApiKey(provider, key);
+  await credentialStore.flush();
 });
 
 handle('api:clearKey', (_event, provider: 'openai' | 'anthropic') => {
@@ -1873,6 +1906,7 @@ handle('oauth:authenticate', async (_event, provider: 'openai' | 'anthropic') =>
   try {
     logOAuth(`authenticate start: ${provider}`);
     await oauthManager.authenticate(provider);
+    await credentialStore.flush();
     logOAuth(`authenticate success: ${provider}`);
     return { success: true };
   } catch (error) {
@@ -2194,6 +2228,8 @@ handle('secondbrain:test', async () => {
 });
 
 // Granola meetings connector — one-click OAuth, notes sync to personal brain.
+handle('granola:openLogin', () => { requireRole('admin'); const url=granolaManager.getLoginUrl(); if(!url)throw new Error('No pending Granola login'); return process.platform==='darwin'?openLoginInSafari(url):shell.openExternal(url); });
+handle('granola:cancel', () => { requireRole('admin'); granolaManager.cancelConnect(); return {ok:true}; });
 handle('granola:getStatus', () => granolaManager.getStatus());
 handle('granola:connect', async () => {
   requireRole('admin');
@@ -2856,17 +2892,57 @@ function requireWorkAccess(id: string) {
   if (currentRole() === 'member' && task.ownerId !== currentUserId()) throw new Error('Task access denied');
   return task;
 }
+function projectConnectionFor(agentId:string,kind:import('../shared/projects.js').ConnectionInstance['kind']) {
+  const p=projectManager.forAgent(agentId);if(!p)return undefined;
+  return projectManager.effective(p).connectionIds.map(id=>projectConnections.get(id)).find(c=>c.kind===kind);
+}
+function activeProjectConnection(kind:import('../shared/projects.js').ConnectionInstance['kind']) {
+  const id=agentManager.getActiveAgentId()||'';const c=projectConnectionFor(id,kind);
+  if(projectManager.forAgent(id)&&!c)throw new Error('This project has no connection for this action');return c;
+}
+function projectToolNames(id:string) {
+  const p=projectManager.get(id);const kinds=projectManager.effective(p).connectionIds.map(id=>projectConnections.get(id).kind);
+  return ['delegate_to_agent','artifact_create',...(kinds.includes('whatsapp')?['whatsapp_read_messages','whatsapp_send_message']:[]),...(kinds.includes('secondbrain')?['secondbrain_search']:[]),...(kinds.some(k=>k==='gmail'||k==='outlook')?['composio_search','composio_execute']:[])];
+}
+function validateProjectPolicy(policy:import('../shared/projects.js').ProjectPolicy) {
+  const kinds=policy.connectionIds.map(id=>projectConnections.get(id).kind);
+  if(new Set(kinds).size!==kinds.length)throw new Error('Choose one account per service in each project');
+  if(policy.skillIds.some(id=>!storageManager.getSkill(id)||projectManager.list().some(p=>p.skillIds.includes(id))))throw new Error('Only shared library skills can be inherited');
+}
+handle('projects:standards',()=>{requireRole('admin');return projectManager.standards();});
+handle('projects:saveStandard',(_event,raw:unknown)=>{requireRole('admin');if(agentManager.getActiveExecutions().length)throw new Error('Wait for active work before changing company standards');const input=projectPolicySchema.extend({id:z.string().uuid().optional(),name:z.string().trim().min(1).max(100)}).parse(raw);validateProjectPolicy(input);return projectManager.saveStandard({...input,id:input.id||uuidv4()});});
+handle('projects:access',(_event,id:string,raw:unknown)=>{requireRole('admin');const p=projectManager.get(id);const access=patchProjectAccess(p.access,raw);
+  if(agentManager.getActiveExecutions().some(e=>p.agentIds.includes(e.agentId)))throw new Error('Wait for project work to finish before changing access');
+  validateProjectPolicy(access.policy);if(access.companyId&&!projectManager.standards().some(s=>s.id===access.companyId))throw new Error('Company standard unavailable');return projectManager.save({...p,access});});
+handle('projects:connections',()=>{requireRole('admin');return projectConnections.list();});
+handle('projects:connectionCreate',(_event,raw:unknown)=>{requireRole('admin');const c=z.object({name:z.string().trim().min(1).max(100),kind:z.enum(['gmail','outlook','whatsapp','secondbrain'])}).strict().parse(raw);return projectConnections.create(c.name,c.kind);});
+handle('projects:connectionConnect',(_event,id:string)=>{requireRole('admin');return projectConnections.connect(id);});
+handle('projects:connectionStatus',(_event,id:string)=>{requireRole('admin');return projectConnections.status(id);});
+handle('projects:brainConfigure',async(_event,id:string,url:string,token:string)=>{requireRole('admin');const endpoint=new URL(url);if(endpoint.username||endpoint.password||!['https:','http:'].includes(endpoint.protocol)||(endpoint.protocol==='http:'&&!['localhost','127.0.0.1'].includes(endpoint.hostname)))throw new Error('Use HTTPS or local loopback');if(!token)throw new Error('A context-scoped token is required');projectConnections.brain(id).setConfig({url,token,enabled:true,access:'read',blockPii:true});await credentialStore.flush();return projectConnections.brain(id).testConnection();});
+handle('projects:list', () => { requireRole('admin'); return projectManager.list(); });
+handle('projects:create', (_event, input: ProjectInput) => {
+  requireRole('admin'); if(remoteWorkspace())throw new Error('Projects require a local workspace');
+  const project=storageManager.transaction(()=>projectManager.create(input));
+  if(project.reportDaily) {
+    const trigger=triggerManager.create({agentId:project.agentIds[0],name:project.name,kind:'daily',timeOfDay:project.reportTime,autonomy:'run',enabled:true,
+      prompt:project.language==='pt' ? 'Atualize-me sobre o objetivo do projeto. Analise evidências disponíveis, o que avançou, o que está bloqueado e a próxima decisão. Sem dados suficientes, faça perguntas objetivas. Não invente métricas nem publique nada.' : 'Update me on the project objective. Review available evidence, progress, blockers and the next decision. Ask focused questions if data is missing. Never invent metrics or publish anything.'});
+    project.triggerId=trigger.id;projectManager.save(project);
+  }
+  return project;
+});
 handle('work:list', () => workManager.snapshot(currentRole() === 'member' ? currentUserId() : undefined));
 handle('work:create', (_event, input: CreateWorkInput) => {
   const agent = storageManager.getAgent(input.agentId);
   if (!agent || (currentRole() === 'member' && !agent.isShared)) throw new Error('Agent unavailable');
-  return workManager.create(input, currentUserId() ?? 'system');
+  const scope = projectManager.forAgent(input.agentId);
+  if (scope?.id !== input.projectId) throw new Error('Choose an agent from this project');
+  return workManager.create({...input, ...(scope ? {project:scope.name} : {})}, currentUserId() ?? 'system');
 });
 handle('work:message', async (_event, id: string, input: ConversationInput, revision: number) => {
   requireWorkAccess(id);
   const userId = currentUserId();
   return new WorkConversation(workManager, {
-    respond: (agentId, context) => runAgentExecution(agentId, context, { userId, conversationOnly: true }),
+    respond: (agentId, context) => runAgentExecution(agentId, {...context, configurationAvailable:hasRole('admin') && !remoteWorkspace()}, { userId, conversationOnly: true }),
     start: taskId => { if (currentUserId() !== userId) throw new Error('Session changed'); requireWorkAccess(taskId); workManager.assertReady(taskId); void workManager.run(taskId, (agentId, context) => runAgentExecution(agentId, context, { userId })).catch(error => console.error('[work]', error)); },
   }).send(id, input, revision);
 });
@@ -2976,5 +3052,93 @@ installLifecycle(app, process.platform, async () => {
   triggerManager?.stop(); companyBrains?.stop(); granolaManager?.stop(); remoteApprovalServer?.stop();
   webhookServer?.close();
   // SQLite remains available to cancellation handlers until process exit.
-  await Promise.allSettled([agentManager.shutdown(), whatsAppManager?.stop(), mcpManager?.close()]);
+  await Promise.allSettled([agentManager.shutdown(), whatsAppManager?.stop(), projectConnections?.stop(), mcpManager?.close()]);
+  await credentialStore?.flush();
 });
+
+let configurationAssistant: ConfigurationAssistant | undefined;
+function configurationChat() {
+  requireRole('admin');
+  if (remoteWorkspace()) throw new Error('Configuration chat operates on the local workspace only');
+  return configurationAssistant ??= new ConfigurationAssistant(storageManager);
+}
+handle('configuration:state', () => configurationChat().state(currentUserId() || 'local'));
+handle('configuration:message', async (event, raw: unknown) => {
+  const {text,language} = z.object({text:z.string().min(1).max(4000),language:z.enum(['pt','en'])}).strict().parse(raw);
+  const chat=configurationChat(); const actor=currentUserId() || 'local';
+  return chat.message(actor,text,language,async (message,history) => {
+    const existing=storageManager.getAllAgents().find(a=>configurationHandlers.get('models:isConfigured')!(event,a.config.model));
+    const model=existing?.config.model || [storageManager.getSetting('defaultModel'),...compatibleProviders.list().map(p=>`compatible/${p.id}`),DEFAULT_MODEL.openai,DEFAULT_MODEL.anthropic].find(m=>m&&configurationHandlers.get('models:isConfigured')!(event,m));
+    if(!model)throw new Error('Connect an AI service to interpret configuration requests');
+    // A tool-free execution identity, not a persisted user agent or allocated spending budget.
+    const agent=existing || {id:`configuration-${actor}`,name:'KeepMind',isShared:false,config:{model,systemPrompt:'',temperature:0,maxTokens:1800,tools:[],monthlyBudgetUsd:5}};
+    const result=await runAgentExecution(agent.id, {task:message,language,history:history.map(t=>({role:t.role,text:t.text})),
+      projects:projectManager.list().map(p=>({id:p.id,name:p.name,access:p.access,effective:projectManager.effective(p)})),connections:projectConnections.list(),companyStandards:projectManager.standards(),
+      teams:storageManager.getAllTeams().map(t=>({id:t.id,name:t.name})),
+      agents:storageManager.getAllAgents().map(a=>({id:a.id,name:a.name,model:a.config.model})),
+      skills:storageManager.getAllSkills().map(s=>({id:s.id,name:s.name})),
+      routines:triggerManager.list().map(t=>({id:t.id,name:t.name,agentId:t.agentId})),
+    },{userId:currentUserId(),conversationOnly:true,configurationOnly:true,configurationAgent:agent});
+    if((currentUserId() || 'local')!==actor)throw new Error('Session changed');
+    if(result.status!=='completed')throw new Error('Configuration interpretation failed');
+    return String(result.output?.content || '');
+  });
+});
+handle('configuration:execute', async (event, raw:unknown) => {
+  const {id,language,credential}=z.object({id:z.string().min(1),language:z.enum(['pt','en']),credential:z.string().min(1).max(32000).optional()}).strict().parse(raw);
+  return configurationChat().execute(currentUserId() || 'local',id,async(action,args)=>{
+    const invoke=(channel:string,...values:unknown[])=>Promise.resolve(configurationHandlers.get(channel)!(event,...values));
+    const requireCredential=()=>{if(!credential)throw new Error('Enter the credential in the secure field');return credential;};
+    switch(action){
+      case 'project.create': return invoke('projects:create',args).then(()=>({ok:true}));
+      case 'project.access': {const {id,...access}=args;return invoke('projects:access',id,access).then(()=>({ok:true}));}
+      case 'project.standard': return invoke('projects:saveStandard',args).then(()=>({ok:true}));
+      case 'project.connection': return invoke('projects:connectionCreate',args).then(()=>({ok:true}));
+      case 'project.brain': return invoke('projects:brainConfigure',args.id,args.url,requireCredential());
+      case 'provider.key': return invoke('api:setKey',args.provider,requireCredential()).then(()=>({ok:true}));
+      case 'secondbrain.connect': return invoke('secondbrain:setConfig',{...args,enabled:true,token:requireCredential()}).then(()=>invoke('secondbrain:test'));
+      case 'composio.key': return invoke('composio:setApiKey',requireCredential()).then(()=>invoke('composio:test'));
+      case 'compatible.configure': return invoke('compatible:save',args,requireCredential()).then(()=>invoke('compatible:test',args.id));
+
+      case 'agent.create': return invoke('agents:create',{...args,temperature:0.3,maxTokens:4096,tools:[]}).then(()=>({ok:true}));
+      case 'agent.delete': return invoke('agents:delete',args.agentId).then(()=>({ok:true}));
+      case 'agent.share': return invoke('agents:share',args.agentId,args.shared).then(()=>({ok:true}));
+      case 'team.create': return invoke('teams:guidedCreate',{...args,requestId:uuidv4(),language}).then(()=>({ok:true}));
+      case 'team.addAgent': return invoke('teams:addAgent',args.teamId,args.agentId).then(()=>({ok:true}));
+      case 'team.removeAgent': return invoke('teams:removeAgent',args.teamId,args.agentId).then(()=>({ok:true}));
+      case 'team.delete': return invoke('teams:delete',args.teamId).then(()=>({ok:true}));
+      case 'company.profile': return invoke('company:update',args).then(()=>({ok:true}));
+      case 'company.bind': return invoke('companyBrain:save',args).then(()=>({ok:true}));
+      case 'company.unbind': return invoke('companyBrain:remove',args.agentId).then(()=>({ok:true}));
+      case 'computer.access': return invoke('computer:updateSettings',args).then(()=>({ok:true}));
+      case 'guardrails': return invoke('settings:update',args).then(()=>({ok:true}));
+      case 'remoteApprovals': return invoke('remoteApprovals:setEnabled',args.enabled).then(()=>({ok:true}));
+      case 'skill.update': {const {id,...updates}=args;return invoke('skills:update',id,updates).then(()=>({ok:true}));}
+      case 'skill.delete': return invoke('skills:delete',args.id).then(()=>({ok:true}));
+      case 'mcp.configure': case 'mcp.remove': {
+        const configs=JSON.parse(storageManager.getSetting('mcp.servers')||'[]').filter((c:{id:string})=>c.id!==args.id);
+        if(action==='mcp.configure')configs.push(args);
+        const statuses=await invoke('mcp:configure',configs) as Array<{id:string;connected:boolean;error?:string}>;
+        if(statuses.some(c=>c.id===args.id&&c.error))throw new Error('MCP configuration saved but connection failed');
+        return {ok:true};
+      }
+
+      case 'granola.connect': if(granolaManager.isConnected())return {ok:true}; return invoke('granola:connect');
+      case 'granola.disconnect': return invoke('granola:disconnect');
+      case 'granola.sync': return invoke('granola:syncNow');
+      case 'granola.interval': return invoke('granola:setSyncMinutes',args.minutes);
+      case 'appearance': case 'preferences': return invoke('settings:update',args).then(()=>({ok:true}));
+      case 'agent.update': { const {agentId,...updates}=args; if(agentManager.getActiveExecutions().some(e=>e.agentId===agentId))throw new Error('Agent is busy'); return invoke('agents:update',agentId,updates).then(()=>({ok:true})); }
+      case 'skill.create': return invoke('skills:create',{...args,toolNames:[]}).then(()=>({ok:true}));
+      case 'routine.create': return invoke('triggers:create',{...args,enabled:true}).then(()=>({ok:true}));
+      case 'routine.toggle': return invoke('triggers:update',args.id,{enabled:args.enabled}).then(()=>({ok:true}));
+      case 'routine.delete': return invoke('triggers:delete',args.id);
+      case 'provider.connect': return invoke('oauth:authenticate',args.provider);
+      case 'skills.connect': return invoke('sak:connect');
+      case 'skills.disconnect': return invoke('sak:disconnect');
+      case 'secondbrain.configure': { const current=secondBrainManager.getConfig(); if(!current.token || new URL(current.url).origin!==new URL(String(args.url)).origin)throw new Error('Connect Second Brain securely first'); return invoke('secondbrain:setConfig',args).then(()=>({ok:true})); }
+      default: { const unsupported: never = action; throw new Error(`Unsupported configuration action: ${unsupported}`); }
+    }
+  },language);
+});
+handle('configuration:dismiss', (_event,id:unknown)=>configurationChat().dismiss(currentUserId() || 'local',z.string().parse(id)));

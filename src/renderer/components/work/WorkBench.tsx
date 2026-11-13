@@ -1,3 +1,8 @@
+import ProjectAccess from './ProjectAccess';
+import ProjectSetup from './ProjectSetup';
+import {pageItems,type Project} from '../../../shared/projects';
+import ConfigurationChat from './ConfigurationChat';
+import { isConfigurationRequest } from '../../../shared/configuration';
 import DecisionCard from './DecisionCard';
 import ConversationDecision from './ConversationDecision';
 import type { ConversationInput } from '../../../shared/conversation';
@@ -12,7 +17,7 @@ import BotAvatar from '../common/BotAvatar';
 import { avatarForAgent } from '../../../shared/avatars';
 import type { ToolStep } from '../../../main/execution/CheckpointStore';
 import React, { useCallback, useEffect, useState, useRef } from 'react';
-import { Alert, Badge, Button, Card, Checkbox, Group, MultiSelect, Select, Stack, Modal, Text, Textarea, TextInput, Title } from '@mantine/core';
+import { Alert, Badge, Button, Card, Checkbox, Group, MultiSelect, Pagination, Select, Stack, Modal, Text, Textarea, TextInput, Title } from '@mantine/core';
 import { useLang } from '../../lib/i18n';
 import type { Agent, Approval, Team } from '../../../shared/types';
 import type { WorkAction, WorkSnapshot, WorkStatus, WorkTask, WorkPreview, WorkContext } from '../../../shared/work';
@@ -23,12 +28,17 @@ export default function WorkBench({ active = true, onNavigate, selectedTaskId, o
   const { lang } = useLang();
   const tr = (en: string, pt: string) => lang === 'pt' ? pt : en;
   const [data, setData] = useState<WorkSnapshot>({ tasks: [], rules: [] });
+  const [projects,setProjects]=useState<Project[]>([]);
+  const [projectId,setProjectId]=useState<string|null>(null);
+  const [accessOpen,setAccessOpen]=useState(false);
+  const [projectSetup,setProjectSetup]=useState(false);
+  const [page,setPage]=useState(1);
   const [teams, setTeams] = useState<Team[]>([]);
   const [showGuide, setShowGuide] = useState(false);
   const [guideGeneration, setGuideGeneration] = useState(0);
   const [directRequest, setDirectRequest] = useState(false);
   const [providerConnected, setProviderConnected] = useState<boolean | null>(null);
-  const [agents, setAgents] = useState<Agent[]>([]);
+  const [allAgents, setAgents] = useState<Agent[]>([]);
   const [approvals, setApprovals] = useState<Approval[]>([]);
   const [rulesOpen, setRulesOpen] = useState(false);
   const [optionsOpen, setOptionsOpen] = useState(false);
@@ -36,6 +46,7 @@ export default function WorkBench({ active = true, onNavigate, selectedTaskId, o
   const [expandedDelivery, setExpandedDelivery] = useState(true);
   const [connectionOpen, setConnectionOpen] = useState(false);
   const [connectionEpoch, setConnectionEpoch] = useState(0);
+  const [configuration, setConfiguration] = useState<{text?:string}|null>(null);
   const [copied, setCopied] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const deliveryRef = useRef<HTMLElement>(null);
@@ -71,24 +82,29 @@ export default function WorkBench({ active = true, onNavigate, selectedTaskId, o
       const context = await window.electronAPI.workContext();
       const remote = context.connection.mode === 'remote' ? await window.electronAPI.workspaceConnection() : null;
       const nextTeams = context.connection.mode === 'local' ? await window.electronAPI.getTeams() : [];
+      const nextProjects=context.connection.mode==='local' && context.connection.role!=='member' ? await window.electronAPI.projectList() : [];
       if (sequence !== refreshSequence.current) return;
       const key = JSON.stringify([context.connection.mode, context.connection.actor, context.connection.role, context.connection.projects, remote?.url]);
-      if (contextKey.current && contextKey.current !== key) { setSelected(null); setGoal(''); setNotes({}); setMaterial(null); setAgentId(null); setCriteria(''); setProject(''); setDependencies([]); setStartImmediately(true); setReviewRequired(true); setConnectionOpen(false); setShowGuide(false); setDirectRequest(false); setGuideGeneration(n => n + 1); }
+      if (contextKey.current && contextKey.current !== key) { setProjectId(null);setProjects([]);setConfiguration(null); setSelected(null); setGoal(''); setNotes({}); setMaterial(null); setAgentId(null); setCriteria(''); setProject(''); setDependencies([]); setStartImmediately(true); setReviewRequired(true); setConnectionOpen(false); setShowGuide(false); setDirectRequest(false); setGuideGeneration(n => n + 1); }
       contextKey.current = key;
       setApprovals(context.approvals); setData(context.snapshot); setAgents(context.agents); setConnection(context.connection);
-      setTeams(nextTeams);
+      setTeams(nextTeams);setProjects(nextProjects);
       setLoaded(true); setOnline(true); setConnectionError(''); setSyncedAt(new Date().toLocaleTimeString());
     } catch (e) { if (sequence !== refreshSequence.current) return; setOnline(false); setLoaded(true); throw e; }
   }, []);
   useEffect(() => { void refresh().catch(e => setConnectionError(String(e))); const timer = setInterval(() => void refresh().catch(e => setConnectionError(String(e))), 3000); return () => clearInterval(timer); }, [refresh]);
-  useEffect(() => { if ((!agentId || !agents.some(a => a.id === agentId)) && agents.length) setAgentId(teams[0]?.agentIds[0] || agents[0].id); }, [agents, agentId, teams]);
+  const activeProject=projects.find(p=>p.id===projectId);
+  const agents=allAgents.filter(a=>projectId ? activeProject?.agentIds.includes(a.id) : !a.config.projectId);
+  useEffect(()=>setPage(1),[query,scope,projectId]);
+  useEffect(() => { if ((!agentId || !agents.some(a => a.id === agentId)) && agents.length) setAgentId(agents.find(a=>!a.managerId)?.id || agents[0].id); }, [agents, agentId, teams]);
   const perform = async (fn: () => Promise<unknown>) => { if (mutationPending.current) return; mutationPending.current = true; setBusy(true); setError(''); try { if (!online) throw new Error(tr('Reconnect before making changes.', 'Reconecte antes de alterar o trabalho.')); await fn(); await refresh(); } catch (e) { setError(tr('Could not complete this step. Your message is preserved; check the latest conversation and try again.', 'Não foi possível concluir esta etapa. Sua mensagem está preservada; confira a conversa atualizada e tente novamente.')); await refresh().catch(() => {}); } finally { mutationPending.current = false; setBusy(false); } };
-  const create = () => perform(async () => {
+  const create = () => { if(connection.mode==='local' && connection.role!=='member' && isConfigurationRequest(goal)){setConfiguration({text:goal});return;} return perform(async () => {
     if (!agentId || busy) return;
-    const task = await window.electronAPI.workCreate({ goal, criteria: criteria || tr('Deliver a useful result with sources and explicit limitations.', 'Entregue um resultado útil, com fontes e limitações explícitas.'), project: project || tr('Workspace', 'Espaço de trabalho'), agentId, dependencies, reviewRequired });
+    const task = await window.electronAPI.workCreate({ goal, criteria: criteria || tr('Deliver a useful result with sources and explicit limitations.', 'Entregue um resultado útil, com fontes e limitações explícitas.'), projectId:projectId || undefined, project: activeProject?.name || project || tr('Workspace', 'Espaço de trabalho'), agentId, dependencies, reviewRequired });
     setGoal(current => current === goal ? '' : current); setCriteria(current => current === criteria ? '' : current); setDependencies(current => current === dependencies ? [] : current); setSelected(task.id);
     if (startImmediately && (connection.mode !== 'local' || await window.electronAPI.isModelConfigured(selectedAgent!.config.model))) await window.electronAPI.workMessage(task.id, { requestId: crypto.randomUUID(), text: '', mode: 'prepare', language: lang }, task.revision);
   });
+  };
   const task = data.tasks.find(t => t.id === selected);
   const delivery = task ? deliveryState(task) : { version: 0, updating: false, nextVersion: 1 };
   const speaker = agents.find(a => a.id === task?.agentId);
@@ -125,6 +141,7 @@ export default function WorkBench({ active = true, onNavigate, selectedTaskId, o
   const sendMessage = (choice?: ConversationInput['choice'], text?: string, prepare = false) => {
     if (!task) return;
     const id = task.id; const submitted = text ?? note;
+    if(!choice && connection.mode==='local' && connection.role!=='member' && isConfigurationRequest(submitted)){setConfiguration({text:submitted});return;}
     const decision = task.conversation?.decision;
     void perform(async () => {
       await window.electronAPI.workMessage(id, {
@@ -140,15 +157,16 @@ export default function WorkBench({ active = true, onNavigate, selectedTaskId, o
   const needsDecision = (t: WorkTask) => !!t.conversation?.decision || t.status === 'review' || t.status === 'blocked' || approvals.some(a => a.context.workTaskId === t.id);
   const selectedAgent = agents.find(a => a.id === agentId);
   const needsGuide = connection.mode === 'local' && connection.role !== 'member' && loaded && (showGuide || (!teams.length && !directRequest));
-  const visible = data.tasks.filter(t => `${t.title} ${t.project} ${t.goal}`.toLowerCase().includes(query.toLowerCase()))
+  const visible = data.tasks.filter(t=>projectId ? t.projectId===projectId : !t.projectId).filter(t => `${t.title} ${t.project} ${t.goal}`.toLowerCase().includes(query.toLowerCase()))
     .filter(t => scope === 'all' || (scope === 'attention' ? needsDecision(t) : scope === 'running' ? t.status === 'running' : scope === 'done' ? t.status === 'done' : !['done','cancelled'].includes(t.status)))
     .sort((a,b) => Number(needsDecision(b)) - Number(needsDecision(a)) || b.updatedAt.localeCompare(a.updatedAt));
+  const paged=pageItems(visible,page);
   const currentDeliveryAt = task?.output && !delivery.updating ? task.deliveries?.at(-1)?.at || task.completedAt || task.updatedAt : undefined;
   const renderMessage = (message: (typeof messages)[number]) => <div key={message.id} className={`km-chat-message ${message.author === 'you' ? 'km-chat-user' : 'km-chat-agent'}`}>
         <Text size="xs" fw={600} mb="xs">{message.author === 'you' ? tr('You', 'Você') : message.author === 'reply' ? speaker?.name || tr('Your team', 'Seu time') : `${speaker?.name || tr('Your team', 'Seu time')} · ${tr('Version', 'Versão')} ${message.version}`}</Text>
         {message.author === 'you' || message.author === 'reply' ? <Text size="sm" style={{ whiteSpace: 'pre-wrap' }}>{message.text}</Text> : <details><summary>{tr('Previous delivery · version', 'Entrega anterior · versão')} {message.version}</summary><Deliverable content={message.text} /><Button size="xs" variant="default" onClick={() => setMaterial({ title: `${task?.project} · ${tr('Version', 'Versão')} ${message.version}`, content: message.text })}>{tr('Preview material', 'Visualizar material')}</Button></details>}
       </div>;
-  const taskCard = (t: WorkTask) => <button key={t.id} className="km-task" aria-current={selected === t.id ? 'true' : undefined} onClick={() => setSelected(t.id)}>
+  const taskCard = (t: WorkTask) => <button key={t.id} className="km-task" aria-current={selected === t.id ? 'true' : undefined} onClick={() => {setSelected(t.id);setProjectId(t.projectId||null);}}>
     <Group justify="space-between"><Text size="xs" c="dimmed">{t.project}</Text><Badge color={color(t.status)} variant="light" size="sm">{t.conversation?.decision ? tr('Waiting for you', 'Aguarda você') : labels[t.status]}</Badge></Group>
     <Text className="km-task-title" fw={600} my="xs">{t.title}</Text>
     <Group justify="space-between"><Group gap={8}><span aria-hidden="true"><BotAvatar definition={avatarForAgent(agents.find(a => a.id === t.agentId) ?? { id: t.agentId })} name={agents.find(a => a.id === t.agentId)?.name} mood={t.status === 'running' ? 'thinking' : t.status === 'done' ? 'happy' : 'idle'} size={28} showBadge={false} /></span><Text size="xs" c="dimmed">{agents.find(a => a.id === t.agentId)?.name ?? tr('Agent', 'Agente')}</Text></Group><Text size="xs" c="dimmed">{t.conversation?.decision ? tr('Continue conversation →', 'Continuar conversa →') : approvals.some(a => a.context.workTaskId === t.id) ? tr('Approval needed', 'Aguarda aprovação') : t.status === 'review' ? tr('Review deliverable →', 'Revisar entrega →') : t.status === 'blocked' ? tr('Resolve blocker →', 'Resolver bloqueio →') : t.status === 'backlog' ? tr('Review plan →', 'Conferir plano →') : new Date(t.updatedAt).toLocaleDateString(lang === 'pt' ? 'pt-BR' : 'en')}</Text></Group>
@@ -159,29 +177,37 @@ export default function WorkBench({ active = true, onNavigate, selectedTaskId, o
   });
   return <div className={`km-workbench km-conversations ${task ? 'km-has-conversation' : ''} ${material ? 'km-has-material' : ''} ${connectionOpen ? 'km-has-connection' : ''}`}>
     <aside className="km-conversation-list" aria-label={tr('Conversations', 'Conversas')}>
-      <Group justify="space-between"><Title order={1} size="h3">{tr('Conversations', 'Conversas')}</Title><Button size="sm" className="km-primary-action" onClick={() => { setSelected(null); setConnectionOpen(false); setShowGuide(false); setDirectRequest(true); }}>{tr('New request', 'Novo pedido')}</Button></Group>
+      <Group justify="space-between"><Title order={1} size="h3">{tr('Projects', 'Projetos')}</Title><Button size="sm" className="km-primary-action" onClick={() => { setSelected(null); setConnectionOpen(false); setShowGuide(false); setDirectRequest(true); }}>{activeProject ? tr('Talk to the team','Conversar com o time') : tr('New request','Novo pedido')}</Button></Group>
+      <Select label={tr('Current project','Projeto atual')} value={projectId || 'legacy'} onChange={value=>{setProjectId(value==='legacy'?null:value);setSelected(null);setGoal('');setDependencies([]);setAgentId(null);setConfiguration(null);}} data={[{value:'legacy',label:tr('Previous workspace','Espaço anterior')},...projects.map(p=>({value:p.id,label:p.name}))]} searchable/>
+      {connection.mode==='local' && connection.role!=='member' && <Button variant="default" onClick={()=>setProjectSetup(true)}>{tr('New project','Novo projeto')}</Button>}
       <TextInput aria-label={tr('Search work', 'Buscar trabalho')} placeholder={tr('Search conversations…', 'Buscar conversas…')} value={query} onChange={e => setQuery(e.currentTarget.value)} />
       <Select aria-label={tr('Filter conversations', 'Filtrar conversas')} value={scope} onChange={v => setScope(v || 'all')} data={[{value:'all',label:tr('All conversations','Todas as conversas')},{value:'attention',label:tr('Need your decision','Precisam de você')},{value:'running',label:tr('In progress','Em andamento')},{value:'done',label:tr('Delivered','Entregues')}]} />
-      <div className="km-conversation-items">{!loaded ? <Text role="status">{tr('Loading conversations…','Carregando conversas…')}</Text> : !visible.length ? <Text size="sm" c="dimmed">{query || scope !== 'all' ? tr('No conversations match this filter.', 'Nenhuma conversa corresponde ao filtro.') : tr('Your requests and deliveries will stay here.', 'Seus pedidos e entregas ficarão aqui.')}</Text> : visible.map(taskCard)}</div>
+      <details className="km-conversation-items" open><summary>{tr('Conversations','Conversas')} · {visible.length}</summary>{!loaded ? <Text role="status">{tr('Loading conversations…','Carregando conversas…')}</Text> : !visible.length ? <Text size="sm" c="dimmed">{query || scope !== 'all' ? tr('No conversations match this filter.', 'Nenhuma conversa corresponde ao filtro.') : tr('Your requests and deliveries will stay here.', 'Seus pedidos e entregas ficarão aqui.')}</Text> : paged.items.map(taskCard)}</details>
+      {paged.pages>1 && <Pagination total={paged.pages} value={paged.page} onChange={setPage} size="sm" siblings={0} boundaries={1} aria-label={tr('Conversation pages','Páginas de conversas')}/> }
       <Button variant="subtle" size="sm" onClick={() => setOptionsOpen(true)}>{tr('Workspace options','Opções do espaço')}</Button>
+      {connection.mode==='local' && connection.role!=='member' && <Button variant="subtle" onClick={()=>setConfiguration({})}>{tr('Configure in chat','Configurar pelo chat')}</Button>}
     </aside>
     <section className="km-conversation-stage" aria-label={tr('Conversation','Conversa')}>
+      {activeProject && <Card withBorder className="km-project-heading"><Group justify="space-between"><Text fw={700}>{activeProject.name}</Text><Button size="xs" variant="default" onClick={()=>setAccessOpen(true)}>{tr('Team access and rules','Acessos e regras do time')}</Button></Group><Text size="sm">{activeProject.objective}</Text><details><summary>{tr('Objective, rules and updates','Objetivo, regras e atualizações')}</summary><Text size="sm">{activeProject.metric || tr('Success metric not defined yet','Indicador de sucesso ainda não definido')}</Text><Text size="sm">{activeProject.voice}</Text><Text size="sm">{activeProject.guardrails}</Text><Text size="xs" c="dimmed">{activeProject.reportDaily ? tr('Daily update at ','Atualização diária às ')+activeProject.reportTime : tr('Daily updates are off','Atualizações diárias desativadas')}</Text></details></Card>}
+
+      {configuration && <ConfigurationChat initialText={configuration.text} onBack={()=>setConfiguration(null)} />}
+      <div className="km-work-content" hidden={!!configuration}>
       {(connectionError || error) && <Alert color={error || connectionError ? 'red' : 'gray'} role="alert" title={tr('We could not update your workspace', 'Não conseguimos atualizar seu espaço')}><Text size="sm">{tr('Your text stays here. Try again to reconnect before sending.', 'Seu texto continua aqui. Tente novamente para reconectar antes de enviar.')}</Text><Button mt="sm" variant="default" onClick={() => { setError(''); setConnectionError(''); void refresh().catch(e => setConnectionError(String(e))); }}>{tr('Try again','Tentar novamente')}</Button>{(error || connectionError) && <details><summary>{tr('Technical details','Detalhes técnicos')}</summary><Text size="xs">{error || connectionError}</Text></details>}</Alert>}
 {connectionOpen && connection.mode === 'local' && <section className="km-context-connection" aria-label={tr('AI connection', 'Conexão de IA')}><Group justify="space-between"><Text fw={600}>{tr('Connect without leaving your request', 'Conecte sem sair do pedido')}</Text><Button variant="subtle" onClick={() => setConnectionOpen(false)}>{tr('Back to conversation', 'Voltar à conversa')}</Button></Group><ProviderConnections provider={(speaker || selectedAgent)?.config.model?.startsWith('claude') ? 'anthropic' : (speaker || selectedAgent)?.config.model?.startsWith('compatible/') ? undefined : 'openai'} onChange={() => setConnectionEpoch(n => n + 1)} />{providerConnected && <Text role="status">{tr('Connected. Return to your request and start when you are ready.', 'Conectado. Volte ao pedido e inicie quando estiver pronto.')}</Text>}<Button variant="subtle" onClick={() => onNavigate('advanced')}>{tr('Other connections', 'Outras conexões')}</Button></section>}
       {connection.mode === 'local' && connection.role !== 'member' && <div hidden={!!task || connectionOpen || !needsGuide} className={needsGuide && !task && !connectionOpen ? 'km-new-conversation' : undefined}><BusinessGuide key={guideGeneration} onCreated={async result => { await refresh(); setAgentId(result.coordinatorId); setSelected(result.taskId); setShowGuide(false); setGuideGeneration(n => n + 1); }} onSkip={() => { setDirectRequest(true); setShowGuide(false); }} /></div>}
       {!task && !connectionOpen && !needsGuide && <div className="km-new-conversation">
     <Card withBorder padding="lg" className="km-command">
-      <Title order={2} mb="sm">{tr("What can we help you with?", "Como podemos ajudar você?")}</Title>
+      <Title order={2} mb="sm">{activeProject ? tr('How can we move this project forward?','Como vamos fazer este projeto avançar?') : tr('What can we help you with?','Como podemos ajudar você?')}</Title>
       <Textarea ref={goalRef} aria-label={tr('Your request', 'Seu pedido')} placeholder={tr('Describe the result you need and add any useful context…', 'Descreva o resultado que você precisa e inclua o contexto…')} value={goal} onChange={e => setGoal(e.currentTarget.value)} minRows={2} autosize variant="default" styles={{ input: { fontSize: 18, lineHeight: 1.6 } }} />
       {!goal && <Group gap="xs" mt="xs">{WORK_TEMPLATES.map(template => <Button key={template.id} size="xs" variant="subtle" color="gray" onClick={() => { setGoal(lang === 'pt' ? template.goalPt : template.goal); setCriteria(lang === 'pt' ? template.criteriaPt : template.criteria); goalRef.current?.focus(); }}>{lang === 'pt' ? template.titlePt : template.title}</Button>)}</Group>}
       <Group mt="md" justify="space-between" align="center">
         {agents.length > 1 ? <Select aria-label={tr('Team or assistant', 'Time ou assistente')} data={agents.filter(a => !a.managerId).map(a => ({ value: a.id, label: teams.find(t => t.agentIds[0] === a.id)?.name || a.name }))} value={agentId} onChange={setAgentId} searchable /> : <Text size="sm" c="dimmed">{selectedAgent?.name || tr('No agent yet', 'Nenhum agente ainda')}</Text>}
-        <Button onClick={create} loading={busy} disabled={!goal.trim() || !agentId || !online}>{startImmediately && providerConnected !== false ? tr('Send request', 'Enviar pedido') : tr('Save request', 'Salvar pedido')}</Button>
+        <Button onClick={create} loading={busy} disabled={!goal.trim() || (!agentId && !isConfigurationRequest(goal)) || !online}>{startImmediately && providerConnected !== false ? tr('Send request', 'Enviar pedido') : tr('Save request', 'Salvar pedido')}</Button>
       </Group>
       <details className="km-details"><summary>{tr('Customize this request', 'Personalizar pedido')}</summary><Stack mt="md">
-        <TextInput label={tr('Project', 'Projeto')} placeholder={tr('Optional project name', 'Nome do projeto (opcional)')} value={project} onChange={e => setProject(e.currentTarget.value)} />
+        <TextInput disabled={!!projectId} label={tr('Project', 'Projeto')} placeholder={tr('Optional project name', 'Nome do projeto (opcional)')} value={project} onChange={e => setProject(e.currentTarget.value)} />
         <Textarea label={tr('What does a good delivery look like?', 'O que define uma boa entrega?')} value={criteria} onChange={e => setCriteria(e.currentTarget.value)} />
-        <MultiSelect label={tr('Wait for completed tasks', 'Aguardar tarefas concluídas')} data={data.tasks.map(t => ({ value: t.id, label: t.title }))} value={dependencies} onChange={setDependencies} searchable />
+        <MultiSelect label={tr('Wait for completed tasks', 'Aguardar tarefas concluídas')} data={data.tasks.filter(t=>t.projectId===(projectId||undefined)).map(t => ({ value: t.id, label: t.title }))} value={dependencies} onChange={setDependencies} searchable />
         <Checkbox checked={startImmediately} onChange={e => setStartImmediately(e.currentTarget.checked)} label={tr('Prepare the request in conversation', 'Preparar o pedido na conversa')} />
         <Checkbox checked={reviewRequired} onChange={e => setReviewRequired(e.currentTarget.checked)} label={tr('Ask me to accept the final delivery', 'Pedir meu aceite na entrega final')} />
       </Stack></details>
@@ -214,7 +240,7 @@ export default function WorkBench({ active = true, onNavigate, selectedTaskId, o
       </section>}
       {currentDeliveryAt && messages.filter(message => message.at >= currentDeliveryAt).map(renderMessage)}
       {task.conversation?.pending && <Text role="status" className="km-conversation-status">{tr('Understanding your message… Your delivery stays unchanged.', 'Entendendo sua mensagem… A entrega continua como está.')}</Text>}
-      {task.conversation?.decision && <ConversationDecision decision={task.conversation.decision} busy={busy || !!task.conversation.pending} canRevise={canReviseWork(task)} hasDelivery={!!task.output} onAnswer={(choice, text) => sendMessage(choice, text ?? '')} onFocus={() => noteRef.current?.focus()} />}
+      {task.conversation?.decision && <ConversationDecision onConfigure={connection.mode==='local' && connection.role!=='member' ? ()=>setConfiguration({text:task.conversation!.decision!.sourceText}) : undefined} decision={task.conversation.decision} busy={busy || !!task.conversation.pending} canRevise={canReviseWork(task)} hasDelivery={!!task.output} onAnswer={(choice, text) => sendMessage(choice, text ?? '')} onFocus={() => noteRef.current?.focus()} />}
       {task.conversation?.error && <Alert color="red" title={tr('Could not finish this reply', 'Não foi possível concluir a resposta')}><Text size="sm">{tr('Your message is saved. Check the connection and send again; the delivery has not been replaced by this reply.', 'Sua mensagem está salva. Confira a conexão e envie novamente; esta resposta não substituiu a entrega.')}</Text><details><summary>{tr('Technical details','Detalhes técnicos')}</summary>{task.conversation.error}</details></Alert>}
       {!!artifacts.length && <Stack gap="xs"><Text fw={600}>{tr('Files', 'Arquivos')}</Text><Text size="xs" c="dimmed">{tr('Proposed files. Downloading does not apply or execute them.', 'Arquivos propostos. Baixar não aplica nem executa alterações.')}</Text>{artifacts.map(file => <Card withBorder key={file.id}><Group justify="space-between"><Text size="sm">{file.name} · v{file.version}</Text><Button size="xs" variant="light" onClick={() => setMaterial({ title: file.name, content: file.content })}>{tr('Preview', 'Visualizar')}</Button><Button size="xs" variant="default" onClick={() => downloadText(file.name, file.content)}>{tr('Download', 'Baixar')}</Button></Group><details className="km-details"><summary>{tr('View contents', 'Ver conteúdo')}</summary>{/\.md$/i.test(file.name) ? <Deliverable content={file.content} /> : <pre className="km-output">{file.content}</pre>}<Text size="xs" c="dimmed">SHA-256: {file.sha256}</Text></details></Card>)}</Stack>}
       {preview && <details className="km-details" ><summary>{tr('Execution details', 'Detalhes da execução')}</summary><Card withBorder className="km-plan" mt="sm"><Text size="xs" c="dimmed">{task.executionId}</Text>
@@ -244,7 +270,7 @@ export default function WorkBench({ active = true, onNavigate, selectedTaskId, o
       </div>
 </div>}
 
-    </section>
+    </div></section>
     {material && <MaterialPreview title={material.title} content={material.content} onClose={() => setMaterial(null)} />}
     <Modal opened={optionsOpen} onClose={() => setOptionsOpen(false)} title={tr('Workspace options', 'Opções do espaço')}><Stack>
       <Text size="sm">{connection.mode === 'remote' ? `${connection.actor} · ${connection.role}` : tr('Local workspace', 'Espaço local')} · {tr('Updated', 'Atualizado')} {syncedAt}</Text>
@@ -252,6 +278,8 @@ export default function WorkBench({ active = true, onNavigate, selectedTaskId, o
       <Button variant="default" onClick={() => { setOptionsOpen(false); setRulesOpen(true); }}>{tr('Project rules', 'Regras do projeto')} · {data.rules.filter(r => r.status === 'proposed').length}</Button>
       <Button variant="default" onClick={exportWork} disabled={busy}>{tr('Export work', 'Exportar trabalho')}</Button>
     </Stack></Modal>
+    <Modal opened={accessOpen&&!!activeProject} onClose={()=>setAccessOpen(false)} title={tr('Project access','Acessos do projeto')} size="lg">{activeProject&&<ProjectAccess key={activeProject.id} project={activeProject} onSaved={()=>void refresh()}/>}</Modal>
+    <Modal opened={projectSetup} onClose={()=>setProjectSetup(false)} title={tr('New project','Novo projeto')}><ProjectSetup teams={teams} onCreated={p=>{setProjectSetup(false);setProjectId(p.id);setSelected(null);setAgentId(p.agentIds[0]);void refresh();}}/></Modal>
     <Modal opened={rulesOpen} onClose={() => setRulesOpen(false)} size="lg" title={tr('Project rules', 'Regras do projeto')}><Stack><Text c="dimmed">{tr('Corrections become proposed rules. Only approved rules inform future work in the same project and owner scope.', 'Correções viram propostas de regras. Apenas regras aprovadas orientam novos trabalhos do mesmo projeto e responsável.')}</Text>{data.rules.map(rule => <Card key={rule.id} withBorder><Group justify="space-between"><Text fw={600}>{rule.project} · v{rule.version}</Text><Badge>{{ proposed: tr('Proposed', 'Proposta'), active: tr('Active', 'Ativa'), retired: tr('Retired', 'Desativada') }[rule.status]}</Badge></Group><Text my="md" style={{ whiteSpace: 'pre-wrap' }}>{rule.text}</Text><Group>{rule.status !== 'active' && <Button disabled={busy} size="xs" onClick={() => perform(() => window.electronAPI.workReviewRule(rule.id, true, rule.version))}>{tr('Activate', 'Ativar')}</Button>}{rule.status !== 'retired' && <Button disabled={busy} size="xs" variant="default" onClick={() => perform(() => window.electronAPI.workReviewRule(rule.id, false, rule.version))}>{tr('Retire', 'Desativar')}</Button>}</Group></Card>)}</Stack></Modal>
 
   </div>;

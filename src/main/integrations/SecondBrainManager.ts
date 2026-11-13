@@ -35,13 +35,13 @@ export function containsPii(text: string): boolean {
  * remember() maps to sb_append on the inbox capture file.
  */
 export class SecondBrainManager {
-  private storage: StorageManager;
-  private credentials?: CredentialStore;
+  private storage: Pick<StorageManager,'getAllSettings'|'setSetting'>;
+  private credentials?: Pick<CredentialStore,'getSecret'|'setSecret'|'hasSecret'>;
   private migrated = false;
   /** Optional LLM second-layer PII check (regex runs first regardless). */
   private piiJudge?: (text: string) => Promise<boolean>;
 
-  constructor(storage: StorageManager, credentials?: CredentialStore) {
+  constructor(storage: Pick<StorageManager,'getAllSettings'|'setSetting'>, credentials?: Pick<CredentialStore,'getSecret'|'setSecret'|'hasSecret'>) {
     this.storage = storage;
     this.credentials = credentials;
   }

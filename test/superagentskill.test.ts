@@ -62,7 +62,7 @@ it('denial, cancellation and timeout never save credentials and allow a fresh at
   const h=setup({timeoutMs:1000});const {callback}=await h.login();callback.searchParams.set('error','access_denied');await fetch(callback);
   expect(h.c.status()).toMatchObject({connected:false,pending:false});expect(h.db.size).toBe(0);
   await h.login();h.c.cancel();expect(h.c.status().pending).toBe(false);
-  const exp=setup({timeoutMs:15});await exp.login();await vi.waitFor(()=>expect(exp.c.status().pending).toBe(false));expect(exp.c.status().error).toContain('expirou');
+  const exp=setup({timeoutMs:15});await exp.c.connect();await vi.waitFor(()=>expect(exp.c.status().pending).toBe(false));expect(exp.c.status().error).toContain('expirou');
 });
 it('does not resurrect credentials when cancelled during token exchange',async()=>{
   let release!:()=>void;const gate=new Promise<void>(r=>{release=r;});const h=setup();const base=h.network.getMockImplementation()!;

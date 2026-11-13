@@ -53,6 +53,7 @@ export class CredentialStore {
   private persistChain = new Map<string, Promise<void>>();
   /** Bumped on every write/clear so a stale persist can't resurrect a cleared key. */
   private writeGen = new Map<string, number>();
+  private persistenceErrors = new Map<string, Error>();
 
   constructor(private storage: SettingsStore) {}
 
@@ -110,6 +111,7 @@ export class CredentialStore {
     this.cache.set(key, plain);
     const gen = (this.writeGen.get(key) ?? 0) + 1;
     this.writeGen.set(key, gen);
+    this.persistenceErrors.delete(key);
     const prev = this.persistChain.get(key) ?? Promise.resolve();
     const next = prev.then(async () => {
       if (this.writeGen.get(key) !== gen) return;
@@ -117,12 +119,21 @@ export class CredentialStore {
         const stored = (await this.encryptionAvailable())
           ? 'enc:' + (await safeStorage.encryptStringAsync(plain)).toString('base64')
           : encode(plain);
-        if (this.writeGen.get(key) === gen) this.storage.setSetting(key, stored);
+        if (this.writeGen.get(key) === gen) { this.storage.setSetting(key, stored); this.persistenceErrors.delete(key); }
       } catch {
-        // Persistence failure must not lose the in-memory credential.
+        // Retain the session credential, but never claim it survived a restart.
+        if(this.writeGen.get(key)===gen)this.persistenceErrors.set(key,new Error('Could not persist credentials securely'));
       }
     });
     this.persistChain.set(key, next);
+  }
+
+  /** Await durable writes before reporting successful sign-in or quitting. */
+  async flush(): Promise<void> {
+    let writes: Promise<void>[];
+    do { writes=[...this.persistChain.values()]; await Promise.all(writes); }
+    while(writes.some((write,index)=>write!==[...this.persistChain.values()][index]) || writes.length!==this.persistChain.size);
+    if(this.persistenceErrors.size)throw new Error('Could not persist credentials securely. This session may not survive restarting the app.');
   }
 
   // ---- API keys ----
@@ -138,6 +149,7 @@ export class CredentialStore {
   private clear(key: string): void {
     this.writeGen.set(key, (this.writeGen.get(key) ?? 0) + 1);
     this.cache.delete(key);
+    this.persistenceErrors.delete(key);
     this.storage.setSetting(key, '');
   }
 

@@ -24,7 +24,7 @@ export default function ProviderConnections({ onChange, provider }: { onChange?:
   const [anthropicHasKey, setAnthropicHasKey] = useState(false);
   const [openaiConfigured, setOpenaiConfigured] = useState(true);
   const [anthropicConfigured, setAnthropicConfigured] = useState(true);
-  useEffect(() => { void checkAuthStatus(); }, []);
+  useEffect(() => { void checkAuthStatus(); const refresh=()=>void checkAuthStatus(); window.addEventListener('focus',refresh);const timer=setInterval(refresh,3000); return()=>{window.removeEventListener('focus',refresh);clearInterval(timer);}; }, []);
   const checkAuthStatus = async () => {
     try {
       const [openai, anthropic, oc, ac, ok, ak] = await Promise.all([
@@ -52,7 +52,7 @@ export default function ProviderConnections({ onChange, provider }: { onChange?:
       const result = await window.electronAPI.oauthAuthenticate(provider);
       if (result.success) {
         setLoginNotice(tr('Connected successfully.', 'Conectado com sucesso.'));
-        void checkAuthStatus(); onChange?.();
+        await checkAuthStatus(); onChange?.();
       } else {
         setLoginNotice(result.error === 'Authentication cancelled'
           ? tr('Login cancelled. You can try again.', 'Login cancelado. Você pode tentar novamente.')
@@ -104,14 +104,15 @@ export default function ProviderConnections({ onChange, provider }: { onChange?:
                   </Badge>
                 </Group>
                 <Group gap="xs">
-                  <Button
+                  {!p.auth && <Button
                     size="xs"
                     variant="default"
-                    disabled={p.auth || !p.configured || !!pendingProvider}
+                    disabled={!p.configured || !!pendingProvider}
                     onClick={() => handleOAuthLogin(p.provider)}
                   >
                     {p.provider === 'openai' ? tr('Sign in with ChatGPT / Codex', 'Entrar com ChatGPT / Codex') : tr('Sign in with Claude (experimental)', 'Entrar com Claude (experimental)')}
-                  </Button>
+                  </Button>}
+                  {p.auth && <Text size="sm" fw={600} role="status">{tr('Account connected · ready to use','Conta conectada · pronta para usar')}</Text>}
                   {p.auth && (
                     <Button size="xs" variant="subtle" color="gray" onClick={() => handleOAuthLogout(p.provider)}>
                       {t('adv2.logout')}
@@ -132,7 +133,7 @@ export default function ProviderConnections({ onChange, provider }: { onChange?:
                     {t('adv2.oauthUnavailable')}
                   </Text>
                 )}
-                <Group gap="xs" align="flex-end">
+                <details open={!p.auth && !p.hasKey}><summary>{p.auth || p.hasKey ? tr('Manage API key (optional)','Gerenciar chave de API (opcional)') : tr('Or use an API key','Ou usar uma chave de API')}</summary><Group gap="xs" align="flex-end">
                   <TextInput
                     style={{ flex: 1 }}
                     size="xs"
@@ -165,7 +166,7 @@ export default function ProviderConnections({ onChange, provider }: { onChange?:
                       {t('common.remove')}
                     </Button>
                   )}
-                </Group>
+                </Group></details>
               </Stack>
             </Card>
           ))}

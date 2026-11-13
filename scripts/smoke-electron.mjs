@@ -1,7 +1,7 @@
 import { createServer } from 'node:http';
 import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { build } from 'esbuild';
+import { build, stop as stopBuildService } from 'esbuild';
 // Smoke test: launch the built Electron app, connect over CDP, and verify
 // the renderer loaded and the preload bridge (window.electronAPI) works.
 // Usage: npm run build && npm run smoke:electron
@@ -527,7 +527,11 @@ try {
     const number=providerRequests.length;
     const dialogue = request.messages.some(m => String(m.content).includes('conversationMode'));
     let content;
-    if (dialogue) {
+    if (String(request.messages[0]?.content).includes('You help a nontechnical business user configure KeepMind OS')) {
+      if(request.tools?.length)fail('configuration planner exposed tools');
+      const context=JSON.parse(request.messages.findLast(m=>m.role==='user').content);
+      content=JSON.stringify(context.task==='Create a routine'?{reply:'Which agent and schedule should I use?',action:null,args:{}}:{reply:'I will change only the interface language.',action:'appearance',args:{language:context.task==='Use English'?'en':'pt'}});
+    } else if (dialogue) {
       if (request.tools?.length) fail('conversation exposed execution tools');
       const context = JSON.parse(request.messages.findLast(m => m.role === 'user').content);
       const reply = context.conversationMode === 'prepare'
@@ -623,6 +627,65 @@ try {
   const accepted=(await evaluate('window.electronAPI.workList()')).tasks.find(t=>t.id===flow.id);
   if(accepted.status!=='done'||!accepted.acceptedAt)fail('delivery approval did not persist');
   checks.push('request-to-delivery-over-provider-http','single-send-revision-v2','approve-version-with-history');
+  await evaluate(`([...document.querySelectorAll('button')].find(b=>b.textContent==='Configure in chat')).click()`);await delay(300);
+  const configMessage=async(text,label)=>{
+    await evaluate(`(()=>{const el=document.querySelector('.km-configuration-chat textarea');Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value').set.call(el,${JSON.stringify(text)});el.dispatchEvent(new Event('input',{bubbles:true}));})()`);await delay(80);
+    await evaluate(`([...document.querySelectorAll('.km-configuration-chat button')].find(b=>b.textContent===${JSON.stringify(label)})).click()`);
+    for(let i=0;i<60;i++){await delay(100);if(!(await evaluate('window.electronAPI.configurationState()')).pending)break;}
+    await delay(300);
+  };
+  await configMessage('Create a routine','Send');
+  if((await evaluate('window.electronAPI.configurationState()')).turns.at(-1).plan)fail('missing setup details created a plan');
+  await configMessage('Change interface language to Portuguese','Send');
+  const configPreview=await send('Page.captureScreenshot',{format:'png'});writeFileSync(path.join(evidenceDir,'configuration-chat-preview.png'),Buffer.from(configPreview.result.data,'base64'));
+  if((await evaluate('window.electronAPI.getSettings()')).language!=='en')fail('setup changed language before approval');
+  await evaluate(`([...document.querySelectorAll('.km-configuration-chat button')].find(b=>b.textContent==='Apply configuration')).click()`);await delay(800);
+  if((await evaluate('window.electronAPI.getSettings()')).language!=='pt')fail('configuration was not applied');
+  if(!(await evaluate(`document.querySelector('.km-configuration-chat').innerText`)).includes('Configuração concluída'))fail('configuration success missing');
+  const configDone=await send('Page.captureScreenshot',{format:'png'});writeFileSync(path.join(evidenceDir,'configuration-chat-complete.png'),Buffer.from(configDone.result.data,'base64'));
+  await configMessage('Use English','Enviar');
+  await evaluate(`([...document.querySelectorAll('.km-configuration-chat button')].find(b=>b.textContent==='Aplicar configuração')).click()`);await delay(800);
+  if(deliveryCalls!==2)fail('configuration started delivery work');
+  await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:false});await delay(250);
+  if(!(await evaluate(`document.documentElement.scrollWidth<=window.innerWidth+2`)))fail('configuration chat overflows narrow viewport');
+  const configurationNarrow=await send('Page.captureScreenshot',{format:'png'});writeFileSync(path.join(evidenceDir,'configuration-chat-narrow.png'),Buffer.from(configurationNarrow.result.data,'base64'));
+  await send('Emulation.clearDeviceMetricsOverride');
+
+  await evaluate(`([...document.querySelectorAll('.km-configuration-chat button')].find(b=>b.textContent==='Back to request')).click()`);await delay(200);
+  checks.push('configuration-chat-clarification-preview-apply','configuration-keeps-delivery-unchanged');
+  // Project scope: clone resources, reject cross-project work, paginate and show access in the real UI.
+  const projectFixtures=await evaluate(`(async()=>{const teams=await window.electronAPI.getTeams();if(!teams.length)throw new Error('No fixture team');
+    const a=await window.electronAPI.projectCreate({name:'Project Alpha',objective:'Generate qualified leads',metric:'Qualified leads per week',teamId:teams[0].id,language:'en'});
+    const b=await window.electronAPI.projectCreate({name:'Project Beta',objective:'Reduce acquisition cost',teamId:teams[0].id,language:'en'});
+    let rejected=false;try{await window.electronAPI.workCreate({goal:'Wrong team',agentId:b.agentIds[0],projectId:a.id});}catch{rejected=true;}
+    for(let i=0;i<15;i++)await window.electronAPI.workCreate({goal:'Project update '+i,agentId:a.agentIds[0],projectId:a.id});
+    return {a,b,rejected};})()`);
+  if(!projectFixtures.rejected || projectFixtures.a.agentIds[0]===projectFixtures.b.agentIds[0])fail('project boundary did not reject foreign agent');
+  await delay(3300);
+  await evaluate(`(()=>{const label=[...document.querySelectorAll('label')].find(l=>l.textContent==='Current project');document.getElementById(label.htmlFor).click();})()`);await delay(100);
+  await evaluate(`([...document.querySelectorAll('[role="option"]')].find(e=>e.textContent==='Project Alpha')).click()`);await delay(250);
+  if((await evaluate(`document.querySelectorAll('.km-conversation-items .km-task').length`))!==12)fail('project pagination did not limit task cards');
+  if(!(await evaluate(`document.querySelector('.km-project-heading').innerText`)).includes('Generate qualified leads'))fail('project objective not visible');
+  await evaluate(`document.querySelector('.km-conversation-items summary').click()`);await delay(100);
+  if(await evaluate(`document.querySelector('.km-conversation-items').open`))fail('conversation accordion did not collapse');
+  await evaluate(`document.querySelector('.km-conversation-items summary').click()`);
+  const projectShot=await send('Page.captureScreenshot',{format:'png'});writeFileSync(path.join(evidenceDir,'projects-desktop.png'),Buffer.from(projectShot.result.data,'base64'));
+  await evaluate(`([...document.querySelectorAll('button')].find(b=>b.textContent==='Team access and rules')).click()`);await delay(350);
+  if(!(await evaluate(`document.body.innerText`)).includes('Project connections'))fail('project access panel missing');
+  const accessShot=await send('Page.captureScreenshot',{format:'png'});writeFileSync(path.join(evidenceDir,'project-access.png'),Buffer.from(accessShot.result.data,'base64'));
+  await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:false});await delay(200);
+  if(!(await evaluate(`document.documentElement.scrollWidth<=window.innerWidth+2`)))fail('project access overflows narrow viewport');
+  const projectNarrow=await send('Page.captureScreenshot',{format:'png'});writeFileSync(path.join(evidenceDir,'project-access-narrow.png'),Buffer.from(projectNarrow.result.data,'base64'));
+  await send('Emulation.clearDeviceMetricsOverride');await send('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});await send('Input.dispatchKeyEvent',{type:'keyUp',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});
+  checks.push('project-isolated-team-and-work','project-pagination-and-accordion','project-objective-and-access-ui','project-access-narrow-layout');
+  // Fresh-workspace recovery: configured provider, no user agents. Do not silently create one.
+  await evaluate(`window.electronAPI.updateSettings({defaultModel:'compatible/conversation-fixture'})`);
+  await evaluate(`window.electronAPI.getAgents().then(async agents=>{for(const agent of agents)await window.electronAPI.deleteAgent(agent.id);})`);
+  const bootstrapped=await evaluate(`window.electronAPI.configurationMessage('Create a routine','en')`);
+  if(bootstrapped.state.turns.at(-1).plan || (await evaluate('window.electronAPI.getAgents()')).length!==0)fail('configuration bootstrap created an agent or skipped clarification');
+  checks.push('configuration-bootstrap-without-persisted-agent');
+
+
   await new Promise(resolve=>providerServer.close(resolve));providerServer=null;
 
   // Exercise the actual Electron bridge against the shared server, then a second client.
@@ -659,17 +722,22 @@ try {
   const localAgain = await evaluate('window.electronAPI.workList()');
   if (!localAgain.tasks.some(t => t.id === task.id) || localAgain.tasks.some(t => t.id === shared.id)) fail('local and remote data were mixed');
   checks.push('shared-workspace-isolation', 'checkpoint-recovery', 'persisted-task-search');
-  if (checks.length < 44) fail('incomplete UI checks');
-  console.log(`SMOKE PASS: electronAPI OK (version=${version}, agents=${Array.isArray(agents) ? agents.length : '?'}, rootChildren=${rootChildren}, uiRendered=true)`);
+  if (checks.length < 51) fail('incomplete UI checks');
+  const finalRootChildren=await evaluate('document.getElementById("root")?.childElementCount ?? 0');if(!finalRootChildren)fail('renderer root is empty after completing the flow');
+  console.log(`SMOKE PASS: electronAPI OK (version=${version}, agents=${Array.isArray(agents) ? agents.length : '?'}, rootChildren=${finalRootChildren}, uiRendered=true)`);
 } catch (err) {
-  failure = err.message; console.error(`SMOKE FAIL: ${err.message}`); process.exitCode = 1;
+  failure = err.message; console.error(`SMOKE FAIL: ${err.message}`); console.error(stderrBuf.slice(-2500)); const failedShot=await send('Page.captureScreenshot',{format:'png'}).catch(()=>null); if(failedShot?.result?.data)writeFileSync(path.join(evidenceDir,'failure.png'),Buffer.from(failedShot.result.data,'base64')); process.exitCode = 1;
 } finally {
-  writeFileSync(path.join(evidenceDir, 'ux-report.json'), JSON.stringify({passed: !failure && checks.length >= 44, checks, failure, fixture: 'synthetic; no live providers', timestamp: new Date().toISOString()}, null, 2));
+  writeFileSync(path.join(evidenceDir, 'ux-report.json'), JSON.stringify({passed: !failure && checks.length >= 51, checks, failure, fixture: 'synthetic; no live providers', timestamp: new Date().toISOString()}, null, 2));
   ws.close();
   workspaceServer?.kill('SIGTERM');
+  providerServer?.closeAllConnections();
   providerServer?.close();
   child.kill('SIGTERM');
   await delay(500);
   if (child.exitCode === null) child.kill('SIGKILL');
+  if (workspaceServer?.exitCode === null) workspaceServer.kill('SIGKILL');
+  stopBuildService();
+  process.exit(process.exitCode || 0);
 }
 

@@ -1,3 +1,4 @@
+import { CONFIGURATION_PROMPT } from '../../shared/configuration.js';
 import { CONVERSATION_PROMPT } from '../../shared/conversation.js';
 import { RequiredCompanyBrainError } from '../keepmind/CompanyBrains.js';
 import { isCompatibleModel } from '../../shared/connectors.js';
@@ -42,7 +43,7 @@ export interface UsageRecord {
 }
 
 /** Budget gate: throws when the agent's monthly spend + estimate exceeds its cap. */
-export type BudgetChecker = (agentId: string, model: string, estimatedCostUsd: number) => void;
+export type BudgetChecker = (agentId: string, model: string, estimatedCostUsd: number, executionCapUsd?: number) => void;
 
 /** Called when an execution settles so memory items it used can be scored. */
 export type MemoryOutcomeRecorder = (executionId: string, memoryIds: string[], succeeded: boolean) => void;
@@ -101,7 +102,7 @@ export class AgentManager {
       : estimateCallCost(config.model, promptChars, config.maxTokens);
     if (profile && (context!.spentUsd + estimate > profile.maxRunUsd)) throw new Error('Provider per-run budget exceeded');
     const reserved = [...this.reservations.entries()].filter(([id, r]) => id !== policy.executionId && r.agentId === policy.callerAgentId).reduce((sum, [, r]) => sum + r.estimate, 0);
-    this.budgetChecker?.(policy.callerAgentId, config.model, estimate + reserved);
+    this.budgetChecker?.(policy.callerAgentId, config.model, estimate + reserved, config.monthlyBudgetUsd);
     this.reservations.set(policy.executionId, { agentId: policy.callerAgentId, estimate });
   }
 
@@ -281,7 +282,7 @@ export class AgentManager {
   /** Assigned skills + auto-routed skills, deduped by id. */
   private resolveSkills(config: AgentConfig, input: Record<string, unknown>, agentId?: string): Skill[] {
     const assigned = this.loadSkills(config);
-    if (!this.autoSkillSelector) return assigned;
+    if (!this.autoSkillSelector || config.projectId) return assigned;
     try {
       const assignedIds = new Set(assigned.map((s) => s.id));
       const extra = this.autoSkillSelector(input, assigned, agentId).filter((s) => !assignedIds.has(s.id));
@@ -331,7 +332,7 @@ export class AgentManager {
   async executeAgent(
     agentId: string, config: AgentConfig, input: Record<string, unknown>,
     onProgress?: (progress: number) => void, executionId: string = uuidv4(),
-    onEvent?: (event: AgentStreamEvent) => void, opts?: { conversationOnly?: boolean; dryRun?: boolean; onSkillsResolved?: (ids: string[]) => void }
+    onEvent?: (event: AgentStreamEvent) => void, opts?: { conversationOnly?: boolean; configurationOnly?: boolean; dryRun?: boolean; onSkillsResolved?: (ids: string[]) => void }
   ): Promise<AgentExecution> {
     if (this.controllers.has(executionId)) throw new CheckpointError('Execution already active');
     const timeoutSeconds = opts?.conversationOnly ? Math.min(config.executionTimeoutSeconds ?? 60, 60) : config.executionTimeoutSeconds ?? 300;
@@ -361,7 +362,7 @@ export class AgentManager {
     onProgress?: (progress: number) => void,
     executionId: string = uuidv4(),
     onEvent?: (event: AgentStreamEvent) => void,
-    opts?: { conversationOnly?: boolean; dryRun?: boolean; onSkillsResolved?: (ids: string[]) => void }
+    opts?: { conversationOnly?: boolean; configurationOnly?: boolean; dryRun?: boolean; onSkillsResolved?: (ids: string[]) => void }
   ): Promise<AgentExecution> {
     const execution: AgentExecution = {
       dryRun: opts?.dryRun === true,
@@ -396,7 +397,7 @@ export class AgentManager {
       const effectiveConfig: AgentConfig = {
         ...config,
         model: routedModel,
-        systemPrompt: opts?.conversationOnly ? CONVERSATION_PROMPT : await this.buildSystemPrompt(config, input, skills),
+        systemPrompt: opts?.conversationOnly ? (opts.configurationOnly ? CONFIGURATION_PROMPT : CONVERSATION_PROMPT) : await this.buildSystemPrompt(config, input, skills),
         ...(opts?.conversationOnly ? { temperature: 0, maxTokens: Math.min(config.maxTokens, 1800) } : {}),
       };
 

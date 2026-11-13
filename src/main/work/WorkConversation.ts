@@ -68,15 +68,15 @@ export class WorkConversation {
       if (result.status !== 'completed') throw new Error(result.error || 'Conversation failed');
       const content = String(result.output?.content || '').trim().replace(/^```(?:json)?\s*|\s*```$/g, '');
       const reply = conversationReplySchema.parse(JSON.parse(content));
-      if (mode === 'prepare' && !['clarify', 'ready'].includes(reply.intent)) throw new Error('Invalid preparation reply');
+      if (mode === 'prepare' && !['clarify', 'ready', 'configure'].includes(reply.intent)) throw new Error('Invalid preparation reply');
       if (mode === 'message' && reply.intent === 'ready') throw new Error('Invalid conversation reply');
       if (input.choice === 'answer' && reply.intent !== 'answer') throw new Error('Expected an answer without changes');
       finish(reply.reply);
       if (reply.intent === 'revise' && canReviseWork(task)) {
         this.work.change(id, 'revise', sourceText); this.actions.start(id);
-      } else if (reply.intent === 'ready' || reply.intent === 'clarify' || reply.intent === 'ambiguous' || reply.intent === 'revise') {
+      } else if (reply.intent === 'configure' || reply.intent === 'ready' || reply.intent === 'clarify' || reply.intent === 'ambiguous' || reply.intent === 'revise') {
         this.work.updateConversation(id, c => { c.decision = {
-          id: randomUUID(), kind: reply.intent === 'ready' ? 'start' : mode === 'prepare' && reply.intent === 'clarify' ? 'clarify' : 'intent',
+          id: randomUUID(), kind: reply.intent === 'configure' ? 'configure' : reply.intent === 'ready' ? 'start' : mode === 'prepare' && reply.intent === 'clarify' ? 'clarify' : 'intent',
           prompt: reply.reply, choices: reply.choices, sourceText, language: input.language,
         }; });
       }

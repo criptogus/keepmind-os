@@ -48,10 +48,10 @@ export class WorkManager {
     const goal = text(input.goal, 12000);
     if (!goal || !text(input.agentId, 200)) throw new Error('A goal and an agent are required');
     const dependencies = [...new Set(input.dependencies || [])];
-    if (dependencies.some(id => !this.state.tasks.some(t => t.id === id && (t.ownerId === ownerId || (this.sharedProjects && t.project === (text(input.project,100) || 'Workspace')))))) throw new Error('Invalid dependency');
+    if (dependencies.some(id => !this.state.tasks.some(t => t.id === id && (t.projectId === input.projectId) && (t.ownerId === ownerId || (this.sharedProjects && t.project === (text(input.project,100) || 'Workspace')))))) throw new Error('Invalid dependency');
     const now = new Date().toISOString();
     const task: WorkTask = { source, id: identity?.id ?? randomUUID(), creationHash: identity?.hash, title: goal.split('\n')[0].slice(0, 100), goal,
-      project: text(input.project, 100) || 'Workspace', agentId: input.agentId, ownerId,
+      projectId: input.projectId, project: text(input.project, 100) || 'Workspace', agentId: input.agentId, ownerId,
       criteria: text(input.criteria, 4000) || 'Deliver a useful result with sources and explicit limitations.',
       reviewRequired: input.reviewRequired ?? false, dependencies, status: 'backlog', revision: 0, events: [], createdAt: now, updatedAt: now };
     this.event(task, 'created', 'Task created'); this.state.tasks.unshift(task); this.save(); return structuredClone(task);
@@ -83,7 +83,7 @@ export class WorkManager {
   }
   executionInput(id: string): Record<string, unknown> {
     const task = this.task(id);
-    const rules = this.state.rules.filter(r => r.project === task.project && r.status === 'active' && (this.sharedProjects || this.task(r.sourceTaskId).ownerId === task.ownerId));
+    const rules = this.state.rules.filter(r => r.project === task.project && this.task(r.sourceTaskId).projectId === task.projectId && r.status === 'active' && (this.sharedProjects || this.task(r.sourceTaskId).ownerId === task.ownerId));
     return { task: task.goal, workTaskId: task.id, incomingEvent: task.source,
         notes: task.events.filter(e => e.kind === 'comment').map(e => e.text), conversationContext: task.conversation?.turns.slice(-20).map(t => ({ role: t.role, text: t.text })), previousDelivery: task.output, acceptanceCriteria: task.criteria, corrections: task.events.filter(e => e.kind === 'revision').map(e => e.text),
         projectRules: rules.map(r => ({ id: r.id, version: r.version, text: r.text })),
