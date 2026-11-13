@@ -14,10 +14,11 @@ import PixelSpinner from '../common/PixelSpinner';
 import OrgChart from './OrgChart';
 import { IconAgent } from '../common/icons.js';
 
-export default function AgentList() {
+export default function AgentList({ newAgentRequest = 0, onCreateOpened }: { newAgentRequest?: number; onCreateOpened?: () => void }) {
   const { t } = useLang();
   const { agents, executions, loading, error, fetchAgents, selectAgent, deleteAgent } = useAgentStore();
   const [createMode, setCreateMode] = useState<'wizard' | 'advanced' | null>(null);
+  useEffect(() => { if (newAgentRequest) { setCreateMode('wizard'); onCreateOpened?.(); } }, [newAgentRequest, onCreateOpened]);
   const [advancedTemplate, setAdvancedTemplate] = useState<AgentTemplate | null>(null);
   const [editingAgentId, setEditingAgentId] = useState<string | null>(null);
   const [view, setView] = useState<'list' | 'org'>('list');

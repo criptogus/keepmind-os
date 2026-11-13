@@ -7,7 +7,7 @@ import { CheckpointStore } from './execution/CheckpointStore.js';
 import { HybridMemory, localEmbedder } from './integrations/HybridMemory.js';
 import { WorkManager } from './work/WorkManager.js';
 import type { CreateWorkInput, WorkAction } from '../shared/work.js';
-import { app, BrowserWindow, dialog, ipcMain, Menu, nativeImage, Tray } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain, Menu, nativeImage, shell, Tray } from 'electron';
 import * as path from 'path';
 import { StorageManager } from './storage/StorageManager.js';
 import { AgentManager } from './agent/AgentManager.js';
@@ -149,6 +149,7 @@ const EXPIRY_SKEW_MS = 60_000;
  * the CLI login shares the same OAuth client, so tokens are interchangeable.
  */
 async function syncCodexCliAuth(): Promise<void> {
+  if (process.env.KEEPMIND_DISABLE_CLI_AUTH === '1') return;
   const cli = readCodexCliAuth();
   if (!cli?.accessToken) return;
 
@@ -419,6 +420,12 @@ function createWindow() {
     titleBarStyle: 'hiddenInset',
     title: 'KeepMind OS',
     backgroundColor: '#ffffff',
+  });
+
+  // Generated delivery sources open only on an explicit click, in the system browser.
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    try { if (['https:', 'http:'].includes(new URL(url).protocol)) void shell.openExternal(url).catch(() => {}); } catch { /* reject malformed URLs */ }
+    return { action: 'deny' };
   });
 
   // Load the renderer

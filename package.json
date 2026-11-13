@@ -21,7 +21,8 @@
     "scan:secrets": "node scripts/scan-secrets.mjs",
     "dist:win": "npm run build && electron-builder --win",
     "runner": "esbuild src/runner/cli.ts --bundle --platform=node --format=esm --packages=external --outfile=dist/runner/cli.mjs && node dist/runner/cli.mjs",
-    "dist:signed": "npm run build && node scripts/dist-signed.mjs"
+    "dist:signed": "npm run build && node scripts/dist-signed.mjs",
+    "verify:ux": "npm run typecheck && npm test && npm run test:integration && npm run build && npm run runner -- --help && npm run smoke:electron && npm run scan:secrets"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.1",
@@ -38,6 +39,8 @@
     "qrcode": "1.5.4",
     "react": "19.2.0",
     "react-dom": "19.2.0",
+    "react-markdown": "10.1.0",
+    "remark-gfm": "4.0.1",
     "unpdf": "1.4.0",
     "uuid": "^11.0.3",
     "xlsx": "0.18.5",

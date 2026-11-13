@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { useThemeStore } from './themeStore';
 import type { AppSettings } from '../../shared/types.js';
 import { DEFAULT_MODEL } from '../../shared/models.js';
 
@@ -38,6 +39,7 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
     set({ loading: true, error: null });
     try {
       await window.electronAPI.updateSettings(newSettings);
+      if (newSettings.theme) useThemeStore.setState({ theme: newSettings.theme });
       set(state => ({
         settings: { ...state.settings, ...newSettings },
         loading: false,

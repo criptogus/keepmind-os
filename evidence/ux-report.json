@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "checks": [
+    "onboarding-without-credentials",
+    "delivery-markdown",
+    "light-title-contrast",
+    "dark-theme-and-contrast",
+    "automatic-system-theme",
+    "quick-actions-consumed-and-approvals-accessible",
+    "narrow-layout",
+    "shared-workspace-isolation",
+    "checkpoint-recovery",
+    "persisted-task-search"
+  ],
+  "failure": null,
+  "fixture": "synthetic; no live providers",
+  "timestamp": "2026-11-13T13:46:15.974Z"
+}
