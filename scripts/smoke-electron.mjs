@@ -136,6 +136,7 @@ try {
   const rendered = await evaluate('document.body?.innerText ?? ""');
   if (!rendered?.includes('Your work, moving forward.') || !rendered.includes('Review repository documentation')) fail('workspace did not render persisted task');
   if (!rendered.includes('Need your decision') || !rendered.includes('Now')) fail('focus overview not rendered');
+  if (!(await evaluate(`!!document.querySelector('.km-sidebar .km-nav-more summary')`))) fail('advanced navigation disclosure missing');
   mkdirSync(path.join(root, 'evidence'), { recursive: true });
   const overview = await send('Page.captureScreenshot', { format: 'png' });
   writeFileSync(path.join(root, 'evidence/focus-desktop.png'), Buffer.from(overview.result.data, 'base64'));

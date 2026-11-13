@@ -161,10 +161,6 @@ export default function App() {
                   {tab.label}
                 </button>
               ))}
-              <details className="km-nav-more" open={!['work','agents','automations','governance'].includes(activeSection) || undefined}>
-                <summary>{lang === 'pt' ? 'Mais ferramentas' : 'More tools'}</summary>
-                {sidebarItems.filter(item => !['work','agents','automations','governance'].includes(item.id)).map(item => <Button key={item.id} fullWidth justify="flex-start" variant={activeSection === item.id ? 'light' : 'subtle'} aria-current={activeSection === item.id ? 'page' : undefined} onClick={() => { setActiveSection(item.id); setMobileNav(false); }}>{item.label}</Button>)}
-              </details>
             </div>
             {governanceTab === 'approvals' ? <ApprovalQueue /> : <GovernanceRules />}
           </div>
@@ -265,6 +261,10 @@ export default function App() {
                   {item.label}
                 </Button>
               ))}
+              <details className="km-nav-more" open={!['work','agents','automations','governance'].includes(activeSection) || undefined}>
+                <summary>{lang === 'pt' ? 'Mais ferramentas' : 'More tools'}</summary>
+                {sidebarItems.filter(item => !['work','agents','automations','governance'].includes(item.id)).map(item => <Button key={item.id} fullWidth justify="flex-start" variant={activeSection === item.id ? 'light' : 'subtle'} aria-current={activeSection === item.id ? 'page' : undefined} onClick={() => { setActiveSection(item.id); setMobileNav(false); }}>{item.label}</Button>)}
+              </details>
             </div>
           </div>
 
