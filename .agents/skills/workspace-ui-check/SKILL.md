@@ -12,7 +12,7 @@ npm run verify:ux
 This reuses typecheck, unit/integration tests, build, the headless runner and
 `scripts/smoke-electron.mjs`, followed by the secret scan and pinned production-dependency/package policy check. Any failed stage exits
 nonzero. The smoke creates fresh temporary SQLite data, seeds a synthetic delivery,
-disables CLI credential import and must complete at least twenty-two checks. It writes
+disables CLI credential import and must complete at least twenty-nine checks. It writes
 `evidence/ux-report.json` plus screenshots. Never use production data or credentials.
 
 For only the smoke after a current build and runner build:
@@ -37,3 +37,7 @@ OAuth regressions use the production MCP SDK with controlled HTTP fixtures: PKCE
 Legacy feature adaptations must keep the current application identity and request/delivery flow. Verify compatible provider selection cannot fall through to a native OAuth account, declared prices enforce per-run limits, and keys never enter ordinary settings. Company-bound context must fail closed without falling back to global memory. Use synthetic multi-company fixtures for path, metadata and content isolation. The packaging gate compares the checked-in dependency inventory and rejects restricted SDKs; refreshing the inventory requires explicit dependency review, not automatic acceptance. Run `npm run check:bundle` for its aggregate report; packaging additionally runs the afterPack gate against ASAR and unpacked paths.
 
 Inspect Home, Agents, Approvals and Settings screenshots in both themes. The shared brand accent is #c4ff3d; glow belongs to primary actions, not warning/destructive controls. Verify reduced-motion disables text/message entry effects and the native app uses the KeepMind icon in development and packaged builds. Monochrome avatars use names/initials consistently across the agent list, selectors and conversation.
+
+Conversation-first changes must preserve unsent text across Settings and team navigation, isolate adjustment drafts by conversation, and retain the same conversation after connecting a provider. Verify the main workspace contains no delivery drawer and the material panel does not stack a modal on it. The smoke uses a loopback provider fixture to exercise a real first execution, a single-send revision, v1 history, v2 and acceptance. It must not call live providers.
+
+Switch the visible language picker between PT-BR and English, verify the saved setting and reload, and inspect onboarding, skills and material controls in both languages. Do not translate user-authored content or external catalog instructions. Built-in metadata is localized only when it still matches the stock description. `test/interface-language.test.ts` validates literal dictionary coverage and catalog/native-menu contracts.

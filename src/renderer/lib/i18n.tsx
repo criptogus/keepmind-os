@@ -1,10 +1,80 @@
-import React, { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
 
-export type Lang = 'en' | 'pt' | 'es';
+export type Lang = 'en' | 'pt';
 const STORAGE_KEY = 'km-lang';
 
-const dict: Record<string, { en: string; pt: string }> = {
-  'nav.work': { en: 'Workspace', pt: 'Trabalho' },
+export const dict: Record<string, { en: string; pt: string }> = {
+  'flow.build-my-team': { en: "Build my team", pt: "Montar meu time" },
+  'flow.your-challenge': { en: "Your challenge", pt: "Seu desafio" },
+  'flow.your-team': { en: "Your team", pt: "Seu time" },
+  'flow.first-delivery': { en: "First delivery", pt: "Primeira entrega" },
+  'flow.what-problem-do-you-want-to-solve': { en: "What problem do you want to solve?", pt: "Qual problema você quer resolver?" },
+  'flow.tell-us-about-your-business-and-what-is-difficult': { en: "Tell us about your business and what is difficult today. We will help you set up an AI team to work alongside you.", pt: "Conte um pouco sobre seu negócio e o que está difícil hoje. Vamos ajudar você a montar um time de IA para trabalhar ao seu lado." },
+  'flow.tell-us-what-you-need': { en: "Tell us what you need", pt: "Conte o que você precisa" },
+  'flow.you-do-not-need-to-know-which-agents-to': { en: "You do not need to know which agents to use. Start in your own words.", pt: "Não precisa saber quais agentes usar. Comece com suas próprias palavras." },
+  'flow.i-run-a-business-that-and-need-help-with': { en: "I run a business that… and need help with…", pt: "Tenho uma empresa de… e preciso de ajuda para…" },
+  'flow.need-an-example-to-get-started': { en: "Need an example to get started?", pt: "Quer um exemplo para começar?" },
+  'flow.serve-my-customers-better': { en: "Serve my customers better", pt: "Atender melhor meus clientes" },
+  'flow.promote-my-business': { en: "Promote my business", pt: "Divulgar meu negócio" },
+  'flow.organize-my-business': { en: "Organize my business", pt: "Organizar meu negócio" },
+  'flow.what-is-your-priority-right-now': { en: "What is your priority right now?", pt: "Qual é sua prioridade agora?" },
+  'flow.this-helps-us-suggest-useful-roles-to-start-with': { en: "This helps us suggest useful roles to start with.", pt: "Isso nos ajuda a sugerir os papéis mais úteis para começar." },
+  'flow.explore-first': { en: "Explore first", pt: "Explorar primeiro" },
+  'flow.suggest-my-team': { en: "Suggest my team", pt: "Sugerir meu time" },
+  'flow.you-review-the-suggestion-before-creating-the-team-no': { en: "You review the suggestion before creating the team. No work starts at this step.", pt: "Você revisa a sugestão antes de criar o time. Nenhum trabalho começa nesta etapa." },
+  'flow.a-team-to-help-you': { en: "A team to help you", pt: "Um time para ajudar você" },
+  'flow.this-is-a-starter-team-for-your-selected-priority': { en: "This is a starter team for your selected priority. Your context accompanies the first request; you can customize the members.", pt: "Este é um time inicial para a prioridade escolhida. Seu contexto acompanha o primeiro pedido; você pode personalizar os integrantes." },
+  'flow.team-name': { en: "Team name", pt: "Nome do seu time" },
+  'flow.coordinator-your-point-of-contact': { en: "Coordinator — your point of contact", pt: "Coordenação — seu ponto de contato" },
+  'flow.talks-with-you-organizes-the-request-involves-specialists-and': { en: "Talks with you, organizes the request, involves specialists and brings their work into one delivery.", pt: "Conversa com você, organiza o pedido, envolve os especialistas e reúne tudo em uma entrega." },
+  'flow.how-they-will-help': { en: "How they will help", pt: "Como vai ajudar" },
+  'flow.finish-customizing': { en: "Finish customizing", pt: "Concluir personalização" },
+  'flow.customize-team': { en: "Customize team", pt: "Personalizar time" },
+  'flow.you-stay-in-control-provide-context-review-deliveries-and': { en: "You stay in control: provide context, review deliveries and request changes. Team members are AI assistants.", pt: "Você continua no comando: traz o contexto, avalia as entregas e pede os ajustes. Os integrantes são assistentes de IA." },
+  'flow.back-to-the-problem': { en: "Back to the problem", pt: "Voltar ao problema" },
+  'flow.choose-the-first-delivery': { en: "Choose the first delivery", pt: "Definir a primeira entrega" },
+  'flow.where-shall-we-start': { en: "Where shall we start?", pt: "Por onde vamos começar?" },
+  'flow.a-small-first-request-helps-you-get-to-know': { en: "A small first request helps you get to know the team. Review the suggestion and add the context you already have.", pt: "Um primeiro pedido pequeno ajuda você a conhecer o time. Revise a sugestão abaixo e acrescente o contexto que já tem." },
+  'flow.your-first-request': { en: "Your first request", pt: "Seu primeiro pedido" },
+  'flow.ai-connection': { en: "AI connection", pt: "Conexão de IA" },
+  'flow.service-you-will-use': { en: "Service you will use", pt: "Serviço que você vai usar" },
+  'flow.you-can-connect-your-account-later-starting-requests-may': { en: "You can connect your account later. Starting requests may incur usage costs.", pt: "Você pode conectar sua conta depois. O uso do serviço ao iniciar pedidos pode gerar custos." },
+  'flow.confirming-creates-the-team-and-saves-this-request-as': { en: "Confirming creates the team and saves this request as a draft. You can review everything and connect AI before starting.", pt: "Ao confirmar, vamos criar o time e salvar este pedido como rascunho. Você poderá conferir tudo e conectar a IA antes de iniciar." },
+  'flow.adjust-team': { en: "Adjust team", pt: "Ajustar o time" },
+  'flow.create-team-and-save-first-request': { en: "Create team and save first request", pt: "Criar time e salvar primeiro pedido" },
+  'flow.your-business-with-a-team-by-your-side': { en: "Your business, with a team by your side.", pt: "Seu negócio, com um time ao seu lado." },
+  'flow.start-with-the-challenge-we-will-help-you-plan': { en: "Start with the challenge. We will help you plan the way forward.", pt: "Comece pelo desafio. Nós ajudamos você a organizar o caminho." },
+  'flow.skill-catalog': { en: "SKILL CATALOG", pt: "CATÁLOGO DE HABILIDADES" },
+  'flow.account-connected': { en: "Account connected", pt: "Conta conectada" },
+  'flow.waiting-for-sign-in': { en: "Waiting for sign-in", pt: "Aguardando login" },
+  'flow.not-connected': { en: "Not connected", pt: "Não conectado" },
+  'flow.find-skills-review-their-instructions-and-choose-which-agent': { en: "Find skills, review their instructions and choose which agent will use them.", pt: "Encontre habilidades, confira as instruções e escolha qual agente vai usá-las." },
+  'flow.connect-my-account': { en: "Connect my account", pt: "Conectar minha conta" },
+  'flow.sign-in-through-your-browser-read-only-catalog-access': { en: "Sign in through your browser · read-only catalog access", pt: "Login no navegador · acesso somente de leitura ao catálogo" },
+  'flow.complete-sign-in-in-your-browser': { en: "Complete sign-in in your browser", pt: "Conclua o login no navegador" },
+  'flow.authorize-the-connection-on-super-agent-skill-if-the': { en: "Authorize the connection on Super Agent Skill. If the website confirms but this screen keeps waiting, use its link to return to the app. You do not need to paste keys here.", pt: "Autorize a conexão no site do Super Agent Skill. Se o site confirmar e esta tela continuar aguardando, use o link do site para retornar ao aplicativo. Não precisa colar chaves aqui." },
+  'flow.open-sign-in-page': { en: "Open sign-in page", pt: "Abrir página de login" },
+  'flow.safari-requested-complete-sign-in-in-the-browser-window': { en: "Safari requested. Complete sign-in in the browser window.", pt: "Abertura solicitada ao Safari. Conclua o login na janela do navegador." },
+  'flow.did-not-open-use-safari': { en: "Did not open? Use Safari", pt: "Não abriu? Usar Safari" },
+  'flow.link-copied-paste-it-in-your-browser': { en: "Link copied. Paste it in your browser.", pt: "Link copiado. Cole no navegador." },
+  'flow.could-not-copy-use-the-link-above': { en: "Could not copy. Use the link above.", pt: "Não foi possível copiar. Use o link acima." },
+  'flow.copy-link': { en: "Copy link", pt: "Copiar link" },
+  'flow.cancel-sign-in': { en: "Cancel sign-in", pt: "Cancelar login" },
+  'flow.what-skill-does-your-agent-need': { en: "What skill does your agent need?", pt: "Que habilidade seu agente precisa?" },
+  'flow.e-g-planning-customer-service-marketing': { en: "E.g. planning, customer service, marketing", pt: "Ex.: planejamento, atendimento, marketing" },
+  'flow.find-skills': { en: "Find skills", pt: "Buscar habilidades" },
+  'flow.only-the-search-term-is-sent-to-the-catalog': { en: "Only the search term is sent to the catalog, not your files or conversations. Results may be in another language.", pt: "Apenas o termo da busca é enviado ao catálogo. Não enviamos seus arquivos ou conversas. O conteúdo encontrado pode estar em inglês." },
+  'flow.no-skills-found-try-another-term-such-as-marketing': { en: "No skills found. Try another term, such as “marketing” or “customer service”.", pt: "Nenhuma habilidade encontrada. Tente outro termo, como “marketing” ou “customer service”." },
+  'flow.not-provided': { en: "not provided", pt: "não informada" },
+  'flow.view-skill': { en: "View skill", pt: "Ver habilidade" },
+  'flow.disconnect-account': { en: "Disconnect account", pt: "Desconectar conta" },
+  'flow.review-skill': { en: "Review skill", pt: "Revisar habilidade" },
+  'flow.you-are-adding-third-party-instructions-review-the-content': { en: "You are adding third-party instructions. Review the content. We will not import scripts or grant new tools.", pt: "Você está adicionando instruções de terceiros. Confira o conteúdo. Não importaremos scripts nem concederemos novas ferramentas." },
+  'flow.which-agent-on-this-computer-will-use-this-skill': { en: "Which agent on this computer will use this skill?", pt: "Qual agente deste computador vai usar esta habilidade?" },
+  'flow.choose-an-agent': { en: "Choose an agent", pt: "Escolha um agente" },
+  'flow.create-an-agent-or-team-before-adding-a-skill': { en: "Create an agent or team before adding a skill.", pt: "Crie um agente ou time antes de adicionar uma habilidade." },
+  'flow.add-to-agent': { en: "Add to agent", pt: "Adicionar ao agente" },
+  'nav.work': { en: 'Conversations', pt: 'Conversas' },
   // Shell / navigation
   'nav.dashboard': { en: 'Home', pt: 'Início' },
   'nav.agents': { en: 'Agents', pt: 'Agentes' },
@@ -794,9 +864,9 @@ const dict: Record<string, { en: string; pt: string }> = {
   'tour.finish': { en: 'Finish', pt: 'Concluir' },
   'tour.stepOf': { en: 'of', pt: 'de' },
   'tour.nav.title': { en: 'This is the menu', pt: 'Este é o menu' },
-  'tour.nav.text': { en: 'Start in Workspace, review Approvals and manage Routines. Agents, teams and settings are under More tools.', pt: 'Comece em Trabalho, confira Aprovações e gerencie Rotinas. Agentes, equipes e configurações ficam em Mais ferramentas.' },
+  'tour.nav.text': { en: 'Start in Conversations. Your team contains members and skills. Connections are in Settings; routines and history are under Organize.', pt: 'Comece em Conversas. Meu time reúne integrantes e habilidades. Conexões ficam em Configurações; rotinas e histórico ficam em Organizar.' },
   'tour.home.title': { en: 'Home shows what needs attention', pt: 'O Início mostra o que precisa de atenção' },
-  'tour.home.text': { en: 'Make a request at the top. Follow ongoing work and open deliveries below.', pt: 'Faça seu pedido no topo. Acompanhe o trabalho e abra as entregas logo abaixo.' },
+  'tour.home.text': { en: 'Create a request, select a conversation and review deliveries beside it.', pt: 'Crie um pedido, selecione uma conversa e revise os materiais ao lado dela.' },
   'tour.agents.title': { en: 'Agents are your AI helpers', pt: 'Agentes são seus assistentes de IA' },
   'tour.agents.text': { en: 'Create agents for jobs like "answer customers on WhatsApp" or "write the daily site report". Each one has its own instructions and tools.', pt: 'Crie agentes para trabalhos como "responder clientes no WhatsApp" ou "escrever o relatório diário da obra". Cada um tem instruções e ferramentas próprias.' },
   'tour.approvals.title': { en: 'You stay in control', pt: 'Você mantém o controle' },
@@ -817,21 +887,38 @@ interface LangContextValue {
   lang: Lang;
   setLang: (lang: Lang) => void;
   t: (key: string) => string;
+  languageError: string;
 }
 
 const LangContext = createContext<LangContextValue>({
   lang: 'pt',
   setLang: () => {},
+  languageError: '',
   t: (key) => dict[key]?.en ?? key,
 });
 
 export function LangProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>(() => {
     const saved = typeof localStorage !== 'undefined' ? localStorage.getItem(STORAGE_KEY) : null;
-    return saved === 'en' || saved === 'pt' || saved === 'es' ? saved : 'pt';
+    return saved === 'en' || saved === 'pt' ? saved : 'pt';
   });
 
+  const [languageError, setLanguageError] = useState('');
+  const changed = useRef(false);
   useEffect(() => {
+    let live = true;
+    void window.electronAPI.getSettings().then(settings => {
+      if (live && !changed.current) setLangState(settings.language === 'en' ? 'en' : 'pt');
+    }).catch(() => {});
+    return () => { live = false; };
+  }, []);
+  const setLang = (value: Lang) => {
+    changed.current = true;
+    setLangState(value); setLanguageError('');
+    void window.electronAPI.updateSettings({ language: value }).catch(() => setLanguageError(value === 'pt' ? 'Não foi possível salvar o idioma. Tente novamente.' : 'Could not save the language. Try again.'));
+  };
+  useEffect(() => {
+    document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
     localStorage.setItem(STORAGE_KEY, lang);
   }, [lang]);
 
@@ -839,11 +926,11 @@ export function LangProvider({ children }: { children: ReactNode }) {
     const entry = dict[key];
     if (!entry) return key;
     if (lang === 'pt') return entry.pt;
-    return entry.en; // 'es' falls back to English until translated
+    return entry.en;
   };
 
   return (
-    <LangContext.Provider value={{ lang, setLang: setLangState, t }}>
+    <LangContext.Provider value={{ lang, setLang, t, languageError }}>
       {children}
     </LangContext.Provider>
   );

@@ -1,3 +1,4 @@
+import { nativeMenuTemplate } from './ui/nativeMenu';
 import { CompanyBrains } from './keepmind/CompanyBrains.js';
 import type { CompanyBrainBinding } from '../shared/company-brain.js';
 import { CompatibleProviders } from './connectors/CompatibleProviders.js';
@@ -1190,6 +1191,7 @@ app.whenReady().then(async () => {
   });
 
   createWindow();
+  updateApplicationMenus();
   setupTray();
 
   app.on('activate', () => {
@@ -1210,6 +1212,15 @@ function showMainWindow() {
   mainWindow.focus();
 }
 
+function updateApplicationMenus() {
+  const language = storageManager.getSetting('language') || 'en';
+  Menu.setApplicationMenu(Menu.buildFromTemplate(nativeMenuTemplate(language, process.platform === 'darwin')));
+  tray?.setContextMenu(Menu.buildFromTemplate([
+    {label: language === 'pt' ? 'Abrir KeepMind OS' : 'Open KeepMind OS', click: showMainWindow},
+    {type: 'separator'},
+    {label: language === 'pt' ? 'Sair' : 'Quit', click: () => app.quit()},
+  ]));
+}
 function setupTray() {
   try {
     const iconPath = path.join(__dirname, 'tray-icon.png');
@@ -1218,11 +1229,7 @@ function setupTray() {
     image.setTemplateImage(true);
     tray = new Tray(image.resize({ width: 18, height: 18 }));
     tray.setToolTip('KeepMind OS');
-    tray.setContextMenu(Menu.buildFromTemplate([
-      { label: 'Open KeepMind OS', click: showMainWindow },
-      { type: 'separator' },
-      { label: 'Quit', click: () => app.quit() },
-    ]));
+    updateApplicationMenus();
     tray.on('click', showMainWindow);
   } catch (error) {
     console.error('Tray setup failed:', error);
@@ -1231,7 +1238,7 @@ function setupTray() {
 
 // Deep links: keepmind://<section> focuses the app and navigates there.
 const DEEP_LINK_SECTIONS = new Set([
-  'dashboard', 'agents', 'teams', 'skills', 'governance', 'logs', 'settings', 'advanced',
+  'work', 'dashboard', 'agents', 'teams', 'skills', 'governance', 'logs', 'settings', 'advanced',
 ]);
 
 function sectionFromDeepLink(url: string): string | null {
@@ -2617,7 +2624,9 @@ handle('settings:get', () => {
 });
 
 handle('settings:update', (_event, settings: Partial<AppSettings>) => {
-  requireRole('admin');
+  // Language is a device presentation preference, not an administration privilege.
+  if (Object.keys(settings).some(key => key !== 'language')) requireRole('admin');
+  if (settings.language !== undefined && !['pt','en'].includes(settings.language)) throw new Error('Unsupported interface language');
   const KEY_MAP: Record<string, string> = {
     onboardingCompleted: 'onboarding.completed',
     memorySemanticSearch: 'memory.semantic',
@@ -2629,6 +2638,8 @@ handle('settings:update', (_event, settings: Partial<AppSettings>) => {
   Object.entries(settings).forEach(([key, value]) => {
     storageManager.setSetting(KEY_MAP[key] ?? key, String(value));
   });
+  if (settings.language !== undefined) updateApplicationMenus();
+  if (Object.keys(settings).every(key => key === 'language')) return { language: storageManager.getSetting('language') };
   return storageManager.getAllSettings();
 });
 

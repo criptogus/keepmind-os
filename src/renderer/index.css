@@ -237,3 +237,65 @@ body {
 .km-typing i { width: 6px; height: 6px; background: var(--km-lime); box-shadow: 0 0 8px #c4ff3d55; border-radius: 50%; animation: km-status-breathe 1.2s ease-in-out infinite; }
 .km-typing i:nth-child(2) { animation-delay: 150ms; }.km-typing i:nth-child(3) { animation-delay: 300ms; }
 @media (prefers-reduced-motion: reduce) { .km-typing i { animation: none; } }
+
+/* Conversation-first shell: stable navigation, independently scrolling history. */
+.km-workspace-host:not([hidden]), .km-main-conversations { height: 100%; min-height: 0; }
+.km-workspace-host[hidden] { display: none; }
+.km-conversations { max-width: none; height: 100%; display: flex; gap: 0; overflow: hidden; }
+.km-conversation-list { width: 300px; flex: 0 0 300px; min-height: 0; display: flex; flex-direction: column; gap: 14px; padding: 20px 16px; border-right: 1px solid var(--mantine-color-default-border); }
+.km-conversation-list > .mantine-Group-root { align-items: flex-start; flex-direction: column; gap: 12px; }
+.km-conversation-items { flex: 1; min-height: 0; overflow-y: auto; }
+.km-conversation-items .km-task { padding: 14px 12px; border: 1px solid transparent; background: var(--mantine-color-body); border-radius: 10px; }
+.km-conversation-items .km-task:hover { background: var(--mantine-color-default-hover); }
+.km-conversation-items .km-task[aria-current=true] { border-color: var(--mantine-color-default-border); background: var(--mantine-color-default-hover); box-shadow: inset 3px 0 var(--km-lime); }
+.km-conversation-items .km-task-title { font-size: 14px; line-height: 1.45; }
+.km-conversation-items .km-task > .mantine-Group-root:last-child { gap: 5px; }
+.km-conversation-stage { flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column; }
+.km-conversation-stage > .mantine-Alert-root { flex-shrink: 0; margin: 12px; }
+.km-new-conversation { overflow-y: auto; padding: 32px; width: 100%; max-width: 900px; margin: auto; }
+.km-new-conversation .km-command { padding: 24px; border: none; }
+.km-conversation-content { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.km-conversation-content .km-chat-heading { position: static; flex-shrink: 0; padding: 16px 24px; gap: 12px; }
+.km-chat-title { min-width: 0; flex: 1; }
+.km-chat-title h2 { overflow-wrap: anywhere; }
+.km-chat-title > p { overflow-wrap: anywhere; }
+.km-chat-history { flex: 1; min-height: 0; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 20px; scroll-padding: 20px; }
+.km-chat-history > * { flex-shrink: 0; }
+.km-chat-history .km-chat-message { width: fit-content; max-width: 100%; padding: 18px; }
+.km-chat-history .km-chat-user { max-width: 88%; }
+.km-chat-history .km-chat-agent { width: 100%; }
+.km-conversation-content .km-chat-composer { position: static; flex-shrink: 0; padding: 16px 24px; }
+.km-back-conversations { display: none; }
+.km-material-panel { width: 45%; min-width: 340px; overflow: auto; padding: 24px; border-left: 1px solid var(--mantine-color-default-border); background: var(--mantine-color-default-hover); }
+.km-has-material .km-conversation-list { display: none; }
+.km-material-panel .km-paper-preview { padding: 28px; }
+.km-material-panel .km-paper-preview h1 { font-size: 24px; border-bottom: none; }
+.km-material-panel .km-paper-preview h2 { border-bottom: none; }
+.km-context-connection { overflow-y: auto; padding: 24px; }
+.km-sidebar { flex-shrink: 0; background: var(--mantine-color-body) !important; }
+.km-sidebar button[aria-current=page] { background: var(--mantine-color-default-hover); color: var(--mantine-color-text); }
+.km-about { font-size: 12px; color: var(--mantine-color-dimmed); padding: 12px 0; }
+.km-about summary { cursor: pointer; }
+.km-about a { color: inherit; }
+@media (max-width: 1100px) {
+  .km-conversation-list { width: 260px; flex-basis: 260px; }
+  .km-new-conversation { padding: 20px; }
+  .km-chat-history { padding: 16px; }
+  .km-material-panel { min-width: 320px; padding: 16px; }
+}
+@media (max-width: 850px) {
+  .km-conversation-list { width: 100%; flex-basis: 100%; }
+  .km-conversation-stage { display: none; }
+  .km-has-conversation .km-conversation-list { display: none; }
+  .km-has-conversation .km-conversation-stage { display: flex; }
+  .km-conversations:has(.km-new-conversation) .km-conversation-list { flex-basis: 220px; width: 220px; }
+  .km-conversations:has(.km-new-conversation) .km-conversation-stage { display: flex; }
+  .km-back-conversations { display: inline-flex; }
+  .km-chat-heading { flex-wrap: wrap; }
+  .km-has-material .km-conversation-stage { display: none; }
+  .km-material-panel { width: 100%; min-width: 0; }
+}
+.km-conversation-list h1 { font-size: 22px; letter-spacing: -.025em; }
+.km-conversation-items .km-task-title { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.km-conversation-items .km-task .km-bot-avatar { width: 28px; height: 28px; }
+.km-language-picker { flex-shrink: 0; }

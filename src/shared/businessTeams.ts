@@ -22,13 +22,13 @@ export const TEAM_STARTERS = [
 export interface BusinessTeamInput {
   requestId: string; problem: string; priority: string; name: string;
   roles: Array<{ name: string; purpose: string }>;
-  firstRequest: string; provider: 'openai' | 'anthropic';
+  firstRequest: string; provider: 'openai' | 'anthropic'; language?: 'en' | 'pt';
 }
 export interface BusinessTeamResult { teamId: string; coordinatorId: string; taskId: string; }
 export function validateBusinessTeam(input: BusinessTeamInput): void {
   const text = (value: unknown, max: number) => typeof value === 'string' && !!value.trim() && value.length <= max;
   if (!input || !/^[\w-]{8,80}$/.test(input.requestId) || !text(input.problem, 6000) || !text(input.name, 100) || !text(input.firstRequest, 6000)
-    || !TEAM_STARTERS.some(t => t.id === input.priority) || !['openai', 'anthropic'].includes(input.provider)
+    || (input.language !== undefined && !['en','pt'].includes(input.language)) || !TEAM_STARTERS.some(t => t.id === input.priority) || !['openai', 'anthropic'].includes(input.provider)
     || !Array.isArray(input.roles) || input.roles.length < 1 || input.roles.length > 3
     || input.roles.some(r => !text(r?.name, 100) || !text(r?.purpose, 1000))) throw new Error('Confira o problema, o nome do time, os papéis e o primeiro pedido.');
 }
@@ -36,14 +36,36 @@ export function validateBusinessTeam(input: BusinessTeamInput): void {
 export function buildBusinessTeam(input: BusinessTeamInput, id: () => string, now: string): { agents: Agent[]; team: Team } {
   validateBusinessTeam(input);
   const teamId = id(); const coordinatorId = id();
-  const boundaries = 'Trabalhe em português claro para uma pessoa não técnica. Use apenas o contexto fornecido. Não invente fatos, fontes, resultados ou ações executadas. Se faltar informação, indique a lacuna e peça esclarecimento. Não publique, não envie mensagens, não acesse arquivos nem sistemas externos.';
+  const boundaries = (input.language === 'en' ? 'Respond in clear English for a nontechnical person. ' : 'Trabalhe em português claro para uma pessoa não técnica. ') + ' Use apenas o contexto fornecido. Não invente fatos, fontes, resultados ou ações executadas. Se faltar informação, indique a lacuna e peça esclarecimento. Não publique, não envie mensagens, não acesse arquivos nem sistemas externos.';
   const base = { model: DEFAULT_MODEL[input.provider], temperature: 0.3, maxTokens: 4096, computerAccess: 'workspace' as const };
   const permissions = { canAccessNetwork: true, canAccessFileSystem: false, canExecuteCode: false, maxExecutionTime: 300 };
   const specialists: Agent[] = input.roles.map(role => ({ id: id(), name: role.name.trim(), description: role.purpose.trim(), managerId: coordinatorId,
     config: { ...base, systemPrompt: `${boundaries}\nSeu papel: ${role.name}. ${role.purpose}\nContexto informado pelo cliente:\n${input.problem}`, tools: [] },
     capabilities: ['text_generation', 'reasoning'], permissions, createdAt: now, updatedAt: now }));
-  const coordinator: Agent = { id: coordinatorId, name: `Coordenação · ${input.name.trim()}`, description: 'Seu ponto de contato: organiza o pedido, envolve os especialistas e apresenta a entrega para sua revisão.',
+  const coordinator: Agent = { id: coordinatorId, name: `${input.language === 'en' ? 'Coordinator' : 'Coordenação'} · ${input.name.trim()}`, description: input.language === 'en' ? 'Your point of contact: organizes requests, involves specialists and brings deliveries for your review.' : 'Seu ponto de contato: organiza o pedido, envolve os especialistas e apresenta a entrega para sua revisão.',
     config: { ...base, systemPrompt: `${boundaries}\nVocê coordena este time e trabalha junto com o cliente. Entenda o pedido. Delegue a produção ao especialista adequado e uma revisão a outro especialista usando delegate_to_agent com os IDs abaixo. Integre as contribuições em uma entrega única e explique o próximo passo. Se a delegação falhar, informe a limitação; nunca simule participação. Não delegue a agentes fora deste time.\nTime:\n${specialists.map(a => `${a.id}: ${a.name} — ${a.description}`).join('\n')}\nContexto do negócio:\n${input.problem}`, tools: [{ name: 'delegate_to_agent', type: 'custom', config: {} }] },
     capabilities: ['text_generation', 'reasoning'], permissions, createdAt: now, updatedAt: now };
   return { agents: [coordinator, ...specialists], team: { id: teamId, name: input.name.trim(), description: input.problem.trim(), agentIds: [coordinatorId, ...specialists.map(a => a.id)], workflow: { id: id(), name: 'Pedido acompanhado pelo time', executionMode: 'sequential', steps: [{ id: id(), agentId: coordinatorId, inputs: {} }] }, createdAt: now, updatedAt: now } };
+}
+
+const ENGLISH_STARTERS = [
+  { id: 'consulting', name: 'Client delivery team', priority: 'Deliver better work for my clients', example: 'I need to prepare proposals and organize deliveries for my business clients.', roles: [
+    { name: 'Business analyst', purpose: 'Organizes the client context and identifies what needs to be solved.' },
+    { name: 'Delivery specialist', purpose: 'Turns information into clear proposals, plans and reports.' },
+  ], first: 'Prepare a proposal template for a client, including objectives, scope, steps and next actions. Mark information I still need to provide.' },
+  { id: 'marketing', name: 'Marketing team', priority: 'Attract clients and grow sales', example: 'I want to promote my products or services and attract new customers.', roles: [
+    { name: 'Marketing strategist', purpose: 'Helps define the audience, message and ways to reach customers.' },
+    { name: 'Content creator', purpose: 'Prepares ideas, copy and campaigns for you to review before publishing.' },
+  ], first: 'Suggest a one-week outreach plan, with content ideas and an initial introduction. List missing information about my audience and offer. Do not publish anything.' },
+  { id: 'operations', name: 'Operations team', priority: 'Organize my business routines', example: 'I run a small business and need to organize requests, deadlines and team follow-up.', roles: [
+    { name: 'Process analyst', purpose: 'Identifies steps, bottlenecks and information to organize.' },
+    { name: 'Operations planner', purpose: 'Suggests priorities, owners and a simple tracking routine.' },
+  ], first: 'Suggest a simple weekly routine for managing requests, with priorities and a tracking template. Highlight missing information.' },
+  { id: 'general', name: 'Business support team', priority: 'Another challenge / not sure yet', example: '', roles: [
+    { name: 'Problem analyst', purpose: 'Helps clarify the challenge, options and missing information.' },
+    { name: 'Solution planner', purpose: 'Turns the diagnosis into next steps and useful materials.' },
+  ], first: 'Help me turn this problem into an initial plan. Suggest a useful first outcome and ask up to three essential questions. Do not invent facts about my business.' },
+];
+export function businessStarters(language: 'en' | 'pt') {
+  return language === 'en' ? ENGLISH_STARTERS : TEAM_STARTERS;
 }
