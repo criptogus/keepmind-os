@@ -1,5 +1,7 @@
+import CommandMenu from './components/navigation/CommandMenu';
 import React, { Suspense, lazy, useState, useEffect } from 'react';
 
+const WorkBench = lazy(() => import('./components/work/WorkBench'));
 const AgentList = lazy(() => import('./components/agents/AgentList'));
 const TeamList = lazy(() => import('./components/teams/TeamList'));
 const ApprovalQueue = lazy(() => import('./components/governance/ApprovalQueue'));
@@ -32,11 +34,18 @@ const sectionLabel: React.CSSProperties = {
 };
 
 export default function App() {
-  const [activeSection, setActiveSection] = useState('dashboard');
+  const [activeSection, setActiveSection] = useState('work');
   const [version, setVersion] = useState<string>('');
   const [pendingApprovals, setPendingApprovals] = useState(0);
   const { initTheme } = useThemeStore();
-  const { t } = useLang();
+  const { t, lang } = useLang();
+  const [commandsOpen, setCommandsOpen] = useState(false);
+  const [selectedWorkId, setSelectedWorkId] = useState<string | null>(null);
+  const [mobileNav, setMobileNav] = useState(false);
+  useEffect(() => {
+    const key = (event: KeyboardEvent) => { if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); setCommandsOpen(open => !open); } };
+    window.addEventListener('keydown', key); return () => window.removeEventListener('keydown', key);
+  }, []);
   const [needsOnboarding, setNeedsOnboarding] = useState<boolean | null>(null);
   const [authState, setAuthState] = useState<{ hasUsers: boolean; currentUser: LocalUser | null } | null>(null);
   const [tourActive, setTourActive] = useState(false);
@@ -78,10 +87,10 @@ export default function App() {
       const state = await window.electronAPI.getGovernanceState();
       setPendingApprovals(state.pendingApprovals.length);
     };
-    fetchApprovals();
-    const interval = setInterval(fetchApprovals, 5000);
+    void fetchApprovals().catch(() => {});
+    const interval = setInterval(() => void fetchApprovals().catch(() => {}), 5000);
     const unsubDeepLink = window.electronAPI.onDeepLink?.(({ section }) => {
-      if (['dashboard', 'agents', 'teams', 'automations', 'skills', 'governance', 'logs', 'settings', 'advanced'].includes(section)) {
+      if (['work', 'dashboard', 'agents', 'teams', 'automations', 'skills', 'governance', 'logs', 'settings', 'advanced'].includes(section)) {
         setActiveSection(section);
       }
     });
@@ -91,6 +100,7 @@ export default function App() {
   const { mode: appMode } = useAppMode();
   // 'unset' keeps every section visible (status quo) until the user picks a mode.
   const allSidebarItems = [
+    { id: 'work', label: t('nav.work') },
     { id: 'dashboard', label: t('nav.dashboard') },
     { id: 'agents', label: t('nav.agents') },
     { id: 'teams', label: t('nav.teams') },
@@ -101,7 +111,7 @@ export default function App() {
     { id: 'settings', label: t('nav.settings') },
     { id: 'advanced', label: t('nav.advanced') },
   ];
-  const CORPORATE_ONLY = new Set(['teams', 'governance']);
+  const CORPORATE_ONLY = new Set<string>([]);
   const sidebarItems = appMode === 'personal'
     ? allSidebarItems.filter((i) => !CORPORATE_ONLY.has(i.id))
     : allSidebarItems;
@@ -117,6 +127,7 @@ export default function App() {
       return <AnalyticsDashboard onNavigate={setActiveSection} />;
     }
     switch (activeSection) {
+      case 'work': return <WorkBench onNavigate={setActiveSection} selectedTaskId={selectedWorkId} onTaskOpened={() => setSelectedWorkId(null)} />;
       case 'dashboard':
         return <AnalyticsDashboard onNavigate={setActiveSection} />;
       case 'agents':
@@ -211,13 +222,17 @@ export default function App() {
             color: '#ffffff', fontSize: 15, fontWeight: 700,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>K</div>
-          <h1 style={{ fontSize: 18, fontWeight: 600, color: 'var(--mantine-color-dark-8)', margin: 0 }}>KeepMind OS</h1>
+          <h1 style={{ fontSize: 18, fontWeight: 600, color: 'var(--mantine-color-text)', margin: 0 }}>KeepMind OS</h1>
         </div>
+        <Group style={{ WebkitAppRegion: 'no-drag' } as React.CSSProperties} gap="xs">
+          <Button className="km-nav-toggle" variant="default" size="xs" aria-expanded={mobileNav} onClick={() => setMobileNav(v => !v)}>{lang === 'pt' ? 'Menu' : 'Menu'}</Button>
+          <Button variant="default" size="xs" onClick={() => setCommandsOpen(true)}>{lang === 'pt' ? 'Buscar' : 'Search'} <span className="km-keycap">⌘ / Ctrl K</span></Button>
+        </Group>
       </header>
 
       <main style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
-        <aside data-tour="sidebar" style={{
-          width: 260,
+        <aside className={`km-sidebar ${mobileNav ? "km-sidebar-open" : ""}`} data-tour="sidebar" style={{
+          width: 220,
           backgroundColor: 'var(--mantine-color-gray-0)',
           borderRight: '1px solid var(--mantine-color-gray-3)',
           padding: 16,
@@ -228,7 +243,7 @@ export default function App() {
           <div style={{ marginBottom: 24 }}>
             <h2 style={{ ...sectionLabel, margin: 0 }}>{t('nav.navigation')}</h2>
             <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 2 }}>
-              {sidebarItems.map((item) => (
+              {sidebarItems.filter(item => ['work','agents','automations','governance'].includes(item.id)).map((item) => (
                 <Button
                   key={item.id}
                   data-tour={`nav-${item.id}`}
@@ -237,7 +252,8 @@ export default function App() {
                   size="sm"
                   fullWidth
                   justify="flex-start"
-                  onClick={() => setActiveSection(item.id)}
+                  aria-current={activeSection === item.id ? 'page' : undefined}
+                  onClick={() => { setActiveSection(item.id); setMobileNav(false); }}
                   rightSection={item.id === 'governance' && pendingApprovals > 0
                     ? <Badge size="sm" variant="filled" color="dark">{pendingApprovals}</Badge>
                     : undefined}
@@ -245,6 +261,10 @@ export default function App() {
                   {item.label}
                 </Button>
               ))}
+              <details className="km-nav-more" open={!['work','agents','automations','governance'].includes(activeSection) || undefined}>
+                <summary>{lang === 'pt' ? 'Mais ferramentas' : 'More tools'}</summary>
+                {sidebarItems.filter(item => !['work','agents','automations','governance'].includes(item.id)).map(item => <Button key={item.id} fullWidth justify="flex-start" variant={activeSection === item.id ? 'light' : 'subtle'} aria-current={activeSection === item.id ? 'page' : undefined} onClick={() => { setActiveSection(item.id); setMobileNav(false); }}>{item.label}</Button>)}
+              </details>
             </div>
           </div>
 
@@ -298,13 +318,14 @@ export default function App() {
           </div>
         </aside>
 
-        <div data-tour="content" style={{ flex: 1, padding: 24, overflowY: 'auto' }}>
+        <div data-tour="content" style={{ minWidth: 0, flex: 1, padding: 24, overflowY: 'auto' }}>
           <Suspense fallback={<Text size="sm" c="dimmed" ta="center" py="xl">{t('nav.loading')}</Text>}>
             {renderContent()}
           </Suspense>
         </div>
       </main>
 
+      <CommandMenu opened={commandsOpen} onClose={() => setCommandsOpen(false)} items={allSidebarItems} pt={lang === 'pt'} onNavigate={id => { setActiveSection(id); setMobileNav(false); }} onTask={id => { setSelectedWorkId(id); setActiveSection('work'); setMobileNav(false); }} />
       {tourActive && (
         <TourOverlay
           steps={tourSteps(t)}
@@ -315,3 +336,4 @@ export default function App() {
     </div>
   );
 }
+

@@ -185,6 +185,8 @@ export interface AgentExecutionEvent {
 }
 
 export interface AgentTrigger {
+  /** Draft creates reviewable work without calling a model; run uses normal tool approvals. */
+  autonomy?: 'draft' | 'run';
   id: string;
   agentId: string;
   name: string;
@@ -235,7 +237,22 @@ export interface RoutingDecision {
 }
 
 /** Personal-brain memory item with temporal validity and outcome weighting. */
+export interface MemorySource {
+  /** Claimed evidence location; not independently verified. */
+  reference?: string;
+  agentId?: string;
+  executionId?: string;
+  capturedAt: string;
+}
+export interface MemoryRelation {
+  targetId: string;
+  type: 'refines' | 'updates' | 'contradicts' | 'related';
+  confidence: number;
+  createdAt: string;
+}
 export interface MemoryItem {
+  sources?: MemorySource[];
+  relations?: MemoryRelation[];
   id: string;
   kind: string;
   content: string;
@@ -255,6 +272,8 @@ export interface MemoryItem {
 }
 
 export interface AppSettings {
+  memorySemanticSearch?: boolean;
+  memoryEmbeddingModel?: string;
   theme: 'light' | 'dark' | 'auto';
   language: string;
   autoApprove: boolean;
@@ -271,3 +290,4 @@ export interface AppSettings {
   /** Comma-separated enabled sound events; undefined/empty = all enabled. */
   soundEvents?: string;
 }
+

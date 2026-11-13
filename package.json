@@ -19,13 +19,16 @@
     "dist:mac": "npm run build && electron-builder --mac",
     "astryx": "astryx",
     "scan:secrets": "node scripts/scan-secrets.mjs",
-    "dist:win": "npm run build && electron-builder --win"
+    "dist:win": "npm run build && electron-builder --win",
+    "runner": "esbuild src/runner/cli.ts --bundle --platform=node --format=esm --packages=external --outfile=dist/runner/cli.mjs && node dist/runner/cli.mjs",
+    "dist:signed": "npm run build && node scripts/dist-signed.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.1",
     "@composio/core": "0.28.0",
     "@mantine/core": "8.3.18",
     "@mantine/hooks": "8.3.18",
+    "@modelcontextprotocol/sdk": "1.32.2",
     "@tanstack/react-query": "^5.62.0",
     "@whiskeysockets/baileys": "6.7.24",
     "electron-updater": "6.8.11",
@@ -132,7 +135,7 @@
       "createStartMenuShortcut": true
     }
   },
-  "description": "KeepMind OS — local agent workspace",
+  "description": "KeepMind OS \u2014 local agent workspace",
   "author": "KeepMind",
   "repository": {
     "type": "git",

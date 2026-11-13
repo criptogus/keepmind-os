@@ -4,6 +4,7 @@ export type Lang = 'en' | 'pt' | 'es';
 const STORAGE_KEY = 'km-lang';
 
 const dict: Record<string, { en: string; pt: string }> = {
+  'nav.work': { en: 'Workspace', pt: 'Trabalho' },
   // Shell / navigation
   'nav.dashboard': { en: 'Home', pt: 'Início' },
   'nav.agents': { en: 'Agents', pt: 'Agentes' },
@@ -45,6 +46,7 @@ const dict: Record<string, { en: string; pt: string }> = {
   'mode.bannerTitle': { en: 'Choose how you will use KeepMind OS', pt: 'Escolha como você vai usar o KeepMind OS' },
   'mode.bannerDesc': { en: 'Personal or Company — this changes menus, templates and corporate features.', pt: 'Pessoal ou Empresa — isso muda menus, templates e recursos corporativos.' },
   'settings.portugues': { en: 'Português', pt: 'Português' },
+  'settings.autonomyPolicy': { en: 'Routine work runs automatically. External or unbounded actions require approval; agent permissions and budgets still apply.', pt: 'Trabalho rotineiro executa automaticamente. Ações externas ou de impacto não delimitado pedem aprovação; permissões e orçamentos continuam valendo.' },
   'settings.governance': { en: 'Governance', pt: 'Governança' },
   'settings.autoApprove': { en: 'Auto-approve actions', pt: 'Aprovar ações automaticamente' },
   'settings.autoApproveHint': { en: 'Disabling manual approval reduces security oversight', pt: 'Desativar aprovação manual reduz a supervisão de segurança' },
@@ -753,3 +755,4 @@ export function LangProvider({ children }: { children: ReactNode }) {
 export function useLang(): LangContextValue {
   return useContext(LangContext);
 }
+

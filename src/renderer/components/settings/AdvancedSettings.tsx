@@ -852,14 +852,7 @@ export default function AdvancedSettings() {
 
       <Card withBorder padding="md" radius="md">
         <Title order={3} size="h5" mb="md">{t('adv2.execution')}</Title>
-        <Switch
-          label={t('adv2.autoApprove')}
-          checked={settings.autoApprove}
-          onChange={(e) => updateSettings({ autoApprove: e.currentTarget.checked })}
-        />
-        <Text size="xs" c="dimmed" mt={4}>
-          {t('adv2.autoApproveWarn')}
-        </Text>
+        <Text size="sm">{t('settings.autonomyPolicy')}</Text>
       </Card>
 
       <Card withBorder padding="md" radius="md">
@@ -882,13 +875,7 @@ export default function AdvancedSettings() {
             checked={settings.llmAutoRoute !== false}
             onChange={(e) => updateSettings({ llmAutoRoute: e.currentTarget.checked })}
           />
-          <Switch
-            size="xs"
-            label={t('adv2.approvalSensitive')}
-            description={t('adv2.approvalSensitiveDesc')}
-            checked={settings.toolApprovalRequired !== false}
-            onChange={(e) => updateSettings({ toolApprovalRequired: e.currentTarget.checked })}
-          />
+
         </Stack>
         <Stack gap="sm">
           <AgentSelect
@@ -969,3 +956,4 @@ export default function AdvancedSettings() {
     </Stack>
   );
 }
+

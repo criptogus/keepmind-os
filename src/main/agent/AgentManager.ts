@@ -1,3 +1,5 @@
+import { CheckpointStore, CheckpointError } from '../execution/CheckpointStore.js';
+import { AsyncLocalStorage } from 'node:async_hooks';
 import OpenAI from 'openai';
 import Anthropic from '@anthropic-ai/sdk';
 import type { AgentConfig, AgentExecution, Skill } from '../../shared/types.js';
@@ -31,6 +33,8 @@ export interface UsageRecord {
   model: string;
   provider: string;
   usage: TokenUsage;
+  costUsd?: number;
+  partial?: boolean;
 }
 
 /** Budget gate: throws when the agent's monthly spend + estimate exceeds its cap. */
@@ -62,7 +66,42 @@ export class AgentManager {
   private usageRecorder?: (rec: UsageRecord) => void;
   private budgetChecker?: BudgetChecker;
   private memoryOutcomeRecorder?: MemoryOutcomeRecorder;
-  private currentAgentId?: string;
+  private runContext = new AsyncLocalStorage<{ agentId: string; executionId: string; signal: AbortSignal }>();
+  private controllers = new Map<string, AbortController>();
+  private reservations = new Map<string, { agentId: string; estimate: number }>();
+
+  private settleUnreported(executionId: string): void {
+    const pending = this.reservations.get(executionId);
+    if (!pending) return;
+    this.usageRecorder?.({ agentId: pending.agentId, executionId, model: 'unreported', provider: 'unreported',
+      usage: { promptTokens: 0, completionTokens: 0 }, costUsd: pending.estimate, partial: true });
+    this.reservations.delete(executionId);
+  }
+
+  private beforeCall(config: AgentConfig, promptChars: number, policy?: ExecutionPolicy): void {
+    policy?.signal?.throwIfAborted();
+    if (!policy?.executionId || !policy.callerAgentId) return;
+    this.settleUnreported(policy.executionId);
+    const estimate = estimateCallCost(config.model, promptChars, config.maxTokens);
+    const reserved = [...this.reservations.entries()].filter(([id, r]) => id !== policy.executionId && r.agentId === policy.callerAgentId).reduce((sum, [, r]) => sum + r.estimate, 0);
+    this.budgetChecker?.(policy.callerAgentId, config.model, estimate + reserved);
+    this.reservations.set(policy.executionId, { agentId: policy.callerAgentId, estimate });
+  }
+
+  private recordCall(config: AgentConfig, usage: TokenUsage, policy?: ExecutionPolicy): void {
+    if (!policy?.executionId || !policy.callerAgentId) return;
+    // Persist before releasing the reservation so concurrent runs see the spend.
+    this.usageRecorder?.({ agentId: policy.callerAgentId, executionId: policy.executionId,
+      model: config.model, provider: providerForModel(config.model) || 'unknown', usage });
+    this.reservations.delete(policy.executionId);
+  }
+
+  private checkpoints?: CheckpointStore;
+  setCheckpointStore(store: CheckpointStore) { this.checkpoints = store; }
+  private providerResponse<T>(policy: ExecutionPolicy | undefined, key: string, call: () => Promise<T>): Promise<T> {
+    return policy?.checkpoint && policy.executionId ? policy.checkpoint.response(policy.executionId, key, call) : call();
+  }
+
   private toolRegistry = new ToolRegistry();
 
   constructor() {
@@ -191,6 +230,13 @@ export class AgentManager {
     return this.toolRegistry;
   }
 
+  previewTools(agentId: string, config: AgentConfig, input: Record<string, unknown>) {
+    const skills = this.resolveSkills(config, input, agentId);
+    const constraints = this.constraintsProvider?.(config);
+    const denied = constraints?.denyTools?.length ? new Set(constraints.denyTools) : undefined;
+    return this.enabledToolNames(config, skills, denied);
+  }
+
   private loadSkills(config: AgentConfig): Skill[] {
     if (!this.skillLoader || !config.skillIds?.length) return [];
     try {
@@ -250,6 +296,28 @@ export class AgentManager {
   }
 
   async executeAgent(
+    agentId: string, config: AgentConfig, input: Record<string, unknown>,
+    onProgress?: (progress: number) => void, executionId: string = uuidv4(),
+    onEvent?: (event: AgentStreamEvent) => void
+  ): Promise<AgentExecution> {
+    if (this.controllers.has(executionId)) throw new CheckpointError('Execution already active');
+    const controller = new AbortController();
+    const parent = this.runContext.getStore()?.signal;
+    const abort = () => controller.abort(parent?.reason);
+    if (parent?.aborted) abort();
+    parent?.addEventListener('abort', abort, { once: true });
+    this.controllers.set(executionId, controller);
+    try {
+      return await this.runContext.run({ agentId, executionId, signal: controller.signal }, () =>
+        this.executeAgentInternal(agentId, config, input, onProgress, executionId, onEvent));
+    } finally {
+      parent?.removeEventListener('abort', abort);
+      this.controllers.delete(executionId);
+      this.settleUnreported(executionId);
+    }
+  }
+
+  private async executeAgentInternal(
     agentId: string,
     config: AgentConfig,
     input: Record<string, unknown>,
@@ -266,13 +334,13 @@ export class AgentManager {
     };
 
     this.activeExecutions.set(executionId, execution);
-    const prevAgentId = this.currentAgentId;
-    this.currentAgentId = agentId;
+    const signal = this.runContext.getStore()!.signal;
     // Per-execution memory sink: brain search tools tag the items they
     // returned so outcomes can be attributed when the run settles.
     const memoryIds = new Set<string>();
 
     try {
+      signal.throwIfAborted();
       execution.status = 'running';
       execution.startedAt = new Date().toISOString();
       execution.progress = 10;
@@ -290,25 +358,27 @@ export class AgentManager {
         systemPrompt: await this.buildSystemPrompt(config, input, skills),
       };
 
+      const checkpoint = this.checkpoints?.open(executionId, { agentId, config, input, routedModel,
+        transport: this.oauthTokens.has('openai') && providerForModel(routedModel) === 'openai' ? 'codex' : providerForModel(routedModel),
+        schemas: this.toolRegistry.schemasFor(toolNames) }, effectiveConfig.systemPrompt);
+      if (checkpoint) effectiveConfig.systemPrompt = checkpoint.systemPrompt;
       const execPolicy: ExecutionPolicy = {
+        checkpoint: this.checkpoints,
         ...(constraints?.policy ?? {}),
         memoryUsage: memoryIds,
         callerAgentId: agentId,
+        executionId, signal, allowedTools: toolNames,
+        workTaskId: typeof input.workTaskId === 'string' ? input.workTaskId : undefined,
       };
-
-      // Monthly budget gate — refuse before any provider call is billed.
-      if (this.budgetChecker && config.monthlyBudgetUsd && config.monthlyBudgetUsd > 0) {
-        const promptChars = effectiveConfig.systemPrompt.length + JSON.stringify(input).length;
-        const est = estimateCallCost(routedModel, promptChars, config.maxTokens);
-        this.budgetChecker(agentId, routedModel, est);
-      }
 
       const emit = (type: AgentStreamEvent['type'], data?: unknown) => {
         try { onEvent?.({ type, data }); } catch { /* renderer gone */ }
       };
 
       const provider = providerForModel(routedModel) || providerForModel(config.model);
-      if (provider === 'openai') {
+      if (checkpoint?.output) {
+        output = checkpoint.output;
+      } else if (provider === 'openai') {
         output = await this.executeOpenAI(effectiveConfig, input, toolNames, emit, (progress) => {
           execution.progress = 10 + progress * 0.8;
           onProgress?.(execution.progress);
@@ -322,20 +392,8 @@ export class AgentManager {
         throw new Error(`Unsupported model: ${config.model}`);
       }
 
-      // Record normalized usage for the cost ledger (best-effort).
-      const usage = output.usage as TokenUsage | undefined;
-      if (this.usageRecorder && usage && (usage.promptTokens > 0 || usage.completionTokens > 0)) {
-        try {
-          this.usageRecorder({
-            agentId,
-            executionId,
-            model: String(output.model || routedModel),
-            provider: provider || 'unknown',
-            usage,
-          });
-        } catch { /* ledger must never break a run */ }
-      }
-
+      signal.throwIfAborted();
+      this.checkpoints?.complete(executionId, output);
       execution.status = 'completed';
       execution.completedAt = new Date().toISOString();
       execution.progress = 100;
@@ -343,22 +401,19 @@ export class AgentManager {
 
       return execution;
     } catch (error) {
-      execution.status = 'failed';
+      execution.status = signal.aborted ? 'cancelled' : 'failed';
       execution.completedAt = new Date().toISOString();
       execution.error = error instanceof Error ? error.message : String(error);
       throw error;
     } finally {
       this.activeExecutions.delete(executionId);
-      this.currentAgentId = prevAgentId;
-      if (memoryIds.size > 0 && (execution.status === 'completed' || execution.status === 'failed')) {
-        try {
-          this.memoryOutcomeRecorder?.(executionId, [...memoryIds], execution.status === 'completed');
-        } catch { /* outcome scoring is best-effort */ }
-      }
+
+
     }
   }
 
   private async runTool(name: string, argsJson: string, emit: (t: AgentStreamEvent['type'], d?: unknown) => void, policy?: ExecutionPolicy): Promise<string> {
+    policy?.signal?.throwIfAborted();
     let args: Record<string, unknown> = {};
     try {
       args = argsJson ? JSON.parse(argsJson) : {};
@@ -371,6 +426,8 @@ export class AgentManager {
       emit('tool_result', { name, result: result.slice(0, 2000) });
       return result;
     } catch (error) {
+      policy?.signal?.throwIfAborted();
+      if (error instanceof CheckpointError || policy?.checkpoint) throw error;
       const msg = error instanceof Error ? error.message : String(error);
       emit('tool_result', { name, error: msg });
       return `Tool error: ${msg}`;
@@ -407,6 +464,7 @@ export class AgentManager {
 
     // No tools → stream the response token-by-token.
     if (schemas.length === 0) {
+      this.beforeCall(config, JSON.stringify(messages).length, policy);
       const stream = await client.chat.completions.create({
         model: config.model,
         messages,
@@ -414,7 +472,7 @@ export class AgentManager {
         max_tokens: config.maxTokens,
         stream: true,
         stream_options: { include_usage: true },
-      });
+      }, { signal: policy?.signal });
 
       onProgress?.(60);
 
@@ -434,6 +492,7 @@ export class AgentManager {
       }
 
       onProgress?.(90);
+      if (usage) this.recordCall(config, usage, policy);
       return { content, model, finishReason, usage };
     }
 
@@ -446,7 +505,10 @@ export class AgentManager {
     let lastResponse: OpenAI.Chat.Completions.ChatCompletion | null = null;
     const usage: TokenUsage = { promptTokens: 0, completionTokens: 0 };
     for (let i = 0; i < MAX_TOOL_ITERATIONS; i++) {
+      policy?.signal?.throwIfAborted();
       onProgress?.(20 + i * 10);
+      const response = await this.providerResponse(policy, `openai:${i}`, async () => {
+      this.beforeCall(config, JSON.stringify(messages).length, policy);
       const response = await client.chat.completions.create({
         model: config.model,
         messages,
@@ -454,6 +516,9 @@ export class AgentManager {
         max_tokens: config.maxTokens,
         tools,
         tool_choice: 'auto',
+      }, { signal: policy?.signal });
+      if (response.usage) this.recordCall(config, { promptTokens: response.usage.prompt_tokens ?? 0, completionTokens: response.usage.completion_tokens ?? 0 }, policy);
+      return response;
       });
       lastResponse = response;
       if (response.usage) {
@@ -474,7 +539,7 @@ export class AgentManager {
       messages.push(msg as unknown as OpenAI.Chat.Completions.ChatCompletionMessageParam);
       for (const call of toolCalls) {
         if (call.type !== 'function') continue;
-        const result = await this.runTool(call.function.name, call.function.arguments, emit, policy);
+        const result = await this.runTool(call.function.name, call.function.arguments, emit, { ...policy, toolCallKey: `openai:${i}:${call.id}` });
         messages.push({
           role: 'tool',
           tool_call_id: call.id,
@@ -484,6 +549,7 @@ export class AgentManager {
     }
 
     onProgress?.(90);
+    if (lastResponse?.choices[0]?.finish_reason === 'tool_calls') throw new Error('Tool iteration limit reached; review progress before retrying');
     const finalMsg = lastResponse?.choices[0]?.message;
     return {
       content: finalMsg?.content || '',
@@ -560,8 +626,11 @@ export class AgentManager {
     };
 
     for (let i = 0; i < MAX_TOOL_ITERATIONS; i++) {
+      policy?.signal?.throwIfAborted();
       onProgress?.(20 + i * 10);
 
+      const response = await this.providerResponse(policy, `codex:${i}`, async () => {
+      this.beforeCall({ ...config, model }, config.systemPrompt.length + JSON.stringify(inputItems).length, policy);
       const res = await fetch('https://chatgpt.com/backend-api/codex/responses', {
         method: 'POST',
         headers,
@@ -574,7 +643,7 @@ export class AgentManager {
           store: false,
           stream: true,
         }),
-        signal: AbortSignal.timeout(300_000),
+        signal: AbortSignal.any([AbortSignal.timeout(300_000), ...(policy?.signal ? [policy.signal] : [])]),
       });
 
       if (!res.ok || !res.body) {
@@ -589,7 +658,6 @@ export class AgentManager {
       const decoder = new TextDecoder();
       let buf = '';
       let completed: CodexCompletedEvent | null = null;
-      const functionCalls: Array<{ callId: string; name: string; args: string }> = [];
 
       for (;;) {
         const { done, value } = await reader.read();
@@ -619,7 +687,12 @@ export class AgentManager {
       if (!response) {
         throw new Error('Codex stream ended without response.completed');
       }
+      const u = response.usage as { input_tokens?: number; output_tokens?: number } | undefined;
+      this.recordCall({ ...config, model }, { promptTokens: u?.input_tokens ?? 0, completionTokens: u?.output_tokens ?? 0 }, policy);
+      return response;
+      });
       absorbUsage(response.usage);
+      const functionCalls: Array<{ callId: string; name: string; args: string }> = [];
       if (response.model) lastModel = response.model;
 
       // Collect function calls from the completed output items.
@@ -636,12 +709,15 @@ export class AgentManager {
 
       onProgress?.(80);
 
+      finalContent = outputItems.flatMap(item => Array.isArray(item.content) ? item.content : [])
+        .filter(part => part.type === 'output_text').map(part => String(part.text ?? '')).join('');
       if (functionCalls.length === 0) break;
+      if (i === MAX_TOOL_ITERATIONS - 1) throw new Error('Tool iteration limit reached; review progress before retrying');
 
       // Feed the turn's output items back, then append tool results.
       inputItems.push(...outputItems);
       for (const call of functionCalls) {
-        const result = await this.runTool(call.name, call.args, emit, policy);
+        const result = await this.runTool(call.name, call.args, emit, { ...policy, toolCallKey: `codex:${i}:${call.callId}` });
         inputItems.push({
           type: 'function_call_output',
           call_id: call.callId,
@@ -673,12 +749,13 @@ export class AgentManager {
     onProgress?.(20);
 
     const betaHeader = this.oauthBetaHeaders.get('anthropic');
-    const requestOpts = betaHeader ? { headers: { 'anthropic-beta': betaHeader } } : undefined;
+    const requestOpts = { signal: policy?.signal, ...(betaHeader ? { headers: { 'anthropic-beta': betaHeader } } : {}) };
 
     const schemas = this.toolRegistry.schemasFor(toolNames);
 
     // No tools → stream text deltas.
     if (schemas.length === 0) {
+      this.beforeCall(config, config.systemPrompt.length + JSON.stringify(input).length, policy);
       const stream = client.messages.stream(
         {
           model: config.model,
@@ -696,6 +773,7 @@ export class AgentManager {
       });
 
       const finalMessage = await stream.finalMessage();
+      this.recordCall(config, { promptTokens: finalMessage.usage?.input_tokens ?? 0, completionTokens: finalMessage.usage?.output_tokens ?? 0 }, policy);
       onProgress?.(90);
       return {
         content,
@@ -722,7 +800,10 @@ export class AgentManager {
     let lastMessage: Anthropic.Message | null = null;
     const usage: TokenUsage = { promptTokens: 0, completionTokens: 0 };
     for (let i = 0; i < MAX_TOOL_ITERATIONS; i++) {
+      policy?.signal?.throwIfAborted();
       onProgress?.(20 + i * 10);
+      const response = await this.providerResponse(policy, `anthropic:${i}`, async () => {
+      this.beforeCall(config, config.systemPrompt.length + JSON.stringify(messages).length, policy);
       const response = await client.messages.create(
         {
           model: config.model,
@@ -733,6 +814,9 @@ export class AgentManager {
         },
         requestOpts
       );
+      this.recordCall(config, { promptTokens: response.usage?.input_tokens ?? 0, completionTokens: response.usage?.output_tokens ?? 0 }, policy);
+      return response;
+      });
       lastMessage = response;
       usage.promptTokens += response.usage?.input_tokens ?? 0;
       usage.completionTokens += response.usage?.output_tokens ?? 0;
@@ -751,7 +835,7 @@ export class AgentManager {
       messages.push({ role: 'assistant', content: response.content });
       const toolResults: Anthropic.ToolResultBlockParam[] = [];
       for (const tu of toolUses) {
-        const result = await this.runTool(tu.name, JSON.stringify(tu.input ?? {}), emit, policy);
+        const result = await this.runTool(tu.name, JSON.stringify(tu.input ?? {}), emit, { ...policy, toolCallKey: `anthropic:${i}:${tu.id}` });
         toolResults.push({
           type: 'tool_result',
           tool_use_id: tu.id,
@@ -762,6 +846,7 @@ export class AgentManager {
     }
 
     onProgress?.(90);
+    if (lastMessage?.stop_reason === 'tool_use') throw new Error('Tool iteration limit reached; review progress before retrying');
     const text = lastMessage?.content
       .filter((b): b is Anthropic.TextBlock => b.type === 'text')
       .map((b) => b.text)
@@ -775,6 +860,7 @@ export class AgentManager {
   }
 
   cancelExecution(executionId: string): void {
+    this.controllers.get(executionId)?.abort(new Error('Execution cancelled'));
     const execution = this.activeExecutions.get(executionId);
     if (execution && execution.status === 'running') {
       execution.status = 'cancelled';
@@ -783,7 +869,7 @@ export class AgentManager {
   }
 
   getActiveAgentId(): string | undefined {
-    return this.currentAgentId;
+    return this.runContext.getStore()?.agentId;
   }
 
   getExecution(executionId: string): AgentExecution | undefined {
@@ -795,8 +881,10 @@ export class AgentManager {
   }
 
   async shutdown(): Promise<void> {
+    for (const controller of this.controllers.values()) controller.abort(new Error('Application shutting down'));
     this.activeExecutions.clear();
     this.openaiClients.clear();
     this.anthropicClients.clear();
   }
 }
+
