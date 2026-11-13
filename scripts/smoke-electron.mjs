@@ -1,3 +1,5 @@
+import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 // Smoke test: launch the built Electron app, connect over CDP, and verify
 // the renderer loaded and the preload bridge (window.electronAPI) works.
 // Usage: npm run build && npm run smoke:electron
@@ -17,7 +19,9 @@ function fail(msg) {
 }
 
 // 1. Launch Electron with remote debugging enabled.
-const env = { ...process.env, ELECTRON_ENABLE_LOGGING: '1' };
+const env = { ...process.env, ELECTRON_ENABLE_LOGGING: '1', KEEPMIND_DATA_DIR: mkdtempSync(path.join(tmpdir(), 'keepmind-smoke-')) };
+delete env.OPENAI_API_KEY;
+delete env.ANTHROPIC_API_KEY;
 delete env.ELECTRON_RUN_AS_NODE; // must not run as plain Node
 const child = spawn(electronBin, ['.', '--remote-debugging-port=0', '--no-sandbox'], {
   cwd: root,
@@ -85,6 +89,7 @@ const evaluate = async (expr) => {
     awaitPromise: true,
     returnByValue: true,
   });
+  if (res.result?.exceptionDetails) throw new Error(res.result.exceptionDetails.exception?.description || 'Renderer evaluation error');
   return res.result?.result?.value;
 };
 
@@ -105,14 +110,38 @@ try {
   let html = '';
   for (let i = 0; i < 50; i++) {
     html = await evaluate('document.body.innerHTML');
-    if (html.includes('KeepMind OS')) break;
+    if (/keepmind os/i.test(html)) break;
     await delay(200);
   }
 
-  if (!html.includes('KeepMind OS')) {
+  if (!/keepmind os/i.test(html)) {
     fail(`renderer did not produce expected UI (html length=${html.length})`);
   }
 
+  const task = await evaluate(`(async () => {
+    const agent = await window.electronAPI.createAgent({ name: 'Maintainer', model: 'gpt-4o-mini', temperature: 0, maxTokens: 100, systemPrompt: 'Read only', tools: [] });
+    const task = await window.electronAPI.workCreate({ goal: 'Review repository documentation', agentId: agent.id, project: 'KeepMind OS', criteria: 'Include file references and reproducible steps.' });
+    await window.electronAPI.workAction(task.id, 'comment', 'Ready for a developer review.');
+    await window.electronAPI.updateSettings({ onboardingCompleted: true });
+    localStorage.setItem('km-tour-done', '1'); localStorage.setItem('km-lang', 'en');
+    return task;
+  })()`);
+  if (!task?.id) fail('work task not created through preload');
+  await send('Page.reload');
+  for (let i = 0; i < 50; i++) {
+    const text = await evaluate('document.body.innerText');
+    if (text?.includes('Review repository documentation')) break;
+    await delay(200);
+  }
+  const rendered = await evaluate('document.body.innerText');
+  if (!rendered?.includes('Your work, moving forward.') || !rendered.includes('Review repository documentation')) fail('workspace did not render persisted task');
+  await evaluate(`document.querySelector('.km-task').click()`);
+  await delay(400);
+  const detail = await evaluate('document.body.innerText');
+  if (!detail.includes('Include file references and reproducible steps.')) fail('task drawer missing criteria');
+  mkdirSync(path.join(root, 'evidence'), { recursive: true });
+  const screenshot = await send('Page.captureScreenshot', { format: 'png' });
+  if (screenshot.result?.data) writeFileSync(path.join(root, 'evidence/workspace-smoke.png'), Buffer.from(screenshot.result.data, 'base64'));
   console.log(`SMOKE PASS: electronAPI OK (version=${version}, agents=${Array.isArray(agents) ? agents.length : '?'}, rootChildren=${rootChildren}, uiRendered=true)`);
 } catch (err) {
   fail(`CDP evaluation failed: ${err.message}\n${stderrBuf.slice(-2000)}`);
@@ -122,3 +151,4 @@ try {
   await delay(500);
   if (child.exitCode === null) child.kill('SIGKILL');
 }
+
