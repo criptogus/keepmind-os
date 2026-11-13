@@ -15,6 +15,7 @@ jobs:
           node-version: '24.x'
           cache: npm
       - run: npm ci
+      - run: npm run check:bundle
       - run: npm run typecheck
       - run: npm test
       - run: npm run test:integration

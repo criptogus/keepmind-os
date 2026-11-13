@@ -16,7 +16,7 @@ interface AgentEditorProps {
 }
 
 export default function AgentEditor({ agentId, onClose }: AgentEditorProps) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const { selectedAgent, loading, error, updateAgent, deleteAgent, executeAgent, simulateAgent, selectAgent, agents } = useAgentStore();
   const [activeTab, setActiveTab] = useState<string | null>('config');
   const [config, setConfig] = useState<AgentConfig | null>(null);
@@ -200,6 +200,9 @@ export default function AgentEditor({ agentId, onClose }: AgentEditorProps) {
               value={config.monthlyBudgetUsd ?? ''}
               onChange={(v) => setConfig({ ...config, monthlyBudgetUsd: v === '' ? undefined : Number(v) })}
             />
+
+            <NumberInput label={lang === 'pt' ? 'Máximo de pedidos por mês' : 'Maximum requests per month'} min={1} max={100000} value={config.monthlyRunCap ?? 1000} onChange={v => setConfig({ ...config, monthlyRunCap: v === '' ? undefined : Number(v) })} />
+            <NumberInput label={lang === 'pt' ? 'Tempo máximo por pedido (segundos)' : 'Request timeout (seconds)'} min={1} max={3600} value={config.executionTimeoutSeconds ?? 300} onChange={v => setConfig({ ...config, executionTimeoutSeconds: Number(v) })} />
 
             {availableSkills.length > 0 && (
               <div>

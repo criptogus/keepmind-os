@@ -15,11 +15,12 @@ function toGroups(models: ModelInfo[]): ModelOptionGroup[] {
   return (['openai', 'anthropic'] as ModelProvider[])
     .map((provider) => ({
       group: PROVIDER_LABEL[provider],
-      items: modelsForProvider(models, provider).map((x) => ({
+      items: modelsForProvider(models, provider).filter(x => !x.id.startsWith('compatible/')).map((x) => ({
         value: x.id,
         label: `${x.label} (${x.tier})`,
       })),
     }))
+    .concat([{ group: 'OpenAI-compatible', items: models.filter(x => x.id.startsWith('compatible/')).map(x => ({ value: x.id, label: x.label })) }])
     .filter((g) => g.items.length > 0);
 }
 

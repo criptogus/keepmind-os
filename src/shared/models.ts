@@ -1,3 +1,4 @@
+import { isCompatibleModel } from './connectors.js';
 /**
  * Single source of truth for the LLM model catalog.
  *
@@ -72,6 +73,7 @@ export const CODEX_DEFAULT_MODEL = 'gpt-6.1-sol';
 // ---------------------------------------------------------------------------
 
 export function providerForModel(model: string): ModelProvider | null {
+  if (isCompatibleModel(model)) return 'openai';
   const id = model.toLowerCase();
   if (id.startsWith('claude-')) return 'anthropic';
   if (id.startsWith('gpt-') || /^o\d/.test(id) || id.startsWith('chatgpt-')) return 'openai';
@@ -80,7 +82,7 @@ export function providerForModel(model: string): ModelProvider | null {
 
 /** 'codex' models route through the ChatGPT-subscription backend. */
 export function isCodexModel(model: string): boolean {
-  return model.toLowerCase().includes('codex');
+  return !isCompatibleModel(model) && model.toLowerCase().includes('codex');
 }
 
 const TIER_ORDER: ModelTier[] = ['simple', 'medium', 'complex', 'flagship'];
@@ -145,7 +147,7 @@ const CODEX_TIER_DEFAULT: Record<TaskTier, string> = {
  */
 export function routeModelForTask(model: string, inputText: string, knownIds?: Set<string>): string {
   // Reasoning-series models (o1/o3/o4…) have a different API shape — never reroute them.
-  if (/^o\d/.test(model)) return model;
+  if (isCompatibleModel(model) || /^o\d/.test(model)) return model;
   const provider = providerForModel(model);
   if (!provider) return model;
 

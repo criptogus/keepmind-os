@@ -1,3 +1,6 @@
+import { RequiredCompanyBrainError } from '../keepmind/CompanyBrains.js';
+import { isCompatibleModel } from '../../shared/connectors.js';
+import type { CompatibleProviders } from '../connectors/CompatibleProviders.js';
 import { CheckpointStore, CheckpointError } from '../execution/CheckpointStore.js';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import OpenAI from 'openai';
@@ -53,21 +56,25 @@ interface CodexCompletedEvent {
 }
 
 export class AgentManager {
+  private compatibleProviders?: CompatibleProviders;
+  setCompatibleProviders(providers: CompatibleProviders) { this.compatibleProviders = providers; }
   private openaiClients: Map<string, OpenAI> = new Map();
   private anthropicClients: Map<string, Anthropic> = new Map();
   private oauthTokens: Map<string, string> = new Map();
   private oauthBetaHeaders: Map<string, string> = new Map();
   private oauthAccountIds: Map<string, string> = new Map();
   private activeExecutions: Map<string, AgentExecution> = new Map();
-  private contextProvider?: (query: string) => Promise<string>;
+  private contextProvider?: (query: string, agentId?: string) => Promise<string>;
   private skillLoader?: (skillIds: string[]) => Skill[];
   private autoSkillSelector?: (input: Record<string, unknown>, assigned: Skill[], agentId?: string) => Skill[];
   private modelRouter?: (model: string, input: Record<string, unknown>, agentId?: string) => string;
   private usageRecorder?: (rec: UsageRecord) => void;
   private budgetChecker?: BudgetChecker;
+  private executionSpend?: (executionId: string) => number;
+  setExecutionSpendProvider(provider: (executionId: string) => number) { this.executionSpend = provider; }
   private memoryOutcomeRecorder?: MemoryOutcomeRecorder;
   private toolCallRecorder?: (executionId: string, kind: 'call' | 'result', name: string, payload: { args?: unknown; result?: unknown; error?: unknown }) => void;
-  private runContext = new AsyncLocalStorage<{ agentId: string; executionId: string; signal: AbortSignal }>();
+  private runContext = new AsyncLocalStorage<{ agentId: string; executionId: string; signal: AbortSignal; spentUsd: number; compatible?: ReturnType<CompatibleProviders['resolve']> }>();
   private controllers = new Map<string, AbortController>();
   private reservations = new Map<string, { agentId: string; estimate: number }>();
 
@@ -76,6 +83,8 @@ export class AgentManager {
     if (!pending) return;
     this.usageRecorder?.({ agentId: pending.agentId, executionId, model: 'unreported', provider: 'unreported',
       usage: { promptTokens: 0, completionTokens: 0 }, costUsd: pending.estimate, partial: true });
+    const context = this.runContext.getStore();
+    if (context?.executionId === executionId) context.spentUsd += pending.estimate;
     this.reservations.delete(executionId);
   }
 
@@ -83,7 +92,13 @@ export class AgentManager {
     policy?.signal?.throwIfAborted();
     if (!policy?.executionId || !policy.callerAgentId) return;
     this.settleUnreported(policy.executionId);
-    const estimate = estimateCallCost(config.model, promptChars, config.maxTokens);
+    const context = this.runContext.getStore();
+    const profile = context?.compatible?.profile;
+    if (isCompatibleModel(config.model) && !profile) throw new Error('Compatible provider not configured');
+    const estimate = profile
+      ? (Math.ceil(promptChars / 3) * profile.inputUsdPerMillion + Math.min(config.maxTokens, profile.maxOutputTokens) * profile.outputUsdPerMillion) / 1_000_000
+      : estimateCallCost(config.model, promptChars, config.maxTokens);
+    if (profile && (context!.spentUsd + estimate > profile.maxRunUsd)) throw new Error('Provider per-run budget exceeded');
     const reserved = [...this.reservations.entries()].filter(([id, r]) => id !== policy.executionId && r.agentId === policy.callerAgentId).reduce((sum, [, r]) => sum + r.estimate, 0);
     this.budgetChecker?.(policy.callerAgentId, config.model, estimate + reserved);
     this.reservations.set(policy.executionId, { agentId: policy.callerAgentId, estimate });
@@ -93,8 +108,17 @@ export class AgentManager {
     if (!policy?.executionId || !policy.callerAgentId) return;
     // Persist before releasing the reservation so concurrent runs see the spend.
     this.usageRecorder?.({ agentId: policy.callerAgentId, executionId: policy.executionId,
-      model: config.model, provider: providerForModel(config.model) || 'unknown', usage });
+      model: config.model, provider: this.runContext.getStore()?.compatible?.profile.kind || providerForModel(config.model) || 'unknown', usage, costUsd: this.compatibleCost(usage) });
     this.reservations.delete(policy.executionId);
+  }
+
+  private compatibleCost(usage: TokenUsage): number | undefined {
+    const context = this.runContext.getStore();
+    const profile = context?.compatible?.profile;
+    if (!profile) return undefined;
+    const cost = (usage.promptTokens * profile.inputUsdPerMillion + usage.completionTokens * profile.outputUsdPerMillion) / 1_000_000;
+    context!.spentUsd += cost;
+    return cost;
   }
 
   private checkpoints?: CheckpointStore;
@@ -187,7 +211,7 @@ export class AgentManager {
   }
 
   /** Optional hook (e.g. SecondBrainManager) that returns extra context for a query. */
-  setContextProvider(provider?: (query: string) => Promise<string>) {
+  setContextProvider(provider?: (query: string, agentId?: string) => Promise<string>) {
     this.contextProvider = provider;
   }
 
@@ -294,10 +318,11 @@ export class AgentManager {
     if (!this.contextProvider) return prompt;
     try {
       const query = JSON.stringify(input).slice(0, 500);
-      const context = await this.contextProvider(query);
+      const context = await this.contextProvider(query, this.getActiveAgentId());
       if (!context) return prompt;
       return `${prompt}\n\n---\nRelevant organizational memory (second brain):\n${context.slice(0, 4000)}`;
-    } catch {
+    } catch (error) {
+      if (error instanceof RequiredCompanyBrainError) throw error;
       return prompt;
     }
   }
@@ -308,16 +333,20 @@ export class AgentManager {
     onEvent?: (event: AgentStreamEvent) => void, opts?: { dryRun?: boolean; onSkillsResolved?: (ids: string[]) => void }
   ): Promise<AgentExecution> {
     if (this.controllers.has(executionId)) throw new CheckpointError('Execution already active');
+    const timeoutSeconds = config.executionTimeoutSeconds ?? 300;
+    if (!Number.isFinite(timeoutSeconds) || timeoutSeconds < 1 || timeoutSeconds > 3600) throw new Error('Invalid execution timeout');
     const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(new Error('Execution time limit reached')), timeoutSeconds * 1000);
     const parent = this.runContext.getStore()?.signal;
     const abort = () => controller.abort(parent?.reason);
     if (parent?.aborted) abort();
     parent?.addEventListener('abort', abort, { once: true });
     this.controllers.set(executionId, controller);
     try {
-      return await this.runContext.run({ agentId, executionId, signal: controller.signal }, () =>
+      return await this.runContext.run({ agentId, executionId, signal: controller.signal, spentUsd: this.executionSpend?.(executionId) ?? 0, compatible: isCompatibleModel(config.model) ? this.compatibleProviders?.resolve(config.model) : undefined }, () =>
         this.executeAgentInternal(agentId, config, input, onProgress, executionId, onEvent, opts));
     } finally {
+      clearTimeout(timeout);
       parent?.removeEventListener('abort', abort);
       this.controllers.delete(executionId);
       this.settleUnreported(executionId);
@@ -391,7 +420,7 @@ export class AgentManager {
       };
 
       const checkpoint = this.checkpoints?.open(executionId, { agentId, config, input, routedModel, ...(opts?.dryRun ? { dryRun: true } : {}),
-        transport: this.oauthTokens.has('openai') && providerForModel(routedModel) === 'openai' ? 'codex' : providerForModel(routedModel),
+        transport: this.runContext.getStore()?.compatible ? JSON.stringify(this.runContext.getStore()!.compatible!.profile) : this.oauthTokens.has('openai') && providerForModel(routedModel) === 'openai' ? 'codex' : providerForModel(routedModel),
         schemas: this.toolRegistry.schemasFor(toolNames) }, effectiveConfig.systemPrompt);
       if (checkpoint) effectiveConfig.systemPrompt = checkpoint.systemPrompt;
       const execPolicy: ExecutionPolicy = {
@@ -475,11 +504,14 @@ export class AgentManager {
   ): Promise<Record<string, unknown>> {
     // ChatGPT-subscription OAuth tokens route through the Codex backend
     // (Responses API over SSE), not api.openai.com.
-    if (this.oauthTokens.has('openai')) {
+    if (!isCompatibleModel(config.model) && this.oauthTokens.has('openai')) {
       return this.executeOpenAICodex(config, input, toolNames, emit, onProgress, policy);
     }
 
-    const client = this.openaiClients.get('default');
+    const compatible = this.runContext.getStore()?.compatible;
+    const client = isCompatibleModel(config.model) ? compatible?.client : this.openaiClients.get('default');
+    const requestModel = compatible?.profile.model ?? config.model;
+    const maxTokens = Math.min(config.maxTokens, compatible?.profile.maxOutputTokens ?? config.maxTokens);
     if (!client) {
       throw new Error('OpenAI API key not configured');
     }
@@ -497,10 +529,10 @@ export class AgentManager {
     if (schemas.length === 0) {
       this.beforeCall(config, JSON.stringify(messages).length, policy);
       const stream = await client.chat.completions.create({
-        model: config.model,
+        model: requestModel,
         messages,
         temperature: config.temperature,
-        max_tokens: config.maxTokens,
+        max_tokens: maxTokens,
         stream: true,
         stream_options: { include_usage: true },
       }, { signal: policy?.signal });
@@ -541,10 +573,10 @@ export class AgentManager {
       const response = await this.providerResponse(policy, `openai:${i}`, async () => {
       this.beforeCall(config, JSON.stringify(messages).length, policy);
       const response = await client.chat.completions.create({
-        model: config.model,
+        model: requestModel,
         messages,
         temperature: config.temperature,
-        max_tokens: config.maxTokens,
+        max_tokens: maxTokens,
         tools,
         tool_choice: 'auto',
       }, { signal: policy?.signal });

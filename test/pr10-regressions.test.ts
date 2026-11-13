@@ -70,3 +70,12 @@ describe('integration review regressions', () => {
     manager.stop();
   });
 });
+
+it('counts running and failed monthly requests before allowing another run', async () => {
+  const storage = new StorageManager(await temp());
+  storage.saveAgentExecution({ id: 'limit-1', agentId: 'a', input: {}, status: 'failed', startedAt: new Date().toISOString(), progress: 0 });
+  expect(() => storage.assertMonthlyRunCap('a', 1)).toThrow('Monthly execution');
+  expect(() => storage.assertMonthlyRunCap('b', 1)).not.toThrow();
+  expect(() => storage.assertMonthlyRunCap('a', 0)).toThrow('Invalid');
+  storage.close();
+});

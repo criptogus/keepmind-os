@@ -241,7 +241,7 @@ export default function AgentWizard({ onClose, onCreated, onAdvanced }: AgentWiz
       {step === 1 && (
         <Stack gap="md">
           {template && template.id !== 'blank' && (
-            <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
+            <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-default-hover)' }}>
               <Text size="sm" fw={600}>{template.name}</Text>
               <Text size="xs" c="dimmed">{template.description}</Text>
             </Card>
@@ -328,7 +328,7 @@ export default function AgentWizard({ onClose, onCreated, onAdvanced }: AgentWiz
             )}
           </div>
           {extra.trim() && (
-            <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
+            <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-default-hover)' }}>
               <Text size="xs" fw={600} mb={4}>{t('wiz.instructions')}</Text>
               <Text size="xs" c="dimmed" style={{ whiteSpace: 'pre-wrap' }}>{extra.trim()}</Text>
             </Card>

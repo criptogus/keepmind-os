@@ -1,5 +1,7 @@
+import CompanyBrainsPanel from './CompanyBrainsPanel';
+import CompatibleProvidersPanel from './CompatibleProvidersPanel';
 import React, { useEffect, useState } from 'react';
-import { Alert, Anchor, Badge, Button, Card, Group, Image, PasswordInput, Select, Stack, Switch, Text, TextInput, Title } from '@mantine/core';
+import { Accordion, Alert, Anchor, Badge, Button, Card, Group, Image, PasswordInput, Select, Stack, Switch, Text, TextInput, Title } from '@mantine/core';
 import { useThemeStore } from '../../store/themeStore';
 import { useSettingsStore } from '../../store/settingsStore';
 import { useLang } from '../../lib/i18n';
@@ -282,6 +284,11 @@ export default function AdvancedSettings() {
           ))}
         </Stack>
       </Card>
+
+      <Accordion variant="separated">
+        <Accordion.Item value="providers"><Accordion.Control data-compatible-settings>{tr('Other AI providers', 'Outros provedores de IA')}</Accordion.Control><Accordion.Panel><CompatibleProvidersPanel /></Accordion.Panel></Accordion.Item>
+        <Accordion.Item value="company"><Accordion.Control data-company-settings>{tr('Separate company memory', 'Memória separada por empresa')}</Accordion.Control><Accordion.Panel><CompanyBrainsPanel /></Accordion.Panel></Accordion.Item>
+      </Accordion>
 
       <Card withBorder padding="md" radius="md">
         <Title order={2} size="h4">{t('adv.secondBrain')}</Title>
@@ -839,7 +846,7 @@ export default function AdvancedSettings() {
                   }}>{t('common.remove')}</Button>
               </Group>
             ))}
-            <Card withBorder padding="sm" radius="sm" mt="xs" style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
+            <Card withBorder padding="sm" radius="sm" mt="xs" style={{ backgroundColor: 'var(--mantine-color-default-hover)' }}>
               <Text size="xs" fw={600} mb={6}>{t('adv2.inviteUser')}</Text>
               <Stack gap={6}>
                 <Group gap={6} grow>

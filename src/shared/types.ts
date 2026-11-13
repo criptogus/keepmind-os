@@ -48,6 +48,8 @@ export interface Skill {
 }
 
 export interface AgentConfig {
+  monthlyRunCap?: number;
+  executionTimeoutSeconds?: number;
   model: string;
   temperature: number;
   maxTokens: number;

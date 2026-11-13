@@ -98,7 +98,7 @@ export default function TeamList() {
                       const agent = getAgent(agentId);
                       return (
                         <Group key={agentId} gap={4} wrap="nowrap" title={getAgentName(agentId)}>
-                          {agent && <BotAvatar definition={avatarForAgent(agent)} size={22} />}
+                          {agent && <BotAvatar definition={avatarForAgent(agent)} name={agent.name} size={22} />}
                           <Text size="xs" c="dimmed">{getAgentName(agentId)}</Text>
                         </Group>
                       );

@@ -101,6 +101,15 @@ contextBridge.exposeInMainWorld('electronAPI', {
   updateSettings: (settings: Partial<AppSettings>) => ipcRenderer.invoke('settings:update', settings) as Promise<Record<string, string>>,
 
   // Model catalog
+  listCompanyBrains: () => ipcRenderer.invoke('companyBrain:list') as Promise<import('../shared/company-brain.js').CompanyBrainBinding[]>,
+  saveCompanyBrain: (binding: import('../shared/company-brain.js').CompanyBrainBinding) => ipcRenderer.invoke('companyBrain:save', binding) as Promise<import('../shared/company-brain.js').CompanyBrainBinding>,
+  removeCompanyBrain: (agentId: string) => ipcRenderer.invoke('companyBrain:remove', agentId) as Promise<void>,
+  testCompanyBrain: (agentId: string) => ipcRenderer.invoke('companyBrain:test', agentId) as Promise<boolean>,
+  listCompatibleProviders: () => ipcRenderer.invoke('compatible:list') as Promise<import('../shared/connectors.js').CompatibleProviderProfile[]>,
+  saveCompatibleProvider: (profile: import('../shared/connectors.js').CompatibleProviderProfile, apiKey?: string) => ipcRenderer.invoke('compatible:save', profile, apiKey) as Promise<import('../shared/connectors.js').CompatibleProviderProfile>,
+  removeCompatibleProvider: (id: string) => ipcRenderer.invoke('compatible:remove', id) as Promise<void>,
+  testCompatibleProvider: (id: string) => ipcRenderer.invoke('compatible:test', id) as Promise<import('../shared/connectors.js').CompatibleModelDiscovery>,
+  isModelConfigured: (model: string) => ipcRenderer.invoke('models:isConfigured', model) as Promise<boolean>,
   listModels: () => ipcRenderer.invoke('models:list') as Promise<ModelCatalogResponse>,
   refreshModels: () => ipcRenderer.invoke('models:refresh') as Promise<ModelCatalogResponse & { errors?: Record<string, string> }>,
 
@@ -391,6 +400,15 @@ declare global {
       setApiKey: (provider: 'openai' | 'anthropic', key: string) => Promise<void>;
       clearApiKey: (provider: 'openai' | 'anthropic') => Promise<void>;
       hasApiKey: (provider: 'openai' | 'anthropic') => Promise<boolean>;
+      listCompanyBrains: () => Promise<import('../shared/company-brain.js').CompanyBrainBinding[]>;
+      saveCompanyBrain: (binding: import('../shared/company-brain.js').CompanyBrainBinding) => Promise<import('../shared/company-brain.js').CompanyBrainBinding>;
+      removeCompanyBrain: (agentId: string) => Promise<void>;
+      testCompanyBrain: (agentId: string) => Promise<boolean>;
+      listCompatibleProviders: () => Promise<import('../shared/connectors.js').CompatibleProviderProfile[]>;
+      saveCompatibleProvider: (profile: import('../shared/connectors.js').CompatibleProviderProfile, apiKey?: string) => Promise<import('../shared/connectors.js').CompatibleProviderProfile>;
+      removeCompatibleProvider: (id: string) => Promise<void>;
+      testCompatibleProvider: (id: string) => Promise<import('../shared/connectors.js').CompatibleModelDiscovery>;
+      isModelConfigured: (model: string) => Promise<boolean>;
       listModels: () => Promise<import('../shared/models.js').ModelCatalogResponse>;
       refreshModels: () => Promise<import('../shared/models.js').ModelCatalogResponse & { errors?: Record<string, string> }>;
       oauthAuthenticate: (provider: 'openai' | 'anthropic') => Promise<{

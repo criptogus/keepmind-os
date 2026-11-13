@@ -38,14 +38,7 @@ export default function SettingsPanel() {
     <Stack gap="md" maw={640}>
       <PageHeader title={t('ph.settings.title')} subtitle={t('ph.settings.sub')} />
 
-      <Card withBorder padding="md" radius="md">
-        <Stack gap="sm">
-          <Text fw={600}>{lang === 'pt' ? 'Memória semântica local' : 'Local semantic memory'}</Text>
-          <Switch label={lang === 'pt' ? 'Combinar busca por palavras e significado' : 'Combine keyword and semantic search'} checked={settings.memorySemanticSearch === true} onChange={e => handleChange('memorySemanticSearch', e.currentTarget.checked)} />
-          <TextInput label="Embedding model" value={settings.memoryEmbeddingModel || 'nomic-embed-text'} onChange={e => handleChange('memoryEmbeddingModel', e.currentTarget.value)} />
-          <Text size="xs" c="dimmed">{lang === 'pt' ? 'Opcional: requer um servidor local compatível com OpenAI na porta 11434 e o modelo instalado. Indexa até 32 memórias por busca. Se indisponível, usa palavras-chave. Nenhum modelo é baixado automaticamente.' : 'Optional: requires a local OpenAI-compatible server on port 11434 with the model installed. Indexes up to 32 memories per search. Falls back to keywords if unavailable. No automatic model downloads.'}</Text>
-        </Stack>
-      </Card>
+
       <Card withBorder padding="md" radius="md">
         <Stack gap="sm">
           <Text fw={600}>{t('settings.appearance')}</Text>
@@ -173,6 +166,16 @@ export default function SettingsPanel() {
       {error && (
         <Text size="sm" c="dimmed">{t('settings.error')}: {error}</Text>
       )}
+      <details className="km-details"><summary>{lang === 'pt' ? 'Opções avançadas de memória' : 'Advanced memory options'}</summary>
+      <Card withBorder padding="md" radius="md">
+        <Stack gap="sm">
+          <Text fw={600}>{lang === 'pt' ? 'Memória semântica local' : 'Local semantic memory'}</Text>
+          <Switch label={lang === 'pt' ? 'Combinar busca por palavras e significado' : 'Combine keyword and semantic search'} checked={settings.memorySemanticSearch === true} onChange={e => handleChange('memorySemanticSearch', e.currentTarget.checked)} />
+          <TextInput label="Embedding model" value={settings.memoryEmbeddingModel || 'nomic-embed-text'} onChange={e => handleChange('memoryEmbeddingModel', e.currentTarget.value)} />
+          <Text size="xs" c="dimmed">{lang === 'pt' ? 'Opcional: requer um servidor local compatível com OpenAI na porta 11434 e o modelo instalado. Indexa até 32 memórias por busca. Se indisponível, usa palavras-chave. Nenhum modelo é baixado automaticamente.' : 'Optional: requires a local OpenAI-compatible server on port 11434 with the model installed. Indexes up to 32 memories per search. Falls back to keywords if unavailable. No automatic model downloads.'}</Text>
+        </Stack>
+      </Card>
+      </details>
     </Stack>
   );
 }

@@ -227,7 +227,7 @@ export default function AutomationPanel() {
                   <Card key={tr.id} withBorder padding="md" radius="md" className="km-enter">
                     <Group justify="space-between" align="flex-start" wrap="nowrap">
                       <Group gap="sm" wrap="nowrap" style={{ minWidth: 0, flex: 1 }}>
-                        {agent && <BotAvatar definition={avatarForAgent(agent)} size={36} mood={tr.enabled ? 'idle' : 'idle'} />}
+                        {agent && <BotAvatar definition={avatarForAgent(agent)} name={agent.name} size={36} mood={tr.enabled ? 'idle' : 'idle'} />}
                         <div style={{ minWidth: 0 }}>
                           <Text size="sm" fw={600}>{tr.name}</Text>
                           <Text size="xs" c="dimmed">

@@ -1,3 +1,7 @@
+import { CompanyBrains } from './keepmind/CompanyBrains.js';
+import type { CompanyBrainBinding } from '../shared/company-brain.js';
+import { CompatibleProviders } from './connectors/CompatibleProviders.js';
+import { isCompatibleModel, type CompatibleProviderProfile } from '../shared/connectors.js';
 import { openLoginInSafari } from './auth/openLoginBrowser.js';
 import { SuperAgentSkill } from './integrations/SuperAgentSkill.js';
 import { installSakSkill } from './integrations/installSakSkill.js';
@@ -61,6 +65,8 @@ let agentManager: AgentManager;
 let teamExecutionEngine: TeamExecutionEngine;
 let oauthManager: OAuthManager;
 let credentialStore: CredentialStore;
+let compatibleProviders: CompatibleProviders;
+let companyBrains: CompanyBrains;
 let secondBrainManager: SecondBrainManager;
 let personalBrainManager: PersonalBrainManager;
 let memoryManager: MemoryManager;
@@ -212,11 +218,13 @@ async function runAgentExecution(agentId: string, input: Record<string, unknown>
     throw new Error('This agent is not shared with members');
   }
 
+  await companyBrains.health(agentId);
   const concurrency = Math.max(1, Math.min(32, Number(storageManager.getSetting('maxConcurrentExecutions')) || 4));
   if (agentManager.getActiveExecutions().length >= concurrency) throw new Error('Concurrent execution limit reached; wait for a running task to finish');
   const previousRun = opts?.resumeId ? storageManager.getAgentExecution(opts.resumeId) : undefined;
   if (opts?.resumeId && (!previousRun || previousRun.agentId !== agentId || (previousRun.status !== 'failed' && !(previousRun.status === 'completed' && checkpoints.read(opts.resumeId)?.output)) || !checkpoints.read(opts.resumeId))) throw new Error('Execution cannot be resumed');
-  if (previousRun) input = previousRun.input;
+  if (previousRun) { input = previousRun.input; opts = { ...opts, dryRun: previousRun.dryRun === true }; }
+  if (!opts?.resumeId) storageManager.assertMonthlyRunCap(agentId, agent.config.monthlyRunCap);
   const executionId = opts?.resumeId ?? uuidv4();
   const userId = opts?.userId ?? currentUserId() ?? 'system';
   const startedAt = previousRun?.startedAt ?? new Date().toISOString();
@@ -586,9 +594,10 @@ const __dirname = path.dirname(__filename);
 
 function createWindow() {
   mainWindow = new BrowserWindow({
+    icon: path.join(__dirname, 'icon.png'),
     width: 1400,
     height: 900,
-    minWidth: 1200,
+    minWidth: 780,
     minHeight: 700,
     webPreferences: {
       preload: path.join(__dirname, 'preload.cjs'),
@@ -621,6 +630,7 @@ function createWindow() {
 }
 
 app.whenReady().then(async () => {
+  if (process.platform === 'darwin') app.dock?.setIcon(nativeImage.createFromPath(path.join(__dirname, 'icon.png')));
   // Initialize managers
   storageManager = new StorageManager(path.join(app.getPath('userData'), 'data'));
   storageManager.recoverInterruptedExecutions();
@@ -629,6 +639,8 @@ app.whenReady().then(async () => {
   // Decrypt stored credentials once via the async safeStorage API — avoids
   // the per-call deprecation warning from the sync decryptString.
   await credentialStore.warm();
+  compatibleProviders = new CompatibleProviders(storageManager, credentialStore);
+  companyBrains = new CompanyBrains(storageManager);
   localAuth = new LocalAuth(storageManager);
   personalBrainManager = new PersonalBrainManager(app.getPath('userData'));
   webClipper = new WebClipper(personalBrainManager, storageManager);
@@ -640,6 +652,8 @@ app.whenReady().then(async () => {
   })));
   seedBuiltInSkills();
   agentManager = new AgentManager();
+  agentManager.setCompatibleProviders(compatibleProviders);
+  agentManager.setExecutionSpendProvider(id => storageManager.getExecutionSpend(id));
   checkpoints = new CheckpointStore(storageManager);
   agentManager.setCheckpointStore(checkpoints);
   mcpManager = new McpManager(agentManager.getToolRegistry());
@@ -760,7 +774,8 @@ app.whenReady().then(async () => {
   });
   startWebhookServer();
   void startRemoteApprovalsIfEnabled().catch(() => console.error('[remote] approval server failed to start'));
-  agentManager.setContextProvider(async (query) => {
+  agentManager.setContextProvider(async (query, agentId) => {
+    if (agentId && companyBrains.binding(agentId)) return companyBrains.search(agentId, query);
     if (!secondBrainManager.isConfigured()) return '';
     return secondBrainManager.search(query, 5);
   });
@@ -812,7 +827,7 @@ app.whenReady().then(async () => {
   // provider family based on task complexity, using the shared catalog
   // (bundled + live-fetched). Disable with 'llm.autoRoute'='false'.
   agentManager.setModelRouter((model, input, agentId) => {
-    if (storageManager.getSetting('llm.autoRoute') === 'false') return model;
+    if (isCompatibleModel(model) || storageManager.getSetting('llm.autoRoute') === 'false') return model;
     const inputText = JSON.stringify(input);
     let routed = routeModelForTask(model, inputText, knownModelIds(storageManager));
     let reason = 'task-complexity heuristic within provider family';
@@ -872,10 +887,13 @@ app.whenReady().then(async () => {
         .reverse()
         .map((m) => ({ from: m.remote, text: m.text, timestamp: m.timestamp })),
     secondBrainSearch: async (query, limit) => {
+      const agentId = agentManager.getActiveAgentId();
+      if (agentId && companyBrains.binding(agentId)) return companyBrains.search(agentId, query);
       if (!secondBrainManager.isConfigured()) throw new Error('Second brain is not configured');
       return secondBrainManager.search(query, limit);
     },
     secondBrainRemember: async (content) => {
+      if (companyBrains.binding(agentManager.getActiveAgentId())) throw new Error('Company memory is read-only');
       if (!secondBrainManager.isConfigured()) throw new Error('Second brain is not configured');
       return secondBrainManager.remember(content);
     },
@@ -1805,6 +1823,27 @@ function providerCredentials(provider: ModelProvider): ProviderCredentials | und
   };
 }
 
+handle('companyBrain:list', () => { requireRole('admin'); return companyBrains.list(); });
+handle('companyBrain:save', (_event, binding: CompanyBrainBinding) => {
+  requireRole('admin');
+  if (!storageManager.getAgent(binding.agentId)) throw new Error('Agent not found');
+  return companyBrains.save(binding);
+});
+handle('companyBrain:remove', (_event, agentId: string) => { requireRole('admin'); companyBrains.remove(agentId); });
+handle('companyBrain:test', (_event, agentId: string) => { requireRole('admin'); return companyBrains.health(agentId); });
+
+handle('compatible:list', () => { requireRole('admin'); return compatibleProviders.list(); });
+handle('compatible:save', (_event, profile: CompatibleProviderProfile, apiKey?: string) => { requireRole('admin'); return compatibleProviders.save(profile, apiKey); });
+handle('compatible:remove', (_event, id: string) => { requireRole('admin'); compatibleProviders.remove(id); });
+handle('compatible:test', (_event, id: string) => { requireRole('admin'); return compatibleProviders.test(id); });
+
+handle('models:isConfigured', (_event, model: string) => {
+  if (typeof model !== 'string') return false;
+  if (isCompatibleModel(model)) { try { compatibleProviders.resolve(model); return true; } catch { return false; } }
+  const provider = providerForModel(model);
+  return !!provider && (credentialStore.hasApiKey(provider) || !!providerApiKeys[provider] || oauthManager.isAuthenticated(provider));
+});
+
 handle('models:list', async () => {
   // Lazily refresh stale caches when credentials are available.
   if (!isCacheFresh(storageManager)) {
@@ -1814,14 +1853,13 @@ handle('models:list', async () => {
       await refreshModelCatalog(storageManager, { openai, anthropic }).catch(() => {});
     }
   }
-  return getCachedCatalog(storageManager);
+  const catalog = getCachedCatalog(storageManager);
+  return { ...catalog, models: [...catalog.models, ...compatibleProviders.catalog()] };
 });
 
 handle('models:refresh', async () => {
-  return refreshModelCatalog(storageManager, {
-    openai: providerCredentials('openai'),
-    anthropic: providerCredentials('anthropic'),
-  });
+  const catalog = await refreshModelCatalog(storageManager, { openai: providerCredentials('openai'), anthropic: providerCredentials('anthropic') });
+  return { ...catalog, models: [...catalog.models, ...compatibleProviders.catalog()] };
 });
 
 // OAuth Authentication
@@ -2910,3 +2948,5 @@ handle('mcp:configure', async (_event, raw: unknown) => {
   }
   return statuses;
 });
+
+app.on('before-quit', () => { companyBrains?.stop(); granolaManager?.stop(); remoteApprovalServer?.stop(); });

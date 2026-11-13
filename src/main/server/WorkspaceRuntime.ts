@@ -1,3 +1,5 @@
+import { CompatibleProviders } from '../connectors/CompatibleProviders.js';
+import { CompanyBrains } from '../keepmind/CompanyBrains.js';
 import { ArtifactStore } from '../artifacts/ArtifactStore.js';
 import { actionDecision } from '../governance/ActionPolicy.js';
 import { randomUUID } from 'node:crypto';
@@ -16,7 +18,9 @@ export const principalSchema = z.object({ id:z.string().min(1), tokenEnv:z.strin
 export type Principal = z.infer<typeof principalSchema>;
 export const workspaceConfigSchema = z.object({
   version:z.literal(1), workspace:z.string(), maxConcurrent:z.number().int().min(1).max(32).default(4),
-  agents:z.array(z.object({id:z.string().min(1),name:z.string().min(1),model:z.string().min(1),prompt:z.string().min(1),maxTokens:z.number().int().min(1).max(32768).default(4096),monthlyBudgetUsd:z.number().positive(),tools:z.array(z.string().regex(/^(artifact_create|file_read|file_list|pdf_read|sheet_read|personalbrain_search|get_current_time|mcp_[a-zA-Z0-9_-]+)$/)).default(['file_read','file_list','get_current_time','artifact_create'])})).min(1),
+  agents:z.array(z.object({id:z.string().min(1),name:z.string().min(1),model:z.string().min(1),prompt:z.string().min(1),maxTokens:z.number().int().min(1).max(32768).default(4096),monthlyBudgetUsd:z.number().positive(),monthlyRunCap:z.number().int().min(1).max(100000).optional(),executionTimeoutSeconds:z.number().int().min(1).max(3600).optional(),tools:z.array(z.string().regex(/^(artifact_create|file_read|file_list|pdf_read|sheet_read|personalbrain_search|get_current_time|mcp_[a-zA-Z0-9_-]+)$/)).default(['file_read','file_list','get_current_time','artifact_create'])})).min(1),
+  compatibleProviders: z.array(z.object({ id: z.string(), name: z.string(), kind: z.enum(['openrouter','deepseek','hermes','custom']), baseUrl: z.string(), model: z.string(), inputUsdPerMillion: z.number().positive(), outputUsdPerMillion: z.number().positive(), maxOutputTokens: z.number().int().positive(), maxRunUsd: z.number().positive(), apiKeyEnv: z.string().min(1) })).optional(),
+  companyBrains: z.array(z.object({ agentId: z.string(), companyId: z.string(), dataRoot: z.string(), entry: z.string(), node: z.string() })).optional(),
   mcp:z.array(mcpConfigSchema).default([]),
   routines:z.array(z.object({agentId:z.string(),name:z.string(),prompt:z.string(),project:z.string().default('Workspace'),intervalMinutes:z.number().int().min(1),autonomy:z.enum(['draft','run']).default('draft')})).default([]),
   server:z.object({host:z.string().default('127.0.0.1'),port:z.number().int().min(0).max(65535).default(47830),principals:z.array(principalSchema).min(1)}).optional(),
@@ -26,6 +30,7 @@ export class WorkspaceRuntime {
   readonly storage:StorageManager; readonly work:WorkManager; readonly manager = new AgentManager();
   readonly checkpoints:CheckpointStore; readonly mcp:McpManager;
   private pending = new Set<Promise<unknown>>();
+  private companyBrains: CompanyBrains;
   constructor(readonly config:WorkspaceConfig, dataDir:string, configDir:string) {
     if (new Set(config.agents.map(a=>a.id)).size !== config.agents.length) throw new Error('Agent IDs must be unique');
     if (new Set(config.routines.map(r=>`${r.agentId}:${r.name}`)).size !== config.routines.length) throw new Error('Routine names must be unique per agent');
@@ -33,6 +38,19 @@ export class WorkspaceRuntime {
     this.storage = new StorageManager(dataDir); this.storage.recoverInterruptedExecutions();
     this.work = new WorkManager(this.storage,true); this.checkpoints = new CheckpointStore(this.storage);
     this.manager.setCheckpointStore(this.checkpoints); this.mcp = new McpManager(this.manager.getToolRegistry());
+    const ephemeralSettings = new Map<string, string>();
+    const settings = { getSetting: (key: string) => ephemeralSettings.get(key), setSetting: (key: string, value: string) => { ephemeralSettings.set(key, value); } };
+    const keys = new Map<string, string>();
+    const providers = new CompatibleProviders(settings, { getSecret: name => keys.get(name) ?? null, setSecret: (name, value) => { keys.set(name, value); }, clearSecret: name => { keys.delete(name); } });
+    for (const profile of config.compatibleProviders ?? []) providers.save(profile, process.env[profile.apiKeyEnv]);
+    this.manager.setCompatibleProviders(providers);
+    this.manager.setExecutionSpendProvider(id => this.storage.getExecutionSpend(id));
+    this.companyBrains = new CompanyBrains(settings);
+    for (const binding of config.companyBrains ?? []) {
+      if (!config.agents.some(agent => agent.id === binding.agentId)) throw new Error('Company binding references unknown agent');
+      this.companyBrains.save(binding);
+    }
+    this.manager.setContextProvider((query, agentId) => agentId ? this.companyBrains.search(agentId, query) : Promise.resolve(''));
     const memory = new MemoryManager(this.storage);
     this.manager.getToolRegistry().setContext({createArtifact:(executionId,input)=>new ArtifactStore(this.storage).create(executionId,input),workspaceDir:path.resolve(configDir,config.workspace),personalBrainSearch:async(q,n)=>memory.search(q,n)});
     this.manager.setConstraintsProvider(()=>({policy:{fileAccess:'workspace',shellAccess:'disabled'}}));
@@ -70,8 +88,9 @@ export class WorkspaceRuntime {
   }
   async initialize(){await this.mcp.configure(this.config.mcp);}
   agent(id:string){const a=this.config.agents.find(a=>a.id===id);if(!a)throw new Error('Unknown agent');return a;}
-  agentConfig(id:string){const a=this.agent(id);return {model:a.model,temperature:0.2,maxTokens:a.maxTokens,systemPrompt:a.prompt,monthlyBudgetUsd:a.monthlyBudgetUsd,tools:a.tools.map(name=>({name,type:'custom' as const,config:{}}))};}
+  agentConfig(id:string){const a=this.agent(id);return {model:a.model,temperature:0.2,maxTokens:a.maxTokens,systemPrompt:a.prompt,monthlyBudgetUsd:a.monthlyBudgetUsd,monthlyRunCap:a.monthlyRunCap,executionTimeoutSeconds:a.executionTimeoutSeconds,tools:a.tools.map(name=>({name,type:'custom' as const,config:{}}))};}
   async execute(agentId:string,input:Record<string,unknown>,actor:string,resumeId?:string):Promise<AgentExecution>{
+    await this.companyBrains.health(agentId);
     const old=resumeId?this.storage.getAgentExecution(resumeId):undefined;
     if(resumeId&&(!old||old.agentId!==agentId||!this.checkpoints.read(resumeId)||(old.status!=='failed'&&!(old.status==='completed'&&this.checkpoints.read(resumeId)?.output))))throw new Error('No resumable execution');
     if(old)input=old.input;
@@ -82,6 +101,7 @@ export class WorkspaceRuntime {
       const rules=new Set(all.rules.filter(r=>visible.has(r.sourceTaskId)).map(r=>r.id));
       input={...input,projectRules:input.projectRules.filter(r=>r&&typeof r==='object'&&rules.has((r as {id:string}).id))};
     }
+    if(!resumeId)this.storage.assertMonthlyRunCap(agentId,this.agent(agentId).monthlyRunCap);
     const id=resumeId??randomUUID();const startedAt=old?.startedAt??new Date().toISOString();
     if(typeof input.workTaskId==='string')this.work.attachExecution(input.workTaskId,id);
     this.storage.saveAgentExecution({id,agentId,input,userId:actor,status:'running',progress:0,startedAt});
@@ -103,5 +123,5 @@ export class WorkspaceRuntime {
     for(const run of this.manager.getActiveExecutions())if(run.input.workTaskId===taskId)this.manager.cancelExecution(run.id);
     for(const a of this.storage.getPendingApprovals())if(a.context.workTaskId===taskId)this.storage.updateApprovalStatus(a.id,'rejected','Task cancelled','system');
   }
-  async close(){await this.manager.shutdown();await Promise.allSettled([...this.pending]);await this.mcp.close();this.storage.close();}
+  async close(){this.companyBrains.stop();await this.manager.shutdown();await Promise.allSettled([...this.pending]);await this.mcp.close();this.storage.close();}
 }

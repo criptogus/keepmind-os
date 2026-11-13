@@ -175,7 +175,7 @@ try {
     await delay(200);
   }
   const rendered = await evaluate('document.body?.innerText ?? ""');
-  if (!rendered?.includes('Vamos trabalhar com seu time?') || !rendered.includes('Review repository documentation')) fail('workspace did not render persisted task');
+  if (!rendered?.includes('Ready to work with your team?') || !rendered.includes('Review repository documentation')) fail('workspace did not render persisted task');
   if (!rendered.includes('Need your decision') || !rendered.includes('Delivered')) fail('focus overview not rendered');
   if (!(await evaluate(`!!document.querySelector('.km-sidebar .km-nav-more summary')`))) fail('advanced navigation disclosure missing');
   mkdirSync(evidenceDir, { recursive: true });
@@ -233,12 +233,12 @@ try {
   await delay(300);
   if (!(await evaluate(`!!document.querySelector('.km-chat-composer') && !!document.querySelector('.km-chat-user')`))) fail('chat conversation missing');
   const approvalStyle = await evaluate(`(() => {const b=document.querySelector('.km-approve-action');if(!b)return null;const s=getComputedStyle(b);return {background:s.backgroundColor,text:s.color,label:b.textContent};})()`);
-  if (!approvalStyle || approvalStyle.background !== 'rgb(197, 245, 66)' || approvalStyle.text !== 'rgb(17, 17, 17)' || !approvalStyle.label.includes('v1')) fail('lime approval or version label missing');
+  if (!approvalStyle || approvalStyle.background !== 'rgb(196, 255, 61)' || approvalStyle.text !== 'rgb(17, 17, 17)' || !approvalStyle.label.includes('v1')) fail('lime approval or version label missing');
   await evaluate(`document.querySelector('.km-approve-action').scrollIntoView({block:'center'})`);await delay(200);
   const approvalShot=await send('Page.captureScreenshot',{format:'png'});writeFileSync(path.join(evidenceDir,'approval-lime.png'),Buffer.from(approvalShot.result.data,'base64'));
   checks.push('lime-approval-version');
 
-  await evaluate(`([...document.querySelectorAll('button')].find(b => b.textContent === 'Visualizar material')).click()`);
+  await evaluate(`([...document.querySelectorAll('button')].find(b => ['Visualizar material', 'Preview material'].includes(b.textContent))).click()`);
   await delay(200);
   if (!(await evaluate(`!!document.querySelector('.km-paper-preview')`))) fail('material preview missing');
   const materialPreview = await send('Page.captureScreenshot', {format:'png'});
@@ -298,8 +298,45 @@ try {
   if (sak.connected || sak.pending) fail('isolated smoke unexpectedly inherited a skill account');
   const sakShot=await send('Page.captureScreenshot',{format:'png'});writeFileSync(path.join(evidenceDir,'skills-connection.png'),Buffer.from(sakShot.result.data,'base64'));
   checks.push('skills-oauth-disconnected');
+  const compatibleProfile = { id: 'smoke-compatible', kind: 'custom', name: 'Conexão de teste', baseUrl: 'http://127.0.0.1:9/v1', model: 'fixture', inputUsdPerMillion: 1, outputUsdPerMillion: 2, maxOutputTokens: 100, maxRunUsd: 1 };
+  await evaluate(`window.electronAPI.saveCompatibleProvider(${JSON.stringify(compatibleProfile)})`);
+  const compatibleModels = await evaluate('window.electronAPI.listModels()');
+  if (!compatibleModels.models.some(model => model.id === 'compatible/smoke-compatible')) fail('compatible provider missing from model picker');
+  if (!(await evaluate(`window.electronAPI.isModelConfigured('compatible/smoke-compatible')`))) fail('compatible account readiness incorrectly requires native OAuth');
+  await command('Advanced');
+  await evaluate(`document.querySelector('[data-compatible-settings]').click()`); await delay(300);
+  if (!(await evaluate('document.body.innerText')).includes('Conexão de teste')) fail('compatible connection is not visible');
+  await evaluate(`document.querySelector('[data-compatible-settings]').scrollIntoView({block:'start'})`);
+  const compatibleShot = await send('Page.captureScreenshot', {format:'png'});
+  writeFileSync(path.join(evidenceDir, 'compatible-providers.png'), Buffer.from(compatibleShot.result.data, 'base64'));
+  await evaluate(`document.querySelector('[data-company-settings]').click()`); await delay(250);
+  if (!(await evaluate('document.body.innerText')).includes('Company ID')) fail('company binding form unavailable');
+  if ((await evaluate('window.electronAPI.listCompanyBrains()')).length !== 0) fail('unexpected automatic company binding');
+  await evaluate(`window.electronAPI.removeCompatibleProvider('smoke-compatible')`);
+  if ((await evaluate('window.electronAPI.listCompatibleProviders()')).length) fail('compatible disconnect did not persist');
+  checks.push('compatible-provider-bridge-and-picker', 'company-memory-explicit-binding');
+
   await command('Workspace');
   checks.push('quick-actions-consumed-and-approvals-accessible');
+  for (const scheme of ['light', 'dark']) {
+    await evaluate(`window.electronAPI.updateSettings({theme:${JSON.stringify(scheme)}})`);
+    await send('Page.reload'); await delay(500);
+    for (const page of ['Home', 'Agents', 'Approvals', 'Settings']) {
+      await command(page); await delay(250);
+      const colors = await evaluate(`({ body:getComputedStyle(document.body).backgroundColor, lime:getComputedStyle(document.documentElement).getPropertyValue('--km-lime').trim() })`);
+      if (colors.lime !== '#c4ff3d' || colors.body !== (scheme === 'light' ? 'rgb(255, 255, 255)' : 'rgb(17, 17, 17)')) fail('inconsistent page color: ' + page + ' ' + scheme + ' ' + JSON.stringify(colors));
+      const shot = await send('Page.captureScreenshot', {format:'png'});
+      writeFileSync(path.join(evidenceDir, page.toLowerCase() + '-' + scheme + '.png'), Buffer.from(shot.result.data, 'base64'));
+    }
+  }
+  await evaluate(`window.electronAPI.updateSettings({theme:'light'})`); await send('Page.reload'); await delay(500);
+  await command('Workspace');
+  await send('Emulation.setEmulatedMedia', {features:[{name:'prefers-reduced-motion',value:'reduce'}]});
+  const motion = await evaluate(`(() => {const element=document.createElement('div');element.className='km-chat-message';document.body.appendChild(element);const value=getComputedStyle(element).animationDuration;element.remove();return value;})()`);
+  if (parseFloat(motion) > .001) fail('reduced motion ignored');
+  await send('Emulation.setEmulatedMedia', {features:[{name:'prefers-reduced-motion',value:'no-preference'}]});
+  checks.push('cross-area-palette-light-dark', 'reduced-motion');
+
   await evaluate(`localStorage.setItem('km-lang', 'pt')`); await send('Page.reload'); await delay(500);
   const portuguese = await send('Page.captureScreenshot', {format:'png'});
   writeFileSync(path.join(evidenceDir, 'workspace-pt.png'), Buffer.from(portuguese.result.data, 'base64'));
@@ -349,12 +386,12 @@ try {
   const localAgain = await evaluate('window.electronAPI.workList()');
   if (!localAgain.tasks.some(t => t.id === task.id) || localAgain.tasks.some(t => t.id === shared.id)) fail('local and remote data were mixed');
   checks.push('shared-workspace-isolation', 'checkpoint-recovery', 'persisted-task-search');
-  if (checks.length < 18) fail('incomplete UI checks');
+  if (checks.length < 22) fail('incomplete UI checks');
   console.log(`SMOKE PASS: electronAPI OK (version=${version}, agents=${Array.isArray(agents) ? agents.length : '?'}, rootChildren=${rootChildren}, uiRendered=true)`);
 } catch (err) {
   failure = err.message; console.error(`SMOKE FAIL: ${err.message}`); process.exitCode = 1;
 } finally {
-  writeFileSync(path.join(evidenceDir, 'ux-report.json'), JSON.stringify({passed: !failure && checks.length >= 18, checks, failure, fixture: 'synthetic; no live providers', timestamp: new Date().toISOString()}, null, 2));
+  writeFileSync(path.join(evidenceDir, 'ux-report.json'), JSON.stringify({passed: !failure && checks.length >= 22, checks, failure, fixture: 'synthetic; no live providers', timestamp: new Date().toISOString()}, null, 2));
   ws.close();
   workspaceServer?.kill('SIGTERM');
   child.kill('SIGTERM');

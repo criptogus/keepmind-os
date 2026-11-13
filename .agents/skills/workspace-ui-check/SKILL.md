@@ -10,9 +10,9 @@ npm run verify:ux
 ```
 
 This reuses typecheck, unit/integration tests, build, the headless runner and
-`scripts/smoke-electron.mjs`, followed by the secret scan. Any failed stage exits
+`scripts/smoke-electron.mjs`, followed by the secret scan and pinned production-dependency/package policy check. Any failed stage exits
 nonzero. The smoke creates fresh temporary SQLite data, seeds a synthetic delivery,
-disables CLI credential import and must complete at least eighteen checks. It writes
+disables CLI credential import and must complete at least twenty-two checks. It writes
 `evidence/ux-report.json` plus screenshots. Never use production data or credentials.
 
 For only the smoke after a current build and runner build:
@@ -33,3 +33,7 @@ The business guide must not persist a team before confirmation or execute a mode
 Also verify a revision starts with one action, preserves earlier deliveries, and identifies the replacement version. Check the chat composer and inline approval controls. Export PDF and PPTX through the real Electron bridge, validate binary signatures, and inspect the material preview. Do not equate a model claiming a file exists with a verified export.
 
 OAuth regressions use the production MCP SDK with controlled HTTP fixtures: PKCE, state, replay, cancellation, refresh and revocation. They do not prove a real account login. Check the disconnected Skills card and lime approval/version label in the smoke. For live login, confirm the browser is actually visible; OS acknowledgement alone is insufficient. Use the explicit Safari recovery option on macOS when default-browser dispatch fails. Never terminate unrelated browser processes. Record live discovery, login-page, account callback, search and install separately.
+
+Legacy feature adaptations must keep the current application identity and request/delivery flow. Verify compatible provider selection cannot fall through to a native OAuth account, declared prices enforce per-run limits, and keys never enter ordinary settings. Company-bound context must fail closed without falling back to global memory. Use synthetic multi-company fixtures for path, metadata and content isolation. The packaging gate compares the checked-in dependency inventory and rejects restricted SDKs; refreshing the inventory requires explicit dependency review, not automatic acceptance. Run `npm run check:bundle` for its aggregate report; packaging additionally runs the afterPack gate against ASAR and unpacked paths.
+
+Inspect Home, Agents, Approvals and Settings screenshots in both themes. The shared brand accent is #c4ff3d; glow belongs to primary actions, not warning/destructive controls. Verify reduced-motion disables text/message entry effects and the native app uses the KeepMind icon in development and packaged builds. Monochrome avatars use names/initials consistently across the agent list, selectors and conversation.

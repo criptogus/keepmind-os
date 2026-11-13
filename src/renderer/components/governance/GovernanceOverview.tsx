@@ -5,12 +5,7 @@ import { useLang } from '../../lib/i18n';
 type Summary = Awaited<ReturnType<typeof window.electronAPI.governanceSummary>>;
 
 const CATEGORY_COLORS: Record<string, string> = {
-  approvals: 'orange',
-  exports: 'red',
-  integrations: 'teal',
-  agents: 'blue',
-  access: 'grape',
-  admin: 'gray',
+  approvals: 'lime', exports: 'gray', integrations: 'lime', agents: 'gray', access: 'gray', admin: 'gray',
 };
 
 function categoryLabel(cat: string, t: (k: string) => string): string {
@@ -50,7 +45,7 @@ export default function GovernanceOverview() {
           <Text size="xs" c="dimmed" tt="uppercase">{t('govsum.approvals')}</Text>
           <Group gap="xs">
             <Badge color="yellow" variant="light">{data.approvals.pending} {t('govsum.pending')}</Badge>
-            <Badge color="green" variant="light">{data.approvals.approved}</Badge>
+            <Badge color="lime" variant="light">{data.approvals.approved}</Badge>
             <Badge color="red" variant="light">{data.approvals.rejected}</Badge>
           </Group>
         </Card>
@@ -105,7 +100,7 @@ export default function GovernanceOverview() {
           <Text fw={600} size="sm" mb="xs">{t('govsum.topTools')}</Text>
           <Group gap="xs" wrap="wrap">
             {data.topTools.map((tool) => (
-              <Badge key={tool.name} variant="light" color="blue" size="lg" radius="sm">
+              <Badge key={tool.name} variant="light" color="lime" size="lg" radius="sm">
                 {tool.name} <Text span ff="monospace" fw={700}>×{tool.count}</Text>
               </Badge>
             ))}

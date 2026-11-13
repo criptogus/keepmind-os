@@ -332,7 +332,7 @@ const dict: Record<string, { en: string; pt: string }> = {
   'dash2.chSystem': { en: 'system', pt: 'sistema' },
   'dash2.unknownAgent': { en: 'Agent', pt: 'Agente' },
   'dash2.askAgent': { en: 'Ask an agent', pt: 'Peça algo a um agente' },
-  'dash2.askAgentPh': { en: 'e.g. Summarize today\'s site report, or JSON like {"message": "..."}', pt: 'ex.: Resuma o relatório da obra de hoje, ou JSON como {"message": "..."}' },
+  'dash2.askAgentPh': { en: 'Describe the result you need, with any useful context…', pt: 'Descreva o resultado que você precisa e inclua o contexto…' },
   'dash2.askAgentBtn': { en: 'Run', pt: 'Executar' },
   'dash2.askAgentHint': { en: 'The agent starts working right away — follow it in "Working now" below or in Agents → Executions.', pt: 'O agente começa na hora — acompanhe em "Trabalhando agora" abaixo ou em Agentes → Execuções.' },
   'dash2.pickAgent': { en: 'Choose an agent…', pt: 'Escolha um agente…' },
@@ -436,7 +436,7 @@ const dict: Record<string, { en: string; pt: string }> = {
   'govr.unknownTeam': { en: 'Unknown Team', pt: 'Equipe desconhecida' },
 
   // Dashboard
-  'dash.title': { en: 'Dashboard', pt: 'Painel' },
+  'dash.title': { en: 'Overview', pt: 'Visão geral' },
   'dash.executions': { en: 'Executions', pt: 'Execuções' },
   'dash.approvals': { en: 'Approvals', pt: 'Aprovações' },
   'dash.tokens': { en: 'Tokens Used', pt: 'Tokens Utilizados' },

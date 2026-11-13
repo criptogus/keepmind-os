@@ -214,7 +214,7 @@ export default function SkillsPanel() {
             onChange={(e) => { setImportUrl(e.currentTarget.value); setImportPreview(null); setImportSel(0); }}
           />
           {importPreview && (
-            <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
+            <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-default-hover)' }}>
               <Stack gap={4}>
                 {importPreview.skills.length > 1 && (
                   <Select
@@ -320,7 +320,7 @@ export default function SkillsPanel() {
                       <Group gap={6}>
                         <Text size="sm" fw={600}>{m.name}</Text>
                         {m.featured && <Badge size="xs" variant="filled" color="dark">{t('skills.featured')}</Badge>}
-                        {m.installed && <Badge size="xs" variant="light" color="green">{t('skills.installed')}</Badge>}
+                        {m.installed && <Badge size="xs" variant="light" color="lime">{t('skills.installed')}</Badge>}
                       </Group>
                       <Text size="xs" c="dimmed">{m.description}</Text>
                       <Text size="xs" c="dimmed" mt={2}>

@@ -9,7 +9,7 @@
   },
   "main": "dist/main/main.cjs",
   "scripts": {
-    "build": "vite build && esbuild src/main/main.ts --bundle --platform=node --format=cjs --packages=external --supported:dynamic-import=true --outfile=dist/main/main.cjs && esbuild src/preload/preload.ts --bundle --platform=node --format=cjs --external:electron --outfile=dist/main/preload.cjs && cp build/tray-icon.png dist/main/tray-icon.png",
+    "build": "vite build && esbuild src/main/main.ts --bundle --platform=node --format=cjs --packages=external --supported:dynamic-import=true --outfile=dist/main/main.cjs && esbuild src/preload/preload.ts --bundle --platform=node --format=cjs --external:electron --outfile=dist/main/preload.cjs && cp build/tray-icon.png dist/main/tray-icon.png && cp build/icon.png dist/main/icon.png",
     "dev": "vite --host 127.0.0.1 --port 0",
     "start": "electron .",
     "test": "vitest run",
@@ -22,7 +22,8 @@
     "dist:win": "npm run build && electron-builder --win",
     "runner": "esbuild src/runner/cli.ts --bundle --platform=node --format=esm --packages=external --outfile=dist/runner/cli.mjs && node dist/runner/cli.mjs",
     "dist:signed": "npm run build && node scripts/dist-signed.mjs",
-    "verify:ux": "npm run typecheck && npm test && npm run test:integration && npm run build && npm run runner -- --help && npm run smoke:electron && npm run scan:secrets"
+    "verify:ux": "npm run typecheck && npm test && npm run test:integration && npm run build && npm run runner -- --help && npm run smoke:electron && npm run scan:secrets && npm run check:bundle",
+    "check:bundle": "node scripts/bundle-license-policy.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.1",
@@ -76,7 +77,11 @@
       "dist/**/*",
       "assets/**/*",
       "package.json",
-      "THIRD_PARTY_NOTICES.md"
+      "THIRD_PARTY_NOTICES.md",
+      "!**/node_modules/@anthropic-ai/claude-agent-sdk{,-*}{,/**/*}",
+      "!**/node_modules/@cursor/sdk{,-*}{,/**/*}",
+      "!**/node_modules/@github/copilot{,-*}{,/**/*}",
+      "!**/node_modules/@paperclipai/server/provider-assets/copilot{,/**/*}"
     ],
     "asar": true,
     "asarUnpack": [
@@ -140,9 +145,10 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true
-    }
+    },
+    "afterPack": "scripts/bundle-after-pack.mjs"
   },
-  "description": "KeepMind OS — local agent workspace",
+  "description": "KeepMind OS \u2014 local agent workspace",
   "author": "KeepMind",
   "repository": {
     "type": "git",

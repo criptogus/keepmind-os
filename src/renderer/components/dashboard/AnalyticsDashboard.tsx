@@ -274,7 +274,7 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
               <span
                 style={{
                   width: 10, height: 10, borderRadius: '50%', flexShrink: 0,
-                  backgroundColor: c.ok ? '#2f9e44' : 'var(--mantine-color-gray-5)',
+                  backgroundColor: c.ok ? 'var(--km-lime)' : 'var(--mantine-color-gray-5)',
                 }}
               />
               <Text size="sm">{c.label}</Text>
@@ -334,7 +334,7 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
               const ss = String(elapsed % 60).padStart(2, '0');
               return (
                 <Group key={exec.id} gap="sm" wrap="nowrap">
-                  {agent ? <BotAvatar definition={avatarForAgent(agent)} mood="thinking" size={28} /> : <PixelSpinner size={16} />}
+                  {agent ? <BotAvatar definition={avatarForAgent(agent)} name={agent.name} mood="thinking" size={28} /> : <PixelSpinner size={16} />}
                   <div style={{ minWidth: 0 }}>
                     <Text size="sm" fw={500} lineClamp={1}>{agent?.name ?? t('dash2.unknownAgent')}</Text>
                     <Text size="xs" c="dimmed">{mm > 0 ? `${mm}m ${ss}s` : `${ss}s`} · {exec.progress}%</Text>
@@ -403,7 +403,7 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
                 padding: '10px 12px', borderRadius: 8,
                 cursor: item.done ? 'default' : 'pointer',
               }}
-              onMouseEnter={(e) => { if (!item.done) (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--mantine-color-gray-1)'; }}
+              onMouseEnter={(e) => { if (!item.done) (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--mantine-color-default-hover)'; }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent'; }}
             >
               <Badge size="sm" color={item.done ? 'dark' : 'gray'} variant="light">
