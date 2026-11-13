@@ -1,3 +1,4 @@
+import type { MemorySource } from '../../shared/types.js';
 import type { CheckpointStore } from '../execution/CheckpointStore.js';
 import { existsSync, realpathSync } from 'node:fs';
 import * as fs from 'node:fs/promises';
@@ -6,6 +7,7 @@ import * as XLSX from 'xlsx';
 import { extractText } from 'unpdf';
 
 export interface ToolContext {
+  executionId?: string;
   signal?: AbortSignal;
   sendWhatsApp?: (to: string, text: string) => Promise<void>;
   /** Recent incoming WhatsApp messages (read-only). */
@@ -36,7 +38,7 @@ export interface ToolContext {
   composioExecute?: (slug: string, argsJson: string) => Promise<string>;
   /** Personal brain (local vault, never leaves the machine). */
   personalBrainSearch?: (query: string, limit?: number) => Promise<{ text: string; ids: string[] }>;
-  personalBrainRemember?: (content: string, file?: string) => Promise<string>;
+  personalBrainRemember?: (content: string, file?: string, evidence?: Omit<MemorySource, 'capturedAt'>) => Promise<string>;
   /** Collects ids of memory items returned to the model (outcome attribution). */
   memoryUsage?: Set<string>;
   /** Id of the agent running this execution (set per-execution via policy). */
@@ -163,12 +165,13 @@ export class ToolRegistry {
         properties: {
           content: { type: 'string', description: 'Note content to remember' },
           file: { type: 'string', description: 'Optional vault file name (default memories.md)' },
+          source: { type: 'string', description: 'Optional original evidence reference (URL, document or message ID). Never include credentials. This is a claim, not verification.' },
         },
         required: ['content'],
       },
       handler: async (args, ctx) => {
         if (!ctx.personalBrainRemember) throw new Error('Personal brain is not available');
-        return ctx.personalBrainRemember(String(args.content), args.file ? String(args.file) : undefined);
+        return ctx.personalBrainRemember(String(args.content), args.file ? String(args.file) : undefined, { reference: typeof args.source === 'string' ? args.source : undefined, agentId: ctx.callerAgentId, executionId: ctx.executionId });
       },
     });
 

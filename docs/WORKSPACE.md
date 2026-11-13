@@ -81,6 +81,28 @@ memory ID and content hash. Offline or invalid responses fall back to keywords.
 Retired memories are excluded. This is currently a linear scan, not a large-scale
 vector database. Retrieved text can subsequently be sent to the chosen LLM.
 
+### Evidence and consolidation history
+
+Personal memory captures the executing agent and execution ID from the runtime,
+plus an optional `source` reference on `personalbrain_remember`. References are
+claims, not independently verified evidence; recall labels them accordingly.
+Both lexical and hybrid recall expose the same provenance. Legacy memories have
+empty provenance, and no source is invented for them. Duplicate capture retains
+additional sources (up to 100) without creating another memory.
+
+Consolidation records typed `refines`, `updates`, `contradicts` and `related`
+links with the judge confidence and timestamp. Contradictions keep both items
+active. Updates retain historical sources on the superseded item. Only actual
+candidate IDs and finite confidence scores in range are accepted; a judge cannot
+mutate arbitrary memories. Superseding multiple items and saving the new one is
+one SQLite transaction. These links are model suggestions, not verified facts.
+
+The memory-list API and database backups include this metadata. The markdown
+vault is still a content archive, not a provenance backup. This is local personal
+memory; it does not introduce shared memory, a graph editor or automatic source
+fetching. Source references should identify documents/messages without access
+tokens; supplied references are length-limited and pass the secret-content guard.
+
 ## Free headless runner
 
 Node.js >=24.11, no Electron window, Docker, database server or KeepMind cloud:
@@ -140,8 +162,9 @@ This is not feature parity with their cloud computers, collaboration or plugins.
   Streamable HTTP tools are implemented with the pinned v1 SDK (2025-11-25 protocol).
 - Rich shared channels and simultaneous document editing. Project/agent-scoped
   task collaboration with role checks and optimistic concurrency is implemented.
-- Structured source provenance, typed commitment/decision relationships and
-  scalable vector retrieval across large vaults.
+- A browsable evidence graph, typed commitment/decision relationships and
+  scalable vector retrieval across large vaults. Source provenance and typed
+  consolidation relationships are implemented in personal memory.
 - Automatic compensating actions and file-diff approvals. Routine draft/run policies
   and execution/tool-argument previews are implemented; arbitrary external effects
   are not automatically reversible.

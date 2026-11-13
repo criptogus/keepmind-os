@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import type { MemoryItem } from '../../shared/types.js';
 import type { StorageManager } from '../storage/StorageManager.js';
-import type { MemoryManager } from './MemoryManager.js';
+import { formatMemory, type MemoryManager } from './MemoryManager.js';
 
 export type Embedder = (texts: string[]) => Promise<number[][]>;
 export function cosine(a: number[], b: number[]): number {
@@ -52,7 +52,7 @@ export class HybridMemory {
       lexical.ids.forEach((id,i) => rank.set(id, 1/(60+i)));
       semantic.forEach(({item},i) => rank.set(item.id, (rank.get(item.id)||0)+1/(60+i)));
       const selected = [...rank].sort((a,b) => b[1]-a[1]).slice(0,limit).map(([id]) => items.find(m => m.id===id)!).filter(Boolean);
-      return { text: selected.map(m => `[memory:${m.id}; valid since ${m.validFrom}]\n${m.content}`).join('\n\n---\n\n'), ids: selected.map(m => m.id), mode: 'hybrid' as const, indexingRemaining: Math.max(0, missing.length-batch.length) };
+      return { text: selected.map(formatMemory).join('\n\n---\n\n'), ids: selected.map(m => m.id), mode: 'hybrid' as const, indexingRemaining: Math.max(0, missing.length-batch.length) };
     } catch {
       const fallback = this.memory.search(query,limit);
       return { ...fallback, mode: 'lexical-fallback' as const };

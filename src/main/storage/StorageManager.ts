@@ -229,6 +229,12 @@ export class StorageManager {
       )
     `);
 
+    for (const column of ['sources TEXT', 'relations TEXT']) {
+      const name = column.split(' ')[0];
+      const columns = this.db.prepare('PRAGMA table_info(memory_items)').all() as Array<{name:string}>;
+      if (!columns.some(c => c.name === name)) this.db.exec(`ALTER TABLE memory_items ADD COLUMN ${column}`);
+    }
+
     // Columns added after initial release — safe no-ops if present
     for (const col of [
       'is_shared INTEGER DEFAULT 0',
@@ -800,11 +806,18 @@ export class StorageManager {
   saveMemoryItem(item: MemoryItem): void {
     this.db.prepare(`
       INSERT OR REPLACE INTO memory_items
-      (id, kind, content, valid_from, valid_until, superseded_by, related_ids, uses, good, bad, demoted, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      (id, kind, content, valid_from, valid_until, superseded_by, related_ids, uses, good, bad, demoted, created_at, updated_at, sources, relations)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `).run(item.id, item.kind, item.content, item.validFrom, item.validUntil ?? null,
       item.supersededBy ?? null, item.relatedIds ? JSON.stringify(item.relatedIds) : null,
-      item.uses, item.good, item.bad, item.demoted ? 1 : 0, item.createdAt, item.updatedAt);
+      item.uses, item.good, item.bad, item.demoted ? 1 : 0, item.createdAt, item.updatedAt,
+      JSON.stringify(item.sources || []), JSON.stringify(item.relations || []));
+  }
+
+  saveMemoryItems(items: MemoryItem[]): void {
+    this.db.exec('BEGIN IMMEDIATE');
+    try { for (const item of items) this.saveMemoryItem(item); this.db.exec('COMMIT'); }
+    catch (error) { this.db.exec('ROLLBACK'); throw error; }
   }
 
   getMemoryItem(id: string): MemoryItem | null {
@@ -817,6 +830,8 @@ export class StorageManager {
       id: row.id, kind: row.kind, content: row.content, validFrom: row.valid_from,
       validUntil: row.valid_until ?? undefined, supersededBy: row.superseded_by ?? undefined,
       relatedIds: row.related_ids ? JSON.parse(row.related_ids) : undefined,
+      sources: row.sources ? JSON.parse(row.sources) : [],
+      relations: row.relations ? JSON.parse(row.relations) : [],
       uses: row.uses, good: row.good, bad: row.bad, demoted: !!row.demoted,
       createdAt: row.created_at, updatedAt: row.updated_at,
     };

@@ -237,7 +237,22 @@ export interface RoutingDecision {
 }
 
 /** Personal-brain memory item with temporal validity and outcome weighting. */
+export interface MemorySource {
+  /** Claimed evidence location; not independently verified. */
+  reference?: string;
+  agentId?: string;
+  executionId?: string;
+  capturedAt: string;
+}
+export interface MemoryRelation {
+  targetId: string;
+  type: 'refines' | 'updates' | 'contradicts' | 'related';
+  confidence: number;
+  createdAt: string;
+}
 export interface MemoryItem {
+  sources?: MemorySource[];
+  relations?: MemoryRelation[];
   id: string;
   kind: string;
   content: string;

@@ -691,8 +691,8 @@ app.whenReady().then(async () => {
       if (r.text) return { text: r.text, ids: r.ids };
       return { text: await personalBrainManager.search(query, limit), ids: [] };
     },
-    personalBrainRemember: async (content, file) => {
-      const summary = await memoryManager.remember(content, file ?? 'fact');
+    personalBrainRemember: async (content, file, evidence) => {
+      const summary = await memoryManager.remember(content, file ?? 'fact', evidence);
       void personalBrainManager.remember(content, file).catch(() => {});
       return summary;
     },
