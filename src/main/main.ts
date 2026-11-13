@@ -1,3 +1,6 @@
+import { openLoginInSafari } from './auth/openLoginBrowser.js';
+import { SuperAgentSkill } from './integrations/SuperAgentSkill.js';
+import { installSakSkill } from './integrations/installSakSkill.js';
 import { materialHtml } from '../shared/materials.js';
 import { exportPresentation } from './materials/exportPresentation.js';
 import { createBusinessTeam } from './work/BusinessTeamSetup.js';
@@ -11,7 +14,7 @@ import { CheckpointStore } from './execution/CheckpointStore.js';
 import { HybridMemory, localEmbedder } from './integrations/HybridMemory.js';
 import { WorkManager } from './work/WorkManager.js';
 import type { CreateWorkInput, WorkAction } from '../shared/work.js';
-import { app, BrowserWindow, dialog, ipcMain, Menu, nativeImage, shell, Tray } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain, Menu, nativeImage, shell, Tray, safeStorage } from 'electron';
 import * as path from 'path';
 import { StorageManager } from './storage/StorageManager.js';
 import { AgentManager } from './agent/AgentManager.js';
@@ -1356,6 +1359,36 @@ handle('agents:getExecutions', (_event, agentId?: string) => {
     return storageManager.getAgentExecutions(agentId, 50, currentUserId());
   }
   return storageManager.getAgentExecutions(agentId);
+});
+
+// A separate account connection, scoped to the signed-in local administrator.
+const sakConnections = new Map<string, SuperAgentSkill>();
+function sakConnection() {
+  requireRole('admin');
+  const owner = currentUserId() || 'local';
+  let connection = sakConnections.get(owner);
+  if (!connection) {
+    connection = new SuperAgentSkill({ secrets: credentialStore, key: `superagentskill.${owner}`, openBrowser: url => shell.openExternal(url), canEncrypt: () => safeStorage.isAsyncEncryptionAvailable() });
+    sakConnections.set(owner, connection);
+  }
+  return connection;
+}
+handle('login:openInSafari', (_event, provider: 'superagentskill' | 'openai' | 'anthropic') => {
+  requireRole('admin');
+  if (!['superagentskill', 'openai', 'anthropic'].includes(provider)) throw new Error('Provedor inválido.');
+  const url = provider === 'superagentskill' ? sakConnection().status().authUrl : oauthManager.getAuthUrl(provider);
+  return openLoginInSafari(url);
+});
+handle('sak:status', () => sakConnection().status());
+handle('sak:connect', () => sakConnection().connect());
+handle('sak:cancel', () => sakConnection().cancel());
+handle('sak:disconnect', () => sakConnection().disconnect());
+handle('sak:search', (_event, query: string) => sakConnection().search(query));
+handle('sak:preview', (_event, slug: string) => sakConnection().preview(slug));
+handle('sak:install', (_event, digest: string, agentId: string) => {
+  const preview = sakConnection().reviewed(digest);
+  if (agentManager.getActiveExecutions().some(run => run.agentId === agentId)) throw new Error('Aguarde o agente terminar o trabalho antes de adicionar uma habilidade.');
+  return installSakSkill(storageManager, preview, agentId);
 });
 
 // Skills

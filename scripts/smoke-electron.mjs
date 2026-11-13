@@ -35,7 +35,7 @@ const fixtureStorage = new StorageManager(path.join(env.KEEPMIND_DATA_DIR, 'data
 const fixtureWork = new WorkManager(fixtureStorage);
 const fixtureAgentId = 'ux-fixture-agent';
 fixtureStorage.saveAgent({ id: fixtureAgentId, name: 'Assistente', description: 'Synthetic smoke fixture', config: { model: 'gpt-4o-mini', temperature: 0, maxTokens: 100, systemPrompt: 'Read only', tools: [] }, capabilities: [], permissions: [], createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
-const fixtureTask = fixtureWork.create({ goal: 'Preparar o resumo do projeto', agentId: fixtureAgentId, project: 'Projeto exemplo', criteria: 'Resumo e próximos passos.' }, 'system');
+const fixtureTask = fixtureWork.create({ goal: 'Preparar o resumo do projeto', agentId: fixtureAgentId, project: 'Projeto exemplo', criteria: 'Resumo e próximos passos.', reviewRequired: true }, 'system');
 await fixtureWork.run(fixtureTask.id, async () => ({ id: 'ux-fixture-execution', agentId: fixtureAgentId, status: 'completed', input: {}, progress: 100, output: { content: '# Resumo do projeto\n\nO pedido foi organizado em **três próximos passos**.\n\n- Confirmar o escopo com a equipe.\n- Revisar a documentação.\n- Preparar a primeira entrega.\n\n## Fontes\n\n[Documentação do projeto](https://github.com/criptogus/keepmind-os)\n\n| Etapa | Estado |\n| --- | --- |\n| Planejamento | Pronto |\n| Revisão | Próxima etapa |' } }));
 fixtureStorage.setSetting('theme', 'light');
 fixtureStorage.close();
@@ -232,6 +232,12 @@ try {
   await evaluate(`([...document.querySelectorAll('.km-task')].find(el => el.textContent.includes('Preparar o resumo'))).click()`);
   await delay(300);
   if (!(await evaluate(`!!document.querySelector('.km-chat-composer') && !!document.querySelector('.km-chat-user')`))) fail('chat conversation missing');
+  const approvalStyle = await evaluate(`(() => {const b=document.querySelector('.km-approve-action');if(!b)return null;const s=getComputedStyle(b);return {background:s.backgroundColor,text:s.color,label:b.textContent};})()`);
+  if (!approvalStyle || approvalStyle.background !== 'rgb(197, 245, 66)' || approvalStyle.text !== 'rgb(17, 17, 17)' || !approvalStyle.label.includes('v1')) fail('lime approval or version label missing');
+  await evaluate(`document.querySelector('.km-approve-action').scrollIntoView({block:'center'})`);await delay(200);
+  const approvalShot=await send('Page.captureScreenshot',{format:'png'});writeFileSync(path.join(evidenceDir,'approval-lime.png'),Buffer.from(approvalShot.result.data,'base64'));
+  checks.push('lime-approval-version');
+
   await evaluate(`([...document.querySelectorAll('button')].find(b => b.textContent === 'Visualizar material')).click()`);
   await delay(200);
   if (!(await evaluate(`!!document.querySelector('.km-paper-preview')`))) fail('material preview missing');
@@ -286,6 +292,12 @@ try {
   if (await evaluate(`!!document.querySelector('[role="dialog"]')`)) fail('stale create-agent command reopened wizard');
   await command('Approvals');
   if (!(await evaluate(`document.body.innerText.includes('Pending approvals') || document.body.innerText.includes('No pending')`))) fail('approvals page not reachable');
+  await command('Skills');
+  if (!(await evaluate(`!!document.querySelector('.km-sak-panel') && document.body.innerText.includes('Conectar minha conta')`))) fail('skills OAuth connection card missing');
+  const sak = await evaluate(`window.electronAPI.sakStatus()`);
+  if (sak.connected || sak.pending) fail('isolated smoke unexpectedly inherited a skill account');
+  const sakShot=await send('Page.captureScreenshot',{format:'png'});writeFileSync(path.join(evidenceDir,'skills-connection.png'),Buffer.from(sakShot.result.data,'base64'));
+  checks.push('skills-oauth-disconnected');
   await command('Workspace');
   checks.push('quick-actions-consumed-and-approvals-accessible');
   await evaluate(`localStorage.setItem('km-lang', 'pt')`); await send('Page.reload'); await delay(500);
@@ -337,12 +349,12 @@ try {
   const localAgain = await evaluate('window.electronAPI.workList()');
   if (!localAgain.tasks.some(t => t.id === task.id) || localAgain.tasks.some(t => t.id === shared.id)) fail('local and remote data were mixed');
   checks.push('shared-workspace-isolation', 'checkpoint-recovery', 'persisted-task-search');
-  if (checks.length < 10) fail('incomplete UI checks');
+  if (checks.length < 18) fail('incomplete UI checks');
   console.log(`SMOKE PASS: electronAPI OK (version=${version}, agents=${Array.isArray(agents) ? agents.length : '?'}, rootChildren=${rootChildren}, uiRendered=true)`);
 } catch (err) {
   failure = err.message; console.error(`SMOKE FAIL: ${err.message}`); process.exitCode = 1;
 } finally {
-  writeFileSync(path.join(evidenceDir, 'ux-report.json'), JSON.stringify({passed: !failure && checks.length >= 10, checks, failure, fixture: 'synthetic; no live providers', timestamp: new Date().toISOString()}, null, 2));
+  writeFileSync(path.join(evidenceDir, 'ux-report.json'), JSON.stringify({passed: !failure && checks.length >= 18, checks, failure, fixture: 'synthetic; no live providers', timestamp: new Date().toISOString()}, null, 2));
   ws.close();
   workspaceServer?.kill('SIGTERM');
   child.kill('SIGTERM');

@@ -29,15 +29,15 @@ export default function BotAvatar({ definition, mood = 'idle', size = 40, color,
   }, []);
 
   const svg = useMemo(
-    () => renderAvatarSvg(definition, { motion: mood, size, color, reducedMotion }),
-    [definition, mood, size, color, reducedMotion]
+    () => renderAvatarSvg(definition, { motion: mood, size, color: '#111111', reducedMotion }),
+    [definition, mood, size, reducedMotion]
   );
 
   const badge = mood === 'thinking' ? '?' : mood === 'happy' ? '✓' : null;
   const badgeSize = Math.max(12, Math.round(size * 0.32));
 
   return (
-    <span style={{ display: 'inline-flex', width: size, height: size, flexShrink: 0, lineHeight: 0, position: 'relative' }}>
+    <span className="km-bot-avatar" style={{ display: 'inline-flex', width: size, height: size, flexShrink: 0, lineHeight: 0, position: 'relative' }}>
       {/* SVG comes from the validated open-bot-avatar renderer (static markup). */}
       <span dangerouslySetInnerHTML={{ __html: svg }} />
       {showBadge && badge && (

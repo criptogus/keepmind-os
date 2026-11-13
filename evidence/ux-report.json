@@ -8,10 +8,12 @@
     "delivery-markdown",
     "real-pdf-export",
     "real-pptx-export",
+    "lime-approval-version",
     "chat-and-material-preview",
     "light-title-contrast",
     "dark-theme-and-contrast",
     "automatic-system-theme",
+    "skills-oauth-disconnected",
     "quick-actions-consumed-and-approvals-accessible",
     "narrow-layout",
     "shared-workspace-isolation",
@@ -20,5 +22,5 @@
   ],
   "failure": null,
   "fixture": "synthetic; no live providers",
-  "timestamp": "2026-11-13T14:52:51.860Z"
+  "timestamp": "2026-11-13T15:41:54.178Z"
 }

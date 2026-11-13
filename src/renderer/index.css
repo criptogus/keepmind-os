@@ -179,16 +179,34 @@ body {
 .km-delivery-drawer { background: var(--mantine-color-body); }
 .km-chat-heading { position: sticky; top: 0; z-index: 2; background: var(--mantine-color-body); padding: 8px 0 14px; border-bottom: 1px solid var(--mantine-color-default-border); }
 .km-chat-message { border: 1px solid var(--mantine-color-default-border); border-radius: 18px; padding: 20px; max-width: 94%; overflow-wrap: anywhere; }
-.km-chat-user { align-self: flex-end; background: light-dark(#e9f4f0, #203b34); border-color: light-dark(#d2e6dc, #36594e); border-bottom-right-radius: 4px; }
-.km-chat-agent { align-self: flex-start; width: 100%; background: light-dark(#fff, #25282d); border-bottom-left-radius: 4px; }
+.km-chat-user { align-self: flex-end; background: #111; color: #fff; border-color: #111; border-bottom-right-radius: 4px; }
+.km-chat-agent { align-self: flex-start; width: 100%; background: light-dark(#fff, #111); border-bottom-left-radius: 4px; }
 .km-chat-message .km-document { font-size: 14px; line-height: 1.65; }
 .km-chat-message .km-document h2 { font-size: 20px; }
 .km-chat-excerpt { max-height: 280px; overflow: hidden; mask-image: linear-gradient(#000 75%, transparent); }
 .km-chat-composer { position: sticky; bottom: -16px; z-index: 3; padding: 16px 0; background: var(--mantine-color-body); border-top: 1px solid var(--mantine-color-default-border); }
-.km-material-card { background: light-dark(#f5f8fa, #2e333a); }
-.km-paper-preview { background: white; color: #182338; padding: 40px; border: 1px solid #dbe1e8; border-radius: 6px; }
-.km-paper-preview h1 { border-bottom: 3px solid #39796b; padding-bottom: 18px; font-size: 28px; }
+.km-material-card { background: light-dark(#fafafa, #171717); }
+.km-paper-preview { background: white; color: #111111; padding: 40px; border: 1px solid #dbe1e8; border-radius: 6px; }
+.km-paper-preview h1 { border-bottom: 3px solid #c5f542; padding-bottom: 18px; font-size: 28px; }
 .km-paper-preview pre { white-space: pre-wrap; overflow-wrap: anywhere; font: 15px/1.6 Arial; }
-.km-slide-preview { background: #f8fafc; color: #182338; padding: 28px 40px; border-left: 10px solid #39796b; border-radius: 8px; min-height: 320px; display: flex; flex-direction: column; }
+.km-slide-preview { background: #ffffff; color: #111111; padding: 28px 40px; border-left: 10px solid #c5f542; border-radius: 8px; min-height: 320px; display: flex; flex-direction: column; }
 .km-slide-preview h2 { font-size: 24px; }.km-slide-preview p { font: 20px/1.5 Arial; flex: 1; white-space: pre-wrap; }.km-slide-preview small { color: #64748b; }
 @media(max-width:600px){.km-chat-message{max-width:100%;padding:14px}.km-paper-preview,.km-slide-preview{padding:20px}.km-chat-composer{bottom:-16px}}
+
+/* KeepMind identity: black and white, with a sharp lime action accent. */
+:root { --km-lime: #c5f542; --km-ink: #111; }
+.km-primary-action, .km-approve-action { background: var(--km-lime) !important; color: #111 !important; border: 1px solid var(--km-lime) !important; border-radius: 10px; font-weight: 650; }
+.km-primary-action:hover, .km-approve-action:hover { background: #b5e52e !important; border-color: #b5e52e !important; }
+.km-primary-action:disabled, .km-approve-action:disabled { background: light-dark(#e8e8e8,#303030) !important; color: light-dark(#676767,#aaa) !important; border-color: transparent !important; }
+.km-approve-action { min-height: 42px; padding: 0 18px; }
+.km-approve-action [class*="section"] { font-size: 18px; }
+.km-lime-badge { background: var(--km-lime) !important; color: #111 !important; }
+.km-bot-avatar svg { filter: grayscale(1); }
+[data-mantine-color-scheme=dark] .km-bot-avatar svg { filter: grayscale(1) invert(1); }
+.km-chat-user .km-document, .km-chat-user p { color: #fff; }
+.km-chat-agent { border-color: light-dark(#e4e4e4,#333); box-shadow: 0 2px 12px #00000004; }
+.km-chat-heading { border-bottom-color: light-dark(#eee,#333); }
+.km-material-card { border-color: light-dark(#dedede,#333); border-left: 3px solid var(--km-lime); }
+.km-eyebrow { font-size: 11px; letter-spacing: .12em; font-weight: 700; color: var(--mantine-color-dimmed); margin-bottom: 6px; }
+.km-sak-panel { border-top: 3px solid var(--km-lime); }
+.km-skill-preview { max-height: 320px; overflow: auto; border: 1px solid var(--mantine-color-default-border); border-radius: 10px; padding: 16px; }

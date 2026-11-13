@@ -44,16 +44,26 @@ Os testes cobrem ausência de credenciais, servidor indisponível, escrita em mo
 
 ## Super Agent Skill e OAuth
 
-**Não há conector OAuth do superagentskill.com na área de skills do KeepMind OS nesta branch.** Essa área oferece criação manual e importação GitHub; o editor de agentes permite selecionar skills. O MCP genérico suporta stdio ou HTTP com bearer lido de variável de ambiente, sem provedor OAuth, descoberta, login ou renovação OAuth.
+A área **Habilidades → Super Agent Skill** agora oferece conexão OAuth, busca, prévia das instruções, escolha de agente e instalação local. Usa o SDK MCP com descoberta, registro dinâmico, PKCE S256, estado aleatório, callback loopback, renovação de sessão e revogação. Tokens ficam no processo principal e no armazenamento criptografado do sistema; o conector recusa conexão sem criptografia disponível.
 
-A [documentação oficial do serviço](https://superagentskill.com/docs/mcp) publica o endpoint `https://superagentskill.com/api/public/mcp` e configuração OAuth. A [página de conexão](https://superagentskill.com/connect/codex) diferencia leituras anônimas e ferramentas de escrita autenticadas por OAuth/token. Isso prova disponibilidade do lado do serviço, não integração pronta no KeepMind OS. Não instalamos nem concedemos acesso ao serviço durante a auditoria.
+A configuração real publicada em `/.well-known/oauth-authorization-server` oferece `mcp:read` e `mcp:write`. Pedimos somente `mcp:read`; as páginas antigas de documentação ainda citam outros nomes. Apenas `search_registry` e `get_package` são expostos pelo conector dedicado. Importamos o texto revisado (prompt, regras e exemplos), sem scripts nem ferramentas; a escolha explícita associa a versão àquele agente. Isso não remove ferramentas que o agente já possuía nem torna instruções de terceiros automaticamente confiáveis.
 
-Para implementar essa integração, faltam uma conexão visível, autorização OAuth/PKCE, armazenamento e renovação de credenciais, cancelamento/desconexão, e escolha explícita das permissões de leitura e escrita. Não foi adicionado um botão de login que não funciona.
+Validação real concluída na instância isolada: descoberta e registro dinâmico, login/consentimento pelo usuário no Safari, callback e troca de token, busca “marketing” com oito resultados, prévia e instalação de **Copywriting 0.1.0** no **Criador de conteúdo**. O banco confirmou associação, `toolNames: []`, zero ferramentas diretas no agente e credencial com prefixo criptografado `enc:`. Após reiniciar, a UI manteve conta conectada e habilidade instalada. Evidência sanitizada em `evidence/live-sak-test.json`. Renovação, revogação e falhas foram verificadas com respostas controladas, não revogando a conta real do usuário.
+
+No Mac de teste, HTTPS está associado ao Chrome; os processos Chrome encontrados usam perfis de automação e `--no-startup-window`, dois também usam `--headless` e bloqueio de rede. A inspeção nativa expirou. O mesmo link abriu a página de login no navegador integrado. Isso aponta para problema local de abertura pelo navegador padrão; não identifica conclusivamente qual processo recebeu o evento. O botão alternativo abriu uma janela real do Safari e permitiu concluir o login. O site exibiu sucesso antes de entregar o callback; clicar no link “Or retry sending to your local client” concluiu a conexão no app. A UI orienta esse retorno. Adicionamos **Não abriu? Usar Safari** para SAK e provedores de IA, sem trocar o padrão ou encerrar navegadores. Link manual, cópia e cancelamento continuam disponíveis.
 
 ## Validação desta atualização
 
-`npm run verify:ux` passou: 169 testes unitários, 1 teste de integração HTTP, typecheck, build, runner, 16 verificações Electron e varredura de segredos sem achados. Regressões incluem início automático local/compartilhado, duplicação concorrente, histórico de versões, falha e retomada de revisão, ausência/falha do Second Brain, PDF e PPTX. O script e a skill existentes foram ampliados.
+`npm run verify:ux` passou: 182 testes unitários, 1 teste de integração HTTP, typecheck, build, runner, 18 verificações Electron e varredura de segredos sem achados. Regressões incluem início automático local/compartilhado, duplicação concorrente, histórico de versões, falha e retomada de revisão, ausência/falha do Second Brain, PDF e PPTX. O script e a skill existentes foram ampliados.
 
 Jev foi usado como checagem semântica das conclusões: modelo jev-1.14.0, 649 tokens de entrada e 91 de saída. Classificou como não sustentadas as alegações de criação automática de skills, OAuth SAK já integrado e proteção completa de custo/PII (probabilidade 1.0 para cada uma). Isso é uma revisão auxiliar, não substitui as evidências do código e dos testes. Payload e resultado em `evidence/semantic/integration-audit-*.json`.
 
 Exportação manual da entrega real pela UI validada: PDF com 1 página e texto extraído corretamente; PPTX com 2 slides e texto editável presente no pacote. Arquivos locais `Downloads/entrega.pdf` e `Downloads/entrega.pptx`. Resultado sanitizado em `evidence/live-chat-test.json`.
+
+## Identidade visual
+
+Entregas usam superfícies brancas/pretas e destaque verde-limão `#c5f542`; avatares ficam monocromáticos nos dois temas. Aprovação usa texto preto sobre limão e identifica a versão. Documento, prévia e PowerPoint compartilham a paleta. Evidências em `approval-lime.png`, `delivery-pt.png`, `material-preview.png` e `skills-connection.png`.
+
+Doze novos testes cobrem o protocolo OAuth com o SDK real e respostas HTTP controladas, catálogo, instalação idempotente/transacional e alternativa de navegador. Um teste cobre visibilidade imediata da credencial e prevenção de restauração por gravação assíncrona após desconexão. Testes simulados não comprovam autorização de uma conta real.
+
+Revisão semântica adicional Jev **antes do login real** (`jev-1.14.0`, 746 tokens de entrada/131 de saída): evidência insuficiente para alegar teste OAuth real completo (0,98), hipótese de Chrome local plausível mas não comprovada (0,93), instalação sem novas ferramentas sustentada (0,92). Payload/resultado: `evidence/semantic/sak-review-*.json`.

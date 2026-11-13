@@ -230,6 +230,7 @@ export default function AdvancedSettings() {
                   <Text size="sm">{tr('If no page opened, open or copy the login link below.', 'Se nenhuma página abriu, abra ou copie o link de login abaixo.')}</Text>
                   <Group mt="sm">
                     {loginUrl && <Anchor href={loginUrl} target="_blank" rel="noreferrer">{tr('Open login page', 'Abrir página de login')}</Anchor>}
+                    {loginUrl && window.electronAPI.platform === 'darwin' && <Button size="xs" variant="default" onClick={() => window.electronAPI.loginOpenInSafari(p.provider).then(() => setLoginNotice(tr('Safari requested. Complete login in the browser.', 'Abertura solicitada ao Safari. Conclua o login no navegador.'))).catch(e => setLoginNotice(e.message))}>{tr('Did not open? Use Safari', 'Não abriu? Usar Safari')}</Button>}
                     {loginUrl && <Button size="xs" variant="default" onClick={() => navigator.clipboard.writeText(loginUrl).then(() => setLoginNotice(tr('Link copied. Paste it in your browser.', 'Link copiado. Cole no navegador.'))).catch(() => setLoginNotice(tr('Could not copy the link.', 'Não foi possível copiar o link.')))}>{tr('Copy login link', 'Copiar link de login')}</Button>}
                     <Button size="xs" variant="subtle" onClick={() => window.electronAPI.oauthCancel(p.provider).catch(() => setLoginNotice(tr('Could not cancel login.', 'Não foi possível cancelar o login.')))}>{tr('Cancel login', 'Cancelar login')}</Button>
                   </Group>

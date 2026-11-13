@@ -91,6 +91,7 @@ export class CredentialStore {
   }
 
   private read(key: string): string | null {
+    if (this.cache.has(key)) return this.cache.get(key) ?? null;
     const stored = this.storage.getSetting(key);
     if (!stored) return null;
     if (this.warmed && this.cache.has(key)) return this.cache.get(key) ?? null;
@@ -116,7 +117,7 @@ export class CredentialStore {
         const stored = (await this.encryptionAvailable())
           ? 'enc:' + (await safeStorage.encryptStringAsync(plain)).toString('base64')
           : encode(plain);
-        this.storage.setSetting(key, stored);
+        if (this.writeGen.get(key) === gen) this.storage.setSetting(key, stored);
       } catch {
         // Persistence failure must not lose the in-memory credential.
       }
