@@ -3,7 +3,7 @@ import BotAvatar from '../common/BotAvatar';
 import { avatarForAgent } from '../../../shared/avatars';
 import type { ToolStep } from '../../../main/execution/CheckpointStore';
 import React, { useCallback, useEffect, useState, useRef } from 'react';
-import { Alert, Badge, Button, Card, Drawer, Group, MultiSelect, Select, SegmentedControl, Stack, Tabs, Text, Textarea, TextInput, Title } from '@mantine/core';
+import { Alert, Badge, Button, Card, Checkbox, Drawer, Group, MultiSelect, Select, SegmentedControl, Stack, Tabs, Text, Textarea, TextInput, Title } from '@mantine/core';
 import { useLang } from '../../lib/i18n';
 import type { Agent, Approval } from '../../../shared/types';
 import type { WorkAction, WorkSnapshot, WorkStatus, WorkTask, WorkPreview, WorkContext } from '../../../shared/work';
@@ -27,6 +27,8 @@ export default function WorkBench({ onNavigate, selectedTaskId, onTaskOpened }: 
   const [connection, setConnection] = useState<WorkContext['connection']>({ mode: 'local', actor: 'local', role: 'owner' });
   const [online, setOnline] = useState(false);
   const [syncedAt, setSyncedAt] = useState('');
+  const [startImmediately, setStartImmediately] = useState(true);
+  const [reviewRequired, setReviewRequired] = useState(false);
   const [goal, setGoal] = useState(''); const [criteria, setCriteria] = useState('');
   const [project, setProject] = useState(''); const [agentId, setAgentId] = useState<string | null>(null);
   const [dependencies, setDependencies] = useState<string[]>([]);
@@ -47,8 +49,9 @@ export default function WorkBench({ onNavigate, selectedTaskId, onTaskOpened }: 
   const perform = async (fn: () => Promise<unknown>) => { setBusy(true); setError(''); try { if (!online) throw new Error(tr('Reconnect before making changes.', 'Reconecte antes de alterar o trabalho.')); await fn(); await refresh(); } catch (e) { setError(e instanceof Error ? e.message : String(e)); } finally { setBusy(false); } };
   const create = () => perform(async () => {
     if (!agentId) return;
-    const task = await window.electronAPI.workCreate({ goal, criteria, project, agentId, dependencies });
+    const task = await window.electronAPI.workCreate({ goal, criteria, project, agentId, dependencies, reviewRequired });
     setGoal(''); setCriteria(''); setDependencies([]); setComposerOpen(false); setSelected(task.id);
+    if (startImmediately) await window.electronAPI.workAction(task.id, 'run', '', task.revision);
   });
   const task = data.tasks.find(t => t.id === selected);
   useEffect(() => {
@@ -59,7 +62,7 @@ export default function WorkBench({ onNavigate, selectedTaskId, onTaskOpened }: 
     return () => { active = false; };
   }, [selected, task?.updatedAt]);
   const action = (id: string, kind: WorkAction) => perform(async () => { await window.electronAPI.workAction(id, kind, note, data.tasks.find(t => t.id === id)?.revision); setNote(''); });
-  const labels: Record<WorkStatus, string> = { backlog: tr('Ready', 'Prontas'), running: tr('In progress', 'Em andamento'), review: tr('Review', 'Revisar'), done: tr('Accepted', 'Aceitas'), blocked: tr('Needs attention', 'Precisa de atenção'), cancelled: tr('Cancelled', 'Canceladas') };
+  const labels: Record<WorkStatus, string> = { backlog: tr('Ready', 'Prontas'), running: tr('In progress', 'Em andamento'), review: tr('Review', 'Revisar'), done: tr('Delivered', 'Entregues'), blocked: tr('Needs attention', 'Precisa de atenção'), cancelled: tr('Cancelled', 'Canceladas') };
   const color = (status: WorkStatus) => ({ backlog: 'gray', running: 'blue', review: 'orange', done: 'teal', blocked: 'red', cancelled: 'gray' })[status];
   const needsDecision = (t: WorkTask) => t.status === 'review' || t.status === 'blocked' || approvals.some(a => a.context.workTaskId === t.id);
   const activeTasks = data.tasks.filter(t => !['done','cancelled'].includes(t.status));
@@ -89,10 +92,10 @@ export default function WorkBench({ onNavigate, selectedTaskId, onTaskOpened }: 
     {(composerOpen || (loaded && !data.tasks.length)) && <Card withBorder radius="lg" padding="lg" className="km-command">
       <Textarea ref={goalRef} aria-label={tr('What do you want to accomplish?', 'O que você quer realizar?')} placeholder={tr('What do you want to accomplish? Include a repository, context and desired outcome…', 'O que você quer realizar? Inclua um repositório, contexto e o resultado esperado…')} value={goal} onChange={e => setGoal(e.currentTarget.value)} minRows={3} autosize variant="unstyled" styles={{ input: { fontSize: 18 } }} />
       <Group gap="xs" mt="sm">{WORK_TEMPLATES.map(template => <Button key={template.id} size="compact-xs" variant="light" color="gray" onClick={() => { setGoal(template.goal); setCriteria(template.criteria); }}>{lang === 'pt' ? template.titlePt : template.title}</Button>)}</Group>
-      <Group mt="lg" align="end" grow><TextInput label={tr('Project', 'Projeto')} placeholder="keepmind-os" value={project} onChange={e => setProject(e.currentTarget.value)} /><Select label={tr('Agent', 'Agente')} data={agents.map(a => ({ value: a.id, label: a.name }))} value={agentId} onChange={setAgentId} searchable /><Button onClick={create} disabled={!goal.trim() || !agentId || busy}>{tr('Review task', 'Conferir tarefa')} →</Button></Group>
-      <details className="km-details"><summary>{tr('Acceptance criteria & dependencies', 'Critérios de aceite e dependências')}</summary><Stack mt="sm"><Textarea label={tr('What does done look like?', 'O que define uma boa entrega?')} value={criteria} onChange={e => setCriteria(e.currentTarget.value)} /><MultiSelect label={tr('Wait for accepted tasks', 'Aguardar tarefas aceitas')} data={data.tasks.map(t => ({ value: t.id, label: t.title }))} value={dependencies} onChange={setDependencies} searchable /></Stack></details>
+      <Group mt="lg" align="end" grow><TextInput label={tr('Project', 'Projeto')} placeholder="keepmind-os" value={project} onChange={e => setProject(e.currentTarget.value)} /><Select label={tr('Agent', 'Agente')} data={agents.map(a => ({ value: a.id, label: a.name }))} value={agentId} onChange={setAgentId} searchable /><Button onClick={create} disabled={!goal.trim() || !agentId || busy}>{startImmediately ? tr('Start work', 'Iniciar trabalho') : tr('Save draft', 'Salvar rascunho')} →</Button></Group>
+      <details className="km-details"><summary>{tr('Acceptance criteria & dependencies', 'Critérios de aceite e dependências')}</summary><Stack mt="sm"><Checkbox checked={startImmediately} onChange={e => setStartImmediately(e.currentTarget.checked)} label={tr('Start immediately', 'Iniciar imediatamente')} /><Checkbox checked={reviewRequired} onChange={e => setReviewRequired(e.currentTarget.checked)} label={tr('Require my acceptance before completing this task', 'Exigir meu aceite para concluir esta tarefa')} description={tr('Off by default. Critical actions still require approval.', 'Desativado por padrão. Ações críticas continuam exigindo aprovação.')} /><Textarea label={tr('What does done look like?', 'O que define uma boa entrega?')} value={criteria} onChange={e => setCriteria(e.currentTarget.value)} /><MultiSelect label={tr('Wait for completed tasks', 'Aguardar tarefas concluídas')} data={data.tasks.map(t => ({ value: t.id, label: t.title }))} value={dependencies} onChange={setDependencies} searchable /></Stack></details>
       {loaded && !agents.length && <Text size="sm" mt="md">{tr('Create your first agent to start.', 'Crie seu primeiro agente para começar.')} <Button size="compact-xs" variant="subtle" onClick={() => onNavigate('agents')}>{tr('Create agent', 'Criar agente')}</Button></Text>}
-      <Text size="xs" c="dimmed" mt="sm">{tr('Creating a task does not run the agent. Review the plan before starting.', 'Criar a tarefa não executa o agente. Confira o plano antes de iniciar.')}</Text>
+      <Text size="xs" c="dimmed" mt="sm">{tr('Work starts immediately by default. Only actions with unbounded impact need a decision. Save a draft in advanced options.', 'O trabalho inicia imediatamente por padrão. Só ações com impacto não delimitado pedem decisão. Para salvar um rascunho, use as opções avançadas.')}</Text>
     </Card>}
     <Tabs defaultValue="board"><Tabs.List><Tabs.Tab value="board">{tr('Work', 'Trabalho')} · {data.tasks.length}</Tabs.Tab><Tabs.Tab value="inbox">{tr('Approvals', 'Aprovações')}</Tabs.Tab><Tabs.Tab value="learning">{tr('Project rules', 'Regras do projeto')} · {data.rules.filter(r => r.status === 'proposed').length}</Tabs.Tab></Tabs.List>
       <Tabs.Panel value="board" pt="lg">
@@ -111,11 +114,12 @@ export default function WorkBench({ onNavigate, selectedTaskId, onTaskOpened }: 
     </Tabs>
     <Drawer opened={!!task} onClose={() => setSelected(null)} position="right" size="xl" title={task?.title}>
       {task && <Stack gap="lg"><Group><Badge color={color(task.status)}>{labels[task.status]}</Badge><Text size="sm">{task.project}</Text></Group><Text style={{ whiteSpace: 'pre-wrap' }}>{task.goal}</Text><Card withBorder><Text size="xs" fw={700}>{tr('ACCEPTANCE CRITERIA', 'CRITÉRIOS DE ACEITE')}</Text><Text size="sm" mt="xs">{task.criteria}</Text></Card>
-      {approvals.filter(a => a.context.workTaskId === task.id).map(approval => <Card withBorder key={approval.id}><Text fw={600}>{tr('Decision needed', 'Decisão necessária')}: {approval.action}</Text><pre className="km-output">{JSON.stringify(approval.context.args, null, 2)}</pre><Group mt="sm"><Button disabled={busy} onClick={() => perform(() => window.electronAPI.approveAction(approval.id))}>{tr('Approve action', 'Aprovar ação')}</Button><Button variant="default" disabled={busy} onClick={() => perform(() => window.electronAPI.rejectAction(approval.id, note || 'Rejected from task review'))}>{tr('Reject', 'Rejeitar')}</Button></Group></Card>)}
+      {approvals.filter(a => a.context.workTaskId === task.id).map(approval => <Card withBorder key={approval.id}><Text fw={600}>{tr('Decision needed', 'Decisão necessária')}: {approval.action}</Text><Text size="sm" c="dimmed">{String(approval.context.decisionReason || '')}</Text><pre className="km-output">{JSON.stringify(approval.context.args, null, 2)}</pre><Group mt="sm"><Button disabled={busy} onClick={() => perform(() => window.electronAPI.approveAction(approval.id))}>{tr('Approve action', 'Aprovar ação')}</Button><Button variant="default" disabled={busy} onClick={() => perform(() => window.electronAPI.rejectAction(approval.id, note || 'Rejected from task review'))}>{tr('Reject', 'Rejeitar')}</Button></Group></Card>)}
+      {task.status === 'done' && <Text size="sm" c="dimmed">{task.acceptedAt ? tr('Accepted by a reviewer', 'Aceita por um revisor') : tr('Delivered automatically. You can request a correction at any time.', 'Entregue automaticamente. Você pode pedir uma correção a qualquer momento.')}</Text>}
       {task.output && <div><Text fw={600} mb="xs">{tr('Deliverable', 'Entrega')}</Text><pre className="km-output">{task.output}</pre><Text size="xs" c="dimmed" mt="xs">{tr('Execution', 'Execução')}: {task.executionId}</Text></div>}
       {preview && <Card withBorder className="km-plan"><Text fw={600}>{tr('Execution plan', 'Plano de execução')}</Text>
         <Text size="sm" mt="xs">{preview.agentName} · {preview.model}</Text>
-        <Text size="xs" c="dimmed">{tr('Configured model; routing may choose another model. Results require your acceptance.', 'Modelo configurado; o roteamento pode escolher outro modelo. Entregas precisam do seu aceite.')}</Text>
+        <Text size="xs" c="dimmed">{tr('Configured model; routing may choose another model. Routine deliveries complete automatically unless review was requested.', 'Modelo configurado; o roteamento pode escolher outro modelo. Entregas rotineiras são concluídas automaticamente, salvo revisão solicitada.')}</Text>
         {preview.monthlyBudgetUsd != null && <Text size="sm" mt="sm">{tr('Agent monthly budget', 'Orçamento mensal do agente')}: US$ {preview.monthlyBudgetUsd}</Text>}
         <details className="km-details"><summary>{tr('Available tools', 'Ferramentas disponíveis')} ({preview.tools.length})</summary><Text size="sm" mt="xs">{preview.tools.join(', ') || tr('No tools', 'Sem ferramentas')}</Text><Text size="xs" c="dimmed">{tr('Current permissions and action approvals are checked when execution starts.', 'Permissões e aprovações de ações são verificadas na execução.')}</Text></details>
         {!!preview.dependencies.length && <Stack gap="xs" mt="sm">{preview.dependencies.map(dep => <Button key={dep.id} variant="subtle" justify="flex-start" onClick={() => setSelected(dep.id)}>{dep.accepted ? '✓' : '○'} {dep.title}</Button>)}</Stack>}

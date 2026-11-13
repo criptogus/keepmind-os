@@ -1,6 +1,9 @@
 export type WorkStatus = 'backlog' | 'running' | 'review' | 'done' | 'blocked' | 'cancelled';
 export interface WorkEvent { actorId?: string; id: string; at: string; kind: string; text: string; }
 export interface WorkTask {
+  /** Legacy tasks with no policy retain mandatory review. */
+  reviewRequired?: boolean;
+  completedAt?: string;
   creationHash?: string;
   id: string; title: string; goal: string; project: string; agentId: string;
   ownerId: string; status: WorkStatus; revision: number;
@@ -13,7 +16,7 @@ export interface WorkRule {
   status: 'proposed' | 'active' | 'retired'; sourceTaskId: string; createdAt: string;
 }
 export interface WorkSnapshot { tasks: WorkTask[]; rules: WorkRule[]; }
-export interface CreateWorkInput { goal: string; project?: string; agentId: string; criteria?: string; dependencies?: string[]; }
+export interface CreateWorkInput { reviewRequired?: boolean; goal: string; project?: string; agentId: string; criteria?: string; dependencies?: string[]; }
 export type WorkAction = 'resume' | 'run' | 'accept' | 'revise' | 'cancel' | 'comment' | 'propose-rule';
 export const WORK_TEMPLATES = [
   { id: 'review', title: 'Review a repository', titlePt: 'Revisar um repositório', goal: 'Review the repository at [path or URL]. Find reproducible correctness and reliability issues. Read CONTRIBUTING.md and AGENTS.md first. Do not change files.', criteria: 'Findings include file references, impact, reproduction steps and prioritized fixes. Clearly distinguish verified bugs from hypotheses.' },

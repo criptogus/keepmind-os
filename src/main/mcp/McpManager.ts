@@ -11,6 +11,7 @@ export const mcpConfigSchema = z.object({
   transport: z.enum(['stdio','http']), command: z.string().optional(), args: z.array(z.string()).default([]),
   url: z.string().optional(), tokenEnv: z.string().optional(), envNames: z.array(z.string()).default([]),
   enabled: z.boolean().default(false),
+  automaticReadTools: z.array(z.string().min(1).max(200)).max(200).default([]),
 });
 export type McpConfig = z.infer<typeof mcpConfigSchema>;
 export function mcpToolName(server: string, tool: string) {
@@ -22,6 +23,8 @@ export function validateEndpoint(value: string) {
   return url;
 }
 export class McpManager {
+  private automaticReads = new Set<string>();
+  isAutomaticRead(name: string) { return this.automaticReads.has(name); }
   private clients = new Map<string, { client: Client; tools: string[] }>();
   private statuses: Array<{id:string; connected:boolean; tools:string[]; error?:string}> = [];
   constructor(private registry: ToolRegistry) {}
@@ -57,6 +60,8 @@ export class McpManager {
             const name = mcpToolName(config.id, tool.name);
             if (names.includes(name)) throw new Error('Duplicate MCP tool');
             names.push(name);
+            // Owner opt-in AND server declaration are required; annotations alone grant nothing.
+            if (config.automaticReadTools.includes(tool.name) && tool.annotations?.readOnlyHint === true && tool.annotations?.destructiveHint === false) this.automaticReads.add(name);
             this.registry.register({name, description:`[MCP ${config.id}] ${tool.description || tool.name}`.slice(0,3000), parameters:tool.inputSchema,
               handler: async (args, ctx) => {
                 const result = await client.callTool({name:tool.name,arguments:args}, undefined, {signal:ctx.signal,timeout:60_000});
@@ -69,7 +74,7 @@ export class McpManager {
         } while (cursor);
         this.clients.set(config.id,{client,tools:names}); this.statuses.push({id:config.id,connected:true,tools:names});
       } catch {
-        for (const name of names) this.registry.unregister(name);
+        for (const name of names) { this.registry.unregister(name); this.automaticReads.delete(name); }
         await client.close().catch(()=>{});
         // Third-party messages can include credentials; detailed errors stay with the server owner.
         this.statuses.push({id:config.id,connected:false,tools:[],error:'Connection failed. Verify command/URL, environment and MCP server logs.'});
@@ -79,6 +84,6 @@ export class McpManager {
   }
   async close() {
     for (const {client,tools} of this.clients.values()) { for (const name of tools) this.registry.unregister(name); await client.close().catch(()=>{}); }
-    this.clients.clear();
+    this.clients.clear(); this.automaticReads.clear();
   }
 }

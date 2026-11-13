@@ -82,19 +82,7 @@ export default function ApprovalQueue() {
         title={t('ap.title')}
         subtitle={t('ph.gov.sub')}
         help={t('ph.gov.help')}
-        actions={pendingApprovals.length > 1 ? (
-          <Button
-            size="xs"
-            variant="default"
-            onClick={async () => {
-              for (const a of pendingApprovals) {
-                await approveAction(a.id);
-              }
-            }}
-          >
-            {t('ap.approveAll')}
-          </Button>
-        ) : undefined}
+
       />
       {pendingApprovals.length > 0 && (
         <Badge size="sm" variant="light" color="gray" w="fit-content">{pendingApprovals.length} {t('common.pending')}</Badge>
@@ -136,6 +124,7 @@ export default function ApprovalQueue() {
                     {approval.agentName} {t('ap2.agentWants')} {desc.action}
                     {desc.target && <> {t('ap2.for')} <Text span fw={600} ff="monospace" size="sm">{desc.target}</Text></>}
                   </Text>
+                  {typeof approval.context.decisionReason === 'string' && <Text size="sm" c="dimmed">{approval.context.decisionReason}</Text>}
                   {desc.payload && (
                     <Card withBorder padding="sm" radius="sm" mt={8} style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
                       <Text size="sm" style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>

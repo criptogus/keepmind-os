@@ -12,7 +12,7 @@ const execution = { id: 'run-1', agentId: 'agent', status: 'completed' as const,
 describe('Outcome workspace', () => {
   it('requires human acceptance, persists history and prevents concurrent duplicate execution', async () => {
     const { manager, storage } = setup();
-    const task = manager.create({ goal: 'Review code', agentId: 'agent' }, 'alice');
+    const task = manager.create({ goal: 'Review code', agentId: 'agent', reviewRequired: true }, 'alice');
     let finish!: (value: typeof execution) => void;
     const run = manager.run(task.id, () => new Promise(resolve => { finish = resolve; }));
     await expect(manager.run(task.id, async () => execution)).rejects.toThrow('not ready');
@@ -23,8 +23,8 @@ describe('Outcome workspace', () => {
     expect(manager.get(task.id).events.map(e => e.kind)).toEqual(['created','started','delivered','accepted']);
   });
   it('blocks dependencies until results have been accepted', async () => {
-    const { manager } = setup(); const parent = manager.create({ goal: 'Research', agentId: 'agent' }, 'alice');
-    const child = manager.create({ goal: 'Implement', agentId: 'agent', dependencies: [parent.id] }, 'alice');
+    const { manager } = setup(); const parent = manager.create({ goal: 'Research', agentId: 'agent', reviewRequired: true }, 'alice');
+    const child = manager.create({ goal: 'Implement', agentId: 'agent', reviewRequired: true, dependencies: [parent.id] }, 'alice');
     await manager.run(parent.id, async () => execution);
     await expect(manager.run(child.id, async () => execution)).rejects.toThrow('accepted');
     manager.change(parent.id, 'accept'); await manager.run(child.id, async () => execution);

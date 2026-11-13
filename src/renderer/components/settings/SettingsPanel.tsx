@@ -89,16 +89,7 @@ export default function SettingsPanel() {
       <Card withBorder padding="md" radius="md">
         <Stack gap="sm">
           <Text fw={600}>{t('settings.governance')}</Text>
-          <Group justify="space-between">
-            <div>
-              <Text size="sm" fw={500}>{t('settings.autoApprove')}</Text>
-              <Text size="xs" c="dimmed">{t('settings.autoApproveHint')}</Text>
-            </div>
-            <Switch
-              checked={settings.autoApprove}
-              onChange={(e) => handleChange('autoApprove', e.currentTarget.checked)}
-            />
-          </Group>
+          <Text size="sm">{t('settings.autonomyPolicy')}</Text>
           <Group justify="space-between" align="flex-start">
             <div>
               <Text size="sm" fw={500}>{t('settings.sound')}</Text>

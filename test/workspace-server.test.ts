@@ -7,7 +7,7 @@ const alice:Principal={id:'alice',tokenEnv:'ALICE_TOKEN',role:'contributor',proj
 const bob:Principal={...alice,id:'bob',tokenEnv:'BOB_TOKEN',role:'reviewer'};
 const reader:Principal={...alice,id:'reader',role:'reader'};
 function fixture(){const dir=fs.mkdtempSync(path.join(os.tmpdir(),'km-server-'));const config=workspaceConfigSchema.parse({version:1,workspace:'.',agents:[{id:'a',name:'A',model:'gpt-4o-mini',prompt:'Read',monthlyBudgetUsd:5,tools:[]},{id:'private',name:'Private',model:'gpt-4o-mini',prompt:'Private',monthlyBudgetUsd:5,tools:[]}],server:{principals:[alice,bob,reader]}});const runtime=new WorkspaceRuntime(config,dir,dir);runtime.manager.clearApiKey('openai');runtime.manager.clearApiKey('anthropic');return {runtime,api:new WorkspaceApi(runtime),async close(){await runtime.close();fs.rmSync(dir,{recursive:true,force:true});}};}
-const input={goal:'Review docs',project:'app',agentId:'a'};
+const input={reviewRequired:true,goal:'Review docs',project:'app',agentId:'a'};
 it('authenticates scoped tokens without accepting missing, short or wrong secrets',()=>{
   expect(authenticate([alice],'Bearer '+'x'.repeat(32),{ALICE_TOKEN:'x'.repeat(32)}).id).toBe('alice');
   for(const token of [undefined,'Bearer wrong','Basic x'])expect(()=>authenticate([alice],token,{ALICE_TOKEN:'x'.repeat(32)})).toThrow();

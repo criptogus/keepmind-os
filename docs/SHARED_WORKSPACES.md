@@ -59,7 +59,7 @@ shown to the client. A stale change returns HTTP 409, preserving the newer state
 Creation uses an idempotency key and a persisted fingerprint: replaying the same
 request cannot create a second task; reusing its key with different data fails.
 Dependencies can reference another collaborator's task in the same project.
-Only accepted dependencies unlock execution. Shared project rules are selected
+Completed dependencies unlock execution; review-required tasks wait for acceptance. Shared project rules are selected
 within the executing principal's project and agent grants.
 
 This is synchronized task collaboration, not offline-first replication, CRDT
@@ -111,8 +111,8 @@ third-party messages that could contain credentials.
 Connected tools receive stable names `mcp_<server>_<tool>_<hash>`, with discovery
 limits and timeouts. Desktop configuration creates an MCP skill: assign it
 explicitly to an agent. These skills are excluded from automatic keyword routing.
-Members cannot use local MCP tools. Every MCP tool call passes through the exact-
-argument approval gate even if global auto-approve is enabled, then the durable
+Members cannot use local MCP tools. MCP calls outside explicitly authorized reads pass through the exact-
+argument approval gate, then the durable
 checkpoint journal. A failure during a handler produces an uncertain effect,
 which requires reconciliation before resume. Server contributors can initiate
 work but need a reviewer to approve external actions.
@@ -125,7 +125,7 @@ Secrets live in the server's environment. Disconnected tools are not executable.
 ## Autonomy
 
 New desktop routines can **create a task for me to start** or **run and request
-delivery review**. Existing routines with no autonomy field retain their previous
+automatic delivery**. Existing routines with no autonomy field retain their previous
 run behavior. Server JSON routines default to `"autonomy":"draft"`; `"run"`
 executes them under normal budgets/approvals. `--watch` uses the current config as
 the routine authority and disables removed entries. Approvals and delivery
@@ -152,3 +152,15 @@ clients and restarts SQLite. Electron smoke connects through the real preload,
 receives a collaborator's comment, renders the shared view and disconnects while
 verifying that local/remote task data remains separate. These tests use synthetic
 data and no paid provider calls.
+
+### Automatic read tools and delivery
+
+For a trusted MCP server, an operator may add `"automaticReadTools": ["search_docs"]`
+to that server's configuration. Use the original MCP tool name, not the generated
+KeepMind name. It must also advertise read-only=true and destructive=false.
+Only those explicit reads skip approval; unknown/write tools still ask with a reason.
+Existing pending decisions are not bypassed. See WORKSPACE.md for trust boundaries.
+
+New tasks deliver without mandatory acceptance by default. Set `reviewRequired`
+to true on task creation when a review is required. Automatic delivery does not
+claim human acceptance or independent validation. Existing tasks retain their policy.

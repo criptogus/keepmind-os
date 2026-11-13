@@ -1,3 +1,4 @@
+import { actionDecision } from '../governance/ActionPolicy.js';
 import { randomUUID } from 'node:crypto';
 import path from 'node:path';
 import { z } from 'zod';
@@ -41,13 +42,15 @@ export class WorkspaceRuntime {
       if(this.storage.getAgentSpendSince(id,start.toISOString())+estimate>a.monthlyBudgetUsd)throw new Error('Monthly budget exceeded');
     });
     this.manager.getToolRegistry().setGate(async(name,args,policy)=>{
-      if(!name.startsWith('mcp_'))return null;
-      if(!policy?.executionId||!policy.toolCallKey)throw new Error('MCP calls require a durable execution');
+      const decision=actionDecision(name,this.mcp.isAutomaticRead(name));
+      const pendingId=policy?.executionId&&policy.toolCallKey?this.checkpoints.approval(policy.executionId,policy.toolCallKey):undefined;
+      if(!decision.requiresApproval&&!pendingId)return null;
+      if(!policy?.executionId||!policy.toolCallKey)throw new Error('Impactful calls require a durable execution');
       const {executionId,toolCallKey}=policy;
       const previous=this.checkpoints.approval(executionId,toolCallKey);
       const existing=previous?this.storage.getApproval(previous):undefined;
       if(previous&&!existing)throw new Error('Saved approval missing');
-      const approval:Approval=existing??{id:randomUUID(),type:'agent_action',agentId:policy.callerAgentId||'',agentName:config.agents.find(a=>a.id===policy.callerAgentId)?.name||'',action:`tool:${name}`,context:{tool:name,args,executionId,workTaskId:policy.workTaskId,argsHash:fingerprint(args)},status:'pending',createdAt:new Date().toISOString()};
+      const approval:Approval=existing??{id:randomUUID(),type:'agent_action',agentId:policy.callerAgentId||'',agentName:config.agents.find(a=>a.id===policy.callerAgentId)?.name||'',action:`tool:${name}`,context:{tool:name,decisionReason:decision.reason,args,executionId,workTaskId:policy.workTaskId,argsHash:fingerprint(args)},status:'pending',createdAt:new Date().toISOString()};
       if(approval.action!==`tool:${name}`||approval.context.argsHash!==fingerprint(args)||approval.context.executionId!==executionId)throw new Error('Approval binding changed');
       this.storage.saveApproval(approval);this.checkpoints.approval(executionId,toolCallKey,approval.id);
       while(Date.now()-Date.parse(approval.createdAt)<86400000){

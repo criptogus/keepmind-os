@@ -22,7 +22,7 @@ interface NewTrigger {
 }
 
 const EMPTY: NewTrigger = {
-  name: '', agentId: '', kind: 'interval', intervalMinutes: 60, autonomy: 'draft',
+  name: '', agentId: '', kind: 'interval', intervalMinutes: 60, autonomy: 'run',
   timeOfDay: '09:00', daysOfWeek: [], prompt: '',
 };
 
@@ -290,7 +290,7 @@ export default function AutomationPanel() {
               onChange={(v) => setForm({ ...form, agentId: v || '' })}
               searchable
             />
-            <Select label={lang === 'pt' ? 'Autonomia' : 'Autonomy'} value={form.autonomy} onChange={v => setForm({ ...form, autonomy: v === 'run' ? 'run' : 'draft' })} data={[{value:'draft',label:lang === 'pt' ? 'Criar tarefa para eu iniciar' : 'Create a task for me to start'},{value:'run',label:lang === 'pt' ? 'Executar e pedir revisão da entrega' : 'Run and request delivery review'}]} />
+            <Select label={lang === 'pt' ? 'Autonomia' : 'Autonomy'} value={form.autonomy} onChange={v => setForm({ ...form, autonomy: v === 'run' ? 'run' : 'draft' })} data={[{value:'draft',label:lang === 'pt' ? 'Criar tarefa para eu iniciar' : 'Create a task for me to start'},{value:'run',label:lang === 'pt' ? 'Executar e entregar automaticamente' : 'Run and deliver automatically'}]} />
             <Group gap="xs" align="flex-end">
               <Select
                 size="sm"

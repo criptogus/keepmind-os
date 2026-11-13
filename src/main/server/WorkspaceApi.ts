@@ -8,7 +8,7 @@ import type { WorkAction } from '../../shared/work.js';
 export class ApiError extends Error { constructor(readonly status:number,message:string){super(message);} }
 const rank={reader:0,contributor:1,reviewer:2,admin:3};
 const has=(list:string[],value:string)=>list.includes('*')||list.includes(value);
-const createSchema=z.object({goal:z.string().trim().min(1).max(12000),agentId:z.string().min(1),project:z.string().trim().min(1).max(100).default('Workspace'),criteria:z.string().max(4000).optional(),dependencies:z.array(z.string()).max(100).optional()}).strict();
+const createSchema=z.object({reviewRequired:z.boolean().optional(),goal:z.string().trim().min(1).max(12000),agentId:z.string().min(1),project:z.string().trim().min(1).max(100).default('Workspace'),criteria:z.string().max(4000).optional(),dependencies:z.array(z.string()).max(100).optional()}).strict();
 export class WorkspaceApi {
   constructor(readonly runtime:WorkspaceRuntime){}
   private role(actor:Principal,level:keyof typeof rank){if(rank[actor.role]<rank[level])throw new ApiError(403,`Requires ${level} access`);}

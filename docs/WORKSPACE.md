@@ -9,9 +9,9 @@ third-party integrations may charge for their own services.
 The Workspace opens with an outcome composer. Create a task with a project,
 agent, acceptance criteria and optional task dependencies. The board separates
 ready, running, review, accepted, blocked and cancelled work. Dependencies are
-satisfied only by accepted deliveries. The details panel keeps output, execution
-ID, comments and corrections together. A completed model call produces a review,
-not an accepted outcome. Request a revision to retain the history and run again.
+satisfied by completed deliveries; tasks marked for review wait for acceptance. The details panel keeps output, execution
+ID, comments and corrections together. New tasks deliver automatically unless mandatory review is selected. Automatic
+delivery is not a claim of human acceptance or independently verified quality. Request a revision to retain the history and run again.
 
 Repository review, release preparation and developer documentation templates are
 included. They do not publish, deploy or merge automatically. Configure the
@@ -117,7 +117,7 @@ npm run runner -- --config examples/workspace.json --watch
 The versioned JSON config defines workspace, agents, models, budgets and interval
 routines. Paths resolve relative to the config. Tools are read-only and restricted
 to the workspace; shell, writes and external connectors are not enabled in this
-initial runner. Results go to human review. Accept a result with:
+initial runner. New results are delivered automatically; critical tool actions still wait for approval. Accept a result with:
 
 ```sh
 npm run runner -- --config examples/workspace.json --accept TASK_ID
@@ -181,12 +181,12 @@ The default **Now** view puts decisions and blocked work first. Completed and
 cancelled work stays available through **Include completed**. Overview counters
 filter the list; search and project filters apply together. **Board** remains an
 optional view and omits empty columns. The task composer opens only for the first
-task or **New task**; creation never starts execution automatically.
+task or **New task**; the primary button starts work immediately. Advanced options allow saving a draft.
 
 The task drawer shows an execution plan with the assigned agent, configured
 model, currently available tools, monthly budget (when configured) and dependency
 status. Auto-routing can change the model; this is not a cost quotation or a
-permission grant. Dependencies must be accepted before running. Uncertain effects
+permission grant. Dependencies must be complete before running; review-required dependencies need acceptance. Uncertain effects
 must be reconciled before the resume button becomes available. Missing provider
 credentials offer a direct route to connection settings.
 
@@ -195,3 +195,37 @@ Enter navigate and activate, Escape closes. The sidebar has four daily destinati
 and a **More tools** disclosure for configuration and specialist screens. Narrow
 windows collapse the sidebar behind **Menu**. Core content uses theme-aware colors,
 visible keyboard focus and responsive task cards; activity history is expandable.
+
+## Autonomy and decisions
+
+New tasks default to `reviewRequired: false`. Completed, non-empty outputs move to
+Delivered without an acceptance click; `acceptedAt` remains empty until an actual
+reviewer accepts the result. A correction can reopen delivered work. Legacy tasks
+with no stored policy retain mandatory review. API callers can set
+`reviewRequired: true`; the desktop exposes this in advanced task options.
+
+The main task button starts execution after creating the task. If starting fails,
+the created task remains visible for recovery; it is not automatically recreated.
+New desktop routine forms default to Run, while existing routines and headless
+config defaults are preserved. Tool permissions and estimated budget checks remain.
+
+The deterministic action policy permits routine reads, personal memory and
+permission-constrained delegation without approval. File/spreadsheet writes,
+shell commands, outgoing messages, shared knowledge changes, agent creation and
+unclassified integrations still request approval with a reason. Legacy global
+`autoApprove`/disabled-gate flags no longer bypass impactful tool actions. Their UI
+switches are replaced with an explanation, and the bulk approval button is removed.
+A previously pending/rejected checkpoint approval cannot be skipped by changing
+an MCP read grant.
+
+MCP administrators may list exact original tool names in `automaticReadTools`.
+A grant takes effect only if the tool also declares `readOnlyHint: true` and
+`destructiveHint: false`. Server annotations alone never grant permission.
+The administrator must trust the configured implementation; these declarations
+are not a sandbox or proof that a remote server cannot mutate state. Do not grant
+automatic reads to general-purpose command, HTTP request or write-capable tools.
+Other MCP calls continue to require approval. Grants do not bypass agent allowlists.
+
+This is a first bounded-autonomy policy, not automatic risk understanding of
+arbitrary shell commands or API payloads. Isolated writable worktrees, validated
+file diffs and narrowly scoped write grants remain needed to automate more changes.
