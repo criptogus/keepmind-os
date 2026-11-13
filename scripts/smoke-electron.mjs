@@ -138,7 +138,7 @@ try {
   // Guide a nontechnical customer from their business problem to a real team and draft.
   const onboarding = await send('Page.captureScreenshot', { format: 'png' });
   writeFileSync(path.join(evidenceDir, 'onboarding-request.png'), Buffer.from(onboarding.result.data, 'base64'));
-  await evaluate(`([...document.querySelectorAll('button')].find(b => b.textContent === 'Marketing para minhas palestras')).click()`);
+  await evaluate(`([...document.querySelectorAll('button')].find(b => b.textContent === 'Divulgar meu negócio')).click()`);
   await delay(100);
   await evaluate(`([...document.querySelectorAll('button')].find(b => b.textContent === 'Sugerir meu time')).click()`);
   await delay(200);
@@ -224,6 +224,22 @@ try {
   await send('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Escape', code: 'Escape', windowsVirtualKeyCode: 27 });
   await send('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Escape', code: 'Escape', windowsVirtualKeyCode: 27 });
   checks.push('delivery-markdown');
+  const pdf = await evaluate(`window.electronAPI.exportMaterial('pdf','Plano de negócio','Proposta de ação e revisão para o cliente.')`);
+  if (String.fromCharCode(...pdf.slice(0,5)) !== '%PDF-') fail('PDF export is not a PDF');
+  const ppt = await evaluate(`window.electronAPI.exportMaterial('pptx','Plano de negócio','Proposta de ação e revisão para o cliente.')`);
+  if (ppt[0] !== 80 || ppt[1] !== 75 || ppt.length < 1000) fail('PowerPoint export is not a ZIP package');
+  checks.push('real-pdf-export','real-pptx-export');
+  await evaluate(`([...document.querySelectorAll('.km-task')].find(el => el.textContent.includes('Preparar o resumo'))).click()`);
+  await delay(300);
+  if (!(await evaluate(`!!document.querySelector('.km-chat-composer') && !!document.querySelector('.km-chat-user')`))) fail('chat conversation missing');
+  await evaluate(`([...document.querySelectorAll('button')].find(b => b.textContent === 'Visualizar material')).click()`);
+  await delay(200);
+  if (!(await evaluate(`!!document.querySelector('.km-paper-preview')`))) fail('material preview missing');
+  const materialPreview = await send('Page.captureScreenshot', {format:'png'});
+  writeFileSync(path.join(evidenceDir,'material-preview.png'),Buffer.from(materialPreview.result.data,'base64'));
+  await send('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape'});await send('Input.dispatchKeyEvent',{type:'keyUp',key:'Escape',code:'Escape'});await delay(200);
+  checks.push('chat-and-material-preview');
+  await send('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape'});await send('Input.dispatchKeyEvent',{type:'keyUp',key:'Escape',code:'Escape'});await delay(200);
   const contrast = await evaluate(`(() => { const el=document.querySelector('.km-task-title'); const style=getComputedStyle(el); const bg=getComputedStyle(el.closest('.km-task')); return {text:style.color,background:bg.backgroundColor}; })()`);
   const luminance = color => { const rgb = color.match(/[\d.]+/g).slice(0,3).map(Number).map(v => {v /= 255; return v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4;}); return rgb[0]*.2126 + rgb[1]*.7152 + rgb[2]*.0722; };
   const ratio = (a,b) => { const x=luminance(a), y=luminance(b); return (Math.max(x,y)+.05)/(Math.min(x,y)+.05); };

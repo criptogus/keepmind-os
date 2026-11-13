@@ -2,11 +2,11 @@ import type { Agent, Team } from './types';
 import { DEFAULT_MODEL } from './models';
 
 export const TEAM_STARTERS = [
-  { id: 'consulting', name: 'Time de entregas', priority: 'Entregar melhor para meus clientes', example: 'Tenho uma consultoria e preciso de ajuda para transformar reuniões com clientes em diagnósticos, propostas e relatórios.', roles: [
+  { id: 'consulting', name: 'Time de entregas', priority: 'Entregar melhor para meus clientes', example: 'Preciso preparar propostas e organizar as entregas para os clientes do meu negócio.', roles: [
     { name: 'Analista de negócios', purpose: 'Organiza o contexto do cliente e identifica o que precisa ser resolvido.' },
     { name: 'Especialista em entregas', purpose: 'Transforma as informações em propostas, planos e relatórios claros.' },
-  ], first: 'Prepare um modelo de diagnóstico inicial para um cliente da minha consultoria, com perguntas para a reunião e uma estrutura de relatório. Marque o que ainda preciso preencher.' },
-  { id: 'marketing', name: 'Time de marketing', priority: 'Atrair clientes e vender mais', example: 'Vendo palestras e quero um time de marketing para divulgar meu trabalho e gerar conversas com empresas interessadas.', roles: [
+  ], first: 'Prepare um modelo de proposta para um cliente do meu negócio, com objetivo, escopo, etapas e próximos passos. Marque o que ainda preciso preencher.' },
+  { id: 'marketing', name: 'Time de marketing', priority: 'Atrair clientes e vender mais', example: 'Quero divulgar melhor os produtos ou serviços do meu negócio e atrair novos clientes.', roles: [
     { name: 'Estrategista de marketing', purpose: 'Ajuda a definir público, mensagem e caminhos para atrair clientes.' },
     { name: 'Criador de conteúdo', purpose: 'Prepara ideias, textos e campanhas para você revisar antes de publicar.' },
   ], first: 'Proponha um plano de divulgação de uma semana, com ideias de conteúdo e um primeiro texto de apresentação. Liste o que falta saber sobre meu público e minha oferta. Não publique nada.' },

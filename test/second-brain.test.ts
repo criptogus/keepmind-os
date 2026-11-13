@@ -35,6 +35,20 @@ describe('SecondBrainManager.remember governance', () => {
     fs.rmSync(dir, { recursive: true, force: true });
   });
 
+  it('does not fetch when credentials are absent and reports a connection failure', async () => {
+    brain.setConfig({ enabled: false, url: '', token: '' });
+    expect(brain.isConfigured()).toBe(false);
+    expect(await brain.search('context')).toBe('');
+    expect((await brain.testConnection()).ok).toBe(false);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('fails softly on unavailable corporate search without inventing memory', async () => {
+    fetchMock.mockRejectedValue(new Error('offline'));
+    expect(await brain.search('context')).toBe('');
+    expect((await brain.testConnection()).ok).toBe(false);
+  });
+
   it('rejects writes in read-only mode', async () => {
     brain.setConfig({ access: 'read' });
     await expect(brain.remember('nota corporativa')).rejects.toThrow('read-only');

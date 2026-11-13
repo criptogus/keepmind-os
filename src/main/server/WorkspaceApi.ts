@@ -58,6 +58,7 @@ export class WorkspaceApi {
         if(!['run','resume','accept','revise','cancel','comment','propose-rule'].includes(String(action)))throw new ApiError(400,'Unknown action');
         if(action==='run'||action==='resume'){void rt.start(t.id,actor.id,action==='resume').catch(()=>{});return rt.work.get(t.id);}
         const changed=rt.work.change(t.id,action as Exclude<WorkAction,'run'|'resume'>,String(note??''),actor.id);
+        if(action==='revise'){void rt.start(t.id,actor.id).catch(()=>{});return rt.work.get(t.id);}
         if(action==='cancel')rt.cancel(t.id);return changed;
       }
       case 'work:reviewRule':{

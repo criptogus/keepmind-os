@@ -6,6 +6,9 @@
     "first-delivery-draft-without-execution",
     "onboarding-without-credentials",
     "delivery-markdown",
+    "real-pdf-export",
+    "real-pptx-export",
+    "chat-and-material-preview",
     "light-title-contrast",
     "dark-theme-and-contrast",
     "automatic-system-theme",
@@ -17,5 +20,5 @@
   ],
   "failure": null,
   "fixture": "synthetic; no live providers",
-  "timestamp": "2026-11-13T14:21:18.455Z"
+  "timestamp": "2026-11-13T14:52:51.860Z"
 }

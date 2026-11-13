@@ -45,6 +45,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // Teams
   getTeams: () => ipcRenderer.invoke('teams:getList') as Promise<Team[]>,
   getTeam: (id: string) => ipcRenderer.invoke('teams:get', id) as Promise<Team | null>,
+  exportMaterial: (format: 'pdf' | 'pptx', title: string, content: string) => ipcRenderer.invoke('materials:export', format, title, content) as Promise<number[]>,
   createBusinessTeam: (input: BusinessTeamInput) => ipcRenderer.invoke('teams:guidedCreate', input) as Promise<BusinessTeamResult>,
   createTeam: (config: TeamConfig) => ipcRenderer.invoke('teams:create', config) as Promise<Team>,
   updateTeam: (id: string, config: Partial<TeamConfig>) => ipcRenderer.invoke('teams:update', id, config) as Promise<Team>,
@@ -277,6 +278,7 @@ declare global {
       getAgentExecutions: (agentId?: string) => Promise<AgentExecution[]>;
       getTeams: () => Promise<Team[]>;
       getTeam: (id: string) => Promise<Team | null>;
+      exportMaterial: (format: 'pdf' | 'pptx', title: string, content: string) => Promise<number[]>;
       createBusinessTeam: (input: BusinessTeamInput) => Promise<BusinessTeamResult>;
       createTeam: (config: TeamConfig) => Promise<Team>;
       updateTeam: (id: string, config: Partial<TeamConfig>) => Promise<Team>;

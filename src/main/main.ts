@@ -1,3 +1,5 @@
+import { materialHtml } from '../shared/materials.js';
+import { exportPresentation } from './materials/exportPresentation.js';
 import { createBusinessTeam } from './work/BusinessTeamSetup.js';
 import type { BusinessTeamInput } from '../shared/businessTeams.js';
 import { ArtifactStore } from './artifacts/ArtifactStore.js';
@@ -2242,8 +2244,9 @@ handle('work:create', (_event, input: CreateWorkInput) => {
   if (!agent || (currentRole() === 'member' && !agent.isShared)) throw new Error('Agent unavailable');
   return workManager.create(input, currentUserId() ?? 'system');
 });
-handle('work:action', async (_event, id: string, action: WorkAction, note?: string) => {
+handle('work:action', async (_event, id: string, action: WorkAction, note?: string, expectedRevision?: number) => {
   const existing = requireWorkAccess(id);
+  if (expectedRevision !== undefined && expectedRevision !== existing.revision) throw new Error('O pedido foi atualizado. Confira a versão atual antes de continuar.');
   if (action === 'run' || action === 'resume') {
     if (action === 'resume' && (existing.status !== 'blocked' || !existing.executionId || !checkpoints.read(existing.executionId))) throw new Error('No resumable checkpoint');
     if (action === 'run' && existing.executionId && checkpoints.read(existing.executionId)) throw new Error('Resume the checkpoint or request a revision to start new work');
@@ -2251,6 +2254,10 @@ handle('work:action', async (_event, id: string, action: WorkAction, note?: stri
     // Claim is synchronous, so a second click cannot launch the same task again.
     void workManager.run(id, (agentId, input) => runAgentExecution(agentId, input, { resumeId: action === 'resume' ? existing.executionId : undefined }))
       .catch(error => console.error('[work]', error));
+    return workManager.get(id);
+  }
+  if (action === 'revise') {
+    void workManager.reviseAndRun(id, note || '', (agentId, input) => runAgentExecution(agentId, input), currentUserId()).catch(error => console.error('[work]', error));
     return workManager.get(id);
   }
   if (!['accept','revise','cancel','comment','propose-rule'].includes(action)) throw new Error('Invalid action');
@@ -2276,6 +2283,17 @@ handle('work:reviewRule', (_event, id: string, accept: boolean) => {
 });
 handle('work:export', () => JSON.stringify({ format: 'keepmind-work', version: 1,
   ...workManager.snapshot(currentRole() === 'member' ? currentUserId() : undefined) }, null, 2));
+
+handle('materials:export', async (_event, format: 'pdf' | 'pptx', title: string, content: string) => {
+  if (!['pdf','pptx'].includes(format) || typeof title !== 'string' || !title.trim() || title.length > 200 || typeof content !== 'string' || !content.trim() || content.length > 30000) throw new Error('Material inválido ou muito longo (limite: 30 mil caracteres).');
+  if (format === 'pptx') return Array.from(await exportPresentation(title, content));
+  const preview = new BrowserWindow({ show: false, webPreferences: { nodeIntegration: false, contextIsolation: true, sandbox: true } });
+  try {
+    preview.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
+    await preview.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(materialHtml(title, content))}`);
+    return Array.from(await preview.webContents.printToPDF({ printBackground: true, pageSize: 'A4', preferCSSPageSize: true }));
+  } finally { preview.destroy(); }
+});
 
 handle('work:artifacts', (_event, id: string) => { const task = requireWorkAccess(id); return task.executionId ? new ArtifactStore(storageManager).list(task.executionId) : []; });
 handle('work:checkpoint', (_event, id: string) => {

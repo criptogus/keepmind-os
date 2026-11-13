@@ -36,6 +36,7 @@
     "jszip": "3.10.1",
     "open-bot-avatar": "0.2.0",
     "openai": "^4.73.0",
+    "pptxgenjs": "4.0.1",
     "qrcode": "1.5.4",
     "react": "19.2.0",
     "react-dom": "19.2.0",
@@ -138,7 +139,7 @@
       "createStartMenuShortcut": true
     }
   },
-  "description": "KeepMind OS \u2014 local agent workspace",
+  "description": "KeepMind OS — local agent workspace",
   "author": "KeepMind",
   "repository": {
     "type": "git",

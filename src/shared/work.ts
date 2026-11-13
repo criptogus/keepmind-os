@@ -1,6 +1,8 @@
 export type WorkStatus = 'backlog' | 'running' | 'review' | 'done' | 'blocked' | 'cancelled';
 export interface WorkEvent { actorId?: string; id: string; at: string; kind: string; text: string; }
+export interface DeliveryVersion { version: number; content: string; at: string; executionId?: string; }
 export interface WorkTask {
+  deliveries?: DeliveryVersion[];
   /** Legacy tasks with no policy retain mandatory review. */
   reviewRequired?: boolean;
   completedAt?: string;
@@ -31,4 +33,11 @@ export interface WorkPreview {
 export interface WorkContext {
   snapshot: WorkSnapshot; agents: import('./types.js').Agent[]; approvals: import('./types.js').Approval[];
   connection: { mode: 'local' | 'remote'; actor: string; role: string; projects?: string[]; serverTime?: string };
+}
+
+export function deliveryState(task: WorkTask) {
+  const version = task.deliveries?.at(-1)?.version ?? (task.output ? Math.max(1, task.events.filter(e => e.kind === 'delivered').length) : 0);
+  const lastDelivery = task.events.map(e => e.kind).lastIndexOf('delivered');
+  const updating = task.events.map(e => e.kind).lastIndexOf('revision') > lastDelivery;
+  return { version, updating, nextVersion: version + 1 };
 }

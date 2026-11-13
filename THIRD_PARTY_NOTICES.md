@@ -181,3 +181,7 @@ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+
+## PptxGenJS
+
+PptxGenJS (MIT), https://github.com/gitbrent/PptxGenJS — generates editable PowerPoint exports. The package license is included with the installed dependency.
