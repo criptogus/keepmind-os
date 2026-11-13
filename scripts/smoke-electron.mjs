@@ -261,6 +261,9 @@ try {
   if ((await evaluate(`document.documentElement.getAttribute('data-mantine-color-scheme')`)) !== 'dark') fail('persisted dark theme not applied');
   const darkShot = await send('Page.captureScreenshot', { format: 'png' });
   writeFileSync(path.join(evidenceDir, 'focus-dark.png'), Buffer.from(darkShot.result.data, 'base64'));
+  await evaluate(`window.dispatchEvent(new KeyboardEvent('keydown',{key:'k',ctrlKey:true,bubbles:true}))`);await delay(300);
+  const searchDark=await send('Page.captureScreenshot',{format:'png'});writeFileSync(path.join(evidenceDir,'search-dark.png'),Buffer.from(searchDark.result.data,'base64'));
+  await send('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});await delay(200);
   const darkContrast = await evaluate(`(() => { const el=document.querySelector('.km-task-title'); return {text:getComputedStyle(el).color,background:getComputedStyle(el.closest('.km-task')).backgroundColor}; })()`);
   if (ratio(darkContrast.text, darkContrast.background) < 4.5) fail('dark title contrast below 4.5:1');
   checks.push('dark-theme-and-contrast');
@@ -276,10 +279,66 @@ try {
   const command = async label => {
     await evaluate(`window.dispatchEvent(new KeyboardEvent('keydown', {key:'k',ctrlKey:true,bubbles:true}))`);
     await delay(200);
-    const clicked = await evaluate(`(() => {const b=[...document.querySelectorAll('[data-command-result]')].find(b => b.textContent === ${JSON.stringify(label)}); if(!b)return false;b.click();return true;})()`);
+    await evaluate(`(() => {const el=document.querySelector('[role=combobox][aria-controls]');Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(el,${JSON.stringify(label)});el.dispatchEvent(new Event('input',{bubbles:true}));})()`); await delay(100);
+    const clicked = await evaluate(`(() => {const b=[...document.querySelectorAll('[data-command-result]')].find(b => b.dataset.commandLabel === ${JSON.stringify(label)}); if(!b)return false;b.click();return true;})()`);
     if (!clicked) fail('command unavailable: ' + label);
     await delay(350);
   };
+  const searchText=async value=>{await evaluate(`(() => {const el=document.querySelector('.km-search-input input');Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(el,${JSON.stringify(value)});el.dispatchEvent(new Event('input',{bubbles:true}));})()`);await delay(120);};
+  const searchKey=async key=>{await send('Input.dispatchKeyEvent',{type:'keyDown',key,code:key});await send('Input.dispatchKeyEvent',{type:'keyUp',key,code:key});};
+  await evaluate(`window.dispatchEvent(new KeyboardEvent('keydown',{key:'k',ctrlKey:true,bubbles:true}))`);await delay(350);
+  const searchDefault=await send('Page.captureScreenshot',{format:'png'});writeFileSync(path.join(evidenceDir,'search-after.png'),Buffer.from(searchDefault.result.data,'base64'));
+  await searchText('resumo projeto');
+  if(await evaluate(`document.querySelectorAll('[data-command-result]').length`)!==1)fail('multi-word search failed');
+  await searchKey('ArrowDown');
+  if(!(await evaluate(`document.activeElement===document.querySelector('.km-search-input input') && !!document.activeElement.getAttribute('aria-activedescendant')`)))fail('search keyboard lost input focus');
+  await searchKey('Enter');await delay(350);
+  if(!(await evaluate(`!!document.querySelector('.km-document h1')`)))fail('search Enter did not open selected conversation');
+  checks.push('search-keyboard-and-multi-word');
+  await evaluate(`window.dispatchEvent(new KeyboardEvent('keydown',{key:'k',ctrlKey:true,bubbles:true}))`);await delay(300);
+  await searchText('zzzz-no-result');
+  if(!(await evaluate(`!!document.querySelector('.km-search-empty')`)))fail('search empty state missing');
+  await send('Emulation.setDeviceMetricsOverride',{width:390,height:780,deviceScaleFactor:1,mobile:false});await delay(200);
+  if(await evaluate(`document.querySelector('.km-search-modal').scrollWidth>document.querySelector('.km-search-modal').clientWidth+2`))fail('search overflow on narrow window');
+  const searchNarrow=await send('Page.captureScreenshot',{format:'png'});writeFileSync(path.join(evidenceDir,'search-empty-narrow.png'),Buffer.from(searchNarrow.result.data,'base64'));
+  await send('Emulation.clearDeviceMetricsOverride');await delay(150);
+  const clearPoint=await evaluate(`(() => {const r=document.querySelector('.km-search-input button').getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};})()`);
+  await send('Input.dispatchMouseEvent',{type:'mousePressed',...clearPoint,button:'left',clickCount:1});await send('Input.dispatchMouseEvent',{type:'mouseReleased',...clearPoint,button:'left',clickCount:1});await delay(100);
+  if(await evaluate(`document.querySelector('.km-search-input input').value`)!=='')fail('pointer clear button failed');
+  await searchKey('Escape');await delay(250);
+  checks.push('search-empty-and-narrow');
+  const searchContext=await evaluate('window.electronAPI.workContext()');
+  let searchPhase='loading';
+  providerServer=createServer(async(req,res)=>{
+    let body='';for await(const chunk of req)body+=chunk;
+    const request=JSON.parse(body);res.setHeader('Content-Type','application/json');
+    if(request.method==='work:context'){res.end(JSON.stringify({value:{...searchContext,connection:{mode:'remote',actor:'search-fixture',role:'contributor'}}}));return;}
+    if(request.method==='work:list'){
+      if(searchPhase==='loading')await delay(900);
+      if(searchPhase==='error'){res.writeHead(503);res.end(JSON.stringify({error:'Controlled search failure'}));return;}
+      res.end(JSON.stringify({value:searchContext.snapshot}));return;
+    }
+    res.end(JSON.stringify({value:{available:false,steps:[]}}));
+  });
+  await new Promise(resolve=>providerServer.listen(0,'127.0.0.1',resolve));
+  await evaluate(`window.electronAPI.workspaceConnect('http://127.0.0.1:${providerServer.address().port}','search-fixture-token-for-isolated-testing')`);
+  await evaluate(`window.dispatchEvent(new KeyboardEvent('keydown',{key:'k',ctrlKey:true,bubbles:true}))`);await delay(250);
+  if(!(await evaluate(`document.querySelector('.km-search-feedback').innerText.includes('Loading')`)))fail('search loading state missing');
+  await searchKey('ArrowDown');await searchKey('ArrowDown');await searchKey('ArrowDown');
+  const selectedBeforeLoad=await evaluate(`document.querySelector('.km-search-result[aria-selected=true]').dataset.commandLabel`);
+  await delay(900);
+  if(await evaluate(`document.querySelector('.km-search-result[aria-selected=true]').dataset.commandLabel`)!==selectedBeforeLoad)fail('async search replaced keyboard selection');
+  await searchKey('Escape');await delay(250);
+  searchPhase='error';
+  await evaluate(`window.dispatchEvent(new KeyboardEvent('keydown',{key:'k',ctrlKey:true,bubbles:true}))`);await delay(250);
+  if(!(await evaluate(`document.querySelector('.km-search-feedback').innerText.includes('unavailable')`)))fail('search error state missing');
+  searchPhase='ok';await evaluate(`document.querySelector('.km-search-feedback button').click()`);await delay(250);
+  if(await evaluate(`document.querySelector('.km-search-feedback').innerText.includes('unavailable')`))fail('search retry failed');
+  await searchKey('Escape');await delay(250);
+  await evaluate('window.electronAPI.workspaceDisconnect()');
+  await new Promise(resolve=>providerServer.close(resolve));providerServer=null;
+  await delay(3200);
+  checks.push('search-loading-error-and-retry');
   await command('New request');
   await command('Agents');
   await command('Conversations');
@@ -366,6 +425,10 @@ try {
   };
   await pickLanguage('Português (Brasil)');
   if ((await evaluate('window.electronAPI.getSettings()')).language !== 'pt') fail('language not persisted');
+  await evaluate(`window.dispatchEvent(new KeyboardEvent('keydown',{key:'k',ctrlKey:true,bubbles:true}))`);await delay(300);
+  if(!(await evaluate(`document.querySelector('.km-search-modal').innerText.includes('Buscar no KeepMind')`)))fail('Portuguese search interface missing');
+  const searchPt=await send('Page.captureScreenshot',{format:'png'});writeFileSync(path.join(evidenceDir,'search-pt.png'),Buffer.from(searchPt.result.data,'base64'));
+  await searchKey('Escape');await delay(200);
   await command('Habilidades');
   if (!(await evaluate(`document.querySelector('.km-sak-panel').innerText`)).includes('Conectar minha conta')) fail('Portuguese skill interface missing');
   await pickLanguage('English');
@@ -550,12 +613,12 @@ try {
   const localAgain = await evaluate('window.electronAPI.workList()');
   if (!localAgain.tasks.some(t => t.id === task.id) || localAgain.tasks.some(t => t.id === shared.id)) fail('local and remote data were mixed');
   checks.push('shared-workspace-isolation', 'checkpoint-recovery', 'persisted-task-search');
-  if (checks.length < 39) fail('incomplete UI checks');
+  if (checks.length < 42) fail('incomplete UI checks');
   console.log(`SMOKE PASS: electronAPI OK (version=${version}, agents=${Array.isArray(agents) ? agents.length : '?'}, rootChildren=${rootChildren}, uiRendered=true)`);
 } catch (err) {
   failure = err.message; console.error(`SMOKE FAIL: ${err.message}`); process.exitCode = 1;
 } finally {
-  writeFileSync(path.join(evidenceDir, 'ux-report.json'), JSON.stringify({passed: !failure && checks.length >= 39, checks, failure, fixture: 'synthetic; no live providers', timestamp: new Date().toISOString()}, null, 2));
+  writeFileSync(path.join(evidenceDir, 'ux-report.json'), JSON.stringify({passed: !failure && checks.length >= 42, checks, failure, fixture: 'synthetic; no live providers', timestamp: new Date().toISOString()}, null, 2));
   ws.close();
   workspaceServer?.kill('SIGTERM');
   providerServer?.close();
