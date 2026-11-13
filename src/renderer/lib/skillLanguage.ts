@@ -4,21 +4,21 @@ const builtinLabels: Record<string, {originalDescription:string; en?: {name:stri
     "originalDescription": "Create reports, proposed code files and patches without altering the project.",
     "pt": {
       "name": "Materiais e documentos",
-      "description": "Prepara relatórios e rascunhos de arquivos para sua revisão."
+      "description": "Cria relatórios, arquivos de código propostos e correções sem alterar o projeto."
     }
   },
   "Local Computer": {
     "originalDescription": "Read/write files, list directories, run shell commands and open URLs on this machine. Files are confined to the app workspace; shell commands have a 30s timeout.",
     "pt": {
       "name": "Arquivos e computador",
-      "description": "Lê e organiza arquivos; ações sensíveis dependem de permissão."
+      "description": "Lê e grava arquivos, lista pastas, executa comandos e abre links. Os arquivos ficam restritos ao espaço do app; comandos têm limite de 30 segundos."
     }
   },
   "Agent Delegation": {
     "originalDescription": "Delegate sub-tasks to other agents, create subordinate specialists, and review their work.",
     "pt": {
       "name": "Colaboração entre agentes",
-      "description": "Envolve outros integrantes na produção e revisão do trabalho."
+      "description": "Delega tarefas, cria agentes especialistas subordinados e revisa o trabalho deles."
     }
   },
   "Second Brain": {
@@ -32,7 +32,7 @@ const builtinLabels: Record<string, {originalDescription:string; en?: {name:stri
     "originalDescription": "Read incoming WhatsApp messages and send WhatsApp text messages via the connected account.",
     "pt": {
       "name": "WhatsApp",
-      "description": "Consulta mensagens e prepara envios pela conta conectada."
+      "description": "Lê mensagens recebidas e envia mensagens de texto pela conta conectada."
     }
   },
   "Agent Reach — Internet Access": {
@@ -74,14 +74,14 @@ const builtinLabels: Record<string, {originalDescription:string; en?: {name:stri
     "originalDescription": "Writes scroll-stopping posts for LinkedIn and X/Twitter: hooks, threads, CTAs.",
     "pt": {
       "name": "Redação para LinkedIn e X",
-      "description": "Prepara publicações, sequências e chamadas para ação."
+      "description": "Escreve publicações para LinkedIn e X, com aberturas, sequências e chamadas para ação."
     }
   },
   "Copywriting — Instagram": {
     "originalDescription": "Captions, carousel scripts and Reels copy for Instagram.",
     "pt": {
       "name": "Redação para Instagram",
-      "description": "Prepara legendas, roteiros de carrosséis e vídeos."
+      "description": "Escreve legendas, roteiros de carrosséis e textos para vídeos Reels do Instagram."
     }
   },
   "SEO & GEO": {
@@ -130,7 +130,7 @@ const builtinLabels: Record<string, {originalDescription:string; en?: {name:stri
     "originalDescription": "Lead research, personalization and outbound messaging.",
     "pt": {
       "name": "Prospecção comercial",
-      "description": "Pesquisa contatos e prepara abordagens personalizadas."
+      "description": "Pesquisa potenciais clientes, personaliza abordagens e redige mensagens de prospecção."
     }
   },
   "Proposals & Commercial Writing": {
@@ -144,7 +144,7 @@ const builtinLabels: Record<string, {originalDescription:string; en?: {name:stri
     "originalDescription": "PRDs, user stories, acceptance criteria and discovery frameworks.",
     "pt": {
       "name": "Descoberta de produto",
-      "description": "Organiza problemas, requisitos e critérios de aceite."
+      "description": "Elabora documentos de requisitos, histórias de usuário, critérios de aceite e métodos de descoberta de produto."
     }
   },
   "User Research Synthesis": {
@@ -158,7 +158,7 @@ const builtinLabels: Record<string, {originalDescription:string; en?: {name:stri
     "originalDescription": "Changelogs, release announcements and internal comms.",
     "pt": {
       "name": "Notas de versão e comunicados",
-      "description": "Prepara comunicados e resumos das mudanças."
+      "description": "Escreve registros de mudanças, anúncios de novas versões e comunicados internos."
     }
   }
 };

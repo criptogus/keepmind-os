@@ -299,3 +299,9 @@ body {
 .km-conversation-items .km-task-title { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
 .km-conversation-items .km-task .km-bot-avatar { width: 28px; height: 28px; }
 .km-language-picker { flex-shrink: 0; }
+
+.km-conversation-stage > [hidden] { display: none; }
+@media (max-width: 850px) {
+  .km-has-connection .km-conversation-list { display: none; }
+  .km-has-connection .km-conversation-stage { display: flex; }
+}

@@ -12,7 +12,7 @@ npm run verify:ux
 This reuses typecheck, unit/integration tests, build, the headless runner and
 `scripts/smoke-electron.mjs`, followed by the secret scan and pinned production-dependency/package policy check. Any failed stage exits
 nonzero. The smoke creates fresh temporary SQLite data, seeds a synthetic delivery,
-disables CLI credential import and must complete at least twenty-nine checks. It writes
+disables CLI credential import and must complete at least thirty-two checks. It writes
 `evidence/ux-report.json` plus screenshots. Never use production data or credentials.
 
 For only the smoke after a current build and runner build:

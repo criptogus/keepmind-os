@@ -1,0 +1,257 @@
+{
+  "summary": {
+    "requested": 1,
+    "completed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "input_tokens": 4899,
+    "output_tokens": 1028
+  },
+  "results": [
+    {
+      "index": 0,
+      "ok": true,
+      "attempts": 1,
+      "seconds": 0.317,
+      "response": {
+        "model": "jev-1.14.0",
+        "answers": {
+          "skill_0": {
+            "type": "choice",
+            "choice": "misleading",
+            "confidence": 0.66,
+            "probabilities": {
+              "faithful": 0.23,
+              "misleading": 0.77,
+              "unclear": 0.0
+            }
+          },
+          "skill_1": {
+            "type": "choice",
+            "choice": "misleading",
+            "confidence": 0.3,
+            "probabilities": {
+              "faithful": 0.46,
+              "misleading": 0.53,
+              "unclear": 0.01
+            }
+          },
+          "skill_2": {
+            "type": "choice",
+            "choice": "faithful",
+            "confidence": 0.33,
+            "probabilities": {
+              "faithful": 0.55,
+              "misleading": 0.44,
+              "unclear": 0.01
+            }
+          },
+          "skill_3": {
+            "type": "choice",
+            "choice": "faithful",
+            "confidence": 0.97,
+            "probabilities": {
+              "faithful": 0.98,
+              "misleading": 0.02,
+              "unclear": 0.0
+            }
+          },
+          "skill_4": {
+            "type": "choice",
+            "choice": "misleading",
+            "confidence": 0.97,
+            "probabilities": {
+              "faithful": 0.02,
+              "misleading": 0.98,
+              "unclear": 0.0
+            }
+          },
+          "skill_5": {
+            "type": "choice",
+            "choice": "faithful",
+            "confidence": 0.72,
+            "probabilities": {
+              "faithful": 0.81,
+              "misleading": 0.18,
+              "unclear": 0.01
+            }
+          },
+          "skill_6": {
+            "type": "choice",
+            "choice": "faithful",
+            "confidence": 0.46,
+            "probabilities": {
+              "faithful": 0.64,
+              "misleading": 0.18,
+              "unclear": 0.18
+            }
+          },
+          "skill_7": {
+            "type": "choice",
+            "choice": "faithful",
+            "confidence": 0.28,
+            "probabilities": {
+              "faithful": 0.52,
+              "misleading": 0.48,
+              "unclear": 0.0
+            }
+          },
+          "skill_8": {
+            "type": "choice",
+            "choice": "faithful",
+            "confidence": 0.62,
+            "probabilities": {
+              "faithful": 0.75,
+              "misleading": 0.23,
+              "unclear": 0.02
+            }
+          },
+          "skill_9": {
+            "type": "choice",
+            "choice": "faithful",
+            "confidence": 0.72,
+            "probabilities": {
+              "faithful": 0.81,
+              "misleading": 0.18,
+              "unclear": 0.01
+            }
+          },
+          "skill_10": {
+            "type": "choice",
+            "choice": "misleading",
+            "confidence": 0.37,
+            "probabilities": {
+              "faithful": 0.42,
+              "misleading": 0.58,
+              "unclear": 0.0
+            }
+          },
+          "skill_11": {
+            "type": "choice",
+            "choice": "misleading",
+            "confidence": 0.46,
+            "probabilities": {
+              "faithful": 0.36,
+              "misleading": 0.64,
+              "unclear": 0.0
+            }
+          },
+          "skill_12": {
+            "type": "choice",
+            "choice": "faithful",
+            "confidence": 0.85,
+            "probabilities": {
+              "faithful": 0.9,
+              "misleading": 0.09,
+              "unclear": 0.01
+            }
+          },
+          "skill_13": {
+            "type": "choice",
+            "choice": "faithful",
+            "confidence": 0.56,
+            "probabilities": {
+              "faithful": 0.71,
+              "misleading": 0.28,
+              "unclear": 0.01
+            }
+          },
+          "skill_14": {
+            "type": "choice",
+            "choice": "faithful",
+            "confidence": 0.62,
+            "probabilities": {
+              "faithful": 0.75,
+              "misleading": 0.25,
+              "unclear": 0.0
+            }
+          },
+          "skill_15": {
+            "type": "choice",
+            "choice": "faithful",
+            "confidence": 0.97,
+            "probabilities": {
+              "faithful": 0.98,
+              "misleading": 0.02,
+              "unclear": 0.0
+            }
+          },
+          "skill_16": {
+            "type": "choice",
+            "choice": "faithful",
+            "confidence": 0.34,
+            "probabilities": {
+              "faithful": 0.56,
+              "misleading": 0.44,
+              "unclear": 0.0
+            }
+          },
+          "skill_17": {
+            "type": "choice",
+            "choice": "faithful",
+            "confidence": 0.55,
+            "probabilities": {
+              "faithful": 0.7,
+              "misleading": 0.29,
+              "unclear": 0.01
+            }
+          },
+          "skill_18": {
+            "type": "choice",
+            "choice": "misleading",
+            "confidence": 0.37,
+            "probabilities": {
+              "faithful": 0.42,
+              "misleading": 0.58,
+              "unclear": 0.0
+            }
+          },
+          "skill_19": {
+            "type": "choice",
+            "choice": "misleading",
+            "confidence": 0.79,
+            "probabilities": {
+              "faithful": 0.14,
+              "misleading": 0.86,
+              "unclear": 0.0
+            }
+          },
+          "skill_20": {
+            "type": "choice",
+            "choice": "faithful",
+            "confidence": 0.85,
+            "probabilities": {
+              "faithful": 0.9,
+              "misleading": 0.09,
+              "unclear": 0.01
+            }
+          },
+          "skill_21": {
+            "type": "choice",
+            "choice": "faithful",
+            "confidence": 0.96,
+            "probabilities": {
+              "faithful": 0.97,
+              "misleading": 0.03,
+              "unclear": 0.0
+            }
+          },
+          "skill_22": {
+            "type": "choice",
+            "choice": "misleading",
+            "confidence": 0.56,
+            "probabilities": {
+              "faithful": 0.29,
+              "misleading": 0.71,
+              "unclear": 0.0
+            }
+          }
+        },
+        "usage": {
+          "input_tokens": 4899,
+          "output_tokens": 1028
+        }
+      }
+    }
+  ]
+}

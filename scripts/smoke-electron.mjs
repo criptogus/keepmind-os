@@ -383,10 +383,21 @@ try {
   await fillText('textarea[aria-label="Your request"]','Draft retained while connecting');
   await command('Settings'); await command('Conversations');
   if (await evaluate(`document.querySelector('textarea[aria-label="Your request"]').value`) !== 'Draft retained while connecting') fail('navigation lost new request draft');
+  await send('Emulation.setDeviceMetricsOverride', { width: 780, height: 900, deviceScaleFactor: 1, mobile: false });
   await evaluate(`([...document.querySelectorAll('.km-conversation-stage button')].find(b=>b.textContent==='Connect my AI')).click()`); await delay(200);
+  if (!(await evaluate(`document.querySelector('.km-context-connection').checkVisibility()`))) fail('narrow contextual connection hidden');
+  checks.push('narrow-contextual-connection');
   if (!(await evaluate(`document.querySelector('.km-context-connection')?.innerText`)).includes('Sign in with')) fail('contextual connection missing');
   await evaluate(`([...document.querySelectorAll('.km-context-connection button')].find(b=>b.textContent==='Back to conversation')).click()`); await delay(100);
   if (await evaluate(`document.querySelector('textarea[aria-label="Your request"]').value`) !== 'Draft retained while connecting') fail('connection lost draft');
+  await send('Emulation.clearDeviceMetricsOverride');
+  await evaluate(`([...document.querySelectorAll('.km-conversation-stage button')].find(b=>b.textContent==='Build a team for a new challenge')).click()`); await delay(100);
+  await fillText('.km-business-guide textarea','Keep my team setup context');
+  await evaluate(`document.querySelector('.km-task').click()`); await delay(100);
+  await command('New request');
+  await evaluate(`([...document.querySelectorAll('.km-conversation-stage button')].find(b=>b.textContent==='Build a team for a new challenge')).click()`); await delay(100);
+  if (await evaluate(`document.querySelector('.km-business-guide textarea').value`) !== 'Keep my team setup context') fail('team setup draft lost');
+  checks.push('team-setup-draft-preservation');
   await evaluate(`([...document.querySelectorAll('.km-task')].find(b=>b.textContent.includes('Preparar o resumo'))).click()`); await delay(200);
   await fillText('.km-chat-composer textarea','Keep this unsent adjustment');
   await command('Settings'); await command('Conversations');
@@ -415,11 +426,17 @@ try {
   });
   await new Promise(resolve=>providerServer.listen(0,'127.0.0.1',resolve));
   const localProfile={id:'conversation-fixture',kind:'custom',name:'Local flow fixture',baseUrl:`http://127.0.0.1:${providerServer.address().port}/v1`,model:'fixture',inputUsdPerMillion:1,outputUsdPerMillion:1,maxOutputTokens:200,maxRunUsd:1};
-  await evaluate(`window.electronAPI.saveCompatibleProvider(${JSON.stringify(localProfile)})`);
+
   const flowAgent=await evaluate(`window.electronAPI.createAgent({name:'Proposal assistant',model:'compatible/conversation-fixture',temperature:0,maxTokens:200,systemPrompt:'Prepare the requested proposal.',tools:[]})`);
   await command('New request'); await delay(3200);
   await evaluate(`document.querySelector('[aria-label="Team or assistant"]').click()`);await delay(100);
   await evaluate(`([...document.querySelectorAll('[role="option"]')].find(el=>el.textContent.trim()==='Proposal assistant')).click()`);await delay(200);
+  if (!(await evaluate(`document.querySelector('.km-command').innerText`)).includes('Connect my AI')) fail('unconfigured model should need connection');
+  await command('Settings');
+  await evaluate(`window.electronAPI.saveCompatibleProvider(${JSON.stringify(localProfile)})`);
+  await command('Conversations'); await delay(200);
+  if (!(await evaluate(`document.querySelector('.km-command').innerText`)).includes('Send request')) fail('returning from Settings did not refresh provider readiness');
+  checks.push('settings-provider-readiness');
   await fillText('textarea[aria-label="Your request"]','Prepare a client proposal for a small business');
   await evaluate(`([...document.querySelectorAll('.km-command button')].find(b=>b.textContent==='Send request')).click()`);
   let flow;
@@ -475,12 +492,12 @@ try {
   const localAgain = await evaluate('window.electronAPI.workList()');
   if (!localAgain.tasks.some(t => t.id === task.id) || localAgain.tasks.some(t => t.id === shared.id)) fail('local and remote data were mixed');
   checks.push('shared-workspace-isolation', 'checkpoint-recovery', 'persisted-task-search');
-  if (checks.length < 29) fail('incomplete UI checks');
+  if (checks.length < 32) fail('incomplete UI checks');
   console.log(`SMOKE PASS: electronAPI OK (version=${version}, agents=${Array.isArray(agents) ? agents.length : '?'}, rootChildren=${rootChildren}, uiRendered=true)`);
 } catch (err) {
   failure = err.message; console.error(`SMOKE FAIL: ${err.message}`); process.exitCode = 1;
 } finally {
-  writeFileSync(path.join(evidenceDir, 'ux-report.json'), JSON.stringify({passed: !failure && checks.length >= 29, checks, failure, fixture: 'synthetic; no live providers', timestamp: new Date().toISOString()}, null, 2));
+  writeFileSync(path.join(evidenceDir, 'ux-report.json'), JSON.stringify({passed: !failure && checks.length >= 32, checks, failure, fixture: 'synthetic; no live providers', timestamp: new Date().toISOString()}, null, 2));
   ws.close();
   workspaceServer?.kill('SIGTERM');
   providerServer?.close();

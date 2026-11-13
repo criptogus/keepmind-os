@@ -1,3 +1,4 @@
+import { workEventLabel } from '../src/renderer/lib/workLanguage';
 import { describe, expect, it } from 'vitest';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -11,6 +12,12 @@ import { materialFilename } from '../src/shared/materials';
 import { businessStarters, buildBusinessTeam } from '../src/shared/businessTeams';
 
 describe('interface language contracts', () => {
+  it('localizes system activity without rewriting a matching customer message', () => {
+    const event={id:'1',at:'2026-11-13',kind:'created',text:'Task created'};
+    expect(workEventLabel(event,'pt')).toEqual({label:'Pedido salvo',text:'Pedido criado'});
+    expect(workEventLabel({...event,kind:'comment'},'pt').text).toBe('Task created');
+    expect(workEventLabel({...event,kind:'failed',text:'Provider diagnostic'},'pt').text).toBe('Provider diagnostic');
+  });
   it('has both translations for every literal renderer translation key', () => {
     const files: string[] = [];
     const walk = (dir: string) => readdirSync(dir, {withFileTypes:true}).forEach(entry => {

@@ -66,7 +66,7 @@ export default function ProviderConnections({ onChange, provider }: { onChange?:
   const handleOAuthLogout = async (provider: 'openai' | 'anthropic') => {
     if (confirm(`${t('adv2.logout')} ${provider === 'openai' ? 'OpenAI' : 'Anthropic'}?`)) {
       await window.electronAPI.oauthLogout(provider);
-      checkAuthStatus();
+      void checkAuthStatus(); onChange?.();
     }
   };
 
@@ -158,7 +158,7 @@ export default function ProviderConnections({ onChange, provider }: { onChange?:
                       onClick={async () => {
                         if (confirm(`${t('adv2.removeKeyConfirm')} (${p.label})`)) {
                           await window.electronAPI.clearApiKey(p.provider);
-                          p.setHasKey(false);
+                          p.setHasKey(false); onChange?.();
                         }
                       }}
                     >

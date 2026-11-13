@@ -20,11 +20,21 @@
     "cross-area-palette-light-dark",
     "reduced-motion",
     "narrow-layout",
+    "language-picker-persistence",
+    "skills-follow-interface-language",
+    "narrow-contextual-connection",
+    "team-setup-draft-preservation",
+    "persistent-conversation-and-drafts",
+    "contextual-connection-preserves-request",
+    "settings-provider-readiness",
+    "request-to-delivery-over-provider-http",
+    "single-send-revision-v2",
+    "approve-version-with-history",
     "shared-workspace-isolation",
     "checkpoint-recovery",
     "persisted-task-search"
   ],
   "failure": null,
   "fixture": "synthetic; no live providers",
-  "timestamp": "2026-11-13T17:55:58.609Z"
+  "timestamp": "2026-11-13T18:45:34.671Z"
 }

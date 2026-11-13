@@ -296,7 +296,7 @@ export default function App() {
 
         <div data-tour="content" className={activeSection === 'work' ? 'km-main-conversations' : undefined} style={{ minWidth: 0, flex: 1, padding: activeSection === 'work' ? 0 : 24, overflowY: 'auto' }}>
           <Suspense fallback={<Text size="sm" c="dimmed" ta="center" py="xl">{t('nav.loading')}</Text>}>
-            <div hidden={activeSection !== 'work'} className="km-workspace-host"><WorkBench onComposerOpened={() => setRequestComposer(0)} requestComposer={requestComposer} onNavigate={navigate} selectedTaskId={selectedWorkId} onTaskOpened={() => setSelectedWorkId(null)} /></div>
+            <div hidden={activeSection !== 'work'} className="km-workspace-host"><WorkBench active={activeSection === 'work'} onComposerOpened={() => setRequestComposer(0)} requestComposer={requestComposer} onNavigate={navigate} selectedTaskId={selectedWorkId} onTaskOpened={() => setSelectedWorkId(null)} /></div>
             {renderContent()}
           </Suspense>
         </div>
