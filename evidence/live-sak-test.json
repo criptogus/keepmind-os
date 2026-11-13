@@ -1,0 +1,23 @@
+{
+  "at": "2026-11-13T15:43:56.626317+00:00",
+  "instance": "KeepMind-PR11-Test",
+  "live": true,
+  "browser": "Safari explicit recovery",
+  "oauth_callback": "success after provider retry-to-local-client link",
+  "scope_requested": "mcp:read",
+  "search": "marketing",
+  "results_observed": 8,
+  "installed": [
+    {
+      "name": "Copywriting",
+      "version": "0.1.0",
+      "toolNames": [],
+      "assignedToContentCreator": true
+    }
+  ],
+  "credentialStoredEncrypted": true,
+  "targetDirectToolsCount": 0,
+  "mergePerformed": false,
+  "connectionRestoredAfterRestart": true,
+  "installedSkillVisibleAfterRestart": true
+}

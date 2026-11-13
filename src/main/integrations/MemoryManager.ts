@@ -1,6 +1,6 @@
 import type { StorageManager } from '../storage/StorageManager.js';
-import type { MemoryItem } from '../../shared/types.js';
-import { containsPii } from './SecondBrainManager.js';
+import { z } from 'zod';
+import type { MemoryItem, MemorySource } from '../../shared/types.js';
 import { v4 as uuidv4 } from 'uuid';
 
 /**
@@ -32,6 +32,19 @@ export type MemoryJudge = (
   candidates: Array<{ id: string; content: string }>
 ) => Promise<ConsolidationVerdict[]>;
 
+const sourceSchema = z.object({ reference: z.string().trim().min(1).max(1000).optional(), agentId: z.string().max(200).optional(), executionId: z.string().max(200).optional() }).strict();
+export function formatMemory(item: MemoryItem): string {
+  return `[memory:${item.id}; valid since ${item.validFrom}]\n${item.content}`
+    + `\nEvidence (unverified references): ${JSON.stringify(item.sources || [])}`
+    + `\nRelationships (model suggestions): ${JSON.stringify(item.relations || [])}`;
+}
+function addSource(item: MemoryItem, source: MemorySource) {
+  const sources = item.sources || [];
+  if (!sources.some(s => s.reference === source.reference && s.agentId === source.agentId && s.executionId === source.executionId)) {
+    if (sources.length >= 100) throw new Error('Memory source limit reached');
+    item.sources = [...sources, source];
+  }
+}
 const MERGE_CONFIDENCE = 0.6;
 const DEMOTE_MIN_USES = 8;
 const DEMOTE_MAX_MEAN = 0.3;
@@ -71,7 +84,9 @@ export class MemoryManager {
    * Stores a memory item, consolidating against similar active items when a
    * judge is available. Returns a human-readable summary of what happened.
    */
-  async remember(content: string, kind = 'fact'): Promise<string> {
+  async remember(content: string, kind = 'fact', evidence?: Omit<MemorySource, 'capturedAt'>): Promise<string> {
+    const metadata = evidence ? sourceSchema.parse(evidence) : undefined;
+    if (metadata?.reference && this.containsSecret(metadata.reference)) throw new Error('Blocked: source contains a credential or secret');
     const text = content.trim();
     if (!text) throw new Error('Empty memory content');
     if (this.containsSecret(text)) {
@@ -88,7 +103,9 @@ export class MemoryManager {
       : [];
 
     const now = new Date().toISOString();
+    const source = metadata ? { ...metadata, capturedAt: now } : undefined;
     const item: MemoryItem = {
+      sources: source ? [source] : [], relations: [],
       id: uuidv4(),
       kind,
       content: text,
@@ -100,32 +117,41 @@ export class MemoryManager {
     if (verdicts.length === 0) {
       // No judge (or judge failed): lexical fallback — exact duplicate is a no-op.
       const dup = candidates.find((c) => normalize(c.content) === normalize(text));
-      if (dup) return `Already known (memory ${dup.id.slice(0, 8)})`;
+      if (dup) {
+        if (source) { addSource(dup, source); dup.updatedAt = now; this.storage.saveMemoryItem(dup); }
+        return `Already known (memory ${dup.id.slice(0, 8)})`;
+      }
       this.storage.saveMemoryItem(item);
       return `Remembered (${item.id.slice(0, 8)})`;
     }
 
-    let acted = false;
+    const changed: MemoryItem[] = [];
+    const seen = new Set<string>();
     const related: string[] = [];
     for (const v of verdicts) {
+      if (!candidates.some(c => c.id === v.candidateId) || seen.has(v.candidateId) || !Number.isFinite(v.confidence) || v.confidence > 1) continue;
+      seen.add(v.candidateId);
       const cand = this.storage.getMemoryItem(v.candidateId);
       if (!cand || cand.validUntil) continue;
       if (v.confidence < MERGE_CONFIDENCE) continue;
 
-      if (v.action === 'same') {
+      if (v.action === 'same' && changed.length === 0) {
+        if (source) addSource(cand, source);
         // Merge: keep the existing item, bump its update stamp.
         cand.updatedAt = now;
         this.storage.saveMemoryItem(cand);
         return `Merged into existing memory (${cand.id.slice(0, 8)})`;
+      }
+      if (['refines', 'updates', 'contradicts', 'related'].includes(v.action)) {
+        item.relations!.push({ targetId: cand.id, type: v.action as NonNullable<MemoryItem['relations']>[number]['type'], confidence: v.confidence, createdAt: now });
       }
       if (v.action === 'refines' || v.action === 'updates') {
         // The new item supersedes: old keeps history with valid_until.
         cand.validUntil = now;
         cand.supersededBy = item.id;
         cand.updatedAt = now;
-        this.storage.saveMemoryItem(cand);
-        item.relatedIds = [cand.id];
-        acted = true;
+        changed.push(cand);
+        item.relatedIds = [...(item.relatedIds || []), cand.id];
         continue;
       }
       if (v.action === 'contradicts') {
@@ -139,8 +165,8 @@ export class MemoryManager {
     }
 
     if (related.length) item.relatedIds = [...new Set([...(item.relatedIds || []), ...related])];
-    this.storage.saveMemoryItem(item);
-    const superseded = verdicts.some((v) => (v.action === 'refines' || v.action === 'updates') && v.confidence >= MERGE_CONFIDENCE);
+    this.storage.saveMemoryItems([...changed, item]);
+    const superseded = changed.length > 0;
     return superseded
       ? `Remembered — updated a previous note (${item.id.slice(0, 8)})`
       : `Remembered (${item.id.slice(0, 8)})${related.length ? `, linked to ${related.length} related` : ''}`;
@@ -149,7 +175,7 @@ export class MemoryManager {
   private findCandidates(text: string, limit: number): MemoryItem[] {
     const terms = tokenize(text);
     if (terms.size === 0) return [];
-    return this.storage.getActiveMemoryItems(500)
+    return this.storage.getActiveMemoryItems()
       .map((m) => ({ m, score: overlapScore(terms, tokenize(m.content)) }))
       .filter((x) => x.score >= 0.34)
       .sort((a, b) => b.score - a.score)
@@ -167,7 +193,7 @@ export class MemoryManager {
     if (terms.size === 0) return { text: '', ids: [] };
 
     const now = Date.now();
-    const scored = this.storage.getActiveMemoryItems(500)
+    const scored = this.storage.getActiveMemoryItems()
       .filter((m) => !m.demoted)
       .map((m) => {
         const relevance = overlapScore(terms, tokenize(m.content));
@@ -180,7 +206,7 @@ export class MemoryManager {
       .slice(0, limit);
 
     // Demotion check on the full active set (cheap, keeps stats honest).
-    for (const m of this.storage.getActiveMemoryItems(500)) {
+    for (const m of this.storage.getActiveMemoryItems()) {
       if (!m.demoted && m.uses >= DEMOTE_MIN_USES) {
         const mean = (m.good + 1) / (m.uses + 2);
         if (mean < DEMOTE_MAX_MEAN) {
@@ -192,7 +218,7 @@ export class MemoryManager {
     }
 
     return {
-      text: scored.map((x) => x.m.content).join('\n\n---\n\n'),
+      text: scored.map((x) => formatMemory(x.m)).join('\n\n---\n\n'),
       ids: scored.map((x) => x.m.id),
     };
   }
@@ -232,3 +258,4 @@ export class MemoryManager {
 function normalize(s: string): string {
   return s.toLowerCase().replace(/\s+/g, ' ').trim();
 }
+

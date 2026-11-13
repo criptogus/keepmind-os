@@ -1,0 +1,40 @@
+{
+  "state": {
+    "requirements": "Persistent request composer, delivery-first content with copy/download/request revision, optional credentials at onboarding, explicit draft saving, approvals retained.",
+    "implementation": {
+      "home": "Composer always rendered. Work defaults to all tasks, includes done. Project/criteria/dependencies under Customize. Approval buttons in task drawer retained.",
+      "onboarding": "Optional API key. Save draft and open action calls workCreate; does not call workAction run. Text explains opening makes no paid call.",
+      "delivery": "task.output Markdown before original request and execution details. Copy and download inline; Request a change focuses feedback textarea. Submit revision is separate button with nonempty text.",
+      "selection": "From PR10: semantic theme alignment and quick actions. Marketplace/templates/backend are not imported."
+    }
+  },
+  "questions": {
+    "onboarding_copy": {
+      "type": "choice",
+      "instructions": "Does onboarding implementation match its Save draft and open label?",
+      "criteria": {
+        "matches": "Saves without execution",
+        "contradicts": "Starts execution or fails to save",
+        "insufficient": "Evidence does not establish behavior"
+      }
+    },
+    "approval_preservation": {
+      "type": "choice",
+      "instructions": "Does implementation describe preserving human approval controls?",
+      "criteria": {
+        "preserves": "Approval actions remain present",
+        "removes": "Approval actions are removed",
+        "insufficient": "Evidence does not establish behavior"
+      }
+    },
+    "delivery_first": {
+      "type": "choice",
+      "instructions": "Does delivery presentation prioritize the requested result before operational metadata?",
+      "criteria": {
+        "yes": "Result before original request and execution details",
+        "no": "Metadata before result",
+        "insufficient": "Evidence does not establish order"
+      }
+    }
+  }
+}

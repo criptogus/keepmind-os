@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Badge, Button, Card, Group, Image, PasswordInput, Select, Stack, Switch, Text, TextInput, Title } from '@mantine/core';
+import { Alert, Anchor, Badge, Button, Card, Group, Image, PasswordInput, Select, Stack, Switch, Text, TextInput, Title } from '@mantine/core';
 import { useThemeStore } from '../../store/themeStore';
 import { useSettingsStore } from '../../store/settingsStore';
 import { useLang } from '../../lib/i18n';
@@ -11,7 +11,19 @@ import { useAppMode } from '../../lib/useAppMode';
 
 
 export default function AdvancedSettings() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
+  const tr = (en: string, pt: string) => lang === 'pt' ? pt : en;
+  const [pendingProvider, setPendingProvider] = useState<'openai' | 'anthropic' | null>(null);
+  const [loginUrl, setLoginUrl] = useState<string | null>(null);
+  const [loginNotice, setLoginNotice] = useState('');
+  useEffect(() => {
+    if (!pendingProvider) return;
+    let live = true;
+    const poll = () => window.electronAPI.oauthPendingUrl(pendingProvider).then(url => { if (live) setLoginUrl(url); }).catch(() => {});
+    void poll();
+    const timer = setInterval(poll, 500);
+    return () => { live = false; clearInterval(timer); };
+  }, [pendingProvider]);
   const { settings, updateSettings } = useSettingsStore();
   const { theme, setTheme } = useThemeStore();
   const [openaiKey, setOpenaiKey] = useState('');
@@ -144,17 +156,20 @@ export default function AdvancedSettings() {
   };
 
   const handleOAuthLogin = async (provider: 'openai' | 'anthropic') => {
+    setPendingProvider(provider); setLoginUrl(null); setLoginNotice('');
     try {
       const result = await window.electronAPI.oauthAuthenticate(provider);
       if (result.success) {
-        alert(`${provider === 'openai' ? 'OpenAI' : 'Anthropic'} ${t('adv2.authSuccess')}`);
-        checkAuthStatus();
+        setLoginNotice(tr('Connected successfully.', 'Conectado com sucesso.'));
+        void checkAuthStatus();
       } else {
-        alert(`${t('adv2.authFailed')}: ${result.error}`);
+        setLoginNotice(result.error === 'Authentication cancelled'
+          ? tr('Login cancelled. You can try again.', 'Login cancelado. Você pode tentar novamente.')
+          : `${t('adv2.authFailed')}: ${result.error}`);
       }
-    } catch (error) {
-      alert(t('adv2.authFailed'));
-    }
+    } catch {
+      setLoginNotice(t('adv2.authFailed'));
+    } finally { setPendingProvider(null); setLoginUrl(null); }
   };
 
   const handleOAuthLogout = async (provider: 'openai' | 'anthropic') => {
@@ -187,6 +202,7 @@ export default function AdvancedSettings() {
         </Text>
 
         <Stack gap="md">
+          {loginNotice && <Text role="status" size="sm">{loginNotice}</Text>}
           {([
             { provider: 'openai' as const, label: 'OpenAI', auth: openaiAuth, configured: openaiConfigured, hasKey: openaiHasKey, setHasKey: setOpenaiHasKey, key: openaiKey, setKey: setOpenaiKey, placeholder: 'sk-...' },
             { provider: 'anthropic' as const, label: 'Anthropic', auth: anthropicAuth, configured: anthropicConfigured, hasKey: anthropicHasKey, setHasKey: setAnthropicHasKey, key: anthropicKey, setKey: setAnthropicKey, placeholder: 'sk-ant-...' },
@@ -203,10 +219,10 @@ export default function AdvancedSettings() {
                   <Button
                     size="xs"
                     variant="default"
-                    disabled={p.auth || !p.configured}
+                    disabled={p.auth || !p.configured || !!pendingProvider}
                     onClick={() => handleOAuthLogin(p.provider)}
                   >
-                    {t('adv2.loginOAuth')}
+                    {p.provider === 'openai' ? tr('Sign in with ChatGPT / Codex', 'Entrar com ChatGPT / Codex') : tr('Sign in with Claude (experimental)', 'Entrar com Claude (experimental)')}
                   </Button>
                   {p.auth && (
                     <Button size="xs" variant="subtle" color="gray" onClick={() => handleOAuthLogout(p.provider)}>
@@ -214,6 +230,15 @@ export default function AdvancedSettings() {
                     </Button>
                   )}
                 </Group>
+                {pendingProvider === p.provider && <Alert title={tr('Complete login in your browser', 'Conclua o login no navegador')} role="status">
+                  <Text size="sm">{tr('If no page opened, open or copy the login link below.', 'Se nenhuma página abriu, abra ou copie o link de login abaixo.')}</Text>
+                  <Group mt="sm">
+                    {loginUrl && <Anchor href={loginUrl} target="_blank" rel="noreferrer">{tr('Open login page', 'Abrir página de login')}</Anchor>}
+                    {loginUrl && window.electronAPI.platform === 'darwin' && <Button size="xs" variant="default" onClick={() => window.electronAPI.loginOpenInSafari(p.provider).then(() => setLoginNotice(tr('Safari requested. Complete login in the browser.', 'Abertura solicitada ao Safari. Conclua o login no navegador.'))).catch(e => setLoginNotice(e.message))}>{tr('Did not open? Use Safari', 'Não abriu? Usar Safari')}</Button>}
+                    {loginUrl && <Button size="xs" variant="default" onClick={() => navigator.clipboard.writeText(loginUrl).then(() => setLoginNotice(tr('Link copied. Paste it in your browser.', 'Link copiado. Cole no navegador.'))).catch(() => setLoginNotice(tr('Could not copy the link.', 'Não foi possível copiar o link.')))}>{tr('Copy login link', 'Copiar link de login')}</Button>}
+                    <Button size="xs" variant="subtle" onClick={() => window.electronAPI.oauthCancel(p.provider).catch(() => setLoginNotice(tr('Could not cancel login.', 'Não foi possível cancelar o login.')))}>{tr('Cancel login', 'Cancelar login')}</Button>
+                  </Group>
+                </Alert>}
                 {!p.configured && (
                   <Text size="xs" c="dimmed">
                     {t('adv2.oauthUnavailable')}
@@ -973,14 +998,7 @@ export default function AdvancedSettings() {
 
       <Card withBorder padding="md" radius="md">
         <Title order={3} size="h5" mb="md">{t('adv2.execution')}</Title>
-        <Switch
-          label={t('adv2.autoApprove')}
-          checked={settings.autoApprove}
-          onChange={(e) => updateSettings({ autoApprove: e.currentTarget.checked })}
-        />
-        <Text size="xs" c="dimmed" mt={4}>
-          {t('adv2.autoApproveWarn')}
-        </Text>
+        <Text size="sm">{t('settings.autonomyPolicy')}</Text>
       </Card>
 
       <Card withBorder padding="md" radius="md">
@@ -1003,13 +1021,7 @@ export default function AdvancedSettings() {
             checked={settings.llmAutoRoute !== false}
             onChange={(e) => updateSettings({ llmAutoRoute: e.currentTarget.checked })}
           />
-          <Switch
-            size="xs"
-            label={t('adv2.approvalSensitive')}
-            description={t('adv2.approvalSensitiveDesc')}
-            checked={settings.toolApprovalRequired !== false}
-            onChange={(e) => updateSettings({ toolApprovalRequired: e.currentTarget.checked })}
-          />
+
         </Stack>
         <Stack gap="sm">
           <AgentSelect
@@ -1090,3 +1102,4 @@ export default function AdvancedSettings() {
     </Stack>
   );
 }
+

@@ -2,7 +2,7 @@ import { DatabaseSync } from 'node:sqlite';
 import { randomUUID } from 'node:crypto';
 import * as path from 'path';
 import * as fs from 'fs';
-import { app } from 'electron';
+import { homedir } from 'node:os';
 import type { Agent, Team, Approval, GovernanceRule, AuditEntry, AgentExecution, ExecutionToolCall, Skill, LocalUser, UserRole, LlmUsageRecord, RoutingDecision, MemoryItem } from '../../shared/types.js';
 
 export class StorageManager {
@@ -10,7 +10,7 @@ export class StorageManager {
   private dbPath: string;
 
   constructor(dataDir?: string) {
-    const dbDir = dataDir ?? path.join(app.getPath('userData'), 'data');
+    const dbDir = dataDir ?? path.join(homedir(), '.keepmind', 'data');
     
     if (!fs.existsSync(dbDir)) {
       fs.mkdirSync(dbDir, { recursive: true });
@@ -20,6 +20,13 @@ export class StorageManager {
     this.db = new DatabaseSync(this.dbPath);
     this.db.exec('PRAGMA journal_mode = WAL');
     this.initializeSchema();
+  }
+
+  /** Synchronous domain writes commit together or leave no partial setup. */
+  transaction<T>(fn: () => T): T {
+    this.db.exec('BEGIN IMMEDIATE');
+    try { const result = fn(); this.db.exec('COMMIT'); return result; }
+    catch (error) { this.db.exec('ROLLBACK'); throw error; }
   }
 
   private initializeSchema() {
@@ -245,6 +252,12 @@ export class StorageManager {
         updated_at TEXT NOT NULL
       )
     `);
+
+    for (const column of ['sources TEXT', 'relations TEXT']) {
+      const name = column.split(' ')[0];
+      const columns = this.db.prepare('PRAGMA table_info(memory_items)').all() as Array<{name:string}>;
+      if (!columns.some(c => c.name === name)) this.db.exec(`ALTER TABLE memory_items ADD COLUMN ${column}`);
+    }
 
     // Columns added after initial release — safe no-ops if present
     for (const col of [
@@ -607,6 +620,21 @@ export class StorageManager {
     };
   }
 
+  /** Runs are never replayed automatically: an external side effect may already have happened. */
+  recoverInterruptedExecutions(): void {
+    this.db.prepare("UPDATE agent_executions SET status = 'failed', error = 'Interrupted by restart. Review external effects before retrying.', completed_at = ? WHERE status IN ('pending','running')").run(new Date().toISOString());
+    // Only approvals bound to a durable, not-yet-started tool can survive restart.
+    for (const approval of this.getPendingApprovals()) {
+      const id = approval.context.executionId;
+      const raw = typeof id === 'string' ? this.getSetting(`execution.checkpoint.v1.${id}`) : undefined;
+      const cp = raw ? JSON.parse(raw) : undefined;
+      const retained = Object.values(cp?.tools ?? {}).some((step: any) => step.state === 'pending' && step.approvalId === approval.id);
+      if (!retained || Date.now() - Date.parse(approval.createdAt) >= 24 * 60 * 60_000) {
+        this.updateApprovalStatus(approval.id, 'rejected', 'No resumable checkpoint or approval expired', 'system');
+      }
+    }
+  }
+
   saveAgentExecution(execution: AgentExecution): void {
     const stmt = this.db.prepare(`
       INSERT OR REPLACE INTO agent_executions
@@ -707,7 +735,7 @@ export class StorageManager {
         SET progress = ?, status = ?, completed_at = ?
         WHERE id = ?
       `);
-      stmt.run(progress, status, status === 'completed' || status === 'failed' ? new Date().toISOString() : null, id);
+      stmt.run(progress, status, status === 'completed' || status === 'failed' || status === 'cancelled' ? new Date().toISOString() : null, id);
     } else {
       stmt = this.db.prepare('UPDATE agent_executions SET progress = ? WHERE id = ?');
       stmt.run(progress, id);
@@ -880,11 +908,18 @@ export class StorageManager {
   saveMemoryItem(item: MemoryItem): void {
     this.db.prepare(`
       INSERT OR REPLACE INTO memory_items
-      (id, kind, content, valid_from, valid_until, superseded_by, related_ids, uses, good, bad, demoted, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      (id, kind, content, valid_from, valid_until, superseded_by, related_ids, uses, good, bad, demoted, created_at, updated_at, sources, relations)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `).run(item.id, item.kind, item.content, item.validFrom, item.validUntil ?? null,
       item.supersededBy ?? null, item.relatedIds ? JSON.stringify(item.relatedIds) : null,
-      item.uses, item.good, item.bad, item.demoted ? 1 : 0, item.createdAt, item.updatedAt);
+      item.uses, item.good, item.bad, item.demoted ? 1 : 0, item.createdAt, item.updatedAt,
+      JSON.stringify(item.sources || []), JSON.stringify(item.relations || []));
+  }
+
+  saveMemoryItems(items: MemoryItem[]): void {
+    this.db.exec('BEGIN IMMEDIATE');
+    try { for (const item of items) this.saveMemoryItem(item); this.db.exec('COMMIT'); }
+    catch (error) { this.db.exec('ROLLBACK'); throw error; }
   }
 
   getMemoryItem(id: string): MemoryItem | null {
@@ -897,13 +932,15 @@ export class StorageManager {
       id: row.id, kind: row.kind, content: row.content, validFrom: row.valid_from,
       validUntil: row.valid_until ?? undefined, supersededBy: row.superseded_by ?? undefined,
       relatedIds: row.related_ids ? JSON.parse(row.related_ids) : undefined,
+      sources: row.sources ? JSON.parse(row.sources) : [],
+      relations: row.relations ? JSON.parse(row.relations) : [],
       uses: row.uses, good: row.good, bad: row.bad, demoted: !!row.demoted,
       createdAt: row.created_at, updatedAt: row.updated_at,
     };
   }
 
   /** Active (non-superseded, non-demoted) memory items for consolidation candidates. */
-  getActiveMemoryItems(limit = 500): MemoryItem[] {
+  getActiveMemoryItems(limit = -1): MemoryItem[] {
     const rows = this.db.prepare(`
       SELECT * FROM memory_items
       WHERE valid_until IS NULL AND demoted = 0
@@ -1067,3 +1104,4 @@ export class StorageManager {
     this.db.exec('PRAGMA journal_mode = WAL');
   }
 }
+

@@ -35,7 +35,7 @@ export class RemoteApprovalServer {
     if (this.server) return this.port;
     this.server = createServer((req, res) => this.route(req, res));
     await new Promise<void>((resolve, reject) => {
-      this.server!.once('error', reject);
+      this.server!.once('error', error => { this.stop(); reject(error); });
       this.server!.listen(preferredPort, '0.0.0.0', () => resolve());
     });
     const addr = this.server.address();
@@ -51,7 +51,7 @@ export class RemoteApprovalServer {
 
   private route(req: import('node:http').IncomingMessage, res: import('node:http').ServerResponse): void {
     const send = (code: number, body: string, type = 'application/json') => {
-      res.writeHead(code, { 'Content-Type': type, 'Cache-Control': 'no-store' });
+      res.writeHead(code, { 'Content-Type': type, 'Cache-Control': 'no-store', 'Referrer-Policy': 'no-referrer', 'X-Content-Type-Options': 'nosniff' });
       res.end(body);
     };
     const url = new URL(req.url ?? '/', 'http://localhost');

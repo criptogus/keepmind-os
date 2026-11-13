@@ -1,9 +1,11 @@
+import CommandMenu from './components/navigation/CommandMenu';
 import React, { Suspense, lazy, useState, useEffect } from 'react';
 
+const WorkBench = lazy(() => import('./components/work/WorkBench'));
 const AgentList = lazy(() => import('./components/agents/AgentList'));
 const TeamList = lazy(() => import('./components/teams/TeamList'));
-const ApprovalQueue = lazy(() => import('./components/governance/ApprovalQueue'));
 const GovernanceOverview = lazy(() => import('./components/governance/GovernanceOverview'));
+const ApprovalQueue = lazy(() => import('./components/governance/ApprovalQueue'));
 const GovernanceRules = lazy(() => import('./components/governance/GovernanceRules'));
 const AuditLogs = lazy(() => import('./components/logs/AuditLogs'));
 const SettingsPanel = lazy(() => import('./components/settings/SettingsPanel'));
@@ -18,9 +20,8 @@ import type { LocalUser } from '../shared/types.js';
 import { Badge, Button, Group, Text, ActionIcon } from '@mantine/core';
 import { useThemeStore } from './store/themeStore';
 import { useLang } from './lib/i18n';
-import { useAppMode } from './lib/useAppMode';
+
 import TourOverlay, { type TourStep } from './components/tour/TourOverlay';
-import CommandPalette, { type PaletteCommand } from './components/common/CommandPalette';
 
 const TOUR_DONE_KEY = 'km-tour-done';
 
@@ -34,21 +35,34 @@ const sectionLabel: React.CSSProperties = {
 };
 
 export default function App() {
-  const [activeSection, setActiveSection] = useState('dashboard');
+  const [activeSection, setActiveSection] = useState('work');
   const [version, setVersion] = useState<string>('');
   const [pendingApprovals, setPendingApprovals] = useState(0);
   const { initTheme } = useThemeStore();
-  const { t } = useLang();
+  const { t, lang } = useLang();
+  const [commandsOpen, setCommandsOpen] = useState(false);
+  const [selectedWorkId, setSelectedWorkId] = useState<string | null>(null);
+  const [mobileNav, setMobileNav] = useState(false);
+  const [requestComposer, setRequestComposer] = useState(0);
+  const [newAgentRequest, setNewAgentRequest] = useState(0);
+  const navigate = (id: string) => {
+    setMobileNav(false);
+    if (id === 'new-agent') { setNewAgentRequest(n => n + 1); setActiveSection('agents'); }
+    else if (id === 'new-request') { setSelectedWorkId(null); setRequestComposer(n => n + 1); setActiveSection('work'); }
+    else setActiveSection(id);
+  };
+  useEffect(() => {
+    const key = (event: KeyboardEvent) => { if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); setCommandsOpen(open => !open); } };
+    window.addEventListener('keydown', key); return () => window.removeEventListener('keydown', key);
+  }, []);
   const [needsOnboarding, setNeedsOnboarding] = useState<boolean | null>(null);
   const [authState, setAuthState] = useState<{ hasUsers: boolean; currentUser: LocalUser | null } | null>(null);
   const [tourActive, setTourActive] = useState(false);
-  const [paletteOpen, setPaletteOpen] = useState(false);
-  const { toggleTheme } = useThemeStore();
 
   const tourSteps = (tt: (k: string) => string): TourStep[] => [
     { title: tt('tour.welcome.title'), text: tt('tour.welcome.text') },
     { target: '[data-tour="sidebar"]', title: tt('tour.nav.title'), text: tt('tour.nav.text') },
-    { target: '[data-tour="content"]', section: 'dashboard', title: tt('tour.home.title'), text: tt('tour.home.text') },
+    { target: '[data-tour="content"]', section: 'work', title: tt('tour.home.title'), text: tt('tour.home.text') },
     { target: '[data-tour="agents-new"]', section: 'agents', title: tt('tour.agents.title'), text: tt('tour.agents.text') },
     { target: '[data-tour="content"]', section: 'governance', title: tt('tour.approvals.title'), text: tt('tour.approvals.text') },
     { target: '[data-tour="content"]', section: 'advanced', title: tt('tour.settings.title'), text: tt('tour.settings.text') },
@@ -71,10 +85,7 @@ export default function App() {
     window.electronAPI.getSettings()
       .then((s) => {
         setNeedsOnboarding(!s.onboardingCompleted);
-        // Auto-start the guided tour once, after onboarding is done.
-        if (s.onboardingCompleted && localStorage.getItem(TOUR_DONE_KEY) !== '1') {
-          setTimeout(() => setTourActive(true), 800);
-        }
+
       })
       .catch(() => setNeedsOnboarding(false));
 
@@ -82,26 +93,18 @@ export default function App() {
       const state = await window.electronAPI.getGovernanceState();
       setPendingApprovals(state.pendingApprovals.length);
     };
-    fetchApprovals();
-    const interval = setInterval(fetchApprovals, 5000);
-    const onKey = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-        e.preventDefault();
-        setPaletteOpen((o) => !o);
-      }
-    };
-    window.addEventListener('keydown', onKey);
+    void fetchApprovals().catch(() => {});
+    const interval = setInterval(() => void fetchApprovals().catch(() => {}), 5000);
     const unsubDeepLink = window.electronAPI.onDeepLink?.(({ section }) => {
-      if (['dashboard', 'agents', 'teams', 'automations', 'skills', 'governance', 'logs', 'settings', 'advanced'].includes(section)) {
+      if (['work', 'dashboard', 'agents', 'teams', 'automations', 'skills', 'governance', 'logs', 'settings', 'advanced'].includes(section)) {
         setActiveSection(section);
       }
     });
-    return () => { clearInterval(interval); window.removeEventListener('keydown', onKey); unsubDeepLink?.(); };
+    return () => { clearInterval(interval); unsubDeepLink?.(); };
   }, [initTheme]);
 
-  const { mode: appMode } = useAppMode();
-  // 'unset' keeps every section visible (status quo) until the user picks a mode.
   const allSidebarItems = [
+    { id: 'work', label: t('nav.work') },
     { id: 'dashboard', label: t('nav.dashboard') },
     { id: 'agents', label: t('nav.agents') },
     { id: 'teams', label: t('nav.teams') },
@@ -112,60 +115,22 @@ export default function App() {
     { id: 'settings', label: t('nav.settings') },
     { id: 'advanced', label: t('nav.advanced') },
   ];
-  const CORPORATE_ONLY = new Set(['teams', 'governance']);
-  const sidebarItems = appMode === 'personal'
-    ? allSidebarItems.filter((i) => !CORPORATE_ONLY.has(i.id))
-    : allSidebarItems;
-
-  const paletteCommands: PaletteCommand[] = [
-    ...sidebarItems.map((item) => ({
-      id: `nav-${item.id}`,
-      label: `${t('cmdk.goTo')} ${item.label}`,
-      keywords: item.id,
-      run: () => setActiveSection(item.id),
-    })),
-    {
-      id: 'action-new-agent',
-      label: t('cmdk.newAgent'),
-      keywords: 'create agent novo',
-      run: () => setActiveSection('agents'),
-    },
-    {
-      id: 'action-approvals',
-      label: `${t('cmdk.goTo')} ${t('gov.pending')}`,
-      keywords: 'approve approval aprovar',
-      run: () => { setGovernanceTab('approvals'); setActiveSection('governance'); },
-    },
-    {
-      id: 'action-theme',
-      label: t('cmdk.toggleTheme'),
-      keywords: 'dark light tema',
-      run: () => void toggleTheme(),
-    },
-    {
-      id: 'action-tour',
-      label: t('cmdk.replayTour'),
-      keywords: 'help tutorial tour',
-      run: () => setTourActive(true),
-    },
-  ];
+  const sidebarItems = allSidebarItems;
 
   const governanceTabs = [
     { id: 'overview', label: t('govsum.title') },
     { id: 'approvals', label: t('gov.pending') },
     { id: 'rules', label: t('gov.rules') },
   ];
-  const [governanceTab, setGovernanceTab] = useState('overview');
+  const [governanceTab, setGovernanceTab] = useState('approvals');
 
   const renderContent = () => {
-    if (appMode === 'personal' && CORPORATE_ONLY.has(activeSection)) {
-      return <AnalyticsDashboard onNavigate={setActiveSection} />;
-    }
     switch (activeSection) {
+      case 'work': return <WorkBench onComposerOpened={() => setRequestComposer(0)} requestComposer={requestComposer} onNavigate={navigate} selectedTaskId={selectedWorkId} onTaskOpened={() => setSelectedWorkId(null)} />;
       case 'dashboard':
         return <AnalyticsDashboard onNavigate={setActiveSection} />;
       case 'agents':
-        return <AgentList />;
+        return <AgentList newAgentRequest={newAgentRequest} onCreateOpened={() => setNewAgentRequest(0)} />;
       case 'teams':
         return <TeamList />;
       case 'automations':
@@ -175,7 +140,7 @@ export default function App() {
       case 'governance':
         return (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            <div style={{ display: 'flex', gap: 8, borderBottom: '1px solid var(--mantine-color-gray-3)', paddingBottom: 12 }}>
+            <div style={{ display: 'flex', gap: 8, borderBottom: '1px solid var(--mantine-color-default-border)', paddingBottom: 12 }}>
               {governanceTabs.map(tab => (
                 <button
                   key={tab.id}
@@ -226,7 +191,7 @@ export default function App() {
   if (needsOnboarding) {
     return (
       <Suspense fallback={null}>
-        <OnboardingWizard onComplete={() => setNeedsOnboarding(false)} />
+        <OnboardingWizard onComplete={taskId => { setNeedsOnboarding(false); if (taskId) setSelectedWorkId(taskId); }} />
       </Suspense>
     );
   }
@@ -245,7 +210,7 @@ export default function App() {
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: '6px 24px 6px 84px',
-          borderBottom: '1px solid var(--mantine-color-gray-3)',
+          borderBottom: '1px solid var(--mantine-color-default-border)',
           backgroundColor: 'var(--mantine-color-body)',
           WebkitAppRegion: 'drag',
         } as React.CSSProperties}
@@ -256,27 +221,19 @@ export default function App() {
             color: '#ffffff', fontSize: 15, fontWeight: 700,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>K</div>
-          <h1 style={{ fontSize: 18, fontWeight: 600, color: 'var(--mantine-color-dark-8)', margin: 0 }}>KeepMind OS</h1>
+          <h1 style={{ fontSize: 18, fontWeight: 600, color: 'var(--mantine-color-text)', margin: 0 }}>KeepMind OS</h1>
         </div>
-        <Button
-          variant="default"
-          size="compact-sm"
-          radius="md"
-          onClick={() => setPaletteOpen(true)}
-          style={{ WebkitAppRegion: 'no-drag' } as React.CSSProperties}
-          leftSection={
-            <Text span size="xs" ff="monospace" c="dimmed">⌘K</Text>
-          }
-        >
-          {t('cmdk.placeholder')}
-        </Button>
+        <Group style={{ WebkitAppRegion: 'no-drag' } as React.CSSProperties} gap="xs">
+          <Button className="km-nav-toggle" variant="default" size="xs" aria-expanded={mobileNav} onClick={() => setMobileNav(v => !v)}>{lang === 'pt' ? 'Menu' : 'Menu'}</Button>
+          <Button variant="default" size="xs" onClick={() => setCommandsOpen(true)}>{lang === 'pt' ? 'Buscar' : 'Search'} <span className="km-keycap">⌘ / Ctrl K</span></Button>
+        </Group>
       </header>
 
       <main style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
-        <aside data-tour="sidebar" style={{
-          width: 260,
-          backgroundColor: 'var(--mantine-color-gray-0)',
-          borderRight: '1px solid var(--mantine-color-gray-3)',
+        <aside className={`km-sidebar ${mobileNav ? "km-sidebar-open" : ""}`} data-tour="sidebar" style={{
+          width: 220,
+          backgroundColor: 'var(--mantine-color-default-hover)',
+          borderRight: '1px solid var(--mantine-color-default-border)',
           padding: 16,
           overflowY: 'auto',
           display: 'flex',
@@ -285,16 +242,17 @@ export default function App() {
           <div style={{ marginBottom: 24 }}>
             <h2 style={{ ...sectionLabel, margin: 0 }}>{t('nav.navigation')}</h2>
             <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 2 }}>
-              {sidebarItems.map((item) => (
+              {sidebarItems.filter(item => ['work','governance','automations'].includes(item.id)).map((item) => (
                 <Button
                   key={item.id}
                   data-tour={`nav-${item.id}`}
                   variant={activeSection === item.id ? 'light' : 'subtle'}
-                  color="dark"
+                  color="gray"
                   size="sm"
                   fullWidth
                   justify="flex-start"
-                  onClick={() => setActiveSection(item.id)}
+                  aria-current={activeSection === item.id ? 'page' : undefined}
+                  onClick={() => { setActiveSection(item.id); setMobileNav(false); }}
                   rightSection={item.id === 'governance' && pendingApprovals > 0
                     ? <Badge size="sm" variant="filled" color="dark">{pendingApprovals}</Badge>
                     : undefined}
@@ -302,12 +260,15 @@ export default function App() {
                   {item.label}
                 </Button>
               ))}
+              <details className="km-nav-more" open={!['work','governance','automations'].includes(activeSection) || undefined}>
+                <summary>{lang === 'pt' ? 'Mais ferramentas' : 'More tools'}</summary>
+                {sidebarItems.filter(item => !['work','governance','automations'].includes(item.id)).map(item => <Button key={item.id} fullWidth justify="flex-start" variant={activeSection === item.id ? 'light' : 'subtle'} aria-current={activeSection === item.id ? 'page' : undefined} onClick={() => { setActiveSection(item.id); setMobileNav(false); }}>{item.label}</Button>)}
+              </details>
             </div>
           </div>
 
           <div style={{ marginBottom: 24 }}>
-            <div style={sectionLabel}>{t('nav.system')}</div>
-            <Text size="sm" c="dimmed">{t('nav.version')}: {version || t('nav.loading')}</Text>
+
             {authState.currentUser && (
               <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
                 <Badge size="sm" variant="light" color="dark">
@@ -327,7 +288,8 @@ export default function App() {
             )}
           </div>
 
-          <div style={{ marginTop: 'auto', paddingTop: 24, borderTop: '1px solid var(--mantine-color-gray-3)' }}>
+          <div style={{ marginTop: 'auto', paddingTop: 24, borderTop: '1px solid var(--mantine-color-default-border)' }}>
+            <Text size="xs" c="dimmed" mb="sm">KeepMind {version} · MIT</Text>
             <Group gap={6} mb={8}>
               <ActionIcon
                 size="sm"
@@ -355,13 +317,14 @@ export default function App() {
           </div>
         </aside>
 
-        <div data-tour="content" key={activeSection} className="km-fade" style={{ flex: 1, padding: 24, overflowY: 'auto' }}>
+        <div data-tour="content" style={{ minWidth: 0, flex: 1, padding: 24, overflowY: 'auto' }}>
           <Suspense fallback={<Text size="sm" c="dimmed" ta="center" py="xl">{t('nav.loading')}</Text>}>
             {renderContent()}
           </Suspense>
         </div>
       </main>
 
+      <CommandMenu opened={commandsOpen} onClose={() => setCommandsOpen(false)} items={allSidebarItems} actions={[{ id: 'new-request', label: lang === 'pt' ? 'Novo pedido' : 'New request', run: () => navigate('new-request') }, { id: 'new-agent', label: lang === 'pt' ? 'Criar agente' : 'Create agent', run: () => navigate('new-agent') }]} pt={lang === 'pt'} onNavigate={id => { setActiveSection(id); setMobileNav(false); }} onTask={id => { setSelectedWorkId(id); setActiveSection('work'); setMobileNav(false); }} />
       {tourActive && (
         <TourOverlay
           steps={tourSteps(t)}
@@ -369,12 +332,7 @@ export default function App() {
           onNavigate={setActiveSection}
         />
       )}
-
-      <CommandPalette
-        opened={paletteOpen}
-        onClose={() => setPaletteOpen(false)}
-        commands={paletteCommands}
-      />
     </div>
   );
 }
+

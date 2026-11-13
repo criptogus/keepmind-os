@@ -4,11 +4,12 @@ export type Lang = 'en' | 'pt' | 'es';
 const STORAGE_KEY = 'km-lang';
 
 const dict: Record<string, { en: string; pt: string }> = {
+  'nav.work': { en: 'Workspace', pt: 'Trabalho' },
   // Shell / navigation
   'nav.dashboard': { en: 'Home', pt: 'Início' },
   'nav.agents': { en: 'Agents', pt: 'Agentes' },
   'nav.teams': { en: 'Teams', pt: 'Equipes' },
-  'nav.automations': { en: 'Automations', pt: 'Automações' },
+  'nav.automations': { en: 'Routines', pt: 'Rotinas' },
   'nav.skills': { en: 'Skills', pt: 'Habilidades' },
   'nav.governance': { en: 'Approvals', pt: 'Aprovações' },
   'nav.logs': { en: 'History', pt: 'Histórico' },
@@ -78,6 +79,7 @@ const dict: Record<string, { en: string; pt: string }> = {
   'mode.bannerTitle': { en: 'Choose how you will use KeepMind OS', pt: 'Escolha como você vai usar o KeepMind OS' },
   'mode.bannerDesc': { en: 'Personal or Company — this changes menus, templates and corporate features.', pt: 'Pessoal ou Empresa — isso muda menus, templates e recursos corporativos.' },
   'settings.portugues': { en: 'Português', pt: 'Português' },
+  'settings.autonomyPolicy': { en: 'Routine work runs automatically. External or unbounded actions require approval; agent permissions and budgets still apply.', pt: 'Trabalho rotineiro executa automaticamente. Ações externas ou de impacto não delimitado pedem aprovação; permissões e orçamentos continuam valendo.' },
   'settings.governance': { en: 'Governance', pt: 'Governança' },
   'settings.autoApprove': { en: 'Auto-approve actions', pt: 'Aprovar ações automaticamente' },
   'settings.autoApproveHint': { en: 'Disabling manual approval reduces security oversight', pt: 'Desativar aprovação manual reduz a supervisão de segurança' },
@@ -792,9 +794,9 @@ const dict: Record<string, { en: string; pt: string }> = {
   'tour.finish': { en: 'Finish', pt: 'Concluir' },
   'tour.stepOf': { en: 'of', pt: 'de' },
   'tour.nav.title': { en: 'This is the menu', pt: 'Este é o menu' },
-  'tour.nav.text': { en: 'Everything lives here: Home, Agents, Teams, Skills, Approvals, History, Settings and Advanced.', pt: 'Tudo fica aqui: Início, Agentes, Equipes, Habilidades, Aprovações, Histórico, Configurações e Avançado.' },
+  'tour.nav.text': { en: 'Start in Workspace, review Approvals and manage Routines. Agents, teams and settings are under More tools.', pt: 'Comece em Trabalho, confira Aprovações e gerencie Rotinas. Agentes, equipes e configurações ficam em Mais ferramentas.' },
   'tour.home.title': { en: 'Home shows what needs attention', pt: 'O Início mostra o que precisa de atenção' },
-  'tour.home.text': { en: 'Pending approvals and connection status appear here first — it tells you what to do next.', pt: 'Aprovações pendentes e status das conexões aparecem aqui primeiro — ele diz o que fazer a seguir.' },
+  'tour.home.text': { en: 'Make a request at the top. Follow ongoing work and open deliveries below.', pt: 'Faça seu pedido no topo. Acompanhe o trabalho e abra as entregas logo abaixo.' },
   'tour.agents.title': { en: 'Agents are your AI helpers', pt: 'Agentes são seus assistentes de IA' },
   'tour.agents.text': { en: 'Create agents for jobs like "answer customers on WhatsApp" or "write the daily site report". Each one has its own instructions and tools.', pt: 'Crie agentes para trabalhos como "responder clientes no WhatsApp" ou "escrever o relatório diário da obra". Cada um tem instruções e ferramentas próprias.' },
   'tour.approvals.title': { en: 'You stay in control', pt: 'Você mantém o controle' },
@@ -850,3 +852,4 @@ export function LangProvider({ children }: { children: ReactNode }) {
 export function useLang(): LangContextValue {
   return useContext(LangContext);
 }
+

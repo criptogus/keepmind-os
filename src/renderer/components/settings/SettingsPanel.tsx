@@ -40,6 +40,14 @@ export default function SettingsPanel() {
 
       <Card withBorder padding="md" radius="md">
         <Stack gap="sm">
+          <Text fw={600}>{lang === 'pt' ? 'Memória semântica local' : 'Local semantic memory'}</Text>
+          <Switch label={lang === 'pt' ? 'Combinar busca por palavras e significado' : 'Combine keyword and semantic search'} checked={settings.memorySemanticSearch === true} onChange={e => handleChange('memorySemanticSearch', e.currentTarget.checked)} />
+          <TextInput label="Embedding model" value={settings.memoryEmbeddingModel || 'nomic-embed-text'} onChange={e => handleChange('memoryEmbeddingModel', e.currentTarget.value)} />
+          <Text size="xs" c="dimmed">{lang === 'pt' ? 'Opcional: requer um servidor local compatível com OpenAI na porta 11434 e o modelo instalado. Indexa até 32 memórias por busca. Se indisponível, usa palavras-chave. Nenhum modelo é baixado automaticamente.' : 'Optional: requires a local OpenAI-compatible server on port 11434 with the model installed. Indexes up to 32 memories per search. Falls back to keywords if unavailable. No automatic model downloads.'}</Text>
+        </Stack>
+      </Card>
+      <Card withBorder padding="md" radius="md">
+        <Stack gap="sm">
           <Text fw={600}>{t('settings.appearance')}</Text>
           <Select
             label={t('settings.theme')}
@@ -81,16 +89,7 @@ export default function SettingsPanel() {
       <Card withBorder padding="md" radius="md">
         <Stack gap="sm">
           <Text fw={600}>{t('settings.governance')}</Text>
-          <Group justify="space-between">
-            <div>
-              <Text size="sm" fw={500}>{t('settings.autoApprove')}</Text>
-              <Text size="xs" c="dimmed">{t('settings.autoApproveHint')}</Text>
-            </div>
-            <Switch
-              checked={settings.autoApprove}
-              onChange={(e) => handleChange('autoApprove', e.currentTarget.checked)}
-            />
-          </Group>
+          <Text size="sm">{t('settings.autonomyPolicy')}</Text>
           <Group justify="space-between" align="flex-start">
             <div>
               <Text size="sm" fw={500}>{t('settings.sound')}</Text>
@@ -177,3 +176,4 @@ export default function SettingsPanel() {
     </Stack>
   );
 }
+

@@ -1,0 +1,252 @@
+# Developer workspace
+
+KeepMind OS is free, MIT-licensed software. There are no paid feature tiers,
+KeepMind account requirements or hosted-service dependencies. Providers and
+third-party integrations may charge for their own services.
+
+## Work, not configuration
+
+The Workspace opens with an outcome composer. Create a task with a project,
+agent, acceptance criteria and optional task dependencies. The board separates
+ready, running, review, accepted, blocked and cancelled work. Dependencies are
+satisfied by completed deliveries; tasks marked for review wait for acceptance. The details panel keeps output, execution
+ID, comments and corrections together. New tasks deliver automatically unless mandatory review is selected. Automatic
+delivery is not a claim of human acceptance or independently verified quality. Request a revision to retain the history and run again.
+
+Repository review, release preparation and developer documentation templates are
+included. They do not publish, deploy or merge automatically. Configure the
+necessary agent skills and directory permissions for your repository.
+
+Corrections can become proposed project rules. Activate or retire them explicitly.
+Only active rules from the same project and task owner are sent to future runs.
+Rules have revision counters and an audit trail. They do not grant permissions.
+
+Export work creates a portable JSON document containing tasks, outputs and rules.
+It contains your work content: review before sharing. It is not an agent-config
+importer or a full backup. Settings → data export remains the full database backup.
+
+## Execution guarantees and boundaries
+
+- Tool governance fails closed on errors; tool allowlists are checked at execution.
+- Agent identity and cancellation are scoped to each asynchronous run, including
+  delegated runs. Cancellation prevents subsequent calls and aborts supported
+  provider requests and shell subprocesses. Already-completed external effects
+  cannot be undone; not every third-party SDK can abort an in-flight operation.
+- Execution records are written before model calls and preserved on failure.
+- Executions save provider responses and tool results in a local write-ahead
+  journal. After restart, the task becomes blocked. **Resume checkpoint** rebuilds
+  the conversation from saved responses and reuses completed tool results without
+  invoking those handlers or billing cached model calls again. OpenAI API,
+  Anthropic and the Codex OAuth tool loops are supported. The original config,
+  tools, transport and input must still match; current tool permissions still apply.
+- A handler marked started without a saved result has an **uncertain effect**.
+  Resume stops at that step. An administrator must inspect the external system
+  and record its verified result in the task drawer. This never retries the
+  uncertain action. Reconciliation records the reviewer and timestamp. This
+  conservative rule also applies to read-tool errors.
+- Pending approvals tied to a not-yet-started checkpoint survive restart for up
+  to 24 hours from creation. Exact arguments and execution bindings are checked
+  again on resume. Legacy or expired approvals are rejected. Resume is explicit;
+  approving an interrupted task does not silently start it. Cancelling rejects
+  its pending approvals. Graceful shutdown preserves resumable approvals.
+- A provider request interrupted before its response is saved may be requested
+  again and charged again; partial text streams are not resumable. Delegated
+  child executions are not recursively resumed: an uncertain delegation requires
+  inspecting the child result and reconciling the parent. No exactly-once claim
+  is made across external systems. A new revision starts a fresh execution and
+  can repeat work, so verify previous effects before requesting one.
+- Journals retain prompts, arguments and results in the same local database as
+  work. They are included in database backups; no separate encryption or automatic
+  retention policy is added by this change.
+- Budgets are checked before each model call and include in-process reservations
+  from concurrent calls. Usage is recorded per successful provider response.
+  Prices and token estimates are not provider invoices. Calls without reported usage keep a conservative estimated ledger entry, marked partial. Failed streams may have
+  billed usage that differs from that estimate. This is not a billing hard cap.
+- Conditional workflows parse typed comparisons without eval; dependencies are
+  validated for cycles before work begins. Failed sequential work stops the chain.
+
+## Memory
+
+Keyword recall searches the complete active corpus, not just the 500 newest items.
+Results include memory IDs and validity dates. Transport success no longer trains
+memory quality. Project rules learn only through explicit review.
+
+Optional hybrid search combines keyword and vector rankings using reciprocal
+rank fusion. Enable **Local semantic memory** in Settings and configure a model
+served by your own OpenAI-compatible local server at
+`http://127.0.0.1:11434/v1/embeddings` (for example an installed local embedding
+model). KeepMind does not install or download it. The first search indexes up to
+32 missing memories; later searches continue indexing. Vectors are cached by model,
+memory ID and content hash. Offline or invalid responses fall back to keywords.
+Retired memories are excluded. This is currently a linear scan, not a large-scale
+vector database. Retrieved text can subsequently be sent to the chosen LLM.
+
+### Evidence and consolidation history
+
+Personal memory captures the executing agent and execution ID from the runtime,
+plus an optional `source` reference on `personalbrain_remember`. References are
+claims, not independently verified evidence; recall labels them accordingly.
+Both lexical and hybrid recall expose the same provenance. Legacy memories have
+empty provenance, and no source is invented for them. Duplicate capture retains
+additional sources (up to 100) without creating another memory.
+
+Consolidation records typed `refines`, `updates`, `contradicts` and `related`
+links with the judge confidence and timestamp. Contradictions keep both items
+active. Updates retain historical sources on the superseded item. Only actual
+candidate IDs and finite confidence scores in range are accepted; a judge cannot
+mutate arbitrary memories. Superseding multiple items and saving the new one is
+one SQLite transaction. These links are model suggestions, not verified facts.
+
+The memory-list API and database backups include this metadata. The markdown
+vault is still a content archive, not a provenance backup. This is local personal
+memory; it does not introduce shared memory, a graph editor or automatic source
+fetching. Source references should identify documents/messages without access
+tokens; supplied references are length-limited and pass the secret-content guard.
+
+## Free headless runner
+
+Node.js >=24.11, no Electron window, Docker, database server or KeepMind cloud:
+
+```sh
+npm ci
+# Set OPENAI_API_KEY or ANTHROPIC_API_KEY in your environment.
+npm run runner -- --config examples/workspace.json --task "Review README.md"
+npm run runner -- --config examples/workspace.json --watch
+```
+
+The versioned JSON config defines workspace, agents, models, budgets and interval
+routines. Paths resolve relative to the config. Tools are read-only and restricted
+to the workspace; shell, writes and external connectors are not enabled in this
+initial runner. New results are delivered automatically; critical tool actions still wait for approval. Accept a result with:
+
+```sh
+npm run runner -- --config examples/workspace.json --accept TASK_ID
+```
+
+Inspect and resume interrupted work without starting a new task:
+
+```sh
+npm run runner -- --config examples/workspace.json --inspect TASK_ID
+npm run runner -- --config examples/workspace.json --resume TASK_ID
+# Only after verifying an uncertain effect; result.txt contains the actual result:
+npm run runner -- --config examples/workspace.json --reconcile TASK_ID --step STEP_KEY --result-file result.txt
+```
+
+State defaults to `~/.keepmind/runner`; use `--data-dir` to change it. Local desktop
+and runner databases remain separate. Connecting the desktop to a shared server
+uses that server as the authoritative workspace; see [Shared workspaces](SHARED_WORKSPACES.md).
+One process may own a data directory. After a crash, inspect processes before
+removing `runner.lock`. A server running this process can keep schedules active
+when your laptop is off; a sleeping or powered-off runner cannot execute work.
+Use your own process supervisor for service management. `--serve` exposes the
+authenticated workspace API; the default runner without that flag opens no port.
+
+## Design references
+
+Independent implementation informed by the public product descriptions of:
+
+- Kortix CompanyOS: one entry point, work attached to persistent context.
+- agentes.chat: contextual review and explicit learning from corrections.
+- Paperclip: tasks, goals, dependencies, budgets and reviewable work products.
+
+No source or branding from these projects was copied. This change retains MIT.
+This is not feature parity with their cloud computers, collaboration or plugins.
+
+## Remaining engineering work
+
+- Recursive delegation/workflow checkpoints, partial-stream continuation and
+  provider-side idempotency where supported. Explicit tool-loop resume is implemented.
+- Offline replication/merge and streaming presence. The shared server, authenticated
+  desktop connection and polling synchronization are implemented.
+- Plugin signing/catalog and additional agent harness adapters. MCP stdio and
+  Streamable HTTP tools are implemented with the pinned v1 SDK (2025-11-25 protocol).
+- Rich shared channels and simultaneous document editing. Project/agent-scoped
+  task collaboration with role checks and optimistic concurrency is implemented.
+- A browsable evidence graph, typed commitment/decision relationships and
+  scalable vector retrieval across large vaults. Source provenance and typed
+  consolidation relationships are implemented in personal memory.
+- Automatic compensating actions and file-diff approvals. Routine draft/run policies
+  and execution/tool-argument previews are implemented; arbitrary external effects
+  are not automatically reversible.
+- Execute and validate signed/notarized macOS and Windows builds with the owner's
+  signing identities. The manual signed-artifact workflow is implemented and
+  refuses unsigned fallback; credentials are not available in this workspace.
+
+These are not advertised as shipped features. keepmind.io should describe the
+released version until a tested release includes this work.
+
+## Focused interface
+
+The default **Now** view puts decisions and blocked work first. Completed and
+cancelled work stays available through **Include completed**. Overview counters
+filter the list; search and project filters apply together. **Board** remains an
+optional view and omits empty columns. The task composer opens only for the first
+task or **New task**; the primary button starts work immediately. Advanced options allow saving a draft.
+
+The task drawer shows an execution plan with the assigned agent, configured
+model, currently available tools, monthly budget (when configured) and dependency
+status. Auto-routing can change the model; this is not a cost quotation or a
+permission grant. Dependencies must be complete before running; review-required dependencies need acceptance. Uncertain effects
+must be reconciled before the resume button becomes available. Missing provider
+credentials offer a direct route to connection settings.
+
+**Cmd/Ctrl K** opens task/page search. Arrow Down moves into results; Tab and
+Enter navigate and activate, Escape closes. The sidebar has four daily destinations
+and a **More tools** disclosure for configuration and specialist screens. Narrow
+windows collapse the sidebar behind **Menu**. Core content uses theme-aware colors,
+visible keyboard focus and responsive task cards; activity history is expandable.
+
+## Autonomy and decisions
+
+New tasks default to `reviewRequired: false`. Completed, non-empty outputs move to
+Delivered without an acceptance click; `acceptedAt` remains empty until an actual
+reviewer accepts the result. A correction can reopen delivered work. Legacy tasks
+with no stored policy retain mandatory review. API callers can set
+`reviewRequired: true`; the desktop exposes this in advanced task options.
+
+The main task button starts execution after creating the task. If starting fails,
+the created task remains visible for recovery; it is not automatically recreated.
+New desktop routine forms default to Run, while existing routines and headless
+config defaults are preserved. Tool permissions and estimated budget checks remain.
+
+The deterministic action policy permits routine reads, personal memory and
+permission-constrained delegation without approval. File/spreadsheet writes,
+shell commands, outgoing messages, shared knowledge changes, agent creation and
+unclassified integrations still request approval with a reason. Legacy global
+`autoApprove`/disabled-gate flags no longer bypass impactful tool actions. Their UI
+switches are replaced with an explanation, and the bulk approval button is removed.
+A previously pending/rejected checkpoint approval cannot be skipped by changing
+an MCP read grant.
+
+MCP administrators may list exact original tool names in `automaticReadTools`.
+A grant takes effect only if the tool also declares `readOnlyHint: true` and
+`destructiveHint: false`. Server annotations alone never grant permission.
+The administrator must trust the configured implementation; these declarations
+are not a sandbox or proof that a remote server cannot mutate state. Do not grant
+automatic reads to general-purpose command, HTTP request or write-capable tools.
+Other MCP calls continue to require approval. Grants do not bypass agent allowlists.
+
+This is a first bounded-autonomy policy, not automatic risk understanding of
+arbitrary shell commands or API payloads. Isolated writable worktrees, validated
+file diffs and narrowly scoped write grants remain needed to automate more changes.
+
+## Autonomous deliverable files
+
+Assign the **Autonomous Deliverables** skill to a desktop agent, or include
+`artifact_create` in a headless agent's tool list. The tool creates a text report,
+proposed source file or patch inside the execution's SQLite record. It does not
+write to the working repository, run code, publish or require a per-file approval.
+
+Open the task to preview plain text or download a file. Each changed content under
+the same filename creates an immutable version with a SHA-256 hash; identical
+retries return the existing version. Runtime identity determines the owning
+execution, not tool arguments. Shared downloads require task/project/agent access.
+Limits are 100 KB per artifact, 20 versions and 500 KB total per execution.
+Filenames cannot contain directories. Contents are rendered as text, never HTML.
+
+These are proposals, not applied edits or proof that tests ran. Downloads require
+a click and do not execute files. Database backups include artifacts. The drawer
+shows the current execution's files; older execution records remain in the database
+but a cross-revision artifact browser is not implemented. A directory sandbox,
+automatic patch application, conflict-aware undo and command isolation remain
+separate work. There is no disk quota across all executions yet.

@@ -14,17 +14,10 @@
 body {
   margin: 0;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  font-feature-settings: 'cv05', 'cv11';
-  letter-spacing: -0.006em;
-  /* Mantine color-scheme aware: stays in sync with light/dark/auto. */
   background-color: var(--mantine-color-body);
   color: var(--mantine-color-text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-::selection {
-  background: var(--mantine-primary-color-light);
 }
 
 #root {
@@ -41,12 +34,12 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--mantine-color-gray-4);
+  background: #d0d5dd;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--mantine-color-gray-5);
+  background: #98a2b3;
 }
 
 /* ---- Motion (inspired by agentes.chat's token system, monochrome) ---- */
@@ -65,39 +58,6 @@ body {
 }
 .km-enter {
   animation: km-enter var(--km-dur-panel) var(--km-out) both;
-}
-
-/* Staggered list entrances — apply km-d1..km-d4 alongside km-enter. */
-.km-d1 { animation-delay: 40ms; }
-.km-d2 { animation-delay: 80ms; }
-.km-d3 { animation-delay: 120ms; }
-.km-d4 { animation-delay: 160ms; }
-
-/* Clickable cards: gentle lift + deeper shadow on hover. */
-.km-hoverable {
-  cursor: pointer;
-}
-.km-hoverable:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(20, 19, 16, 0.10), 0 2px 6px rgba(20, 19, 16, 0.05) !important;
-  border-color: var(--mantine-color-gray-4) !important;
-}
-
-/* Page/section transitions: a soft fade when switching views. */
-@keyframes km-fade {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-.km-fade {
-  animation: km-fade 200ms var(--km-out) both;
-}
-
-/* Sidebar nav buttons: subtle press feedback. */
-.mantine-Button-root {
-  transition: transform 120ms var(--km-spring), background-color 140ms ease, color 140ms ease;
-}
-.mantine-Button-root:active {
-  transform: scale(0.985);
 }
 
 /* Live progress bar: a soft sheen sweeping while work runs. */
@@ -120,17 +80,133 @@ body {
 
 /* Keyboard focus: a solid ring offset from the control (WCAG 2.4.7). */
 :focus-visible {
-  outline: 2px solid #111;
+  outline: 2px solid var(--mantine-color-text);
   outline-offset: 2px;
   border-radius: 4px;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .km-enter,
-  .km-fade,
-  .km-progress::after,
-  .mantine-Button-root {
+  .km-progress::after {
     animation: none;
-    transition: none;
   }
 }
+
+
+.km-workbench { max-width: 1040px; width: 100%; margin: 0 auto; }
+.km-eyebrow { font: 600 10px/1.5 ui-monospace, monospace; letter-spacing: .16em; color: var(--mantine-color-dimmed); margin-bottom: 12px; }
+.km-command { box-shadow: 0 8px 30px #00000005; }
+.km-details { margin-top: 16px; font-size: 12px; color: var(--mantine-color-dimmed); }
+.km-details summary { cursor: pointer; }
+.km-board { display: grid; grid-template-columns: repeat(3, minmax(220px, 1fr)); gap: 18px; align-items: start; }
+.km-column { background: var(--mantine-color-default-hover); padding: 14px; border-radius: 12px; min-height: 180px; }
+.km-task { display: block; width: 100%; text-align: left; cursor: pointer; padding: 16px; margin-bottom: 10px; border: 1px solid var(--mantine-color-default-border); border-radius: 10px; background: var(--mantine-color-body); color: var(--mantine-color-text); transition: transform 140ms, box-shadow 140ms; }
+.km-task:hover { transform: translateY(-2px); box-shadow: 0 4px 16px #0000000a; }
+.km-empty { padding: 64px 24px; text-align: center; border: 1px dashed var(--mantine-color-default-border); border-radius: 14px; }
+.km-empty p { margin-top: 12px; }
+.km-output { white-space: pre-wrap; overflow-wrap: anywhere; padding: 20px; border: 1px solid var(--mantine-color-default-border); border-radius: 10px; font: 13px/1.7 ui-monospace, monospace; }
+.km-event { padding: 0 0 12px 14px; border-left: 2px solid var(--mantine-color-default-border); }
+@media (max-width: 1100px) { .km-board { grid-template-columns: repeat(2, minmax(180px, 1fr)); } }
+@media (max-width: 760px) { .km-board { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .km-task { transition: none; } .km-task:hover { transform: none; } }
+
+.km-focus-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.km-focus-stat { display: flex; align-items: center; gap: 14px; text-align: left; padding: 18px; border: 1px solid var(--mantine-color-default-border); background: var(--mantine-color-body); color: var(--mantine-color-text); border-radius: 12px; cursor: pointer; }
+.km-focus-stat strong { font-size: 28px; letter-spacing: -.04em; }
+.km-focus-stat span { font-size: 13px; }
+.km-focus-stat[aria-pressed=true] { border-color: var(--mantine-color-text); background: var(--mantine-color-default-hover); }
+.km-focus-list { display: grid; grid-template-columns: 1fr; gap: 12px; }
+.km-focus-list .km-task { margin: 0; }
+.km-task { overflow-wrap: anywhere; }
+.km-nav-more { margin-top: 18px; }
+.km-nav-more summary { padding: 10px; cursor: pointer; font-size: 13px; color: var(--mantine-color-dimmed); }
+.km-keycap { font-size: 10px; margin-left: 12px; opacity: .65; }
+.km-sidebar { flex-shrink: 0; }
+.km-nav-toggle { display: none; }
+[data-mantine-color-scheme=dark] :focus-visible { outline-color: #fff; }
+@media (max-width: 900px) {
+  .km-nav-toggle { display: inline-flex; }
+  .km-sidebar:not(.km-sidebar-open) { display: none !important; }
+  .km-sidebar.km-sidebar-open { position: absolute; z-index: 150; top: 42px; bottom: 0; box-shadow: 8px 0 30px #0002; }
+  .km-focus-list { grid-template-columns: 1fr; }
+  .km-focus-stat { padding: 12px; gap: 6px; flex-direction: column; align-items: flex-start; }
+  .km-focus-stat span { font-size: 11px; }
+  .km-workbench h1 { font-size: 26px; }
+}
+
+/* Request and delivery surfaces share the same semantic color tokens. */
+.km-workbench h1 { font-size: clamp(24px, 2.5vw, 32px); letter-spacing: -.035em; }
+.km-workbench h2 { font-size: 20px; letter-spacing: -.02em; }
+.km-task { color: var(--mantine-color-text); padding: 18px 20px; }
+.km-task-title { color: var(--mantine-color-text); font-size: 16px; }
+.km-task:hover { transform: none; border-color: var(--mantine-color-dimmed); box-shadow: none; }
+.km-command { box-shadow: none; border-color: var(--mantine-color-default-border); }
+.km-empty { padding: 32px 20px; border-style: solid; background: var(--mantine-color-default-hover); }
+.km-filter-options { margin: 0 0 16px; }
+.km-details summary { color: var(--mantine-color-text); padding: 8px 0; font-size: 13px; }
+.km-details summary:hover { text-decoration: underline; }
+.km-document { color: var(--mantine-color-text); font-size: 15px; line-height: 1.75; overflow-wrap: anywhere; }
+.km-document > * + * { margin-top: 16px; }
+.km-document h1, .km-document h2, .km-document h3 { line-height: 1.35; margin: 24px 0 12px; }
+.km-document h1 { font-size: 24px; }
+.km-document h2 { font-size: 20px; }
+.km-document h3 { font-size: 17px; }
+.km-document ul, .km-document ol { padding-left: 24px; }
+.km-document li + li { margin-top: 6px; }
+.km-document blockquote { border-left: 3px solid var(--mantine-color-default-border); padding-left: 16px; }
+.km-document pre { white-space: pre-wrap; padding: 16px; border-radius: 8px; background: var(--mantine-color-default-hover); }
+.km-document code { font-family: var(--mantine-font-family-monospace); font-size: .9em; }
+.km-document a { color: var(--mantine-color-anchor); text-decoration: underline; }
+.km-document table { display: block; overflow-x: auto; border-collapse: collapse; }
+.km-document th, .km-document td { padding: 8px 12px; border: 1px solid var(--mantine-color-default-border); text-align: left; }
+.km-delivery-drawer { width: min(820px, 100vw); }
+@media (max-width: 600px) {
+  [data-tour=content] { padding: 16px !important; }
+  .km-work-filters { gap: 2px; }
+  .km-work-filters button { padding-inline: 8px; }
+}
+
+:root[data-mantine-color-scheme=light] { --mantine-color-dimmed: #59616b; }
+:root[data-mantine-color-scheme=dark] { --mantine-color-dimmed: #adb5bd; }
+.km-workbench button[data-variant=subtle], .km-workbench button[data-variant=light],
+.km-sidebar button[data-variant=subtle], .km-sidebar button[data-variant=light] { color: var(--mantine-color-text); }
+
+/* Business onboarding remains readable and scrollable at small window sizes. */
+.km-welcome { max-width: 960px; margin: 0 auto; padding: 40px 24px 64px; }
+.km-business-guide { width: 100%; }
+@media (max-width: 600px) { .km-welcome { padding: 24px 12px; } .km-business-guide { padding: 20px !important; } }
+
+.km-delivery-drawer { background: var(--mantine-color-body); }
+.km-chat-heading { position: sticky; top: 0; z-index: 2; background: var(--mantine-color-body); padding: 8px 0 14px; border-bottom: 1px solid var(--mantine-color-default-border); }
+.km-chat-message { border: 1px solid var(--mantine-color-default-border); border-radius: 18px; padding: 20px; max-width: 94%; overflow-wrap: anywhere; }
+.km-chat-user { align-self: flex-end; background: #111; color: #fff; border-color: #111; border-bottom-right-radius: 4px; }
+.km-chat-agent { align-self: flex-start; width: 100%; background: light-dark(#fff, #111); border-bottom-left-radius: 4px; }
+.km-chat-message .km-document { font-size: 14px; line-height: 1.65; }
+.km-chat-message .km-document h2 { font-size: 20px; }
+.km-chat-excerpt { max-height: 280px; overflow: hidden; mask-image: linear-gradient(#000 75%, transparent); }
+.km-chat-composer { position: sticky; bottom: -16px; z-index: 3; padding: 16px 0; background: var(--mantine-color-body); border-top: 1px solid var(--mantine-color-default-border); }
+.km-material-card { background: light-dark(#fafafa, #171717); }
+.km-paper-preview { background: white; color: #111111; padding: 40px; border: 1px solid #dbe1e8; border-radius: 6px; }
+.km-paper-preview h1 { border-bottom: 3px solid #c5f542; padding-bottom: 18px; font-size: 28px; }
+.km-paper-preview pre { white-space: pre-wrap; overflow-wrap: anywhere; font: 15px/1.6 Arial; }
+.km-slide-preview { background: #ffffff; color: #111111; padding: 28px 40px; border-left: 10px solid #c5f542; border-radius: 8px; min-height: 320px; display: flex; flex-direction: column; }
+.km-slide-preview h2 { font-size: 24px; }.km-slide-preview p { font: 20px/1.5 Arial; flex: 1; white-space: pre-wrap; }.km-slide-preview small { color: #64748b; }
+@media(max-width:600px){.km-chat-message{max-width:100%;padding:14px}.km-paper-preview,.km-slide-preview{padding:20px}.km-chat-composer{bottom:-16px}}
+
+/* KeepMind identity: black and white, with a sharp lime action accent. */
+:root { --km-lime: #c5f542; --km-ink: #111; }
+.km-primary-action, .km-approve-action { background: var(--km-lime) !important; color: #111 !important; border: 1px solid var(--km-lime) !important; border-radius: 10px; font-weight: 650; }
+.km-primary-action:hover, .km-approve-action:hover { background: #b5e52e !important; border-color: #b5e52e !important; }
+.km-primary-action:disabled, .km-approve-action:disabled { background: light-dark(#e8e8e8,#303030) !important; color: light-dark(#676767,#aaa) !important; border-color: transparent !important; }
+.km-approve-action { min-height: 42px; padding: 0 18px; }
+.km-approve-action [class*="section"] { font-size: 18px; }
+.km-lime-badge { background: var(--km-lime) !important; color: #111 !important; }
+.km-bot-avatar svg { filter: grayscale(1); }
+[data-mantine-color-scheme=dark] .km-bot-avatar svg { filter: grayscale(1) invert(1); }
+.km-chat-user .km-document, .km-chat-user p { color: #fff; }
+.km-chat-agent { border-color: light-dark(#e4e4e4,#333); box-shadow: 0 2px 12px #00000004; }
+.km-chat-heading { border-bottom-color: light-dark(#eee,#333); }
+.km-material-card { border-color: light-dark(#dedede,#333); border-left: 3px solid var(--km-lime); }
+.km-eyebrow { font-size: 11px; letter-spacing: .12em; font-weight: 700; color: var(--mantine-color-dimmed); margin-bottom: 6px; }
+.km-sak-panel { border-top: 3px solid var(--km-lime); }
+.km-skill-preview { max-height: 320px; overflow: auto; border: 1px solid var(--mantine-color-default-border); border-radius: 10px; padding: 16px; }
