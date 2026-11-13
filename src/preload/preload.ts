@@ -91,6 +91,18 @@ contextBridge.exposeInMainWorld('electronAPI', {
     ipcRenderer.invoke('secondbrain:setConfig', config) as Promise<{ enabled: boolean; url: string; hasToken: boolean; access?: string; blockPii?: boolean }>,
   secondBrainTest: () => ipcRenderer.invoke('secondbrain:test') as Promise<{ ok: boolean; error?: string }>,
 
+  // App mode (personal | corporate) and guided brain-product install
+  appGetMode: () => ipcRenderer.invoke('app:getMode') as Promise<'personal' | 'corporate' | 'unset'>,
+  appSetMode: (mode: 'personal' | 'corporate') =>
+    ipcRenderer.invoke('app:setMode', mode) as Promise<{ ok: boolean; mode?: string; error?: string }>,
+  brainInstallProduct: (product: 'personal' | 'corporate') =>
+    ipcRenderer.invoke('brain:installProduct', product) as Promise<{ ok: boolean; path?: string; error?: string }>,
+  onBrainInstallProgress: (callback: (p: { received: number; total: number }) => void) => {
+    const listener = (_e: Electron.IpcRendererEvent, p: { received: number; total: number }) => callback(p);
+    ipcRenderer.on('brain:installProgress', listener);
+    return () => ipcRenderer.removeListener('brain:installProgress', listener);
+  },
+
   // Skills
   getSkills: () => ipcRenderer.invoke('skills:getAll') as Promise<Skill[]>,
   getSkill: (id: string) => ipcRenderer.invoke('skills:get', id) as Promise<Skill | null>,
@@ -278,6 +290,10 @@ declare global {
       secondBrainSetConfig: (config: { enabled?: boolean; url?: string; token?: string; access?: 'read' | 'write'; blockPii?: boolean }) =>
         Promise<{ enabled: boolean; url: string; hasToken: boolean; access?: string; blockPii?: boolean }>;
       secondBrainTest: () => Promise<{ ok: boolean; error?: string }>;
+      appGetMode: () => Promise<'personal' | 'corporate' | 'unset'>;
+      appSetMode: (mode: 'personal' | 'corporate') => Promise<{ ok: boolean; mode?: string; error?: string }>;
+      brainInstallProduct: (product: 'personal' | 'corporate') => Promise<{ ok: boolean; path?: string; error?: string }>;
+      onBrainInstallProgress: (callback: (p: { received: number; total: number }) => void) => () => void;
       whatsappGetStatus: () => Promise<{ status: 'disconnected' | 'connecting' | 'qr' | 'connected' | 'error'; phone: string }>;
       whatsappStart: () => Promise<{ status: string; phone: string }>;
       whatsappStop: () => Promise<{ status: string; phone: string }>;

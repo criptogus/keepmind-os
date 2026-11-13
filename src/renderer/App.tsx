@@ -17,6 +17,7 @@ import type { LocalUser } from '../shared/types.js';
 import { Badge, Button, Group, Text, ActionIcon } from '@mantine/core';
 import { useThemeStore } from './store/themeStore';
 import { useLang } from './lib/i18n';
+import { useAppMode } from './lib/useAppMode';
 import TourOverlay, { type TourStep } from './components/tour/TourOverlay';
 
 const TOUR_DONE_KEY = 'km-tour-done';
@@ -87,7 +88,9 @@ export default function App() {
     return () => { clearInterval(interval); unsubDeepLink?.(); };
   }, [initTheme]);
 
-  const sidebarItems = [
+  const { mode: appMode } = useAppMode();
+  // 'unset' keeps every section visible (status quo) until the user picks a mode.
+  const allSidebarItems = [
     { id: 'dashboard', label: t('nav.dashboard') },
     { id: 'agents', label: t('nav.agents') },
     { id: 'teams', label: t('nav.teams') },
@@ -98,6 +101,10 @@ export default function App() {
     { id: 'settings', label: t('nav.settings') },
     { id: 'advanced', label: t('nav.advanced') },
   ];
+  const CORPORATE_ONLY = new Set(['teams', 'governance']);
+  const sidebarItems = appMode === 'personal'
+    ? allSidebarItems.filter((i) => !CORPORATE_ONLY.has(i.id))
+    : allSidebarItems;
 
   const governanceTabs = [
     { id: 'approvals', label: t('gov.pending') },
@@ -106,6 +113,9 @@ export default function App() {
   const [governanceTab, setGovernanceTab] = useState('approvals');
 
   const renderContent = () => {
+    if (appMode === 'personal' && CORPORATE_ONLY.has(activeSection)) {
+      return <AnalyticsDashboard onNavigate={setActiveSection} />;
+    }
     switch (activeSection) {
       case 'dashboard':
         return <AnalyticsDashboard onNavigate={setActiveSection} />;

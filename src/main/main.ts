@@ -16,6 +16,7 @@ import { TriggerManager } from './agent/TriggerManager.js';
 import { LocalAuth } from './auth/LocalAuth.js';
 import { importSkillsFromGitHub } from './integrations/SkillImporter.js';
 import { MemoryManager } from './integrations/MemoryManager.js';
+import { downloadAndOpenInstaller } from './integrations/productInstall.js';
 import { createMemoryJudge } from './integrations/MemoryJudge.js';
 import { getCachedCatalog, isCacheFresh, knownModelIds, refreshModelCatalog, type ProviderCredentials } from './integrations/ModelCatalog.js';
 import { routeModelForTask, DEFAULT_MODEL, costFromUsage, type ModelProvider } from '../shared/models.js';
@@ -1645,6 +1646,59 @@ handle('secondbrain:setConfig', (_event, config: { enabled?: boolean; url?: stri
 
 handle('secondbrain:test', async () => {
   return secondBrainManager.testConnection();
+});
+
+// Personal vs corporate mode — chosen at onboarding, editable in Settings.
+handle('app:getMode', () => {
+  const mode = storageManager.getSetting('app.mode');
+  return mode === 'personal' || mode === 'corporate' ? mode : 'unset';
+});
+
+handle('app:setMode', (_event, mode: string) => {
+  requireRole('admin');
+  if (mode !== 'personal' && mode !== 'corporate') {
+    return { ok: false, error: 'Invalid mode' };
+  }
+  storageManager.setSetting('app.mode', mode);
+  storageManager.saveAuditLog({
+    id: uuidv4(), timestamp: new Date().toISOString(),
+    agentId: 'system', agentName: 'System', action: 'app_mode_changed',
+    input: { mode }, output: {}, metadata: {},
+    userId: currentUserId(),
+  });
+  return { ok: true, mode };
+});
+
+// Guided second-brain install: downloads the right installer for this
+// platform from GitHub Releases and opens it.
+handle('brain:installProduct', async (_event, product: 'personal' | 'corporate') => {
+  if (product !== 'personal' && product !== 'corporate') {
+    return { ok: false, error: 'Invalid product' };
+  }
+  const platform = process.platform as 'darwin' | 'win32' | 'linux';
+  if (!['darwin', 'win32', 'linux'].includes(platform)) {
+    return { ok: false, error: `Unsupported platform: ${platform}` };
+  }
+  const { shell } = await import('electron');
+  const result = await downloadAndOpenInstaller(
+    product,
+    platform,
+    app.getPath('downloads'),
+    (received, total) => {
+      mainWindow?.webContents.send('brain:installProgress', { received, total });
+    },
+  );
+  if (result.ok && result.path) {
+    const open = await shell.openPath(result.path);
+    if (open) return { ok: false, error: open, path: result.path };
+    storageManager.saveAuditLog({
+      id: uuidv4(), timestamp: new Date().toISOString(),
+      agentId: 'system', agentName: 'System', action: 'brain_installer_downloaded',
+      input: { product, platform }, output: { path: result.path }, metadata: {},
+      userId: currentUserId(),
+    });
+  }
+  return result;
 });
 
 // WhatsApp (Baileys)

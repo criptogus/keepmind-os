@@ -6,6 +6,7 @@ import { AVATAR_PRESETS, avatarJson, presetAvatarFor } from '../../../shared/ava
 import { AGENT_TEMPLATES, type AgentTemplate } from '../../lib/agentTemplates';
 import { describeTool } from '../../lib/plainLanguage';
 import { useLang } from '../../lib/i18n';
+import { useAppMode } from '../../lib/useAppMode';
 import type { Agent, AgentConfig, Skill, ToolConfig } from '../../../shared/types.js';
 import { DEFAULT_MODEL } from '../../../shared/models.js';
 
@@ -63,11 +64,16 @@ export default function AgentWizard({ onClose, onCreated, onAdvanced }: AgentWiz
       .catch(() => setSkillIds([]));
   }, [template]);
 
+  const { mode: appMode } = useAppMode();
   const grouped = useMemo(() => {
     const acc: Record<string, AgentTemplate[]> = {};
-    for (const tpl of AGENT_TEMPLATES) (acc[tpl.group] ||= []).push(tpl);
+    for (const tpl of AGENT_TEMPLATES) {
+      // 'unset' shows everything; personal hides corporate role templates.
+      if (appMode === 'personal' && (tpl.audience ?? 'corporate') === 'corporate') continue;
+      (acc[tpl.group] ||= []).push(tpl);
+    }
     return Object.entries(acc);
-  }, []);
+  }, [appMode]);
 
   const buildConfig = (): AgentConfig => {
     const base = template?.config ?? BLANK_TEMPLATE.config;

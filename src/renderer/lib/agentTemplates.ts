@@ -10,6 +10,8 @@ export interface AgentTemplate {
   tagline: string;
   description: string;
   capabilities: string[];
+  /** Who this template is for. Defaults to 'corporate' for role templates. */
+  audience?: 'personal' | 'corporate';
   /** Names of built-in skills to pre-assign (matched by name at creation). */
   skillNames: string[];
   /** Direct tool access granted to this role (in addition to skill tools).
@@ -31,6 +33,7 @@ const base = (systemPrompt: string, extra?: Partial<AgentConfig>): AgentConfig =
 export const AGENT_TEMPLATES: AgentTemplate[] = [
   {
     id: 'ceo',
+    audience: 'corporate',
     group: 'Executive',
     name: 'Chief Executive Officer',
     role: 'CEO',
@@ -58,6 +61,7 @@ Working style:
   },
   {
     id: 'cfo',
+    audience: 'corporate',
     group: 'Executive',
     name: 'Chief Financial Officer',
     role: 'CFO',
@@ -85,6 +89,7 @@ Working style:
   },
   {
     id: 'cto',
+    audience: 'corporate',
     group: 'Executive',
     name: 'Chief Technology Officer',
     role: 'CTO',
@@ -112,6 +117,7 @@ Working style:
   },
   {
     id: 'cmo',
+    audience: 'corporate',
     group: 'Executive',
     name: 'Chief Marketing Officer',
     role: 'CMO',
@@ -139,6 +145,7 @@ Working style:
   },
   {
     id: 'coo',
+    audience: 'corporate',
     group: 'Executive',
     name: 'Chief Operating Officer',
     role: 'COO',
@@ -166,6 +173,7 @@ Working style:
   },
   {
     id: 'chro',
+    audience: 'corporate',
     group: 'Executive',
     name: 'Chief Human Resources Officer',
     role: 'CHRO',
@@ -193,6 +201,7 @@ Working style:
   },
   {
     id: 'ciso',
+    audience: 'corporate',
     group: 'Executive',
     name: 'Chief Information Security Officer',
     role: 'CISO',
@@ -220,6 +229,7 @@ Working style:
   },
   {
     id: 'cpo',
+    audience: 'corporate',
     group: 'Executive',
     name: 'Chief Product Officer',
     role: 'CPO',
@@ -247,6 +257,7 @@ Working style:
   },
   {
     id: 'cro',
+    audience: 'corporate',
     group: 'Executive',
     name: 'Chief Revenue Officer',
     role: 'CRO',
@@ -274,6 +285,7 @@ Working style:
   },
   {
     id: 'general-counsel',
+    audience: 'corporate',
     group: 'Executive',
     name: 'General Counsel',
     role: 'Legal',
@@ -302,6 +314,7 @@ Working style:
   // ---- Construction / construtora templates ----
   {
     id: 'site-engineer',
+    audience: 'corporate',
     group: 'Construction — Site',
     name: 'Engenheiro de Obra',
     role: 'Obra',
@@ -330,6 +343,7 @@ Working style:
   },
   {
     id: 'site-foreman',
+    audience: 'corporate',
     group: 'Construction — Site',
     name: 'Mestre de Obras',
     role: 'Obra',
@@ -357,6 +371,7 @@ Working style:
   },
   {
     id: 'site-supervisor',
+    audience: 'corporate',
     group: 'Construction — Site',
     name: 'Encarregado de Obra',
     role: 'Obra',
@@ -384,6 +399,7 @@ Working style:
   },
   {
     id: 'purchasing',
+    audience: 'corporate',
     group: 'Construction — Supply',
     name: 'Compras',
     role: 'Suprimentos',
@@ -412,6 +428,7 @@ Working style:
   },
   {
     id: 'safety-officer',
+    audience: 'corporate',
     group: 'Construction — Safety',
     name: 'Técnico de Segurança (SESMT)',
     role: 'Segurança',
@@ -440,6 +457,7 @@ Working style:
   },
   {
     id: 'site-finance',
+    audience: 'corporate',
     group: 'Construction — Finance',
     name: 'Financeiro de Obra',
     role: 'Financeiro',
@@ -468,6 +486,7 @@ Working style:
   },
   {
     id: 'bids-assistant',
+    audience: 'corporate',
     group: 'Construction — Commercial',
     name: 'Assistente de Licitações',
     role: 'Comercial',
@@ -492,6 +511,92 @@ Working style:
 - Aponte o que pode desclassificar a proposta antes de qualquer otimização de preço
 - Estruture: Objeto → Requisitos → Habilitação → Riscos → Documentos → Prazos`,
       { temperature: 0.5, maxTokens: 3072 }
+    ),
+  },
+
+  // ---- Personal templates (modo pessoal) ----
+  {
+    id: 'personal-assistant',
+    audience: 'personal',
+    group: 'Personal',
+    name: 'Personal Assistant',
+    role: 'Assistant',
+    tagline: 'Daily tasks, reminders and quick answers',
+    description: 'A general-purpose assistant for everyday questions, planning and small tasks.',
+    capabilities: ['Answer questions', 'Plan your day', 'Draft messages', 'Summarize text'],
+    skillNames: [],
+    toolNames: ['get_current_time', 'web_read_url', 'file_read', 'file_write', 'file_list'],
+    config: base(
+      `You are a personal assistant. You help with everyday questions, planning, drafting and small tasks.
+
+Working style:
+- Be concise and practical
+- Ask one clarifying question only when truly necessary
+- Prefer doing over describing: give the answer or the draft directly`,
+      { temperature: 0.7, maxTokens: 2048 }
+    ),
+  },
+  {
+    id: 'research-analyst',
+    audience: 'personal',
+    group: 'Personal',
+    name: 'Research Analyst',
+    role: 'Researcher',
+    tagline: 'Find, compare and summarize information',
+    description: 'Researches topics, compares options and summarizes findings with sources.',
+    capabilities: ['Web research', 'Compare options', 'Summarize sources', 'Structured briefs'],
+    skillNames: [],
+    toolNames: ['web_read_url', 'open_url', 'file_read', 'file_write', 'get_current_time'],
+    config: base(
+      `You are a research analyst. You find, compare and summarize information.
+
+Working style:
+- Always cite where each claim came from
+- Separate facts from inference
+- End with a short "bottom line" recommendation`,
+      { temperature: 0.4, maxTokens: 3072 }
+    ),
+  },
+  {
+    id: 'content-writer',
+    audience: 'personal',
+    group: 'Personal',
+    name: 'Content Writer',
+    role: 'Writer',
+    tagline: 'Emails, posts, essays and edits',
+    description: 'Writes and edits texts in a clear, natural voice — emails, posts, documents.',
+    capabilities: ['Draft texts', 'Edit and rewrite', 'Match tone', 'Structure arguments'],
+    skillNames: [],
+    toolNames: ['file_read', 'file_write', 'file_list'],
+    config: base(
+      `You are a content writer. You draft and edit texts: emails, posts, essays, documents.
+
+Working style:
+- Write in the user's voice; ask for samples if tone matters
+- Prefer short paragraphs and concrete words
+- When editing, explain what changed and why in one line`,
+      { temperature: 0.8, maxTokens: 3072 }
+    ),
+  },
+  {
+    id: 'life-organizer',
+    audience: 'personal',
+    group: 'Personal',
+    name: 'Life Organizer',
+    role: 'Planner',
+    tagline: 'Goals, habits, schedules and decisions',
+    description: 'Helps plan goals, routines and decisions with simple, actionable structures.',
+    capabilities: ['Goal planning', 'Weekly schedules', 'Decision frameworks', 'Habit tracking ideas'],
+    skillNames: [],
+    toolNames: ['get_current_time', 'file_read', 'file_write', 'file_list'],
+    config: base(
+      `You are a life organizer. You help plan goals, routines, schedules and decisions.
+
+Working style:
+- Turn vague goals into concrete next steps
+- Keep plans small enough to actually do
+- Use simple structures: lists, time blocks, decision criteria`,
+      { temperature: 0.6, maxTokens: 2048 }
     ),
   },
 ];

@@ -6,11 +6,13 @@ import { DEFAULT_MODEL } from '../../../shared/models.js';
 import { useLang, type Lang } from '../../lib/i18n';
 import PageHeader from '../common/PageHeader';
 import { setSfxEnabled, setSfxEvent, type SfxEvent } from '../../lib/sfx';
+import { useAppMode } from '../../lib/useAppMode';
 
 export default function SettingsPanel() {
   const { lang, setLang, t } = useLang();
   const { settings, loading, error, fetchSettings, updateSettings } = useSettingsStore();
   const { groups: modelGroups, updatedAt, refreshing, refresh } = useModelOptions();
+  const { mode: appMode, setMode: setAppMode } = useAppMode();
 
   useEffect(() => {
     fetchSettings();
@@ -59,6 +61,18 @@ export default function SettingsPanel() {
             ]}
             value={settings.language}
             onChange={(v) => { handleChange('language', v); setLang((v || 'pt') as Lang); }}
+            allowDeselect={false}
+          />
+          <Select
+            label={t('settings.mode')}
+            description={t('settings.modeDesc')}
+            data={[
+              { value: 'personal', label: t('ob.modePersonal') },
+              { value: 'corporate', label: t('ob.modeCorporate') },
+            ]}
+            value={appMode === 'unset' ? null : appMode}
+            placeholder={t('mode.bannerTitle')}
+            onChange={(v) => { if (v === 'personal' || v === 'corporate') void setAppMode(v); }}
             allowDeselect={false}
           />
         </Stack>

@@ -6,6 +6,7 @@ import { useTeamStore } from '../../store/teamStore';
 import { useLang } from '../../lib/i18n';
 import BotAvatar from '../common/BotAvatar';
 import AgentSelect from '../common/AgentSelect';
+import { useAppMode } from '../../lib/useAppMode';
 import PixelSpinner from '../common/PixelSpinner';
 import { avatarForAgent } from '../../../shared/avatars';
 import type { AgentExecution } from '../../../shared/types.js';
@@ -22,6 +23,7 @@ interface ConnectionStatus {
 
 export default function AnalyticsDashboard({ onNavigate }: Props) {
   const { t } = useLang();
+  const { mode: appMode, setMode: setAppMode } = useAppMode();
   const { agents, fetchAgents, executeAgent } = useAgentStore();
   const { teams, fetchTeams } = useTeamStore();
   const [executions, setExecutions] = useState(0);
@@ -165,6 +167,21 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
           <Button onClick={() => onNavigate?.('agents')}>{t('agents.new')}</Button>
         </Group>
       </Group>
+
+      {appMode === 'unset' && (
+        <Card withBorder padding="md" radius="md" style={{ borderStyle: 'dashed' }}>
+          <Group justify="space-between" wrap="wrap" gap="sm">
+            <div>
+              <Text fw={600} size="sm">{t('mode.bannerTitle')}</Text>
+              <Text size="xs" c="dimmed">{t('mode.bannerDesc')}</Text>
+            </div>
+            <Group gap="xs">
+              <Button size="xs" variant="light" color="dark" onClick={() => void setAppMode('personal')}>{t('ob.modePersonal')}</Button>
+              <Button size="xs" variant="filled" color="dark" onClick={() => void setAppMode('corporate')}>{t('ob.modeCorporate')}</Button>
+            </Group>
+          </Group>
+        </Card>
+      )}
 
       {agents.length > 0 && (
         <Card withBorder padding="lg" radius="md">

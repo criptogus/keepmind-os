@@ -5,6 +5,7 @@ import { useSettingsStore } from '../../store/settingsStore';
 import { useLang } from '../../lib/i18n';
 import type { Agent, LocalUser, UserRole, ComputerAccessLevel } from '../../../shared/types.js';
 import AgentSelect from '../common/AgentSelect';
+import { useAppMode } from '../../lib/useAppMode';
 
 
 
@@ -25,6 +26,8 @@ export default function AdvancedSettings() {
   const [brainUrl, setBrainUrl] = useState('');
   const [brainToken, setBrainToken] = useState('');
   const [brainStatus, setBrainStatus] = useState('');
+  const [installingBrain, setInstallingBrain] = useState(false);
+  const { mode: appMode } = useAppMode();
   const [waStatus, setWaStatus] = useState<'disconnected' | 'connecting' | 'qr' | 'connected' | 'error'>('disconnected');
   const [waPhone, setWaPhone] = useState('');
   const [waQr, setWaQr] = useState('');
@@ -322,6 +325,26 @@ export default function AdvancedSettings() {
                 }}
               >
                 {t('adv2.saveTest')}
+              </Button>
+              <Button
+                size="xs"
+                variant="light"
+                color="dark"
+                disabled={installingBrain}
+                onClick={async () => {
+                  setInstallingBrain(true);
+                  setBrainStatus(t('ob.installing'));
+                  try {
+                    const res = await window.electronAPI.brainInstallProduct(appMode === 'corporate' ? 'corporate' : 'personal');
+                    setBrainStatus(res.ok ? t('ob.installerOpened') : `${t('adv2.failed')}: ${res.error || t('adv2.unknownErr')}`);
+                  } catch (e) {
+                    setBrainStatus(`${t('adv2.failed')}: ${e instanceof Error ? e.message : t('adv2.unknownErr')}`);
+                  } finally {
+                    setInstallingBrain(false);
+                  }
+                }}
+              >
+                {installingBrain ? t('ob.installing') : appMode === 'corporate' ? t('ob.installCorp') : t('ob.installPersonal')}
               </Button>
               {secondBrain?.enabled && (
                 <Button
