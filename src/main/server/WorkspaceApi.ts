@@ -1,3 +1,5 @@
+import { WorkConversation } from '../work/WorkConversation.js';
+import type { ConversationInput } from '../../shared/conversation.js';
 import { ArtifactStore } from '../artifacts/ArtifactStore.js';
 import { createServer } from 'node:http';
 import { createHash, timingSafeEqual } from 'node:crypto';
@@ -49,6 +51,13 @@ export class WorkspaceApi {
       case 'work:artifacts':{const task=this.task(actor,String(args[0]));return task.executionId?new ArtifactStore(rt.storage).list(task.executionId):[];}
       case 'work:checkpoint':{
         const t=this.task(actor,String(args[0]));return {available:!!t.executionId&&!!rt.checkpoints.read(t.executionId),steps:t.executionId?rt.checkpoints.steps(t.executionId):[]};
+      }
+      case 'work:message': {
+        this.role(actor,'contributor'); const task=this.task(actor,String(args[0]));
+        return rt.trackConversation(new WorkConversation(rt.work, {
+          respond: (agentId,input) => rt.execute(agentId,input,actor.id,undefined,true),
+          start: id => { void rt.start(id,actor.id).catch(()=>{}); },
+        }).send(task.id,args[1] as ConversationInput,args[2] as number));
       }
       case 'work:action':{
         const [id,action,note,expected]=args;const t=this.task(actor,String(id));
@@ -103,7 +112,7 @@ export function createWorkspaceServer(api:WorkspaceApi,principals:Principal[]){
       for await(const chunk of req){bytes+=chunk.length;if(bytes>1024*1024)throw new ApiError(413,'Request too large');chunks.push(chunk);}
       let payload;try{payload=JSON.parse(Buffer.concat(chunks).toString());}catch{throw new ApiError(400,'Invalid JSON');}
       const input=z.object({method:z.string(),args:z.array(z.unknown()).max(8)}).strict().parse(payload);
-      const value=api.call(actor,input.method,input.args,typeof req.headers['idempotency-key']==='string'?req.headers['idempotency-key']:undefined);
+      const value=await api.call(actor,input.method,input.args,typeof req.headers['idempotency-key']==='string'?req.headers['idempotency-key']:undefined);
       res.end(JSON.stringify({value:value??null}));
     }catch(error){res.statusCode=error instanceof ApiError?error.status:error instanceof z.ZodError?400:400;res.end(JSON.stringify({error:error instanceof z.ZodError?'Invalid request':error instanceof Error?error.message:'Request failed'}));}
   });

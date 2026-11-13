@@ -1,3 +1,4 @@
+import type { ConversationInput } from '../shared/conversation';
 import type { SakStatus, SakHit, SakPreview } from '../shared/superAgentSkill.js';
 import type { BusinessTeamInput, BusinessTeamResult } from '../shared/businessTeams.js';
 import type { McpConfig } from '../main/mcp/McpManager.js';
@@ -22,6 +23,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   workPreview: (id: string) => ipcRenderer.invoke('work:preview', id) as Promise<WorkPreview>,
   workList: () => ipcRenderer.invoke('work:list') as Promise<WorkSnapshot>,
   workCreate: (input: CreateWorkInput) => ipcRenderer.invoke('work:create', input) as Promise<WorkTask>,
+  workMessage: (id: string, input: ConversationInput, revision: number) => ipcRenderer.invoke('work:message', id, input, revision) as Promise<WorkTask>,
   workAction: (id: string, action: WorkAction, note?: string, revision?: number) => ipcRenderer.invoke('work:action', id, action, note, revision) as Promise<WorkTask>,
   workReviewRule: (id: string, accept: boolean, version?: number) => ipcRenderer.invoke('work:reviewRule', id, accept, version) as Promise<void>,
   workExport: () => ipcRenderer.invoke('work:export') as Promise<string>,
@@ -335,6 +337,7 @@ declare global {
       workPreview: (id: string) => Promise<WorkPreview>;
       workList: () => Promise<WorkSnapshot>;
       workCreate: (input: CreateWorkInput) => Promise<WorkTask>;
+      workMessage: (id: string, input: ConversationInput, revision: number) => Promise<WorkTask>;
       workAction: (id: string, action: WorkAction, note?: string, revision?: number) => Promise<WorkTask>;
       workReviewRule: (id: string, accept: boolean, version?: number) => Promise<void>;
       workExport: () => Promise<string>;

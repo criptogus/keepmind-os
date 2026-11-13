@@ -1,3 +1,5 @@
+import { WorkConversation } from './work/WorkConversation.js';
+import type { ConversationInput } from '../shared/conversation.js';
 import { nativeMenuTemplate } from './ui/nativeMenu';
 import { CompanyBrains } from './keepmind/CompanyBrains.js';
 import type { CompanyBrainBinding } from '../shared/company-brain.js';
@@ -90,7 +92,7 @@ function remoteWorkspace() {
   if (url && !token) throw new Error('Shared workspace token unavailable. Reconnect or explicitly disconnect.');
   return url && token ? new RemoteWorkspace(url, token) : undefined;
 }
-const REMOTE_METHODS = new Set(["work:artifacts","work:context","work:list","work:create","work:action","work:preview","work:checkpoint","work:reconcile","work:reviewRule","work:export","governance:getState","governance:getPendingApprovals","governance:approve","governance:reject"]);
+const REMOTE_METHODS = new Set(["work:message","work:artifacts","work:context","work:list","work:create","work:action","work:preview","work:checkpoint","work:reconcile","work:reviewRule","work:export","governance:getState","governance:getPendingApprovals","governance:approve","governance:reject"]);
 let workspaceDir = '';
 let tray: Tray | null = null;
 
@@ -211,7 +213,7 @@ async function syncCodexCliAuth(): Promise<void> {
 let activeDelegationDepth = 0;
 
 /** Runs an agent execution end-to-end: streams events, persists the result. */
-async function runAgentExecution(agentId: string, input: Record<string, unknown>, opts?: { userId?: string; resumeId?: string; dryRun?: boolean }) {
+async function runAgentExecution(agentId: string, input: Record<string, unknown>, opts?: { userId?: string; resumeId?: string; dryRun?: boolean; conversationOnly?: boolean }) {
   const agent = storageManager.getAgent(agentId);
   if (!agent) throw new Error('Agent not found');
   // Members may only execute agents explicitly shared by an admin.
@@ -219,7 +221,7 @@ async function runAgentExecution(agentId: string, input: Record<string, unknown>
     throw new Error('This agent is not shared with members');
   }
 
-  await companyBrains.health(agentId);
+  if (!opts?.conversationOnly) await companyBrains.health(agentId);
   const concurrency = Math.max(1, Math.min(32, Number(storageManager.getSetting('maxConcurrentExecutions')) || 4));
   if (agentManager.getActiveExecutions().length >= concurrency) throw new Error('Concurrent execution limit reached; wait for a running task to finish');
   const previousRun = opts?.resumeId ? storageManager.getAgentExecution(opts.resumeId) : undefined;
@@ -229,14 +231,14 @@ async function runAgentExecution(agentId: string, input: Record<string, unknown>
   const executionId = opts?.resumeId ?? uuidv4();
   const userId = opts?.userId ?? currentUserId() ?? 'system';
   const startedAt = previousRun?.startedAt ?? new Date().toISOString();
-  if (typeof input.workTaskId === 'string') workManager.attachExecution(input.workTaskId, executionId);
+  if (!opts?.conversationOnly && typeof input.workTaskId === 'string') workManager.attachExecution(input.workTaskId, executionId);
   storageManager.saveAgentExecution({ id: executionId, agentId, input, userId, startedAt, dryRun: opts?.dryRun === true, activatedSkillIds: previousRun?.activatedSkillIds, status: 'running', progress: 0 });
   try {
     const execution = await agentManager.executeAgent(agentId, agent.config, input, (progress) => {
       storageManager.updateAgentExecutionProgress(executionId, progress);
     }, executionId, (event) => {
       mainWindow?.webContents.send('agents:event', { executionId, ...event });
-    }, { dryRun: opts?.dryRun === true, onSkillsResolved: (ids) => {
+    }, { conversationOnly: opts?.conversationOnly, dryRun: opts?.dryRun === true, onSkillsResolved: (ids) => {
       const record = storageManager.getAgentExecution(executionId);
       if (record) storageManager.saveAgentExecution({ ...record, activatedSkillIds: ids });
     } });
@@ -2857,6 +2859,14 @@ handle('work:create', (_event, input: CreateWorkInput) => {
   const agent = storageManager.getAgent(input.agentId);
   if (!agent || (currentRole() === 'member' && !agent.isShared)) throw new Error('Agent unavailable');
   return workManager.create(input, currentUserId() ?? 'system');
+});
+handle('work:message', async (_event, id: string, input: ConversationInput, revision: number) => {
+  requireWorkAccess(id);
+  const userId = currentUserId();
+  return new WorkConversation(workManager, {
+    respond: (agentId, context) => runAgentExecution(agentId, context, { userId, conversationOnly: true }),
+    start: taskId => { if (currentUserId() !== userId) throw new Error('Session changed'); requireWorkAccess(taskId); workManager.assertReady(taskId); void workManager.run(taskId, (agentId, context) => runAgentExecution(agentId, context, { userId })).catch(error => console.error('[work]', error)); },
+  }).send(id, input, revision);
 });
 handle('work:action', async (_event, id: string, action: WorkAction, note?: string, expectedRevision?: number) => {
   const existing = requireWorkAccess(id);

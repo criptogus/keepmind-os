@@ -1,3 +1,4 @@
+import { CONVERSATION_PROMPT } from '../../shared/conversation.js';
 import { RequiredCompanyBrainError } from '../keepmind/CompanyBrains.js';
 import { isCompatibleModel } from '../../shared/connectors.js';
 import type { CompatibleProviders } from '../connectors/CompatibleProviders.js';
@@ -330,10 +331,10 @@ export class AgentManager {
   async executeAgent(
     agentId: string, config: AgentConfig, input: Record<string, unknown>,
     onProgress?: (progress: number) => void, executionId: string = uuidv4(),
-    onEvent?: (event: AgentStreamEvent) => void, opts?: { dryRun?: boolean; onSkillsResolved?: (ids: string[]) => void }
+    onEvent?: (event: AgentStreamEvent) => void, opts?: { conversationOnly?: boolean; dryRun?: boolean; onSkillsResolved?: (ids: string[]) => void }
   ): Promise<AgentExecution> {
     if (this.controllers.has(executionId)) throw new CheckpointError('Execution already active');
-    const timeoutSeconds = config.executionTimeoutSeconds ?? 300;
+    const timeoutSeconds = opts?.conversationOnly ? Math.min(config.executionTimeoutSeconds ?? 60, 60) : config.executionTimeoutSeconds ?? 300;
     if (!Number.isFinite(timeoutSeconds) || timeoutSeconds < 1 || timeoutSeconds > 3600) throw new Error('Invalid execution timeout');
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(new Error('Execution time limit reached')), timeoutSeconds * 1000);
@@ -360,7 +361,7 @@ export class AgentManager {
     onProgress?: (progress: number) => void,
     executionId: string = uuidv4(),
     onEvent?: (event: AgentStreamEvent) => void,
-    opts?: { dryRun?: boolean; onSkillsResolved?: (ids: string[]) => void }
+    opts?: { conversationOnly?: boolean; dryRun?: boolean; onSkillsResolved?: (ids: string[]) => void }
   ): Promise<AgentExecution> {
     const execution: AgentExecution = {
       dryRun: opts?.dryRun === true,
@@ -385,17 +386,18 @@ export class AgentManager {
       onProgress?.(10);
 
       let output: Record<string, unknown>;
-      const skills = this.resolveSkills(config, input, agentId);
+      const skills = opts?.conversationOnly ? [] : this.resolveSkills(config, input, agentId);
       execution.activatedSkillIds = skills.map(skill => skill.id);
       opts?.onSkillsResolved?.(execution.activatedSkillIds);
       const constraints = this.constraintsProvider?.(config);
       const denied = constraints?.denyTools?.length ? new Set(constraints.denyTools) : undefined;
-      const toolNames = this.enabledToolNames(config, skills, denied);
-      const routedModel = this.modelRouter ? this.modelRouter(config.model, input, agentId) : config.model;
+      const toolNames = opts?.conversationOnly ? [] : this.enabledToolNames(config, skills, denied);
+      const routedModel = !opts?.conversationOnly && this.modelRouter ? this.modelRouter(config.model, input, agentId) : config.model;
       const effectiveConfig: AgentConfig = {
         ...config,
         model: routedModel,
-        systemPrompt: await this.buildSystemPrompt(config, input, skills),
+        systemPrompt: opts?.conversationOnly ? CONVERSATION_PROMPT : await this.buildSystemPrompt(config, input, skills),
+        ...(opts?.conversationOnly ? { temperature: 0, maxTokens: Math.min(config.maxTokens, 1800) } : {}),
       };
 
       // Dry-run: collect every tool call the model attempts so the final

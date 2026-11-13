@@ -2,6 +2,7 @@ export type WorkStatus = 'backlog' | 'running' | 'review' | 'done' | 'blocked' |
 export interface WorkEvent { actorId?: string; id: string; at: string; kind: string; text: string; }
 export interface DeliveryVersion { version: number; content: string; at: string; executionId?: string; }
 export interface WorkTask {
+  conversation?: import('./conversation.js').WorkConversation;
   deliveries?: DeliveryVersion[];
   /** Legacy tasks with no policy retain mandatory review. */
   reviewRequired?: boolean;
@@ -41,3 +42,6 @@ export function deliveryState(task: WorkTask) {
   const updating = task.events.map(e => e.kind).lastIndexOf('revision') > lastDelivery;
   return { version, updating, nextVersion: version + 1 };
 }
+
+/** A failed first attempt can be corrected even before a delivery exists. */
+export const canReviseWork = (task: Pick<WorkTask, "status">) => ["review", "blocked", "cancelled", "done"].includes(task.status);

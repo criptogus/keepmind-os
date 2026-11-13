@@ -27,6 +27,13 @@
     "persistent-conversation-and-drafts",
     "contextual-connection-preserves-request",
     "settings-provider-readiness",
+    "decision-free-text-focus-and-narrow-layout",
+    "conversation-error-preserves-delivery",
+    "clarification-before-execution",
+    "explicit-start-decision",
+    "question-preserves-delivery",
+    "acknowledgement-without-model-call",
+    "ambiguous-message-decision",
     "request-to-delivery-over-provider-http",
     "single-send-revision-v2",
     "approve-version-with-history",
@@ -36,5 +43,5 @@
   ],
   "failure": null,
   "fixture": "synthetic; no live providers",
-  "timestamp": "2026-11-13T18:45:34.671Z"
+  "timestamp": "2026-11-13T19:20:38.284Z"
 }

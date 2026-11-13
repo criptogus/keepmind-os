@@ -305,3 +305,12 @@ body {
   .km-has-connection .km-conversation-list { display: none; }
   .km-has-connection .km-conversation-stage { display: flex; }
 }
+
+/* Decisions share structure while their words preserve distinct permissions. */
+.km-decision-card { margin-top: 16px; border: 1px solid var(--mantine-color-default-border); border-radius: 12px; background: var(--mantine-color-body); overflow: hidden; }
+.km-decision-heading, .km-decision-body, .km-decision-actions { padding: 12px 16px; }
+.km-decision-heading { border-bottom: 1px solid var(--mantine-color-default-border); }
+.km-decision-actions:not(:empty) { border-top: 1px solid var(--mantine-color-default-border); }
+.km-decision-actions button { height: auto; min-height: 40px; padding-block: 10px; }
+.km-decision-actions button span { white-space: normal; }
+.km-conversation-status { padding: 12px 16px; }

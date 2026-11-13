@@ -410,13 +410,26 @@ try {
   checks.push('persistent-conversation-and-drafts','contextual-connection-preserves-request');
 
   // Complete real IPC/execution/HTTP paths against a deterministic local provider.
-  const providerRequests=[];
+  const providerRequests=[]; let deliveryCalls=0;
   providerServer=createServer(async(req,res)=>{
     let body='';for await(const chunk of req)body+=chunk;
     if(req.url!=='/v1/chat/completions'){res.writeHead(404).end();return;}
     const request=JSON.parse(body); providerRequests.push(request);
     const number=providerRequests.length;
-    const content=number===1?'# Client proposal\n\nInitial scope and next steps.':'# Client proposal\n\nRevised scope with a shorter timeline.';
+    const dialogue = request.messages.some(m => String(m.content).includes('conversationMode'));
+    let content;
+    if (dialogue) {
+      if (request.tools?.length) fail('conversation exposed execution tools');
+      const context = JSON.parse(request.messages.findLast(m => m.role === 'user').content);
+      const reply = context.conversationMode === 'prepare'
+        ? context.conversation.some(t => t.text === 'A one-page proposal')
+          ? {intent:'ready',reply:'I will prepare a one-page proposal with scope and next steps.'}
+          : {intent:'clarify',reply:'What format would be most useful?',choices:['A one-page proposal','A detailed document']}
+        : context.task === 'Use a shorter timeline' ? {intent:'revise',reply:'I will shorten the timeline in a new version.'}
+        : context.task === 'Not quite right' ? {intent:'ambiguous',reply:'Would you like an explanation or a change to the proposal?'}
+        : {intent:'answer',reply:'The proposal includes scope and next steps. No delivery has been changed.'};
+      content=context.task==='Malformed reply fixture'?'not valid JSON':JSON.stringify(reply);
+    } else { deliveryCalls++; content=deliveryCalls===1?'# Client proposal\n\nInitial scope and next steps.':'# Client proposal\n\nRevised scope with a shorter timeline.'; }
     await delay(400);
     if (!request.stream) { res.writeHead(200,{'Content-Type':'application/json'}); res.end(JSON.stringify({id:'fixture-'+number,object:'chat.completion',model:'fixture',choices:[{index:0,message:{role:'assistant',content},finish_reason:'stop'}],usage:{prompt_tokens:20,completion_tokens:30,total_tokens:50}})); return; }
     res.writeHead(200,{'Content-Type':'text/event-stream'});
@@ -440,17 +453,62 @@ try {
   await fillText('textarea[aria-label="Your request"]','Prepare a client proposal for a small business');
   await evaluate(`([...document.querySelectorAll('.km-command button')].find(b=>b.textContent==='Send request')).click()`);
   let flow;
-  for(let i=0;i<70;i++){const list=await evaluate('window.electronAPI.workList()');flow=list.tasks.find(t=>t.agentId===flowAgent.id);if(flow?.status==='review')break;await delay(150);}
-  if(flow?.status!=='review')fail('request did not reach delivery review: '+JSON.stringify(flow));
+  const waitFlow = async predicate => {
+    for(let i=0;i<100;i++){flow=(await evaluate('window.electronAPI.workList()')).tasks.find(t=>t.agentId===flowAgent.id);if(flow && predicate(flow))return;await delay(150);}
+    fail('conversation did not reach expected state: '+JSON.stringify(flow));
+  };
+  const clickDecision = async text => {
+    for(let i=0;i<50;i++){if(await evaluate(`!![...document.querySelectorAll('.km-decision-card button')].find(b=>b.textContent===${JSON.stringify(text)})`))break;await delay(100);}
+    await evaluate(`([...document.querySelectorAll('.km-decision-card button')].find(b=>b.textContent===${JSON.stringify(text)})).click()`);
+  };
+  const sendMessage = async text => {
+    await delay(1100);
+    await fillText('.km-chat-composer textarea',text); await delay(100);
+    await evaluate(`([...document.querySelectorAll('.km-chat-composer button')].find(b=>b.textContent==='Send message')).click()`);
+  };
+  await waitFlow(t=>t.conversation?.decision?.kind==='clarify');
+  if(deliveryCalls)fail('preparation started work before confirmation');
+  await delay(1100);
+  const clarificationShot=await send('Page.captureScreenshot',{format:'png'});writeFileSync(path.join(evidenceDir,'conversation-clarification.png'),Buffer.from(clarificationShot.result.data,'base64'));
+  await clickDecision('Write my answer');
+  if(!(await evaluate(`document.activeElement===document.querySelector('.km-chat-composer textarea')`)))fail('clarification did not focus free-text answer');
+  await send('Emulation.setDeviceMetricsOverride',{width:780,height:900,deviceScaleFactor:1,mobile:false});await delay(200);
+  if(await evaluate(`document.querySelector('.km-conversation-stage').scrollWidth>document.querySelector('.km-conversation-stage').clientWidth+2`))fail('decision card overflow on narrow window');
+  const narrowDecision=await send('Page.captureScreenshot',{format:'png'});writeFileSync(path.join(evidenceDir,'conversation-decision-narrow.png'),Buffer.from(narrowDecision.result.data,'base64'));
+  await send('Emulation.clearDeviceMetricsOverride');
+  checks.push('decision-free-text-focus-and-narrow-layout');
+  await clickDecision('A one-page proposal');
+  await waitFlow(t=>t.conversation?.decision?.kind==='start');
+  if(deliveryCalls)fail('clarification started work before confirmation');
+  await delay(300);
+  const briefShot=await send('Page.captureScreenshot',{format:'png'});writeFileSync(path.join(evidenceDir,'conversation-brief.png'),Buffer.from(briefShot.result.data,'base64'));
+  await clickDecision('Start delivery');
+  await waitFlow(t=>t.status==='review');
   for(let i=0;i<50;i++){if(await evaluate(`!!document.querySelector('.km-approve-action')`))break;await delay(100);}
-  await fillText('.km-chat-composer textarea','Use a shorter timeline');
-  await evaluate(`([...document.querySelectorAll('.km-chat-composer button')].find(b=>b.textContent==='Send change')).click()`);
-  for(let i=0;i<70;i++){const list=await evaluate('window.electronAPI.workList()');flow=list.tasks.find(t=>t.id===flow.id);if(flow?.deliveries?.length===2&&flow.status==='review')break;await delay(150);}
-  if(flow?.deliveries?.length!==2||flow.status!=='review')fail('single-send revision did not finish');
-  if(providerRequests.length!==2||!JSON.stringify(providerRequests[1]).includes('Use a shorter timeline'))fail('revision duplicate call or missing adjustment');
+  await sendMessage('Why did you include next steps?');
+  await waitFlow(t=>!t.conversation?.pending && t.conversation?.turns.at(-1)?.text.includes('No delivery has been changed'));
+  if(flow.deliveries.length!==1||deliveryCalls!==1)fail('question changed the delivery');
+  await sendMessage('Malformed reply fixture');
+  await waitFlow(t=>!!t.conversation?.error && !t.conversation.pending);
+  if(flow.deliveries.length!==1 || deliveryCalls!==1)fail('invalid reply changed the delivery');
+  checks.push('conversation-error-preserves-delivery');
+  const callsBeforeThanks=providerRequests.length;
+  await sendMessage('Thanks');
+  await waitFlow(t=>t.conversation?.turns.at(-1)?.text.includes('You are welcome'));
+  if(providerRequests.length!==callsBeforeThanks)fail('acknowledgement called the model');
+  await sendMessage('Not quite right');
+  await waitFlow(t=>t.conversation?.decision?.kind==='intent');
+  await clickDecision('Keep as a comment');
+  await waitFlow(t=>!t.conversation?.decision && t.conversation?.turns.at(-1)?.text.includes('Comment saved'));
+  if(flow.deliveries.length!==1||flow.acceptedAt)fail('comment changed/approved delivery');
+  checks.push('clarification-before-execution','explicit-start-decision','question-preserves-delivery','acknowledgement-without-model-call','ambiguous-message-decision');
+  await sendMessage('Use a shorter timeline');
+  await waitFlow(t=>t.deliveries?.length===2&&t.status==='review');
+  if(deliveryCalls!==2||!JSON.stringify(providerRequests.at(-1)).includes('Use a shorter timeline'))fail('revision duplicate call or missing adjustment');
   for(let i=0;i<50;i++){if((await evaluate(`document.querySelector('.km-approve-action')?.textContent`))?.includes('v2'))break;await delay(100);}
   if (!(await evaluate(`document.querySelector('.km-approve-action')?.textContent`))?.includes('v2')) fail('v2 approval label missing');
   if (!(await evaluate(`document.querySelector('.km-chat-history').innerText`)).includes('Previous delivery'))fail('v1 history missing');
+  await delay(350);
   const revisionShot=await send('Page.captureScreenshot',{format:'png'});writeFileSync(path.join(evidenceDir,'conversation-v2.png'),Buffer.from(revisionShot.result.data,'base64'));
   await evaluate(`document.querySelector('.km-approve-action').click()`);await delay(300);
   const accepted=(await evaluate('window.electronAPI.workList()')).tasks.find(t=>t.id===flow.id);
@@ -492,12 +550,12 @@ try {
   const localAgain = await evaluate('window.electronAPI.workList()');
   if (!localAgain.tasks.some(t => t.id === task.id) || localAgain.tasks.some(t => t.id === shared.id)) fail('local and remote data were mixed');
   checks.push('shared-workspace-isolation', 'checkpoint-recovery', 'persisted-task-search');
-  if (checks.length < 32) fail('incomplete UI checks');
+  if (checks.length < 39) fail('incomplete UI checks');
   console.log(`SMOKE PASS: electronAPI OK (version=${version}, agents=${Array.isArray(agents) ? agents.length : '?'}, rootChildren=${rootChildren}, uiRendered=true)`);
 } catch (err) {
   failure = err.message; console.error(`SMOKE FAIL: ${err.message}`); process.exitCode = 1;
 } finally {
-  writeFileSync(path.join(evidenceDir, 'ux-report.json'), JSON.stringify({passed: !failure && checks.length >= 32, checks, failure, fixture: 'synthetic; no live providers', timestamp: new Date().toISOString()}, null, 2));
+  writeFileSync(path.join(evidenceDir, 'ux-report.json'), JSON.stringify({passed: !failure && checks.length >= 39, checks, failure, fixture: 'synthetic; no live providers', timestamp: new Date().toISOString()}, null, 2));
   ws.close();
   workspaceServer?.kill('SIGTERM');
   providerServer?.close();

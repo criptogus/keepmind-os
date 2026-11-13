@@ -45,3 +45,27 @@ The first full local run stopped at the secret scanner because linked `node_modu
 Screenshots under `evidence/` show the conversation workspace in light/dark mode, Portuguese controls, narrow layout, version 2, and adjacent material preview. Visual inspection led to neutral connection notices in dark mode and scrolling to the current delivery's heading when opening a conversation.
 
 Limits: synthetic local provider, no live OAuth login or paid model invocation; drafts persist during navigation, not across app restarts; historical/customer/external content retains its original language. Material preview shows content, not final PDF pagination. No data migration or merge is performed.
+
+## Conversational intent and decisions (PR #12 follow-up)
+
+User scope: implement conversation that understands intent, asks clarifying questions and presents decision cards, preserving white/black/lime identity. Update the same PR; do not merge.
+
+- Preparing a new request asks one essential question at a time, offers optional answers and accepts free text. A concise brief requires explicit **Start delivery** confirmation. The pending decision and dialogue survive restart.
+- Questions receive a contextual answer without replacing, accepting or versioning the delivery. Exact thanks are acknowledged locally. Unclear messages offer answer / new version / comment decisions; clear change requests start a new revision immediately.
+- Conversation classification uses the configured provider with a fixed prompt, no tools, no skill selection and no external memory retrieval. Existing provider, concurrency, usage and budget controls apply. It does not claim to infer an agent's private reasoning. External-action requests cannot become action approvals.
+- Delivery approval and sensitive-action approval remain separate, consistently styled cards. Generated messages preserve their historical language; controls follow PT/EN settings.
+- Duplicate request IDs are idempotent; stale revisions/decisions, malformed responses and late replies after cancellation cannot start work. Running-task messages explicitly say they apply to the next revision.
+
+Validation uses the existing `npm run verify:ux` automation, extended with controlled provider responses for clarification → brief → start → delivery → question → thanks → ambiguous comment → immediate revision → approval. These fixtures verify the application plumbing and decision handling, not every model's semantic accuracy. Additional domain tests cover persistence, invalid replies, duplicate decisions, scoped remote access and tool-free inference with recorded cost.
+
+### Follow-up review and evidence
+
+**Standards:** the review found that cancelling a pending reply did not abort its paid inference. Inference now carries the work-task identity without replacing the delivery execution ID; a provider-signal test confirms cancellation releases its slot. Shutdown tracks dialogue separately from work concurrency. A regression test covers immediate revision with `maxConcurrent=1`. Shared `canReviseWork` keeps transition eligibility consistent.
+
+**Spec:** a failed first attempt could not accept corrections before producing a delivery. This now starts corrected work and creates v1; the UI says “Try the updated request” when no prior delivery exists. Both reviewers confirmed their findings resolved by source inspection.
+
+Jev `jev-1.14.0` classified six synthetic Portuguese cases against the conversation policy: question with negation, thanks plus correction, ambiguous feedback, external action, textual approval and a quoted action. All six matched the intended categories; textual approval was less decisive (reported confidence 0.88), reinforcing the deterministic rule that ordinary text never accepts deliveries. Exact distributions and usage (1,450 input / 277 output tokens) are retained in `evidence/conversation-semantic-*.json`. This is advisory policy evidence, not a live-provider accuracy benchmark.
+
+Focused UX references supported contextual status messages and visible keyboard focus; existing tokens, components and reduced-motion rules remain authoritative. Visual inspection covered the new clarification, brief, v2 and narrow-window screenshots. The redundant saved-request notice is hidden once preparation is underway, and the conversation list exposes “Waiting for you”.
+
+Final validation: `npm run verify:ux` covers 238 unit tests in 34 files, one integration test, 39 Electron scenarios, TypeScript, production build, runner, secret scan and the 462-package inventory policy. The provider in the full UI flow is a deterministic loopback fixture; no live customer OAuth session or model quality claim is made. No merge.

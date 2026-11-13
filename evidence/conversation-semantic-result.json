@@ -1,0 +1,93 @@
+{
+  "summary": {
+    "requested": 1,
+    "completed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "input_tokens": 1450,
+    "output_tokens": 277
+  },
+  "results": [
+    {
+      "index": 0,
+      "ok": true,
+      "attempts": 1,
+      "seconds": 0.306,
+      "response": {
+        "model": "jev-1.14.0",
+        "answers": {
+          "question": {
+            "type": "choice",
+            "choice": "answer",
+            "confidence": 0.99,
+            "probabilities": {
+              "answer": 0.99,
+              "revise": 0.01,
+              "ambiguous": 0.0,
+              "external": 0.0
+            }
+          },
+          "change": {
+            "type": "choice",
+            "choice": "revise",
+            "confidence": 1.0,
+            "probabilities": {
+              "answer": 0.0,
+              "revise": 1.0,
+              "ambiguous": 0.0,
+              "external": 0.0
+            }
+          },
+          "unclear": {
+            "type": "choice",
+            "choice": "ambiguous",
+            "confidence": 1.0,
+            "probabilities": {
+              "answer": 0.0,
+              "revise": 0.0,
+              "ambiguous": 1.0,
+              "external": 0.0
+            }
+          },
+          "external": {
+            "type": "choice",
+            "choice": "external",
+            "confidence": 1.0,
+            "probabilities": {
+              "answer": 0.0,
+              "revise": 0.0,
+              "ambiguous": 0.0,
+              "external": 1.0
+            }
+          },
+          "approval": {
+            "type": "choice",
+            "choice": "answer",
+            "confidence": 0.88,
+            "probabilities": {
+              "answer": 0.91,
+              "revise": 0.0,
+              "ambiguous": 0.08,
+              "external": 0.01
+            }
+          },
+          "quoted": {
+            "type": "choice",
+            "choice": "answer",
+            "confidence": 1.0,
+            "probabilities": {
+              "answer": 1.0,
+              "revise": 0.0,
+              "ambiguous": 0.0,
+              "external": 0.0
+            }
+          }
+        },
+        "usage": {
+          "input_tokens": 1450,
+          "output_tokens": 277
+        }
+      }
+    }
+  ]
+}

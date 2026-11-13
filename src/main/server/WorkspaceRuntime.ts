@@ -30,6 +30,7 @@ export class WorkspaceRuntime {
   readonly storage:StorageManager; readonly work:WorkManager; readonly manager = new AgentManager();
   readonly checkpoints:CheckpointStore; readonly mcp:McpManager;
   private pending = new Set<Promise<unknown>>();
+  private conversations = new Set<Promise<unknown>>();
   private companyBrains: CompanyBrains;
   constructor(readonly config:WorkspaceConfig, dataDir:string, configDir:string) {
     if (new Set(config.agents.map(a=>a.id)).size !== config.agents.length) throw new Error('Agent IDs must be unique');
@@ -89,8 +90,9 @@ export class WorkspaceRuntime {
   async initialize(){await this.mcp.configure(this.config.mcp);}
   agent(id:string){const a=this.config.agents.find(a=>a.id===id);if(!a)throw new Error('Unknown agent');return a;}
   agentConfig(id:string){const a=this.agent(id);return {model:a.model,temperature:0.2,maxTokens:a.maxTokens,systemPrompt:a.prompt,monthlyBudgetUsd:a.monthlyBudgetUsd,monthlyRunCap:a.monthlyRunCap,executionTimeoutSeconds:a.executionTimeoutSeconds,tools:a.tools.map(name=>({name,type:'custom' as const,config:{}}))};}
-  async execute(agentId:string,input:Record<string,unknown>,actor:string,resumeId?:string):Promise<AgentExecution>{
-    await this.companyBrains.health(agentId);
+  async execute(agentId:string,input:Record<string,unknown>,actor:string,resumeId?:string,conversationOnly=false):Promise<AgentExecution>{
+    if (this.manager.getActiveExecutions().length >= this.config.maxConcurrent) throw new Error('Concurrent execution limit reached');
+    if (!conversationOnly) await this.companyBrains.health(agentId);
     const old=resumeId?this.storage.getAgentExecution(resumeId):undefined;
     if(resumeId&&(!old||old.agentId!==agentId||!this.checkpoints.read(resumeId)||(old.status!=='failed'&&!(old.status==='completed'&&this.checkpoints.read(resumeId)?.output))))throw new Error('No resumable execution');
     if(old)input=old.input;
@@ -103,10 +105,10 @@ export class WorkspaceRuntime {
     }
     if(!resumeId)this.storage.assertMonthlyRunCap(agentId,this.agent(agentId).monthlyRunCap);
     const id=resumeId??randomUUID();const startedAt=old?.startedAt??new Date().toISOString();
-    if(typeof input.workTaskId==='string')this.work.attachExecution(input.workTaskId,id);
+    if(!conversationOnly&&typeof input.workTaskId==='string')this.work.attachExecution(input.workTaskId,id);
     this.storage.saveAgentExecution({id,agentId,input,userId:actor,status:'running',progress:0,startedAt});
     try{
-      const result=await this.manager.executeAgent(agentId,this.agentConfig(agentId),input,p=>this.storage.updateAgentExecutionProgress(id,p),id);
+      const result=await this.manager.executeAgent(agentId,this.agentConfig(agentId),input,p=>this.storage.updateAgentExecutionProgress(id,p),id,undefined,{conversationOnly});
       result.userId=actor;this.storage.saveAgentExecution(result);return result;
     }catch(error){this.storage.saveAgentExecution({id,agentId,input,userId:actor,status:'failed',progress:0,startedAt,completedAt:new Date().toISOString(),error:String(error)});throw error;}
   }
@@ -119,9 +121,13 @@ export class WorkspaceRuntime {
     this.pending.add(promise);void promise.finally(()=>this.pending.delete(promise)).catch(()=>{});
     return promise;
   }
+  trackConversation<T>(promise: Promise<T>): Promise<T> {
+    this.conversations.add(promise);void promise.finally(()=>this.conversations.delete(promise)).catch(()=>{});
+    return promise;
+  }
   cancel(taskId:string){
     for(const run of this.manager.getActiveExecutions())if(run.input.workTaskId===taskId)this.manager.cancelExecution(run.id);
     for(const a of this.storage.getPendingApprovals())if(a.context.workTaskId===taskId)this.storage.updateApprovalStatus(a.id,'rejected','Task cancelled','system');
   }
-  async close(){this.companyBrains.stop();await this.manager.shutdown();await Promise.allSettled([...this.pending]);await this.mcp.close();this.storage.close();}
+  async close(){this.companyBrains.stop();await this.manager.shutdown();await Promise.allSettled([...this.pending,...this.conversations]);await this.mcp.close();this.storage.close();}
 }
