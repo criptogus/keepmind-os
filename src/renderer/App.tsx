@@ -1,5 +1,6 @@
 import React, { Suspense, lazy, useState, useEffect } from 'react';
 
+const WorkBench = lazy(() => import('./components/work/WorkBench'));
 const AgentList = lazy(() => import('./components/agents/AgentList'));
 const TeamList = lazy(() => import('./components/teams/TeamList'));
 const ApprovalQueue = lazy(() => import('./components/governance/ApprovalQueue'));
@@ -32,7 +33,7 @@ const sectionLabel: React.CSSProperties = {
 };
 
 export default function App() {
-  const [activeSection, setActiveSection] = useState('dashboard');
+  const [activeSection, setActiveSection] = useState('work');
   const [version, setVersion] = useState<string>('');
   const [pendingApprovals, setPendingApprovals] = useState(0);
   const { initTheme } = useThemeStore();
@@ -81,7 +82,7 @@ export default function App() {
     fetchApprovals();
     const interval = setInterval(fetchApprovals, 5000);
     const unsubDeepLink = window.electronAPI.onDeepLink?.(({ section }) => {
-      if (['dashboard', 'agents', 'teams', 'automations', 'skills', 'governance', 'logs', 'settings', 'advanced'].includes(section)) {
+      if (['work', 'dashboard', 'agents', 'teams', 'automations', 'skills', 'governance', 'logs', 'settings', 'advanced'].includes(section)) {
         setActiveSection(section);
       }
     });
@@ -91,6 +92,7 @@ export default function App() {
   const { mode: appMode } = useAppMode();
   // 'unset' keeps every section visible (status quo) until the user picks a mode.
   const allSidebarItems = [
+    { id: 'work', label: t('nav.work') },
     { id: 'dashboard', label: t('nav.dashboard') },
     { id: 'agents', label: t('nav.agents') },
     { id: 'teams', label: t('nav.teams') },
@@ -101,7 +103,7 @@ export default function App() {
     { id: 'settings', label: t('nav.settings') },
     { id: 'advanced', label: t('nav.advanced') },
   ];
-  const CORPORATE_ONLY = new Set(['teams', 'governance']);
+  const CORPORATE_ONLY = new Set<string>([]);
   const sidebarItems = appMode === 'personal'
     ? allSidebarItems.filter((i) => !CORPORATE_ONLY.has(i.id))
     : allSidebarItems;
@@ -117,6 +119,7 @@ export default function App() {
       return <AnalyticsDashboard onNavigate={setActiveSection} />;
     }
     switch (activeSection) {
+      case 'work': return <WorkBench onNavigate={setActiveSection} />;
       case 'dashboard':
         return <AnalyticsDashboard onNavigate={setActiveSection} />;
       case 'agents':
@@ -211,13 +214,13 @@ export default function App() {
             color: '#ffffff', fontSize: 15, fontWeight: 700,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>K</div>
-          <h1 style={{ fontSize: 18, fontWeight: 600, color: 'var(--mantine-color-dark-8)', margin: 0 }}>KeepMind OS</h1>
+          <h1 style={{ fontSize: 18, fontWeight: 600, color: 'var(--mantine-color-text)', margin: 0 }}>KeepMind OS</h1>
         </div>
       </header>
 
       <main style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
         <aside data-tour="sidebar" style={{
-          width: 260,
+          width: 220,
           backgroundColor: 'var(--mantine-color-gray-0)',
           borderRight: '1px solid var(--mantine-color-gray-3)',
           padding: 16,
@@ -315,3 +318,4 @@ export default function App() {
     </div>
   );
 }
+

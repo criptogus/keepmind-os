@@ -1,9 +1,11 @@
+import { existsSync, realpathSync } from 'node:fs';
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 import * as XLSX from 'xlsx';
 import { extractText } from 'unpdf';
 
 export interface ToolContext {
+  signal?: AbortSignal;
   sendWhatsApp?: (to: string, text: string) => Promise<void>;
   /** Recent incoming WhatsApp messages (read-only). */
   getWhatsAppMessages?: (limit?: number) => Array<{ from: string; text: string; timestamp: number }>;
@@ -14,7 +16,7 @@ export interface ToolContext {
   /** Root directory the file tools are confined to. */
   workspaceDir?: string;
   /** Executes a shell command; returns combined stdout+stderr (truncated). */
-  shellExec?: (command: string) => Promise<string>;
+  shellExec?: (command: string, signal?: AbortSignal) => Promise<string>;
   /** Opens a URL in the default browser. */
   openUrl?: (url: string) => Promise<void>;
   /** Reads a web page via Jina Reader (clean markdown, no bot wall). */
@@ -46,6 +48,10 @@ export interface ToolContext {
 
 /** Per-execution policy computed from install settings + agent config + caller role. */
 export interface ExecutionPolicy {
+  signal?: AbortSignal;
+  executionId?: string;
+  workTaskId?: string;
+  allowedTools?: string[];
   fileAccess?: 'workspace' | 'authorized' | 'full';
   allowedRoots?: string[];
   shellAccess?: 'disabled' | 'allowlist' | 'full';
@@ -77,9 +83,9 @@ export class ToolRegistry {
    * Return a string to block the call (the string becomes the tool result),
    * or null/undefined to allow it.
    */
-  private gate?: (name: string, args: Record<string, unknown>) => Promise<string | null>;
+  private gate?: (name: string, args: Record<string, unknown>, policy?: ExecutionPolicy) => Promise<string | null>;
 
-  setGate(gate?: (name: string, args: Record<string, unknown>) => Promise<string | null>): void {
+  setGate(gate?: (name: string, args: Record<string, unknown>, policy?: ExecutionPolicy) => Promise<string | null>): void {
     this.gate = gate;
   }
 
@@ -129,7 +135,7 @@ export class ToolRegistry {
 
     this.register({
       name: 'personalbrain_search',
-      description: 'Searches the PERSONAL brain — a local vault on this machine for private notes, memories and personal context. Never sends data anywhere.',
+      description: 'Searches the PERSONAL brain — a local vault on this machine for private notes, memories and personal context. Retrieval is local; results may be included in calls to the configured model provider.',
       parameters: {
         type: 'object',
         properties: {
@@ -373,7 +379,7 @@ export class ToolRegistry {
             throw new Error(`Command not in shell allowlist. Allowed prefixes: ${allow.join(', ') || '(none)'}`);
           }
         }
-        const out = await ctx.shellExec(command);
+        const out = await ctx.shellExec(command, ctx.signal);
         return out.slice(0, 20000);
       },
     });
@@ -539,12 +545,15 @@ export class ToolRegistry {
   }
 
   async execute(name: string, args: Record<string, unknown>, policy?: ExecutionPolicy): Promise<string> {
+    policy?.signal?.throwIfAborted();
+    if (policy?.allowedTools && !policy.allowedTools.includes(name)) throw new Error(`Tool not authorized: ${name}`);
     const tool = this.tools.get(name);
     if (!tool) throw new Error(`Unknown tool: ${name}`);
     if (this.gate) {
-      const denied = await this.gate(name, args).catch(() => null);
+      const denied = await this.gate(name, args, policy);
       if (denied) return denied;
     }
+    policy?.signal?.throwIfAborted();
     const ctx = policy ? { ...this.context, ...policy } : this.context;
     return tool.handler(args, ctx);
   }
@@ -561,13 +570,18 @@ function resolveInWorkspace(ctx: ToolContext, rel: string): string {
     if (!ctx.workspaceDir) throw new Error('Workspace is not configured');
     return path.resolve(ctx.workspaceDir, rel);
   }
+  const canonical = (value: string): string => {
+    if (existsSync(value)) return realpathSync(value);
+    const parent = path.dirname(value);
+    return parent === value ? value : path.join(canonical(parent), path.basename(value));
+  };
   const roots = [ctx.workspaceDir, ...(access === 'authorized' ? ctx.allowedRoots || [] : [])]
     .filter((r): r is string => !!r)
-    .map((r) => path.resolve(r));
+    .map((r) => canonical(path.resolve(r)));
   if (roots.length === 0) throw new Error('Workspace is not configured');
-  const resolved = path.isAbsolute(rel)
+  const resolved = canonical(path.isAbsolute(rel)
     ? path.resolve(rel)
-    : path.resolve(roots[0], rel);
+    : path.resolve(roots[0], rel));
   const inside = roots.some((root) => resolved === root || resolved.startsWith(root + path.sep));
   if (!inside) {
     throw new Error(access === 'authorized'
@@ -576,3 +590,4 @@ function resolveInWorkspace(ctx: ToolContext, rel: string): string {
   }
   return resolved;
 }
+

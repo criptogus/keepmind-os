@@ -149,7 +149,7 @@ export class MemoryManager {
   private findCandidates(text: string, limit: number): MemoryItem[] {
     const terms = tokenize(text);
     if (terms.size === 0) return [];
-    return this.storage.getActiveMemoryItems(500)
+    return this.storage.getActiveMemoryItems()
       .map((m) => ({ m, score: overlapScore(terms, tokenize(m.content)) }))
       .filter((x) => x.score >= 0.34)
       .sort((a, b) => b.score - a.score)
@@ -167,7 +167,7 @@ export class MemoryManager {
     if (terms.size === 0) return { text: '', ids: [] };
 
     const now = Date.now();
-    const scored = this.storage.getActiveMemoryItems(500)
+    const scored = this.storage.getActiveMemoryItems()
       .filter((m) => !m.demoted)
       .map((m) => {
         const relevance = overlapScore(terms, tokenize(m.content));
@@ -180,7 +180,7 @@ export class MemoryManager {
       .slice(0, limit);
 
     // Demotion check on the full active set (cheap, keeps stats honest).
-    for (const m of this.storage.getActiveMemoryItems(500)) {
+    for (const m of this.storage.getActiveMemoryItems()) {
       if (!m.demoted && m.uses >= DEMOTE_MIN_USES) {
         const mean = (m.good + 1) / (m.uses + 2);
         if (mean < DEMOTE_MAX_MEAN) {
@@ -192,7 +192,7 @@ export class MemoryManager {
     }
 
     return {
-      text: scored.map((x) => x.m.content).join('\n\n---\n\n'),
+      text: scored.map((x) => `[memory:${x.m.id}; valid since ${x.m.validFrom}]\n${x.m.content}`).join('\n\n---\n\n'),
       ids: scored.map((x) => x.m.id),
     };
   }
@@ -232,3 +232,4 @@ export class MemoryManager {
 function normalize(s: string): string {
   return s.toLowerCase().replace(/\s+/g, ' ').trim();
 }
+

@@ -1,3 +1,6 @@
+import { HybridMemory, localEmbedder } from './integrations/HybridMemory.js';
+import { WorkManager } from './work/WorkManager.js';
+import type { CreateWorkInput, WorkAction } from '../shared/work.js';
 import { app, BrowserWindow, dialog, ipcMain, Menu, nativeImage, Tray } from 'electron';
 import * as path from 'path';
 import { StorageManager } from './storage/StorageManager.js';
@@ -32,6 +35,8 @@ import { v4 as uuidv4 } from 'uuid';
 import type { AgentConfig, CreateAgentInput, TeamConfig, GovernanceRule, AppSettings, AgentTrigger, Approval, LocalUser, UserRole, ComputerAccessLevel } from '../shared/types.js';
 import { presetAvatarFor, avatarJson, parseAvatarDefinition } from '../shared/avatars.js';
 
+if (process.env.KEEPMIND_DATA_DIR) app.setPath('userData', path.resolve(process.env.KEEPMIND_DATA_DIR));
+
 let mainWindow: BrowserWindow | null = null;
 let storageManager: StorageManager;
 let agentManager: AgentManager;
@@ -41,11 +46,13 @@ let credentialStore: CredentialStore;
 let secondBrainManager: SecondBrainManager;
 let personalBrainManager: PersonalBrainManager;
 let memoryManager: MemoryManager;
+let hybridMemory: HybridMemory;
 let webhookServer: Server | null = null;
 let whatsAppManager: WhatsAppManager;
 let composioManager: ComposioManager;
 let triggerManager: TriggerManager;
 let localAuth: LocalAuth;
+let workManager: WorkManager;
 let workspaceDir = '';
 let tray: Tray | null = null;
 
@@ -172,17 +179,30 @@ async function runAgentExecution(agentId: string, input: Record<string, unknown>
     throw new Error('This agent is not shared with members');
   }
 
+  const concurrency = Math.max(1, Math.min(32, Number(storageManager.getSetting('maxConcurrentExecutions')) || 4));
+  if (agentManager.getActiveExecutions().length >= concurrency) throw new Error('Concurrent execution limit reached; wait for a running task to finish');
   const executionId = uuidv4();
-  const execution = await agentManager.executeAgent(agentId, agent.config, input, (progress) => {
-    storageManager.updateAgentExecutionProgress(executionId, progress);
-  }, executionId, (event) => {
-    mainWindow?.webContents.send('agents:event', { executionId, ...event });
-  });
-  execution.userId = opts?.userId ?? currentUserId() ?? 'system';
-
-  storageManager.saveAgentExecution(execution);
-  mainWindow?.webContents.send('agents:event', { executionId, type: 'done' });
-  return execution;
+  const userId = opts?.userId ?? currentUserId() ?? 'system';
+  const startedAt = new Date().toISOString();
+  storageManager.saveAgentExecution({ id: executionId, agentId, input, userId, startedAt, status: 'running', progress: 0 });
+  try {
+    const execution = await agentManager.executeAgent(agentId, agent.config, input, (progress) => {
+      storageManager.updateAgentExecutionProgress(executionId, progress);
+    }, executionId, (event) => {
+      mainWindow?.webContents.send('agents:event', { executionId, ...event });
+    });
+    execution.userId = userId;
+    storageManager.saveAgentExecution(execution);
+    return execution;
+  } catch (error) {
+    const previous = storageManager.getAgentExecution(executionId);
+    storageManager.saveAgentExecution({ id: executionId, agentId, input, userId, startedAt,
+      status: previous?.status === 'cancelled' ? 'cancelled' : 'failed', progress: previous?.progress ?? 0,
+      completedAt: new Date().toISOString(), error: error instanceof Error ? error.message : String(error) });
+    throw error;
+  } finally {
+    mainWindow?.webContents.send('agents:event', { executionId, type: 'done' });
+  }
 }
 
 /** Seeds built-in skills once so agents can opt into computer/delegation tools. */
@@ -295,11 +315,11 @@ Regras:
   }
 }
 
-function shellExec(command: string): Promise<string> {
+function shellExec(command: string, signal?: AbortSignal): Promise<string> {
   return new Promise((resolve, reject) => {
-    exec(command, { timeout: 30_000, maxBuffer: 1024 * 1024, cwd: workspaceDir || undefined }, (error, stdout, stderr) => {
+    exec(command, { signal, timeout: 30_000, maxBuffer: 1024 * 1024, cwd: workspaceDir || undefined }, (error, stdout, stderr) => {
       const out = [stdout, stderr].filter(Boolean).join('\n').trim();
-      if (error && !out) {
+      if (error) {
         reject(new Error(`Command failed: ${error.message}`));
       } else {
         resolve(out || '(no output)');
@@ -394,7 +414,9 @@ function createWindow() {
 
 app.whenReady().then(async () => {
   // Initialize managers
-  storageManager = new StorageManager();
+  storageManager = new StorageManager(path.join(app.getPath('userData'), 'data'));
+  storageManager.recoverInterruptedExecutions();
+  workManager = new WorkManager(storageManager);
   credentialStore = new CredentialStore(storageManager);
   // Decrypt stored credentials once via the async safeStorage API — avoids
   // the per-call deprecation warning from the sync decryptString.
@@ -402,6 +424,7 @@ app.whenReady().then(async () => {
   localAuth = new LocalAuth(storageManager);
   personalBrainManager = new PersonalBrainManager(app.getPath('userData'));
   memoryManager = new MemoryManager(storageManager);
+  hybridMemory = new HybridMemory(storageManager, memoryManager);
   memoryManager.setJudge(createMemoryJudge(() => ({
     openai: providerApiKeys.openai ?? credentialStore.getApiKey('openai') ?? undefined,
     anthropic: providerApiKeys.anthropic ?? credentialStore.getApiKey('anthropic') ?? undefined,
@@ -634,7 +657,8 @@ app.whenReady().then(async () => {
       return composioManager.execute(slug, args);
     },
     personalBrainSearch: async (query, limit) => {
-      const r = memoryManager.search(query, limit);
+      const model = storageManager.getSetting('memory.embeddingModel') || 'nomic-embed-text';
+      const r = await hybridMemory.search(query, limit, storageManager.getSetting('memory.semantic') === 'true' ? localEmbedder(model) : undefined, model);
       if (r.text) return { text: r.text, ids: r.ids };
       return { text: await personalBrainManager.search(query, limit), ids: [] };
     },
@@ -756,8 +780,8 @@ app.whenReady().then(async () => {
         provider: rec.provider,
         promptTokens: rec.usage.promptTokens,
         completionTokens: rec.usage.completionTokens,
-        costUsd: costFromUsage(rec.model, rec.usage.promptTokens, rec.usage.completionTokens),
-        partial: false,
+        costUsd: rec.costUsd ?? costFromUsage(rec.model, rec.usage.promptTokens, rec.usage.completionTokens),
+        partial: rec.partial ?? false,
       });
     } catch (e) { console.error('[usage] ledger write failed:', e); }
   });
@@ -804,7 +828,7 @@ app.whenReady().then(async () => {
   // waits (polling) for a decision; approval lets it proceed, rejection or
   // timeout returns an error string to the model as the tool result.
   const GATED_TOOLS = new Set(['shell_exec', 'file_write', 'open_url', 'whatsapp_send_message', 'delegate_to_agent', 'create_agent', 'composio_execute', 'secondbrain_remember']);
-  const APPROVAL_TIMEOUT_MS = 120_000;
+  const APPROVAL_TIMEOUT_MS = 24 * 60 * 60_000;
   const sanitizeArg = (v: unknown): unknown => {
     if (typeof v === 'string') return v.length > 500 ? v.slice(0, 500) + '…[truncated]' : v;
     if (Array.isArray(v)) return v.slice(0, 20).map(sanitizeArg);
@@ -822,12 +846,13 @@ app.whenReady().then(async () => {
       : val);
   const argsFingerprint = (args: Record<string, unknown>) =>
     createHash('sha256').update(canonicalJson(args)).digest('hex').slice(0, 16);
-  agentManager.getToolRegistry().setGate(async (name, args) => {
+  agentManager.getToolRegistry().setGate(async (name, args, policy) => {
+    policy?.signal?.throwIfAborted();
     if (!GATED_TOOLS.has(name)) return null;
     if (storageManager.getSetting('gov.toolApproval') === 'false') return null;
     if (storageManager.getAllSettings().autoApprove === 'true') return null;
 
-    const agentId = agentManager.getActiveAgentId() || '';
+    const agentId = policy?.callerAgentId || '';
     const agent = agentId ? storageManager.getAgent(agentId) : null;
     const approval: Approval = {
       id: uuidv4(),
@@ -837,9 +862,11 @@ app.whenReady().then(async () => {
       action: `tool:${name}`,
       context: {
         tool: name,
-        args: sanitizeArg(args),
+        executionId: policy?.executionId,
+        workTaskId: policy?.workTaskId,
+        args: structuredClone(args),
         argsHash: argsFingerprint(args),
-        argsTruncated: canonicalJson(sanitizeArg(args)) !== canonicalJson(args),
+        argsTruncated: false,
       },
       status: 'pending',
       createdAt: new Date().toISOString(),
@@ -849,9 +876,16 @@ app.whenReady().then(async () => {
 
     const deadline = Date.now() + APPROVAL_TIMEOUT_MS;
     while (Date.now() < deadline) {
+      if (policy?.signal?.aborted) {
+        storageManager.updateApprovalStatus(approval.id, 'rejected', 'Execution cancelled', 'system');
+        policy.signal.throwIfAborted();
+      }
       await new Promise((r) => setTimeout(r, 1500));
       const current = storageManager.getApproval(approval.id);
-      if (current?.status === 'approved') return null;
+      if (current?.status === 'approved') {
+        if (current.context.argsHash !== argsFingerprint(args)) throw new Error('Approved action changed');
+        return null;
+      }
       if (current?.status === 'rejected') {
         return `Tool call rejected by reviewer${current.rejectionReason ? `: ${current.rejectionReason}` : ''}`;
       }
@@ -1535,16 +1569,7 @@ handle('teams:execute', async (_event, teamId: string, input: Record<string, unk
 
   const agents = storageManager.getAllAgents();
   const result = await teamExecutionEngine.executeTeam(team, agents, input, async (agentId, agentInput) => {
-    const agent = storageManager.getAgent(agentId);
-    if (!agent) throw new Error('Agent not found');
-
-    const executionId = uuidv4();
-    const execution = await agentManager.executeAgent(agentId, agent.config, agentInput, (progress) => {
-      storageManager.updateAgentExecutionProgress(executionId, progress);
-    }, executionId);
-    
-    storageManager.saveAgentExecution(execution);
-    return execution;
+    return runAgentExecution(agentId, agentInput);
   });
 
   // Log team execution to audit
@@ -1927,6 +1952,8 @@ handle('settings:get', () => {
     llmAutoRoute: settings['llm.autoRoute'] !== 'false',
     toolApprovalRequired: settings['gov.toolApproval'] !== 'false',
     soundEffects: settings.soundEffects === 'true',
+    memorySemanticSearch: settings['memory.semantic'] === 'true',
+    memoryEmbeddingModel: settings['memory.embeddingModel'] || 'nomic-embed-text',
     soundEvents: settings.soundEvents || 'attention,done,error,start',
   };
 });
@@ -1934,6 +1961,9 @@ handle('settings:get', () => {
 handle('settings:update', (_event, settings: Partial<AppSettings>) => {
   requireRole('admin');
   const KEY_MAP: Record<string, string> = {
+    onboardingCompleted: 'onboarding.completed',
+    memorySemanticSearch: 'memory.semantic',
+    memoryEmbeddingModel: 'memory.embeddingModel',
     skillsAutoRoute: 'skills.autoRoute',
     llmAutoRoute: 'llm.autoRoute',
     toolApprovalRequired: 'gov.toolApproval',
@@ -2145,3 +2175,46 @@ handle('brain:createPersonalRepo', async (_event, repoName?: string) => {
   });
   return { ok: true, repo: fullName, url: repoUrl, dir: cloneDir };
 });
+
+
+// Outcome-oriented workspace. Every call uses the existing authenticated IPC boundary.
+function requireWorkAccess(id: string) {
+  const task = workManager.get(id);
+  if (currentRole() === 'member' && task.ownerId !== currentUserId()) throw new Error('Task access denied');
+  return task;
+}
+handle('work:list', () => workManager.snapshot(currentRole() === 'member' ? currentUserId() : undefined));
+handle('work:create', (_event, input: CreateWorkInput) => {
+  const agent = storageManager.getAgent(input.agentId);
+  if (!agent || (currentRole() === 'member' && !agent.isShared)) throw new Error('Agent unavailable');
+  return workManager.create(input, currentUserId() ?? 'system');
+});
+handle('work:action', async (_event, id: string, action: WorkAction, note?: string) => {
+  requireWorkAccess(id);
+  if (action === 'run') {
+    workManager.assertReady(id);
+    // Claim is synchronous, so a second click cannot launch the same task again.
+    void workManager.run(id, (agentId, input) => runAgentExecution(agentId, input))
+      .catch(error => console.error('[work]', error));
+    return workManager.get(id);
+  }
+  if (!['accept','revise','cancel','comment','propose-rule'].includes(action)) throw new Error('Invalid action');
+  const task = workManager.change(id, action, note);
+  if (action === 'cancel') {
+    for (const run of agentManager.getActiveExecutions()) {
+      if (run.input.workTaskId === id) {
+        agentManager.cancelExecution(run.id);
+        storageManager.updateAgentExecutionProgress(run.id, run.progress, 'cancelled');
+      }
+    }
+  }
+  return task;
+});
+handle('work:reviewRule', (_event, id: string, accept: boolean) => {
+  const rule = workManager.snapshot().rules.find(r => r.id === id);
+  if (!rule) throw new Error('Rule not found');
+  requireWorkAccess(rule.sourceTaskId);
+  workManager.reviewRule(id, accept);
+});
+handle('work:export', () => JSON.stringify({ format: 'keepmind-work', version: 1,
+  ...workManager.snapshot(currentRole() === 'member' ? currentUserId() : undefined) }, null, 2));

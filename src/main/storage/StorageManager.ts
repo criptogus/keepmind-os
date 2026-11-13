@@ -2,7 +2,7 @@ import { DatabaseSync } from 'node:sqlite';
 import { randomUUID } from 'node:crypto';
 import * as path from 'path';
 import * as fs from 'fs';
-import { app } from 'electron';
+import { homedir } from 'node:os';
 import type { Agent, Team, Approval, GovernanceRule, AuditEntry, AgentExecution, Skill, LocalUser, UserRole, LlmUsageRecord, RoutingDecision, MemoryItem } from '../../shared/types.js';
 
 export class StorageManager {
@@ -10,7 +10,7 @@ export class StorageManager {
   private dbPath: string;
 
   constructor(dataDir?: string) {
-    const dbDir = dataDir ?? path.join(app.getPath('userData'), 'data');
+    const dbDir = dataDir ?? path.join(homedir(), '.keepmind', 'data');
     
     if (!fs.existsSync(dbDir)) {
       fs.mkdirSync(dbDir, { recursive: true });
@@ -590,6 +590,12 @@ export class StorageManager {
     };
   }
 
+  /** Runs are never replayed automatically: an external side effect may already have happened. */
+  recoverInterruptedExecutions(): void {
+    this.db.prepare("UPDATE agent_executions SET status = 'failed', error = 'Interrupted by restart. Review external effects before retrying.', completed_at = ? WHERE status IN ('pending','running')").run(new Date().toISOString());
+    this.db.prepare("UPDATE approvals SET status = 'rejected' WHERE status = 'pending'").run();
+  }
+
   saveAgentExecution(execution: AgentExecution): void {
     const stmt = this.db.prepare(`
       INSERT OR REPLACE INTO agent_executions
@@ -639,7 +645,7 @@ export class StorageManager {
         SET progress = ?, status = ?, completed_at = ?
         WHERE id = ?
       `);
-      stmt.run(progress, status, status === 'completed' || status === 'failed' ? new Date().toISOString() : null, id);
+      stmt.run(progress, status, status === 'completed' || status === 'failed' || status === 'cancelled' ? new Date().toISOString() : null, id);
     } else {
       stmt = this.db.prepare('UPDATE agent_executions SET progress = ? WHERE id = ?');
       stmt.run(progress, id);
@@ -808,7 +814,7 @@ export class StorageManager {
   }
 
   /** Active (non-superseded, non-demoted) memory items for consolidation candidates. */
-  getActiveMemoryItems(limit = 500): MemoryItem[] {
+  getActiveMemoryItems(limit = -1): MemoryItem[] {
     const rows = this.db.prepare(`
       SELECT * FROM memory_items
       WHERE valid_until IS NULL AND demoted = 0
@@ -972,3 +978,4 @@ export class StorageManager {
     this.db.exec('PRAGMA journal_mode = WAL');
   }
 }
+

@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "workspace": "..",
+  "agents": [{
+    "id": "maintainer",
+    "name": "Maintainer",
+    "model": "gpt-4o-mini",
+    "prompt": "Review this project's code and documentation. Read AGENTS.md and CONTRIBUTING.md first. Report evidence and limitations. Do not claim to have run tests when you only read them.",
+    "monthlyBudgetUsd": 5,
+    "tools": ["file_read", "file_list", "personalbrain_search", "get_current_time"]
+  }],
+  "routines": []
+}

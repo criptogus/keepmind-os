@@ -255,6 +255,8 @@ export interface MemoryItem {
 }
 
 export interface AppSettings {
+  memorySemanticSearch?: boolean;
+  memoryEmbeddingModel?: string;
   theme: 'light' | 'dark' | 'auto';
   language: string;
   autoApprove: boolean;
@@ -271,3 +273,4 @@ export interface AppSettings {
   /** Comma-separated enabled sound events; undefined/empty = all enabled. */
   soundEvents?: string;
 }
+

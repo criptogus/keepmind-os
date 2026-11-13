@@ -14,7 +14,7 @@ import type { Agent } from '../../../shared/types.js';
 
 const SENSITIVE_TOOLS = new Set(['shell_exec', 'file_write', 'whatsapp_send_message', 'composio_execute', 'secondbrain_remember']);
 /** Mirrors APPROVAL_TIMEOUT_MS in main.ts — the gate auto-rejects after this. */
-const APPROVAL_TTL_MS = 120_000;
+const APPROVAL_TTL_MS = 24 * 60 * 60_000;
 
 export default function ApprovalQueue() {
   const { t, lang } = useLang();
@@ -171,3 +171,4 @@ export default function ApprovalQueue() {
     </Stack>
   );
 }
+

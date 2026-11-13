@@ -1,8 +1,14 @@
+import type { CreateWorkInput, WorkAction, WorkSnapshot, WorkTask } from '../shared/work.js';
 import { contextBridge, ipcRenderer } from 'electron';
 import type { Agent, Team, Approval, GovernanceRule, AuditEntry, AgentExecution, AgentConfig, CreateAgentInput, TeamConfig, AppSettings, Skill, AgentTrigger, LocalUser, UserRole, ComputerAccessLevel, LlmUsageRecord, RoutingDecision, MemoryItem } from '../shared/types.js';
 import type { ModelCatalogResponse } from '../shared/models.js';
 
 contextBridge.exposeInMainWorld('electronAPI', {
+  workList: () => ipcRenderer.invoke('work:list') as Promise<WorkSnapshot>,
+  workCreate: (input: CreateWorkInput) => ipcRenderer.invoke('work:create', input) as Promise<WorkTask>,
+  workAction: (id: string, action: WorkAction, note?: string) => ipcRenderer.invoke('work:action', id, action, note) as Promise<WorkTask>,
+  workReviewRule: (id: string, accept: boolean) => ipcRenderer.invoke('work:reviewRule', id, accept) as Promise<void>,
+  workExport: () => ipcRenderer.invoke('work:export') as Promise<string>,
   // App info
   getVersion: () => ipcRenderer.invoke('app:getVersion'),
   getPath: (name: string) => ipcRenderer.invoke('app:getPath', name),
@@ -224,6 +230,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
 declare global {
   interface Window {
     electronAPI: {
+      workList: () => Promise<WorkSnapshot>;
+      workCreate: (input: CreateWorkInput) => Promise<WorkTask>;
+      workAction: (id: string, action: WorkAction, note?: string) => Promise<WorkTask>;
+      workReviewRule: (id: string, accept: boolean) => Promise<void>;
+      workExport: () => Promise<string>;
       getVersion: () => Promise<string>;
       getPath: (name: string) => Promise<string>;
       minimizeWindow: () => Promise<void>;
@@ -371,3 +382,4 @@ declare global {
     };
   }
 }
+

@@ -4,6 +4,7 @@ export type Lang = 'en' | 'pt' | 'es';
 const STORAGE_KEY = 'km-lang';
 
 const dict: Record<string, { en: string; pt: string }> = {
+  'nav.work': { en: 'Workspace', pt: 'Trabalho' },
   // Shell / navigation
   'nav.dashboard': { en: 'Home', pt: 'Início' },
   'nav.agents': { en: 'Agents', pt: 'Agentes' },
@@ -753,3 +754,4 @@ export function LangProvider({ children }: { children: ReactNode }) {
 export function useLang(): LangContextValue {
   return useContext(LangContext);
 }
+
