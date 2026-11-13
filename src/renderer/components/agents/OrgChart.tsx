@@ -47,7 +47,7 @@ export default function OrgChart({ agents, reputations = {}, onSelect }: OrgChar
           onClick={() => onSelect?.(agent)}
         >
           <Group gap="sm" wrap="nowrap">
-            <BotAvatar definition={avatarForAgent(agent)} size={30} showBadge={false} />
+            <BotAvatar definition={avatarForAgent(agent)} name={agent.name} size={30} showBadge={false} />
             <div style={{ minWidth: 0 }}>
               <Group gap={6} wrap="nowrap">
                 <Text size="sm" fw={600} lineClamp={1}>{agent.name}</Text>

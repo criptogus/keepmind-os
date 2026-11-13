@@ -9,7 +9,7 @@
   },
   "main": "dist/main/main.cjs",
   "scripts": {
-    "build": "vite build && esbuild src/main/main.ts --bundle --platform=node --format=cjs --packages=external --supported:dynamic-import=true --outfile=dist/main/main.cjs && esbuild src/preload/preload.ts --bundle --platform=node --format=cjs --external:electron --outfile=dist/main/preload.cjs && cp build/tray-icon.png dist/main/tray-icon.png",
+    "build": "vite build && esbuild src/main/main.ts --bundle --platform=node --format=cjs --packages=external --supported:dynamic-import=true --outfile=dist/main/main.cjs && esbuild src/preload/preload.ts --bundle --platform=node --format=cjs --external:electron --outfile=dist/main/preload.cjs && cp build/tray-icon.png dist/main/tray-icon.png && cp build/icon.png dist/main/icon.png",
     "dev": "vite --host 127.0.0.1 --port 0",
     "start": "electron .",
     "test": "vitest run",

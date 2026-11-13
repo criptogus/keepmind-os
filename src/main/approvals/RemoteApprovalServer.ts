@@ -1,3 +1,4 @@
+import { BRAND_LIME } from '../../shared/brand.js';
 import { createServer, type Server } from 'node:http';
 import { networkInterfaces } from 'node:os';
 import type { Approval } from '../../shared/types.js';
@@ -119,7 +120,7 @@ function PAGE_HTML(token: string, language: string): string {
   body { font-family: -apple-system, 'Segoe UI', sans-serif; margin: 0; background: #ffffff; color: #16161a; }
   header { padding: 16px 20px; background: #16161a; color: #fff; display: flex; justify-content: space-between; align-items: center; }
   header h1 { font-size: 17px; margin: 0; font-weight: 600; }
-  header .dot { width: 8px; height: 8px; border-radius: 50%; background: #c5f542; display: inline-block; margin-right: 6px; }
+  header .dot { width: 8px; height: 8px; border-radius: 50%; background: ${BRAND_LIME}; display: inline-block; margin-right: 6px; }
   main { padding: 16px; max-width: 720px; margin: 0 auto; }
   .card { background: #fff; border: 1px solid #e5e5e0; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
   .card .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
@@ -129,7 +130,7 @@ function PAGE_HTML(token: string, language: string): string {
   .args { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: #555; white-space: pre-wrap; word-break: break-word; background: #fafaf8; border-radius: 6px; padding: 8px; max-height: 140px; overflow: auto; }
   .btns { display: flex; gap: 8px; margin-top: 12px; }
   button { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; }
-  .ok { background: #c5f542; color: #111; }
+  .ok { background: ${BRAND_LIME}; color: #111; }
   .no { background: #fff; color: #16161a; border: 1px solid #d4d4cf; }
   .empty { text-align: center; color: #888; padding: 48px 0; }
   .err { color: #b91c1c; font-size: 13px; }

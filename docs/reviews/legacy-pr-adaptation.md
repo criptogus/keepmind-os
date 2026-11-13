@@ -28,7 +28,7 @@ promise identical Paperclip APIs or CLI process internals.
 
 ## Reproducible validation
 
-Run `npm run verify:ux` for typecheck, unit/integration, build, runner, 20 Electron
+Run `npm run verify:ux` for typecheck, unit/integration, build, runner, 22 Electron
 checks, secret scan and dependency policy. The existing workspace-ui-check skill
 now includes compatible providers and company-memory checks. Targeted tests cover
 local HTTP model discovery, selected-endpoint execution with native OAuth present,
@@ -47,3 +47,38 @@ The dependency inventory records existing licenses including libsignal GPL-3.0,
 libvips LGPL and JSZip's MIT/GPL choice. It detects changes and excluded SDKs; it
 is not a blanket license clearance for distributing an installer. No release is
 published by this migration.
+
+### Review resolutions
+
+Standards review found three blockers: missing-usage charges did not accumulate in
+the active run cap, resume reset that cap, and switching connections via Test could
+reuse a pending key. Estimates now charge both the ledger and active execution;
+resumed executions initialize spending from the ledger; switching profiles clears
+the password. The independent Spec axis identified the same spending issues and
+a missing subscription run-cap default. The default is now 1,000 requests/month,
+configurable per agent; the timeout defaults to 300 seconds. Both review axes
+confirmed the reviewed fixes, with no remaining runtime blocker.
+
+### Visual follow-up requested by the owner
+
+Unified Mantine and CSS variables around white, neutral black and #c4ff3d lime,
+including the remote approvals page and PDF/PPT accents. Primary actions receive
+a restrained glow; warnings retain semantic colors. Agent identities are now
+monochrome initials or geometric marks, consistent in lists, selectors and chat.
+Removed the avatar character shapes, mismatched green/blue status accents and
+low-contrast delivery gradient. Chat entry/working indicators respect reduced
+motion. Portuguese/English conversation labels now follow the selected language.
+
+Native windows and the macOS Dock explicitly use the existing KeepMind K icon,
+including development launches; the icon is copied into the built main assets.
+Advanced memory controls are collapsed below everyday settings. Business examples
+and agent capability labels no longer present JSON or internal identifiers.
+
+The smoke now requires 22 checks, including cross-area light/dark palette equality,
+compatible provider readiness without native OAuth, and reduced motion. Capture
+and visually inspect Home, Agents, Approvals, Settings, chat and materials before
+recording final evidence. macOS directory packaging runs the actual afterPack hook;
+its first normalized-config failure was fixed, and a subsequent package scanned
+24,202 dependency entries successfully. No release or installer publication.
+
+Final local aggregate: 213 unit tests, 1 integration test, 22 Electron checks, typecheck/build/runner, 274-file secret scan and 462-package dependency inventory passed. Final visual inspection prompted full delivery expansion by default so tables and sources are not clipped.

@@ -84,7 +84,7 @@ export default function WorkflowBuilder({ workflow, agents, onChange, onAgentCre
 
       <Stack gap="sm">
         {workflow.steps.length === 0 ? (
-          <Card withBorder padding="lg" radius="md" style={{ borderStyle: 'dashed', backgroundColor: 'var(--mantine-color-gray-0)' }}>
+          <Card withBorder padding="lg" radius="md" style={{ borderStyle: 'dashed', backgroundColor: 'var(--mantine-color-default-hover)' }}>
             <Text size="sm" c="dimmed" ta="center">{t('wf.empty')}</Text>
           </Card>
         ) : (

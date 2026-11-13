@@ -41,11 +41,11 @@ export class CompanyBrains {
   }
   async health(agentId: string) {
     if (!this.binding(agentId)) return false;
-    try { await this.service(agentId)!.health(); return true; } catch { throw new RequiredCompanyBrainError(); }
+    try { await this.service(agentId)!.health(); return true; } catch { this.services.get(agentId)?.dispose(); this.services.delete(agentId); throw new RequiredCompanyBrainError(); }
   }
   async search(agentId: string, query: string) {
     try { const service = this.service(agentId); return service ? JSON.stringify(await service.search(query)) : ''; }
-    catch { throw new RequiredCompanyBrainError(); }
+    catch { this.services.get(agentId)?.dispose(); this.services.delete(agentId); throw new RequiredCompanyBrainError(); }
   }
   stop() { for (const service of this.services.values()) service.dispose(); this.services.clear(); }
 }

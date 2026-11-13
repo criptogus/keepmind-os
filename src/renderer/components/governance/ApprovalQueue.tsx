@@ -140,7 +140,7 @@ export default function ApprovalQueue() {
               <Stack gap="sm">
                 <Group justify="space-between">
                   <Group gap="xs">
-                    {agent && <BotAvatar definition={avatarForAgent(agent)} mood="thinking" size={28} />}
+                    {agent && <BotAvatar definition={avatarForAgent(agent)} name={agent.name} mood="thinking" size={28} />}
                     <Text size="xs" c="dimmed">{new Date(approval.createdAt).toLocaleString()}</Text>
                     {expiry && <Text size="xs" c="dimmed">· {expiry}</Text>}
                   </Group>
@@ -158,7 +158,7 @@ export default function ApprovalQueue() {
                   </Text>
                   {typeof approval.context.decisionReason === 'string' && <Text size="sm" c="dimmed">{approval.context.decisionReason}</Text>}
                   {desc.payload && (
-                    <Card withBorder padding="sm" radius="sm" mt={8} style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
+                    <Card withBorder padding="sm" radius="sm" mt={8} style={{ backgroundColor: 'var(--mantine-color-default-hover)' }}>
                       <Text size="sm" style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
                         {desc.payload}
                       </Text>
@@ -174,7 +174,7 @@ export default function ApprovalQueue() {
                   </Text>
                 </UnstyledButton>
                 <Collapse in={isOpen}>
-                  <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
+                  <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-default-hover)' }}>
                     <Text size="xs" ff="monospace" style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
                       {JSON.stringify(approval.context, null, 2)}
                     </Text>
@@ -213,7 +213,7 @@ function RemoteApprovalsCard({
       <Group justify="space-between" wrap="nowrap">
         <Group gap="xs" wrap="nowrap" style={{ minWidth: 0 }}>
           <Text size="sm" fw={500}>{t('ap2.remoteTitle')}</Text>
-          {enabled && <Badge size="xs" variant="light" color="green">{t('ap2.remoteOn')}</Badge>}
+          {enabled && <Badge size="xs" variant="light" color="lime">{t('ap2.remoteOn')}</Badge>}
         </Group>
         <Group gap="xs" wrap="nowrap">
           {enabled && remote?.url && (

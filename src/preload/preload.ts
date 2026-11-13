@@ -109,6 +109,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   saveCompatibleProvider: (profile: import('../shared/connectors.js').CompatibleProviderProfile, apiKey?: string) => ipcRenderer.invoke('compatible:save', profile, apiKey) as Promise<import('../shared/connectors.js').CompatibleProviderProfile>,
   removeCompatibleProvider: (id: string) => ipcRenderer.invoke('compatible:remove', id) as Promise<void>,
   testCompatibleProvider: (id: string) => ipcRenderer.invoke('compatible:test', id) as Promise<import('../shared/connectors.js').CompatibleModelDiscovery>,
+  isModelConfigured: (model: string) => ipcRenderer.invoke('models:isConfigured', model) as Promise<boolean>,
   listModels: () => ipcRenderer.invoke('models:list') as Promise<ModelCatalogResponse>,
   refreshModels: () => ipcRenderer.invoke('models:refresh') as Promise<ModelCatalogResponse & { errors?: Record<string, string> }>,
 
@@ -407,6 +408,7 @@ declare global {
       saveCompatibleProvider: (profile: import('../shared/connectors.js').CompatibleProviderProfile, apiKey?: string) => Promise<import('../shared/connectors.js').CompatibleProviderProfile>;
       removeCompatibleProvider: (id: string) => Promise<void>;
       testCompatibleProvider: (id: string) => Promise<import('../shared/connectors.js').CompatibleModelDiscovery>;
+      isModelConfigured: (model: string) => Promise<boolean>;
       listModels: () => Promise<import('../shared/models.js').ModelCatalogResponse>;
       refreshModels: () => Promise<import('../shared/models.js').ModelCatalogResponse & { errors?: Record<string, string> }>;
       oauthAuthenticate: (provider: 'openai' | 'anthropic') => Promise<{

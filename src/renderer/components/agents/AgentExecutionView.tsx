@@ -86,7 +86,7 @@ function ExecutionToolCalls({ executionId }: { executionId: string }) {
         {open ? `▾ ${t('aex.toolCalls')}` : `▸ ${t('aex.toolCalls')}`}
       </Button>
       {open && (
-        <Card withBorder padding="sm" radius="sm" mt={4} style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
+        <Card withBorder padding="sm" radius="sm" mt={4} style={{ backgroundColor: 'var(--mantine-color-default-hover)' }}>
           {loading && <Text size="xs" c="dimmed">{t('logs.loading')}</Text>}
           {!loading && items.length === 0 && <Text size="xs" c="dimmed">{t('govsum.empty')}</Text>}
           <Stack gap={4}>
@@ -231,7 +231,7 @@ export default function AgentExecutionView({ agentId }: AgentExecutionViewProps)
             </Group>
             <div className="km-progress" style={{ height: 4, backgroundColor: 'var(--mantine-color-gray-3)', borderRadius: 2 }} />
             {/* Live plan: request → each tool → response (WorkPlan pattern). */}
-            <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
+            <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-default-hover)' }}>
               <Text size="xs" fw={600} mb={4}>{t('aex.plan')}</Text>
               <Stack gap={2}>
                 <PlanStep state="done" label={t('aex.stepStart')} />
@@ -253,7 +253,7 @@ export default function AgentExecutionView({ agentId }: AgentExecutionViewProps)
             </Card>
 
             {live.tools.length > 0 && (
-              <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
+              <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-default-hover)' }}>
                 <Text size="xs" fw={600} mb={4}>{t('aex.toolCalls')}</Text>
                 <Stack gap={2}>
                   {live.tools.map((tool, i) => {
@@ -283,7 +283,7 @@ export default function AgentExecutionView({ agentId }: AgentExecutionViewProps)
               </Card>
             )}
             {live.text && (
-              <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
+              <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-default-hover)' }}>
                 <Text size="xs" style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{live.text}</Text>
               </Card>
             )}
@@ -309,7 +309,7 @@ export default function AgentExecutionView({ agentId }: AgentExecutionViewProps)
             {execution.status === 'running' && (
               <>
                 <div className="km-progress" style={{ height: 4, backgroundColor: 'var(--mantine-color-gray-3)', borderRadius: 2, overflow: 'hidden' }}>
-                  <div style={{ height: '100%', width: `${execution.progress}%`, backgroundColor: 'var(--mantine-color-dark-9)', transition: 'width 0.3s ease' }} />
+                  <div style={{ height: '100%', width: `${execution.progress}%`, backgroundColor: 'var(--km-lime)', transition: 'width 0.3s ease' }} />
                 </div>
                 <Text size="xs" c="dimmed">
                   {t('aex.elapsed')} {execution.startedAt ? fmtElapsed(now - new Date(execution.startedAt).getTime()) : '—'}
@@ -319,7 +319,7 @@ export default function AgentExecutionView({ agentId }: AgentExecutionViewProps)
 
             <div>
               <Text size="xs" fw={600} tt="uppercase" c="dimmed" mb={4}>{t('logs.input')}</Text>
-              <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
+              <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-default-hover)' }}>
                 <Text size="xs" ff="monospace" style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
                   {JSON.stringify(execution.input, null, 2)}
                 </Text>
@@ -329,7 +329,7 @@ export default function AgentExecutionView({ agentId }: AgentExecutionViewProps)
             {execution.output && typeof execution.output === 'object' && Array.isArray((execution.output as Record<string, unknown>).plannedActions) && (
               <div>
                 <Text size="xs" fw={600} tt="uppercase" c="dimmed" mb={4}>{t('aex.plannedActions')}</Text>
-                <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
+                <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-default-hover)' }}>
                   <Stack gap={4}>
                     {((execution.output as Record<string, unknown>).plannedActions as Array<{ name: string; args: unknown }>).map((a, i) => (
                       <Group key={i} gap={6} wrap="nowrap" align="flex-start">
@@ -357,7 +357,7 @@ export default function AgentExecutionView({ agentId }: AgentExecutionViewProps)
             {execution.output && (
               <div>
                 <Text size="xs" fw={600} tt="uppercase" c="dimmed" mb={4}>{t('logs.output')}</Text>
-                <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-gray-0)', maxHeight: 200, overflow: 'auto' }}>
+                <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-default-hover)', maxHeight: 200, overflow: 'auto' }}>
                   <Text size="xs" ff="monospace" style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
                     {typeof execution.output === 'string'
                       ? execution.output
@@ -370,7 +370,7 @@ export default function AgentExecutionView({ agentId }: AgentExecutionViewProps)
             {execution.error && (
               <div>
                 <Text size="xs" fw={600} tt="uppercase" c="dimmed" mb={4}>{t('common.error')}</Text>
-                <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
+                <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-default-hover)' }}>
                   <Text size="xs" ff="monospace">{execution.error}</Text>
                 </Card>
               </div>

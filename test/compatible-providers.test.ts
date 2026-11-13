@@ -59,3 +59,22 @@ describe('compatible providers', () => {
     await manager.shutdown();
   });
 });
+
+it('charges missing usage against the run cap and restores persistent spend for resume', async () => {
+  const manager = new AgentManager();
+  let calls = 0;
+  const ledger: Array<{ executionId?: string; costUsd?: number }> = [];
+  manager.setUsageRecorder(record => ledger.push(record));
+  manager.setExecutionSpendProvider(id => ledger.filter(r => r.executionId === id).reduce((sum, record) => sum + (record.costUsd || 0), 0));
+  manager.setCompatibleProviders({ resolve: () => ({ profile: { ...profile, maxRunUsd: 0.001 }, client: { chat: { completions: { create: async () => {
+    calls++;
+    return { choices: [{ finish_reason: 'tool_calls', message: { role: 'assistant', tool_calls: [{ id: `call-${calls}`, type: 'function', function: { name: 'get_current_time', arguments: '{}' } }] } }] };
+  } } } } }) } as any);
+  const config = { model: 'compatible/local', temperature: 0, maxTokens: 100, systemPrompt: 'Help.', tools: [{ name: 'get_current_time', type: 'custom' as const, config: {} }] };
+  await expect(manager.executeAgent('a', config, { task: 'Check time' }, undefined, 'persisted-run')).rejects.toThrow('per-run budget');
+  expect(calls).toBe(1);
+  expect(ledger[0].costUsd).toBeGreaterThan(0);
+  await expect(manager.executeAgent('a', config, { task: 'Check time' }, undefined, 'persisted-run')).rejects.toThrow('per-run budget');
+  expect(calls).toBe(1);
+  await manager.shutdown();
+});

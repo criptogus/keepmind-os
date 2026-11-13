@@ -15,7 +15,7 @@ import OrgChart from './OrgChart';
 import { IconAgent } from '../common/icons.js';
 
 export default function AgentList({ newAgentRequest = 0, onCreateOpened }: { newAgentRequest?: number; onCreateOpened?: () => void }) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const { agents, executions, loading, error, fetchAgents, selectAgent, deleteAgent } = useAgentStore();
   const [createMode, setCreateMode] = useState<'wizard' | 'advanced' | null>(null);
   useEffect(() => { if (newAgentRequest) { setCreateMode('wizard'); onCreateOpened?.(); } }, [newAgentRequest, onCreateOpened]);
@@ -112,7 +112,7 @@ export default function AgentList({ newAgentRequest = 0, onCreateOpened }: { new
             >
               <Stack gap="xs">
                 <Group gap="sm" wrap="nowrap">
-                  <BotAvatar definition={avatarForAgent(agent)} mood={moodFor(agent.id)} size={44} />
+                  <BotAvatar definition={avatarForAgent(agent)} name={agent.name} mood={moodFor(agent.id)} size={44} />
                   <div>
                     <Text fw={600}>{agent.name}</Text>
                     {isRunning(agent.id) && (
@@ -127,11 +127,11 @@ export default function AgentList({ newAgentRequest = 0, onCreateOpened }: { new
                 {agent.capabilities.length > 0 && (
                   <Group gap={4}>
                     {agent.capabilities.slice(0, 4).map((cap) => (
-                      <Badge key={cap} size="sm" variant="light" color="gray">{cap}</Badge>
+                      <Badge key={cap} size="sm" variant="light" color="gray">{({ text_generation: lang === 'pt' ? 'Conteúdo' : 'Content', reasoning: lang === 'pt' ? 'Análise' : 'Analysis' } as Record<string,string>)[cap] ?? cap.replace(/_/g, ' ')}</Badge>
                     ))}
                   </Group>
                 )}
-                <Group justify="space-between" mt="xs" style={{ borderTop: '1px solid var(--mantine-color-gray-3)', paddingTop: 8 }}>
+                <Group justify="space-between" mt="xs" style={{ borderTop: '1px solid var(--mantine-color-default-border)', paddingTop: 8 }}>
                   <Text size="xs" c="dimmed">{t('agents.updated')} {new Date(agent.updatedAt).toLocaleDateString()}</Text>
                   <Group gap={4}>
                     <Button size="compact-xs" variant="subtle" color="gray" onClick={(e) => { e.stopPropagation(); setEditingAgentId(agent.id); }}>

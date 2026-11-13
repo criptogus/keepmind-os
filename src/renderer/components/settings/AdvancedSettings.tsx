@@ -846,7 +846,7 @@ export default function AdvancedSettings() {
                   }}>{t('common.remove')}</Button>
               </Group>
             ))}
-            <Card withBorder padding="sm" radius="sm" mt="xs" style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
+            <Card withBorder padding="sm" radius="sm" mt="xs" style={{ backgroundColor: 'var(--mantine-color-default-hover)' }}>
               <Text size="xs" fw={600} mb={6}>{t('adv2.inviteUser')}</Text>
               <Stack gap={6}>
                 <Group gap={6} grow>

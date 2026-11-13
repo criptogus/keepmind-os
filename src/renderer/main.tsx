@@ -6,6 +6,7 @@ import App from './App';
 import { LangProvider } from './lib/i18n';
 import './index.css';
 import { theme } from './lib/theme';
+import { BRAND_LIME } from '../shared/brand';
 import { useThemeStore } from './store/themeStore';
 
 // Persistence is owned by themeStore; Mantine owns auto/system resolution.
@@ -13,7 +14,7 @@ const colorSchemeManager = { get: () => 'auto' as const, set: () => {}, subscrib
 
 function ThemedApp() {
   const colorScheme = useThemeStore(state => state.theme);
-  return <MantineProvider theme={theme} forceColorScheme={colorScheme === 'auto' ? undefined : colorScheme} defaultColorScheme="auto" colorSchemeManager={colorSchemeManager}><LangProvider><App /></LangProvider></MantineProvider>;
+  return <MantineProvider theme={theme} cssVariablesResolver={() => ({ variables: { '--km-lime': BRAND_LIME }, light: { '--mantine-color-body': '#ffffff', '--mantine-color-text': '#111111', '--mantine-color-dimmed': '#626262' }, dark: { '--mantine-color-body': '#111111', '--mantine-color-text': '#f5f5f5', '--mantine-color-dimmed': '#b4b4b4' } })} forceColorScheme={colorScheme === 'auto' ? undefined : colorScheme} defaultColorScheme="auto" colorSchemeManager={colorSchemeManager}><LangProvider><App /></LangProvider></MantineProvider>;
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

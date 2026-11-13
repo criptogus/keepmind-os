@@ -22,7 +22,7 @@ export default function AgentSelect({ agents, ...props }: AgentSelectProps) {
         const agent = byId.get(option.value);
         return (
           <Group gap="xs" wrap="nowrap">
-            {agent && <BotAvatar definition={avatarForAgent(agent)} size={22} showBadge={false} />}
+            {agent && <BotAvatar definition={avatarForAgent(agent)} name={agent.name} size={22} showBadge={false} />}
             <span>{option.label}</span>
           </Group>
         );

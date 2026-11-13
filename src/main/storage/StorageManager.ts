@@ -640,8 +640,12 @@ export class StorageManager {
     }
   }
 
-  assertMonthlyRunCap(agentId: string, cap?: number): void {
-    if (cap === undefined) return;
+  getExecutionSpend(executionId: string): number {
+    const row = this.db.prepare('SELECT COALESCE(SUM(cost_usd), 0) AS total FROM llm_usage WHERE execution_id = ?').get(executionId) as { total: number };
+    return Number(row.total);
+  }
+
+  assertMonthlyRunCap(agentId: string, cap = 1000): void {
     if (!Number.isSafeInteger(cap) || cap < 1 || cap > 100_000) throw new Error('Invalid monthly run limit');
     const month = new Date(); month.setUTCDate(1); month.setUTCHours(0, 0, 0, 0);
     const row = this.db.prepare('SELECT COUNT(*) AS n FROM agent_executions WHERE agent_id = ? AND started_at >= ?').get(agentId, month.toISOString()) as { n: number };

@@ -201,7 +201,7 @@ export default function AgentEditor({ agentId, onClose }: AgentEditorProps) {
               onChange={(v) => setConfig({ ...config, monthlyBudgetUsd: v === '' ? undefined : Number(v) })}
             />
 
-            <NumberInput label={lang === 'pt' ? 'Máximo de pedidos por mês' : 'Maximum requests per month'} min={1} max={100000} value={config.monthlyRunCap ?? ''} onChange={v => setConfig({ ...config, monthlyRunCap: v === '' ? undefined : Number(v) })} />
+            <NumberInput label={lang === 'pt' ? 'Máximo de pedidos por mês' : 'Maximum requests per month'} min={1} max={100000} value={config.monthlyRunCap ?? 1000} onChange={v => setConfig({ ...config, monthlyRunCap: v === '' ? undefined : Number(v) })} />
             <NumberInput label={lang === 'pt' ? 'Tempo máximo por pedido (segundos)' : 'Request timeout (seconds)'} min={1} max={3600} value={config.executionTimeoutSeconds ?? 300} onChange={v => setConfig({ ...config, executionTimeoutSeconds: Number(v) })} />
 
             {availableSkills.length > 0 && (

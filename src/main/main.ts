@@ -223,7 +223,7 @@ async function runAgentExecution(agentId: string, input: Record<string, unknown>
   if (agentManager.getActiveExecutions().length >= concurrency) throw new Error('Concurrent execution limit reached; wait for a running task to finish');
   const previousRun = opts?.resumeId ? storageManager.getAgentExecution(opts.resumeId) : undefined;
   if (opts?.resumeId && (!previousRun || previousRun.agentId !== agentId || (previousRun.status !== 'failed' && !(previousRun.status === 'completed' && checkpoints.read(opts.resumeId)?.output)) || !checkpoints.read(opts.resumeId))) throw new Error('Execution cannot be resumed');
-  if (previousRun) input = previousRun.input;
+  if (previousRun) { input = previousRun.input; opts = { ...opts, dryRun: previousRun.dryRun === true }; }
   if (!opts?.resumeId) storageManager.assertMonthlyRunCap(agentId, agent.config.monthlyRunCap);
   const executionId = opts?.resumeId ?? uuidv4();
   const userId = opts?.userId ?? currentUserId() ?? 'system';
@@ -594,9 +594,10 @@ const __dirname = path.dirname(__filename);
 
 function createWindow() {
   mainWindow = new BrowserWindow({
+    icon: path.join(__dirname, 'icon.png'),
     width: 1400,
     height: 900,
-    minWidth: 1200,
+    minWidth: 780,
     minHeight: 700,
     webPreferences: {
       preload: path.join(__dirname, 'preload.cjs'),
@@ -628,7 +629,9 @@ function createWindow() {
   });
 }
 
+app.setName('KeepMind OS');
 app.whenReady().then(async () => {
+  if (process.platform === 'darwin') app.dock?.setIcon(nativeImage.createFromPath(path.join(__dirname, 'icon.png')));
   // Initialize managers
   storageManager = new StorageManager(path.join(app.getPath('userData'), 'data'));
   storageManager.recoverInterruptedExecutions();
@@ -651,6 +654,7 @@ app.whenReady().then(async () => {
   seedBuiltInSkills();
   agentManager = new AgentManager();
   agentManager.setCompatibleProviders(compatibleProviders);
+  agentManager.setExecutionSpendProvider(id => storageManager.getExecutionSpend(id));
   checkpoints = new CheckpointStore(storageManager);
   agentManager.setCheckpointStore(checkpoints);
   mcpManager = new McpManager(agentManager.getToolRegistry());
@@ -1833,6 +1837,13 @@ handle('compatible:list', () => { requireRole('admin'); return compatibleProvide
 handle('compatible:save', (_event, profile: CompatibleProviderProfile, apiKey?: string) => { requireRole('admin'); return compatibleProviders.save(profile, apiKey); });
 handle('compatible:remove', (_event, id: string) => { requireRole('admin'); compatibleProviders.remove(id); });
 handle('compatible:test', (_event, id: string) => { requireRole('admin'); return compatibleProviders.test(id); });
+
+handle('models:isConfigured', (_event, model: string) => {
+  if (typeof model !== 'string') return false;
+  if (isCompatibleModel(model)) { try { compatibleProviders.resolve(model); return true; } catch { return false; } }
+  const provider = providerForModel(model);
+  return !!provider && (credentialStore.hasApiKey(provider) || !!providerApiKeys[provider] || oauthManager.isAuthenticated(provider));
+});
 
 handle('models:list', async () => {
   // Lazily refresh stale caches when credentials are available.

@@ -70,6 +70,8 @@ export class AgentManager {
   private modelRouter?: (model: string, input: Record<string, unknown>, agentId?: string) => string;
   private usageRecorder?: (rec: UsageRecord) => void;
   private budgetChecker?: BudgetChecker;
+  private executionSpend?: (executionId: string) => number;
+  setExecutionSpendProvider(provider: (executionId: string) => number) { this.executionSpend = provider; }
   private memoryOutcomeRecorder?: MemoryOutcomeRecorder;
   private toolCallRecorder?: (executionId: string, kind: 'call' | 'result', name: string, payload: { args?: unknown; result?: unknown; error?: unknown }) => void;
   private runContext = new AsyncLocalStorage<{ agentId: string; executionId: string; signal: AbortSignal; spentUsd: number; compatible?: ReturnType<CompatibleProviders['resolve']> }>();
@@ -81,6 +83,8 @@ export class AgentManager {
     if (!pending) return;
     this.usageRecorder?.({ agentId: pending.agentId, executionId, model: 'unreported', provider: 'unreported',
       usage: { promptTokens: 0, completionTokens: 0 }, costUsd: pending.estimate, partial: true });
+    const context = this.runContext.getStore();
+    if (context?.executionId === executionId) context.spentUsd += pending.estimate;
     this.reservations.delete(executionId);
   }
 
@@ -339,7 +343,7 @@ export class AgentManager {
     parent?.addEventListener('abort', abort, { once: true });
     this.controllers.set(executionId, controller);
     try {
-      return await this.runContext.run({ agentId, executionId, signal: controller.signal, spentUsd: 0, compatible: isCompatibleModel(config.model) ? this.compatibleProviders?.resolve(config.model) : undefined }, () =>
+      return await this.runContext.run({ agentId, executionId, signal: controller.signal, spentUsd: this.executionSpend?.(executionId) ?? 0, compatible: isCompatibleModel(config.model) ? this.compatibleProviders?.resolve(config.model) : undefined }, () =>
         this.executeAgentInternal(agentId, config, input, onProgress, executionId, onEvent, opts));
     } finally {
       clearTimeout(timeout);

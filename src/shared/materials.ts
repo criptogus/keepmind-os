@@ -1,3 +1,4 @@
+import { BRAND_LIME } from './brand.js';
 export interface MaterialSlide { title: string; body: string; }
 export function plainMaterial(content: string): string {
   return content.replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/\[([^\]]+)\]\(([^)]+)\)/g, '$1 ($2)').replace(/^#{1,6}\s+/gm, '').replace(/\*\*|__|`/g, '').replace(/^>\s?/gm, '').replace(/^\|?\s*:?-{3,}.*$/gm, '').replace(/^\|(.+)\|\s*$/gm, (_, row: string) => row.split('|').map(cell => cell.trim()).join(' — ')).replace(/\*([^*]+)\*/g, '$1').trim();
@@ -39,5 +40,5 @@ function documentBody(content: string): string {
   return blocks.join('');
 }
 export function materialHtml(title: string, content: string): string {
-  return `<!doctype html><html lang="pt"><head><meta charset="UTF-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'"><style>@page{size:A4;margin:22mm}body{font:11pt/1.6 Arial;color:#111111;overflow-wrap:anywhere}h1{font-size:24pt;line-height:1.2;border-bottom:3px solid #c5f542;padding-bottom:18px}h2{font-size:19pt}h3{font-size:15pt}p{margin:10px 0}table{border-collapse:collapse;width:100%;font-size:10pt;margin:18px 0}th,td{border:1px solid #dbe1e8;padding:9px;text-align:left;vertical-align:top}th{background:#f4f4f4}tr{break-inside:avoid}footer{color:#64748b;font-size:9pt;margin-top:25px}</style></head><body><h1>${escape(title)}</h1>${documentBody(content)}<footer>KeepMind OS · Material para revisão</footer></body></html>`;
+  return `<!doctype html><html lang="pt"><head><meta charset="UTF-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'"><style>@page{size:A4;margin:22mm}body{font:11pt/1.6 Arial;color:#111111;overflow-wrap:anywhere}h1{font-size:24pt;line-height:1.2;border-bottom:3px solid ${BRAND_LIME};padding-bottom:18px}h2{font-size:19pt}h3{font-size:15pt}p{margin:10px 0}table{border-collapse:collapse;width:100%;font-size:10pt;margin:18px 0}th,td{border:1px solid #dbe1e8;padding:9px;text-align:left;vertical-align:top}th{background:#f4f4f4}tr{break-inside:avoid}footer{color:#64748b;font-size:9pt;margin-top:25px}</style></head><body><h1>${escape(title)}</h1>${documentBody(content)}<footer>KeepMind OS · Material para revisão</footer></body></html>`;
 }

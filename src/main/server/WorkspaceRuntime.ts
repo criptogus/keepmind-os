@@ -44,6 +44,7 @@ export class WorkspaceRuntime {
     const providers = new CompatibleProviders(settings, { getSecret: name => keys.get(name) ?? null, setSecret: (name, value) => { keys.set(name, value); }, clearSecret: name => { keys.delete(name); } });
     for (const profile of config.compatibleProviders ?? []) providers.save(profile, process.env[profile.apiKeyEnv]);
     this.manager.setCompatibleProviders(providers);
+    this.manager.setExecutionSpendProvider(id => this.storage.getExecutionSpend(id));
     this.companyBrains = new CompanyBrains(settings);
     for (const binding of config.companyBrains ?? []) {
       if (!config.agents.some(agent => agent.id === binding.agentId)) throw new Error('Company binding references unknown agent');

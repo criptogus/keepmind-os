@@ -14,7 +14,11 @@
     "dark-theme-and-contrast",
     "automatic-system-theme",
     "skills-oauth-disconnected",
+    "compatible-provider-bridge-and-picker",
+    "company-memory-explicit-binding",
     "quick-actions-consumed-and-approvals-accessible",
+    "cross-area-palette-light-dark",
+    "reduced-motion",
     "narrow-layout",
     "shared-workspace-isolation",
     "checkpoint-recovery",
@@ -22,5 +26,5 @@
   ],
   "failure": null,
   "fixture": "synthetic; no live providers",
-  "timestamp": "2026-11-13T17:23:45.675Z"
+  "timestamp": "2026-11-13T17:55:58.609Z"
 }

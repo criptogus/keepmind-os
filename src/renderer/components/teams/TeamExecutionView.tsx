@@ -78,14 +78,14 @@ export default function TeamExecutionView({ team }: TeamExecutionViewProps) {
                     <Text size="xs" c="dimmed">{r.status}</Text>
                   </Group>
                   {r.output && (
-                    <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
+                    <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-default-hover)' }}>
                       <Text size="xs" ff="monospace" style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
                         {JSON.stringify(r.output, null, 2)}
                       </Text>
                     </Card>
                   )}
                   {r.error && (
-                    <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
+                    <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-default-hover)' }}>
                       <Text size="xs" ff="monospace">{r.error}</Text>
                     </Card>
                   )}
