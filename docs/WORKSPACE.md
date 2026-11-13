@@ -229,3 +229,24 @@ Other MCP calls continue to require approval. Grants do not bypass agent allowli
 This is a first bounded-autonomy policy, not automatic risk understanding of
 arbitrary shell commands or API payloads. Isolated writable worktrees, validated
 file diffs and narrowly scoped write grants remain needed to automate more changes.
+
+## Autonomous deliverable files
+
+Assign the **Autonomous Deliverables** skill to a desktop agent, or include
+`artifact_create` in a headless agent's tool list. The tool creates a text report,
+proposed source file or patch inside the execution's SQLite record. It does not
+write to the working repository, run code, publish or require a per-file approval.
+
+Open the task to preview plain text or download a file. Each changed content under
+the same filename creates an immutable version with a SHA-256 hash; identical
+retries return the existing version. Runtime identity determines the owning
+execution, not tool arguments. Shared downloads require task/project/agent access.
+Limits are 100 KB per artifact, 20 versions and 500 KB total per execution.
+Filenames cannot contain directories. Contents are rendered as text, never HTML.
+
+These are proposals, not applied edits or proof that tests ran. Downloads require
+a click and do not execute files. Database backups include artifacts. The drawer
+shows the current execution's files; older execution records remain in the database
+but a cross-revision artifact browser is not implemented. A directory sandbox,
+automatic patch application, conflict-aware undo and command isolation remain
+separate work. There is no disk quota across all executions yet.

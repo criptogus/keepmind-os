@@ -1,3 +1,4 @@
+import { ArtifactStore } from '../artifacts/ArtifactStore.js';
 import { actionDecision } from '../governance/ActionPolicy.js';
 import { randomUUID } from 'node:crypto';
 import path from 'node:path';
@@ -15,7 +16,7 @@ export const principalSchema = z.object({ id:z.string().min(1), tokenEnv:z.strin
 export type Principal = z.infer<typeof principalSchema>;
 export const workspaceConfigSchema = z.object({
   version:z.literal(1), workspace:z.string(), maxConcurrent:z.number().int().min(1).max(32).default(4),
-  agents:z.array(z.object({id:z.string().min(1),name:z.string().min(1),model:z.string().min(1),prompt:z.string().min(1),maxTokens:z.number().int().min(1).max(32768).default(4096),monthlyBudgetUsd:z.number().positive(),tools:z.array(z.string().regex(/^(file_read|file_list|pdf_read|sheet_read|personalbrain_search|get_current_time|mcp_[a-zA-Z0-9_-]+)$/)).default(['file_read','file_list','get_current_time'])})).min(1),
+  agents:z.array(z.object({id:z.string().min(1),name:z.string().min(1),model:z.string().min(1),prompt:z.string().min(1),maxTokens:z.number().int().min(1).max(32768).default(4096),monthlyBudgetUsd:z.number().positive(),tools:z.array(z.string().regex(/^(artifact_create|file_read|file_list|pdf_read|sheet_read|personalbrain_search|get_current_time|mcp_[a-zA-Z0-9_-]+)$/)).default(['file_read','file_list','get_current_time','artifact_create'])})).min(1),
   mcp:z.array(mcpConfigSchema).default([]),
   routines:z.array(z.object({agentId:z.string(),name:z.string(),prompt:z.string(),project:z.string().default('Workspace'),intervalMinutes:z.number().int().min(1),autonomy:z.enum(['draft','run']).default('draft')})).default([]),
   server:z.object({host:z.string().default('127.0.0.1'),port:z.number().int().min(0).max(65535).default(47830),principals:z.array(principalSchema).min(1)}).optional(),
@@ -33,7 +34,7 @@ export class WorkspaceRuntime {
     this.work = new WorkManager(this.storage,true); this.checkpoints = new CheckpointStore(this.storage);
     this.manager.setCheckpointStore(this.checkpoints); this.mcp = new McpManager(this.manager.getToolRegistry());
     const memory = new MemoryManager(this.storage);
-    this.manager.getToolRegistry().setContext({workspaceDir:path.resolve(configDir,config.workspace),personalBrainSearch:async(q,n)=>memory.search(q,n)});
+    this.manager.getToolRegistry().setContext({createArtifact:(executionId,input)=>new ArtifactStore(this.storage).create(executionId,input),workspaceDir:path.resolve(configDir,config.workspace),personalBrainSearch:async(q,n)=>memory.search(q,n)});
     this.manager.setConstraintsProvider(()=>({policy:{fileAccess:'workspace',shellAccess:'disabled'}}));
     this.manager.setUsageRecorder(r=>this.storage.saveLlmUsage({...r,promptTokens:r.usage.promptTokens,completionTokens:r.usage.completionTokens,costUsd:r.costUsd??costFromUsage(r.model,r.usage.promptTokens,r.usage.completionTokens),partial:r.partial??false}));
     this.manager.setBudgetChecker((id,_model,estimate)=>{

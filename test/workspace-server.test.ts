@@ -65,3 +65,13 @@ it('requires HTTPS for remote endpoints and namespaces tool names deterministica
   expect(()=>validateEndpoint('http://remote.example')).toThrow('HTTPS');expect(()=>validateEndpoint('https://user:pass@example.com')).toThrow();
   expect(mcpToolName('docs','a/b')).not.toBe(mcpToolName('docs','a_b'));expect(mcpToolName('docs','x'.repeat(100)).length).toBeLessThanOrEqual(64);
 });
+it('scopes artifact downloads to authorized tasks and their bound execution',async()=>{
+ const {ArtifactStore}=await import('../src/main/artifacts/ArtifactStore');const f=fixture();
+ try {
+  const visible=f.runtime.work.create(input,'alice');const hidden=f.runtime.work.create({...input,project:'secret'},'admin');
+  f.runtime.work.attachExecution(visible.id,'visible-run');f.runtime.work.attachExecution(hidden.id,'hidden-run');
+  const artifacts=new ArtifactStore(f.runtime.storage);artifacts.create('visible-run',{name:'report.md',content:'Public to project'});artifacts.create('hidden-run',{name:'report.md',content:'Restricted'});
+  expect((f.api.call(reader,'work:artifacts',[visible.id]) as any[])[0].content).toBe('Public to project');
+  expect(()=>f.api.call(alice,'work:artifacts',[hidden.id])).toThrow('unavailable');
+ } finally {await f.close();}
+});

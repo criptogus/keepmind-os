@@ -1,3 +1,4 @@
+import { ArtifactStore } from '../artifacts/ArtifactStore.js';
 import { createServer } from 'node:http';
 import { createHash, timingSafeEqual } from 'node:crypto';
 import { z } from 'zod';
@@ -45,6 +46,7 @@ export class WorkspaceApi {
         const task=this.task(actor,String(args[0]));const a=rt.agent(task.agentId);
         return {agentName:a.name,model:a.model,monthlyBudgetUsd:a.monthlyBudgetUsd,tools:rt.manager.previewTools(a.id,rt.agentConfig(a.id),(task.status==='blocked'&&task.executionId?rt.storage.getAgentExecution(task.executionId)?.input:undefined)??rt.work.executionInput(task.id)),dependencies:task.dependencies.map(id=>{const dep=this.task(actor,id);return {id,title:dep.title,accepted:dep.status==='done'};})};
       }
+      case 'work:artifacts':{const task=this.task(actor,String(args[0]));return task.executionId?new ArtifactStore(rt.storage).list(task.executionId):[];}
       case 'work:checkpoint':{
         const t=this.task(actor,String(args[0]));return {available:!!t.executionId&&!!rt.checkpoints.read(t.executionId),steps:t.executionId?rt.checkpoints.steps(t.executionId):[]};
       }

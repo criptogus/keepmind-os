@@ -1,3 +1,4 @@
+import { ArtifactStore } from './artifacts/ArtifactStore.js';
 import { actionDecision } from './governance/ActionPolicy.js';
 import { McpManager, mcpConfigSchema } from './mcp/McpManager.js';
 import { RemoteWorkspace } from './server/RemoteWorkspace.js';
@@ -67,7 +68,7 @@ function remoteWorkspace() {
   if (url && !token) throw new Error('Shared workspace token unavailable. Reconnect or explicitly disconnect.');
   return url && token ? new RemoteWorkspace(url, token) : undefined;
 }
-const REMOTE_METHODS = new Set(["work:context","work:list","work:create","work:action","work:preview","work:checkpoint","work:reconcile","work:reviewRule","work:export","governance:getState","governance:getPendingApprovals","governance:approve","governance:reject"]);
+const REMOTE_METHODS = new Set(["work:artifacts","work:context","work:list","work:create","work:action","work:preview","work:checkpoint","work:reconcile","work:reviewRule","work:export","governance:getState","governance:getPendingApprovals","governance:approve","governance:reject"]);
 let workspaceDir = '';
 let tray: Tray | null = null;
 
@@ -231,6 +232,7 @@ function seedBuiltInSkills() {
   const byName = new Map(all.map((s) => [s.name, s]));
   const now = new Date().toISOString();
   const seeds: Array<Omit<Skill, 'id' | 'createdAt' | 'updatedAt'>> = [
+    { name: 'Autonomous Deliverables', description: 'Create reports, proposed code files and patches without altering the project.', prompt: 'Use artifact_create to save concrete text deliverables. Artifacts are drafts, not applied or executed changes. Cite evidence separately. Use short filenames without directories.', toolNames: ['artifact_create'] },
     {
       name: 'Local Computer',
       description: 'Read/write files, list directories, run shell commands and open URLs on this machine. Files are confined to the app workspace; shell commands have a 30s timeout.',
@@ -661,6 +663,7 @@ app.whenReady().then(async () => {
       return secondBrainManager.remember(content);
     },
     workspaceDir,
+    createArtifact: (executionId, input) => new ArtifactStore(storageManager).create(executionId, input),
     shellExec,
     openUrl: async (url) => {
       await shellExec(`open "${url.replace(/"/g, '')}"`);
@@ -2263,6 +2266,7 @@ handle('work:reviewRule', (_event, id: string, accept: boolean) => {
 handle('work:export', () => JSON.stringify({ format: 'keepmind-work', version: 1,
   ...workManager.snapshot(currentRole() === 'member' ? currentUserId() : undefined) }, null, 2));
 
+handle('work:artifacts', (_event, id: string) => { const task = requireWorkAccess(id); return task.executionId ? new ArtifactStore(storageManager).list(task.executionId) : []; });
 handle('work:checkpoint', (_event, id: string) => {
   const task = requireWorkAccess(id);
   return { available: !!task.executionId && !!checkpoints.read(task.executionId),

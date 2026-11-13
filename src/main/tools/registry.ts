@@ -7,6 +7,7 @@ import * as XLSX from 'xlsx';
 import { extractText } from 'unpdf';
 
 export interface ToolContext {
+  createArtifact?: (executionId: string, input: unknown) => import('../../shared/artifacts.js').WorkArtifact;
   executionId?: string;
   signal?: AbortSignal;
   sendWhatsApp?: (to: string, text: string) => Promise<void>;
@@ -95,6 +96,16 @@ export class ToolRegistry {
   }
 
   constructor() {
+    this.register({
+      name: 'artifact_create',
+      description: 'Create an immutable text deliverable (report, proposed source file or patch) attached to this execution. Does not edit project files, execute code or publish. Repeated names create versions. Max 100 KB each, 20 versions and 500 KB total per execution.',
+      parameters: {type:'object',properties:{name:{type:'string',description:'Simple download filename, no directories'},content:{type:'string',description:'Complete UTF-8 text'}},required:['name','content']},
+      handler: async(args,ctx)=>{
+        if(!ctx.executionId||!ctx.createArtifact)throw new Error('Artifacts require a persistent execution');
+        const artifact=ctx.createArtifact(ctx.executionId,{name:args.name,content:args.content});
+        return JSON.stringify({id:artifact.id,name:artifact.name,version:artifact.version,sha256:artifact.sha256,status:'draft artifact saved; project files unchanged'});
+      },
+    });
     this.register({
       name: 'get_current_time',
       description: 'Returns the current date and time in ISO format.',

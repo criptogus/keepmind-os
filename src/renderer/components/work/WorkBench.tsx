@@ -20,6 +20,7 @@ export default function WorkBench({ onNavigate, selectedTaskId, onTaskOpened }: 
   const [view, setView] = useState('now');
   const [scope, setScope] = useState('active');
   const [projectFilter, setProjectFilter] = useState<string | null>(null);
+  const [artifacts, setArtifacts] = useState<import('../../../shared/artifacts').WorkArtifact[]>([]);
   const [preview, setPreview] = useState<WorkPreview | null>(null);
   const goalRef = useRef<HTMLTextAreaElement>(null);
   useEffect(() => { if (selectedTaskId) { setSelected(selectedTaskId); onTaskOpened?.(); } }, [selectedTaskId, onTaskOpened]);
@@ -55,9 +56,9 @@ export default function WorkBench({ onNavigate, selectedTaskId, onTaskOpened }: 
   });
   const task = data.tasks.find(t => t.id === selected);
   useEffect(() => {
-    let active = true; setPreview(null); setCheckpoint({ available: false, steps: [] }); setVerifiedResult('');
-    if (selected) void Promise.all([window.electronAPI.workCheckpoint(selected), window.electronAPI.workPreview(selected)]).then(([cp, plan]) => {
-      if (active) { setCheckpoint(cp); setPreview(plan); }
+    let active = true; setArtifacts([]); setPreview(null); setCheckpoint({ available: false, steps: [] }); setVerifiedResult('');
+    if (selected) void Promise.all([window.electronAPI.workCheckpoint(selected), window.electronAPI.workPreview(selected), window.electronAPI.workArtifacts(selected)]).then(([cp, plan, files]) => {
+      if (active) { setCheckpoint(cp); setPreview(plan); setArtifacts(files); }
     }).catch(e => { if (active) setError(String(e)); });
     return () => { active = false; };
   }, [selected, task?.updatedAt]);
@@ -116,6 +117,7 @@ export default function WorkBench({ onNavigate, selectedTaskId, onTaskOpened }: 
       {task && <Stack gap="lg"><Group><Badge color={color(task.status)}>{labels[task.status]}</Badge><Text size="sm">{task.project}</Text></Group><Text style={{ whiteSpace: 'pre-wrap' }}>{task.goal}</Text><Card withBorder><Text size="xs" fw={700}>{tr('ACCEPTANCE CRITERIA', 'CRITÉRIOS DE ACEITE')}</Text><Text size="sm" mt="xs">{task.criteria}</Text></Card>
       {approvals.filter(a => a.context.workTaskId === task.id).map(approval => <Card withBorder key={approval.id}><Text fw={600}>{tr('Decision needed', 'Decisão necessária')}: {approval.action}</Text><Text size="sm" c="dimmed">{String(approval.context.decisionReason || '')}</Text><pre className="km-output">{JSON.stringify(approval.context.args, null, 2)}</pre><Group mt="sm"><Button disabled={busy} onClick={() => perform(() => window.electronAPI.approveAction(approval.id))}>{tr('Approve action', 'Aprovar ação')}</Button><Button variant="default" disabled={busy} onClick={() => perform(() => window.electronAPI.rejectAction(approval.id, note || 'Rejected from task review'))}>{tr('Reject', 'Rejeitar')}</Button></Group></Card>)}
       {task.status === 'done' && <Text size="sm" c="dimmed">{task.acceptedAt ? tr('Accepted by a reviewer', 'Aceita por um revisor') : tr('Delivered automatically. You can request a correction at any time.', 'Entregue automaticamente. Você pode pedir uma correção a qualquer momento.')}</Text>}
+      {!!artifacts.length && <Stack gap="xs"><Text fw={600}>{tr('Deliverable files', 'Arquivos da entrega')}</Text><Text size="xs" c="dimmed">{tr('Drafts only. Downloading does not apply or execute them.', 'São propostas. Baixar não aplica nem executa os arquivos.')}</Text>{artifacts.map(file => <Card withBorder key={file.id}><Group justify="space-between"><Text size="sm">{file.name} · v{file.version}</Text><Button size="xs" variant="default" onClick={() => { const url=URL.createObjectURL(new Blob([file.content],{type:'text/plain;charset=utf-8'})); const link=document.createElement('a');link.href=url;link.download=file.name;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000); }}>{tr('Download', 'Baixar')}</Button></Group><details className="km-details"><summary>{tr('View contents', 'Ver conteúdo')}</summary><pre className="km-output">{file.content}</pre><Text size="xs" c="dimmed">SHA-256: {file.sha256}</Text></details></Card>)}</Stack>}
       {task.output && <div><Text fw={600} mb="xs">{tr('Deliverable', 'Entrega')}</Text><pre className="km-output">{task.output}</pre><Text size="xs" c="dimmed" mt="xs">{tr('Execution', 'Execução')}: {task.executionId}</Text></div>}
       {preview && <Card withBorder className="km-plan"><Text fw={600}>{tr('Execution plan', 'Plano de execução')}</Text>
         <Text size="sm" mt="xs">{preview.agentName} · {preview.model}</Text>

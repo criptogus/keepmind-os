@@ -6,6 +6,7 @@ import type { Agent, Team, Approval, GovernanceRule, AuditEntry, AgentExecution,
 import type { ModelCatalogResponse } from '../shared/models.js';
 
 contextBridge.exposeInMainWorld('electronAPI', {
+  workArtifacts: (id: string) => ipcRenderer.invoke('work:artifacts', id) as Promise<import('../shared/artifacts.js').WorkArtifact[]>,
   workCheckpoint: (id: string) => ipcRenderer.invoke('work:checkpoint', id) as Promise<{ available: boolean; steps: ToolStep[] }>,
   workReconcile: (id: string, key: string, result: string, revision?: number) => ipcRenderer.invoke('work:reconcile', id, key, result, revision) as Promise<void>,
   workContext: () => ipcRenderer.invoke('work:context') as Promise<WorkContext>,
@@ -241,6 +242,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
 declare global {
   interface Window {
     electronAPI: {
+      workArtifacts: (id: string) => Promise<import('../shared/artifacts.js').WorkArtifact[]>;
       workCheckpoint: (id: string) => Promise<{ available: boolean; steps: ToolStep[] }>;
       workReconcile: (id: string, key: string, result: string, revision?: number) => Promise<void>;
       workContext: () => Promise<WorkContext>;

@@ -2,15 +2,58 @@
   "version": 1,
   "workspace": "..",
   "maxConcurrent": 4,
-  "agents": [{"id":"maintainer","name":"Maintainer","model":"gpt-4o-mini","prompt":"Read repository evidence and report verified findings. Do not claim unperformed checks.","monthlyBudgetUsd":5,"tools":["file_read","file_list","get_current_time"]}],
+  "agents": [
+    {
+      "id": "maintainer",
+      "name": "Maintainer",
+      "model": "gpt-4o-mini",
+      "prompt": "Read repository evidence and report verified findings. Do not claim unperformed checks.",
+      "monthlyBudgetUsd": 5,
+      "tools": [
+        "file_read",
+        "file_list",
+        "get_current_time",
+        "artifact_create"
+      ]
+    }
+  ],
   "mcp": [],
-  "routines": [{"agentId":"maintainer","name":"Daily repository review","project":"KeepMind","prompt":"Review README and propose improvements.","intervalMinutes":1440,"autonomy":"draft"}],
+  "routines": [
+    {
+      "agentId": "maintainer",
+      "name": "Daily repository review",
+      "project": "KeepMind",
+      "prompt": "Review README and propose improvements.",
+      "intervalMinutes": 1440,
+      "autonomy": "draft"
+    }
+  ],
   "server": {
-    "host":"127.0.0.1",
-    "port":47830,
-    "principals":[
-      {"id":"developer","tokenEnv":"KEEPMIND_DEVELOPER_TOKEN","role":"contributor","projects":["KeepMind"],"agents":["maintainer"]},
-      {"id":"reviewer","tokenEnv":"KEEPMIND_REVIEWER_TOKEN","role":"reviewer","projects":["KeepMind"],"agents":["maintainer"]}
+    "host": "127.0.0.1",
+    "port": 47830,
+    "principals": [
+      {
+        "id": "developer",
+        "tokenEnv": "KEEPMIND_DEVELOPER_TOKEN",
+        "role": "contributor",
+        "projects": [
+          "KeepMind"
+        ],
+        "agents": [
+          "maintainer"
+        ]
+      },
+      {
+        "id": "reviewer",
+        "tokenEnv": "KEEPMIND_REVIEWER_TOKEN",
+        "role": "reviewer",
+        "projects": [
+          "KeepMind"
+        ],
+        "agents": [
+          "maintainer"
+        ]
+      }
     ]
   }
 }
