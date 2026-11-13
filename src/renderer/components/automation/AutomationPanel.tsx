@@ -11,6 +11,7 @@ import { useLang } from '../../lib/i18n';
 import type { Agent, AgentTrigger } from '../../../shared/types';
 
 interface NewTrigger {
+  autonomy: 'draft' | 'run';
   name: string;
   agentId: string;
   kind: 'interval' | 'daily' | 'webhook';
@@ -21,7 +22,7 @@ interface NewTrigger {
 }
 
 const EMPTY: NewTrigger = {
-  name: '', agentId: '', kind: 'interval', intervalMinutes: 60,
+  name: '', agentId: '', kind: 'interval', intervalMinutes: 60, autonomy: 'draft',
   timeOfDay: '09:00', daysOfWeek: [], prompt: '',
 };
 
@@ -121,7 +122,7 @@ function formatNext(date: Date, t: (k: string) => string): string {
  * next run and last run in plain language.
  */
 export default function AutomationPanel() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const [triggers, setTriggers] = useState<AgentTrigger[]>([]);
   const [agents, setAgents] = useState<Agent[]>([]);
   const [form, setForm] = useState<NewTrigger>(EMPTY);
@@ -171,6 +172,7 @@ export default function AutomationPanel() {
           ? form.daysOfWeek
           : undefined,
         prompt: form.prompt.trim(),
+        autonomy: form.autonomy,
         enabled: true,
       });
       setForm(EMPTY);
@@ -288,6 +290,7 @@ export default function AutomationPanel() {
               onChange={(v) => setForm({ ...form, agentId: v || '' })}
               searchable
             />
+            <Select label={lang === 'pt' ? 'Autonomia' : 'Autonomy'} value={form.autonomy} onChange={v => setForm({ ...form, autonomy: v === 'run' ? 'run' : 'draft' })} data={[{value:'draft',label:lang === 'pt' ? 'Criar tarefa para eu iniciar' : 'Create a task for me to start'},{value:'run',label:lang === 'pt' ? 'Executar e pedir revisão da entrega' : 'Run and request delivery review'}]} />
             <Group gap="xs" align="flex-end">
               <Select
                 size="sm"
@@ -367,3 +370,4 @@ export default function AutomationPanel() {
     </Stack>
   );
 }
+

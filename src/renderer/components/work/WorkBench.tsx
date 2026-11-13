@@ -1,3 +1,4 @@
+import WorkspaceConnections from './WorkspaceConnections';
 import BotAvatar from '../common/BotAvatar';
 import { avatarForAgent } from '../../../shared/avatars';
 import type { ToolStep } from '../../../main/execution/CheckpointStore';
@@ -5,7 +6,7 @@ import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { Alert, Badge, Button, Card, Drawer, Group, MultiSelect, Select, SegmentedControl, Stack, Tabs, Text, Textarea, TextInput, Title } from '@mantine/core';
 import { useLang } from '../../lib/i18n';
 import type { Agent, Approval } from '../../../shared/types';
-import type { WorkAction, WorkSnapshot, WorkStatus, WorkTask, WorkPreview } from '../../../shared/work';
+import type { WorkAction, WorkSnapshot, WorkStatus, WorkTask, WorkPreview, WorkContext } from '../../../shared/work';
 import { WORK_TEMPLATES } from '../../../shared/work';
 import ApprovalQueue from '../governance/ApprovalQueue';
 
@@ -23,6 +24,9 @@ export default function WorkBench({ onNavigate, selectedTaskId, onTaskOpened }: 
   const goalRef = useRef<HTMLTextAreaElement>(null);
   useEffect(() => { if (selectedTaskId) { setSelected(selectedTaskId); onTaskOpened?.(); } }, [selectedTaskId, onTaskOpened]);
   useEffect(() => { if (composerOpen) goalRef.current?.focus(); }, [composerOpen]);
+  const [connection, setConnection] = useState<WorkContext['connection']>({ mode: 'local', actor: 'local', role: 'owner' });
+  const [online, setOnline] = useState(false);
+  const [syncedAt, setSyncedAt] = useState('');
   const [goal, setGoal] = useState(''); const [criteria, setCriteria] = useState('');
   const [project, setProject] = useState(''); const [agentId, setAgentId] = useState<string | null>(null);
   const [dependencies, setDependencies] = useState<string[]>([]);
@@ -32,13 +36,15 @@ export default function WorkBench({ onNavigate, selectedTaskId, onTaskOpened }: 
   const [query, setQuery] = useState(''); const [busy, setBusy] = useState(false);
   const [error, setError] = useState(''); const [loaded, setLoaded] = useState(false);
   const refresh = useCallback(async () => {
-    const [snapshot, list, pending] = await Promise.all([window.electronAPI.workList(), window.electronAPI.getAgents(), window.electronAPI.getPendingApprovals()]);
-    setApprovals(pending);
-    setData(snapshot); setAgents(list); setLoaded(true);
+    try {
+      const context = await window.electronAPI.workContext();
+      setApprovals(context.approvals); setData(context.snapshot); setAgents(context.agents); setConnection(context.connection);
+      setLoaded(true); setOnline(true); setSyncedAt(new Date().toLocaleTimeString());
+    } catch (e) { setOnline(false); throw e; }
   }, []);
   useEffect(() => { void refresh().catch(e => setError(String(e))); const timer = setInterval(() => void refresh().catch(e => setError(String(e))), 3000); return () => clearInterval(timer); }, [refresh]);
   useEffect(() => { if (!agentId && agents.length) setAgentId(agents[0].id); }, [agents, agentId]);
-  const perform = async (fn: () => Promise<unknown>) => { setBusy(true); setError(''); try { await fn(); await refresh(); } catch (e) { setError(e instanceof Error ? e.message : String(e)); } finally { setBusy(false); } };
+  const perform = async (fn: () => Promise<unknown>) => { setBusy(true); setError(''); try { if (!online) throw new Error(tr('Reconnect before making changes.', 'Reconecte antes de alterar o trabalho.')); await fn(); await refresh(); } catch (e) { setError(e instanceof Error ? e.message : String(e)); } finally { setBusy(false); } };
   const create = () => perform(async () => {
     if (!agentId) return;
     const task = await window.electronAPI.workCreate({ goal, criteria, project, agentId, dependencies });
@@ -52,7 +58,7 @@ export default function WorkBench({ onNavigate, selectedTaskId, onTaskOpened }: 
     }).catch(e => { if (active) setError(String(e)); });
     return () => { active = false; };
   }, [selected, task?.updatedAt]);
-  const action = (id: string, kind: WorkAction) => perform(async () => { await window.electronAPI.workAction(id, kind, note); setNote(''); });
+  const action = (id: string, kind: WorkAction) => perform(async () => { await window.electronAPI.workAction(id, kind, note, data.tasks.find(t => t.id === id)?.revision); setNote(''); });
   const labels: Record<WorkStatus, string> = { backlog: tr('Ready', 'Prontas'), running: tr('In progress', 'Em andamento'), review: tr('Review', 'Revisar'), done: tr('Accepted', 'Aceitas'), blocked: tr('Needs attention', 'Precisa de atenção'), cancelled: tr('Cancelled', 'Canceladas') };
   const color = (status: WorkStatus) => ({ backlog: 'gray', running: 'blue', review: 'orange', done: 'teal', blocked: 'red', cancelled: 'gray' })[status];
   const needsDecision = (t: WorkTask) => t.status === 'review' || t.status === 'blocked' || approvals.some(a => a.context.workTaskId === t.id);
@@ -73,8 +79,9 @@ export default function WorkBench({ onNavigate, selectedTaskId, onTaskOpened }: 
   return <Stack gap="xl" className="km-workbench">
     <Group justify="space-between" align="flex-start">
       <div><Text className="km-eyebrow">KEEP MIND · BUILD TOGETHER</Text><Title order={1}>{tr('Your work, moving forward.', 'Seu trabalho, avançando.')}</Title><Text c="dimmed" mt={6}>{tr('Define an outcome. Follow the work. Review the result.', 'Defina um objetivo. Acompanhe o trabalho. Revise a entrega.')}</Text></div>
-      <Group><Button onClick={() => setComposerOpen(v => !v)}>{composerOpen ? tr('Close composer', 'Fechar criação') : tr('New task', 'Nova tarefa')}</Button><Badge variant="outline" color="teal">MIT · OPEN SOURCE</Badge><Button variant="default" size="xs" onClick={exportWork} disabled={busy}>{tr('Export work', 'Exportar trabalho')}</Button></Group>
+      <Group><WorkspaceConnections /><Button onClick={() => setComposerOpen(v => !v)}>{composerOpen ? tr('Close composer', 'Fechar criação') : tr('New task', 'Nova tarefa')}</Button><Badge variant="outline" color="teal">MIT · OPEN SOURCE</Badge><Button variant="default" size="xs" onClick={exportWork} disabled={busy}>{tr('Export work', 'Exportar trabalho')}</Button></Group>
     </Group>
+    <Group gap="xs"><Badge variant="light" color={online ? 'teal' : 'orange'}>{connection.mode === 'remote' ? tr('Shared workspace', 'Workspace compartilhado') : tr('Local workspace', 'Workspace local')}</Badge><Text size="xs" c="dimmed">{connection.mode === 'remote' ? `${connection.actor} · ${connection.role} · ` : ''}{online ? `${tr('Updated', 'Atualizado')} ${syncedAt}` : tr('Connecting or offline — changes disabled', 'Conectando ou offline — alterações desabilitadas')}</Text></Group>
     {error && <Alert color="red" role="alert" title={tr('Could not complete action', 'Não foi possível concluir')}>{error}</Alert>}
     <div className="km-focus-stats" aria-label={tr('Work overview', 'Visão do trabalho')}>
       {[{id:'attention', count: data.tasks.filter(needsDecision).length, label:tr('Need your decision', 'Precisam de você')}, {id:'running',count:data.tasks.filter(t => t.status === 'running').length,label:tr('In progress', 'Em andamento')}, {id:'active',count:activeTasks.length,label:tr('Active work', 'Trabalhos ativos')}].map(item => <button key={item.id} className="km-focus-stat" aria-pressed={scope === item.id} onClick={() => setScope(item.id)}><strong>{item.count}</strong><span>{item.label}</span></button>)}
@@ -100,7 +107,7 @@ export default function WorkBench({ onNavigate, selectedTaskId, onTaskOpened }: 
           : <div className="km-board">{columns.filter(status => visible.some(t => t.status === status)).map(status => <section key={status} className="km-column"><Group justify="space-between" mb="md"><Text fw={600} size="sm">{labels[status]}</Text><Badge color={color(status)} variant="light">{visible.filter(t => t.status === status).length}</Badge></Group>{visible.filter(t => t.status === status).map(taskCard)}</section>)}</div>}
       </Tabs.Panel>
       <Tabs.Panel value="inbox" pt="lg"><ApprovalQueue /></Tabs.Panel>
-      <Tabs.Panel value="learning" pt="lg"><Stack><Text c="dimmed">{tr('Corrections become proposed rules. Only approved rules inform future work in the same project and owner scope.', 'Correções viram propostas de regras. Apenas regras aprovadas orientam novos trabalhos do mesmo projeto e responsável.')}</Text>{data.rules.map(rule => <Card key={rule.id} withBorder><Group justify="space-between"><Text fw={600}>{rule.project} · v{rule.version}</Text><Badge>{rule.status}</Badge></Group><Text my="md" style={{ whiteSpace: 'pre-wrap' }}>{rule.text}</Text><Group>{rule.status !== 'active' && <Button disabled={busy} size="xs" onClick={() => perform(() => window.electronAPI.workReviewRule(rule.id, true))}>{tr('Activate', 'Ativar')}</Button>}{rule.status !== 'retired' && <Button disabled={busy} size="xs" variant="default" onClick={() => perform(() => window.electronAPI.workReviewRule(rule.id, false))}>{tr('Retire', 'Desativar')}</Button>}</Group></Card>)}</Stack></Tabs.Panel>
+      <Tabs.Panel value="learning" pt="lg"><Stack><Text c="dimmed">{tr('Corrections become proposed rules. Only approved rules inform future work in the same project and owner scope.', 'Correções viram propostas de regras. Apenas regras aprovadas orientam novos trabalhos do mesmo projeto e responsável.')}</Text>{data.rules.map(rule => <Card key={rule.id} withBorder><Group justify="space-between"><Text fw={600}>{rule.project} · v{rule.version}</Text><Badge>{rule.status}</Badge></Group><Text my="md" style={{ whiteSpace: 'pre-wrap' }}>{rule.text}</Text><Group>{rule.status !== 'active' && <Button disabled={busy} size="xs" onClick={() => perform(() => window.electronAPI.workReviewRule(rule.id, true, rule.version))}>{tr('Activate', 'Ativar')}</Button>}{rule.status !== 'retired' && <Button disabled={busy} size="xs" variant="default" onClick={() => perform(() => window.electronAPI.workReviewRule(rule.id, false, rule.version))}>{tr('Retire', 'Desativar')}</Button>}</Group></Card>)}</Stack></Tabs.Panel>
     </Tabs>
     <Drawer opened={!!task} onClose={() => setSelected(null)} position="right" size="xl" title={task?.title}>
       {task && <Stack gap="lg"><Group><Badge color={color(task.status)}>{labels[task.status]}</Badge><Text size="sm">{task.project}</Text></Group><Text style={{ whiteSpace: 'pre-wrap' }}>{task.goal}</Text><Card withBorder><Text size="xs" fw={700}>{tr('ACCEPTANCE CRITERIA', 'CRITÉRIOS DE ACEITE')}</Text><Text size="sm" mt="xs">{task.criteria}</Text></Card>
@@ -122,12 +129,12 @@ export default function WorkBench({ onNavigate, selectedTaskId, onTaskOpened }: 
         <Text size="sm">{tr('This action may have completed. Check its external effect and record the actual result. It will not be executed again.', 'Esta ação pode ter terminado. Confira o efeito externo e registre o resultado real. Ela não será executada novamente.')}</Text>
         <Text fw={600} mt="sm">{step.name}</Text><pre className="km-output">{JSON.stringify(step.args, null, 2)}</pre>
         <Textarea label={tr('Verified result', 'Resultado conferido')} value={verifiedResult} onChange={e => setVerifiedResult(e.currentTarget.value)} />
-        <Button mt="sm" disabled={busy || !verifiedResult.trim()} onClick={() => perform(async () => { await window.electronAPI.workReconcile(task.id, step.key, verifiedResult); setVerifiedResult(''); })}>{tr('Record verified result', 'Registrar resultado conferido')}</Button>
+        <Button mt="sm" disabled={busy || !verifiedResult.trim()} onClick={() => perform(async () => { await window.electronAPI.workReconcile(task.id, step.key, verifiedResult, task.revision); setVerifiedResult(''); })}>{tr('Record verified result', 'Registrar resultado conferido')}</Button>
       </Alert>)}
       <Group>{['backlog','blocked'].includes(task.status) && <Button disabled={busy || !preview || preview.dependencies.some(dep => !dep.accepted) || checkpoint.steps.some(step => step.state === 'started')} onClick={() => action(task.id, task.status === 'blocked' && checkpoint.available ? 'resume' : 'run')}>{task.status === 'blocked' && checkpoint.available ? tr('Resume checkpoint', 'Retomar etapa salva') : tr('Run task', 'Executar tarefa')}</Button>}{task.status === 'review' && <Button color="teal" disabled={busy} onClick={() => action(task.id, 'accept')}>{tr('Accept result', 'Aceitar entrega')}</Button>}{!['done','cancelled'].includes(task.status) && <Button variant="default" disabled={busy} onClick={() => action(task.id, 'cancel')}>{tr('Cancel', 'Cancelar')}</Button>}</Group>
 
       <Textarea label={tr('Feedback or project rule', 'Comentário ou regra do projeto')} value={note} onChange={e => setNote(e.currentTarget.value)} minRows={3} /><Group><Button disabled={busy || !note.trim()} variant="default" onClick={() => action(task.id, 'comment')}>{tr('Comment', 'Comentar')}</Button>{['review','blocked','cancelled','done'].includes(task.status) && <Button disabled={busy || !note.trim()} variant="default" onClick={() => action(task.id, 'revise')}>{tr('Request revision', 'Pedir revisão')}</Button>}<Button disabled={busy || !note.trim()} variant="light" onClick={() => action(task.id, 'propose-rule')}>{tr('Propose rule', 'Propor regra')}</Button></Group>
-      <details className="km-details"><summary>{tr('Activity', 'Atividade')} · {task.events.length}</summary>{[...task.events].reverse().map(event => <div className="km-event" key={event.id}><Text size="xs" c="dimmed">{new Date(event.at).toLocaleString()} · {event.kind}</Text><Text size="sm" style={{ whiteSpace: 'pre-wrap' }}>{event.text}</Text></div>)}</details></Stack>}
+      <details className="km-details"><summary>{tr('Activity', 'Atividade')} · {task.events.length}</summary>{[...task.events].reverse().map(event => <div className="km-event" key={event.id}><Text size="xs" c="dimmed">{new Date(event.at).toLocaleString()} · {event.kind}{event.actorId ? ` · ${event.actorId}` : ''}</Text><Text size="sm" style={{ whiteSpace: 'pre-wrap' }}>{event.text}</Text></div>)}</details></Stack>}
     </Drawer>
   </Stack>;
 }

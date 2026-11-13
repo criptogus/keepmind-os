@@ -8,7 +8,7 @@ const text = (value: unknown, max: number) => typeof value === 'string' ? value.
 /** Synchronous SQLite-backed document writes keep task claims atomic within one desktop process. */
 export class WorkManager {
   private state: WorkSnapshot;
-  constructor(private storage: WorkStorage) {
+  constructor(private storage: WorkStorage, private sharedProjects = false) {
     const raw = storage.getSetting(KEY);
     this.state = raw ? JSON.parse(raw) : { tasks: [], rules: [] };
     for (const task of this.state.tasks) {
@@ -31,13 +31,14 @@ export class WorkManager {
   }
   get(id: string) { const t = this.state.tasks.find(t => t.id === id); if (!t) throw new Error('Task not found'); return structuredClone(t); }
   private task(id: string) { const t = this.state.tasks.find(t => t.id === id); if (!t) throw new Error('Task not found'); return t; }
-  create(input: CreateWorkInput, ownerId: string): WorkTask {
+  create(input: CreateWorkInput, ownerId: string, identity?: { id: string; hash: string }): WorkTask {
+    if (identity) { const existing = this.state.tasks.find(t => t.id === identity.id); if (existing) { if (existing.creationHash !== identity.hash) throw new Error('Request ID reused with different input'); return structuredClone(existing); } }
     const goal = text(input.goal, 12000);
     if (!goal || !text(input.agentId, 200)) throw new Error('A goal and an agent are required');
     const dependencies = [...new Set(input.dependencies || [])];
-    if (dependencies.some(id => !this.state.tasks.some(t => t.id === id && t.ownerId === ownerId))) throw new Error('Invalid dependency');
+    if (dependencies.some(id => !this.state.tasks.some(t => t.id === id && (t.ownerId === ownerId || (this.sharedProjects && t.project === (text(input.project,100) || 'Workspace')))))) throw new Error('Invalid dependency');
     const now = new Date().toISOString();
-    const task: WorkTask = { id: randomUUID(), title: goal.split('\n')[0].slice(0, 100), goal,
+    const task: WorkTask = { id: identity?.id ?? randomUUID(), creationHash: identity?.hash, title: goal.split('\n')[0].slice(0, 100), goal,
       project: text(input.project, 100) || 'Workspace', agentId: input.agentId, ownerId,
       criteria: text(input.criteria, 4000) || 'Deliver a useful result with sources and explicit limitations.',
       dependencies, status: 'backlog', revision: 0, events: [], createdAt: now, updatedAt: now };
@@ -53,7 +54,7 @@ export class WorkManager {
   }
   executionInput(id: string): Record<string, unknown> {
     const task = this.task(id);
-    const rules = this.state.rules.filter(r => r.project === task.project && r.status === 'active' && this.task(r.sourceTaskId).ownerId === task.ownerId);
+    const rules = this.state.rules.filter(r => r.project === task.project && r.status === 'active' && (this.sharedProjects || this.task(r.sourceTaskId).ownerId === task.ownerId));
     return { task: task.goal, workTaskId: task.id,
         acceptanceCriteria: task.criteria, corrections: task.events.filter(e => e.kind === 'revision').map(e => e.text),
         projectRules: rules.map(r => ({ id: r.id, version: r.version, text: r.text })),
@@ -77,7 +78,7 @@ export class WorkManager {
     } finally { this.save(); }
     return structuredClone(task);
   }
-  change(id: string, action: 'accept' | 'revise' | 'cancel' | 'comment' | 'propose-rule', note = '') {
+  change(id: string, action: 'accept' | 'revise' | 'cancel' | 'comment' | 'propose-rule', note = '', actorId?: string) {
     const task = this.task(id); note = text(note, 4000);
     if (action === 'accept') {
       if (task.status !== 'review') throw new Error('Only a delivered result can be accepted');
@@ -96,11 +97,14 @@ export class WorkManager {
       if (!note) throw new Error('A comment is required');
       this.event(task, 'comment', note);
     }
+    if (actorId && task.events.length) task.events[task.events.length - 1].actorId = actorId;
     this.save(); return structuredClone(task);
   }
-  reviewRule(id: string, accept: boolean) {
+  reviewRule(id: string, accept: boolean, actorId?: string) {
     const rule = this.state.rules.find(r => r.id === id); if (!rule) throw new Error('Rule not found');
     rule.status = accept ? 'active' : 'retired'; rule.version++;
-    this.event(this.task(rule.sourceTaskId), 'rule-reviewed', `${rule.status}: ${rule.text}`); this.save();
+    const task = this.task(rule.sourceTaskId);
+    this.event(task, 'rule-reviewed', `${rule.status}: ${rule.text}`);
+    if (actorId) task.events[task.events.length - 1].actorId = actorId; this.save();
   }
 }

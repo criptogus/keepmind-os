@@ -23,6 +23,7 @@ const env = { ...process.env, ELECTRON_ENABLE_LOGGING: '1', KEEPMIND_DATA_DIR: m
 delete env.OPENAI_API_KEY;
 delete env.ANTHROPIC_API_KEY;
 delete env.ELECTRON_RUN_AS_NODE; // must not run as plain Node
+let workspaceServer;
 const child = spawn(electronBin, ['.', '--remote-debugging-port=0', '--no-sandbox'], {
   cwd: root,
   env,
@@ -179,11 +180,45 @@ try {
   if (await evaluate(`getComputedStyle(document.querySelector('.km-sidebar')).display !== 'none'`)) fail('narrow screen sidebar not collapsed');
   const narrow = await send('Page.captureScreenshot', { format: 'png' });
   writeFileSync(path.join(root, 'evidence/focus-narrow.png'), Buffer.from(narrow.result.data, 'base64'));
+  // Exercise the actual Electron bridge against the shared server, then a second client.
+  const serverDir = mkdtempSync(path.join(tmpdir(), 'keepmind-server-smoke-'));
+  const serverConfig = path.join(serverDir, 'workspace.json');
+  const aliceToken = 'smoke-alice-token-'.repeat(3); const bobToken = 'smoke-bob-token-'.repeat(3);
+  writeFileSync(serverConfig, JSON.stringify({ version: 1, workspace: serverDir,
+    agents: [{ id: 'shared-agent', name: 'Shared maintainer', model: 'gpt-4o-mini', prompt: 'Read only', monthlyBudgetUsd: 5 }],
+    server: { port: 0, principals: [
+      { id: 'alice', tokenEnv: 'KM_SMOKE_ALICE', role: 'contributor', projects: ['Shared'], agents: ['shared-agent'] },
+      { id: 'bob', tokenEnv: 'KM_SMOKE_BOB', role: 'reviewer', projects: ['Shared'], agents: ['shared-agent'] }
+    ] } }));
+  workspaceServer = spawn(process.execPath, ['dist/runner/cli.mjs', '--config', serverConfig, '--serve', '--data-dir', path.join(serverDir, 'data')], {
+    cwd: root, env: { ...env, KM_SMOKE_ALICE: aliceToken, KM_SMOKE_BOB: bobToken }, stdio: ['ignore', 'pipe', 'pipe']
+  });
+  let serverPort;
+  workspaceServer.stdout.on('data', d => { const m = d.toString().match(/listening on (\d+)/); if (m) serverPort = Number(m[1]); });
+  workspaceServer.stderr.on('data', () => {});
+  for (let i = 0; i < 100 && !serverPort; i++) await delay(100);
+  if (!serverPort) fail('shared server did not start');
+  const serverUrl = `http://127.0.0.1:${serverPort}`;
+  await evaluate(`window.electronAPI.workspaceConnect(${JSON.stringify(serverUrl)}, ${JSON.stringify(aliceToken)})`);
+  const shared = await evaluate(`window.electronAPI.workCreate({ goal: 'Collaborative release review', project: 'Shared', agentId: 'shared-agent' })`);
+  const peer = await fetch(serverUrl + '/v1/call', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + bobToken }, body: JSON.stringify({ method: 'work:action', args: [shared.id, 'comment', 'Reviewed by Bob', shared.revision] }) });
+  if (!peer.ok) fail('second collaborator could not comment');
+  const sharedContext = await evaluate('window.electronAPI.workContext()');
+  if (sharedContext.connection.mode !== 'remote' || sharedContext.snapshot.tasks[0].events.at(-1).actorId !== 'bob') fail('remote state did not synchronize');
+  await send('Page.reload');
+  for (let i = 0; i < 80; i++) { if ((await evaluate('document.body?.innerText ?? ""')).includes('Collaborative release review')) break; await delay(100); }
+  if (!(await evaluate('document.body?.innerText ?? ""')).includes('Shared workspace')) fail('shared workspace indicator missing');
+  const sharedShot = await send('Page.captureScreenshot', { format: 'png' });
+  writeFileSync(path.join(root, 'evidence/shared-workspace.png'), Buffer.from(sharedShot.result.data, 'base64'));
+  await evaluate('window.electronAPI.workspaceDisconnect()');
+  const localAgain = await evaluate('window.electronAPI.workList()');
+  if (!localAgain.tasks.some(t => t.id === task.id) || localAgain.tasks.some(t => t.id === shared.id)) fail('local and remote data were mixed');
   console.log(`SMOKE PASS: electronAPI OK (version=${version}, agents=${Array.isArray(agents) ? agents.length : '?'}, rootChildren=${rootChildren}, uiRendered=true)`);
 } catch (err) {
   fail(`CDP evaluation failed: ${err.message}\n${stderrBuf.slice(-2000)}`);
 } finally {
   ws.close();
+  workspaceServer?.kill('SIGTERM');
   child.kill('SIGTERM');
   await delay(500);
   if (child.exitCode === null) child.kill('SIGKILL');

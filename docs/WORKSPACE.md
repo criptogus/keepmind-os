@@ -110,12 +110,14 @@ npm run runner -- --config examples/workspace.json --resume TASK_ID
 npm run runner -- --config examples/workspace.json --reconcile TASK_ID --step STEP_KEY --result-file result.txt
 ```
 
-State defaults to `~/.keepmind/runner`; use `--data-dir` to change it. The runner
-uses separate data from the desktop; there is no automatic cross-device sync.
+State defaults to `~/.keepmind/runner`; use `--data-dir` to change it. Local desktop
+and runner databases remain separate. Connecting the desktop to a shared server
+uses that server as the authoritative workspace; see [Shared workspaces](SHARED_WORKSPACES.md).
 One process may own a data directory. After a crash, inspect processes before
 removing `runner.lock`. A server running this process can keep schedules active
 when your laptop is off; a sleeping or powered-off runner cannot execute work.
-Use your own process supervisor for service management. No network API is exposed.
+Use your own process supervisor for service management. `--serve` exposes the
+authenticated workspace API; the default runner without that flag opens no port.
 
 ## Design references
 
@@ -132,13 +134,20 @@ This is not feature parity with their cloud computers, collaboration or plugins.
 
 - Recursive delegation/workflow checkpoints, partial-stream continuation and
   provider-side idempotency where supported. Explicit tool-loop resume is implemented.
-- A common desktop/server execution service and authenticated multi-device sync.
-- First-class MCP/harness adapters, an extension API and trusted plugin packaging.
-- Shared channels and multiplayer editing with resource-scoped authorization.
+- Offline replication/merge and streaming presence. The shared server, authenticated
+  desktop connection and polling synchronization are implemented.
+- Plugin signing/catalog and additional agent harness adapters. MCP stdio and
+  Streamable HTTP tools are implemented with the pinned v1 SDK (2025-11-25 protocol).
+- Rich shared channels and simultaneous document editing. Project/agent-scoped
+  task collaboration with role checks and optimistic concurrency is implemented.
 - Structured source provenance, typed commitment/decision relationships and
   scalable vector retrieval across large vaults.
-- Per-routine autonomy policies, approval previews/diffs and reversible actions.
-- Signed/notarized macOS and Windows distribution (requires signing identities).
+- Automatic compensating actions and file-diff approvals. Routine draft/run policies
+  and execution/tool-argument previews are implemented; arbitrary external effects
+  are not automatically reversible.
+- Execute and validate signed/notarized macOS and Windows builds with the owner's
+  signing identities. The manual signed-artifact workflow is implemented and
+  refuses unsigned fallback; credentials are not available in this workspace.
 
 These are not advertised as shipped features. keepmind.io should describe the
 released version until a tested release includes this work.

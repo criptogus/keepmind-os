@@ -1,6 +1,7 @@
 export type WorkStatus = 'backlog' | 'running' | 'review' | 'done' | 'blocked' | 'cancelled';
-export interface WorkEvent { id: string; at: string; kind: string; text: string; }
+export interface WorkEvent { actorId?: string; id: string; at: string; kind: string; text: string; }
 export interface WorkTask {
+  creationHash?: string;
   id: string; title: string; goal: string; project: string; agentId: string;
   ownerId: string; status: WorkStatus; revision: number;
   criteria: string; dependencies: string[]; events: WorkEvent[];
@@ -23,4 +24,8 @@ export const WORK_TEMPLATES = [
 export interface WorkPreview {
   agentName: string; model: string; tools: string[]; monthlyBudgetUsd?: number;
   dependencies: Array<{ id: string; title: string; accepted: boolean }>;
+}
+export interface WorkContext {
+  snapshot: WorkSnapshot; agents: import('./types.js').Agent[]; approvals: import('./types.js').Approval[];
+  connection: { mode: 'local' | 'remote'; actor: string; role: string; projects?: string[]; serverTime?: string };
 }

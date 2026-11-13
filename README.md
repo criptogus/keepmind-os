@@ -147,3 +147,13 @@ See the [development roadmap](docs/ROADMAP.md) for planned work.
 ### Resume interrupted work
 
 The developer workspace now journals model responses and tool results. Use **Resume checkpoint** after an interruption. Completed tools are not replayed; uncertain external effects require a verified result before continuing. Pending checkpoint-bound approvals survive restart within their original 24-hour window. The headless runner supports `--inspect`, `--resume` and `--reconcile`. See [execution guarantees and boundaries](docs/WORKSPACE.md) for limits, data retention and recovery instructions.
+
+### Shared workspace and extensions
+
+Run `npm run runner -- --config examples/shared-workspace.json --serve --watch`
+to host a free workspace for your devices/team. Configure distinct environment
+tokens per person and project/agent grants, then use **Connections** in the desktop.
+Task changes synchronize from the server with conflict detection. MCP stdio and
+Streamable HTTP tools use the existing approvals and durable execution journal.
+New routines can draft tasks or execute for review. See
+[setup, permissions and limitations](docs/SHARED_WORKSPACES.md).

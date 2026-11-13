@@ -87,8 +87,8 @@ export default function App() {
       const state = await window.electronAPI.getGovernanceState();
       setPendingApprovals(state.pendingApprovals.length);
     };
-    fetchApprovals();
-    const interval = setInterval(fetchApprovals, 5000);
+    void fetchApprovals().catch(() => {});
+    const interval = setInterval(() => void fetchApprovals().catch(() => {}), 5000);
     const unsubDeepLink = window.electronAPI.onDeepLink?.(({ section }) => {
       if (['work', 'dashboard', 'agents', 'teams', 'automations', 'skills', 'governance', 'logs', 'settings', 'advanced'].includes(section)) {
         setActiveSection(section);

@@ -540,6 +540,8 @@ export class ToolRegistry {
   }
 
   /** Returns only the requested tools that exist, as LLM-facing schemas. */
+  unregister(name: string): void { this.tools.delete(name); }
+
   schemasFor(names: string[]): Array<{ name: string; description: string; parameters: Record<string, unknown> }> {
     return names
       .map((n) => this.tools.get(n))

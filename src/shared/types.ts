@@ -185,6 +185,8 @@ export interface AgentExecutionEvent {
 }
 
 export interface AgentTrigger {
+  /** Draft creates reviewable work without calling a model; run uses normal tool approvals. */
+  autonomy?: 'draft' | 'run';
   id: string;
   agentId: string;
   name: string;

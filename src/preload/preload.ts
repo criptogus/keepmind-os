@@ -1,17 +1,24 @@
+import type { McpConfig } from '../main/mcp/McpManager.js';
 import type { ToolStep } from '../main/execution/CheckpointStore.js';
-import type { CreateWorkInput, WorkAction, WorkSnapshot, WorkTask, WorkPreview } from '../shared/work.js';
+import type { CreateWorkInput, WorkAction, WorkSnapshot, WorkTask, WorkPreview, WorkContext } from '../shared/work.js';
 import { contextBridge, ipcRenderer } from 'electron';
 import type { Agent, Team, Approval, GovernanceRule, AuditEntry, AgentExecution, AgentConfig, CreateAgentInput, TeamConfig, AppSettings, Skill, AgentTrigger, LocalUser, UserRole, ComputerAccessLevel, LlmUsageRecord, RoutingDecision, MemoryItem } from '../shared/types.js';
 import type { ModelCatalogResponse } from '../shared/models.js';
 
 contextBridge.exposeInMainWorld('electronAPI', {
   workCheckpoint: (id: string) => ipcRenderer.invoke('work:checkpoint', id) as Promise<{ available: boolean; steps: ToolStep[] }>,
-  workReconcile: (id: string, key: string, result: string) => ipcRenderer.invoke('work:reconcile', id, key, result) as Promise<void>,
+  workReconcile: (id: string, key: string, result: string, revision?: number) => ipcRenderer.invoke('work:reconcile', id, key, result, revision) as Promise<void>,
+  workContext: () => ipcRenderer.invoke('work:context') as Promise<WorkContext>,
+  workspaceConnection: () => ipcRenderer.invoke('workspace:connection') as Promise<{ url: string; connected: boolean }>,
+  workspaceConnect: (url: string, token: string) => ipcRenderer.invoke('workspace:connect', url, token) as Promise<WorkContext>,
+  workspaceDisconnect: () => ipcRenderer.invoke('workspace:disconnect') as Promise<void>,
+  mcpList: () => ipcRenderer.invoke('mcp:list') as Promise<{ configs: McpConfig[]; statuses: Array<{id:string;connected:boolean;tools:string[];error?:string}> }>,
+  mcpConfigure: (configs: unknown) => ipcRenderer.invoke('mcp:configure', configs) as Promise<Array<{id:string;connected:boolean;tools:string[];error?:string}>>,
   workPreview: (id: string) => ipcRenderer.invoke('work:preview', id) as Promise<WorkPreview>,
   workList: () => ipcRenderer.invoke('work:list') as Promise<WorkSnapshot>,
   workCreate: (input: CreateWorkInput) => ipcRenderer.invoke('work:create', input) as Promise<WorkTask>,
-  workAction: (id: string, action: WorkAction, note?: string) => ipcRenderer.invoke('work:action', id, action, note) as Promise<WorkTask>,
-  workReviewRule: (id: string, accept: boolean) => ipcRenderer.invoke('work:reviewRule', id, accept) as Promise<void>,
+  workAction: (id: string, action: WorkAction, note?: string, revision?: number) => ipcRenderer.invoke('work:action', id, action, note, revision) as Promise<WorkTask>,
+  workReviewRule: (id: string, accept: boolean, version?: number) => ipcRenderer.invoke('work:reviewRule', id, accept, version) as Promise<void>,
   workExport: () => ipcRenderer.invoke('work:export') as Promise<string>,
   // App info
   getVersion: () => ipcRenderer.invoke('app:getVersion'),
@@ -235,12 +242,18 @@ declare global {
   interface Window {
     electronAPI: {
       workCheckpoint: (id: string) => Promise<{ available: boolean; steps: ToolStep[] }>;
-      workReconcile: (id: string, key: string, result: string) => Promise<void>;
+      workReconcile: (id: string, key: string, result: string, revision?: number) => Promise<void>;
+      workContext: () => Promise<WorkContext>;
+      workspaceConnection: () => Promise<{ url: string; connected: boolean }>;
+      workspaceConnect: (url: string, token: string) => Promise<WorkContext>;
+      workspaceDisconnect: () => Promise<void>;
+      mcpList: () => Promise<{ configs: McpConfig[]; statuses: Array<{id:string;connected:boolean;tools:string[];error?:string}> }>;
+      mcpConfigure: (configs: unknown) => Promise<Array<{id:string;connected:boolean;tools:string[];error?:string}>>;
       workPreview: (id: string) => Promise<WorkPreview>;
       workList: () => Promise<WorkSnapshot>;
       workCreate: (input: CreateWorkInput) => Promise<WorkTask>;
-      workAction: (id: string, action: WorkAction, note?: string) => Promise<WorkTask>;
-      workReviewRule: (id: string, accept: boolean) => Promise<void>;
+      workAction: (id: string, action: WorkAction, note?: string, revision?: number) => Promise<WorkTask>;
+      workReviewRule: (id: string, accept: boolean, version?: number) => Promise<void>;
       workExport: () => Promise<string>;
       getVersion: () => Promise<string>;
       getPath: (name: string) => Promise<string>;
