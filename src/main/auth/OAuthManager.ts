@@ -41,6 +41,8 @@ export class OAuthManager {
   private onTokens?: (provider: 'openai' | 'anthropic', tokens: OAuthTokens) => void;
   /** Injectable for tests; defaults to opening the system browser. */
   private openExternal: (url: string) => Promise<void>;
+  private cancellations = new Map<'openai' | 'anthropic', () => void>();
+  private cleanups = new Map<'openai' | 'anthropic', () => void>();
   private authUrls = new Map<'openai' | 'anthropic', string>();
   /** In-flight authenticate() per provider — a second call re-opens the
    *  browser with the same URL instead of failing on the bound port. */
@@ -134,10 +136,12 @@ export class OAuthManager {
 
     const promise = this.startFlow(provider);
     this.inflight.set(provider, promise);
-    promise.then(
-      () => this.inflight.delete(provider),
-      () => this.inflight.delete(provider),
-    );
+    const cleanup = () => {
+      this.cleanups.get(provider)?.(); this.cleanups.delete(provider);
+      this.cancellations.delete(provider); this.authUrls.delete(provider);
+      this.inflight.delete(provider);
+    };
+    promise.then(cleanup, cleanup);
     return promise;
   }
 
@@ -186,10 +190,11 @@ export class OAuthManager {
             res.end('Not found');
             return;
           }
+          if (u.searchParams.get('state') !== state) { res.writeHead(400); res.end('Invalid OAuth state'); return; }
           res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
           res.end(
             '<!doctype html><html><body style="font-family:system-ui;text-align:center;padding:4rem">' +
-            '<h2>Authentication complete</h2><p>You can close this tab and return to KeepMind OS.</p>' +
+            '<h2>Login response received</h2><p>Return to KeepMind OS to check whether the connection succeeded.</p>' +
             '</body></html>'
           );
           server.close();
@@ -226,7 +231,13 @@ export class OAuthManager {
         failFlow(new Error('OAuth timed out — no callback received from the browser'));
       }, 5 * 60 * 1000);
       timer.unref?.();
+      this.cancellations.set(provider, () => failFlow(new Error('Authentication cancelled')));
+      this.cleanups.set(provider, () => { clearTimeout(timer); server.close(); });
     });
+  }
+
+  cancelAuthentication(provider: 'openai' | 'anthropic'): void {
+    this.cancellations.get(provider)?.();
   }
 
   /** Last authorize URL issued per provider (for tests/debugging). */
@@ -266,6 +277,11 @@ export class OAuthManager {
 
     try {
       const tokens = await this.exchangeCodeForTokens(provider, code, codeVerifier, state);
+      if (this.pendingRequests.get(state) !== pending) return; // Cancelled during exchange.
+      this.agentManager.setOAuthToken(provider, tokens.accessToken);
+      const config = this.configs[provider];
+      if (config.betaHeader) this.agentManager.setOAuthBetaHeader(provider, config.betaHeader);
+      this.onTokens?.(provider, tokens);
       pending.resolve(tokens);
       this.pendingRequests.delete(state);
     } catch (error) {
@@ -320,12 +336,6 @@ export class OAuthManager {
       idToken: tokenData.id_token,
       scope: tokenData.scope,
     };
-
-    this.agentManager.setOAuthToken(provider, tokens.accessToken);
-    if (config.betaHeader) {
-      this.agentManager.setOAuthBetaHeader(provider, config.betaHeader);
-    }
-    this.onTokens?.(provider, tokens);
 
     return tokens;
   }

@@ -170,3 +170,8 @@ body {
 :root[data-mantine-color-scheme=dark] { --mantine-color-dimmed: #adb5bd; }
 .km-workbench button[data-variant=subtle], .km-workbench button[data-variant=light],
 .km-sidebar button[data-variant=subtle], .km-sidebar button[data-variant=light] { color: var(--mantine-color-text); }
+
+/* Business onboarding remains readable and scrollable at small window sizes. */
+.km-welcome { max-width: 960px; margin: 0 auto; padding: 40px 24px 64px; }
+.km-business-guide { width: 100%; }
+@media (max-width: 600px) { .km-welcome { padding: 24px 12px; } .km-business-guide { padding: 20px !important; } }

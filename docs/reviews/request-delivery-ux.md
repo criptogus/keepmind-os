@@ -65,3 +65,19 @@ Jev advisory verification: three requirements checked by jev-1.14.0, 683 input a
 132 output tokens. Probabilities: truthful draft wording .98, approval controls
 preserved 1.00, delivery-first ordering 1.00. The minimal request and complete
 result are retained under `evidence/semantic/`; these support review, not authority.
+
+## OAuth recovery follow-up
+
+A manual test reported that clicking provider login opened no visible browser. The OS accepted the previous open command, which does not prove browser visibility or successful authentication. Use Electron shell.openExternal, expose the pending authorization link and copy action, and allow cancellation/retry in onboarding and Advanced settings. Cancelled flows cannot install credentials after a delayed token response. Authentication IPC returns status rather than token data.
+
+Validation: regression reproduced missing cancellation before the fix and passed afterwards, including retry; typecheck, build, verify:ux (unit/integration/smoke/secret scan) passed. The Advanced settings recovery UI was added afterwards and typechecked/built. Real provider login and request → delivery → revision remain pending user authentication. No merge performed.
+
+## Business-first journey
+
+The entry point now asks for the customer's business problem and priority. Examples cover consultancy deliveries, marketing for speaking services, and business operations. An editable initial team suggestion explains coordination and specialist responsibilities. The customer reviews the first request, then explicitly creates the real team and saves a draft. Existing local workspaces without teams receive the same guide; returning customers can create another team or send a request to their existing team.
+
+Suggestions currently use curated roles selected by the customer's explicit priority, not AI interpretation of arbitrary text. The business problem is retained in each agent's instructions. The coordinator delegates using specialist IDs and consolidates a delivery; creation itself makes no model calls. The first request requires review, and missing credentials show a connection next step before execution. Provider connections include pending login link/copy/cancel recovery.
+
+Creation is atomic across agents, team and work draft, with in-memory rollback and request-key deduplication. Unit tests cover four business contexts, retry, invalid roles, and a failed final database write. The existing verification skill/script was extended instead of creating another runner.
+
+Validation: `npm run verify:ux` passed: 161 unit tests, 1 integration test, build/typecheck/runner, 13 Electron smoke checks, secret scan (201 files; no findings). Screenshots reviewed for the business problem, editable team proposal and first request. These automated flows use synthetic data with no provider calls. The earlier live single-assistant request reached done, but the new multi-agent delivery/revision flow has not yet been validated with a live provider. Jev semantic check: jev-1.14.0, 536 input / 61 output tokens; guidance clear=1.0, curated flow cannot claim AI interpretation=0.91. Evidence retained in evidence/semantic/business-journey-*.json.

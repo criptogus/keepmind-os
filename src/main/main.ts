@@ -1,3 +1,5 @@
+import { createBusinessTeam } from './work/BusinessTeamSetup.js';
+import type { BusinessTeamInput } from '../shared/businessTeams.js';
 import { ArtifactStore } from './artifacts/ArtifactStore.js';
 import { actionDecision } from './governance/ActionPolicy.js';
 import { McpManager, mcpConfigSchema } from './mcp/McpManager.js';
@@ -470,17 +472,10 @@ app.whenReady().then(async () => {
     const prev = credentialStore.getOAuth(provider);
     credentialStore.setOAuth(provider, { ...tokens, accountId: tokens.accountId ?? prev?.accountId });
   }, async (url) => {
-    logOAuth(`openExternal attempt: ${url.slice(0, 90)}`);
-    // shell.openExternal can hang silently in packaged builds; the platform
-    // command is deterministic. On Windows `start` treats the first quoted
-    // arg as a window title, so an empty title arg is required.
-    const cmd = process.platform === 'darwin' ? `open ${JSON.stringify(url)}`
-      : process.platform === 'win32' ? `cmd /c start "" ${JSON.stringify(url)}`
-      : `xdg-open ${JSON.stringify(url)}`;
-    await new Promise<void>((resolve, reject) => {
-      exec(cmd, (err) => (err ? reject(err) : resolve()));
-    });
-    logOAuth('openExternal done via platform command');
+    // OS acknowledgement is not proof that a browser became visible. The UI
+    // keeps a manual link and cancellation available while waiting for callback.
+    await shell.openExternal(url);
+    logOAuth('OAuth browser open requested');
   });
 
   // Restore persisted credentials so agents keep working across restarts.
@@ -1514,15 +1509,18 @@ function logOAuth(message: string) {
 handle('oauth:authenticate', async (_event, provider: 'openai' | 'anthropic') => {
   try {
     logOAuth(`authenticate start: ${provider}`);
-    const tokens = await oauthManager.authenticate(provider);
+    await oauthManager.authenticate(provider);
     logOAuth(`authenticate success: ${provider}`);
-    return { success: true, tokens };
+    return { success: true };
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error);
     logOAuth(`authenticate FAILED ${provider}: ${msg}`);
     return { success: false, error: msg };
   }
 });
+
+handle('oauth:pendingUrl', (_event, provider: 'openai' | 'anthropic') => oauthManager.getAuthUrl(provider));
+handle('oauth:cancel', (_event, provider: 'openai' | 'anthropic') => oauthManager.cancelAuthentication(provider));
 
 handle('oauth:isAuthenticated', (_event, provider: 'openai' | 'anthropic') => {
   return oauthManager.isAuthenticated(provider);
@@ -1549,6 +1547,12 @@ handle('teams:getList', () => {
 
 handle('teams:get', (_event, id: string) => {
   return storageManager.getTeam(id);
+});
+
+handle('teams:guidedCreate', (_event, input: BusinessTeamInput) => {
+  requireRole('admin');
+  if (remoteWorkspace()) throw new Error('Crie o time no espaço local.');
+  return createBusinessTeam(storageManager, workManager, input, currentUserId() ?? 'system');
 });
 
 handle('teams:create', (_event, config: TeamConfig) => {

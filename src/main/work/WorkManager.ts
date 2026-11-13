@@ -19,6 +19,11 @@ export class WorkManager {
     }
     this.save();
   }
+  /** Pair with a storage transaction to restore the in-memory document on failure. */
+  atomic<T>(fn: () => T): T {
+    const previous = structuredClone(this.state);
+    try { return fn(); } catch (error) { this.state = previous; throw error; }
+  }
   private save() { this.storage.setSetting(KEY, JSON.stringify(this.state)); }
   private event(task: WorkTask, kind: string, message: string) {
     task.updatedAt = new Date().toISOString(); task.revision++;

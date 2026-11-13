@@ -22,6 +22,13 @@ export class StorageManager {
     this.initializeSchema();
   }
 
+  /** Synchronous domain writes commit together or leave no partial setup. */
+  transaction<T>(fn: () => T): T {
+    this.db.exec('BEGIN IMMEDIATE');
+    try { const result = fn(); this.db.exec('COMMIT'); return result; }
+    catch (error) { this.db.exec('ROLLBACK'); throw error; }
+  }
+
   private initializeSchema() {
     // Agents table
     this.db.exec(`

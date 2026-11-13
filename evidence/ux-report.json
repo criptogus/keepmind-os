@@ -1,6 +1,9 @@
 {
   "passed": true,
   "checks": [
+    "business-problem-to-team",
+    "team-confirmation-before-creation",
+    "first-delivery-draft-without-execution",
     "onboarding-without-credentials",
     "delivery-markdown",
     "light-title-contrast",
@@ -14,5 +17,5 @@
   ],
   "failure": null,
   "fixture": "synthetic; no live providers",
-  "timestamp": "2026-11-13T13:46:15.974Z"
+  "timestamp": "2026-11-13T14:21:18.455Z"
 }

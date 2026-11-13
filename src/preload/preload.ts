@@ -1,3 +1,4 @@
+import type { BusinessTeamInput, BusinessTeamResult } from '../shared/businessTeams.js';
 import type { McpConfig } from '../main/mcp/McpManager.js';
 import type { ToolStep } from '../main/execution/CheckpointStore.js';
 import type { CreateWorkInput, WorkAction, WorkSnapshot, WorkTask, WorkPreview, WorkContext } from '../shared/work.js';
@@ -44,6 +45,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // Teams
   getTeams: () => ipcRenderer.invoke('teams:getList') as Promise<Team[]>,
   getTeam: (id: string) => ipcRenderer.invoke('teams:get', id) as Promise<Team | null>,
+  createBusinessTeam: (input: BusinessTeamInput) => ipcRenderer.invoke('teams:guidedCreate', input) as Promise<BusinessTeamResult>,
   createTeam: (config: TeamConfig) => ipcRenderer.invoke('teams:create', config) as Promise<Team>,
   updateTeam: (id: string, config: Partial<TeamConfig>) => ipcRenderer.invoke('teams:update', id, config) as Promise<Team>,
   deleteTeam: (id: string) => ipcRenderer.invoke('teams:delete', id) as Promise<void>,
@@ -98,6 +100,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
     };
     error?: string;
   }>,
+  oauthPendingUrl: (provider: 'openai' | 'anthropic') => ipcRenderer.invoke('oauth:pendingUrl', provider) as Promise<string | null>,
+  oauthCancel: (provider: 'openai' | 'anthropic') => ipcRenderer.invoke('oauth:cancel', provider) as Promise<void>,
   oauthIsAuthenticated: (provider: 'openai' | 'anthropic') => ipcRenderer.invoke('oauth:isAuthenticated', provider) as Promise<boolean>,
   oauthIsConfigured: (provider: 'openai' | 'anthropic') => ipcRenderer.invoke('oauth:isConfigured', provider) as Promise<boolean>,
   oauthGetToken: (provider: 'openai' | 'anthropic') => ipcRenderer.invoke('oauth:getToken', provider) as Promise<string | null>,
@@ -273,6 +277,7 @@ declare global {
       getAgentExecutions: (agentId?: string) => Promise<AgentExecution[]>;
       getTeams: () => Promise<Team[]>;
       getTeam: (id: string) => Promise<Team | null>;
+      createBusinessTeam: (input: BusinessTeamInput) => Promise<BusinessTeamResult>;
       createTeam: (config: TeamConfig) => Promise<Team>;
       updateTeam: (id: string, config: Partial<TeamConfig>) => Promise<Team>;
       deleteTeam: (id: string) => Promise<void>;
@@ -315,6 +320,8 @@ declare global {
         };
         error?: string;
       }>;
+      oauthPendingUrl: (provider: 'openai' | 'anthropic') => Promise<string | null>;
+      oauthCancel: (provider: 'openai' | 'anthropic') => Promise<void>;
       oauthIsAuthenticated: (provider: 'openai' | 'anthropic') => Promise<boolean>;
       oauthIsConfigured: (provider: 'openai' | 'anthropic') => Promise<boolean>;
       oauthGetToken: (provider: 'openai' | 'anthropic') => Promise<string | null>;

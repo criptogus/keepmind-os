@@ -135,18 +135,30 @@ try {
     fail(`renderer did not produce expected UI (html length=${html.length})`);
   }
 
-  // The new onboarding can complete without credentials or paid execution.
+  // Guide a nontechnical customer from their business problem to a real team and draft.
   const onboarding = await send('Page.captureScreenshot', { format: 'png' });
   writeFileSync(path.join(evidenceDir, 'onboarding-request.png'), Buffer.from(onboarding.result.data, 'base64'));
-  await evaluate(`([...document.querySelectorAll('button')].find(b => /^(Continuar|Continue)$/.test(b.textContent))).click()`);
+  await evaluate(`([...document.querySelectorAll('button')].find(b => b.textContent === 'Marketing para minhas palestras')).click()`);
+  await delay(100);
+  await evaluate(`([...document.querySelectorAll('button')].find(b => b.textContent === 'Sugerir meu time')).click()`);
   await delay(200);
-  const onboardingConnection = await send('Page.captureScreenshot', { format: 'png' });
-  writeFileSync(path.join(evidenceDir, 'onboarding-connection.png'), Buffer.from(onboardingConnection.result.data, 'base64'));
-  await evaluate(`([...document.querySelectorAll('button')].find(b => /^(Abrir espaço|Open workspace)$/.test(b.textContent))).click()`);
+  const teamSuggestion = await send('Page.captureScreenshot', { format: 'png' });
+  writeFileSync(path.join(evidenceDir, 'onboarding-team.png'), Buffer.from(teamSuggestion.result.data, 'base64'));
+  if ((await evaluate('window.electronAPI.getTeams()')).length) fail('suggestion created a team before confirmation');
+  await evaluate(`([...document.querySelectorAll('button')].find(b => b.textContent === 'Definir a primeira entrega')).click()`);
+  await delay(200);
+  const firstDelivery = await send('Page.captureScreenshot', { format: 'png' });
+  writeFileSync(path.join(evidenceDir, 'onboarding-connection.png'), Buffer.from(firstDelivery.result.data, 'base64'));
+  await evaluate(`([...document.querySelectorAll('button')].find(b => b.textContent === 'Criar time e salvar primeiro pedido')).click()`);
   for (let i = 0; i < 50; i++) { if (await evaluate(`!!document.querySelector('.km-workbench')`)) break; await delay(100); }
-  if (!(await evaluate(`!!document.querySelector('.km-workbench')`))) fail('onboarding without credentials failed');
+  if (!(await evaluate(`!!document.querySelector('.km-workbench')`))) fail('business onboarding without credentials failed');
   if ((await evaluate('window.electronAPI.getAgentExecutions()')).length) fail('onboarding unexpectedly executed work');
-  checks.push('onboarding-without-credentials');
+  const guidedTeams = await evaluate('window.electronAPI.getTeams()');
+  if (guidedTeams.length !== 1 || guidedTeams[0].agentIds.length !== 3) fail('confirmed team was not persisted with specialists');
+  const guidedWork = await evaluate('window.electronAPI.workContext()');
+  const firstDraft = guidedWork.snapshot.tasks.find(t => t.project === 'Time de marketing');
+  if (!firstDraft || firstDraft.status !== 'backlog' || firstDraft.agentId !== guidedTeams[0].agentIds[0]) fail('first request was not saved as a coordinator draft');
+  checks.push('business-problem-to-team', 'team-confirmation-before-creation', 'first-delivery-draft-without-execution', 'onboarding-without-credentials');
   const task = await evaluate(`(async () => {
     const agent = await window.electronAPI.createAgent({ name: 'Maintainer', model: 'gpt-4o-mini', temperature: 0, maxTokens: 100, systemPrompt: 'Read only', tools: [] });
     const task = await window.electronAPI.workCreate({ goal: 'Review repository documentation', agentId: agent.id, project: 'KeepMind OS', criteria: 'Include file references and reproducible steps.' });
@@ -163,7 +175,7 @@ try {
     await delay(200);
   }
   const rendered = await evaluate('document.body?.innerText ?? ""');
-  if (!rendered?.includes('What would you like to get done?') || !rendered.includes('Review repository documentation')) fail('workspace did not render persisted task');
+  if (!rendered?.includes('Vamos trabalhar com seu time?') || !rendered.includes('Review repository documentation')) fail('workspace did not render persisted task');
   if (!rendered.includes('Need your decision') || !rendered.includes('Delivered')) fail('focus overview not rendered');
   if (!(await evaluate(`!!document.querySelector('.km-sidebar .km-nav-more summary')`))) fail('advanced navigation disclosure missing');
   mkdirSync(evidenceDir, { recursive: true });
