@@ -1,26 +1,20 @@
 import { configDefaults, defineConfig } from 'vitest/config';
 
+const integration = process.argv.includes('integration');
+
 export default defineConfig({
   test: {
-    projects: [
-      {
-        test: {
-          name: 'unit',
-          environment: 'node',
-          include: ['src/**/*.{test,spec}.{ts,tsx}', 'test/**/*.{test,spec}.{ts,tsx,mjs}'],
-          exclude: [...configDefaults.exclude, 'test/integration/**'],
-        },
+    projects: [{
+      test: {
+        name: integration ? 'integration' : 'unit',
+        environment: 'node',
+        include: integration
+          ? ['test/integration/**/*.{test,spec}.{ts,tsx,mjs}']
+          : ['src/**/*.{test,spec}.{ts,tsx}', 'test/**/*.{test,spec}.{ts,tsx,mjs}'],
+        exclude: integration
+          ? [...configDefaults.exclude]
+          : [...configDefaults.exclude, 'test/integration/**'],
       },
-      {
-        test: {
-          name: 'integration',
-          environment: 'node',
-          include: ['test/integration/**/*.{test,spec}.{ts,tsx,mjs}'],
-          exclude: [...configDefaults.exclude],
-          testTimeout: 300000,
-          hookTimeout: 300000,
-        },
-      },
-    ],
+    }],
   },
 });

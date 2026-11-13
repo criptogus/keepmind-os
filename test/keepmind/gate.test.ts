@@ -1,5 +1,6 @@
 import { expect, it } from 'vitest';
 import { mkdtempSync, rmSync, readFileSync, mkdirSync, symlinkSync } from 'node:fs';
+import { realpathSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { clientIdFor, spaceFor, vaultDir, scopesFor, writeScopes, gateCall, authorizeContent, checkedPath } from '../../src/main/keepmind';
@@ -10,7 +11,7 @@ it('maps only validated company identities', () => {
     for (const id of ['', '../beta', '/acme', 'a b', 'a'.repeat(65), 'acme\0']) expect(() => clientIdFor(id)).toThrow();
 });
 it('writes scopes with exactly one client and no write authority', () => {
-    const root = mkdtempSync(join(tmpdir(), 'km-scopes-'));
+    const root = mkdtempSync(join(realpathSync(tmpdir()), 'km-scopes-'));
     try {
         const scopes = JSON.parse(readFileSync(writeScopes(root, 'acme'), 'utf8'));
         expect(scopes).toEqual(scopesFor('acme'));
@@ -37,7 +38,7 @@ it('requires explicit company space and public/internal including elevation rule
     expect(authorizeContent(note('space: company-acme\nclass: internal', 'sk-fixture-only'), 'acme')).toBe(false);
 });
 it('denies traversal, platform absolute paths and symlinked roots/ancestors', () => {
-    const root = mkdtempSync(join(tmpdir(), 'km-path-'));
+    const root = mkdtempSync(join(realpathSync(tmpdir()), 'km-path-'));
     try {
         const vault = join(root, 'vault'); mkdirSync(vault); mkdirSync(join(root, 'outside'));
         symlinkSync(join(root, 'outside'), join(vault, 'escape'));

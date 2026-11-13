@@ -1,60 +1,504 @@
-# Architecture
+# Zero Agency OS - Architecture Design
 
-The Electron shell reuses the plain Node core. It takes a single-instance lock,
-loads a sandboxed file renderer, starts Paperclip, authenticates the operator,
-restarts with signup disabled, and audits managed agents before marking the
-workspace ready. Credentials and workspace state use Electron safeStorage.
-Paperclip data lives in <userData>/paperclip; ZAOS state lives in <userData>/zaos.
-ZAOS_USER_DATA overrides userData before Electron is ready. Execution consent
-resets on each launch. Startup failures expose a retry and local log tail.
+## Overview
 
-`Supervisor` launches the external Node >=24.11.0 binary and the installed Paperclip CLI with a dedicated data directory. It polls health, reports stopped/starting/ready/unavailable/crashed, retries crashes three times with exponential backoff, and terminates the child with SIGTERM followed by SIGKILL after the grace period. Health timeout defaults to 180 seconds; integration allows 240 seconds. The external runtime is resolved from ZAOS_NODE_BINARY or PATH.
+Zero Agency OS is a local-first desktop application that provides human-governed agent teams. Built on Electron with React, using a custom agent execution engine backed by the OpenAI and Anthropic SDKs (API key or OAuth).
 
-`paperclip-config` writes authenticated/private/loopback configuration before first boot. `ports` probes ephemeral IPv4 loopback ports for the server and embedded PostgreSQL, excluding 3000, 3100, 8642, 8787, and 8794. Probes cannot reserve a port across process startup; a subsequent bind failure must be surfaced and retried by the caller.
+## System Architecture
 
-`instance-secrets` persists three independent random 32-byte hex secrets through an injected encryptor, with file mode 0600. `operator-auth` creates a random local operator identity, claims bootstrap, persists credentials, and signs in on later boots. Its callback writes disableSignUp=true. That change requires a server restart; integration verifies it against the installed version.
+### High-Level Components
 
-`PaperclipClient` carries session cookies and Origin, applies timeouts, refuses redirects, and emits bounded errors. The board window signs in through Electron session.fetch so the cookie lands in persist:zaos-board. Navigation is limited to the current loopback origin. Its injected CSS contains only neutral identity styles.
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Electron Main Process                     │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
+│  │ Window Mgmt  │  │ IPC Handlers │  │ Agent Engine │      │
+│  │              │  │              │  │ (OpenAI/     │      │
+│  │              │  │              │  │ Anthropic)   │      │
+│  └──────────────┘  └──────────────┘  └──────────────┘      │
+└─────────────────────────────────────────────────────────────┘
+                            │ IPC
+                            ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    Renderer Process (React)                    │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
+│  │ UI Components│  │ State Mgmt   │  │ Preload API  │      │
+│  │              │  │              │  │              │      │
+│  └──────────────┘  └──────────────┘  └──────────────┘      │
+└─────────────────────────────────────────────────────────────┘
+                            │
+                            ▼
+┌─────────────────────────────────────────────────────────────┐
+│                   Local Storage Layer                         │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
+│  │ SQLite (node:sqlite) │  │ File System  │  │ Secure Store │      │
+│  │              │  │              │  │              │      │
+│  └──────────────┘  └──────────────┘  └──────────────┘      │
+└─────────────────────────────────────────────────────────────┘
+```
 
-`Orchestrator` creates a company, stores BYOK keys in Paperclip's local encrypted secrets store, creates an allowlisted process runner agent, applies spend policies, gates paid execution, and polls tasks. Workspace state and persistence are injected; paid consent is never persisted and resets on process start. Call startupAudit before exposing execution after restart. The injected state must default telemetry to false and managedAgentIds to an empty list. The shell persists state through the existing encrypted storage helper. A single active task is allowed per orchestrator instance.
+## Module Breakdown
 
-The runner uses agent JWT authorization and X-Paperclip-Run-Id. It discovers an assigned task, checks price and remaining budget before any provider call, records priced usage, posts the result, and requests in_review. It never marks a task done.
+### 1. Main Process (`src/main/`)
 
-Paperclip's data-quality API exposes only problematic events. The runner therefore emits a bounded acknowledgement of the accepted priced cost event to stdout. The board reads that acknowledgement from the same run's log before adjusting its separate unpriced process receipt to zero. No result text or raw provider errors are printed. This trusts the managed runner and Paperclip's stored logs; it is not independent provider billing verification. Missing or malformed acknowledgement leaves cost unknown.
+#### Responsibilities
+- Window lifecycle management
+- IPC communication bridge
+- Agent execution via OpenAI/Anthropic SDKs
+- File system operations
+- Security boundaries
 
-Tests use injected fetch/process fakes without sockets. Optional socket tests exercise the mock servers and real fake-server child. The integration suite boots real Paperclip in os.tmpdir(), uses only a local mock provider, checks authentication and listener address, and writes evidence/integration-report.json after cleanup.
+#### Key Modules
 
-The preload exposes only typed methods on window.zaos. Main-process IPC validates
-both webContents identity and the exact owned main frame/URL, then payloads.
-The owned renderer has a file response CSP with connect-src none, external build
-scripts only, and inline styles permitted for Astryx. It cannot call providers or
-Paperclip directly. React uses the installed Astryx components and built Neutral
-theme with explicit light/dark mode and locally bundled Inter.
+**Window Manager**
+```typescript
+class WindowManager {
+  createMainWindow(): BrowserWindow
+  createAgentWindow(agentId: string): BrowserWindow
+  createSettingsWindow(): BrowserWindow
+  handleWindowEvents()
+}
+```
 
-Packaged external Node entrypoints and their dependencies are unpacked from asar;
-renderer, preload, and identity assets remain inside the app archive. The smoke
-uses the same API facade and Orchestrator as IPC, captures actual windows, accepts
-a review, disables execution, stops the supervisor, and writes a structured report.
+**IPC Handler Registry**
+```typescript
+class IPCRegistry {
+  registerAgentHandlers()
+  registerGovernanceHandlers()
+  registerStorageHandlers()
+  registerSystemHandlers()
+}
+```
 
-Provider connectors use `connectors/port.ts` and a trusted registry of six
-adapters. Legacy provider state migrates to custom. The existing setup remains
-available; typed connector IPC uses the same exact frame and payload validation.
-OpenRouter discovers models through injected fetch; other adapters use static or
-operator-specified models. API execution remains in the ZAOS runner. Subscription
-execution delegates to installed Codex/Claude binaries from that runner, never a
-new Paperclip adapter. Binary resolution is trusted main-process PATH discovery
-or launch-time ZAOS_CODEX_BIN / ZAOS_CLAUDE_BIN. See ADR 0001.
+**Agent Execution Engine**
+```typescript
+class AgentManager {
+  executeAgent(agentId: string, config: AgentConfig, input: unknown): Promise<AgentExecution>
+  cancelExecution(executionId: string)
+  setApiKey(provider: 'openai' | 'anthropic', key: string)
+  setOAuthToken(provider: 'openai' | 'anthropic', token: string)
+}
 
-## Naming
+class TeamExecutionEngine {
+  executeTeam(team: Team, agents: Agent[], input: unknown): Promise<TeamResult>
+}
+```
 
-The product is KeepMind OS; its short name is KeepMind. Legacy internal names
-remain for data compatibility: package `name` (`zero-agency-os`) preserves
-Electron's development userData location, and `agency.zero.os` preserves app
-identity. `ZAOS_*` environment variables, `window.zaos` and IPC identifiers,
-`zaos/` state files (`workspace.json`, `operator.json`, `instance-secrets.json`),
-`zaos.onboard.v1`, keyring/safeStorage names and `persist:zaos-board` keep existing
-configuration, credentials and drafts accessible. The `zaos-*` runner filenames,
-`.zero-agency-os` / `za-*` CSS classes and `zero-agency-theme.css` stay stable,
-as do test fixture names and Paperclip-side identifiers. The GitHub repository
-name and URLs remain `criptogus/ZeroAgencyOS`. Existing operators retain their
-stored display name; newly created operators use KeepMind Operator.
+**Storage Layer**
+```typescript
+class StorageManager {
+  // SQLite for structured data
+  database: SQLiteDatabase
+
+  // File system for artifacts
+  artifactsDir: string
+
+  // Encrypted storage for secrets
+  secureStore: KeytarWrapper
+
+  async saveAgent(agent: Agent)
+  async loadAgent(agentId: string): Agent
+  async saveTeam(team: Team)
+  async loadTeam(teamId: string): Team
+  async saveAuditLog(log: AuditEntry)
+  async queryAuditLogs(filters: AuditFilters): AuditEntry[]
+}
+```
+
+### 2. Preload Script (`src/preload/`)
+
+#### Responsibilities
+- Secure bridge between main and renderer
+- Type-safe IPC API exposure
+- Sanitize renderer requests
+
+#### API Surface
+
+```typescript
+interface ElectronAPI {
+  // System
+  getVersion(): Promise<string>
+  getPath(name: string): Promise<string>
+
+  // Window
+  minimizeWindow(): Promise<void>
+  maximizeWindow(): Promise<void>
+  closeWindow(): Promise<void>
+
+  // Agents
+  getAgents(): Promise<Agent[]>
+  getAgent(id: string): Promise<Agent>
+  createAgent(config: AgentConfig): Promise<Agent>
+  updateAgent(id: string, config: Partial<AgentConfig>): Promise<Agent>
+  deleteAgent(id: string): Promise<void>
+  executeAgent(id: string, input: unknown): Promise<AgentExecution>
+  cancelExecution(executionId: string): Promise<void>
+
+  // Teams
+  getTeams(): Promise<Team[]>
+  getTeam(id: string): Promise<Team>
+  createTeam(config: TeamConfig): Promise<Team>
+  updateTeam(id: string, config: Partial<TeamConfig>): Promise<Team>
+  deleteTeam(id: string): Promise<void>
+  addAgentToTeam(teamId: string, agentId: string): Promise<void>
+  removeAgentFromTeam(teamId: string, agentId: string): Promise<void>
+
+  // Governance
+  getGovernanceState(): Promise<GovernanceState>
+  getPendingApprovals(): Promise<Approval[]>
+  approveAction(actionId: string): Promise<void>
+  rejectAction(actionId: string, reason: string): Promise<void>
+  setGovernanceRule(rule: GovernanceRule): Promise<void>
+
+  // Storage
+  getAuditLogs(filters: AuditFilters): Promise<AuditEntry[]>
+  exportAuditLogs(filters: AuditFilters): Promise<string>
+
+  // Settings
+  getSettings(): Promise<AppSettings>
+  updateSettings(settings: Partial<AppSettings>): Promise<AppSettings>
+}
+```
+
+### 3. Renderer Process (`src/renderer/`)
+
+#### Tech Stack
+- React 19 for UI
+- StyleX for styling (via Astryx)
+- Zustand for state management
+- React Query for data fetching
+- React Router for navigation
+
+#### Directory Structure
+
+```
+src/renderer/
+├── components/
+│   ├── common/
+│   │   ├── Button.tsx
+│   │   ├── Card.tsx
+│   │   ├── Modal.tsx
+│   │   └── Table.tsx
+│   ├── dashboard/
+│   │   ├── Dashboard.tsx
+│   │   ├── ActivityChart.tsx
+│   │   └── QuickActions.tsx
+│   ├── agents/
+│   │   ├── AgentList.tsx
+│   │   ├── AgentCard.tsx
+│   │   ├── AgentEditor.tsx
+│   │   └── AgentExecutionView.tsx
+│   ├── teams/
+│   │   ├── TeamList.tsx
+│   │   ├── TeamCard.tsx
+│   │   ├── TeamEditor.tsx
+│   │   └── WorkflowBuilder.tsx
+│   ├── governance/
+│   │   ├── ApprovalQueue.tsx
+│   │   ├── ApprovalCard.tsx
+│   │   ├── GovernanceRules.tsx
+│   │   └── SafetyBoundaries.tsx
+│   └── settings/
+│       ├── SettingsPanel.tsx
+│       ├── APIKeys.tsx
+│       ├── Preferences.tsx
+│       └── About.tsx
+├── store/
+│   ├── agentStore.ts
+│   ├── teamStore.ts
+│   ├── governanceStore.ts
+│   └── settingsStore.ts
+├── hooks/
+│   ├── useAgents.ts
+│   ├── useTeams.ts
+│   ├── useGovernance.ts
+│   └── useAuditLogs.ts
+├── lib/
+│   ├── api.ts (IPC wrapper)
+│   ├── types.ts
+│   └── utils.ts
+├── routes/
+│   └── AppRouter.tsx
+├── App.tsx
+├── main.tsx
+└── index.html
+```
+
+#### State Management (Zustand)
+
+```typescript
+// agentStore.ts
+interface AgentStore {
+  agents: Agent[]
+  selectedAgent: Agent | null
+  loading: boolean
+  error: string | null
+
+  fetchAgents: () => Promise<void>
+  selectAgent: (id: string) => void
+  createAgent: (config: AgentConfig) => Promise<void>
+  updateAgent: (id: string, config: Partial<AgentConfig>) => Promise<void>
+  deleteAgent: (id: string) => Promise<void>
+  executeAgent: (id: string, input: unknown) => Promise<void>
+}
+
+// governanceStore.ts
+interface GovernanceStore {
+  pendingApprovals: Approval[]
+  governanceRules: GovernanceRule[]
+  loading: boolean
+
+  fetchPendingApprovals: () => Promise<void>
+  approveAction: (actionId: string) => Promise<void>
+  rejectAction: (actionId: string, reason: string) => Promise<void>
+  updateRule: (rule: GovernanceRule) => Promise<void>
+}
+```
+
+### 4. Shared Types (`src/shared/`)
+
+```typescript
+// types.ts
+export interface Agent {
+  id: string
+  name: string
+  description: string
+  config: AgentConfig
+  capabilities: string[]
+  permissions: AgentPermissions
+  createdAt: Date
+  updatedAt: Date
+}
+
+export interface AgentConfig {
+  model: string
+  temperature: number
+  maxTokens: number
+  systemPrompt: string
+  tools: ToolConfig[]
+}
+
+export interface Team {
+  id: string
+  name: string
+  description: string
+  agentIds: string[]
+  workflow: Workflow
+  createdAt: Date
+  updatedAt: Date
+}
+
+export interface Workflow {
+  steps: WorkflowStep[]
+  executionMode: 'sequential' | 'parallel' | 'conditional'
+}
+
+export interface Approval {
+  id: string
+  type: 'agent_action' | 'team_execution' | 'resource_access'
+  agentId: string
+  agentName: string
+  action: string
+  context: unknown
+  status: 'pending' | 'approved' | 'rejected'
+  createdAt: Date
+  reviewedAt?: Date
+  reviewedBy?: 'human'
+  rejectionReason?: string
+}
+
+export interface GovernanceRule {
+  id: string
+  name: string
+  type: 'approval_required' | 'rate_limit' | 'resource_constraint' | 'content_filter'
+  scope: 'agent' | 'team' | 'global'
+  condition: RuleCondition
+  action: RuleAction
+  enabled: boolean
+}
+
+export interface AuditEntry {
+  id: string
+  timestamp: Date
+  agentId: string
+  agentName: string
+  action: string
+  input: unknown
+  output: unknown
+  metadata: Record<string, unknown>
+}
+```
+
+## Data Flow
+
+### Agent Execution Flow
+
+```
+1. User requests agent execution (Renderer)
+   ↓
+2. IPC call to main process (Preload)
+   ↓
+3. Governance check (Main)
+   ├─ If approval required → Queue for human review
+   └─ If approved → Continue
+   ↓
+4. AgentManager executes agent via provider API (Main)
+   ↓
+5. Stream results back via IPC (Main → Renderer)
+   ↓
+6. Update UI with real-time progress (Renderer)
+   ↓
+7. Log execution to audit trail (Main)
+```
+
+### Team Coordination Flow
+
+```
+1. User defines team workflow (Renderer)
+   ↓
+2. Validate workflow structure (Main)
+   ↓
+3. Store team configuration (Main → Storage)
+   ↓
+4. On execution:
+   ├─ Load team configuration
+   ├─ Initialize agent instances
+   ├─ Execute workflow steps (TeamExecutionEngine)
+   ├─ Inter-agent communication
+   └─ Aggregate results
+   ↓
+6. Return team execution result
+```
+
+### Governance Approval Flow
+
+```
+1. Agent requests action requiring approval
+   ↓
+2. Create approval entry (Main)
+   ↓
+3. Notify renderer via IPC event
+   ↓
+4. Display in approval queue (Renderer)
+   ↓
+5. Human reviews and approves/rejects
+   ↓
+6. Send decision via IPC (Renderer → Main)
+   ↓
+7. Resume or cancel action (Main)
+   ↓
+8. Log decision to audit trail
+```
+
+## Security Architecture
+
+### 1. Process Isolation
+- Main process runs with elevated privileges
+- Renderer process sandboxed
+- No direct Node.js access in renderer
+- All file system operations via IPC
+
+### 2. Data Protection
+- Secrets stored in system keychain (keytar)
+- Database encryption at rest
+- Secure IPC communication
+- Input validation on all IPC calls
+
+### 3. Governance Controls
+- Approval queues for sensitive actions
+- Rate limiting per agent/team
+- Resource quotas (CPU, memory, API calls)
+- Content filtering for outputs
+- Audit trail for all actions
+
+### 4. Network Security
+- All external API calls through main process
+- Certificate pinning for critical endpoints
+- Request signing and validation
+- No direct network access from renderer
+
+## Performance Considerations
+
+### 1. Agent Execution
+- Long-running operations in worker threads
+- Stream results instead of buffering
+- Cancellation support for in-flight executions
+- Resource pooling for concurrent agents
+
+### 2. UI Responsiveness
+- Debounce expensive operations
+- Virtual scrolling for large lists
+- Lazy loading of audit logs
+- Web Workers for data processing
+
+### 3. Storage Optimization
+- Indexed SQLite queries
+- Pagination for large datasets
+- Archive old audit logs
+- Prune expired data
+
+## Error Handling
+
+### 1. IPC Errors
+- Graceful degradation
+- User-friendly error messages
+- Retry logic for transient failures
+- Error logging for debugging
+
+### 2. Agent Failures
+- Capture stack traces
+- Save partial results
+- Retry with exponential backoff
+- Notify user of failures
+
+### 3. Storage Errors
+- Fallback to in-memory cache
+- Data integrity checks
+- Recovery procedures
+- Backup and restore
+
+## Testing Strategy
+
+### 1. Unit Tests
+- IPC handler logic
+- Storage operations
+- Data transformations
+- Utility functions
+
+### 2. Integration Tests
+- IPC communication
+- Agent execution engine
+- Storage layer
+- Agent lifecycle
+
+### 3. E2E Tests
+- User workflows
+- Multi-window scenarios
+- Approval flows
+- Error recovery
+
+## Future Enhancements
+
+### 1. Plugin System
+- External agent providers
+- Custom governance rules
+- Third-party integrations
+- Extensible UI components
+
+### 2. Multi-User Support
+- User profiles
+- Permission system
+- Team collaboration
+- Shared workspaces
+
+### 3. Cloud Sync
+- Optional cloud backup
+- Cross-device sync
+- Remote agent execution
+- Distributed coordination
+
+### 4. Advanced Governance
+- ML-based anomaly detection
+- Automated policy enforcement
+- Risk scoring
+- Compliance reporting

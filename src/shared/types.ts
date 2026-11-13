@@ -1,133 +1,309 @@
-export type ConnectorId = 'custom' | 'openrouter' | 'deepseek' | 'hermes' | 'codex' | 'claude';
-export interface ConnectorModel { id: string; name: string; priceKnown: boolean; inputCentsPerMTok?: number; outputCentsPerMTok?: number; contextLength?: number; maxOutputTokens?: number; pricesRetrievedAt?: string; pricingSource?: string }
-export interface ConnectorDetection { installed: boolean; loggedIn: boolean; authMethod?: 'subscription' | 'api-key' | 'unknown' }
-export interface ConfigureConnector { pricingSource?: 'catalog' | 'user'; connectorId: ConnectorId; mode: 'api' | 'api-key' | 'cli-subscription'; baseUrl?: string; model: string; prices?: { inputCentsPerMTok: number; outputCentsPerMTok: number }; limits: { maxOutputTokens?: number; maxRunCents?: number; monthlyRunCap?: number; cliTimeoutSec?: number } }
-export type ConnectorConfig = (ProviderConfig & { connectorId: ConnectorId; mode: 'api'; priceKnown: true; pricingSource?: string; pricesRetrievedAt?: string }) | { connectorId: 'codex' | 'claude'; mode: 'cli-subscription'; model: string; monthlyRunCap: number; cliTimeoutSec: number };
-export interface ReviewInteraction {
-    id: string;
-    kind: string;
-    status: string;
-    sourceRunId: string | null;
-    idempotencyKey?: string | null;
-    addresseeUserId?: string | null;
-    resolverPolicy?: string;
-    continuationPolicy?: string;
-    payload?: { detailsMarkdown?: string };
+export type UserRole = 'owner' | 'admin' | 'member';
+
+export interface LocalUser {
+  id: string;
+  email: string;
+  name: string;
+  role: UserRole;
+  createdAt: string;
+  createdBy?: string;
 }
-export type SupervisorState = 'stopped' | 'starting' | 'ready' | 'unavailable' | 'crashed';
-export interface ProviderConfig {
-    baseUrl: string;
-    model: string;
-    inputCentsPerMTok: number;
-    outputCentsPerMTok: number;
-    maxOutputTokens: number;
-    maxRunCents: number;
-}
+
+export type ComputerAccessLevel = 'workspace' | 'authorized' | 'full';
+
 export interface Agent {
-    id: string;
-    name: string;
-    status?: string;
-    budgetMonthlyCents: number;
-    spentMonthlyCents: number;
+  id: string;
+  name: string;
+  description: string;
+  config: AgentConfig;
+  capabilities: string[];
+  permissions: AgentPermissions;
+  /** Shared agents can be executed by 'member' users (who cannot edit them). */
+  isShared?: boolean;
+  sharedBy?: string;
+  sharedAt?: string;
+  /** open-bot-avatar JSON definition (geometry only); auto-assigned when absent. */
+  avatar?: string;
+  /** Agent this one reports to (org hierarchy). Undefined = top level. */
+  managerId?: string;
+  createdAt: string;
+  updatedAt: string;
 }
-export interface Issue {
-    assigneeUserId?: string | null;
-    id: string;
-    title: string;
-    description?: string;
-    status: string;
+
+export interface Skill {
+  id: string;
+  name: string;
+  description: string;
+  prompt: string;
+  toolNames: string[];
+  createdAt: string;
+  updatedAt: string;
+  /** Times this skill was injected into an execution (auto-improvement signal). */
+  usageCount?: number;
+  lastUsedAt?: string;
+  /** Import provenance: URL the skill was imported from, git ref, schema version. */
+  source?: string;
+  sourceRef?: string;
+  version?: number;
 }
-export interface Run {
-    id: string;
-    issueId?: string;
-    status: string;
+
+export interface AgentConfig {
+  monthlyRunCap?: number;
+  executionTimeoutSeconds?: number;
+  model: string;
+  temperature: number;
+  maxTokens: number;
+  systemPrompt: string;
+  tools: ToolConfig[];
+  skillIds?: string[];
+  /** Per-agent computer access ceiling — can only narrow the install level. */
+  computerAccess?: ComputerAccessLevel;
+  /** Monthly LLM spend cap in USD; unset = unlimited. Enforced before each call. */
+  monthlyBudgetUsd?: number;
 }
-export interface TaskResult {
-    issueId?: string;
-    result: string;
-    costCents: number;
-    spent: number;
-    cap: number;
-    status: string;
+
+export interface CreateAgentInput extends AgentConfig {
+  name?: string;
+  description?: string;
+  capabilities?: string[];
+  /** open-bot-avatar JSON definition; auto-assigned from presets when absent. */
+  avatar?: string;
+  /** Agent this one reports to; must exist and must not create a cycle. */
+  managerId?: string;
 }
-export interface Encryptor {
-    encrypt(value: string): string;
-    decrypt(value: string): string;
+
+export interface ToolConfig {
+  name: string;
+  type: 'api' | 'file' | 'database' | 'custom';
+  config: Record<string, unknown>;
 }
-export interface BoardApi {
-    request<T = unknown>(method: string, path: string, body?: unknown): Promise<T>;
+
+export interface AgentPermissions {
+  canAccessNetwork: boolean;
+  canAccessFileSystem: boolean;
+  canExecuteCode: boolean;
+  maxExecutionTime: number;
 }
-export interface TestConnector { connectorId: ConnectorId; mode: ConfigureConnector["mode"]; baseUrl?: string; key?: string }
-export interface ConnectorTestResult { ok: boolean; models?: number; error?: "unavailable" | "http" | "invalid-response"; installed?: boolean; loggedIn?: boolean }
-export interface ZaosAPI {
-    openExternal(url: string): Promise<void>;
-    testConnector(payload: TestConnector): Promise<ConnectorTestResult>;
-    listConnectors(): Promise<{ id: ConnectorId; modes: string[] }[]>;
-    detectConnector(id: ConnectorId): Promise<ConnectorDetection>;
-    startConnectorLogin(id: ConnectorId): Promise<void>;
-    listConnectorModels(id: ConnectorId): Promise<ConnectorModel[]>;
-    configureConnector(config: ConfigureConnector): Promise<void>;
-    getStatus(): Promise<{
-        state: SupervisorState;
-        lastError?: string;
-        paidExecution: boolean;
-        configured?: boolean;
-        setupProgress?: number;
-        cap?: number;
-        logTail?: string;
-        lastResult?: TaskResult;
-    }>;
-    retryStartup(): Promise<void>;
-    openBoard(): Promise<void>;
-    createCompany(name: string): Promise<{
-        id: string;
-    }>;
-    createAgentFromTemplate(templateId: string, provider?: ProviderConfig): Promise<Agent>;
-    setProviderKey(key: string): Promise<void>;
-    setSpendCap(cap: number): Promise<void>;
-    setPaidExecution(enabled: boolean, consent: boolean): Promise<void>;
-    runTask(title: string, description: string): Promise<TaskResult>;
-    acceptReview(issueId: string): Promise<ReviewInteraction>;
-    listRuns(): Promise<Run[]>;
-    getTelemetry(): Promise<boolean>;
-    setTelemetry(enabled: boolean): Promise<void>;
+
+export interface Team {
+  id: string;
+  name: string;
+  description: string;
+  agentIds: string[];
+  workflow: Workflow;
+  createdAt: string;
+  updatedAt: string;
 }
-export interface IpcPayloads {
-    openExternal: { url: string };
-    testConnector: TestConnector;
-    listConnectors: Record<string, never>;
-    detectConnector: { id: ConnectorId };
-    startConnectorLogin: { id: ConnectorId };
-    listConnectorModels: { id: ConnectorId };
-    configureConnector: ConfigureConnector;
-    getStatus: Record<string, never>;
-    retryStartup: Record<string, never>;
-    openBoard: Record<string, never>;
-    createCompany: {
-        name: string;
-    };
-    createAgentFromTemplate: {
-        templateId: string;
-        provider?: ProviderConfig;
-    };
-    setProviderKey: {
-        key: string;
-    };
-    setSpendCap: {
-        cap: number;
-    };
-    setPaidExecution: {
-        enabled: boolean;
-        consent: boolean;
-    };
-    runTask: {
-        title: string;
-        description: string;
-    };
-    acceptReview: { issueId: string };
-    listRuns: Record<string, never>;
-    getTelemetry: Record<string, never>;
-    setTelemetry: {
-        enabled: boolean;
-    };
+
+export interface TeamConfig {
+  name: string;
+  description?: string;
+  agentIds?: string[];
+  workflow?: Workflow;
 }
+
+export interface Workflow {
+  id: string;
+  name: string;
+  steps: WorkflowStep[];
+  executionMode: 'sequential' | 'parallel' | 'conditional';
+}
+
+export interface WorkflowStep {
+  id: string;
+  agentId: string;
+  inputs: Record<string, unknown>;
+  condition?: string;
+  dependsOn?: string[];
+}
+
+export interface Approval {
+  id: string;
+  type: 'agent_action' | 'team_execution' | 'resource_access';
+  agentId: string;
+  agentName: string;
+  action: string;
+  context: Record<string, unknown>;
+  status: 'pending' | 'approved' | 'rejected';
+  createdAt: string;
+  reviewedAt?: string;
+  reviewedBy?: 'human' | 'remote' | string;
+  rejectionReason?: string;
+}
+
+export interface GovernanceRule {
+  id: string;
+  name: string;
+  type: 'approval_required' | 'rate_limit' | 'resource_constraint' | 'content_filter';
+  scope: 'agent' | 'team' | 'global';
+  scopeId?: string;
+  condition: RuleCondition;
+  action: RuleAction;
+  enabled: boolean;
+}
+
+export interface RuleCondition {
+  field: string;
+  operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'regex';
+  value: unknown;
+}
+
+export interface RuleAction {
+  type: 'block' | 'require_approval' | 'limit' | 'warn';
+  parameters?: Record<string, unknown>;
+}
+
+export interface AuditEntry {
+  id: string;
+  timestamp: string;
+  agentId: string;
+  agentName: string;
+  action: string;
+  input: Record<string, unknown>;
+  output: Record<string, unknown>;
+  metadata: Record<string, unknown>;
+  /** Local user who triggered the action ('system' for triggers/WhatsApp). */
+  userId?: string;
+}
+
+export interface AgentExecution {
+  dryRun?: boolean;
+  activatedSkillIds?: string[];
+  id: string;
+  agentId: string;
+  status: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
+  input: Record<string, unknown>;
+  output?: Record<string, unknown>;
+  error?: string;
+  startedAt?: string;
+  completedAt?: string;
+  progress: number;
+  /** Local user who initiated the execution ('system' for triggers/WhatsApp). */
+  userId?: string;
+}
+
+/** One tool call (or its result) recorded during an agent execution. */
+export interface ExecutionToolCall {
+  id: string;
+  executionId: string;
+  kind: 'call' | 'result';
+  name: string;
+  args?: Record<string, unknown>;
+  result?: string;
+  error?: string;
+  createdAt: string;
+}
+
+export interface AgentExecutionEvent {
+  executionId: string;
+  type: 'chunk' | 'tool_call' | 'tool_result' | 'status' | 'error';
+  data?: unknown;
+}
+
+export interface AgentTrigger {
+  /** Draft creates reviewable work without calling a model; run uses normal tool approvals. */
+  autonomy?: 'draft' | 'run';
+  id: string;
+  agentId: string;
+  name: string;
+  kind: 'interval' | 'daily' | 'webhook';
+  /** Minutes between runs (kind='interval'). */
+  intervalMinutes?: number;
+  /** HH:MM local time (kind='daily'). */
+  timeOfDay?: string;
+  /** Weekdays the daily trigger fires on, 0=Sun..6=Sat. Empty/undefined = every day. */
+  daysOfWeek?: number[];
+  /** Secret token in the webhook URL path (kind='webhook'). */
+  webhookToken?: string;
+  /** Task description sent to the agent on each run. */
+  prompt: string;
+  enabled: boolean;
+  lastRunAt?: string;
+  createdAt: string;
+}
+
+/** One recorded LLM call for cost accounting (USD, estimated from catalog prices). */
+export interface LlmUsageRecord {
+  id: string;
+  agentId: string;
+  executionId?: string;
+  model: string;
+  provider: string;
+  promptTokens: number;
+  completionTokens: number;
+  costUsd: number;
+  /** True when the provider stream died mid-call — billed anyway. */
+  partial?: boolean;
+  createdAt: string;
+}
+
+/** Every auto-routing decision, stored so strategies stay comparable/auditable. */
+export interface RoutingDecision {
+  id: string;
+  kind: 'skill' | 'model';
+  agentId?: string;
+  /** Short summary of what was being routed (task text excerpt). */
+  subject: string;
+  /** Candidates considered with their scores, e.g. [{id, score}]. */
+  candidates: Array<{ id: string; score: number }>;
+  /** What was picked (may be empty = nobody/nothing). */
+  decision: string[];
+  reason?: string;
+  createdAt: string;
+}
+
+/** Personal-brain memory item with temporal validity and outcome weighting. */
+export interface MemorySource {
+  /** Claimed evidence location; not independently verified. */
+  reference?: string;
+  agentId?: string;
+  executionId?: string;
+  capturedAt: string;
+}
+export interface MemoryRelation {
+  targetId: string;
+  type: 'refines' | 'updates' | 'contradicts' | 'related';
+  confidence: number;
+  createdAt: string;
+}
+export interface MemoryItem {
+  sources?: MemorySource[];
+  relations?: MemoryRelation[];
+  id: string;
+  kind: string;
+  content: string;
+  validFrom: string;
+  /** Set when superseded — the item stays as history but leaves active recall. */
+  validUntil?: string;
+  supersededBy?: string;
+  relatedIds?: string[];
+  /** Outcome stats: uses counted when returned by search, good/bad by run result. */
+  uses: number;
+  good: number;
+  bad: number;
+  /** Set when outcomes are consistently bad — demoted from recall. */
+  demoted?: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AppSettings {
+  memorySemanticSearch?: boolean;
+  memoryEmbeddingModel?: string;
+  theme: 'light' | 'dark' | 'auto';
+  language: string;
+  autoApprove: boolean;
+  defaultModel: string;
+  maxConcurrentExecutions: number;
+  auditRetentionDays: number;
+  onboardingCompleted?: boolean;
+  skillsAutoRoute?: boolean;
+  llmAutoRoute?: boolean;
+  /** When true (default), sensitive tools wait for human approval. */
+  toolApprovalRequired?: boolean;
+  /** Subtle synthesized UI sounds (approvals, completions, errors). Default off. */
+  soundEffects?: boolean;
+  /** Comma-separated enabled sound events; undefined/empty = all enabled. */
+  soundEvents?: string;
+}
+

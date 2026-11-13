@@ -1,0 +1,38 @@
+{
+  "state": {
+    "evidence": {
+      "oauth": "Live server accepted dynamic registration. App generated PKCE S256, state, loopback redirect and mcp:read URL. Same URL reached real sign-in page in independent integrated browser. No user login or token exchange completed yet. Twelve protocol unit tests use real SDK but fake HTTP responses.",
+      "local": "macOS default HTTPS handler is Chrome. All three main Chrome processes use automation profiles/no-startup-window; two also headless and proxy127.0.0.1:9 with blocked DNS. Native Chrome inspection timed out. No evidence of which process received the openExternal event.",
+      "install": "Installer persists reviewed prompt+rules+examples with toolNames:[] then adds skillId to chosen agent preserving existing tools; no scripts imported. Other preexisting routing may add other skills/tools."
+    }
+  },
+  "questions": {
+    "live_auth": {
+      "type": "choice",
+      "instructions": "Do the supplied facts support claiming that production account OAuth and authenticated skill installation were successfully tested?",
+      "criteria": {
+        "supports": "Production login/token/installation observed",
+        "insufficient": "Only discovery/login-page or mocked protocol verified",
+        "contradicts": "Evidence shows final authentication failed"
+      }
+    },
+    "browser_root": {
+      "type": "choice",
+      "instructions": "How strong is the claim that a particular headless Chrome process definitively caused the missing login window?",
+      "criteria": {
+        "proven": "Event delivery to that process verified",
+        "plausible": "Local automation browser evidence suggests cause but target unverified",
+        "unsupported": "No relevant local evidence"
+      }
+    },
+    "tool_authority": {
+      "type": "choice",
+      "instructions": "Does the installer evidence support that this imported skill itself grants no additional local tools? Distinguish existing agent permissions and other routing.",
+      "criteria": {
+        "supports": "Text-only skill has empty toolNames and existing permissions preserved",
+        "contradicts": "Imported skill grants tools",
+        "insufficient": "Not enough code behavior evidence"
+      }
+    }
+  }
+}

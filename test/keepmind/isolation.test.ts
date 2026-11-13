@@ -3,17 +3,17 @@ import { EventEmitter } from 'node:events';
 import { PassThrough, Writable } from 'node:stream';
 import type { spawn } from 'node:child_process';
 import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync, symlinkSync } from 'node:fs';
+import { realpathSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { FixtureKeepMindTransport, KeepMindService, KeepMindDeniedError, KeepMindUnavailableError, StdioKeepMindTransport } from '../../src/main/keepmind';
 import type { KeepMindTransport } from '../../src/main/keepmind';
-import { Orchestrator } from '../../src/main/orchestrator';
-import type { WorkspaceState } from '../../src/main/orchestrator';
+import { CompanyBrains } from '../../src/main/keepmind/CompanyBrains';
 const roots: string[] = [];
 const services: KeepMindService[] = [];
 afterEach(() => { services.forEach(s => s.dispose()); services.length = 0; roots.splice(0).forEach(root => rmSync(root, { recursive: true, force: true })); });
 function setup(transport?: KeepMindTransport) {
-    const root = mkdtempSync(join(tmpdir(), 'km-isolation-')); roots.push(root);
+    const root = mkdtempSync(join(realpathSync(tmpdir()), 'km-isolation-')); roots.push(root);
     cpSync(resolve('test/fixtures/keepmind'), root, { recursive: true });
     const service = new KeepMindService({ dataRoot: root, companyId: 'acme', transportFactory: context => transport ?? new FixtureKeepMindTransport(context.vault, context.companyId) });
     services.push(service);
@@ -87,16 +87,14 @@ it('sanitizes unavailable transport failures', async () => {
     await expect(service.health()).rejects.toBeInstanceOf(KeepMindUnavailableError);
     await expect(service.search('plan')).rejects.toThrow('KeepMind unavailable');
 });
-it.each([false, 'throws', 'foreign company'])('blocks orchestrator before any board/provider call: %s', async mode => {
-    const { service } = setup({ health: async () => { if (mode === 'throws') throw new Error('SECRET'); return mode !== false; }, call: vi.fn(), dispose() {} });
-    const state: WorkspaceState = { companyId: mode === 'foreign company' ? 'beta' : 'acme', agentId: 'a', managedAgentIds: ['a'], telemetry: false, cap: 100 };
-    const request = vi.fn();
-    const o = new Orchestrator({ request }, state, { node: '/node', runnerPath: '/runner', cwd: '/tmp' }, vi.fn(), () => ({}), undefined, undefined, service);
-    // Model an already-consented session without resuming a provider in this test.
-    Object.assign(o, { paid: true });
-    const result = await o.runTask('Task', 'Description');
-    expect(result).toMatchObject({ status: 'blocked', costCents: 0, result: 'KeepMind unavailable' });
-    expect(request).not.toHaveBeenCalled();
+it.each([false, 'throws'])('blocks required company context before provider calls: %s', async mode => {
+    const { service } = setup({ health: async () => { if (mode === 'throws') throw new Error('SECRET'); return false; }, call: vi.fn(), dispose() {} });
+    const settings = { getSetting: () => JSON.stringify([{ agentId: 'a', companyId: 'acme', dataRoot: '/tmp', node: '/node', entry: '/entry' }]), setSetting: vi.fn() };
+    const brains = new CompanyBrains(settings, () => service);
+    const provider = vi.fn();
+    await expect((async () => { await brains.health('a'); provider(); })()).rejects.toThrow('company memory connection is unavailable');
+    expect(provider).not.toHaveBeenCalled();
+    expect(brains.binding('another-agent')).toBeUndefined();
 });
 it('speaks stdio JSON-RPC and clears pending calls when the child is unavailable', async () => {
     const { root } = setup();

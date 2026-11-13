@@ -1,10 +1,10 @@
 # KeepMind OS main-process sidecar
 
-Construct `createCompanyKeepMind(dataRoot, workspace, { node, keepmindPackageRoot })`
-in the main process and inject it as the optional last Orchestrator constructor
-argument. No sidecar is started without explicit configuration. A workspace company
-change requires a fresh service; the orchestrator blocks mismatched company IDs.
-Dispose the service on workspace shutdown.
+The current app uses `CompanyBrains` to bind agents to company-specific
+`KeepMindService` instances. Configure it in Advanced → Separate company memory,
+or the headless workspace's `companyBrains` array. No sidecar starts without an
+explicit administrator binding. Changing a binding disposes the previous service.
+Agent/tool input cannot choose a company or endpoint.
 
 `dataRoot/companies/<companyId>/memory` is the company's separate vault.
 `dataRoot/keepmind/zaos-<companyId>/scopes.json` contains exactly one client.
@@ -35,12 +35,19 @@ single-client map written beside the canonical wrapped scopes file. The
 upstream MCP also keeps its own hashed access ledger under `memory/ops`;
 OS audit records are separate and outside the vault. Note writes remain denied.
 
-The orchestrator checks health and company binding before creating a task,
-changing run counters, or calling the board/provider. Failure returns a blocked
-result without vault text. Optional search/citations are deferred because the
-current execution path persists instructions and task descriptions in Paperclip.
-No snippets are persisted by this integration.
+The desktop and headless runner check required company memory before provider
+execution. Context retrieval and secondbrain_search use only the bound service;
+secondbrain_remember is denied for bound agents. Unbound agents retain the existing
+optional global Second Brain behavior. Company binding scopes this connector, not
+all independently granted tools or personal memory permissions.
 
-P1: encrypted unlock descriptor/keychain lifecycle, upstream external audit path
-configuration, ephemeral per-run citations that bypass Paperclip/PG storage,
-audit rotation/correlation, packaged sidecar discovery and live desktop validation.
+Authorized context becomes part of normal execution/checkpoint data in the local
+workspace. The connector audit contains no snippets; it is not a claim that all
+workspace storage is content-free. Existing encrypted unlock support must be
+provided by the operator's compatible MCP launcher; the app does not accept vault
+passphrases or enable plaintext fixtures through the UI. No live encrypted vault
+was available during migration tests.
+
+The retained `zaos-` client prefix and flat mcp-scopes.json preserve the legacy
+upstream contract. Packaged sidecar discovery, encrypted unlock descriptor
+lifecycle and audit rotation remain external/future work, as in the old PR.

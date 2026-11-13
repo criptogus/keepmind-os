@@ -1,53 +1,159 @@
 # KeepMind OS
 
-MVP v0.1 — private, pre-release
+A free, open-source developer workspace for goal-driven AI agent work. Local-first, MIT licensed, with your own models and data.
 
-A local-first desktop operating layer for human-governed agent teams, maintained
-by KeepMind and built on Paperclip (MIT). macOS is the first target.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Latest release](https://img.shields.io/github/v/release/criptogus/keepmind-os)](https://github.com/criptogus/keepmind-os/releases/latest)
+![Platform: macOS](https://img.shields.io/badge/platform-macOS-lightgrey.svg)
 
-License: TBD (pending owner decision)
+[Homepage](https://keepmind.io)
 
-The package metadata uses UNLICENSED until the owner decides the project license.
-See THIRD_PARTY_NOTICES.md for dependency notices and pending license checks.
+## Why
 
-Phase 3 adds the Electron shell, isolated preload, and owned React/Astryx screens
-around the existing core. Startup supervises the local Paperclip server, signs in
-the operator, disables signup, and audits managed agents before opening execution.
-The separate Paperclip board uses an authenticated, persistent session.
+Agent teams need a workspace where people can configure their tools, review sensitive actions, and inspect what happened. KeepMind OS brings execution, governance, memory, and integrations into a desktop app with local SQLite storage. Model calls and enabled integrations use external services.
 
-Use Node >=24.11.0 and `npm ci`. No dependencies were added for Phase 3.
+## Features
 
-- `npm test`: socket-free unit tests; two host socket tests are skipped by default.
-- `ZAOS_SOCKET_TESTS=1 npm test`: also run mock HTTP and fake-child server tests.
-- `npm run typecheck`: TypeScript verification.
-- `npm run test:integration`: real Paperclip + local mock provider; separate opt-in
-  suite with temporary storage, cleanup, and `evidence/integration-report.json`.
-- `npm run scan:secrets`: local heuristic secret scan.
+**Developer workspace**
 
-The sandbox denies loopback listening with EPERM. Real server integration and
-socket tests must be run by the operator outside it. Mock tests require no real
-provider key and generate no paid traffic.
+- Start with a goal, acceptance criteria and a repository-oriented template.
+- Track tasks, dependencies, comments and deliverables on a work board.
+- Review results before accepting completion; turn corrections into proposed project rules.
+- Export your work as JSON. No paid plans or KeepMind account required.
+- Optional local hybrid memory search and a standalone Node.js runner for your own server.
 
-Launch with `npm run dev` (builds and starts Electron), or `npm run build && npm start`.
-On Linux with an X server, run `xvfb-run -a env ZAOS_SMOKE_LINUX=1 npm run smoke:electron`
-after building. The smoke uses a temporary instance and a local mock provider,
-captures six PNGs in `evidence/screenshots`, and writes `evidence/smoke-report.json`.
-Electron and real Paperclip execution must be verified by the operator outside
-the restricted sandbox. Cross-platform packaging is unsigned and untested; see [Packaging](docs/PACKAGING.md). Restricted Claude Agent, Cursor, and Copilot SDKs are excluded from shipped apps; the default process-runner / BYOK path does not require them.
+See [Workspace guide](docs/WORKSPACE.md) for setup, guarantees and current limitations.
 
-Paid execution defaults off. Enabling requires a BYOK secret, known prices,
-positive monthly cap, and explicit consent. A cap of zero is rejected because
-Paperclip treats it as disabling its budget policy. Disabling pauses the agent.
-Runner output goes to human review, never automatic completion or publication.
+**Agents and teams**
 
-See [Architecture](docs/ARCHITECTURE.md), [Security model](docs/SECURITY-MODEL.md),
-[Spend policy](docs/SPEND-POLICY.md), [Telemetry](docs/TELEMETRY.md), and
-[Run on macOS](docs/RUN-MACOS.md). Paperclip is MIT; KeepMind OS does not copy
-CompanyOS code, UI, or assets. Dependency notices are in THIRD_PARTY_NOTICES.md.
+- Configure agents with prompts, models, tools, skills, and distinct avatars.
+- Build team workflows with sequential, parallel, or conditional steps.
+- Run agents and teams, inspect execution history, and cancel agent runs.
+- Use OpenAI and Anthropic through OAuth or API keys.
 
-Backend connectors: Custom OpenAI-compatible, OpenRouter (live model pricing),
-DeepSeek (dated peak rates), Hermes local gateway, Codex, and Claude. Codex and
-Claude support API keys with explicit operator prices; installed CLI delegation
-uses the CLI's own login and run/timeout caps. Claude subscription delegation is
-personal/local opt-in only, hidden by default; ZAOS_ENABLE_CLAUDE_SUBSCRIPTION=1
-enables it. See [ADR 0001](docs/adr/0001-subscription-cli-delegation.md).
+**Governance and visibility**
+
+- Review sensitive tool actions in a human approval queue and edit governance rules.
+- Inspect audit logs and model/skill routing decisions, including selection reasons.
+- Track estimated token costs per call and configure monthly budgets checked before each call, including concurrent in-process reservations. Estimates are not provider invoices; interrupted streams and estimation errors can exceed budgets.
+
+**Memory and skills**
+
+- Keep a personal Markdown memory vault with a local SQLite retrieval index.
+- Consolidate memories, retain superseded history, and retrieve across the full active corpus. Optional local embeddings combine semantic and keyword recall.
+- Create skills or import them from GitHub with provenance and text-only import restrictions.
+
+**Automation and integrations**
+
+- Schedule interval or daily triggers, or start agents through token-protected local webhooks.
+- Connect WhatsApp through Baileys and external application tools through Composio.
+- Connect to a Second Brain / KeepMind Corp server to search, read, and capture shared knowledge, with configurable write access and PII checks.
+
+**Desktop workspace**
+
+- English and Brazilian Portuguese interface strings, onboarding, theme settings, and an analytics dashboard.
+- Local SQLite persistence for agents, teams, settings, approvals, and execution records.
+
+## Screenshots
+
+<img src="docs/screenshots/dashboard.png" alt="Home dashboard with an ask-an-agent prompt, connections, agent, team, execution, and approval counters, and a getting-started checklist" width="100%">
+
+Ask an agent, monitor workspace activity, and follow the getting-started checklist from Home.
+
+<table>
+  <tr>
+    <td width="33%"><img src="docs/screenshots/onboarding.png" alt="First-run onboarding wizard for configuring a company, LLM provider, second brain, and first agent" width="100%"></td>
+    <td width="33%"><img src="docs/screenshots/agents.png" alt="Agents page displaying configured agents as cards" width="100%"></td>
+    <td width="33%"><img src="docs/screenshots/settings.png" alt="Settings page with appearance, language, governance and approvals, execution model, and data retention options" width="100%"></td>
+  </tr>
+  <tr>
+    <td>Set up your company, LLM provider, second brain, and first agent.</td>
+    <td>Browse and manage your agents from their cards.</td>
+    <td>Configure appearance, language, governance, execution, and data retention.</td>
+  </tr>
+</table>
+
+*Screenshots use fictional demo data.*
+
+## Download
+
+Get the [latest desktop release](https://github.com/criptogus/keepmind-os/releases/latest).
+
+| Mac | DMG filename |
+| --- | --- |
+| Apple Silicon | `KeepMind-OS-<version>-arm64.dmg` |
+| Intel | `KeepMind-OS-<version>.dmg` |
+
+Replace `<version>` with the release version. ZIP variants are also available.
+
+Builds are currently unsigned and not notarized. On first launch, macOS Gatekeeper may block the app. Right-click the app and choose **Open**, or use **System Settings > Privacy & Security > Open Anyway**.
+
+## Build from source
+
+Requires Node.js **>= 24.11.0** and npm. From the repository root:
+
+```bash
+npm ci
+npm run build
+npm start
+```
+
+Available commands:
+
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Start the Vite renderer development server only |
+| `npm run build` | Build the renderer, main process, and preload bridge |
+| `npm start` | Launch Electron using the built output |
+| `npm test` | Run unit tests |
+| `npm run typecheck` | Check TypeScript types |
+| `npm run dist:mac` | Build macOS DMG and ZIP packages |
+
+## Configuration
+
+KeepMind OS itself is free. Model providers and connected services may charge for their usage. Bring your own credentials; there is no KeepMind subscription.
+
+Configure OpenAI and Anthropic in the app's settings using OAuth or API keys. The `OPENAI_API_KEY` and `ANTHROPIC_API_KEY` environment variables are also supported. Configure optional integrations in the app before enabling them.
+
+## Architecture
+
+Electron and TypeScript separate privileged operations from the React interface:
+
+- **Main:** window lifecycle, agent/team execution, integrations, credentials, and SQLite storage.
+- **Preload:** a typed IPC bridge between the renderer and main process.
+- **Renderer:** React views and workspace state.
+- **Runner:** standalone Node.js CLI for read-only developer work and interval routines. Desktop execution still lives in the main process; the two do not automatically synchronize.
+- **Shared:** common types, model metadata, and avatar utilities.
+
+See [Architecture](docs/ARCHITECTURE.md) and the [architecture decisions](docs/adr/). The architecture document includes design proposals; the source is authoritative for current behavior.
+
+## Security
+
+See [SECURITY.md](SECURITY.md) for the security model and private vulnerability reporting.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, checks, and pull request guidelines.
+
+## Roadmap
+
+See the [development roadmap](docs/ROADMAP.md) for planned work.
+
+## License
+
+[MIT](LICENSE). See [third-party notices](THIRD_PARTY_NOTICES.md) for dependency notices.
+
+
+### Resume interrupted work
+
+The developer workspace now journals model responses and tool results. Use **Resume checkpoint** after an interruption. Completed tools are not replayed; uncertain external effects require a verified result before continuing. Pending checkpoint-bound approvals survive restart within their original 24-hour window. The headless runner supports `--inspect`, `--resume` and `--reconcile`. See [execution guarantees and boundaries](docs/WORKSPACE.md) for limits, data retention and recovery instructions.
+
+### Shared workspace and extensions
+
+Run `npm run runner -- --config examples/shared-workspace.json --serve --watch`
+to host a free workspace for your devices/team. Configure distinct environment
+tokens per person and project/agent grants, then use **Connections** in the desktop.
+Task changes synchronize from the server with conflict detection. MCP stdio and
+Streamable HTTP tools use the existing approvals and durable execution journal.
+New routines can draft tasks or execute for review. See
+[setup, permissions and limitations](docs/SHARED_WORKSPACES.md).
