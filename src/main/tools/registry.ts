@@ -19,6 +19,8 @@ export interface ToolContext {
   openUrl?: (url: string) => Promise<void>;
   /** Reads a web page via Jina Reader (clean markdown, no bot wall). */
   webReadUrl?: (url: string) => Promise<string>;
+  /** Clips a URL into the personal brain vault; returns a summary. */
+  webClipUrl?: (url: string) => Promise<string>;
   /** Returns Agent Reach channel/backent availability. */
   agentReachStatus?: () => Promise<unknown>;
   /** Per-execution computer access policy (merged over the global context). */
@@ -34,6 +36,9 @@ export interface ToolContext {
   /** Personal brain (local vault, never leaves the machine). */
   personalBrainSearch?: (query: string, limit?: number) => Promise<{ text: string; ids: string[] }>;
   personalBrainRemember?: (content: string, file?: string) => Promise<string>;
+  /** Granola meeting notes (requires the Granola connector). */
+  granolaSearchMeetings?: (query: string) => Promise<string>;
+  granolaGetMeeting?: (id: string) => Promise<string>;
   /** Collects ids of memory items returned to the model (outcome attribution). */
   memoryUsage?: Set<string>;
   /** Id of the agent running this execution (set per-execution via policy). */
@@ -55,6 +60,12 @@ export interface ExecutionPolicy {
   memoryUsage?: Set<string>;
   /** Id of the agent running this execution. */
   callerAgentId?: string;
+  /**
+   * Simulation mode: tool handlers are never invoked and the governance gate
+   * is skipped — every call returns a "would execute" description so the
+   * model can produce an action plan without side effects.
+   */
+  dryRun?: boolean;
 }
 
 export interface ToolDefinition {
@@ -179,6 +190,24 @@ export class ToolRegistry {
         if (!/^https?:\/\//i.test(url)) throw new Error('URL must start with http:// or https://');
         const text = await ctx.webReadUrl(url);
         return text.slice(0, 12000) || '(empty page)';
+      },
+    });
+
+    this.register({
+      name: 'web_clip_url',
+      description: 'Clips a web page into the PERSONAL brain vault as a clean Markdown file (main content only, boilerplate removed). Use to save articles, docs and references for later recall via personalbrain_search.',
+      parameters: {
+        type: 'object',
+        properties: {
+          url: { type: 'string', description: 'http(s) URL to clip' },
+        },
+        required: ['url'],
+      },
+      handler: async (args, ctx) => {
+        if (!ctx.webClipUrl) throw new Error('Web clipping is not available');
+        const url = String(args.url || '');
+        if (!/^https?:\/\//i.test(url)) throw new Error('URL must start with http:// or https://');
+        return ctx.webClipUrl(url);
       },
     });
 
@@ -495,6 +524,40 @@ export class ToolRegistry {
     });
 
     this.register({
+      name: 'granola_search_meetings',
+      description: 'Searches Granola meeting notes (titles, summaries, attendees) by keyword. Requires the Granola connector in Settings → Advanced. Synced meetings are also searchable via personalbrain_search.',
+      parameters: {
+        type: 'object',
+        properties: {
+          query: { type: 'string', description: 'Keywords to search meeting notes for' },
+        },
+        required: ['query'],
+      },
+      handler: async (args, ctx) => {
+        if (!ctx.granolaSearchMeetings) throw new Error('Granola is not connected');
+        const out = await ctx.granolaSearchMeetings(String(args.query));
+        return String(out).slice(0, 12000);
+      },
+    });
+
+    this.register({
+      name: 'granola_get_meeting',
+      description: 'Reads a full Granola meeting note (summary, private notes, transcript when the plan allows) by meeting ID from granola_search_meetings or list_meetings.',
+      parameters: {
+        type: 'object',
+        properties: {
+          id: { type: 'string', description: 'Granola meeting ID (e.g. not_...)' },
+        },
+        required: ['id'],
+      },
+      handler: async (args, ctx) => {
+        if (!ctx.granolaGetMeeting) throw new Error('Granola is not connected');
+        const out = await ctx.granolaGetMeeting(String(args.id));
+        return String(out).slice(0, 30000);
+      },
+    });
+
+    this.register({
       name: 'open_url',
       description: 'Opens a URL in the default web browser.',
       parameters: {
@@ -541,6 +604,10 @@ export class ToolRegistry {
   async execute(name: string, args: Record<string, unknown>, policy?: ExecutionPolicy): Promise<string> {
     const tool = this.tools.get(name);
     if (!tool) throw new Error(`Unknown tool: ${name}`);
+    if (policy?.dryRun) {
+      const summary = JSON.stringify(args).slice(0, 500);
+      return `[dry-run] would execute ${name}(${summary}) — nothing was run`;
+    }
     if (this.gate) {
       const denied = await this.gate(name, args).catch(() => null);
       if (denied) return denied;

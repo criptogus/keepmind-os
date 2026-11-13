@@ -106,8 +106,7 @@ export default function AgentList() {
               withBorder
               padding="md"
               radius="md"
-              className="km-enter"
-              style={{ cursor: 'pointer' }}
+              className="km-enter km-hoverable"
               onClick={() => selectAgent(agent.id)}
             >
               <Stack gap="xs">

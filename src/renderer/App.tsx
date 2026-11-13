@@ -3,6 +3,7 @@ import React, { Suspense, lazy, useState, useEffect } from 'react';
 const AgentList = lazy(() => import('./components/agents/AgentList'));
 const TeamList = lazy(() => import('./components/teams/TeamList'));
 const ApprovalQueue = lazy(() => import('./components/governance/ApprovalQueue'));
+const GovernanceOverview = lazy(() => import('./components/governance/GovernanceOverview'));
 const GovernanceRules = lazy(() => import('./components/governance/GovernanceRules'));
 const AuditLogs = lazy(() => import('./components/logs/AuditLogs'));
 const SettingsPanel = lazy(() => import('./components/settings/SettingsPanel'));
@@ -19,6 +20,7 @@ import { useThemeStore } from './store/themeStore';
 import { useLang } from './lib/i18n';
 import { useAppMode } from './lib/useAppMode';
 import TourOverlay, { type TourStep } from './components/tour/TourOverlay';
+import CommandPalette, { type PaletteCommand } from './components/common/CommandPalette';
 
 const TOUR_DONE_KEY = 'km-tour-done';
 
@@ -40,6 +42,8 @@ export default function App() {
   const [needsOnboarding, setNeedsOnboarding] = useState<boolean | null>(null);
   const [authState, setAuthState] = useState<{ hasUsers: boolean; currentUser: LocalUser | null } | null>(null);
   const [tourActive, setTourActive] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+  const { toggleTheme } = useThemeStore();
 
   const tourSteps = (tt: (k: string) => string): TourStep[] => [
     { title: tt('tour.welcome.title'), text: tt('tour.welcome.text') },
@@ -80,12 +84,19 @@ export default function App() {
     };
     fetchApprovals();
     const interval = setInterval(fetchApprovals, 5000);
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setPaletteOpen((o) => !o);
+      }
+    };
+    window.addEventListener('keydown', onKey);
     const unsubDeepLink = window.electronAPI.onDeepLink?.(({ section }) => {
       if (['dashboard', 'agents', 'teams', 'automations', 'skills', 'governance', 'logs', 'settings', 'advanced'].includes(section)) {
         setActiveSection(section);
       }
     });
-    return () => { clearInterval(interval); unsubDeepLink?.(); };
+    return () => { clearInterval(interval); window.removeEventListener('keydown', onKey); unsubDeepLink?.(); };
   }, [initTheme]);
 
   const { mode: appMode } = useAppMode();
@@ -106,11 +117,45 @@ export default function App() {
     ? allSidebarItems.filter((i) => !CORPORATE_ONLY.has(i.id))
     : allSidebarItems;
 
+  const paletteCommands: PaletteCommand[] = [
+    ...sidebarItems.map((item) => ({
+      id: `nav-${item.id}`,
+      label: `${t('cmdk.goTo')} ${item.label}`,
+      keywords: item.id,
+      run: () => setActiveSection(item.id),
+    })),
+    {
+      id: 'action-new-agent',
+      label: t('cmdk.newAgent'),
+      keywords: 'create agent novo',
+      run: () => setActiveSection('agents'),
+    },
+    {
+      id: 'action-approvals',
+      label: `${t('cmdk.goTo')} ${t('gov.pending')}`,
+      keywords: 'approve approval aprovar',
+      run: () => { setGovernanceTab('approvals'); setActiveSection('governance'); },
+    },
+    {
+      id: 'action-theme',
+      label: t('cmdk.toggleTheme'),
+      keywords: 'dark light tema',
+      run: () => void toggleTheme(),
+    },
+    {
+      id: 'action-tour',
+      label: t('cmdk.replayTour'),
+      keywords: 'help tutorial tour',
+      run: () => setTourActive(true),
+    },
+  ];
+
   const governanceTabs = [
+    { id: 'overview', label: t('govsum.title') },
     { id: 'approvals', label: t('gov.pending') },
     { id: 'rules', label: t('gov.rules') },
   ];
-  const [governanceTab, setGovernanceTab] = useState('approvals');
+  const [governanceTab, setGovernanceTab] = useState('overview');
 
   const renderContent = () => {
     if (appMode === 'personal' && CORPORATE_ONLY.has(activeSection)) {
@@ -151,7 +196,7 @@ export default function App() {
                 </button>
               ))}
             </div>
-            {governanceTab === 'approvals' ? <ApprovalQueue /> : <GovernanceRules />}
+            {governanceTab === 'overview' ? <GovernanceOverview /> : governanceTab === 'approvals' ? <ApprovalQueue /> : <GovernanceRules />}
           </div>
         );
       case 'logs':
@@ -213,6 +258,18 @@ export default function App() {
           }}>K</div>
           <h1 style={{ fontSize: 18, fontWeight: 600, color: 'var(--mantine-color-dark-8)', margin: 0 }}>KeepMind OS</h1>
         </div>
+        <Button
+          variant="default"
+          size="compact-sm"
+          radius="md"
+          onClick={() => setPaletteOpen(true)}
+          style={{ WebkitAppRegion: 'no-drag' } as React.CSSProperties}
+          leftSection={
+            <Text span size="xs" ff="monospace" c="dimmed">⌘K</Text>
+          }
+        >
+          {t('cmdk.placeholder')}
+        </Button>
       </header>
 
       <main style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
@@ -298,7 +355,7 @@ export default function App() {
           </div>
         </aside>
 
-        <div data-tour="content" style={{ flex: 1, padding: 24, overflowY: 'auto' }}>
+        <div data-tour="content" key={activeSection} className="km-fade" style={{ flex: 1, padding: 24, overflowY: 'auto' }}>
           <Suspense fallback={<Text size="sm" c="dimmed" ta="center" py="xl">{t('nav.loading')}</Text>}>
             {renderContent()}
           </Suspense>
@@ -312,6 +369,12 @@ export default function App() {
           onNavigate={setActiveSection}
         />
       )}
+
+      <CommandPalette
+        opened={paletteOpen}
+        onClose={() => setPaletteOpen(false)}
+        commands={paletteCommands}
+      />
     </div>
   );
 }

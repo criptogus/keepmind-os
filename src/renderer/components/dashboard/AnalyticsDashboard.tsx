@@ -21,10 +21,29 @@ interface ConnectionStatus {
   ok: boolean;
 }
 
+type Digest = Awaited<ReturnType<typeof window.electronAPI.activityDigest>>;
+
+function digestTotal(d: Digest): number {
+  return d.executions
+    + d.integrations.reduce((n, i) => n + (i.action === 'granola_sync' ? Number(i.output?.synced ?? 0) : 1), 0)
+    + d.whatsappMessages + d.memories;
+}
+
+function channelLabel(channel: string, t: (k: string) => string): string {
+  const map: Record<string, string> = {
+    schedule: t('dash2.chSchedule'),
+    webhook: t('dash2.chWebhook'),
+    whatsapp: t('dash2.chWhatsapp'),
+    manual: t('dash2.chManual'),
+    system: t('dash2.chSystem'),
+  };
+  return map[channel] || channel;
+}
+
 export default function AnalyticsDashboard({ onNavigate }: Props) {
   const { t } = useLang();
   const { mode: appMode, setMode: setAppMode } = useAppMode();
-  const { agents, fetchAgents, executeAgent } = useAgentStore();
+  const { agents, fetchAgents, executeAgent, simulateAgent } = useAgentStore();
   const { teams, fetchTeams } = useTeamStore();
   const [executions, setExecutions] = useState(0);
   const [runningExecs, setRunningExecs] = useState<AgentExecution[]>([]);
@@ -42,6 +61,7 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
   const [tipDismissed, setTipDismissed] = useState(() => {
     try { return localStorage.getItem('km.tipDismissed') === new Date().toDateString(); } catch { return false; }
   });
+  const [digest, setDigest] = useState<Awaited<ReturnType<typeof window.electronAPI.activityDigest>> | null>(null);
 
   useEffect(() => {
     const load = async () => {
@@ -77,6 +97,9 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
       try {
         setMonthlySpend(await window.electronAPI.getMonthlySpend());
       } catch { /* usage ledger unavailable */ }
+      try {
+        setDigest(await window.electronAPI.activityDigest());
+      } catch { /* digest unavailable */ }
     };
     load();
     // Presence strip: refresh running executions + elapsed clock every 5s.
@@ -118,7 +141,7 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
   ];
   const allConnected = connections.every((c) => c.ok);
 
-  const handleAsk = async () => {
+  const handleAsk = async (dryRun = false) => {
     if (!askAgentId || !askText.trim() || asking) return;
     setAsking(true);
     setAskError('');
@@ -131,8 +154,12 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
       } catch {
         input = { message: askText };
       }
-      await executeAgent(askAgentId, input);
-      sfxStart();
+      if (dryRun) {
+        await simulateAgent(askAgentId, input);
+      } else {
+        await executeAgent(askAgentId, input);
+        sfxStart();
+      }
       setAskText('');
       // Refresh presence strip immediately.
       try {
@@ -206,8 +233,11 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
                 onChange={(e) => setAskText(e.currentTarget.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) void handleAsk(); }}
               />
-              <Button onClick={() => void handleAsk()} loading={asking} disabled={!askAgentId || !askText.trim()}>
+              <Button onClick={() => void handleAsk(false)} loading={asking} disabled={!askAgentId || !askText.trim()}>
                 {t('dash2.askAgentBtn')}
+              </Button>
+              <Button variant="default" onClick={() => void handleAsk(true)} loading={asking} disabled={!askAgentId || !askText.trim()} title={t('agents.simulateHint')}>
+                {t('agents.simulate')}
               </Button>
             </Group>
             {askError && <Text size="xs" c="red">{askError}</Text>}
@@ -257,6 +287,41 @@ export default function AnalyticsDashboard({ onNavigate }: Props) {
           ))}
         </Group>
       </Card>
+
+      {digest && digestTotal(digest) > 0 && (
+        <Card withBorder padding="lg" radius="md">
+          <Stack gap="sm">
+            <Group justify="space-between">
+              <Text fw={600} size="sm">{t('dash2.whileAway')}</Text>
+              <Text size="xs" c="dimmed">{t('dash2.last24h')}</Text>
+            </Group>
+            <Group gap="md" wrap="wrap">
+              {digest.executions > 0 && (
+                <Text size="sm">
+                  <Text span fw={700}>{digest.executions}</Text> {t('dash2.agentsRan')}
+                  {Object.keys(digest.byChannel).length > 0 && (
+                    <Text span c="dimmed"> ({Object.entries(digest.byChannel).map(([k, v]) => `${v} ${channelLabel(k, t)}`).join(' · ')})</Text>
+                  )}
+                </Text>
+              )}
+              {digest.integrations.map((i) => (
+                <Text key={`${i.action}-${i.timestamp}`} size="sm">
+                  <Text span fw={700}>
+                    {i.action === 'granola_sync' ? Number(i.output?.synced ?? 0) : 1}
+                  </Text>{' '}
+                  {i.action === 'granola_sync' ? t('dash2.meetingsSynced') : t('dash2.pagesClipped')}
+                </Text>
+              ))}
+              {digest.whatsappMessages > 0 && (
+                <Text size="sm"><Text span fw={700}>{digest.whatsappMessages}</Text> {t('dash2.waIndexed')}</Text>
+              )}
+              {digest.memories > 0 && (
+                <Text size="sm"><Text span fw={700}>{digest.memories}</Text> {t('dash2.newMemories')}</Text>
+              )}
+            </Group>
+          </Stack>
+        </Card>
+      )}
 
       {runningExecs.length > 0 && (
         <Card withBorder padding="md" radius="md" className="km-enter">

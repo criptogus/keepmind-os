@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Badge, Button, Card, Group, Stack, Text, Title } from '@mantine/core';
 import { useAgentStore } from '../../store/agentStore';
-import type { AgentExecution } from '../../../shared/types.js';
+import type { AgentExecution, ExecutionToolCall } from '../../../shared/types.js';
 import { IconBolt } from '../common/icons.js';
 import { useLang } from '../../lib/i18n';
 import PixelSpinner from '../common/PixelSpinner';
@@ -41,6 +41,87 @@ function PlanStep({ state, label }: { state: 'todo' | 'doing' | 'done' | 'failed
       </span>
       <Text size="xs" c={state === 'todo' ? 'dimmed' : undefined} ff="monospace" style={{ wordBreak: 'break-all' }}>{label}</Text>
     </Group>
+  );
+}
+
+/** Collapsible persisted tool calls for a finished execution — "what the agent touched". */
+function ExecutionToolCalls({ executionId }: { executionId: string }) {
+  const { t } = useLang();
+  const [open, setOpen] = useState(false);
+  const [calls, setCalls] = useState<ExecutionToolCall[] | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const toggle = async () => {
+    const next = !open;
+    setOpen(next);
+    if (next && calls === null) {
+      setLoading(true);
+      try {
+        setCalls(await window.electronAPI.getExecutionToolCalls(executionId));
+      } catch {
+        setCalls([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  // Pair call/result rows into one item per invocation.
+  const items: Array<{ name: string; args?: unknown; result?: string; error?: string }> = [];
+  for (const c of calls ?? []) {
+    if (c.kind === 'call') {
+      items.push({ name: c.name, args: c.args });
+    } else {
+      const target = [...items].reverse().find((i) => i.name === c.name && i.result === undefined && i.error === undefined);
+      if (target) {
+        target.result = c.result;
+        target.error = c.error;
+      }
+    }
+  }
+
+  return (
+    <div>
+      <Button size="compact-xs" variant="subtle" onClick={() => void toggle()}>
+        {open ? `▾ ${t('aex.toolCalls')}` : `▸ ${t('aex.toolCalls')}`}
+      </Button>
+      {open && (
+        <Card withBorder padding="sm" radius="sm" mt={4} style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
+          {loading && <Text size="xs" c="dimmed">{t('logs.loading')}</Text>}
+          {!loading && items.length === 0 && <Text size="xs" c="dimmed">{t('govsum.empty')}</Text>}
+          <Stack gap={4}>
+            {items.map((tool, i) => {
+              const pending = tool.result === undefined && tool.error === undefined;
+              const failed = tool.error !== undefined;
+              return (
+                <Group key={i} gap={6} wrap="nowrap" align="flex-start">
+                  <span style={{ width: 14, display: 'inline-flex', justifyContent: 'center', flexShrink: 0, marginTop: 2 }}>
+                    {pending ? <PixelSpinner size={14} /> : failed ? (
+                      <Text span size="xs" fw={700}>!</Text>
+                    ) : (
+                      <Text span size="xs" fw={700}>✓</Text>
+                    )}
+                  </span>
+                  <div style={{ minWidth: 0 }}>
+                    <Text size="xs" ff="monospace" fw={500} style={{ wordBreak: 'break-all' }}>{tool.name}</Text>
+                    {tool.args !== undefined && (
+                      <Text size="xs" c="dimmed" ff="monospace" lineClamp={2} style={{ wordBreak: 'break-word' }}>
+                        {JSON.stringify(tool.args)}
+                      </Text>
+                    )}
+                    {(tool.result !== undefined || tool.error) && (
+                      <Text size="xs" c={failed ? 'dark' : 'dimmed'} ff="monospace" style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }} lineClamp={3}>
+                        {tool.error ? `error: ${tool.error}` : tool.result}
+                      </Text>
+                    )}
+                  </div>
+                </Group>
+              );
+            })}
+          </Stack>
+        </Card>
+      )}
+    </div>
   );
 }
 
@@ -214,7 +295,12 @@ export default function AgentExecutionView({ agentId }: AgentExecutionViewProps)
         <Card key={execution.id} withBorder padding="md" radius="md" className="km-enter">
           <Stack gap="sm">
             <Group justify="space-between">
-              <Badge size="sm" variant="light" color="gray">{execution.status}</Badge>
+              <Group gap={6}>
+                <Badge size="sm" variant="light" color="gray">{execution.status}</Badge>
+                {execution.output && typeof execution.output === 'object' && (execution.output as Record<string, unknown>).dryRun === true && (
+                  <Badge size="sm" variant="filled" color="yellow">{t('aex.dryRun')}</Badge>
+                )}
+              </Group>
               <Text size="xs" c="dimmed">
                 {execution.startedAt ? new Date(execution.startedAt).toLocaleString() : t('aex.notStarted')}
               </Text>
@@ -223,7 +309,7 @@ export default function AgentExecutionView({ agentId }: AgentExecutionViewProps)
             {execution.status === 'running' && (
               <>
                 <div className="km-progress" style={{ height: 4, backgroundColor: 'var(--mantine-color-gray-3)', borderRadius: 2, overflow: 'hidden' }}>
-                  <div style={{ height: '100%', width: `${execution.progress}%`, backgroundColor: '#111', transition: 'width 0.3s ease' }} />
+                  <div style={{ height: '100%', width: `${execution.progress}%`, backgroundColor: 'var(--mantine-color-dark-9)', transition: 'width 0.3s ease' }} />
                 </div>
                 <Text size="xs" c="dimmed">
                   {t('aex.elapsed')} {execution.startedAt ? fmtElapsed(now - new Date(execution.startedAt).getTime()) : '—'}
@@ -239,6 +325,34 @@ export default function AgentExecutionView({ agentId }: AgentExecutionViewProps)
                 </Text>
               </Card>
             </div>
+
+            {execution.output && typeof execution.output === 'object' && Array.isArray((execution.output as Record<string, unknown>).plannedActions) && (
+              <div>
+                <Text size="xs" fw={600} tt="uppercase" c="dimmed" mb={4}>{t('aex.plannedActions')}</Text>
+                <Card withBorder padding="sm" radius="sm" style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
+                  <Stack gap={4}>
+                    {((execution.output as Record<string, unknown>).plannedActions as Array<{ name: string; args: unknown }>).map((a, i) => (
+                      <Group key={i} gap={6} wrap="nowrap" align="flex-start">
+                        <Text span size="xs" ff="monospace" fw={600} c="dark">{i + 1}.</Text>
+                        <div style={{ minWidth: 0 }}>
+                          <Text size="xs" ff="monospace" fw={600} style={{ wordBreak: 'break-all' }}>{a.name}</Text>
+                          <Text size="xs" c="dimmed" ff="monospace" style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }} lineClamp={2}>
+                            {JSON.stringify(a.args)}
+                          </Text>
+                        </div>
+                      </Group>
+                    ))}
+                    {((execution.output as Record<string, unknown>).plannedActions as unknown[]).length === 0 && (
+                      <Text size="xs" c="dimmed">{t('aex.noActions')}</Text>
+                    )}
+                  </Stack>
+                </Card>
+              </div>
+            )}
+
+            {execution.status !== 'running' && execution.status !== 'pending' && (
+              <ExecutionToolCalls executionId={execution.id} />
+            )}
 
             {execution.output && (
               <div>

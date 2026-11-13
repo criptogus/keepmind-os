@@ -17,7 +17,7 @@ interface AgentEditorProps {
 
 export default function AgentEditor({ agentId, onClose }: AgentEditorProps) {
   const { t } = useLang();
-  const { selectedAgent, loading, error, updateAgent, deleteAgent, executeAgent, selectAgent, agents } = useAgentStore();
+  const { selectedAgent, loading, error, updateAgent, deleteAgent, executeAgent, simulateAgent, selectAgent, agents } = useAgentStore();
   const [activeTab, setActiveTab] = useState<string | null>('config');
   const [config, setConfig] = useState<AgentConfig | null>(null);
   const [avatarSel, setAvatarSel] = useState('auto');
@@ -62,11 +62,15 @@ export default function AgentEditor({ agentId, onClose }: AgentEditorProps) {
     }
   };
 
-  const handleExecute = async () => {
+  const handleExecute = async (dryRun = false) => {
     try {
       const input = JSON.parse(executionInput);
-      await executeAgent(agentId, input);
-      sfxStart();
+      if (dryRun) {
+        await simulateAgent(agentId, input);
+      } else {
+        await executeAgent(agentId, input);
+        sfxStart();
+      }
       setActiveTab('executions');
     } catch (err) {
       alert(t('ae.invalidJson'));
@@ -231,8 +235,11 @@ export default function AgentEditor({ agentId, onClose }: AgentEditorProps) {
                   value={executionInput}
                   onChange={(e) => setExecutionInput(e.currentTarget.value)}
                 />
-                <Group justify="flex-end">
-                  <Button size="xs" onClick={handleExecute}>{t('agents.run')}</Button>
+                <Group justify="flex-end" gap="xs">
+                  <Button size="xs" variant="default" onClick={() => handleExecute(true)} title={t('agents.simulateHint')}>
+                    {t('agents.simulate')}
+                  </Button>
+                  <Button size="xs" onClick={() => handleExecute(false)}>{t('agents.run')}</Button>
                 </Group>
               </Stack>
             </Card>

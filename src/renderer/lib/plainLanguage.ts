@@ -107,6 +107,9 @@ const TOOL_LABELS: Record<string, { en: string; pt: string }> = {
   composio_search_tools: { en: 'find app actions', pt: 'encontrar ações de apps' },
   composio_execute: { en: 'run actions in connected apps', pt: 'executar ações em apps conectados' },
   web_read_url: { en: 'read web pages', pt: 'ler páginas da web' },
+  web_clip_url: { en: 'save web pages to personal brain', pt: 'salvar páginas da web no cérebro pessoal' },
+  granola_search_meetings: { en: 'search Granola meetings', pt: 'buscar reuniões do Granola' },
+  granola_get_meeting: { en: 'read Granola meeting notes', pt: 'ler notas de reunião do Granola' },
   agent_reach_status: { en: 'check internet access tools', pt: 'verificar ferramentas de internet' },
   get_current_time: { en: 'check the current time', pt: 'verificar a hora atual' },
 };

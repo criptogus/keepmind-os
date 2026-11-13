@@ -11,6 +11,25 @@ export default function AuditLogs() {
   const [routing, setRouting] = useState<RoutingDecision[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [exporting, setExporting] = useState(false);
+  const [exportMsg, setExportMsg] = useState<string | null>(null);
+
+  const handleExport = async (format: 'json' | 'html') => {
+    setExporting(true);
+    setExportMsg(null);
+    try {
+      const res = format === 'json'
+        ? await window.electronAPI.exportAuditReceiptJson()
+        : await window.electronAPI.exportAuditReceiptHtml();
+      if (res.ok && res.path) {
+        setExportMsg(t('logs.receiptSaved').replace('{n}', String(res.entryCount ?? 0)));
+      }
+    } catch (err) {
+      setExportMsg(err instanceof Error ? err.message : String(err));
+    } finally {
+      setExporting(false);
+    }
+  };
 
   useEffect(() => {
     loadLogs();
@@ -44,7 +63,18 @@ export default function AuditLogs() {
         title={t('ph.logs.title')}
         subtitle={t('ph.logs.sub')}
         help={t('ph.logs.help')}
-        actions={<Button size="xs" variant="default" onClick={loadLogs}>{t('common.refresh')}</Button>}
+        actions={(
+          <Group gap="xs">
+            {exportMsg && <Text size="xs" c="dimmed">{exportMsg}</Text>}
+            <Button size="xs" variant="default" onClick={() => void handleExport('html')} loading={exporting}>
+              {t('logs.exportPdf')}
+            </Button>
+            <Button size="xs" variant="default" onClick={() => void handleExport('json')} loading={exporting}>
+              {t('logs.exportJson')}
+            </Button>
+            <Button size="xs" variant="default" onClick={loadLogs}>{t('common.refresh')}</Button>
+          </Group>
+        )}
       />
 
       {logs.length === 0 ? (

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Badge, Button, Card, Collapse, Group, Stack, Text, UnstyledButton } from '@mantine/core';
+import { Badge, Button, Card, Collapse, CopyButton, Group, Stack, Switch, Text, TextInput, UnstyledButton } from '@mantine/core';
 import { useGovernanceStore } from '../../store/governanceStore';
 import { useAgentStore } from '../../store/agentStore';
 import { useLang } from '../../lib/i18n';
@@ -22,10 +22,19 @@ export default function ApprovalQueue() {
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const [agents, setAgents] = useState<Agent[]>([]);
   const [now, setNow] = useState(Date.now());
+  const [remote, setRemote] = useState<{ enabled: boolean; url: string | null } | null>(null);
+  const [remoteBusy, setRemoteBusy] = useState(false);
   const seenIds = useRef<Set<string>>(new Set());
+
+  const refreshRemote = () => {
+    window.electronAPI.getRemoteApprovalsStatus()
+      .then(setRemote)
+      .catch(() => {});
+  };
 
   useEffect(() => {
     fetchPendingApprovals();
+    refreshRemote();
     void window.electronAPI.getAgents().then(setAgents).catch(() => {});
     const interval = setInterval(() => {
       fetchPendingApprovals();
@@ -96,6 +105,29 @@ export default function ApprovalQueue() {
           </Button>
         ) : undefined}
       />
+      <RemoteApprovalsCard
+        remote={remote}
+        busy={remoteBusy}
+        onToggle={async (enabled) => {
+          setRemoteBusy(true);
+          try {
+            const res = await window.electronAPI.setRemoteApprovalsEnabled(enabled);
+            setRemote({ enabled, url: res.url });
+          } finally {
+            setRemoteBusy(false);
+          }
+        }}
+        onRegenerate={async () => {
+          setRemoteBusy(true);
+          try {
+            const res = await window.electronAPI.regenerateRemoteApprovalsLink();
+            setRemote((r) => ({ enabled: r?.enabled ?? false, url: res.url }));
+          } finally {
+            setRemoteBusy(false);
+          }
+        }}
+      />
+
       {pendingApprovals.length > 0 && (
         <Badge size="sm" variant="light" color="gray" w="fit-content">{pendingApprovals.length} {t('common.pending')}</Badge>
       )}
@@ -169,5 +201,64 @@ export default function ApprovalQueue() {
         })
       )}
     </Stack>
+  );
+}
+
+function RemoteApprovalsCard({
+  remote,
+  busy,
+  onToggle,
+  onRegenerate,
+}: {
+  remote: { enabled: boolean; url: string | null } | null;
+  busy: boolean;
+  onToggle: (enabled: boolean) => Promise<void>;
+  onRegenerate: () => Promise<void>;
+}) {
+  const { t } = useLang();
+  const [open, setOpen] = useState(false);
+  const enabled = remote?.enabled === true;
+
+  return (
+    <Card withBorder padding="sm" radius="md">
+      <Group justify="space-between" wrap="nowrap">
+        <Group gap="xs" wrap="nowrap" style={{ minWidth: 0 }}>
+          <Text size="sm" fw={500}>{t('ap2.remoteTitle')}</Text>
+          {enabled && <Badge size="xs" variant="light" color="green">{t('ap2.remoteOn')}</Badge>}
+        </Group>
+        <Group gap="xs" wrap="nowrap">
+          {enabled && remote?.url && (
+            <Button size="compact-xs" variant="subtle" onClick={() => setOpen((o) => !o)}>
+              {open ? t('ap2.remoteHide') : t('ap2.remoteShow')}
+            </Button>
+          )}
+          <Switch
+            size="sm"
+            checked={enabled}
+            disabled={busy || remote === null}
+            onChange={(e) => void onToggle(e.currentTarget.checked)}
+            aria-label={t('ap2.remoteTitle')}
+          />
+        </Group>
+      </Group>
+      {enabled && open && remote?.url && (
+        <Stack gap="xs" mt="sm">
+          <Text size="xs" c="dimmed">{t('ap2.remoteHint')}</Text>
+          <Group gap="xs" wrap="nowrap">
+            <TextInput size="xs" value={remote.url} readOnly style={{ flex: 1 }} ff="monospace" />
+            <CopyButton value={remote.url} timeout={1500}>
+              {({ copied, copy }) => (
+                <Button size="compact-xs" variant="default" onClick={copy}>
+                  {copied ? t('ap2.remoteCopied') : t('ap2.remoteCopy')}
+                </Button>
+              )}
+            </CopyButton>
+            <Button size="compact-xs" variant="subtle" color="gray" loading={busy} onClick={() => void onRegenerate()}>
+              {t('ap2.remoteRotate')}
+            </Button>
+          </Group>
+        </Stack>
+      )}
+    </Card>
   );
 }

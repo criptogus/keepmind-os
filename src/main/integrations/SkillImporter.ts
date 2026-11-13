@@ -1,4 +1,6 @@
 import JSZip from 'jszip';
+import * as fs from 'node:fs/promises';
+import * as path from 'node:path';
 
 export interface ImportedSkill {
   name: string;
@@ -53,6 +55,101 @@ export async function importSkillsFromGitHub(url: string): Promise<SkillImportRe
   if (!res.ok) throw new Error(`Fetch failed (${res.status}) for ${rawUrl}`);
   const text = (await res.text()).slice(0, MAX_SKILL_MD_BYTES);
   return { skills: [parseSkillMarkdown(text, trimmed)], skipped: [] };
+}
+
+/**
+ * Imports skills from a local folder (plugin directory). Same rules as the
+ * GitHub importer: SKILL.md discovery up to 6 levels deep, text files only,
+ * size/file-count caps, provenance recorded as `local:<path>`.
+ */
+export async function importSkillsFromFolder(dir: string): Promise<SkillImportResult> {
+  const root = path.resolve(dir);
+  const stat = await fs.stat(root).catch(() => null);
+  if (!stat?.isDirectory()) throw new Error('Not a directory');
+
+  interface FileEntry { abs: string; rel: string }
+  const all: FileEntry[] = [];
+  const walk = async (absDir: string, relDir: string, depth: number) => {
+    if (depth > 6 || all.length >= MAX_FILES * 4) return;
+    let entries;
+    try { entries = await fs.readdir(absDir, { withFileTypes: true }); } catch { return; }
+    for (const e of entries) {
+      if (e.name.startsWith('.')) continue;
+      const abs = path.join(absDir, e.name);
+      const rel = relDir ? `${relDir}/${e.name}` : e.name;
+      if (e.isDirectory()) await walk(abs, rel, depth + 1);
+      else if (e.isFile()) all.push({ abs, rel });
+    }
+  };
+  await walk(root, '', 0);
+
+  // Skill folders = dirs containing SKILL.md (case-insensitive), up to 6 deep.
+  const skillDirs = new Set<string>();
+  for (const f of all) {
+    const parts = f.rel.split('/');
+    for (let i = parts.length - 1; i >= 0; i--) {
+      if (/^skill\.md$/i.test(parts[i]) && parts.slice(0, i).length <= 6) {
+        skillDirs.add(parts.slice(0, i).join('/'));
+        break;
+      }
+    }
+  }
+
+  const result: SkillImportResult = { skills: [], skipped: [] };
+  const sourceBase = `local:${root}`;
+  for (const dir of [...skillDirs].sort()) {
+    const prefix = dir ? `${dir}/` : '';
+    const files = all
+      .filter((f) => f.rel.startsWith(prefix))
+      .sort((a, b) => a.rel.localeCompare(b.rel));
+
+    const skillMd = files.find((f) => /(^|\/)skill\.md$/i.test(f.rel));
+    if (!skillMd) continue;
+    try {
+      const mdStat = await fs.stat(skillMd.abs);
+      if (mdStat.size > MAX_SKILL_MD_BYTES) {
+        result.skipped.push({ name: dir || path.basename(root), reason: 'SKILL.md too large (>512KB)' });
+        continue;
+      }
+
+      const textFiles: Array<{ path: string; text: string }> = [];
+      const ignored: string[] = [];
+      let textBytes = 0;
+      for (const f of files) {
+        const rel = f.rel.slice(prefix.length);
+        if (!rel || rel.includes('..')) continue;
+        const isText = ALLOWED_TEXT_EXT.test(rel);
+        const fStat = await fs.stat(f.abs).catch(() => null);
+        const size = fStat?.size ?? 0;
+        if (isText && textBytes + size <= MAX_TEXT_BYTES && textFiles.length < MAX_FILES) {
+          const content = await fs.readFile(f.abs, 'utf8');
+          textFiles.push({ path: rel, text: content });
+          textBytes += size;
+        } else {
+          ignored.push(rel);
+        }
+      }
+
+      const md = textFiles.find((x) => /(^|\/)skill\.md$/i.test(x.path));
+      if (!md) continue;
+      try {
+        const skill = parseSkillMarkdown(md.text, sourceBase);
+        skill.sourceRef = dir || undefined;
+        skill.files = textFiles.filter((x) => x !== md).map((x) => x.path);
+        if (ignored.length) skill.ignored = ignored;
+        result.skills.push(skill);
+      } catch (e) {
+        result.skipped.push({ name: dir || path.basename(root), reason: e instanceof Error ? e.message : 'invalid SKILL.md' });
+      }
+    } catch (e) {
+      result.skipped.push({ name: dir || path.basename(root), reason: e instanceof Error ? e.message : 'read failed' });
+    }
+  }
+
+  if (result.skills.length === 0 && result.skipped.length === 0) {
+    throw new Error('No SKILL.md found in this folder');
+  }
+  return result;
 }
 
 /** Back-compat single-skill entry point used by older callers. */

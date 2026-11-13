@@ -4,11 +4,12 @@ import { MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
 import App from './App';
 import { LangProvider } from './lib/i18n';
+import { theme } from './lib/theme';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <MantineProvider theme={{ primaryColor: 'dark' }}>
+    <MantineProvider theme={theme} defaultColorScheme="light">
       <LangProvider>
         <App />
       </LangProvider>

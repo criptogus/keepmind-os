@@ -3,7 +3,7 @@ import { randomUUID } from 'node:crypto';
 import * as path from 'path';
 import * as fs from 'fs';
 import { app } from 'electron';
-import type { Agent, Team, Approval, GovernanceRule, AuditEntry, AgentExecution, Skill, LocalUser, UserRole, LlmUsageRecord, RoutingDecision, MemoryItem } from '../../shared/types.js';
+import type { Agent, Team, Approval, GovernanceRule, AuditEntry, AgentExecution, ExecutionToolCall, Skill, LocalUser, UserRole, LlmUsageRecord, RoutingDecision, MemoryItem } from '../../shared/types.js';
 
 export class StorageManager {
   private db: DatabaseSync;
@@ -109,6 +109,23 @@ export class StorageManager {
         progress INTEGER NOT NULL DEFAULT 0
       )
     `);
+
+    // Tool calls executed during agent runs — the audit trail of "what the
+    // agent touched". One row per event (call or result), ordered by rowid.
+    this.db.exec(`
+      CREATE TABLE IF NOT EXISTS execution_tool_calls (
+        id TEXT PRIMARY KEY,
+        execution_id TEXT NOT NULL,
+        kind TEXT NOT NULL,
+        name TEXT NOT NULL,
+        args TEXT,
+        result TEXT,
+        error TEXT,
+        created_at TEXT NOT NULL
+      )
+    `);
+    this.db.exec(`CREATE INDEX IF NOT EXISTS idx_etc_execution ON execution_tool_calls(execution_id)`);
+    this.db.exec(`CREATE INDEX IF NOT EXISTS idx_etc_created ON execution_tool_calls(created_at)`);
 
     // Skills table
     this.db.exec(`
@@ -631,6 +648,57 @@ export class StorageManager {
     return rows.map((row) => this.rowToExecution(row));
   }
 
+  /** Persists one tool_call/tool_result event from an agent run. Best-effort. */
+  saveExecutionToolEvent(executionId: string, kind: 'call' | 'result', name: string, payload: { args?: unknown; result?: unknown; error?: unknown }): void {
+    try {
+      const stmt = this.db.prepare(`
+        INSERT INTO execution_tool_calls (id, execution_id, kind, name, args, result, error, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      `);
+      stmt.run(
+        randomUUID(),
+        executionId,
+        kind,
+        name,
+        payload.args !== undefined ? JSON.stringify(payload.args) : null,
+        payload.result !== undefined ? String(payload.result).slice(0, 4000) : null,
+        payload.error !== undefined ? String(payload.error) : null,
+        new Date().toISOString()
+      );
+    } catch { /* audit trail must never break a run */ }
+  }
+
+  /** All tool events for one execution, in order. */
+  getExecutionToolCalls(executionId: string): ExecutionToolCall[] {
+    const rows = this.db.prepare(`
+      SELECT * FROM execution_tool_calls WHERE execution_id = ? ORDER BY rowid ASC
+    `).all(executionId) as any[];
+    return rows.map((row) => ({
+      id: row.id,
+      executionId: row.execution_id,
+      kind: row.kind,
+      name: row.name,
+      args: row.args ? JSON.parse(row.args) : undefined,
+      result: row.result ?? undefined,
+      error: row.error ?? undefined,
+      createdAt: row.created_at,
+    }));
+  }
+
+  /** Tool usage counts since an ISO timestamp — powers governance "what agents touched". */
+  getToolUsageCounts(sinceIso: string, userId?: string): Array<{ name: string; count: number }> {
+    const join = userId
+      ? `JOIN agent_executions e ON e.id = etc.execution_id AND e.user_id = ?`
+      : '';
+    const rows = this.db.prepare(`
+      SELECT etc.name AS name, COUNT(*) AS count
+      FROM execution_tool_calls etc ${join}
+      WHERE etc.kind = 'call' AND etc.created_at >= ?
+      GROUP BY etc.name ORDER BY count DESC LIMIT 20
+    `).all(...(userId ? [userId, sinceIso] : [sinceIso])) as any[];
+    return rows.map((r) => ({ name: r.name, count: r.count }));
+  }
+
   updateAgentExecutionProgress(id: string, progress: number, status?: AgentExecution['status']): void {
     let stmt;
     if (status) {
@@ -754,6 +822,33 @@ export class StorageManager {
   getLlmUsage(limit = 100): LlmUsageRecord[] {
     const rows = this.db.prepare('SELECT * FROM llm_usage ORDER BY created_at DESC LIMIT ?').all(limit) as any[];
     return rows.map((r) => this.rowToUsage(r));
+  }
+
+  /**
+   * Per-model execution outcomes, joining the usage ledger to execution
+   * status. Powers outcome-weighted model routing: models with enough history
+   * and poor success rates get demoted in favor of proven alternatives.
+   */
+  getModelOutcomeStats(): Record<string, { completed: number; failed: number; total: number; successRate: number }> {
+    const rows = this.db.prepare(`
+      SELECT u.model AS model, e.status AS status, COUNT(*) AS n
+      FROM llm_usage u
+      JOIN agent_executions e ON e.id = u.execution_id
+      WHERE e.status IN ('completed', 'failed')
+      GROUP BY u.model, e.status
+    `).all() as any[];
+    const acc: Record<string, { completed: number; failed: number }> = {};
+    for (const r of rows) {
+      const m = acc[r.model] ??= { completed: 0, failed: 0 };
+      if (r.status === 'completed') m.completed += Number(r.n);
+      else m.failed += Number(r.n);
+    }
+    const out: Record<string, { completed: number; failed: number; total: number; successRate: number }> = {};
+    for (const [model, s] of Object.entries(acc)) {
+      const total = s.completed + s.failed;
+      out[model] = { ...s, total, successRate: total > 0 ? s.completed / total : 0 };
+    }
+    return out;
   }
 
   // Routing decisions

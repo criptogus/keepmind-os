@@ -21,6 +21,10 @@ export const useThemeStore = create<ThemeStore>((set, get) => ({
       const settings = await window.electronAPI.getSettings();
       set({ theme: settings.theme });
       updateTheme(settings.theme);
+      // 'auto' follows OS changes live.
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+        if (get().theme === 'auto') updateTheme('auto');
+      });
     } catch (error) {
       console.error('Failed to load theme:', error);
     }
@@ -48,9 +52,10 @@ export const useThemeStore = create<ThemeStore>((set, get) => ({
 
 function updateTheme(theme: 'light' | 'dark' | 'auto') {
   const isDark = theme === 'dark' || (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-  document.documentElement.classList.toggle('dark', isDark);
+  // Mantine reads the color scheme from this attribute (not a .dark class).
+  document.documentElement.setAttribute('data-mantine-color-scheme', isDark ? 'dark' : 'light');
   document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
-  
+
   // Update CSS variables
   if (isDark) {
     document.documentElement.style.setProperty('--bg-color', '#1f2937');

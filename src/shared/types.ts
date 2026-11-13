@@ -125,7 +125,7 @@ export interface Approval {
   status: 'pending' | 'approved' | 'rejected';
   createdAt: string;
   reviewedAt?: string;
-  reviewedBy?: 'human';
+  reviewedBy?: 'human' | 'remote' | string;
   rejectionReason?: string;
 }
 
@@ -176,6 +176,18 @@ export interface AgentExecution {
   progress: number;
   /** Local user who initiated the execution ('system' for triggers/WhatsApp). */
   userId?: string;
+}
+
+/** One tool call (or its result) recorded during an agent execution. */
+export interface ExecutionToolCall {
+  id: string;
+  executionId: string;
+  kind: 'call' | 'result';
+  name: string;
+  args?: Record<string, unknown>;
+  result?: string;
+  error?: string;
+  createdAt: string;
 }
 
 export interface AgentExecutionEvent {

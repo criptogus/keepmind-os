@@ -14,10 +14,17 @@
 body {
   margin: 0;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background-color: #f8f9fa;
-  color: #1a1b1e;
+  font-feature-settings: 'cv05', 'cv11';
+  letter-spacing: -0.006em;
+  /* Mantine color-scheme aware: stays in sync with light/dark/auto. */
+  background-color: var(--mantine-color-body);
+  color: var(--mantine-color-text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: var(--mantine-primary-color-light);
 }
 
 #root {
@@ -34,12 +41,12 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d0d5dd;
+  background: var(--mantine-color-gray-4);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #98a2b3;
+  background: var(--mantine-color-gray-5);
 }
 
 /* ---- Motion (inspired by agentes.chat's token system, monochrome) ---- */
@@ -58,6 +65,39 @@ body {
 }
 .km-enter {
   animation: km-enter var(--km-dur-panel) var(--km-out) both;
+}
+
+/* Staggered list entrances — apply km-d1..km-d4 alongside km-enter. */
+.km-d1 { animation-delay: 40ms; }
+.km-d2 { animation-delay: 80ms; }
+.km-d3 { animation-delay: 120ms; }
+.km-d4 { animation-delay: 160ms; }
+
+/* Clickable cards: gentle lift + deeper shadow on hover. */
+.km-hoverable {
+  cursor: pointer;
+}
+.km-hoverable:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(20, 19, 16, 0.10), 0 2px 6px rgba(20, 19, 16, 0.05) !important;
+  border-color: var(--mantine-color-gray-4) !important;
+}
+
+/* Page/section transitions: a soft fade when switching views. */
+@keyframes km-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.km-fade {
+  animation: km-fade 200ms var(--km-out) both;
+}
+
+/* Sidebar nav buttons: subtle press feedback. */
+.mantine-Button-root {
+  transition: transform 120ms var(--km-spring), background-color 140ms ease, color 140ms ease;
+}
+.mantine-Button-root:active {
+  transform: scale(0.985);
 }
 
 /* Live progress bar: a soft sheen sweeping while work runs. */
@@ -87,7 +127,10 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .km-enter,
-  .km-progress::after {
+  .km-fade,
+  .km-progress::after,
+  .mantine-Button-root {
     animation: none;
+    transition: none;
   }
 }

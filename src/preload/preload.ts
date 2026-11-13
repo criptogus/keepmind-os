@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron';
-import type { Agent, Team, Approval, GovernanceRule, AuditEntry, AgentExecution, AgentConfig, CreateAgentInput, TeamConfig, AppSettings, Skill, AgentTrigger, LocalUser, UserRole, ComputerAccessLevel, LlmUsageRecord, RoutingDecision, MemoryItem } from '../shared/types.js';
+import type { Agent, Team, Approval, GovernanceRule, AuditEntry, AgentExecution, ExecutionToolCall, AgentConfig, CreateAgentInput, TeamConfig, AppSettings, Skill, AgentTrigger, LocalUser, UserRole, ComputerAccessLevel, LlmUsageRecord, RoutingDecision, MemoryItem } from '../shared/types.js';
 import type { ModelCatalogResponse } from '../shared/models.js';
 
 contextBridge.exposeInMainWorld('electronAPI', {
@@ -20,8 +20,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
   updateAgent: (id: string, updates: Partial<AgentConfig> & { avatar?: string | null; managerId?: string | null }) => ipcRenderer.invoke('agents:update', id, updates) as Promise<Agent>,
   deleteAgent: (id: string) => ipcRenderer.invoke('agents:delete', id) as Promise<void>,
   executeAgent: (id: string, input: Record<string, unknown>) => ipcRenderer.invoke('agents:execute', id, input) as Promise<AgentExecution>,
+  executeAgentDryRun: (id: string, input: Record<string, unknown>) => ipcRenderer.invoke('agents:executeDryRun', id, input) as Promise<AgentExecution>,
   cancelExecution: (executionId: string) => ipcRenderer.invoke('agents:cancelExecution', executionId) as Promise<void>,
   getAgentExecutions: (agentId?: string) => ipcRenderer.invoke('agents:getExecutions', agentId) as Promise<AgentExecution[]>,
+  getExecutionToolCalls: (executionId: string) => ipcRenderer.invoke('executions:getToolCalls', executionId) as Promise<ExecutionToolCall[]>,
 
   // Teams
   getTeams: () => ipcRenderer.invoke('teams:getList') as Promise<Team[]>,
@@ -53,8 +55,15 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getGovernanceRules: () => ipcRenderer.invoke('governance:getRules') as Promise<GovernanceRule[]>,
   deleteGovernanceRule: (ruleId: string) => ipcRenderer.invoke('governance:deleteRule', ruleId) as Promise<void>,
 
+  // Remote approvals (LAN companion page)
+  getRemoteApprovalsStatus: () => ipcRenderer.invoke('remoteApprovals:status') as Promise<{ enabled: boolean; url: string | null }>,
+  setRemoteApprovalsEnabled: (enabled: boolean) => ipcRenderer.invoke('remoteApprovals:setEnabled', enabled) as Promise<{ ok: boolean; url: string | null }>,
+  regenerateRemoteApprovalsLink: () => ipcRenderer.invoke('remoteApprovals:regenerateLink') as Promise<{ ok: boolean; url: string | null }>,
+
   // Audit Logs
   getAuditLogs: (limit?: number, offset?: number) => ipcRenderer.invoke('audit:getLogs', limit, offset) as Promise<AuditEntry[]>,
+  exportAuditReceiptJson: () => ipcRenderer.invoke('audit:exportReceiptJson') as Promise<{ ok: boolean; canceled?: boolean; path?: string; entryCount?: number; head?: string; error?: string }>,
+  exportAuditReceiptHtml: () => ipcRenderer.invoke('audit:exportReceiptHtml') as Promise<{ ok: boolean; canceled?: boolean; path?: string; entryCount?: number; head?: string; error?: string }>,
 
   // Settings
   getSettings: () => ipcRenderer.invoke('settings:get') as Promise<AppSettings>,
@@ -91,6 +100,38 @@ contextBridge.exposeInMainWorld('electronAPI', {
     ipcRenderer.invoke('secondbrain:setConfig', config) as Promise<{ enabled: boolean; url: string; hasToken: boolean; access?: string; blockPii?: boolean }>,
   secondBrainTest: () => ipcRenderer.invoke('secondbrain:test') as Promise<{ ok: boolean; error?: string }>,
 
+  // Granola meetings connector (OAuth)
+  granolaGetStatus: () => ipcRenderer.invoke('granola:getStatus') as Promise<{ enabled: boolean; connected: boolean; account?: string; lastSync?: string; lastSyncError?: string; syncedCount: number; syncMinutes: number }>,
+  granolaConnect: () => ipcRenderer.invoke('granola:connect') as Promise<{ ok: boolean; account?: string; error?: string }>,
+  granolaDisconnect: () => ipcRenderer.invoke('granola:disconnect') as Promise<{ ok: boolean }>,
+  granolaTest: () => ipcRenderer.invoke('granola:test') as Promise<{ ok: boolean; tools?: string[]; error?: string }>,
+  granolaSyncNow: () => ipcRenderer.invoke('granola:syncNow') as Promise<{ synced: number; skipped: number; removed?: number; error?: string }>,
+  granolaSetSyncMinutes: (minutes: number) => ipcRenderer.invoke('granola:setSyncMinutes', minutes) as Promise<{ ok: boolean; syncMinutes: number }>,
+
+  // Activity digest ("while you were away")
+  activityDigest: () => ipcRenderer.invoke('activity:digest') as Promise<{
+    windowHours: number;
+    executions: number;
+    byChannel: Record<string, number>;
+    recentExecs: Array<{ id: string; agentId: string; status: string; channel: string; startedAt?: string }>;
+    integrations: Array<{ action: string; agentName: string; timestamp: string; output: Record<string, unknown> }>;
+    whatsappMessages: number;
+    memories: number;
+  }>,
+
+  // Governance overview ("who did what, where")
+  governanceSummary: () => ipcRenderer.invoke('governance:summary') as Promise<{
+    totalEntries: number;
+    totalExecutions: number;
+    byCategory: Record<string, number>;
+    byUser: Array<{ userId: string; count: number }>;
+    topActions: Array<{ action: string; count: number }>;
+    approvals: { pending: number; approved: number; rejected: number };
+    execByStatus: Record<string, number>;
+    execByChannel: Record<string, number>;
+    recent: Array<{ id: string; timestamp: string; userId: string; agentName: string; action: string; category: string }>;
+  }>,
+
   // App mode (personal | corporate) and guided brain-product install
   appGetMode: () => ipcRenderer.invoke('app:getMode') as Promise<'personal' | 'corporate' | 'unset'>,
   appSetMode: (mode: 'personal' | 'corporate') =>
@@ -112,6 +153,20 @@ contextBridge.exposeInMainWorld('electronAPI', {
   listSkillTools: () => ipcRenderer.invoke('skills:listTools') as Promise<Array<{ name: string; description: string }>>,
   improveSkill: (id: string) => ipcRenderer.invoke('skills:improve', id) as Promise<{ improvedPrompt: string }>,
   importSkillFromGitHub: (url: string) => ipcRenderer.invoke('skills:importGitHub', url) as Promise<{
+    skills: Array<{ name: string; description: string; prompt: string; toolNames: string[]; source: string; sourceRef?: string; files?: string[]; ignored?: string[] }>;
+    skipped: Array<{ name: string; reason: string }>;
+  }>,
+  importSkillFromFolder: (dir?: string) => ipcRenderer.invoke('skills:importFolder', dir) as Promise<{
+    skills: Array<{ name: string; description: string; prompt: string; toolNames: string[]; source: string; sourceRef?: string; files?: string[]; ignored?: string[] }>;
+    skipped: Array<{ name: string; reason: string }>;
+    canceled?: boolean;
+  }>,
+  listSkillMarketplace: () => ipcRenderer.invoke('skills:listMarketplace') as Promise<Array<{
+    id: string; name: string; description: string; source: string;
+    tags: string[]; audience: string; version: string; featured?: boolean;
+    installed: boolean; installedCount: number;
+  }>>,
+  installSkillFromMarketplace: (id: string) => ipcRenderer.invoke('skills:installMarketplace', id) as Promise<{
     skills: Array<{ name: string; description: string; prompt: string; toolNames: string[]; source: string; sourceRef?: string; files?: string[]; ignored?: string[] }>;
     skipped: Array<{ name: string; reason: string }>;
   }>,
@@ -236,8 +291,10 @@ declare global {
       updateAgent: (id: string, updates: Partial<AgentConfig> & { avatar?: string | null; managerId?: string | null }) => Promise<Agent>;
       deleteAgent: (id: string) => Promise<void>;
       executeAgent: (id: string, input: Record<string, unknown>) => Promise<AgentExecution>;
+      executeAgentDryRun: (id: string, input: Record<string, unknown>) => Promise<AgentExecution>;
       cancelExecution: (executionId: string) => Promise<void>;
       getAgentExecutions: (agentId?: string) => Promise<AgentExecution[]>;
+      getExecutionToolCalls: (executionId: string) => Promise<ExecutionToolCall[]>;
       getTeams: () => Promise<Team[]>;
       getTeam: (id: string) => Promise<Team | null>;
       createTeam: (config: TeamConfig) => Promise<Team>;
@@ -264,7 +321,12 @@ declare global {
       setGovernanceRule: (rule: GovernanceRule) => Promise<void>;
       getGovernanceRules: () => Promise<GovernanceRule[]>;
       deleteGovernanceRule: (ruleId: string) => Promise<void>;
+      getRemoteApprovalsStatus: () => Promise<{ enabled: boolean; url: string | null }>;
+      setRemoteApprovalsEnabled: (enabled: boolean) => Promise<{ ok: boolean; url: string | null }>;
+      regenerateRemoteApprovalsLink: () => Promise<{ ok: boolean; url: string | null }>;
       getAuditLogs: (limit?: number, offset?: number) => Promise<AuditEntry[]>;
+      exportAuditReceiptJson: () => Promise<{ ok: boolean; canceled?: boolean; path?: string; entryCount?: number; head?: string; error?: string }>;
+      exportAuditReceiptHtml: () => Promise<{ ok: boolean; canceled?: boolean; path?: string; entryCount?: number; head?: string; error?: string }>;
       getSettings: () => Promise<AppSettings>;
       updateSettings: (settings: Partial<AppSettings>) => Promise<Record<string, string>>;
       setApiKey: (provider: 'openai' | 'anthropic', key: string) => Promise<void>;
@@ -290,6 +352,33 @@ declare global {
       secondBrainSetConfig: (config: { enabled?: boolean; url?: string; token?: string; access?: 'read' | 'write'; blockPii?: boolean }) =>
         Promise<{ enabled: boolean; url: string; hasToken: boolean; access?: string; blockPii?: boolean }>;
       secondBrainTest: () => Promise<{ ok: boolean; error?: string }>;
+      granolaGetStatus: () => Promise<{ enabled: boolean; connected: boolean; account?: string; lastSync?: string; lastSyncError?: string; syncedCount: number; syncMinutes: number }>;
+      granolaConnect: () => Promise<{ ok: boolean; account?: string; error?: string }>;
+      granolaDisconnect: () => Promise<{ ok: boolean }>;
+      granolaTest: () => Promise<{ ok: boolean; tools?: string[]; error?: string }>;
+      granolaSyncNow: () => Promise<{ synced: number; skipped: number; removed?: number; error?: string }>;
+      granolaSetSyncMinutes: (minutes: number) => Promise<{ ok: boolean; syncMinutes: number }>;
+      activityDigest: () => Promise<{
+        windowHours: number;
+        executions: number;
+        byChannel: Record<string, number>;
+        recentExecs: Array<{ id: string; agentId: string; status: string; channel: string; startedAt?: string }>;
+        integrations: Array<{ action: string; agentName: string; timestamp: string; output: Record<string, unknown> }>;
+        whatsappMessages: number;
+        memories: number;
+      }>;
+      governanceSummary: () => Promise<{
+        totalEntries: number;
+        totalExecutions: number;
+        byCategory: Record<string, number>;
+        byUser: Array<{ userId: string; count: number }>;
+        topActions: Array<{ action: string; count: number }>;
+        approvals: { pending: number; approved: number; rejected: number };
+        execByStatus: Record<string, number>;
+        execByChannel: Record<string, number>;
+        topTools: Array<{ name: string; count: number }>;
+        recent: Array<{ id: string; timestamp: string; userId: string; agentName: string; action: string; category: string }>;
+      }>;
       appGetMode: () => Promise<'personal' | 'corporate' | 'unset'>;
       appSetMode: (mode: 'personal' | 'corporate') => Promise<{ ok: boolean; mode?: string; error?: string }>;
       brainInstallProduct: (product: 'personal' | 'corporate') => Promise<{ ok: boolean; path?: string; error?: string }>;
@@ -325,6 +414,20 @@ declare global {
       listSkillTools: () => Promise<Array<{ name: string; description: string }>>;
       improveSkill: (id: string) => Promise<{ improvedPrompt: string }>;
       importSkillFromGitHub: (url: string) => Promise<{
+        skills: Array<{ name: string; description: string; prompt: string; toolNames: string[]; source: string; sourceRef?: string; files?: string[]; ignored?: string[] }>;
+        skipped: Array<{ name: string; reason: string }>;
+      }>;
+      importSkillFromFolder: (dir?: string) => Promise<{
+        skills: Array<{ name: string; description: string; prompt: string; toolNames: string[]; source: string; sourceRef?: string; files?: string[]; ignored?: string[] }>;
+        skipped: Array<{ name: string; reason: string }>;
+        canceled?: boolean;
+      }>;
+      listSkillMarketplace: () => Promise<Array<{
+        id: string; name: string; description: string; source: string;
+        tags: string[]; audience: string; version: string; featured?: boolean;
+        installed: boolean; installedCount: number;
+      }>>;
+      installSkillFromMarketplace: (id: string) => Promise<{
         skills: Array<{ name: string; description: string; prompt: string; toolNames: string[]; source: string; sourceRef?: string; files?: string[]; ignored?: string[] }>;
         skipped: Array<{ name: string; reason: string }>;
       }>;
