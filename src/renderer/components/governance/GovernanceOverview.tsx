@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Badge, Card, Group, SimpleGrid, Stack, Table, Text } from '@mantine/core';
+import { Badge, Button, Card, Group, SimpleGrid, Stack, Table, Text } from '@mantine/core';
+import LoadFeedback from '../common/LoadFeedback';
 import { useLang } from '../../lib/i18n';
 
 type Summary = Awaited<ReturnType<typeof window.electronAPI.governanceSummary>>;
@@ -13,24 +14,26 @@ function categoryLabel(cat: string, t: (k: string) => string): string {
 }
 
 export default function GovernanceOverview() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const [data, setData] = useState<Summary | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    window.electronAPI.governanceSummary()
-      .then(setData)
-      .catch((e) => setError(e instanceof Error ? e.message : String(e)));
-  }, []);
-
-  if (error) return <Text c="dimmed">{t('common.error')}: {error}</Text>;
-  if (!data) return <Text c="dimmed" ta="center" py="xl">{t('logs.loading')}</Text>;
+  const [loading, setLoading] = useState(true);
+  const load = () => {
+    setError(null); setLoading(true);
+    void window.electronAPI.governanceSummary().then(setData)
+      .catch(e => setError(e instanceof Error ? e.message : String(e))).finally(() => setLoading(false));
+  };
+  useEffect(load, []);
+  if (!data) return <LoadFeedback loading={!error} error={error} retry={load} />;
 
   const catEntries = Object.entries(data.byCategory).sort((a, b) => b[1] - a[1]);
   const failedExecs = data.execByStatus.failed || 0;
 
   return (
-    <Stack gap="md">
+    <Stack gap="md" className="km-enter">
+      <Group justify="flex-end"><Button size="xs" variant="default" loading={loading} onClick={load}>{t('common.refresh')}</Button></Group>
+      <LoadFeedback loading={loading} error={error} retry={load} />
       <SimpleGrid cols={{ base: 2, sm: 4 }}>
         <Card withBorder padding="md" radius="md">
           <Text size="xs" c="dimmed" tt="uppercase">{t('govsum.auditEntries')}</Text>
@@ -60,7 +63,7 @@ export default function GovernanceOverview() {
       <SimpleGrid cols={{ base: 1, md: 2 }}>
         <Card withBorder padding="md" radius="md">
           <Text fw={600} size="sm" mb="xs">{t('govsum.byCategory')}</Text>
-          <Table striped highlightOnHover>
+          <Table.ScrollContainer minWidth={320}><Table className="km-data-table" highlightOnHover>
             <Table.Tbody>
               {catEntries.map(([cat, count]) => (
                 <Table.Tr key={cat}>
@@ -74,12 +77,12 @@ export default function GovernanceOverview() {
                 <Table.Tr><Table.Td><Text size="sm" c="dimmed">{t('govsum.empty')}</Text></Table.Td></Table.Tr>
               )}
             </Table.Tbody>
-          </Table>
+          </Table></Table.ScrollContainer>
         </Card>
 
         <Card withBorder padding="md" radius="md">
           <Text fw={600} size="sm" mb="xs">{t('govsum.byUser')}</Text>
-          <Table striped highlightOnHover>
+          <Table.ScrollContainer minWidth={320}><Table className="km-data-table" highlightOnHover>
             <Table.Tbody>
               {data.byUser.map((u) => (
                 <Table.Tr key={u.userId}>
@@ -91,7 +94,7 @@ export default function GovernanceOverview() {
                 <Table.Tr><Table.Td><Text size="sm" c="dimmed">{t('govsum.empty')}</Text></Table.Td></Table.Tr>
               )}
             </Table.Tbody>
-          </Table>
+          </Table></Table.ScrollContainer>
         </Card>
       </SimpleGrid>
 
@@ -110,7 +113,7 @@ export default function GovernanceOverview() {
 
       <Card withBorder padding="md" radius="md">
         <Text fw={600} size="sm" mb="xs">{t('govsum.recentActivity')}</Text>
-        <Table striped highlightOnHover>
+        <Table.ScrollContainer minWidth={320}><Table className="km-data-table" highlightOnHover>
           <Table.Thead>
             <Table.Tr>
               <Table.Th>{t('govsum.when')}</Table.Th>
@@ -122,7 +125,7 @@ export default function GovernanceOverview() {
           <Table.Tbody>
             {data.recent.map((r) => (
               <Table.Tr key={r.id}>
-                <Table.Td><Text size="xs" c="dimmed">{new Date(r.timestamp).toLocaleString()}</Text></Table.Td>
+                <Table.Td><Text size="xs" c="dimmed">{new Date(r.timestamp).toLocaleString(lang === 'pt' ? 'pt-BR' : 'en-US')}</Text></Table.Td>
                 <Table.Td><Text size="sm" ff="monospace">{r.userId}</Text></Table.Td>
                 <Table.Td><Text size="sm">{r.agentName}</Text></Table.Td>
                 <Table.Td>
@@ -136,7 +139,7 @@ export default function GovernanceOverview() {
               <Table.Tr><Table.Td colSpan={4}><Text size="sm" c="dimmed" ta="center">{t('govsum.empty')}</Text></Table.Td></Table.Tr>
             )}
           </Table.Tbody>
-        </Table>
+        </Table></Table.ScrollContainer>
       </Card>
     </Stack>
   );

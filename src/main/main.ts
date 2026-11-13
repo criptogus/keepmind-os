@@ -1,3 +1,4 @@
+import { installLifecycle } from './lifecycle.js';
 import { WorkConversation } from './work/WorkConversation.js';
 import type { ConversationInput } from '../shared/conversation.js';
 import { nativeMenuTemplate } from './ui/nativeMenu';
@@ -769,8 +770,8 @@ app.whenReady().then(async () => {
     runAgent: async (agentId, input) => {
       const trigger = typeof input.triggerId === 'string' ? triggerManager.list().find(t => t.id === input.triggerId) : undefined;
       if (!trigger) return runAgentExecution(agentId, input);
-      const task = workManager.create({ agentId, goal: String(input.task ?? trigger.prompt), project: 'Automations' }, 'system');
-      if (trigger.autonomy === 'draft') return task;
+      const { task, duplicate } = workManager.createRoutine({ agentId, goal: String(input.task ?? trigger.prompt), project: 'Automations' }, 'system', { triggerId: trigger.id, channel: String(input.channel ?? 'schedule'), receivedAt: new Date().toISOString(), eventId: typeof input.eventId === 'string' ? input.eventId : undefined, payload: input.webhookPayload });
+      if (duplicate || trigger.autonomy === 'draft') return task;
       return workManager.run(task.id, (id, workInput) => runAgentExecution(id, workInput));
     },
     getAgentName: (agentId) => storageManager.getAgent(agentId)?.name,
@@ -1381,17 +1382,6 @@ if (app.isPackaged) {
     app.setAsDefaultProtocolClient('keepmind');
   }
 }
-
-app.on('window-all-closed', async () => {
-  triggerManager?.stop();
-  await whatsAppManager?.stop();
-  await agentManager.shutdown();
-  await mcpManager?.close();
-  storageManager.close();
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
-});
 
 // IPC Handlers - System
 handle('app:getVersion', () => {
@@ -2420,14 +2410,26 @@ function startWebhookServer(): void {
       send(404, 'not found');
       return;
     }
-    const token = decodeURIComponent(req.url.slice('/webhook/'.length).split('?')[0]);
-    let body = '';
-    req.on('data', (c) => { body += c; if (body.length > 256 * 1024) req.destroy(); });
+    let token: string;
+    try { token = decodeURIComponent(req.url.slice('/webhook/'.length).split('?')[0]); } catch { send(400, 'invalid webhook path'); return; }
+    const eventId = req.headers['idempotency-key'];
+    if (eventId !== undefined && (typeof eventId !== 'string' || !eventId.trim() || eventId.length > 200)) { send(400, 'invalid idempotency key'); return; }
+    const chunks: Buffer[] = [];
+    let bytes = 0;
+    req.on('data', (chunk: Buffer) => {
+      bytes += chunk.length;
+      if (bytes > 256 * 1024) { if (!res.headersSent) send(413, 'webhook payload too large'); return; }
+      chunks.push(chunk);
+    });
     req.on('end', async () => {
+      if (bytes > 256 * 1024) return;
+      const body = Buffer.concat(chunks).toString('utf8');
       let payload: unknown = null;
-      try { payload = body ? JSON.parse(body) : null; } catch { payload = body.slice(0, 4000); }
-      const ok = await triggerManager.dispatchWebhook(token, payload);
-      send(ok ? 202 : 404, ok ? 'triggered' : 'unknown or disabled webhook token');
+      try { payload = body ? JSON.parse(body) : null; } catch { payload = body; }
+      try {
+        const ok = await triggerManager.dispatchWebhook(token, payload, eventId);
+        send(ok ? 202 : 404, ok ? 'processed; review task status in the workspace' : 'unknown or disabled webhook token');
+      } catch { send(503, 'Could not process event. Check the workspace before retrying with the same idempotency key.'); }
     });
   });
   webhookServer.on('error', (e) => console.error('[webhook] server error:', e));
@@ -2970,4 +2972,9 @@ handle('mcp:configure', async (_event, raw: unknown) => {
   return statuses;
 });
 
-app.on('before-quit', () => { companyBrains?.stop(); granolaManager?.stop(); remoteApprovalServer?.stop(); });
+installLifecycle(app, process.platform, async () => {
+  triggerManager?.stop(); companyBrains?.stop(); granolaManager?.stop(); remoteApprovalServer?.stop();
+  webhookServer?.close();
+  // SQLite remains available to cancellation handlers until process exit.
+  await Promise.allSettled([agentManager.shutdown(), whatsAppManager?.stop(), mcpManager?.close()]);
+});

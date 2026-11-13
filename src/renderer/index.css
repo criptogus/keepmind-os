@@ -157,8 +157,8 @@ body {
 .km-document pre { white-space: pre-wrap; padding: 16px; border-radius: 8px; background: var(--mantine-color-default-hover); }
 .km-document code { font-family: var(--mantine-font-family-monospace); font-size: .9em; }
 .km-document a { color: var(--mantine-color-anchor); text-decoration: underline; }
-.km-document table { display: block; overflow-x: auto; border-collapse: collapse; }
-.km-document th, .km-document td { padding: 8px 12px; border: 1px solid var(--mantine-color-default-border); text-align: left; }
+.km-document table { width: 100%; border-collapse: collapse; }
+.km-document th, .km-document td { padding: 8px 12px; border-bottom: 1px solid var(--mantine-color-default-border); }
 .km-delivery-drawer { width: min(820px, 100vw); }
 @media (max-width: 600px) {
   [data-tour=content] { padding: 16px !important; }
@@ -333,3 +333,29 @@ body {
 .km-search-empty { padding: 36px 16px; text-align: center; }
 .km-search-footer { display: flex; justify-content: space-between; gap: 12px; padding: 12px 20px; border-top: 1px solid var(--mantine-color-default-border); font-size: 12px; color: var(--mantine-color-dimmed); }
 @media (max-width: 480px) { .km-search-header, .km-search-footer { padding-inline: 12px; } .km-search-input, .km-search-feedback { padding-inline: 12px; } }
+
+/* Quiet table surfaces: keep columns aligned and wide content inside its region. */
+.km-table-region { max-width:100%; overflow:auto; border:1px solid var(--mantine-color-default-border); border-radius:12px; margin:16px 0; }
+.km-data-table { font-variant-numeric:tabular-nums; }
+.km-data-table th, .km-document th { background:var(--mantine-color-default); font-size:12px; font-weight:600; color:var(--mantine-color-dimmed); }
+.km-data-table td, .km-data-table th { padding:12px 16px; vertical-align:top; }
+.km-data-table td { max-width:360px; overflow-wrap:anywhere; }
+.km-data-table tbody tr:last-child td { border-bottom:0; }
+.km-data-table tbody tr { transition:background-color 140ms ease; }
+.km-table-details { min-width:160px; max-width:340px; font-size:12px; }
+.km-table-details summary, .km-error-details summary { cursor:pointer; color:var(--mantine-color-dimmed); }
+.km-table-details pre, .km-error-details pre { white-space:pre-wrap; overflow-wrap:anywhere; max-height:240px; overflow:auto; font-size:12px; }
+.km-document th, .km-document td { min-width:100px; vertical-align:top; }
+@media (prefers-reduced-motion:reduce) { .km-data-table tbody tr { transition:none; } }
+
+.km-source-details { padding:12px 16px; border-bottom:1px solid var(--mantine-color-default-border); font-size:12px; }
+.km-source-details summary { cursor:pointer; color:var(--mantine-color-dimmed); }
+.km-source-details pre { white-space:pre-wrap; overflow-wrap:anywhere; max-height:220px; overflow:auto; }
+
+.km-page-header { gap:16px; }
+.km-page-heading { flex:1 1 260px; }
+.km-page-actions { max-width:100%; }
+.km-data-table th { white-space:nowrap; }
+.km-data-table td:nth-child(2) { min-width:130px; }
+.km-data-table td:nth-child(3) { min-width:140px; }
+@media (max-width:600px) { .km-page-heading, .km-page-actions { flex-basis:100%; } }

@@ -20,7 +20,7 @@ Há componentes úteis de automação, mas ainda não um processo corporativo co
 ### Evidência no código
 
 - `src/main/agent/TriggerManager.ts`: intervalos e horário diário, regras/último disparo persistidos, webhook por token e fila específica de WhatsApp. Não há uma fila genérica durável com política completa de repetição/deduplicação. `lastRunAt` é salvo antes da execução; a falha é registrada em log.
-- `src/main/main.ts` (`triggerManager.attach`): o disparo cria um WorkTask, mas reconstrói a entrada usando o pedido; o `webhookPayload` recebido não é incorporado. O conteúdo da reclamação pode se perder. Corrigir esse contrato é pré-requisito do fluxo de atendimento.
+- `src/main/main.ts` (`triggerManager.attach`): a perda do `webhookPayload` identificada nesta análise foi corrigida na continuação do PR #12. A origem e o conteúdo agora persistem no pedido; `Idempotency-Key` evita nova execução do mesmo evento. Isso ainda não substitui uma fila durável nem um processo com múltiplas etapas. Ver [implementação e limites](table-errors-motion.md).
 - `src/main/main.ts` (`startWebhookServer`): receptor em `127.0.0.1`; não é diretamente acessível por um site externo. É necessário um ingresso autenticado e operável, não expor o app indiscriminadamente.
 - `src/runner/cli.ts` (`--watch`): permite rotinas por intervalo fora do desktop enquanto o processo está ativo. Isso não equivale a serviço 24/7 instalado e monitorado; desligar o computador interrompe a operação local.
 - `src/main/agent/TeamExecutionEngine.ts`: etapas sequenciais/paralelas, dependências e condições tipadas. O estado das etapas vive na execução em memória; checkpoints de ferramentas individuais não equivalem à retomada de um processo entre vários agentes.

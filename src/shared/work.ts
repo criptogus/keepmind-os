@@ -1,7 +1,9 @@
 export type WorkStatus = 'backlog' | 'running' | 'review' | 'done' | 'blocked' | 'cancelled';
 export interface WorkEvent { actorId?: string; id: string; at: string; kind: string; text: string; }
 export interface DeliveryVersion { version: number; content: string; at: string; executionId?: string; }
+export interface WorkSource { triggerId: string; channel: string; receivedAt: string; eventId?: string; payload?: unknown; }
 export interface WorkTask {
+  source?: WorkSource;
   conversation?: import('./conversation.js').WorkConversation;
   deliveries?: DeliveryVersion[];
   /** Legacy tasks with no policy retain mandatory review. */

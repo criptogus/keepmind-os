@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "checks": [
+    "native-window-close",
+    "activate-recreates-window",
+    "database-readable-after-reopen"
+  ],
+  "profile": "isolated"
+}
