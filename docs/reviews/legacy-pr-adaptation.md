@@ -82,3 +82,5 @@ its first normalized-config failure was fixed, and a subsequent package scanned
 24,202 dependency entries successfully. No release or installer publication.
 
 Final local aggregate: 213 unit tests, 1 integration test, 22 Electron checks, typecheck/build/runner, 274-file secret scan and 462-package dependency inventory passed. Final visual inspection prompted full delivery expansion by default so tables and sources are not clipped.
+
+Native icon changes deliberately retain the existing Electron application name used by credential storage; changing that name could select a different macOS Keychain service. Window title and packaged product identity remain KeepMind OS.

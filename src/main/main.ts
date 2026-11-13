@@ -629,7 +629,6 @@ function createWindow() {
   });
 }
 
-app.setName('KeepMind OS');
 app.whenReady().then(async () => {
   if (process.platform === 'darwin') app.dock?.setIcon(nativeImage.createFromPath(path.join(__dirname, 'icon.png')));
   // Initialize managers
