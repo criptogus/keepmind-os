@@ -1,3 +1,4 @@
+import { CheckpointStore } from './execution/CheckpointStore.js';
 import { HybridMemory, localEmbedder } from './integrations/HybridMemory.js';
 import { WorkManager } from './work/WorkManager.js';
 import type { CreateWorkInput, WorkAction } from '../shared/work.js';
@@ -53,6 +54,7 @@ let composioManager: ComposioManager;
 let triggerManager: TriggerManager;
 let localAuth: LocalAuth;
 let workManager: WorkManager;
+let checkpoints: CheckpointStore;
 let workspaceDir = '';
 let tray: Tray | null = null;
 
@@ -171,7 +173,7 @@ async function syncCodexCliAuth(): Promise<void> {
 let activeDelegationDepth = 0;
 
 /** Runs an agent execution end-to-end: streams events, persists the result. */
-async function runAgentExecution(agentId: string, input: Record<string, unknown>, opts?: { userId?: string }) {
+async function runAgentExecution(agentId: string, input: Record<string, unknown>, opts?: { userId?: string; resumeId?: string }) {
   const agent = storageManager.getAgent(agentId);
   if (!agent) throw new Error('Agent not found');
   // Members may only execute agents explicitly shared by an admin.
@@ -181,9 +183,13 @@ async function runAgentExecution(agentId: string, input: Record<string, unknown>
 
   const concurrency = Math.max(1, Math.min(32, Number(storageManager.getSetting('maxConcurrentExecutions')) || 4));
   if (agentManager.getActiveExecutions().length >= concurrency) throw new Error('Concurrent execution limit reached; wait for a running task to finish');
-  const executionId = uuidv4();
+  const previousRun = opts?.resumeId ? storageManager.getAgentExecution(opts.resumeId) : undefined;
+  if (opts?.resumeId && (!previousRun || previousRun.agentId !== agentId || (previousRun.status !== 'failed' && !(previousRun.status === 'completed' && checkpoints.read(opts.resumeId)?.output)) || !checkpoints.read(opts.resumeId))) throw new Error('Execution cannot be resumed');
+  if (previousRun) input = previousRun.input;
+  const executionId = opts?.resumeId ?? uuidv4();
   const userId = opts?.userId ?? currentUserId() ?? 'system';
-  const startedAt = new Date().toISOString();
+  const startedAt = previousRun?.startedAt ?? new Date().toISOString();
+  if (typeof input.workTaskId === 'string') workManager.attachExecution(input.workTaskId, executionId);
   storageManager.saveAgentExecution({ id: executionId, agentId, input, userId, startedAt, status: 'running', progress: 0 });
   try {
     const execution = await agentManager.executeAgent(agentId, agent.config, input, (progress) => {
@@ -431,6 +437,8 @@ app.whenReady().then(async () => {
   })));
   seedBuiltInSkills();
   agentManager = new AgentManager();
+  checkpoints = new CheckpointStore(storageManager);
+  agentManager.setCheckpointStore(checkpoints);
   teamExecutionEngine = new TeamExecutionEngine();
   oauthManager = new OAuthManager(agentManager, (provider, tokens) => {
     // Preserve accountId across refreshes — refresh responses don't include it.
@@ -854,7 +862,11 @@ app.whenReady().then(async () => {
 
     const agentId = policy?.callerAgentId || '';
     const agent = agentId ? storageManager.getAgent(agentId) : null;
-    const approval: Approval = {
+    const savedApprovalId = policy?.executionId && policy.toolCallKey
+      ? policy.checkpoint?.approval(policy.executionId, policy.toolCallKey) : undefined;
+    const savedApproval = savedApprovalId ? storageManager.getApproval(savedApprovalId) : undefined;
+    if (savedApprovalId && !savedApproval) throw new Error('Saved approval is missing');
+    const approval: Approval = savedApproval ?? {
       id: uuidv4(),
       type: 'agent_action',
       agentId,
@@ -871,13 +883,15 @@ app.whenReady().then(async () => {
       status: 'pending',
       createdAt: new Date().toISOString(),
     };
+    if (approval.context.argsHash !== argsFingerprint(args) || approval.context.executionId !== policy?.executionId || approval.action !== `tool:${name}`) throw new Error('Approval binding changed');
     storageManager.saveApproval(approval);
+    if (policy?.executionId && policy.toolCallKey) policy.checkpoint?.approval(policy.executionId, policy.toolCallKey, approval.id);
     mainWindow?.webContents.send('governance:approvalRequested', approval);
 
-    const deadline = Date.now() + APPROVAL_TIMEOUT_MS;
+    const deadline = Date.parse(approval.createdAt) + APPROVAL_TIMEOUT_MS;
     while (Date.now() < deadline) {
       if (policy?.signal?.aborted) {
-        storageManager.updateApprovalStatus(approval.id, 'rejected', 'Execution cancelled', 'system');
+        if (policy.signal.reason?.message !== 'Application shutting down') storageManager.updateApprovalStatus(approval.id, 'rejected', 'Execution cancelled', 'system');
         policy.signal.throwIfAborted();
       }
       await new Promise((r) => setTimeout(r, 1500));
@@ -2190,17 +2204,22 @@ handle('work:create', (_event, input: CreateWorkInput) => {
   return workManager.create(input, currentUserId() ?? 'system');
 });
 handle('work:action', async (_event, id: string, action: WorkAction, note?: string) => {
-  requireWorkAccess(id);
-  if (action === 'run') {
+  const existing = requireWorkAccess(id);
+  if (action === 'run' || action === 'resume') {
+    if (action === 'resume' && (existing.status !== 'blocked' || !existing.executionId || !checkpoints.read(existing.executionId))) throw new Error('No resumable checkpoint');
+    if (action === 'run' && existing.executionId && checkpoints.read(existing.executionId)) throw new Error('Resume the checkpoint or request a revision to start new work');
     workManager.assertReady(id);
     // Claim is synchronous, so a second click cannot launch the same task again.
-    void workManager.run(id, (agentId, input) => runAgentExecution(agentId, input))
+    void workManager.run(id, (agentId, input) => runAgentExecution(agentId, input, { resumeId: action === 'resume' ? existing.executionId : undefined }))
       .catch(error => console.error('[work]', error));
     return workManager.get(id);
   }
   if (!['accept','revise','cancel','comment','propose-rule'].includes(action)) throw new Error('Invalid action');
   const task = workManager.change(id, action, note);
   if (action === 'cancel') {
+    for (const approval of storageManager.getPendingApprovals()) {
+      if (approval.context.workTaskId === id) storageManager.updateApprovalStatus(approval.id, 'rejected', 'Task cancelled', currentUserId() ?? 'system');
+    }
     for (const run of agentManager.getActiveExecutions()) {
       if (run.input.workTaskId === id) {
         agentManager.cancelExecution(run.id);
@@ -2218,3 +2237,16 @@ handle('work:reviewRule', (_event, id: string, accept: boolean) => {
 });
 handle('work:export', () => JSON.stringify({ format: 'keepmind-work', version: 1,
   ...workManager.snapshot(currentRole() === 'member' ? currentUserId() : undefined) }, null, 2));
+
+handle('work:checkpoint', (_event, id: string) => {
+  const task = requireWorkAccess(id);
+  return { available: !!task.executionId && !!checkpoints.read(task.executionId),
+    steps: task.executionId ? checkpoints.steps(task.executionId) : [] };
+});
+handle('work:reconcile', (_event, id: string, key: string, result: string) => {
+  requireRole('admin');
+  const task = requireWorkAccess(id);
+  if (task.status !== 'blocked' || !task.executionId) throw new Error('Only interrupted work can be reconciled');
+  checkpoints.reconcile(task.executionId, key, result, currentUserId() ?? 'local-admin');
+  workManager.change(id, 'comment', `Verified external result for ${key}: ${result}`);
+});

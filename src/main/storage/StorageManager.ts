@@ -593,7 +593,16 @@ export class StorageManager {
   /** Runs are never replayed automatically: an external side effect may already have happened. */
   recoverInterruptedExecutions(): void {
     this.db.prepare("UPDATE agent_executions SET status = 'failed', error = 'Interrupted by restart. Review external effects before retrying.', completed_at = ? WHERE status IN ('pending','running')").run(new Date().toISOString());
-    this.db.prepare("UPDATE approvals SET status = 'rejected' WHERE status = 'pending'").run();
+    // Only approvals bound to a durable, not-yet-started tool can survive restart.
+    for (const approval of this.getPendingApprovals()) {
+      const id = approval.context.executionId;
+      const raw = typeof id === 'string' ? this.getSetting(`execution.checkpoint.v1.${id}`) : undefined;
+      const cp = raw ? JSON.parse(raw) : undefined;
+      const retained = Object.values(cp?.tools ?? {}).some((step: any) => step.state === 'pending' && step.approvalId === approval.id);
+      if (!retained || Date.now() - Date.parse(approval.createdAt) >= 24 * 60 * 60_000) {
+        this.updateApprovalStatus(approval.id, 'rejected', 'No resumable checkpoint or approval expired', 'system');
+      }
+    }
   }
 
   saveAgentExecution(execution: AgentExecution): void {

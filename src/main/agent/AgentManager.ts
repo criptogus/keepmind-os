@@ -1,3 +1,4 @@
+import { CheckpointStore, CheckpointError } from '../execution/CheckpointStore.js';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import OpenAI from 'openai';
 import Anthropic from '@anthropic-ai/sdk';
@@ -93,6 +94,12 @@ export class AgentManager {
     this.usageRecorder?.({ agentId: policy.callerAgentId, executionId: policy.executionId,
       model: config.model, provider: providerForModel(config.model) || 'unknown', usage });
     this.reservations.delete(policy.executionId);
+  }
+
+  private checkpoints?: CheckpointStore;
+  setCheckpointStore(store: CheckpointStore) { this.checkpoints = store; }
+  private providerResponse<T>(policy: ExecutionPolicy | undefined, key: string, call: () => Promise<T>): Promise<T> {
+    return policy?.checkpoint && policy.executionId ? policy.checkpoint.response(policy.executionId, key, call) : call();
   }
 
   private toolRegistry = new ToolRegistry();
@@ -286,6 +293,7 @@ export class AgentManager {
     onProgress?: (progress: number) => void, executionId: string = uuidv4(),
     onEvent?: (event: AgentStreamEvent) => void
   ): Promise<AgentExecution> {
+    if (this.controllers.has(executionId)) throw new CheckpointError('Execution already active');
     const controller = new AbortController();
     const parent = this.runContext.getStore()?.signal;
     const abort = () => controller.abort(parent?.reason);
@@ -343,7 +351,12 @@ export class AgentManager {
         systemPrompt: await this.buildSystemPrompt(config, input, skills),
       };
 
+      const checkpoint = this.checkpoints?.open(executionId, { agentId, config, input, routedModel,
+        transport: this.oauthTokens.has('openai') && providerForModel(routedModel) === 'openai' ? 'codex' : providerForModel(routedModel),
+        schemas: this.toolRegistry.schemasFor(toolNames) }, effectiveConfig.systemPrompt);
+      if (checkpoint) effectiveConfig.systemPrompt = checkpoint.systemPrompt;
       const execPolicy: ExecutionPolicy = {
+        checkpoint: this.checkpoints,
         ...(constraints?.policy ?? {}),
         memoryUsage: memoryIds,
         callerAgentId: agentId,
@@ -356,7 +369,9 @@ export class AgentManager {
       };
 
       const provider = providerForModel(routedModel) || providerForModel(config.model);
-      if (provider === 'openai') {
+      if (checkpoint?.output) {
+        output = checkpoint.output;
+      } else if (provider === 'openai') {
         output = await this.executeOpenAI(effectiveConfig, input, toolNames, emit, (progress) => {
           execution.progress = 10 + progress * 0.8;
           onProgress?.(execution.progress);
@@ -371,6 +386,7 @@ export class AgentManager {
       }
 
       signal.throwIfAborted();
+      this.checkpoints?.complete(executionId, output);
       execution.status = 'completed';
       execution.completedAt = new Date().toISOString();
       execution.progress = 100;
@@ -404,6 +420,7 @@ export class AgentManager {
       return result;
     } catch (error) {
       policy?.signal?.throwIfAborted();
+      if (error instanceof CheckpointError || policy?.checkpoint) throw error;
       const msg = error instanceof Error ? error.message : String(error);
       emit('tool_result', { name, error: msg });
       return `Tool error: ${msg}`;
@@ -483,6 +500,7 @@ export class AgentManager {
     for (let i = 0; i < MAX_TOOL_ITERATIONS; i++) {
       policy?.signal?.throwIfAborted();
       onProgress?.(20 + i * 10);
+      const response = await this.providerResponse(policy, `openai:${i}`, async () => {
       this.beforeCall(config, JSON.stringify(messages).length, policy);
       const response = await client.chat.completions.create({
         model: config.model,
@@ -492,9 +510,11 @@ export class AgentManager {
         tools,
         tool_choice: 'auto',
       }, { signal: policy?.signal });
+      if (response.usage) this.recordCall(config, { promptTokens: response.usage.prompt_tokens ?? 0, completionTokens: response.usage.completion_tokens ?? 0 }, policy);
+      return response;
+      });
       lastResponse = response;
       if (response.usage) {
-        this.recordCall(config, { promptTokens: response.usage.prompt_tokens ?? 0, completionTokens: response.usage.completion_tokens ?? 0 }, policy);
         usage.promptTokens += response.usage.prompt_tokens ?? 0;
         usage.completionTokens += response.usage.completion_tokens ?? 0;
       }
@@ -512,7 +532,7 @@ export class AgentManager {
       messages.push(msg as unknown as OpenAI.Chat.Completions.ChatCompletionMessageParam);
       for (const call of toolCalls) {
         if (call.type !== 'function') continue;
-        const result = await this.runTool(call.function.name, call.function.arguments, emit, policy);
+        const result = await this.runTool(call.function.name, call.function.arguments, emit, { ...policy, toolCallKey: `openai:${i}:${call.id}` });
         messages.push({
           role: 'tool',
           tool_call_id: call.id,
@@ -602,6 +622,7 @@ export class AgentManager {
       policy?.signal?.throwIfAborted();
       onProgress?.(20 + i * 10);
 
+      const response = await this.providerResponse(policy, `codex:${i}`, async () => {
       this.beforeCall({ ...config, model }, config.systemPrompt.length + JSON.stringify(inputItems).length, policy);
       const res = await fetch('https://chatgpt.com/backend-api/codex/responses', {
         method: 'POST',
@@ -630,7 +651,6 @@ export class AgentManager {
       const decoder = new TextDecoder();
       let buf = '';
       let completed: CodexCompletedEvent | null = null;
-      const functionCalls: Array<{ callId: string; name: string; args: string }> = [];
 
       for (;;) {
         const { done, value } = await reader.read();
@@ -660,9 +680,12 @@ export class AgentManager {
       if (!response) {
         throw new Error('Codex stream ended without response.completed');
       }
-      const oldUsage = { ...usage };
+      const u = response.usage as { input_tokens?: number; output_tokens?: number } | undefined;
+      this.recordCall({ ...config, model }, { promptTokens: u?.input_tokens ?? 0, completionTokens: u?.output_tokens ?? 0 }, policy);
+      return response;
+      });
       absorbUsage(response.usage);
-      this.recordCall({ ...config, model }, { promptTokens: usage.promptTokens - oldUsage.promptTokens, completionTokens: usage.completionTokens - oldUsage.completionTokens }, policy);
+      const functionCalls: Array<{ callId: string; name: string; args: string }> = [];
       if (response.model) lastModel = response.model;
 
       // Collect function calls from the completed output items.
@@ -679,13 +702,15 @@ export class AgentManager {
 
       onProgress?.(80);
 
+      finalContent = outputItems.flatMap(item => Array.isArray(item.content) ? item.content : [])
+        .filter(part => part.type === 'output_text').map(part => String(part.text ?? '')).join('');
       if (functionCalls.length === 0) break;
       if (i === MAX_TOOL_ITERATIONS - 1) throw new Error('Tool iteration limit reached; review progress before retrying');
 
       // Feed the turn's output items back, then append tool results.
       inputItems.push(...outputItems);
       for (const call of functionCalls) {
-        const result = await this.runTool(call.name, call.args, emit, policy);
+        const result = await this.runTool(call.name, call.args, emit, { ...policy, toolCallKey: `codex:${i}:${call.callId}` });
         inputItems.push({
           type: 'function_call_output',
           call_id: call.callId,
@@ -770,6 +795,7 @@ export class AgentManager {
     for (let i = 0; i < MAX_TOOL_ITERATIONS; i++) {
       policy?.signal?.throwIfAborted();
       onProgress?.(20 + i * 10);
+      const response = await this.providerResponse(policy, `anthropic:${i}`, async () => {
       this.beforeCall(config, config.systemPrompt.length + JSON.stringify(messages).length, policy);
       const response = await client.messages.create(
         {
@@ -781,8 +807,10 @@ export class AgentManager {
         },
         requestOpts
       );
-      lastMessage = response;
       this.recordCall(config, { promptTokens: response.usage?.input_tokens ?? 0, completionTokens: response.usage?.output_tokens ?? 0 }, policy);
+      return response;
+      });
+      lastMessage = response;
       usage.promptTokens += response.usage?.input_tokens ?? 0;
       usage.completionTokens += response.usage?.output_tokens ?? 0;
 
@@ -800,7 +828,7 @@ export class AgentManager {
       messages.push({ role: 'assistant', content: response.content });
       const toolResults: Anthropic.ToolResultBlockParam[] = [];
       for (const tu of toolUses) {
-        const result = await this.runTool(tu.name, JSON.stringify(tu.input ?? {}), emit, policy);
+        const result = await this.runTool(tu.name, JSON.stringify(tu.input ?? {}), emit, { ...policy, toolCallKey: `anthropic:${i}:${tu.id}` });
         toolResults.push({
           type: 'tool_result',
           tool_use_id: tu.id,

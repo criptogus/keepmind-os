@@ -143,3 +143,7 @@ See the [development roadmap](docs/ROADMAP.md) for planned work.
 
 [MIT](LICENSE). See [third-party notices](THIRD_PARTY_NOTICES.md) for dependency notices.
 
+
+### Resume interrupted work
+
+The developer workspace now journals model responses and tool results. Use **Resume checkpoint** after an interruption. Completed tools are not replayed; uncertain external effects require a verified result before continuing. Pending checkpoint-bound approvals survive restart within their original 24-hour window. The headless runner supports `--inspect`, `--resume` and `--reconcile`. See [execution guarantees and boundaries](docs/WORKSPACE.md) for limits, data retention and recovery instructions.

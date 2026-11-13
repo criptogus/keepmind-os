@@ -139,6 +139,23 @@ try {
   await delay(400);
   const detail = await evaluate('document.body?.innerText ?? ""');
   if (!detail.includes('Include file references and reproducible steps.')) fail('task drawer missing criteria');
+  await evaluate(`window.electronAPI.workAction(${JSON.stringify(task.id)}, 'run')`);
+  let cp;
+  for (let i = 0; i < 50; i++) {
+    const saved = await evaluate(`window.electronAPI.workList()`);
+    if (saved.tasks.find(t => t.id === task.id)?.status === 'blocked') {
+      cp = await evaluate(`window.electronAPI.workCheckpoint(${JSON.stringify(task.id)})`);
+      break;
+    }
+    await delay(200);
+  }
+  if (!cp?.available) fail('failed run did not preserve its checkpoint');
+  for (let i = 0; i < 50; i++) {
+    if ((await evaluate('document.body?.innerText ?? ""')).includes('Resume checkpoint')) break;
+    await delay(200);
+  }
+  if (!(await evaluate('document.body?.innerText ?? ""')).includes('Resume checkpoint')) fail('checkpoint resume action not visible');
+
   mkdirSync(path.join(root, 'evidence'), { recursive: true });
   const screenshot = await send('Page.captureScreenshot', { format: 'png' });
   if (screenshot.result?.data) writeFileSync(path.join(root, 'evidence/workspace-smoke.png'), Buffer.from(screenshot.result.data, 'base64'));

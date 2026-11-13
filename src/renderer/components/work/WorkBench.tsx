@@ -1,3 +1,4 @@
+import type { ToolStep } from '../../../main/execution/CheckpointStore';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Alert, Badge, Button, Card, Drawer, Group, MultiSelect, Select, Stack, Tabs, Text, Textarea, TextInput, Title } from '@mantine/core';
 import { useLang } from '../../lib/i18n';
@@ -16,6 +17,8 @@ export default function WorkBench({ onNavigate }: { onNavigate: (section: string
   const [project, setProject] = useState(''); const [agentId, setAgentId] = useState<string | null>(null);
   const [dependencies, setDependencies] = useState<string[]>([]);
   const [selected, setSelected] = useState<string | null>(null); const [note, setNote] = useState('');
+  const [checkpoint, setCheckpoint] = useState<{ available: boolean; steps: ToolStep[] }>({ available: false, steps: [] });
+  const [verifiedResult, setVerifiedResult] = useState('');
   const [query, setQuery] = useState(''); const [busy, setBusy] = useState(false);
   const [error, setError] = useState(''); const [loaded, setLoaded] = useState(false);
   const refresh = useCallback(async () => {
@@ -32,6 +35,7 @@ export default function WorkBench({ onNavigate }: { onNavigate: (section: string
     setGoal(''); setDependencies([]); setSelected(task.id);
   });
   const task = data.tasks.find(t => t.id === selected);
+  useEffect(() => { let active = true; setCheckpoint({ available: false, steps: [] }); if (selected) void window.electronAPI.workCheckpoint(selected).then(cp => { if (active) setCheckpoint(cp); }).catch(e => { if (active) setError(String(e)); }); return () => { active = false; }; }, [selected, data]);
   const action = (id: string, kind: WorkAction) => perform(async () => { await window.electronAPI.workAction(id, kind, note); setNote(''); });
   const labels: Record<WorkStatus, string> = { backlog: tr('Ready', 'Prontas'), running: tr('In progress', 'Em andamento'), review: tr('Review', 'Revisar'), done: tr('Accepted', 'Aceitas'), blocked: tr('Needs attention', 'Precisa de atenção'), cancelled: tr('Cancelled', 'Canceladas') };
   const color = (status: WorkStatus) => ({ backlog: 'gray', running: 'blue', review: 'orange', done: 'teal', blocked: 'red', cancelled: 'gray' })[status];
@@ -65,7 +69,13 @@ export default function WorkBench({ onNavigate }: { onNavigate: (section: string
       {task && <Stack gap="lg"><Group><Badge color={color(task.status)}>{labels[task.status]}</Badge><Text size="sm">{task.project}</Text></Group><Text style={{ whiteSpace: 'pre-wrap' }}>{task.goal}</Text><Card withBorder><Text size="xs" fw={700}>{tr('ACCEPTANCE CRITERIA', 'CRITÉRIOS DE ACEITE')}</Text><Text size="sm" mt="xs">{task.criteria}</Text></Card>
       {approvals.filter(a => a.context.workTaskId === task.id).map(approval => <Card withBorder key={approval.id}><Text fw={600}>{tr('Decision needed', 'Decisão necessária')}: {approval.action}</Text><pre className="km-output">{JSON.stringify(approval.context.args, null, 2)}</pre><Group mt="sm"><Button disabled={busy} onClick={() => perform(() => window.electronAPI.approveAction(approval.id))}>{tr('Approve action', 'Aprovar ação')}</Button><Button variant="default" disabled={busy} onClick={() => perform(() => window.electronAPI.rejectAction(approval.id, note || 'Rejected from task review'))}>{tr('Reject', 'Rejeitar')}</Button></Group></Card>)}
       {task.error && <Alert color="red">{task.error}</Alert>}
-      <Group>{['backlog','blocked'].includes(task.status) && <Button disabled={busy} onClick={() => action(task.id, 'run')}>{tr('Run task', 'Executar tarefa')}</Button>}{task.status === 'review' && <Button color="teal" disabled={busy} onClick={() => action(task.id, 'accept')}>{tr('Accept result', 'Aceitar entrega')}</Button>}{!['done','cancelled'].includes(task.status) && <Button variant="default" disabled={busy} onClick={() => action(task.id, 'cancel')}>{tr('Cancel', 'Cancelar')}</Button>}</Group>
+      {task.status === 'blocked' && checkpoint.steps.filter(step => step.state === 'started').map(step => <Alert color="orange" key={step.key} title={tr('Verify before resuming', 'Confira antes de retomar')}>
+        <Text size="sm">{tr('This action may have completed. Check its external effect and record the actual result. It will not be executed again.', 'Esta ação pode ter terminado. Confira o efeito externo e registre o resultado real. Ela não será executada novamente.')}</Text>
+        <Text fw={600} mt="sm">{step.name}</Text><pre className="km-output">{JSON.stringify(step.args, null, 2)}</pre>
+        <Textarea label={tr('Verified result', 'Resultado conferido')} value={verifiedResult} onChange={e => setVerifiedResult(e.currentTarget.value)} />
+        <Button mt="sm" disabled={busy || !verifiedResult.trim()} onClick={() => perform(async () => { await window.electronAPI.workReconcile(task.id, step.key, verifiedResult); setVerifiedResult(''); })}>{tr('Record verified result', 'Registrar resultado conferido')}</Button>
+      </Alert>)}
+      <Group>{['backlog','blocked'].includes(task.status) && <Button disabled={busy} onClick={() => action(task.id, task.status === 'blocked' && checkpoint.available ? 'resume' : 'run')}>{task.status === 'blocked' && checkpoint.available ? tr('Resume checkpoint', 'Retomar etapa salva') : tr('Run task', 'Executar tarefa')}</Button>}{task.status === 'review' && <Button color="teal" disabled={busy} onClick={() => action(task.id, 'accept')}>{tr('Accept result', 'Aceitar entrega')}</Button>}{!['done','cancelled'].includes(task.status) && <Button variant="default" disabled={busy} onClick={() => action(task.id, 'cancel')}>{tr('Cancel', 'Cancelar')}</Button>}</Group>
       {task.output && <div><Text fw={600} mb="xs">{tr('Deliverable', 'Entrega')}</Text><pre className="km-output">{task.output}</pre><Text size="xs" c="dimmed" mt="xs">{tr('Execution', 'Execução')}: {task.executionId}</Text></div>}
       <Textarea label={tr('Feedback or project rule', 'Comentário ou regra do projeto')} value={note} onChange={e => setNote(e.currentTarget.value)} minRows={3} /><Group><Button disabled={busy || !note.trim()} variant="default" onClick={() => action(task.id, 'comment')}>{tr('Comment', 'Comentar')}</Button>{['review','blocked','cancelled','done'].includes(task.status) && <Button disabled={busy || !note.trim()} variant="default" onClick={() => action(task.id, 'revise')}>{tr('Request revision', 'Pedir revisão')}</Button>}<Button disabled={busy || !note.trim()} variant="light" onClick={() => action(task.id, 'propose-rule')}>{tr('Propose rule', 'Propor regra')}</Button></Group>
       <Text fw={600}>{tr('Activity', 'Atividade')}</Text>{[...task.events].reverse().map(event => <div className="km-event" key={event.id}><Text size="xs" c="dimmed">{new Date(event.at).toLocaleString()} · {event.kind}</Text><Text size="sm" style={{ whiteSpace: 'pre-wrap' }}>{event.text}</Text></div>)}</Stack>}

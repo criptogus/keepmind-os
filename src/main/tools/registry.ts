@@ -1,3 +1,4 @@
+import type { CheckpointStore } from '../execution/CheckpointStore.js';
 import { existsSync, realpathSync } from 'node:fs';
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
@@ -48,6 +49,8 @@ export interface ToolContext {
 
 /** Per-execution policy computed from install settings + agent config + caller role. */
 export interface ExecutionPolicy {
+  checkpoint?: CheckpointStore;
+  toolCallKey?: string;
   signal?: AbortSignal;
   executionId?: string;
   workTaskId?: string;
@@ -549,13 +552,20 @@ export class ToolRegistry {
     if (policy?.allowedTools && !policy.allowedTools.includes(name)) throw new Error(`Tool not authorized: ${name}`);
     const tool = this.tools.get(name);
     if (!tool) throw new Error(`Unknown tool: ${name}`);
-    if (this.gate) {
-      const denied = await this.gate(name, args, policy);
-      if (denied) return denied;
+    const perform = async (started: () => void) => {
+      if (this.gate) {
+        const denied = await this.gate(name, args, policy);
+        if (denied) return denied;
+      }
+      policy?.signal?.throwIfAborted();
+      const ctx = policy ? { ...this.context, ...policy } : this.context;
+      started();
+      return tool.handler(args, ctx);
+    };
+    if (policy?.checkpoint && policy.executionId && policy.toolCallKey) {
+      return policy.checkpoint.tool(policy.executionId, policy.toolCallKey, name, args, perform);
     }
-    policy?.signal?.throwIfAborted();
-    const ctx = policy ? { ...this.context, ...policy } : this.context;
-    return tool.handler(args, ctx);
+    return perform(() => {});
   }
 }
 

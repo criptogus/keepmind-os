@@ -13,7 +13,7 @@ export interface WorkRule {
 }
 export interface WorkSnapshot { tasks: WorkTask[]; rules: WorkRule[]; }
 export interface CreateWorkInput { goal: string; project?: string; agentId: string; criteria?: string; dependencies?: string[]; }
-export type WorkAction = 'run' | 'accept' | 'revise' | 'cancel' | 'comment' | 'propose-rule';
+export type WorkAction = 'resume' | 'run' | 'accept' | 'revise' | 'cancel' | 'comment' | 'propose-rule';
 export const WORK_TEMPLATES = [
   { id: 'review', title: 'Review a repository', titlePt: 'Revisar um repositório', goal: 'Review the repository at [path or URL]. Find reproducible correctness and reliability issues. Read CONTRIBUTING.md and AGENTS.md first. Do not change files.', criteria: 'Findings include file references, impact, reproduction steps and prioritized fixes. Clearly distinguish verified bugs from hypotheses.' },
   { id: 'release', title: 'Prepare a release', titlePt: 'Preparar uma release', goal: 'Prepare a release readiness report for [repository]. Inspect changes, tests, compatibility, migration steps and documentation. Draft release notes. Do not publish or tag.', criteria: 'Include evidence for checks, blockers, upgrade instructions and release notes. Never claim a check passed unless it was executed.' },

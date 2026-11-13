@@ -33,12 +33,31 @@ importer or a full backup. Settings → data export remains the full database ba
   provider requests and shell subprocesses. Already-completed external effects
   cannot be undone; not every third-party SDK can abort an in-flight operation.
 - Execution records are written before model calls and preserved on failure.
-- Interrupted executions become failed/blocked on restart. They are NOT replayed:
-  verify external effects before retrying. Transparent checkpoint resume is not
-  implemented in this version.
-- Approvals remain available in personal and corporate modes and wait up to 24
-  hours while the process runs. On restart pending approvals are rejected; create
-  a new execution after reviewing state. This is not restart-resumable approval.
+- Executions save provider responses and tool results in a local write-ahead
+  journal. After restart, the task becomes blocked. **Resume checkpoint** rebuilds
+  the conversation from saved responses and reuses completed tool results without
+  invoking those handlers or billing cached model calls again. OpenAI API,
+  Anthropic and the Codex OAuth tool loops are supported. The original config,
+  tools, transport and input must still match; current tool permissions still apply.
+- A handler marked started without a saved result has an **uncertain effect**.
+  Resume stops at that step. An administrator must inspect the external system
+  and record its verified result in the task drawer. This never retries the
+  uncertain action. Reconciliation records the reviewer and timestamp. This
+  conservative rule also applies to read-tool errors.
+- Pending approvals tied to a not-yet-started checkpoint survive restart for up
+  to 24 hours from creation. Exact arguments and execution bindings are checked
+  again on resume. Legacy or expired approvals are rejected. Resume is explicit;
+  approving an interrupted task does not silently start it. Cancelling rejects
+  its pending approvals. Graceful shutdown preserves resumable approvals.
+- A provider request interrupted before its response is saved may be requested
+  again and charged again; partial text streams are not resumable. Delegated
+  child executions are not recursively resumed: an uncertain delegation requires
+  inspecting the child result and reconciling the parent. No exactly-once claim
+  is made across external systems. A new revision starts a fresh execution and
+  can repeat work, so verify previous effects before requesting one.
+- Journals retain prompts, arguments and results in the same local database as
+  work. They are included in database backups; no separate encryption or automatic
+  retention policy is added by this change.
 - Budgets are checked before each model call and include in-process reservations
   from concurrent calls. Usage is recorded per successful provider response.
   Prices and token estimates are not provider invoices. Calls without reported usage keep a conservative estimated ledger entry, marked partial. Failed streams may have
@@ -82,6 +101,15 @@ initial runner. Results go to human review. Accept a result with:
 npm run runner -- --config examples/workspace.json --accept TASK_ID
 ```
 
+Inspect and resume interrupted work without starting a new task:
+
+```sh
+npm run runner -- --config examples/workspace.json --inspect TASK_ID
+npm run runner -- --config examples/workspace.json --resume TASK_ID
+# Only after verifying an uncertain effect; result.txt contains the actual result:
+npm run runner -- --config examples/workspace.json --reconcile TASK_ID --step STEP_KEY --result-file result.txt
+```
+
 State defaults to `~/.keepmind/runner`; use `--data-dir` to change it. The runner
 uses separate data from the desktop; there is no automatic cross-device sync.
 One process may own a data directory. After a crash, inspect processes before
@@ -102,8 +130,8 @@ This is not feature parity with their cloud computers, collaboration or plugins.
 
 ## Remaining engineering work
 
-- Durable per-step checkpoints and resumable approvals after process restart,
-  with reconciliation of unknown external effects.
+- Recursive delegation/workflow checkpoints, partial-stream continuation and
+  provider-side idempotency where supported. Explicit tool-loop resume is implemented.
 - A common desktop/server execution service and authenticated multi-device sync.
 - First-class MCP/harness adapters, an extension API and trusted plugin packaging.
 - Shared channels and multiplayer editing with resource-scoped authorization.

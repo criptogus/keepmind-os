@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { CheckpointStore } from '../main/execution/CheckpointStore.js';
 import { readFileSync, mkdirSync, openSync, closeSync, unlinkSync } from 'node:fs';
 import { homedir } from 'node:os';
 import path from 'node:path';
@@ -14,7 +15,7 @@ import { z } from 'zod';
 const args = process.argv.slice(2);
 const value = (flag: string) => args.includes(flag) ? args[args.indexOf(flag) + 1] : undefined;
 if (args.includes('--help') || !value('--config')) {
-  console.log('KeepMind OS — free MIT runner\nUsage: npm run runner -- --config examples/workspace.json --task "Review README"\nOptions: --watch (scheduled routines), --data-dir DIR, --agent ID, --accept TASK_ID\nAPI keys: OPENAI_API_KEY / ANTHROPIC_API_KEY. No KeepMind account required.');
+  console.log('KeepMind OS — free MIT runner\nUsage: npm run runner -- --config examples/workspace.json --task "Review README"\nOptions: --watch (scheduled routines), --data-dir DIR, --agent ID, --accept TASK_ID, --resume TASK_ID, --inspect TASK_ID, --reconcile TASK_ID --step KEY --result-file FILE\nAPI keys: OPENAI_API_KEY / ANTHROPIC_API_KEY. No KeepMind account required.');
   process.exit(args.includes('--help') ? 0 : 1);
 }
 const configSchema = z.object({
@@ -39,6 +40,7 @@ process.on('exit', () => { closeSync(lockFd); unlinkSync(lock); });
 const storage = new StorageManager(dataDir);
 storage.recoverInterruptedExecutions();
 const work = new WorkManager(storage); const manager = new AgentManager(); const memory = new MemoryManager(storage);
+const checkpoints = new CheckpointStore(storage); manager.setCheckpointStore(checkpoints);
 manager.getToolRegistry().setContext({ workspaceDir: path.resolve(path.dirname(configFile), config.workspace),
   personalBrainSearch: async (query, limit) => memory.search(query, limit) });
 manager.setConstraintsProvider(() => ({ policy: { fileAccess: 'workspace', shellAccess: 'disabled' } }));
@@ -49,11 +51,15 @@ manager.setBudgetChecker((id, _model, estimate) => {
   const start = new Date(); start.setUTCDate(1); start.setUTCHours(0,0,0,0);
   if (storage.getAgentSpendSince(id, start.toISOString()) + estimate > agent.monthlyBudgetUsd) throw new Error('Monthly budget exceeded');
 });
-async function run(agentId: string, goal: string) {
+async function run(agentId: string, goal: string, resumeTaskId?: string) {
   const agent = config.agents.find(a => a.id === agentId); if (!agent) throw new Error('Unknown agent');
-  const task = work.create({ goal, agentId, project: path.basename(config.workspace) }, 'runner');
+  const task = resumeTaskId ? work.get(resumeTaskId) : work.create({ goal, agentId, project: path.basename(config.workspace) }, 'runner');
+  const previous = resumeTaskId && task.executionId ? storage.getAgentExecution(task.executionId) : undefined;
+  if (resumeTaskId && (task.status !== 'blocked' || !previous || (previous.status !== 'failed' && !(previous.status === 'completed' && checkpoints.read(previous.id)?.output)) || !checkpoints.read(previous.id))) throw new Error('No resumable checkpoint');
   const result = await work.run(task.id, async (_id, input) => {
-    const id = randomUUID(); const startedAt = new Date().toISOString();
+    const id = previous?.id ?? randomUUID(); const startedAt = previous?.startedAt ?? new Date().toISOString();
+    if (previous) input = previous.input;
+    work.attachExecution(task.id, id);
     storage.saveAgentExecution({ id, agentId, input, status: 'running', progress: 0, startedAt, userId: 'runner' });
     try {
       const execution = await manager.executeAgent(agentId, { model: agent.model, temperature: 0.2, maxTokens: agent.maxTokens,
@@ -67,6 +73,18 @@ async function run(agentId: string, goal: string) {
   console.log(JSON.stringify(result));
   return result;
 }
+const inspect = value('--inspect');
+if (inspect) { const task = work.get(inspect); console.log(JSON.stringify({ task, steps: task.executionId ? checkpoints.steps(task.executionId) : [] }, null, 2)); storage.close(); process.exit(0); }
+const reconcile = value('--reconcile');
+if (reconcile) {
+  const task = work.get(reconcile);
+  if (task.status !== 'blocked' || !task.executionId || !value('--step') || !value('--result-file')) throw new Error('Use a blocked task with --step and --result-file');
+  checkpoints.reconcile(task.executionId, value('--step')!, readFileSync(value('--result-file')!, 'utf8'), 'runner');
+  work.change(task.id, 'comment', `External result verified for ${value('--step')}`);
+  storage.close(); process.exit(0);
+}
+const resume = value('--resume');
+if (resume) { const task = work.get(resume); const result = await run(task.agentId, task.goal, resume); storage.close(); process.exit(result.status === 'review' ? 0 : 1); }
 const accept = value('--accept');
 if (accept) { console.log(JSON.stringify(work.change(accept, 'accept'))); storage.close(); process.exit(0); }
 if (value('--task')) {

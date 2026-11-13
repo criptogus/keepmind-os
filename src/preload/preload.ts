@@ -1,9 +1,12 @@
+import type { ToolStep } from '../main/execution/CheckpointStore.js';
 import type { CreateWorkInput, WorkAction, WorkSnapshot, WorkTask } from '../shared/work.js';
 import { contextBridge, ipcRenderer } from 'electron';
 import type { Agent, Team, Approval, GovernanceRule, AuditEntry, AgentExecution, AgentConfig, CreateAgentInput, TeamConfig, AppSettings, Skill, AgentTrigger, LocalUser, UserRole, ComputerAccessLevel, LlmUsageRecord, RoutingDecision, MemoryItem } from '../shared/types.js';
 import type { ModelCatalogResponse } from '../shared/models.js';
 
 contextBridge.exposeInMainWorld('electronAPI', {
+  workCheckpoint: (id: string) => ipcRenderer.invoke('work:checkpoint', id) as Promise<{ available: boolean; steps: ToolStep[] }>,
+  workReconcile: (id: string, key: string, result: string) => ipcRenderer.invoke('work:reconcile', id, key, result) as Promise<void>,
   workList: () => ipcRenderer.invoke('work:list') as Promise<WorkSnapshot>,
   workCreate: (input: CreateWorkInput) => ipcRenderer.invoke('work:create', input) as Promise<WorkTask>,
   workAction: (id: string, action: WorkAction, note?: string) => ipcRenderer.invoke('work:action', id, action, note) as Promise<WorkTask>,
@@ -230,6 +233,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
 declare global {
   interface Window {
     electronAPI: {
+      workCheckpoint: (id: string) => Promise<{ available: boolean; steps: ToolStep[] }>;
+      workReconcile: (id: string, key: string, result: string) => Promise<void>;
       workList: () => Promise<WorkSnapshot>;
       workCreate: (input: CreateWorkInput) => Promise<WorkTask>;
       workAction: (id: string, action: WorkAction, note?: string) => Promise<WorkTask>;

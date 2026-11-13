@@ -13,7 +13,7 @@ export class WorkManager {
     this.state = raw ? JSON.parse(raw) : { tasks: [], rules: [] };
     for (const task of this.state.tasks) {
       if (task.status === 'running') {
-        task.status = 'blocked'; task.error = 'Interrupted by restart. Check external effects before retrying.';
+        task.status = 'blocked'; task.error = 'Interrupted by restart. Resume from the checkpoint after reviewing uncertain effects.';
         this.event(task, 'interrupted', task.error);
       }
     }
@@ -42,6 +42,9 @@ export class WorkManager {
       criteria: text(input.criteria, 4000) || 'Deliver a useful result with sources and explicit limitations.',
       dependencies, status: 'backlog', revision: 0, events: [], createdAt: now, updatedAt: now };
     this.event(task, 'created', 'Task created'); this.state.tasks.unshift(task); this.save(); return structuredClone(task);
+  }
+  attachExecution(id: string, executionId: string) {
+    const task = this.task(id); task.executionId = executionId; this.save();
   }
   assertReady(id: string): void {
     const task = this.task(id);
@@ -77,7 +80,7 @@ export class WorkManager {
       task.status = 'done'; task.acceptedAt = new Date().toISOString(); this.event(task, 'accepted', note || 'Result accepted');
     } else if (action === 'revise') {
       if (!['review', 'blocked', 'cancelled', 'done'].includes(task.status) || !note) throw new Error('A correction is required for a finished or blocked task');
-      task.status = 'backlog'; task.acceptedAt = undefined; this.event(task, 'revision', note);
+      task.status = 'backlog'; task.acceptedAt = undefined; task.executionId = undefined; this.event(task, 'revision', note);
     } else if (action === 'cancel') {
       if (task.status === 'done') throw new Error('Accepted tasks cannot be cancelled');
       task.status = 'cancelled'; this.event(task, 'cancelled', 'Cancellation requested');
