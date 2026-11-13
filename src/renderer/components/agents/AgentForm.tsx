@@ -1,3 +1,4 @@
+import { skillLabel } from '../../lib/skillLanguage';
 import React, { useEffect, useState } from 'react';
 import { Button, Checkbox, Group, NumberInput, Select, Slider, Stack, Text, Textarea, TextInput, Title } from '@mantine/core';
 import { useAgentStore } from '../../store/agentStore';
@@ -25,7 +26,7 @@ interface AgentFormProps {
 }
 
 export default function AgentForm({ onClose, template, onCreated }: AgentFormProps) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const { createAgent, loading, error, agents } = useAgentStore();
   const { groups: modelGroups } = useModelOptions();
   const [name, setName] = useState(template?.name ?? '');
@@ -253,8 +254,8 @@ export default function AgentForm({ onClose, template, onCreated }: AgentFormPro
                   size="sm"
                   label={
                     <Text size="sm">
-                      <Text span fw={600}>{skill.name}</Text>
-                      {skill.description ? ` — ${skill.description}` : ''}
+                      <Text span fw={600}>{skillLabel(skill, lang).name}</Text>
+                      {skill.description ? ` — ${skillLabel(skill, lang).description}` : ''}
                       {skill.toolNames.length > 0 ? ` (${skill.toolNames.length} ${t('agents.tools')})` : ''}
                     </Text>
                   }

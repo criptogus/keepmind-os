@@ -89,3 +89,50 @@ it('starts shared revisions in one action and rejects a stale duplicate submissi
   finish({id:'second',agentId:'a',status:'completed',progress:100,input:{},output:{content:'Shorter'}});
  } finally {await f.close();vi.restoreAllMocks();}
 });
+
+it('scopes conversational replies and persists asynchronous results without starting work',async()=>{
+  const f=fixture();try{
+    const task=f.runtime.work.create(input,'alice');
+    const reply=vi.spyOn(f.runtime,'execute').mockResolvedValue({id:'chat',agentId:'a',status:'completed',progress:100,input:{},output:{content:JSON.stringify({intent:'clarify',reply:'Who is this for?',choices:['Customers','My team']})}});
+    const message={requestId:'prepare-12345',text:task.goal,mode:'prepare',language:'en'};
+    expect(()=>f.api.call(reader,'work:message',[task.id,message,task.revision])).toThrow('contributor');
+    const privateTask=f.runtime.work.create({...input,project:'secret'},'admin');
+    expect(()=>f.api.call(alice,'work:message',[privateTask.id,message,privateTask.revision])).toThrow('unavailable');
+    const result=await f.api.call(alice,'work:message',[task.id,message,task.revision]) as any;
+    expect(result.conversation.decision.kind).toBe('clarify');expect(result.status).toBe('backlog');
+    expect(reply.mock.calls[0][4]).toBe(true);
+    await expect(f.api.call(alice,'work:message',[task.id,{...message,requestId:'stale-123456'},task.revision])).rejects.toThrow('changed');
+    expect(reply).toHaveBeenCalledTimes(1);
+  }finally{await f.close();}
+});
+
+it('aborts pending conversation inference on cancellation and releases the active slot',async()=>{
+  const f=fixture();let started!:()=>void;const ready=new Promise<void>(r=>{started=r;});let providerSignal:AbortSignal|undefined;
+  try{
+    f.runtime.agent('a').model='compatible/chat-test';
+    f.runtime.manager.setCompatibleProviders({resolve:()=>({profile:{id:'chat-test',model:'fixture',maxOutputTokens:100,inputUsdPerMillion:1,outputUsdPerMillion:1,maxRunUsd:1},client:{chat:{completions:{create:async(_request:unknown,options:{signal:AbortSignal})=>{
+      providerSignal=options.signal;started();
+      return (async function*(){await new Promise<void>((_resolve,reject)=>{options.signal.addEventListener('abort',()=>reject(options.signal.reason),{once:true});});})();
+    }}}}})} as any);
+    const task=f.runtime.work.create(input,'alice');
+    const pending=Promise.resolve(f.api.call(alice,'work:message',[task.id,{requestId:'cancel-chat-1234',text:'Prepare this',language:'en',mode:'prepare'},task.revision]));
+    // Attach rejection handling before cancellation to avoid an unhandled rejection.
+    const finished=pending.catch(error=>error);
+    await ready;
+    f.api.call(alice,'work:action',[task.id,'cancel','',f.runtime.work.get(task.id).revision]);
+    await finished;
+    expect(providerSignal?.aborted).toBe(true);expect(f.runtime.manager.getActiveExecutions()).toHaveLength(0);
+    expect(f.runtime.work.get(task.id).status).toBe('cancelled');expect(f.runtime.work.get(task.id).executionId).toBeUndefined();
+  }finally{await f.close();}
+});
+
+it('starts immediate revisions at concurrency one after inference releases its slot',async()=>{
+  const f=fixture();try{
+    f.runtime.config.maxConcurrent=1;
+    const task=f.runtime.work.create(input,'alice');
+    await f.runtime.work.run(task.id,async()=>({id:'original',agentId:'a',status:'completed',progress:100,input:{},output:{content:'Original'}}));
+    const execute=vi.spyOn(f.runtime,'execute').mockImplementation(async(_agent,context,_actor,_resume,conversationOnly)=>({id:conversationOnly?'chat':'new-run',agentId:'a',status:'completed',progress:100,input:context,output:{content:conversationOnly?JSON.stringify({intent:'revise',reply:'Updating the proposal.'}):'Revised'}}));
+    await f.api.call(alice,'work:message',[task.id,{requestId:'revise-single-123',text:'Make it shorter',language:'en'},f.runtime.work.get(task.id).revision]);
+    expect(execute).toHaveBeenCalledTimes(2);expect(f.runtime.work.get(task.id).deliveries?.map(d=>d.content)).toEqual(['Original','Revised']);
+  }finally{await f.close();}
+});

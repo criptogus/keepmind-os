@@ -5,7 +5,7 @@ const base = {
   height: 48,
   viewBox: '0 0 24 24',
   fill: 'none',
-  stroke: '#111111',
+  stroke: 'currentColor',
   strokeWidth: 1.5,
   strokeLinecap: 'round' as const,
   strokeLinejoin: 'round' as const,
@@ -16,8 +16,8 @@ export function IconAgent() {
     <svg {...base}>
       <rect x="4" y="8" width="16" height="12" rx="2" />
       <path d="M12 8V4M8 4h8" />
-      <circle cx="9" cy="13" r="1" fill="#111" stroke="none" />
-      <circle cx="15" cy="13" r="1" fill="#111" stroke="none" />
+      <circle cx="9" cy="13" r="1" fill="currentColor" stroke="none" />
+      <circle cx="15" cy="13" r="1" fill="currentColor" stroke="none" />
       <path d="M9 17h6" />
     </svg>
   );

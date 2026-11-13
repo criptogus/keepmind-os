@@ -3,6 +3,7 @@ import {
   Button, Card, Group, MultiSelect, NumberInput, Select, Stack, Switch, Text,
   TextInput, Textarea, Title,
 } from '@mantine/core';
+import LoadFeedback from '../common/LoadFeedback';
 import PageHeader from '../common/PageHeader';
 import AgentSelect from '../common/AgentSelect';
 import BotAvatar from '../common/BotAvatar';
@@ -129,14 +130,23 @@ export default function AutomationPanel() {
   const [creating, setCreating] = useState(false);
   const [pickedPreset, setPickedPreset] = useState<string | null>(null);
 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [mutating, setMutating] = useState(false);
   const reload = useCallback(async () => {
-    const [tr, ag] = await Promise.all([
-      window.electronAPI.triggersList().catch(() => [] as AgentTrigger[]),
-      window.electronAPI.getAgents().catch(() => [] as Agent[]),
-    ]);
-    setTriggers(tr);
-    setAgents(ag);
+    setLoading(true); setError(null);
+    try {
+      const [tr, ag] = await Promise.all([window.electronAPI.triggersList(), window.electronAPI.getAgents()]);
+      setTriggers(tr); setAgents(ag);
+    } catch (e) { setError(e instanceof Error ? e.message : String(e)); }
+    finally { setLoading(false); }
   }, []);
+  const mutate = async (action: () => Promise<unknown>) => {
+    setMutating(true); setError(null);
+    try { await action(); await reload(); }
+    catch (e) { setError(e instanceof Error ? e.message : String(e)); }
+    finally { setMutating(false); }
+  };
 
   useEffect(() => { void reload(); }, [reload]);
 
@@ -178,6 +188,7 @@ export default function AutomationPanel() {
       setForm(EMPTY);
       setPickedPreset(null);
       await reload();
+    } catch (e) { setError(e instanceof Error ? e.message : String(e));
     } finally {
       setCreating(false);
     }
@@ -191,7 +202,8 @@ export default function AutomationPanel() {
         help={t('auto.help')}
       />
 
-      {agents.length === 0 ? (
+      <LoadFeedback loading={loading} error={error} retry={() => void reload()} />
+      {agents.length === 0 && (loading || error) ? null : agents.length === 0 ? (
         <Card withBorder padding="xl" radius="md">
           <Text size="sm" c="dimmed" ta="center">{t('auto.needAgent')}</Text>
         </Card>
@@ -246,19 +258,20 @@ export default function AutomationPanel() {
                       <Group gap="xs" wrap="nowrap">
                         <Switch
                           size="sm"
+                          disabled={mutating || loading}
+                          aria-label={`${tr.name}: ${lang === 'pt' ? 'ativar rotina' : 'enable routine'}`}
                           checked={tr.enabled}
                           onChange={(e) => {
-                            void window.electronAPI.triggersUpdate(tr.id, { enabled: e.currentTarget.checked }).then(reload);
+                            const enabled = e.currentTarget.checked;
+                            void mutate(() => window.electronAPI.triggersUpdate(tr.id, { enabled }));
                           }}
                         />
                         <Button
                           size="compact-xs"
                           variant="subtle"
                           color="gray"
-                          onClick={async () => {
-                            await window.electronAPI.triggersDelete(tr.id);
-                            await reload();
-                          }}
+                          disabled={mutating || loading}
+                          onClick={() => void mutate(() => window.electronAPI.triggersDelete(tr.id))}
                         >
                           {t('common.delete')}
                         </Button>

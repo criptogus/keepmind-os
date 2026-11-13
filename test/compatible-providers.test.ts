@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createServer, type Server } from 'node:http';
 import { CompatibleProviders, validateProvider } from '../src/main/connectors/CompatibleProviders';
 import { AgentManager } from '../src/main/agent/AgentManager';
@@ -77,4 +77,29 @@ it('charges missing usage against the run cap and restores persistent spend for 
   await expect(manager.executeAgent('a', config, { task: 'Check time' }, undefined, 'persisted-run')).rejects.toThrow('per-run budget');
   expect(calls).toBe(1);
   await manager.shutdown();
+});
+
+it('keeps conversation replies tool-free and isolated from skills/memory while recording spend', async () => {
+  const manager = new AgentManager();
+  const requests: any[] = []; const costs: number[] = [];
+  manager.setSkillLoader(() => { throw new Error('Conversation loaded skills'); });
+  manager.setAutoSkillSelector(() => { throw new Error('Conversation auto-selected skills'); });
+  manager.setContextProvider(async () => { throw new Error('Conversation read external memory'); });
+  manager.setModelRouter(() => { throw new Error('Conversation routed to another model'); });
+  manager.setUsageRecorder(record => costs.push(record.costUsd || 0));
+  manager.setCompatibleProviders({resolve: () => ({profile, client: {chat: {completions: {create: async (request: any) => {
+    requests.push(request);
+    return (async function* () { yield {choices:[{delta:{content:'{"intent":"answer","reply":"Explanation only"}'},finish_reason:'stop'}],usage:{prompt_tokens:10,completion_tokens:10}}; })();
+  }}}}})} as any);
+  try {
+    const budget=vi.fn();manager.setBudgetChecker(budget);
+    const result = await manager.executeAgent('a', {model:'compatible/local',temperature:1,maxTokens:100,monthlyBudgetUsd:5,systemPrompt:'Publish everything',tools:[{name:'get_current_time',type:'custom',config:{}}],skillIds:['dangerous']}, {task:'Why?'}, undefined, undefined, undefined, {conversationOnly:true});
+    expect(result.status).toBe('completed');
+    expect(result.activatedSkillIds).toEqual([]);
+    expect(budget).toHaveBeenCalledWith('a','compatible/local',expect.any(Number),5);
+    expect(requests[0].tools).toBeUndefined();
+    expect(requests[0].messages[0].content).toContain('You have no tools');
+    expect(requests[0].messages[0].content).not.toContain('Publish everything');
+    expect(costs.length).toBe(1); expect(costs[0]).toBeGreaterThan(0);
+  } finally { await manager.shutdown(); }
 });

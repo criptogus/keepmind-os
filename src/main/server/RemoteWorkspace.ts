@@ -7,7 +7,7 @@ export class RemoteWorkspace {
   }
   async call(method:string,args:unknown[]=[]){
     let response:Response;
-    try{response=await fetch(new URL('/v1/call',this.url),{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${this.token}`,'Idempotency-Key':randomUUID()},body:JSON.stringify({method,args}),redirect:'error',signal:AbortSignal.timeout(15000)});}
+    try{response=await fetch(new URL('/v1/call',this.url),{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${this.token}`,'Idempotency-Key':randomUUID()},body:JSON.stringify({method,args}),redirect:'error',signal:AbortSignal.timeout(method === 'work:message' ? 90000 : 15000)});}
     catch{throw new Error('Shared workspace unavailable. Check the connection and refresh before retrying. Local work was not changed.');}
     const result=await response.json() as {value?:unknown;error?:string};
     if(!response.ok)throw new Error(result.error||`Workspace request failed (${response.status})`);

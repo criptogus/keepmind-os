@@ -1,3 +1,4 @@
+import { skillLabel } from '../../lib/skillLanguage';
 import React, { useEffect, useState } from 'react';
 import { Badge, Button, Card, Checkbox, Group, NumberInput, Select, Slider, Stack, Tabs, Text, Textarea, Title } from '@mantine/core';
 import { useAgentStore } from '../../store/agentStore';
@@ -214,8 +215,8 @@ export default function AgentEditor({ agentId, onClose }: AgentEditorProps) {
                       size="sm"
                       label={
                         <Text size="sm">
-                          <Text span fw={600}>{skill.name}</Text>
-                          {skill.description ? ` — ${skill.description}` : ''}
+                          <Text span fw={600}>{skillLabel(skill, lang).name}</Text>
+                          {skill.description ? ` — ${skillLabel(skill, lang).description}` : ''}
                           {skill.toolNames.length > 0 ? ` (${skill.toolNames.length} ${t('agents.tools')})` : ''}
                         </Text>
                       }

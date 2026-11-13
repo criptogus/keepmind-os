@@ -38,6 +38,7 @@ export class ComposioManager {
     private secrets: SecretStore,
     private settings: SettingsStore,
     private openExternal: (url: string) => Promise<void>,
+    private userId = USER_ID,
   ) {}
 
   isConfigured(): boolean {
@@ -115,14 +116,15 @@ export class ComposioManager {
    * polled. Does NOT block waiting for the user to finish auth.
    */
   async connect(toolkit: string): Promise<{ id: string; redirectUrl: string | null }> {
-    const session = await this.composio.sessions.create(USER_ID, { toolkits: [toolkit] } as never);
+    const session = await this.composio.sessions.create(this.userId, { toolkits: [toolkit] } as never);
     const req = await session.authorize(toolkit);
     const state = req.toJSON();
     const redirectUrl = state.redirectUrl ?? null;
-    if (redirectUrl) await this.openExternal(redirectUrl);
     const conns = this.loadConnections().filter((c) => c.toolkit !== toolkit);
     conns.push({ toolkit, connectedAccountId: state.id, status: state.status || 'INITIATED' });
     this.saveConnections(conns);
+    // Persist pending identity before opening the browser; the returned URL is the recovery path.
+    if (redirectUrl) await this.openExternal(redirectUrl).catch(()=>{});
     return { id: state.id, redirectUrl };
   }
 
@@ -154,8 +156,9 @@ export class ComposioManager {
   }
 
   private async session() {
-    const active = this.loadConnections().filter((c) => c.status === 'ACTIVE').map((c) => c.toolkit);
-    return this.composio.sessions.create(USER_ID, { toolkits: active } as never);
+    const active = (await this.refreshConnections()).filter((c) => c.status === 'ACTIVE');
+    if(!active.length)throw new Error('No connected account available');
+    return this.composio.sessions.create(this.userId, { toolkits: active.map(c=>c.toolkit), connectedAccounts:Object.fromEntries(active.map(c=>[c.toolkit,c.connectedAccountId])), manageConnections:false, instant:false });
   }
 
   /** Semantic search over available Composio tools/actions. */

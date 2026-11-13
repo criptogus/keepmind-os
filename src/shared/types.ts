@@ -48,6 +48,7 @@ export interface Skill {
 }
 
 export interface AgentConfig {
+  projectId?: string;
   monthlyRunCap?: number;
   executionTimeoutSeconds?: number;
   model: string;

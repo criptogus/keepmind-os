@@ -1,3 +1,7 @@
+import type { ConfigurationContext } from '../shared/configuration.js';
+import type { Project, ProjectInput, ProjectAccess, CompanyStandard, ConnectionInstance } from '../shared/projects';
+import type { ConfigurationState } from '../shared/configuration';
+import type { ConversationInput } from '../shared/conversation';
 import type { SakStatus, SakHit, SakPreview } from '../shared/superAgentSkill.js';
 import type { BusinessTeamInput, BusinessTeamResult } from '../shared/businessTeams.js';
 import type { McpConfig } from '../main/mcp/McpManager.js';
@@ -13,6 +17,16 @@ contextBridge.exposeInMainWorld('electronAPI', {
   workArtifacts: (id: string) => ipcRenderer.invoke('work:artifacts', id) as Promise<import('../shared/artifacts.js').WorkArtifact[]>,
   workCheckpoint: (id: string) => ipcRenderer.invoke('work:checkpoint', id) as Promise<{ available: boolean; steps: ToolStep[] }>,
   workReconcile: (id: string, key: string, result: string, revision?: number) => ipcRenderer.invoke('work:reconcile', id, key, result, revision) as Promise<void>,
+  projectStandards: () => ipcRenderer.invoke('projects:standards') as Promise<CompanyStandard[]>,
+  projectSaveStandard: (input:Omit<CompanyStandard,'id'> & {id?:string}) => ipcRenderer.invoke('projects:saveStandard',input) as Promise<CompanyStandard>,
+  projectAccess: (id:string,input:Omit<ProjectAccess,'companyId'> & {companyId?:string|null}) => ipcRenderer.invoke('projects:access',id,input) as Promise<Project>,
+  projectConnections: () => ipcRenderer.invoke('projects:connections') as Promise<ConnectionInstance[]>,
+  projectConnectionCreate: (input:Omit<ConnectionInstance,'id'>) => ipcRenderer.invoke('projects:connectionCreate',input) as Promise<ConnectionInstance>,
+  projectConnectionConnect: (id:string) => ipcRenderer.invoke('projects:connectionConnect',id) as Promise<{redirectUrl?:string|null;status?:string}>,
+  projectConnectionStatus: (id:string) => ipcRenderer.invoke('projects:connectionStatus',id) as Promise<{status?:string;phone?:string;qrDataUrl?:string;accounts?:Array<{status:string;toolkit:string}>}>,
+  projectBrainConfigure: (id:string,url:string,token:string) => ipcRenderer.invoke('projects:brainConfigure',id,url,token) as Promise<{ok:boolean;error?:string}>,
+  projectList: () => ipcRenderer.invoke('projects:list') as Promise<Project[]>,
+  projectCreate: (input:ProjectInput) => ipcRenderer.invoke('projects:create',input) as Promise<Project>,
   workContext: () => ipcRenderer.invoke('work:context') as Promise<WorkContext>,
   workspaceConnection: () => ipcRenderer.invoke('workspace:connection') as Promise<{ url: string; connected: boolean }>,
   workspaceConnect: (url: string, token: string) => ipcRenderer.invoke('workspace:connect', url, token) as Promise<WorkContext>,
@@ -20,8 +34,13 @@ contextBridge.exposeInMainWorld('electronAPI', {
   mcpList: () => ipcRenderer.invoke('mcp:list') as Promise<{ configs: McpConfig[]; statuses: Array<{id:string;connected:boolean;tools:string[];error?:string}> }>,
   mcpConfigure: (configs: unknown) => ipcRenderer.invoke('mcp:configure', configs) as Promise<Array<{id:string;connected:boolean;tools:string[];error?:string}>>,
   workPreview: (id: string) => ipcRenderer.invoke('work:preview', id) as Promise<WorkPreview>,
+  configurationState: (context?:ConfigurationContext) => ipcRenderer.invoke('configuration:state',context) as Promise<ConfigurationState>,
+  configurationMessage: (text:string,language:'pt'|'en',context?:ConfigurationContext) => ipcRenderer.invoke('configuration:message',{text,language,context}) as Promise<{state:ConfigurationState;autoStart?:string}>,
+  configurationExecute: (id:string,language:'pt'|'en',credential?:string,context?:ConfigurationContext) => ipcRenderer.invoke('configuration:execute',{id,language,credential,context}) as Promise<ConfigurationState>,
+  configurationDismiss: (id:string,context?:ConfigurationContext) => ipcRenderer.invoke('configuration:dismiss',id,context) as Promise<ConfigurationState>,
   workList: () => ipcRenderer.invoke('work:list') as Promise<WorkSnapshot>,
   workCreate: (input: CreateWorkInput) => ipcRenderer.invoke('work:create', input) as Promise<WorkTask>,
+  workMessage: (id: string, input: ConversationInput, revision: number) => ipcRenderer.invoke('work:message', id, input, revision) as Promise<WorkTask>,
   workAction: (id: string, action: WorkAction, note?: string, revision?: number) => ipcRenderer.invoke('work:action', id, action, note, revision) as Promise<WorkTask>,
   workReviewRule: (id: string, accept: boolean, version?: number) => ipcRenderer.invoke('work:reviewRule', id, accept, version) as Promise<void>,
   workExport: () => ipcRenderer.invoke('work:export') as Promise<string>,
@@ -143,6 +162,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   secondBrainTest: () => ipcRenderer.invoke('secondbrain:test') as Promise<{ ok: boolean; error?: string }>,
 
   // Granola meetings connector (OAuth)
+  granolaOpenLogin: () => ipcRenderer.invoke('granola:openLogin') as Promise<void>,
+  granolaCancel: () => ipcRenderer.invoke('granola:cancel') as Promise<{ok:boolean}>,
   granolaGetStatus: () => ipcRenderer.invoke('granola:getStatus') as Promise<{ enabled: boolean; connected: boolean; account?: string; lastSync?: string; lastSyncError?: string; syncedCount: number; syncMinutes: number }>,
   granolaConnect: () => ipcRenderer.invoke('granola:connect') as Promise<{ ok: boolean; account?: string; error?: string }>,
   granolaDisconnect: () => ipcRenderer.invoke('granola:disconnect') as Promise<{ ok: boolean }>,
@@ -326,6 +347,16 @@ declare global {
       workArtifacts: (id: string) => Promise<import('../shared/artifacts.js').WorkArtifact[]>;
       workCheckpoint: (id: string) => Promise<{ available: boolean; steps: ToolStep[] }>;
       workReconcile: (id: string, key: string, result: string, revision?: number) => Promise<void>;
+      projectStandards: () => Promise<CompanyStandard[]>;
+      projectSaveStandard: (input:Omit<CompanyStandard,'id'> & {id?:string}) => Promise<CompanyStandard>;
+      projectAccess: (id:string,input:Omit<ProjectAccess,'companyId'> & {companyId?:string|null}) => Promise<Project>;
+      projectConnections: () => Promise<ConnectionInstance[]>;
+      projectConnectionCreate: (input:Omit<ConnectionInstance,'id'>) => Promise<ConnectionInstance>;
+      projectConnectionConnect: (id:string) => Promise<{redirectUrl?:string|null;status?:string}>;
+      projectConnectionStatus: (id:string) => Promise<{status?:string;phone?:string;qrDataUrl?:string;accounts?:Array<{status:string;toolkit:string}>}>;
+      projectBrainConfigure: (id:string,url:string,token:string) => Promise<{ok:boolean;error?:string}>;
+      projectList: () => Promise<Project[]>;
+      projectCreate: (input:ProjectInput) => Promise<Project>;
       workContext: () => Promise<WorkContext>;
       workspaceConnection: () => Promise<{ url: string; connected: boolean }>;
       workspaceConnect: (url: string, token: string) => Promise<WorkContext>;
@@ -333,8 +364,13 @@ declare global {
       mcpList: () => Promise<{ configs: McpConfig[]; statuses: Array<{id:string;connected:boolean;tools:string[];error?:string}> }>;
       mcpConfigure: (configs: unknown) => Promise<Array<{id:string;connected:boolean;tools:string[];error?:string}>>;
       workPreview: (id: string) => Promise<WorkPreview>;
+      configurationState: (context?:ConfigurationContext) => Promise<ConfigurationState>;
+      configurationMessage: (text:string,language:'pt'|'en',context?:ConfigurationContext) => Promise<{state:ConfigurationState;autoStart?:string}>;
+      configurationExecute: (id:string,language:'pt'|'en',credential?:string,context?:ConfigurationContext) => Promise<ConfigurationState>;
+      configurationDismiss: (id:string,context?:ConfigurationContext) => Promise<ConfigurationState>;
       workList: () => Promise<WorkSnapshot>;
       workCreate: (input: CreateWorkInput) => Promise<WorkTask>;
+      workMessage: (id: string, input: ConversationInput, revision: number) => Promise<WorkTask>;
       workAction: (id: string, action: WorkAction, note?: string, revision?: number) => Promise<WorkTask>;
       workReviewRule: (id: string, accept: boolean, version?: number) => Promise<void>;
       workExport: () => Promise<string>;
@@ -431,6 +467,8 @@ declare global {
       secondBrainSetConfig: (config: { enabled?: boolean; url?: string; token?: string; access?: 'read' | 'write'; blockPii?: boolean }) =>
         Promise<{ enabled: boolean; url: string; hasToken: boolean; access?: string; blockPii?: boolean }>;
       secondBrainTest: () => Promise<{ ok: boolean; error?: string }>;
+      granolaOpenLogin: () => Promise<void>;
+      granolaCancel: () => Promise<{ok:boolean}>;
       granolaGetStatus: () => Promise<{ enabled: boolean; connected: boolean; account?: string; lastSync?: string; lastSyncError?: string; syncedCount: number; syncMinutes: number }>;
       granolaConnect: () => Promise<{ ok: boolean; account?: string; error?: string }>;
       granolaDisconnect: () => Promise<{ ok: boolean }>;

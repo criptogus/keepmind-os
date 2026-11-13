@@ -1,3 +1,4 @@
+import { localizeTemplate, localizePack } from '../../lib/catalogLanguage';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Badge, Button, Card, Group, Select, SimpleGrid, Stack, Stepper, Text, Textarea, TextInput, Title, UnstyledButton } from '@mantine/core';
 import { useAgentStore } from '../../store/agentStore';
@@ -71,13 +72,13 @@ export default function AgentWizard({ onClose, onCreated, onAdvanced }: AgentWiz
   const { mode: appMode } = useAppMode();
   const grouped = useMemo(() => {
     const acc: Record<string, AgentTemplate[]> = {};
-    for (const tpl of AGENT_TEMPLATES) {
+    for (const tpl of AGENT_TEMPLATES.map(item => localizeTemplate(item, lang))) {
       // 'unset' shows everything; personal hides corporate role templates.
       if (appMode === 'personal' && (tpl.audience ?? 'corporate') === 'corporate') continue;
       (acc[tpl.group] ||= []).push(tpl);
     }
     return Object.entries(acc);
-  }, [appMode]);
+  }, [appMode, lang]);
 
   const buildConfig = (tpl: AgentTemplate | null = template): AgentConfig => {
     const base = tpl?.config ?? BLANK_TEMPLATE.config;
@@ -167,7 +168,7 @@ export default function AgentWizard({ onClose, onCreated, onAdvanced }: AgentWiz
       {step === 0 && (
         <Stack gap="md" style={{ maxHeight: '55vh', overflowY: 'auto', paddingRight: 4 }}>
           {(() => {
-            const visiblePacks = NICHE_PACKS.filter((p) => appMode !== 'personal' || p.audience !== 'corporate');
+            const visiblePacks = NICHE_PACKS.map(item => localizePack(item, lang)).filter((p) => appMode !== 'personal' || p.audience !== 'corporate');
             return visiblePacks.length > 0 ? (
               <div>
                 <Text size="xs" fw={600} tt="uppercase" c="dimmed" mb={6}>{t('wiz.packs')}</Text>

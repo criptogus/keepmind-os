@@ -158,18 +158,19 @@ export class TriggerManager {
    * POST arrives with a trigger's token. Returns false for unknown tokens
    * or disabled rules — the HTTP layer maps that to 404.
    */
-  async dispatchWebhook(token: string, payload: unknown): Promise<boolean> {
+  async dispatchWebhook(token: string, payload: unknown, eventId?: string): Promise<boolean> {
     this.load();
     const rule = this.rules.find((r) => r.enabled && r.kind === 'webhook' && r.webhookToken === token);
     if (!rule || !this.ctx) return false;
     rule.lastRunAt = new Date().toISOString();
     this.save();
-    await this.fire(rule.agentId, {
+    await this.ctx.runAgent(rule.agentId, {
       channel: 'webhook',
+      eventId,
       triggerId: rule.id,
       task: rule.prompt,
       webhookPayload: payload,
-    }, `webhook:${rule.id}`);
+    });
     return true;
   }
 

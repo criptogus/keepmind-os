@@ -1,3 +1,4 @@
+import { localizeTemplate, localizePack } from '../../lib/catalogLanguage';
 import React, { useEffect, useState } from 'react';
 import { Badge, Button, Card, Group, Modal, SimpleGrid, Stack, Text, TextInput, Textarea } from '@mantine/core';
 import { useTeamStore } from '../../store/teamStore';
@@ -14,7 +15,7 @@ import { avatarForAgent } from '../../../shared/avatars';
 import { IconTeam } from '../common/icons.js';
 
 export default function TeamList() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const { teams, loading, error, fetchTeams, selectTeam, deleteTeam, createTeam } = useTeamStore();
   const { agents } = useAgentStore();
   const [editingTeamId, setEditingTeamId] = useState<string | null>(null);
@@ -171,7 +172,7 @@ export default function TeamList() {
       <Modal opened={templatesOpen} onClose={() => setTemplatesOpen(false)} title={t('teams.templatesTitle')} size="lg">
         <Stack gap="sm">
           <Text size="sm" c="dimmed">{t('teams.templatesHint')}</Text>
-          {NICHE_PACKS.filter((p) => appMode !== 'personal' || p.audience !== 'corporate').map((pack) => (
+          {NICHE_PACKS.map(item => localizePack(item, lang)).filter((p) => appMode !== 'personal' || p.audience !== 'corporate').map((pack) => (
             <Card key={pack.id} withBorder padding="md" radius="md" className="km-enter km-hoverable">
               <Group justify="space-between" align="flex-start" wrap="nowrap" gap="sm">
                 <Stack gap={4} style={{ minWidth: 0 }}>

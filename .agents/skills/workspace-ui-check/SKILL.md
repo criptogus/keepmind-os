@@ -12,7 +12,7 @@ npm run verify:ux
 This reuses typecheck, unit/integration tests, build, the headless runner and
 `scripts/smoke-electron.mjs`, followed by the secret scan and pinned production-dependency/package policy check. Any failed stage exits
 nonzero. The smoke creates fresh temporary SQLite data, seeds a synthetic delivery,
-disables CLI credential import and must complete at least twenty-two checks. It writes
+disables CLI credential import and must complete at least forty-two checks. It writes
 `evidence/ux-report.json` plus screenshots. Never use production data or credentials.
 
 For only the smoke after a current build and runner build:
@@ -37,3 +37,27 @@ OAuth regressions use the production MCP SDK with controlled HTTP fixtures: PKCE
 Legacy feature adaptations must keep the current application identity and request/delivery flow. Verify compatible provider selection cannot fall through to a native OAuth account, declared prices enforce per-run limits, and keys never enter ordinary settings. Company-bound context must fail closed without falling back to global memory. Use synthetic multi-company fixtures for path, metadata and content isolation. The packaging gate compares the checked-in dependency inventory and rejects restricted SDKs; refreshing the inventory requires explicit dependency review, not automatic acceptance. Run `npm run check:bundle` for its aggregate report; packaging additionally runs the afterPack gate against ASAR and unpacked paths.
 
 Inspect Home, Agents, Approvals and Settings screenshots in both themes. The shared brand accent is #c4ff3d; glow belongs to primary actions, not warning/destructive controls. Verify reduced-motion disables text/message entry effects and the native app uses the KeepMind icon in development and packaged builds. Monochrome avatars use names/initials consistently across the agent list, selectors and conversation.
+
+Conversation-first changes must preserve unsent text across Settings and team navigation, isolate adjustment drafts by conversation, and retain the same conversation after connecting a provider. Verify the main workspace contains no delivery drawer and the material panel does not stack a modal on it. The smoke uses a loopback provider fixture to exercise a real first execution, a single-send revision, v1 history, v2 and acceptance. It must not call live providers.
+
+Switch the visible language picker between PT-BR and English, verify the saved setting and reload, and inspect onboarding, skills and material controls in both languages. Do not translate user-authored content or external catalog instructions. Built-in metadata is localized only when it still matches the stock description. `test/interface-language.test.ts` validates literal dictionary coverage and catalog/native-menu contracts.
+
+For intent changes, test clarification → brief → explicit start, questions that preserve the delivery, local thanks, ambiguous-message decisions, and immediate explicit revisions. Check persisted choices, stale decisions, cancellation and provider failures. Conversation inference must expose no tools or skills and must still record usage. Capture the clarification card and inspect focus and narrow layout.
+
+Search changes must check keyboard selection without losing the query focus, Enter navigation, multi-word/accent matching, empty/narrow layouts, and real remote loading/error/retry using a loopback workspace fixture. Do not monkey-patch the immutable Electron bridge. Preserve before/after captures and scope results to authorized work.
+
+Table/feedback changes must inspect History at desktop and 390px in light/dark themes, open a payload disclosure, and verify headers/actions remain readable rather than merely testing document overflow. Check Markdown table alignment and keyboard access. Preserve old content on reload failures. A routine mutation may succeed before its refresh fails: recovery copy must not promise that nothing changed. Webhook fixtures must use an isolated port and exercise payload retention, duplicate keys, conflicting payloads and malformed paths through HTTP. macOS window closure must leave workspace services alive; only actual quit performs cleanup.
+
+On macOS, run `node_modules/.bin/electron scripts/smoke-lifecycle.cjs` after the build. It closes and reopens a production window against an isolated profile, checks SQLite access and writes `evidence/lifecycle-report.json`. It deliberately fails on other platforms; use the platform-neutral lifecycle unit tests there.
+
+Configuration chat must use a fixed tool-free planner and typed action catalog; execution receives a persisted plan ID rather than caller-supplied parameters. Test missing-details clarification, explicit preview/apply, actor isolation, stale plans, duplicate apply and interrupted auth. Authentication credentials belong only in dedicated secure fields, never plan arguments or AI context. Confirm language changes in the destination language and resolve entity names in action previews; never translate user-authored names/instructions as enums. Granola callback tests use PKCE/state validation, browser recovery, cancellation and controlled token exchange; live account login is a separate result. Inspect the configuration conversation after repeated messages and approval, since effect cleanup can fail only on a subsequent render.
+
+### Project and company boundaries
+
+Run `npm run verify:ux` for the aggregate project/account checks as well. Use synthetic separate projects/accounts; never authenticate a real account merely to make a fixture pass. Verify cloned agents/skills, foreign-agent and dependency rejection, account identity pinning, no fallback to global memory/accounts, company inheritance opt-in and override behavior, authenticated-session restoration, and OAuth completion after closing its UI. Check project objectives, 12-item conversation pagination, accordion keyboard interaction, and access dialogs at desktop and narrow widths. Keep server-scoped Second Brain authorization distinct from a connection label. Record live-auth limitations separately from simulated SDK/loopback checks.
+
+### Team setup and inline connections
+
+Exercise ready-made project teams without a source team, and cloning with coordinator delegation IDs remapped. In project settings, test Team/Tools/Rules, per-service account creation → automatic selection → save, and distinguish selection from authentication. Inspect the tools accordion at desktop/390px and use keyboard tab navigation. Keep company rules visible and sharing opt-in.
+
+For chat connections, submit the original request through the ordinary composer. Assert that no dialog opens and that only missing details are requested. Use a loopback Second Brain endpoint and a synthetic token to verify the secure field → reviewed plan → real IPC/HTTP test → project binding. Check that other accounts remain selected, another project's configuration history stays empty, and neither model requests nor stored messages include the token. This does not validate the user's real Second Brain account.

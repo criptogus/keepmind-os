@@ -1,7 +1,11 @@
 export type WorkStatus = 'backlog' | 'running' | 'review' | 'done' | 'blocked' | 'cancelled';
 export interface WorkEvent { actorId?: string; id: string; at: string; kind: string; text: string; }
 export interface DeliveryVersion { version: number; content: string; at: string; executionId?: string; }
+export interface WorkSource { triggerId: string; channel: string; receivedAt: string; eventId?: string; payload?: unknown; }
 export interface WorkTask {
+  projectId?: string;
+  source?: WorkSource;
+  conversation?: import('./conversation.js').WorkConversation;
   deliveries?: DeliveryVersion[];
   /** Legacy tasks with no policy retain mandatory review. */
   reviewRequired?: boolean;
@@ -18,7 +22,7 @@ export interface WorkRule {
   status: 'proposed' | 'active' | 'retired'; sourceTaskId: string; createdAt: string;
 }
 export interface WorkSnapshot { tasks: WorkTask[]; rules: WorkRule[]; }
-export interface CreateWorkInput { reviewRequired?: boolean; goal: string; project?: string; agentId: string; criteria?: string; dependencies?: string[]; }
+export interface CreateWorkInput { projectId?: string; reviewRequired?: boolean; goal: string; project?: string; agentId: string; criteria?: string; dependencies?: string[]; }
 export type WorkAction = 'resume' | 'run' | 'accept' | 'revise' | 'cancel' | 'comment' | 'propose-rule';
 export const WORK_TEMPLATES = [
   { id: 'proposal', title: 'Prepare a client proposal', titlePt: 'Proposta para um cliente', goal: 'Help me draft a proposal for a client. Identify the context you need and provide an editable outline.', goalPt: 'Ajude-me a preparar uma proposta para um cliente. Indique o contexto que precisa e monte uma estrutura que eu possa completar.', criteria: 'Clear scope, missing information and next steps.', criteriaPt: 'Escopo claro, informações que faltam e próximos passos.' },
@@ -41,3 +45,6 @@ export function deliveryState(task: WorkTask) {
   const updating = task.events.map(e => e.kind).lastIndexOf('revision') > lastDelivery;
   return { version, updating, nextVersion: version + 1 };
 }
+
+/** A failed first attempt can be corrected even before a delivery exists. */
+export const canReviseWork = (task: Pick<WorkTask, "status">) => ["review", "blocked", "cancelled", "done"].includes(task.status);

@@ -1,3 +1,4 @@
+import { skillLabel } from '../../lib/skillLanguage';
 import SuperAgentSkillPanel from './SuperAgentSkillPanel';
 import React, { useEffect, useState } from 'react';
 import { Badge, Button, Card, Checkbox, Group, Modal, Select, Stack, Text, Textarea, TextInput } from '@mantine/core';
@@ -11,7 +12,7 @@ interface ToolInfo {
 }
 
 export default function SkillsPanel() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const [skills, setSkills] = useState<Skill[]>([]);
   const [tools, setTools] = useState<ToolInfo[]>([]);
   const [editing, setEditing] = useState<Skill | null>(null);
@@ -165,7 +166,7 @@ export default function SkillsPanel() {
             <Group justify="space-between" align="flex-start">
               <div style={{ flex: 1 }}>
                 <Group gap="xs">
-                  <Text fw={600}>{skill.name}</Text>
+                  <Text fw={600}>{skillLabel(skill, lang).name}</Text>
                   {skill.toolNames.length > 0 && (
                     <Badge size="sm" variant="light" color="gray">{skill.toolNames.length} {t('agents.tools')}</Badge>
                   )}
@@ -175,8 +176,8 @@ export default function SkillsPanel() {
                     </Badge>
                   )}
                 </Group>
-                {skill.description && <Text size="sm" c="dimmed">{skill.description}</Text>}
-                <Text size="xs" c="dimmed" lineClamp={2} mt={4} style={{ whiteSpace: 'pre-wrap' }}>{skill.prompt}</Text>
+                {skill.description && <Text size="sm" c="dimmed">{skillLabel(skill, lang).description}</Text>}
+                <details className="km-details"><summary>{lang === 'pt' ? 'Instruções originais' : 'Original instructions'}</summary><Text size="xs" c="dimmed" mt={4} style={{ whiteSpace: 'pre-wrap' }}>{skill.prompt}</Text></details>
               </div>
               <Group gap="xs">
                 <Button size="xs" variant="subtle" color="gray" onClick={() => openEdit(skill)}>{t('common.edit')}</Button>
@@ -193,7 +194,7 @@ export default function SkillsPanel() {
                   size="xs"
                   variant="subtle"
                   color="gray"
-                  onClick={async () => { if (confirm(`${t('skills.deleteConfirm')} "${skill.name}"?`)) { await window.electronAPI.deleteSkill(skill.id); await load(); } }}
+                  onClick={async () => { if (confirm(`${t('skills.deleteConfirm')} "${skillLabel(skill, lang).name}"?`)) { await window.electronAPI.deleteSkill(skill.id); await load(); } }}
                 >
                   {t('common.delete')}
                 </Button>

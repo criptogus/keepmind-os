@@ -9,7 +9,7 @@ import { setSfxEnabled, setSfxEvent, type SfxEvent } from '../../lib/sfx';
 import { useAppMode } from '../../lib/useAppMode';
 
 export default function SettingsPanel() {
-  const { lang, setLang, t } = useLang();
+  const { lang, setLang, t, languageError } = useLang();
   const { settings, loading, error, fetchSettings, updateSettings } = useSettingsStore();
   const { groups: modelGroups, updatedAt, refreshing, refresh } = useModelOptions();
   const { mode: appMode, setMode: setAppMode } = useAppMode();
@@ -58,10 +58,10 @@ export default function SettingsPanel() {
             data={[
               { value: 'en', label: 'English' },
               { value: 'pt', label: t('settings.portugues') },
-              { value: 'es', label: 'Español' },
             ]}
-            value={settings.language}
-            onChange={(v) => { handleChange('language', v); setLang((v || 'pt') as Lang); }}
+            aria-label={lang === 'pt' ? 'Idioma da interface' : 'Interface language'}
+            value={lang}
+            onChange={(v) => { setLang((v || 'pt') as Lang); }}
             allowDeselect={false}
           />
           <Select
@@ -171,7 +171,7 @@ export default function SettingsPanel() {
         <Stack gap="sm">
           <Text fw={600}>{lang === 'pt' ? 'Memória semântica local' : 'Local semantic memory'}</Text>
           <Switch label={lang === 'pt' ? 'Combinar busca por palavras e significado' : 'Combine keyword and semantic search'} checked={settings.memorySemanticSearch === true} onChange={e => handleChange('memorySemanticSearch', e.currentTarget.checked)} />
-          <TextInput label="Embedding model" value={settings.memoryEmbeddingModel || 'nomic-embed-text'} onChange={e => handleChange('memoryEmbeddingModel', e.currentTarget.value)} />
+          <TextInput label={lang === 'pt' ? 'Modelo de representação semântica' : 'Embedding model'} value={settings.memoryEmbeddingModel || 'nomic-embed-text'} onChange={e => handleChange('memoryEmbeddingModel', e.currentTarget.value)} />
           <Text size="xs" c="dimmed">{lang === 'pt' ? 'Opcional: requer um servidor local compatível com OpenAI na porta 11434 e o modelo instalado. Indexa até 32 memórias por busca. Se indisponível, usa palavras-chave. Nenhum modelo é baixado automaticamente.' : 'Optional: requires a local OpenAI-compatible server on port 11434 with the model installed. Indexes up to 32 memories per search. Falls back to keywords if unavailable. No automatic model downloads.'}</Text>
         </Stack>
       </Card>

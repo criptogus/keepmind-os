@@ -14,8 +14,8 @@ interface PageHeaderProps {
 /** Consistent page heading: title + plain subtitle + optional help + actions. */
 export default function PageHeader({ title, subtitle, help, actions }: PageHeaderProps) {
   return (
-    <Group justify="space-between" align="flex-start" wrap="nowrap">
-      <div style={{ minWidth: 0 }}>
+    <Group justify="space-between" align="flex-start" className="km-page-header">
+      <div className="km-page-heading" style={{ minWidth: 0 }}>
         <Group gap={6} align="center">
           <Title order={2} size="h4">{title}</Title>
           {help && <HelpTip label={help} />}
@@ -24,7 +24,7 @@ export default function PageHeader({ title, subtitle, help, actions }: PageHeade
           <Text size="sm" c="dimmed" mt={2}>{subtitle}</Text>
         )}
       </div>
-      {actions && <div style={{ flexShrink: 0 }}>{actions}</div>}
+      {actions && <div className="km-page-actions">{actions}</div>}
     </Group>
   );
 }

@@ -82,6 +82,12 @@ export interface GranolaStatus {
 }
 
 export class GranolaManager {
+  private pendingLoginUrl: string | null = null;
+  private cancelLogin: (() => void) | null = null;
+  private connecting = false;
+  private loginEpoch = 0;
+  getLoginUrl(): string | null { return this.pendingLoginUrl; }
+  cancelConnect(): void { this.loginEpoch++; this.cancelLogin?.(); }
   private storage: StorageManager;
   private credentials: CredentialStore;
   private personalBrain: PersonalBrainManager;
@@ -225,11 +231,16 @@ export class GranolaManager {
    * id_token carries one.
    */
   async connect(): Promise<{ ok: boolean; account?: string; error?: string }> {
+    if(this.connecting) return {ok:false,error:'Sign-in already in progress'};
+    this.connecting=true; const epoch=++this.loginEpoch;
     try {
       const meta = await this.discoverAuthServer();
       const clientId = await this.ensureClientId(meta);
+      if(epoch!==this.loginEpoch)throw new Error('Sign-in cancelled');
       const tokens = await this.runAuthCodeFlow(meta, clientId);
+      if(epoch!==this.loginEpoch)throw new Error('Sign-in cancelled');
       this.saveTokens(tokens);
+      await this.credentials.flush();
       this.storage.setSetting(KEY_ENABLED, 'true');
       this.initialized = false;
       this.sessionId = null;
@@ -242,7 +253,7 @@ export class GranolaManager {
       return { ok: true, account };
     } catch (error) {
       return { ok: false, error: error instanceof Error ? error.message : String(error) };
-    }
+    } finally { this.connecting=false; }
   }
 
   private runAuthCodeFlow(meta: AuthServerMetadata, clientId: string): Promise<GranolaTokens> {
@@ -251,70 +262,36 @@ export class GranolaManager {
     const codeChallenge = crypto.createHash('sha256').update(codeVerifier).digest('base64url');
 
     return new Promise((resolve, reject) => {
-      const server = http.createServer((req, res) => {
-        try {
-          const u = new URL(req.url || '/', `http://127.0.0.1:${REDIRECT_PORT}`);
-          if (u.pathname !== CALLBACK_PATH) {
-            res.writeHead(404);
-            res.end('Not found');
-            return;
-          }
-          res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-          res.end(
-            '<!doctype html><html><body style="font-family:system-ui;text-align:center;padding-top:4rem">' +
-            '<h2>Granola connected</h2><p>You can close this tab and return to KeepMind OS.</p></body></html>'
-          );
-          const code = u.searchParams.get('code');
-          const gotState = u.searchParams.get('state');
-          const oauthError = u.searchParams.get('error');
-          server.close();
-          if (oauthError) {
-            reject(new Error(`Granola authorization failed: ${oauthError}`));
-            return;
-          }
-          if (!code || gotState !== state) {
-            reject(new Error('Granola callback missing code or state mismatch'));
-            return;
-          }
-          this.exchangeCode(meta.token_endpoint, {
-            grant_type: 'authorization_code',
-            code,
-            redirect_uri: REDIRECT_URI,
-            client_id: clientId,
-            code_verifier: codeVerifier,
-            resource: MCP_URL,
-          }).then(resolve, reject);
-        } catch (e) {
-          server.close();
-          reject(e instanceof Error ? e : new Error(String(e)));
-        }
-      });
-
-      server.on('error', (err) => {
-        reject(new Error(`Could not start OAuth callback server on port ${REDIRECT_PORT}: ${err.message}`));
-      });
-      server.listen(REDIRECT_PORT, '127.0.0.1');
-
-      const authUrl = new URL(meta.authorization_endpoint);
-      authUrl.searchParams.set('response_type', 'code');
-      authUrl.searchParams.set('client_id', clientId);
-      authUrl.searchParams.set('redirect_uri', REDIRECT_URI);
-      authUrl.searchParams.set('scope', 'openid email profile offline_access');
-      authUrl.searchParams.set('state', state);
-      authUrl.searchParams.set('code_challenge', codeChallenge);
-      authUrl.searchParams.set('code_challenge_method', 'S256');
-      authUrl.searchParams.set('resource', MCP_URL);
-
-      this.openExternal(authUrl.toString()).catch((e) => {
+      let settled=false; let exchanging=false;
+      const finish=(error?:Error,tokens?:GranolaTokens)=>{
+        if(settled)return; settled=true; clearTimeout(timer); server.close();
+        this.pendingLoginUrl=null;this.cancelLogin=null;
+        if(error)reject(error);else resolve(tokens!);
+      };
+      const server=http.createServer((req,res)=>{
+        const url=new URL(req.url||'/',`http://127.0.0.1:${REDIRECT_PORT}`);
+        if(url.pathname!==CALLBACK_PATH){res.writeHead(404);res.end('Not found');return;}
+        if(url.searchParams.get('state')!==state){res.writeHead(400);res.end('Invalid authorization state');return;}
+        if(exchanging){res.writeHead(409);res.end('Authorization already being verified');return;}
+        const code=url.searchParams.get('code'); const error=url.searchParams.get('error');
+        if(error||!code){res.writeHead(400);res.end('Authorization not completed');finish(new Error('Granola authorization not completed'));return;}
+        exchanging=true;
+        res.writeHead(200,{'Content-Type':'text/html; charset=utf-8'});
+        res.end('<!doctype html><html><body><p>Return to KeepMind OS to check the connection. / Volte ao KeepMind OS para verificar a conexão.</p></body></html>');
         server.close();
-        reject(new Error(`Could not open browser: ${e instanceof Error ? e.message : e}`));
+        this.exchangeCode(meta.token_endpoint,{grant_type:'authorization_code',code,redirect_uri:REDIRECT_URI,client_id:clientId,code_verifier:codeVerifier,resource:MCP_URL})
+          .then(tokens=>finish(undefined,tokens),error=>finish(error instanceof Error?error:new Error(String(error))));
       });
-
-      // Timeout so a never-completed flow doesn't leak the server.
-      setTimeout(() => {
-        server.close();
-        reject(new Error('Granola sign-in timed out — try connecting again'));
-      }, 5 * 60_000).unref();
+      const timer=setTimeout(()=>finish(new Error('Granola sign-in timed out')),5*60_000);timer.unref();
+      this.cancelLogin=()=>finish(new Error('Granola sign-in cancelled'));
+      server.on('error',()=>finish(new Error('Could not start Granola sign-in callback')));
+      server.listen(REDIRECT_PORT,'127.0.0.1',()=>{
+        const url=new URL(meta.authorization_endpoint);
+        for(const [key,value] of Object.entries({response_type:'code',client_id:clientId,redirect_uri:REDIRECT_URI,scope:'openid email profile offline_access',state,code_challenge:codeChallenge,code_challenge_method:'S256',resource:MCP_URL}))url.searchParams.set(key,value);
+        this.pendingLoginUrl=url.toString();
+        // Keep the pending URL available for explicit browser recovery if automatic opening fails.
+        void this.openExternal(this.pendingLoginUrl).catch(()=>{});
+      });
     });
   }
 
@@ -737,6 +714,7 @@ export class GranolaManager {
   }
 
   stop(): void {
+    this.cancelConnect();
     if (this.syncTimer) clearInterval(this.syncTimer);
     this.syncTimer = null;
   }
