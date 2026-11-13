@@ -3062,17 +3062,27 @@ function configurationChat() {
   if (remoteWorkspace()) throw new Error('Configuration chat operates on the local workspace only');
   return configurationAssistant ??= new ConfigurationAssistant(storageManager);
 }
-handle('configuration:state', () => configurationChat().state(currentUserId() || 'local'));
+const configurationContextSchema=z.object({projectId:z.string().optional(),taskId:z.string().optional()}).strict().optional();
+function configurationScope(raw:unknown){
+  const context=configurationContextSchema.parse(raw);
+  const task=context?.taskId?requireWorkAccess(context.taskId):undefined;
+  if(task&&context?.projectId&&task.projectId!==context.projectId)throw new Error('Configuration project mismatch');
+  const projectId=task?.projectId||context?.projectId;
+  if(projectId)projectManager.get(projectId);
+  const actor=currentUserId()||'local';
+  return {actor,projectId,key:context?.taskId||projectId?JSON.stringify([actor,projectId||null,context?.taskId||null]):actor};
+}
+handle('configuration:state', (_event,context:unknown) => {const chat=configurationChat();return chat.state(configurationScope(context).key);});
 handle('configuration:message', async (event, raw: unknown) => {
-  const {text,language} = z.object({text:z.string().min(1).max(4000),language:z.enum(['pt','en'])}).strict().parse(raw);
-  const chat=configurationChat(); const actor=currentUserId() || 'local';
-  return chat.message(actor,text,language,async (message,history) => {
+  const {text,language,context} = z.object({text:z.string().min(1).max(4000),language:z.enum(['pt','en']),context:configurationContextSchema}).strict().parse(raw);
+  const chat=configurationChat(); const {actor,key,projectId}=configurationScope(context);
+  return chat.message(key,text,language,async (message,history) => {
     const existing=storageManager.getAllAgents().find(a=>configurationHandlers.get('models:isConfigured')!(event,a.config.model));
     const model=existing?.config.model || [storageManager.getSetting('defaultModel'),...compatibleProviders.list().map(p=>`compatible/${p.id}`),DEFAULT_MODEL.openai,DEFAULT_MODEL.anthropic].find(m=>m&&configurationHandlers.get('models:isConfigured')!(event,m));
     if(!model)throw new Error('Connect an AI service to interpret configuration requests');
     // A tool-free execution identity, not a persisted user agent or allocated spending budget.
     const agent=existing || {id:`configuration-${actor}`,name:'KeepMind',isShared:false,config:{model,systemPrompt:'',temperature:0,maxTokens:1800,tools:[],monthlyBudgetUsd:5}};
-    const result=await runAgentExecution(agent.id, {task:message,language,history:history.map(t=>({role:t.role,text:t.text})),
+    const result=await runAgentExecution(agent.id, {task:message,language,currentProjectId:projectId,history:history.map(t=>({role:t.role,text:t.text})),
       projects:projectManager.list().map(p=>({id:p.id,name:p.name,access:p.access,effective:projectManager.effective(p)})),connections:projectConnections.list(),companyStandards:projectManager.standards(),
       teams:storageManager.getAllTeams().map(t=>({id:t.id,name:t.name})),
       agents:storageManager.getAllAgents().map(a=>({id:a.id,name:a.name,model:a.config.model})),
@@ -3085,11 +3095,25 @@ handle('configuration:message', async (event, raw: unknown) => {
   });
 });
 handle('configuration:execute', async (event, raw:unknown) => {
-  const {id,language,credential}=z.object({id:z.string().min(1),language:z.enum(['pt','en']),credential:z.string().min(1).max(32000).optional()}).strict().parse(raw);
-  return configurationChat().execute(currentUserId() || 'local',id,async(action,args)=>{
+  const {id,language,credential,context}=z.object({id:z.string().min(1),language:z.enum(['pt','en']),credential:z.string().min(1).max(32000).optional(),context:configurationContextSchema}).strict().parse(raw);
+  const chat=configurationChat();const scope=configurationScope(context);
+  return chat.execute(scope.key,id,async(action,args)=>{
+    if(scope.projectId&&action.startsWith('secondbrain.'))throw new Error('Use a project-scoped Second Brain connection');
+    if(action==='project.brainConnect'&&scope.projectId&&args.projectId!==scope.projectId)throw new Error('Project mismatch');
     const invoke=(channel:string,...values:unknown[])=>Promise.resolve(configurationHandlers.get(channel)!(event,...values));
     const requireCredential=()=>{if(!credential)throw new Error('Enter the credential in the secure field');return credential;};
     switch(action){
+      case 'project.brainConnect': {
+        const p=projectManager.get(String(args.projectId));
+        if(agentManager.getActiveExecutions().some(e=>p.agentIds.includes(e.agentId)))throw new Error('Wait for project work to finish');
+        // Never overwrite a shared account: prepare a new identity, test, then explicitly bind it.
+        const account=projectConnections.create(`Second Brain — ${p.name}`,'secondbrain');
+        const result=await invoke('projects:brainConfigure',account.id,args.url,requireCredential()) as {ok:boolean};
+        if(!result.ok)return result;
+        const ids=projectManager.effective(projectManager.get(p.id)).connectionIds.filter(id=>projectConnections.get(id).kind!=='secondbrain');
+        await invoke('projects:access',p.id,{inheritConnections:false,policy:{connectionIds:[...ids,account.id]}});
+        return {ok:true};
+      }
       case 'project.create': return invoke('projects:create',args).then(()=>({ok:true}));
       case 'project.access': {const {id,...access}=args;return invoke('projects:access',id,access).then(()=>({ok:true}));}
       case 'project.standard': return invoke('projects:saveStandard',args).then(()=>({ok:true}));
@@ -3141,4 +3165,4 @@ handle('configuration:execute', async (event, raw:unknown) => {
     }
   },language);
 });
-handle('configuration:dismiss', (_event,id:unknown)=>configurationChat().dismiss(currentUserId() || 'local',z.string().parse(id)));
+handle('configuration:dismiss', (_event,id:unknown,context:unknown)=>{const chat=configurationChat();return chat.dismiss(configurationScope(context).key,z.string().parse(id));});

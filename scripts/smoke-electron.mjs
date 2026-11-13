@@ -487,7 +487,7 @@ try {
   checks.push('language-picker-persistence','skills-follow-interface-language');
 
   // Drafts must survive navigation and remain associated with their own conversation.
-  const fillText = async (selector,value) => evaluate(`(() => {const el=document.querySelector(${JSON.stringify(selector)});if(!el)throw new Error('input missing');Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value').set.call(el,${JSON.stringify(value)});el.dispatchEvent(new Event('input',{bubbles:true}));})()`);
+  const fillText = async (selector,value) => evaluate(`(() => {const el=document.querySelector(${JSON.stringify(selector)});if(!el)throw new Error('input missing');Object.getOwnPropertyDescriptor(el.tagName==='TEXTAREA'?HTMLTextAreaElement.prototype:HTMLInputElement.prototype,'value').set.call(el,${JSON.stringify(value)});el.dispatchEvent(new Event('input',{bubbles:true}));})()`);
   await command('New request');
   await fillText('textarea[aria-label="Your request"]','Draft retained while connecting');
   await command('Settings'); await command('Conversations');
@@ -522,6 +522,7 @@ try {
   const providerRequests=[]; let deliveryCalls=0;
   providerServer=createServer(async(req,res)=>{
     let body='';for await(const chunk of req)body+=chunk;
+    if(req.url==='/api/mcp/call'){res.writeHead(req.headers.authorization==='Bearer smoke-brain-only'?200:401,{'Content-Type':'application/json'}).end(JSON.stringify({result:[]}));return;}
     if(req.url!=='/v1/chat/completions'){res.writeHead(404).end();return;}
     const request=JSON.parse(body); providerRequests.push(request);
     const number=providerRequests.length;
@@ -530,7 +531,7 @@ try {
     if (String(request.messages[0]?.content).includes('You help a nontechnical business user configure KeepMind OS')) {
       if(request.tools?.length)fail('configuration planner exposed tools');
       const context=JSON.parse(request.messages.findLast(m=>m.role==='user').content);
-      content=JSON.stringify(context.task==='Create a routine'?{reply:'Which agent and schedule should I use?',action:null,args:{}}:{reply:'I will change only the interface language.',action:'appearance',args:{language:context.task==='Use English'?'en':'pt'}});
+      content=JSON.stringify(context.task==='Connect my Second Brain'?{reply:'What is your Second Brain address? Enter the token only in the secure field that follows.',action:null,args:{}}:context.task.startsWith('http://127.0.0.1:')?{reply:'Connect a separate read-only knowledge account for this project. Other project accounts stay selected. Company account inheritance will become a project-specific selection.',action:'project.brainConnect',args:{projectId:context.currentProjectId,url:context.task}}:context.task==='Create a routine'?{reply:'Which agent and schedule should I use?',action:null,args:{}}:{reply:'I will change only the interface language.',action:'appearance',args:{language:context.task==='Use English'?'en':'pt'}});
     } else if (dialogue) {
       if (request.tools?.length) fail('conversation exposed execution tools');
       const context = JSON.parse(request.messages.findLast(m => m.role === 'user').content);
@@ -631,11 +632,11 @@ try {
   const configMessage=async(text,label)=>{
     await evaluate(`(()=>{const el=document.querySelector('.km-configuration-chat textarea');Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value').set.call(el,${JSON.stringify(text)});el.dispatchEvent(new Event('input',{bubbles:true}));})()`);await delay(80);
     await evaluate(`([...document.querySelectorAll('.km-configuration-chat button')].find(b=>b.textContent===${JSON.stringify(label)})).click()`);
-    for(let i=0;i<60;i++){await delay(100);if(!(await evaluate('window.electronAPI.configurationState()')).pending)break;}
+    for(let i=0;i<60;i++){await delay(100);if(!(await evaluate(`window.electronAPI.configurationState({taskId:${JSON.stringify(flow.id)}})`)).pending)break;}
     await delay(300);
   };
   await configMessage('Create a routine','Send');
-  if((await evaluate('window.electronAPI.configurationState()')).turns.at(-1).plan)fail('missing setup details created a plan');
+  if((await evaluate(`window.electronAPI.configurationState({taskId:${JSON.stringify(flow.id)}})`)).turns.at(-1).plan)fail('missing setup details created a plan');
   await configMessage('Change interface language to Portuguese','Send');
   const configPreview=await send('Page.captureScreenshot',{format:'png'});writeFileSync(path.join(evidenceDir,'configuration-chat-preview.png'),Buffer.from(configPreview.result.data,'base64'));
   if((await evaluate('window.electronAPI.getSettings()')).language!=='en')fail('setup changed language before approval');
@@ -651,7 +652,7 @@ try {
   const configurationNarrow=await send('Page.captureScreenshot',{format:'png'});writeFileSync(path.join(evidenceDir,'configuration-chat-narrow.png'),Buffer.from(configurationNarrow.result.data,'base64'));
   await send('Emulation.clearDeviceMetricsOverride');
 
-  await evaluate(`([...document.querySelectorAll('.km-configuration-chat button')].find(b=>b.textContent==='Back to request')).click()`);await delay(200);
+  await evaluate(`([...document.querySelectorAll('.km-configuration-chat button')].find(b=>b.textContent==='Continue conversation with team')).click()`);await delay(200);
   checks.push('configuration-chat-clarification-preview-apply','configuration-keeps-delivery-unchanged');
   // Project scope: clone resources, reject cross-project work, paginate and show access in the real UI.
   const projectFixtures=await evaluate(`(async()=>{const teams=await window.electronAPI.getTeams();if(!teams.length)throw new Error('No fixture team');
@@ -671,13 +672,54 @@ try {
   await evaluate(`document.querySelector('.km-conversation-items summary').click()`);
   const projectShot=await send('Page.captureScreenshot',{format:'png'});writeFileSync(path.join(evidenceDir,'projects-desktop.png'),Buffer.from(projectShot.result.data,'base64'));
   await evaluate(`([...document.querySelectorAll('button')].find(b=>b.textContent==='Team access and rules')).click()`);await delay(350);
-  if(!(await evaluate(`document.body.innerText`)).includes('Project connections'))fail('project access panel missing');
+  if(!(await evaluate(`document.body.innerText`)).includes('Who works with you'))fail('project team panel missing');
+  await evaluate(`([...document.querySelectorAll('[role=tab]')].find(b=>b.textContent==='Tools')).click()`);await delay(150);
+  if(!(await evaluate(`document.body.innerText`)).includes('Account for Gmail'))fail('tool account picker missing');
+  await evaluate(`([...document.querySelectorAll('.km-project-settings button')].find(b=>b.textContent==='Add another account')).click()`);await delay(100);
+  await evaluate(`([...document.querySelectorAll('.km-project-settings button')].find(b=>b.textContent==='Continue to connection')).click()`);await delay(350);
+  if(!(await evaluate(`document.querySelector('.km-project-settings').innerText`)).includes('Awaiting connection'))fail('new account wrongly claims connected');
+  await evaluate(`([...document.querySelectorAll('.km-project-settings button')].find(b=>b.textContent==='Save changes')).click()`);await delay(350);
+  if((await evaluate(`window.electronAPI.projectList()`)).find(p=>p.id===projectFixtures.a.id).access.policy.connectionIds.length!==1)fail('new account selection not saved');
+  checks.push('tool-account-create-select-save-without-reselection');
   const accessShot=await send('Page.captureScreenshot',{format:'png'});writeFileSync(path.join(evidenceDir,'project-access.png'),Buffer.from(accessShot.result.data,'base64'));
   await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:false});await delay(200);
   if(!(await evaluate(`document.documentElement.scrollWidth<=window.innerWidth+2`)))fail('project access overflows narrow viewport');
   const projectNarrow=await send('Page.captureScreenshot',{format:'png'});writeFileSync(path.join(evidenceDir,'project-access-narrow.png'),Buffer.from(projectNarrow.result.data,'base64'));
   await send('Emulation.clearDeviceMetricsOverride');await send('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});await send('Input.dispatchKeyEvent',{type:'keyUp',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});
   checks.push('project-isolated-team-and-work','project-pagination-and-accordion','project-objective-and-access-ui','project-access-narrow-layout');
+  await delay(300);
+  // The same request stays inline; only missing details are requested. No live account is used.
+  await fillText('textarea[aria-label="Your request"]','Connect my Second Brain');
+  await evaluate(`([...document.querySelectorAll('.km-command button')].find(b=>b.textContent==='Send request')).click()`);
+  for(let i=0;i<70;i++){await delay(100);if((await evaluate(`window.electronAPI.configurationState({projectId:${JSON.stringify(projectFixtures.a.id)}})`)).turns.length>=2)break;}
+  if(!(await evaluate(`document.querySelector('.km-configuration-inline')?.innerText`))?.includes('What is your Second Brain address?'))fail('connection request not carried into inline chat');
+  if(await evaluate(`!!document.querySelector('[role=dialog]')`))fail('chat connection opened a dialog');
+  const brainUrl=`http://127.0.0.1:${providerServer.address().port}`;
+  await fillText('.km-configuration-chat textarea',brainUrl);
+  await evaluate(`([...document.querySelectorAll('.km-configuration-chat button')].find(b=>b.textContent==='Send')).click()`);
+  for(let i=0;i<70;i++){await delay(100);if(await evaluate(`!!document.querySelector('.km-configuration-chat input[type=password]')`))break;}
+  if(!(await evaluate(`!!document.querySelector('.km-configuration-chat input[type=password]')`)))fail('secure token input missing');
+  await fillText('.km-configuration-chat input[type=password]','smoke-brain-only');
+  await evaluate(`([...document.querySelectorAll('.km-configuration-chat button')].find(b=>b.textContent==='Apply configuration')).click()`);
+  for(let i=0;i<70;i++){await delay(100);if((await evaluate(`window.electronAPI.configurationState({projectId:${JSON.stringify(projectFixtures.a.id)}})`)).turns.some(t=>t.plan?.status==='done'))break;}
+  const brainState=await evaluate(`window.electronAPI.configurationState({projectId:${JSON.stringify(projectFixtures.a.id)}})`);
+  if(!brainState.turns.some(t=>t.plan?.status==='done'))fail('inline Second Brain connection did not complete');
+  const brainProjects=await evaluate('window.electronAPI.projectList()');
+  if(brainProjects.find(p=>p.id===projectFixtures.a.id).access.policy.connectionIds.length!==2||brainProjects.find(p=>p.id===projectFixtures.b.id).access)fail('Second Brain binding leaked into another project');
+  if(JSON.stringify(brainState).includes('smoke-brain-only')||JSON.stringify(providerRequests).includes('smoke-brain-only'))fail('secure token leaked into chat or planner');
+  if((await evaluate(`window.electronAPI.configurationState({projectId:${JSON.stringify(projectFixtures.b.id)}})`)).turns.length)fail('configuration history leaked between projects');
+  const brainShot=await send('Page.captureScreenshot',{format:'png'});writeFileSync(path.join(evidenceDir,'secondbrain-inline.png'),Buffer.from(brainShot.result.data,'base64'));
+  checks.push('secondbrain-inline-original-request','secondbrain-secure-connect-and-project-binding','configuration-project-history-isolation');
+  await evaluate(`([...document.querySelectorAll('.km-configuration-chat button')].find(b=>b.textContent==='Continue conversation with team')).click()`);
+
+  await evaluate(`([...document.querySelectorAll('button')].find(b=>b.textContent==='New project')).click()`);await delay(200);
+  await evaluate(`(()=>{for(const [label,value] of [['Project name','Ready-made project'],['What should the team achieve?','Improve client deliveries']]){const l=[...document.querySelectorAll('label')].find(l=>l.textContent.startsWith(label));const el=document.getElementById(l.htmlFor);Object.getOwnPropertyDescriptor(el.tagName==='TEXTAREA'?HTMLTextAreaElement.prototype:HTMLInputElement.prototype,'value').set.call(el,value);el.dispatchEvent(new Event('input',{bubbles:true}));}})()`);await delay(100);
+  if(!(await evaluate(`document.querySelector('[role=dialog]').innerText`)).includes('Your team: a coordinator and two specialists'))fail('team preview missing');
+  const teamSetupShot=await send('Page.captureScreenshot',{format:'png'});writeFileSync(path.join(evidenceDir,'project-team-setup.png'),Buffer.from(teamSetupShot.result.data,'base64'));
+  await evaluate(`([...document.querySelectorAll('[role=dialog] button')].find(b=>b.textContent==='Create project')).click()`);await delay(400);
+  const readyProject=(await evaluate('window.electronAPI.projectList()')).find(p=>p.name==='Ready-made project');
+  if(!readyProject||readyProject.agentIds.length!==3||readyProject.reportDaily)fail('ready-made project not created safely');
+  checks.push('ready-made-project-team-without-source-team');
   // Fresh-workspace recovery: configured provider, no user agents. Do not silently create one.
   await evaluate(`window.electronAPI.updateSettings({defaultModel:'compatible/conversation-fixture'})`);
   await evaluate(`window.electronAPI.getAgents().then(async agents=>{for(const agent of agents)await window.electronAPI.deleteAgent(agent.id);})`);

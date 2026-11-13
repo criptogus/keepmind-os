@@ -5,11 +5,13 @@ export const projectInputSchema = z.object({
   metric: z.string().trim().max(1000).default(''),
   voice: z.string().trim().max(2000).default(''),
   guardrails: z.string().trim().max(4000).default(''),
-  teamId: z.string().min(1),
+  teamId: z.string().min(1).optional(),
+  teamTemplate: z.enum(['consulting','marketing','operations','general']).optional(),
+  provider: z.enum(['openai','anthropic']).default('openai'),
   reportDaily: z.boolean().default(false),
   reportTime: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/).default('09:00'),
   language: z.enum(['pt','en']).default('pt'),
-}).strict();
+}).strict().refine(v=>Boolean(v.teamId)!==Boolean(v.teamTemplate),{message:'Choose an existing team or a team template'});
 export type ProjectInput = z.input<typeof projectInputSchema>;
 export interface Project {
   access?: ProjectAccess;

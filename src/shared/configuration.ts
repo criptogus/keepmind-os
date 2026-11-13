@@ -5,6 +5,7 @@ const text = z.string().trim().min(1).max(4000);
 const noArgs = z.object({}).strict();
 export const configurationSchemas = {
   'project.create': projectInputSchema,
+  'project.brainConnect': z.object({projectId:id,url:z.string().url().max(1000)}).strict(),
   'project.access': projectAccessPatchSchema.extend({id}).refine(v=>Object.keys(v).length>1),
   'project.standard': projectPolicySchema.extend({name:z.string().trim().min(1).max(100)}),
   'project.connection': z.object({name:z.string().trim().min(1).max(100),kind:z.enum(['gmail','outlook','whatsapp','secondbrain'])}).strict(),
@@ -48,6 +49,7 @@ export const configurationSchemas = {
 } as const;
 export type ConfigurationAction = keyof typeof configurationSchemas;
 export const configurationLabels: Record<ConfigurationAction,[string,string]> = {
+ 'project.brainConnect':['Conectar Second Brain ao projeto','Connect Second Brain to project'],
  'project.create':['Criar projeto','Create project'],'project.access':['Configurar acessos do projeto','Configure project access'],'project.standard':['Criar padrão da empresa','Create company standard'],'project.connection':['Preparar conexão separada','Prepare separate connection'],'project.brain':['Conectar contexto do Second Brain','Connect Second Brain context'],
  'provider.key':['Conectar IA com chave','Connect AI with key'],'secondbrain.connect':['Conectar Second Brain','Connect Second Brain'],'composio.key':['Conectar Composio','Connect Composio'],'compatible.configure':['Conectar provedor compatível','Connect compatible provider'],
  'agent.create':['Criar agente','Create agent'],'agent.delete':['Excluir agente','Delete agent'],'agent.share':['Compartilhar agente','Share agent'],
@@ -61,7 +63,8 @@ export const configurationLabels: Record<ConfigurationAction,[string,string]> = 
  'provider.connect':['Conectar serviço de IA','Connect AI service'],'skills.connect':['Conectar Super Agent Skill','Connect Super Agent Skill'],'skills.disconnect':['Desconectar Super Agent Skill','Disconnect Super Agent Skill'],'secondbrain.configure':['Configurar Second Brain','Configure Second Brain'],
 };
 export const CONFIGURATION_CATALOG = `Supported actions and exact args:
-project.create {name,objective,metric?,voice?,guardrails?,teamId,reportDaily:boolean,reportTime:HH:MM,language:pt|en} copies the selected team and skills; never enable daily paid reports unless requested. project.access {id,companyId?:string|null,inheritConnections?:boolean,inheritSkills?:boolean,policy?:{connectionIds?:string[],skillIds?:string[],voice?,guardrails?}} patches only supplied fields; omit unchanged values, null companyId explicitly removes a standard. It uses saved project/connection/library IDs; do not infer account sharing. project.standard {name,connectionIds:string[],skillIds:string[],voice,guardrails} creates an explicitly reusable company standard. Company rules remain additive. project.connection {name,kind:gmail|outlook|whatsapp|secondbrain} ONLY creates an unconnected account slot; user must authenticate through project access panel. Never say connected. project.brain {id,url} shows secure token field for a server-restricted Second Brain context, read-only. A name alone cannot enforce server data isolation.
+When currentProjectId is present, a request to connect Second Brain uses project.brainConnect {projectId:currentProjectId,url}. Ask only for the missing URL; a secure credential field follows. This creates a separate read-only connection, tests it and binds it to the project, preserving the other effective accounts. Never use a global secondbrain action for a project request. Do not ask users to open settings or repeat the request.
+project.create {name,objective,metric?,voice?,guardrails?,teamId? OR teamTemplate:consulting|marketing|operations|general,provider?:openai|anthropic,reportDaily:boolean,reportTime:HH:MM,language:pt|en} copies the selected team and skills; never enable daily paid reports unless requested. project.access {id,companyId?:string|null,inheritConnections?:boolean,inheritSkills?:boolean,policy?:{connectionIds?:string[],skillIds?:string[],voice?,guardrails?}} patches only supplied fields; omit unchanged values, null companyId explicitly removes a standard. It uses saved project/connection/library IDs; do not infer account sharing. project.standard {name,connectionIds:string[],skillIds:string[],voice,guardrails} creates an explicitly reusable company standard. Company rules remain additive. project.connection {name,kind:gmail|outlook|whatsapp|secondbrain} ONLY creates an unconnected account slot; user must authenticate through project access panel. Never say connected. project.brain {id,url} shows secure token field for a server-restricted Second Brain context, read-only. A name alone cannot enforce server data isolation.
 
 provider.key {provider:openai|anthropic}; secondbrain.connect {url,access:read|write,blockPii:boolean}; composio.key {}; compatible.configure {id,name,kind:openrouter|deepseek|hermes|custom,baseUrl,model,inputUsdPerMillion,outputUsdPerMillion,maxOutputTokens,maxRunUsd}. These show a separate secure credential field. NEVER ask the user to type the credential into chat. Do not invent pricing/limits; ask for them. User enters secret only after reviewing the destination.
 
@@ -89,6 +92,8 @@ export function isConfigurationRequest(value:string):boolean {
  return /^(?:(?:por favor|please)[,\s]+)?(?:quero\s+|preciso\s+|pode\s+|can you\s+|i want to\s+)?(?:conectar|conecte|connect|configurar|configure|desconectar|desconecte|disconnect|mudar o idioma|alterar o idioma|change (?:the )?(?:language|theme))\b/i.test(value.trim());
 }
 
-export const credentialActions = new Set<ConfigurationAction>(['project.brain','provider.key','secondbrain.connect','composio.key','compatible.configure']);
+export const credentialActions = new Set<ConfigurationAction>(['project.brainConnect','project.brain','provider.key','secondbrain.connect','composio.key','compatible.configure']);
 
 export const oauthActions = new Set<ConfigurationAction>(['granola.connect','skills.connect','provider.connect']);
+
+export interface ConfigurationContext { projectId?:string; taskId?:string; }

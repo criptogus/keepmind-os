@@ -10,7 +10,7 @@ const enums: Record<string,Record<string,[string,string]>>={
 export function formatConfigurationValue(key:string,value:unknown,language:'pt'|'en',names:Record<string,string>={}):string {
  if(key==='policy'&&value&&typeof value==='object'){const labels:Record<string,[string,string]>={connectionIds:['Contas','Accounts'],skillIds:['Habilidades','Skills'],voice:['Tom de voz','Voice'],guardrails:['Regras','Rules']};return Object.entries(value).map(([field,v])=>`${labels[field]?.[language==='pt'?0:1]||field}: ${formatConfigurationValue(field,v,language,names)||'—'}`).join('\n');}
  if(key==='roles'&&Array.isArray(value))return value.map(role=>`${role.name} — ${role.purpose}`).join('\n');
- if(['agentId','skillIds','id','teamId','companyId','connectionIds'].includes(key)){const name=(id:unknown)=>names[String(id)]?`${names[String(id)]} (${id})`:String(id);return Array.isArray(value)?value.map(name).join(', '):name(value);}
+ if(['projectId','agentId','skillIds','id','teamId','companyId','connectionIds'].includes(key)){const name=(id:unknown)=>names[String(id)]?names[String(id)]:String(id);return Array.isArray(value)?value.map(name).join(', '):name(value);}
  if(typeof value==='boolean')return language==='pt'?(value?'Sim':'Não'):(value?'Yes':'No');
  if(typeof value==='string'&&enums[key]?.[value])return enums[key][value][language==='pt'?0:1];
  return Array.isArray(value)?value.join(', '):typeof value==='object'?JSON.stringify(value):String(value);

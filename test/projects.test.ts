@@ -26,3 +26,17 @@ it('patching voice preserves project accounts, skills and mandatory company asso
  const next=patchProjectAccess(current,{policy:{voice:'New'}});expect(next).toEqual({...current,policy:{...current.policy,voice:'New'}});
  expect(patchProjectAccess(current,{companyId:null}).companyId).toBeUndefined();
 });
+
+it('builds a project team without a pre-existing team, calls or external accounts',()=>{
+ const {manager,agents,teams}=fixture();
+ const p=manager.create({name:'Operations',objective:'Improve delivery reliability',teamTemplate:'operations',language:'en'});
+ expect(p.agentIds).toHaveLength(3);expect(teams.get(p.teamId).agentIds).toEqual(p.agentIds);
+ for(const id of p.agentIds){expect(agents.get(id).config.projectId).toBe(p.id);expect(agents.get(id).permissions.canAccessFileSystem).toBe(false);}
+ const coordinator=agents.get(p.agentIds[0]);for(const id of p.agentIds.slice(1))expect(coordinator.config.systemPrompt).toContain(id);
+ const cloned=manager.create({name:'Copy',objective:'Other objective',teamId:p.teamId});
+ const clonedPrompt=agents.get(cloned.agentIds[0]).config.systemPrompt;
+ for(const id of p.agentIds.slice(1))expect(clonedPrompt).not.toContain(id);
+ for(const id of cloned.agentIds.slice(1))expect(clonedPrompt).toContain(id);
+ expect(manager.effective(p).connectionIds).toEqual([]);expect(p.reportDaily).toBe(false);
+ expect(()=>manager.create({name:'Invalid',objective:'Test',teamTemplate:'general',teamId:'t'})).toThrow();
+});

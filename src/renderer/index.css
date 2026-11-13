@@ -370,3 +370,17 @@ body {
 
 .km-configuration-chat { margin:0 auto; width:100%; padding:24px 32px; }
 @media(max-width:600px){.km-configuration-chat { padding:16px; }}
+
+/* Project settings: one decision per section, with neutral surfaces and lime actions. */
+.km-project-settings { min-width: 0; }
+.km-project-settings .mantine-Tabs-list { position: sticky; top: 0; background: var(--mantine-color-body); z-index: 2; }
+.km-project-settings .mantine-Tabs-tab { min-height: 44px; }
+.km-access-row { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--mantine-color-default-border); }
+.km-access-row > div { min-width: 0; overflow-wrap: anywhere; }
+.km-role-avatar { flex: 0 0 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: light-dark(#111,#f5f5f5); color: light-dark(#fff,#111); font-size: 13px; font-weight: 650; }
+.km-tool-setting { padding: 16px 0; border-bottom: 1px solid var(--mantine-color-default-border); }
+.km-connection-detail, .km-inherited-rules { margin-top: 12px; padding: 16px; background: var(--mantine-color-default-hover); border-radius: 10px; overflow-wrap: anywhere; }
+.km-connection-detail > * + * { margin-top: 12px; }
+.km-access-footer { position: sticky; bottom: 0; padding: 16px 0 4px; background: var(--mantine-color-body); border-top: 1px solid var(--mantine-color-default-border); z-index: 3; }
+.km-configuration-inline { padding: 16px 0; min-width: 0; }
+@media (max-width: 480px) { .km-access-footer > * { width: 100%; } }

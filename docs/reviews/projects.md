@@ -13,7 +13,7 @@ Second Brain isolation depends on a server account/token restricted to the inten
 Daily reports use the existing durable trigger/task execution path, only while the app runs, normal budget/approval gates, scoped project progress, and missing-data questions. No invented business metrics. Reports are delivered as conversations in the project.
 
 ## Validation
-`npm run verify:ux` passed: 271 unit tests (44 files), one integration test, 51 Electron scenarios, typecheck, build, runner, secret scan and bundle dependency policy. Desktop and 390px project/access screenshots were inspected. Account isolation, partial policy edits, restoration intent, OAuth pending refresh/pinning and browser failure recovery have focused tests.
+`npm run verify:ux` passed: 273 unit tests (44 files), one integration test, 56 Electron scenarios, typecheck, build, runner, secret scan and bundle dependency policy. Desktop and 390px project/access screenshots were inspected. Account isolation, partial policy edits, restoration intent, OAuth pending refresh/pinning and browser failure recovery have focused tests.
 
 UI reference retrieval for accordion/pagination was irrelevant, then zero on one narrow retry. Implementation uses existing Mantine controls and native details semantics as general fallback guidance, not a claimed reference match.
 
@@ -30,3 +30,5 @@ UI reference retrieval for accordion/pagination was irrelevant, then zero on one
 Spec and Standards reviewers found account restoration, pending OAuth refresh, private-skill picker filtering, symmetric dependency scope, shutdown during reconnect and destructive whole-policy replacement. These were corrected. Policy edits are now partial and preserve omitted account, skill and rule fields; removing a company requires explicit null. SDK session construction pins exact account IDs and disables automatic connection management. Browser-open failure preserves pending account identity and returns a recovery URL.
 
 Jev 1.14.0 reviewed a minimal synthetic design description (574 input / 81 output tokens): explicit inheritance was compatible with the requirement (probability 0.82); claiming client labels alone enforce server memory isolation was an overclaim (1.0). These are advisory semantic checks, not authorization or security proof.
+
+Team setup now offers ready-made teams or copies of existing teams; access uses Team/Tools/Rules tabs and per-service accordions. See [team and inline connections](team-access-and-inline-connections.md).

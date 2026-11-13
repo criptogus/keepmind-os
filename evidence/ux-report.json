@@ -44,10 +44,15 @@
     "approve-version-with-history",
     "configuration-chat-clarification-preview-apply",
     "configuration-keeps-delivery-unchanged",
+    "tool-account-create-select-save-without-reselection",
     "project-isolated-team-and-work",
     "project-pagination-and-accordion",
     "project-objective-and-access-ui",
     "project-access-narrow-layout",
+    "secondbrain-inline-original-request",
+    "secondbrain-secure-connect-and-project-binding",
+    "configuration-project-history-isolation",
+    "ready-made-project-team-without-source-team",
     "configuration-bootstrap-without-persisted-agent",
     "shared-workspace-isolation",
     "checkpoint-recovery",
@@ -55,5 +60,5 @@
   ],
   "failure": null,
   "fixture": "synthetic; no live providers",
-  "timestamp": "2026-11-13T21:14:15.866Z"
+  "timestamp": "2026-11-13T22:05:36.937Z"
 }

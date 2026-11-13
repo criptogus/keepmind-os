@@ -55,3 +55,9 @@ Configuration chat must use a fixed tool-free planner and typed action catalog; 
 ### Project and company boundaries
 
 Run `npm run verify:ux` for the aggregate project/account checks as well. Use synthetic separate projects/accounts; never authenticate a real account merely to make a fixture pass. Verify cloned agents/skills, foreign-agent and dependency rejection, account identity pinning, no fallback to global memory/accounts, company inheritance opt-in and override behavior, authenticated-session restoration, and OAuth completion after closing its UI. Check project objectives, 12-item conversation pagination, accordion keyboard interaction, and access dialogs at desktop and narrow widths. Keep server-scoped Second Brain authorization distinct from a connection label. Record live-auth limitations separately from simulated SDK/loopback checks.
+
+### Team setup and inline connections
+
+Exercise ready-made project teams without a source team, and cloning with coordinator delegation IDs remapped. In project settings, test Team/Tools/Rules, per-service account creation → automatic selection → save, and distinguish selection from authentication. Inspect the tools accordion at desktop/390px and use keyboard tab navigation. Keep company rules visible and sharing opt-in.
+
+For chat connections, submit the original request through the ordinary composer. Assert that no dialog opens and that only missing details are requested. Use a loopback Second Brain endpoint and a synthetic token to verify the secure field → reviewed plan → real IPC/HTTP test → project binding. Check that other accounts remain selected, another project's configuration history stays empty, and neither model requests nor stored messages include the token. This does not validate the user's real Second Brain account.

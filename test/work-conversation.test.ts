@@ -91,3 +91,10 @@ describe('work conversation',()=>{
     expect(restarted.conversation?.pending).toBeUndefined();expect(restarted.conversation?.error).toBe('interrupted');
   });
 });
+
+it('preserves the original request when preparation hands off to inline configuration',async()=>{
+ const f=setup({intent:'configure',reply:'I can prepare this connection here.',choices:[]});
+ const result=await f.send('',{mode:'prepare'});
+ expect(result.conversation?.decision).toMatchObject({kind:'configure',sourceText:f.task.goal});
+ expect(f.start).not.toHaveBeenCalled();
+});

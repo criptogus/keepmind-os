@@ -77,7 +77,7 @@ export class WorkConversation {
       } else if (reply.intent === 'configure' || reply.intent === 'ready' || reply.intent === 'clarify' || reply.intent === 'ambiguous' || reply.intent === 'revise') {
         this.work.updateConversation(id, c => { c.decision = {
           id: randomUUID(), kind: reply.intent === 'configure' ? 'configure' : reply.intent === 'ready' ? 'start' : mode === 'prepare' && reply.intent === 'clarify' ? 'clarify' : 'intent',
-          prompt: reply.reply, choices: reply.choices, sourceText, language: input.language,
+          prompt: reply.reply, choices: reply.choices, sourceText: sourceText || task.goal, language: input.language,
         }; });
       }
       return this.work.get(id);

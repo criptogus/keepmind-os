@@ -1,3 +1,4 @@
+import type { ConfigurationContext } from '../shared/configuration.js';
 import type { Project, ProjectInput, ProjectAccess, CompanyStandard, ConnectionInstance } from '../shared/projects';
 import type { ConfigurationState } from '../shared/configuration';
 import type { ConversationInput } from '../shared/conversation';
@@ -33,10 +34,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
   mcpList: () => ipcRenderer.invoke('mcp:list') as Promise<{ configs: McpConfig[]; statuses: Array<{id:string;connected:boolean;tools:string[];error?:string}> }>,
   mcpConfigure: (configs: unknown) => ipcRenderer.invoke('mcp:configure', configs) as Promise<Array<{id:string;connected:boolean;tools:string[];error?:string}>>,
   workPreview: (id: string) => ipcRenderer.invoke('work:preview', id) as Promise<WorkPreview>,
-  configurationState: () => ipcRenderer.invoke('configuration:state') as Promise<ConfigurationState>,
-  configurationMessage: (text:string,language:'pt'|'en') => ipcRenderer.invoke('configuration:message',{text,language}) as Promise<{state:ConfigurationState;autoStart?:string}>,
-  configurationExecute: (id:string,language:'pt'|'en',credential?:string) => ipcRenderer.invoke('configuration:execute',{id,language,credential}) as Promise<ConfigurationState>,
-  configurationDismiss: (id:string) => ipcRenderer.invoke('configuration:dismiss',id) as Promise<ConfigurationState>,
+  configurationState: (context?:ConfigurationContext) => ipcRenderer.invoke('configuration:state',context) as Promise<ConfigurationState>,
+  configurationMessage: (text:string,language:'pt'|'en',context?:ConfigurationContext) => ipcRenderer.invoke('configuration:message',{text,language,context}) as Promise<{state:ConfigurationState;autoStart?:string}>,
+  configurationExecute: (id:string,language:'pt'|'en',credential?:string,context?:ConfigurationContext) => ipcRenderer.invoke('configuration:execute',{id,language,credential,context}) as Promise<ConfigurationState>,
+  configurationDismiss: (id:string,context?:ConfigurationContext) => ipcRenderer.invoke('configuration:dismiss',id,context) as Promise<ConfigurationState>,
   workList: () => ipcRenderer.invoke('work:list') as Promise<WorkSnapshot>,
   workCreate: (input: CreateWorkInput) => ipcRenderer.invoke('work:create', input) as Promise<WorkTask>,
   workMessage: (id: string, input: ConversationInput, revision: number) => ipcRenderer.invoke('work:message', id, input, revision) as Promise<WorkTask>,
@@ -363,10 +364,10 @@ declare global {
       mcpList: () => Promise<{ configs: McpConfig[]; statuses: Array<{id:string;connected:boolean;tools:string[];error?:string}> }>;
       mcpConfigure: (configs: unknown) => Promise<Array<{id:string;connected:boolean;tools:string[];error?:string}>>;
       workPreview: (id: string) => Promise<WorkPreview>;
-      configurationState: () => Promise<ConfigurationState>;
-      configurationMessage: (text:string,language:'pt'|'en') => Promise<{state:ConfigurationState;autoStart?:string}>;
-      configurationExecute: (id:string,language:'pt'|'en',credential?:string) => Promise<ConfigurationState>;
-      configurationDismiss: (id:string) => Promise<ConfigurationState>;
+      configurationState: (context?:ConfigurationContext) => Promise<ConfigurationState>;
+      configurationMessage: (text:string,language:'pt'|'en',context?:ConfigurationContext) => Promise<{state:ConfigurationState;autoStart?:string}>;
+      configurationExecute: (id:string,language:'pt'|'en',credential?:string,context?:ConfigurationContext) => Promise<ConfigurationState>;
+      configurationDismiss: (id:string,context?:ConfigurationContext) => Promise<ConfigurationState>;
       workList: () => Promise<WorkSnapshot>;
       workCreate: (input: CreateWorkInput) => Promise<WorkTask>;
       workMessage: (id: string, input: ConversationInput, revision: number) => Promise<WorkTask>;
