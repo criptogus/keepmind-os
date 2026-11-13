@@ -109,7 +109,7 @@ try {
   // before the renderer finishes mounting).
   let html = '';
   for (let i = 0; i < 50; i++) {
-    html = await evaluate('document.body.innerHTML');
+    html = await evaluate('document.body?.innerHTML ?? ""');
     if (/keepmind os/i.test(html)) break;
     await delay(200);
   }
@@ -129,15 +129,15 @@ try {
   if (!task?.id) fail('work task not created through preload');
   await send('Page.reload');
   for (let i = 0; i < 50; i++) {
-    const text = await evaluate('document.body.innerText');
+    const text = await evaluate('document.body?.innerText ?? ""');
     if (text?.includes('Review repository documentation')) break;
     await delay(200);
   }
-  const rendered = await evaluate('document.body.innerText');
+  const rendered = await evaluate('document.body?.innerText ?? ""');
   if (!rendered?.includes('Your work, moving forward.') || !rendered.includes('Review repository documentation')) fail('workspace did not render persisted task');
   await evaluate(`document.querySelector('.km-task').click()`);
   await delay(400);
-  const detail = await evaluate('document.body.innerText');
+  const detail = await evaluate('document.body?.innerText ?? ""');
   if (!detail.includes('Include file references and reproducible steps.')) fail('task drawer missing criteria');
   mkdirSync(path.join(root, 'evidence'), { recursive: true });
   const screenshot = await send('Page.captureScreenshot', { format: 'png' });
