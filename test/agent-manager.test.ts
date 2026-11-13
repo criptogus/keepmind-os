@@ -302,7 +302,7 @@ describe('StorageManager - Advanced', () => {
       storage.saveAgentExecution(execution);
       const retrieved = storage.getAgentExecution(execution.id);
 
-      expect(retrieved).toEqual(execution);
+      expect(retrieved).toEqual({ ...execution, dryRun: false, activatedSkillIds: [] });
     });
 
     it('should get executions by agent', () => {

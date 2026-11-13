@@ -20,7 +20,7 @@ export interface AgentTemplate {
   config: AgentConfig;
 }
 
-const base = (systemPrompt: string, extra?: Partial<AgentConfig>): AgentConfig => ({
+export const baseAgentConfig = (systemPrompt: string, extra?: Partial<AgentConfig>): AgentConfig => ({
   model: DEFAULT_MODEL.openai,
   temperature: 0.7,
   maxTokens: 2048,
@@ -42,7 +42,7 @@ export const AGENT_TEMPLATES: AgentTemplate[] = [
     capabilities: ['strategy', 'planning', 'executive-communication'],
     skillNames: ['Second Brain'],
     toolNames: ['secondbrain_search', 'file_read', 'file_list', 'get_current_time'],
-    config: base(
+    config: baseAgentConfig(
       `You are the Chief Executive Officer of the company. Your role is to set direction, allocate resources, and make high-stakes decisions.
 
 Responsibilities:
@@ -70,7 +70,7 @@ Working style:
     capabilities: ['finance', 'forecasting', 'analysis'],
     skillNames: [],
     toolNames: ['file_read', 'file_list', 'secondbrain_search', 'get_current_time'],
-    config: base(
+    config: baseAgentConfig(
       `You are the Chief Financial Officer. You own the company's financial health and capital allocation.
 
 Responsibilities:
@@ -98,7 +98,7 @@ Working style:
     capabilities: ['engineering', 'architecture', 'strategy'],
     skillNames: ['Local Computer', 'Second Brain'],
     toolNames: ['file_read', 'file_write', 'file_list', 'shell_exec', 'secondbrain_search', 'secondbrain_remember', 'get_current_time'],
-    config: base(
+    config: baseAgentConfig(
       `You are the Chief Technology Officer. You own the technology strategy and the engineering organization.
 
 Responsibilities:
@@ -126,7 +126,7 @@ Working style:
     capabilities: ['marketing', 'growth', 'content'],
     skillNames: ['WhatsApp', 'Second Brain'],
     toolNames: ['whatsapp_send_message', 'whatsapp_read_messages', 'secondbrain_search', 'secondbrain_remember', 'open_url', 'get_current_time'],
-    config: base(
+    config: baseAgentConfig(
       `You are the Chief Marketing Officer. You own how the market understands and chooses the company.
 
 Responsibilities:
@@ -154,7 +154,7 @@ Working style:
     capabilities: ['operations', 'process', 'execution'],
     skillNames: ['Local Computer'],
     toolNames: ['file_read', 'file_write', 'file_list', 'secondbrain_search', 'get_current_time'],
-    config: base(
+    config: baseAgentConfig(
       `You are the Chief Operating Officer. You make the company run — turning strategy into reliable execution.
 
 Responsibilities:
@@ -182,7 +182,7 @@ Working style:
     capabilities: ['hr', 'hiring', 'culture'],
     skillNames: [],
     toolNames: ['file_read', 'file_list', 'secondbrain_search', 'get_current_time'],
-    config: base(
+    config: baseAgentConfig(
       `You are the Chief Human Resources Officer. You own the company's most important asset: its people.
 
 Responsibilities:
@@ -210,7 +210,7 @@ Working style:
     capabilities: ['security', 'compliance', 'risk'],
     skillNames: ['Local Computer', 'Second Brain'],
     toolNames: ['file_read', 'file_list', 'secondbrain_search', 'secondbrain_remember', 'shell_exec', 'get_current_time'],
-    config: base(
+    config: baseAgentConfig(
       `You are the Chief Information Security Officer. You protect the company from security, privacy, and compliance risk.
 
 Responsibilities:
@@ -238,7 +238,7 @@ Working style:
     capabilities: ['product', 'discovery', 'strategy'],
     skillNames: ['Second Brain', 'Agent Delegation'],
     toolNames: ['secondbrain_search', 'secondbrain_remember', 'delegate_to_agent', 'file_read', 'get_current_time'],
-    config: base(
+    config: baseAgentConfig(
       `You are the Chief Product Officer. You own what the company builds and why.
 
 Responsibilities:
@@ -266,7 +266,7 @@ Working style:
     capabilities: ['sales', 'revenue', 'gtm'],
     skillNames: ['WhatsApp', 'Second Brain'],
     toolNames: ['whatsapp_send_message', 'whatsapp_read_messages', 'secondbrain_search', 'secondbrain_remember', 'open_url', 'get_current_time'],
-    config: base(
+    config: baseAgentConfig(
       `You are the Chief Revenue Officer. You own the revenue engine end to end.
 
 Responsibilities:
@@ -294,7 +294,7 @@ Working style:
     capabilities: ['legal', 'compliance', 'contracts'],
     skillNames: [],
     toolNames: ['file_read', 'file_list', 'secondbrain_search', 'get_current_time'],
-    config: base(
+    config: baseAgentConfig(
       `You are the General Counsel. You advise the business on legal risk and commercial terms.
 
 Responsibilities:
@@ -323,7 +323,7 @@ Working style:
     capabilities: ['obra', 'diario-obra', 'documentacao'],
     skillNames: ['Diário de Obra', 'Documentos e Licitações', 'Second Brain'],
     toolNames: ['file_read', 'file_write', 'file_list', 'pdf_read', 'sheet_read', 'sheet_write', 'secondbrain_search', 'secondbrain_remember', 'whatsapp_read_messages', 'get_current_time'],
-    config: base(
+    config: baseAgentConfig(
       `Você é o Engenheiro de Obra da construtora. Sua responsabilidade é acompanhar a execução técnica da obra do início ao fim.
 
 Responsabilidades:
@@ -352,7 +352,7 @@ Working style:
     capabilities: ['canteiro', 'equipes', 'cronograma'],
     skillNames: ['Diário de Obra', 'WhatsApp'],
     toolNames: ['whatsapp_send_message', 'whatsapp_read_messages', 'file_read', 'file_write', 'file_list', 'secondbrain_search', 'get_current_time'],
-    config: base(
+    config: baseAgentConfig(
       `Você é o Mestre de Obras. Você coordena o dia a dia do canteiro: equipes, materiais, sequência de serviços e prazos.
 
 Responsabilidades:
@@ -380,7 +380,7 @@ Working style:
     capabilities: ['equipe', 'producao', 'reporte'],
     skillNames: ['WhatsApp', 'Diário de Obra'],
     toolNames: ['whatsapp_send_message', 'whatsapp_read_messages', 'file_read', 'secondbrain_search', 'get_current_time'],
-    config: base(
+    config: baseAgentConfig(
       `Você é o Encarregado de Obra. Você acompanha uma frente de serviço ou equipe e reporta ao mestre de obras.
 
 Responsabilidades:
@@ -408,7 +408,7 @@ Working style:
     capabilities: ['compras', 'cotacao', 'fornecedores'],
     skillNames: ['Orçamento e Planejamento', 'Second Brain'],
     toolNames: ['sheet_read', 'sheet_write', 'pdf_read', 'file_read', 'file_write', 'file_list', 'web_read_url', 'secondbrain_search', 'secondbrain_remember', 'get_current_time'],
-    config: base(
+    config: baseAgentConfig(
       `Você é o responsável por Compras da construtora. Gerencia cotações, pedidos e entregas de materiais de obra.
 
 Responsabilidades:
@@ -437,7 +437,7 @@ Working style:
     capabilities: ['seguranca', 'nr', 'ppra'],
     skillNames: ['Segurança do Trabalho (NR)', 'Second Brain'],
     toolNames: ['file_read', 'file_write', 'file_list', 'pdf_read', 'sheet_read', 'sheet_write', 'secondbrain_search', 'secondbrain_remember', 'whatsapp_read_messages', 'get_current_time'],
-    config: base(
+    config: baseAgentConfig(
       `Você é o Técnico de Segurança do Trabalho (SESMT) da construtora. Sua missão é garantir que nenhuma atividade aconteça fora das normas.
 
 Responsabilidades:
@@ -466,7 +466,7 @@ Working style:
     capabilities: ['custos', 'medicao', 'fluxo-caixa'],
     skillNames: ['Orçamento e Planejamento', 'Diário de Obra'],
     toolNames: ['sheet_read', 'sheet_write', 'pdf_read', 'file_read', 'file_list', 'secondbrain_search', 'secondbrain_remember', 'get_current_time'],
-    config: base(
+    config: baseAgentConfig(
       `Você é o Financeiro de Obra. Você controla os custos de cada canteiro e garante que a obra seja lucrativa.
 
 Responsabilidades:
@@ -495,7 +495,7 @@ Working style:
     capabilities: ['licitacao', 'propostas', 'edital'],
     skillNames: ['Documentos e Licitações', 'Orçamento e Planejamento'],
     toolNames: ['pdf_read', 'sheet_read', 'file_read', 'file_write', 'file_list', 'web_read_url', 'secondbrain_search', 'secondbrain_remember', 'get_current_time'],
-    config: base(
+    config: baseAgentConfig(
       `Você é o Assistente de Licitações da construtora. Você analisa editais e monta propostas para obras públicas e privadas.
 
 Responsabilidades:
@@ -525,8 +525,8 @@ Working style:
     description: 'A general-purpose assistant for everyday questions, planning and small tasks.',
     capabilities: ['Answer questions', 'Plan your day', 'Draft messages', 'Summarize text'],
     skillNames: [],
-    toolNames: ['get_current_time', 'web_read_url', 'file_read', 'file_write', 'file_list'],
-    config: base(
+    toolNames: ['get_current_time', 'web_read_url', 'web_clip_url', 'file_read', 'file_write', 'file_list', 'personalbrain_search', 'personalbrain_remember', 'granola_search_meetings', 'granola_get_meeting'],
+    config: baseAgentConfig(
       `You are a personal assistant. You help with everyday questions, planning, drafting and small tasks.
 
 Working style:
@@ -546,8 +546,8 @@ Working style:
     description: 'Researches topics, compares options and summarizes findings with sources.',
     capabilities: ['Web research', 'Compare options', 'Summarize sources', 'Structured briefs'],
     skillNames: [],
-    toolNames: ['web_read_url', 'open_url', 'file_read', 'file_write', 'get_current_time'],
-    config: base(
+    toolNames: ['web_read_url', 'web_clip_url', 'open_url', 'file_read', 'file_write', 'get_current_time', 'personalbrain_search', 'personalbrain_remember'],
+    config: baseAgentConfig(
       `You are a research analyst. You find, compare and summarize information.
 
 Working style:
@@ -568,7 +568,7 @@ Working style:
     capabilities: ['Draft texts', 'Edit and rewrite', 'Match tone', 'Structure arguments'],
     skillNames: [],
     toolNames: ['file_read', 'file_write', 'file_list'],
-    config: base(
+    config: baseAgentConfig(
       `You are a content writer. You draft and edit texts: emails, posts, essays, documents.
 
 Working style:
@@ -589,7 +589,7 @@ Working style:
     capabilities: ['Goal planning', 'Weekly schedules', 'Decision frameworks', 'Habit tracking ideas'],
     skillNames: [],
     toolNames: ['get_current_time', 'file_read', 'file_write', 'file_list'],
-    config: base(
+    config: baseAgentConfig(
       `You are a life organizer. You help plan goals, routines, schedules and decisions.
 
 Working style:

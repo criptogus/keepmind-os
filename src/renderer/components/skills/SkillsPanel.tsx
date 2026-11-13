@@ -24,6 +24,11 @@ export default function SkillsPanel() {
   const [importing, setImporting] = useState(false);
   const [importPreview, setImportPreview] = useState<{ skills: Array<{ name: string; description: string; prompt: string; toolNames: string[]; source: string; sourceRef?: string; files?: string[]; ignored?: string[] }>; skipped: Array<{ name: string; reason: string }> } | null>(null);
   const [importSel, setImportSel] = useState(0);
+  const [marketOpen, setMarketOpen] = useState(false);
+  const [marketItems, setMarketItems] = useState<Array<{ id: string; name: string; description: string; source: string; tags: string[]; audience: string; version: string; featured?: boolean; installed: boolean; installedCount: number }>>([]);
+  const [marketLoading, setMarketLoading] = useState(false);
+  const [marketQuery, setMarketQuery] = useState('');
+  const [marketBusy, setMarketBusy] = useState<string | null>(null);
 
   const load = async () => {
     const [s, t] = await Promise.all([window.electronAPI.getSkills(), window.electronAPI.listSkillTools()]);
@@ -32,6 +37,58 @@ export default function SkillsPanel() {
   };
 
   useEffect(() => { void load(); }, []);
+
+  const openMarketplace = async () => {
+    setMarketOpen(true);
+    setMarketLoading(true);
+    try {
+      setMarketItems(await window.electronAPI.listSkillMarketplace());
+    } catch { setMarketItems([]); }
+    finally { setMarketLoading(false); }
+  };
+
+  const installFromMarket = async (id: string) => {
+    setMarketBusy(id);
+    setError('');
+    try {
+      const draft = await window.electronAPI.installSkillFromMarketplace(id);
+      for (const s of draft.skills) {
+        await window.electronAPI.createSkill({
+          name: s.name,
+          description: s.description,
+          prompt: s.prompt,
+          toolNames: s.toolNames.filter((n) => tools.some((t) => t.name === n)),
+          source: s.source,
+          sourceRef: s.sourceRef,
+          version: 1,
+        });
+      }
+      setMarketItems((items) => items.map((m) => (m.id === id ? { ...m, installed: true, installedCount: m.installedCount + draft.skills.length } : m)));
+      await load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : t('skills.importFailed'));
+    } finally {
+      setMarketBusy(null);
+    }
+  };
+
+  const importFolder = async () => {
+    setImporting(true);
+    setError('');
+    try {
+      const draft = await window.electronAPI.importSkillFromFolder();
+      if (draft.canceled) return;
+      if (!draft.skills.length) throw new Error(t('skills.importFailed'));
+      setImportOpen(true);
+      setImportPreview(draft);
+      setImportSel(0);
+      setImportUrl('');
+    } catch (e) {
+      setError(e instanceof Error ? e.message : t('skills.importFailed'));
+    } finally {
+      setImporting(false);
+    }
+  };
 
   const openNew = () => {
     setIsNew(true);
@@ -86,6 +143,8 @@ export default function SkillsPanel() {
         help={t('ph.skills.help')}
         actions={
           <Group gap="xs">
+            <Button size="xs" variant="default" onClick={() => void openMarketplace()}>{t('skills.marketplace')}</Button>
+            <Button size="xs" variant="default" onClick={() => void importFolder()} loading={importing}>{t('skills.importFolder')}</Button>
             <Button size="xs" variant="default" onClick={() => { setImportOpen(true); setImportPreview(null); setImportSel(0); setImportUrl(''); }}>{t('skills.importGithub')}</Button>
             <Button size="xs" variant="default" onClick={openNew}>{t('skills.new')}</Button>
           </Group>
@@ -230,6 +289,57 @@ export default function SkillsPanel() {
               </Button>
             )}
           </Group>
+        </Stack>
+      </Modal>
+
+      <Modal opened={marketOpen} onClose={() => setMarketOpen(false)} title={t('skills.marketplaceTitle')} size="lg">
+        <Stack gap="sm">
+          <TextInput
+            placeholder={t('skills.marketplaceSearch')}
+            value={marketQuery}
+            onChange={(e) => setMarketQuery(e.currentTarget.value)}
+          />
+          {marketLoading ? (
+            <Text size="sm" c="dimmed" ta="center" py="lg">{t('nav.loading')}</Text>
+          ) : marketItems.filter((m) =>
+            !marketQuery.trim() ||
+            `${m.name} ${m.description} ${m.tags.join(' ')}`.toLowerCase().includes(marketQuery.trim().toLowerCase())
+          ).length === 0 ? (
+            <Text size="sm" c="dimmed" ta="center" py="lg">{t('skills.marketplaceEmpty')}</Text>
+          ) : (
+            marketItems
+              .filter((m) =>
+                !marketQuery.trim() ||
+                `${m.name} ${m.description} ${m.tags.join(' ')}`.toLowerCase().includes(marketQuery.trim().toLowerCase())
+              )
+              .sort((a, b) => Number(b.featured ?? false) - Number(a.featured ?? false))
+              .map((m) => (
+                <Card key={m.id} withBorder padding="sm" radius="sm">
+                  <Group justify="space-between" align="flex-start" wrap="nowrap">
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <Group gap={6}>
+                        <Text size="sm" fw={600}>{m.name}</Text>
+                        {m.featured && <Badge size="xs" variant="filled" color="dark">{t('skills.featured')}</Badge>}
+                        {m.installed && <Badge size="xs" variant="light" color="green">{t('skills.installed')}</Badge>}
+                      </Group>
+                      <Text size="xs" c="dimmed">{m.description}</Text>
+                      <Text size="xs" c="dimmed" mt={2}>
+                        v{m.version} · {m.tags.join(', ')} · {m.source.replace(/^https:\/\/github\.com\//, '')}
+                      </Text>
+                    </div>
+                    <Button
+                      size="xs"
+                      variant={m.installed ? 'light' : 'filled'}
+                      color="dark"
+                      loading={marketBusy === m.id}
+                      onClick={() => void installFromMarket(m.id)}
+                    >
+                      {m.installed ? t('skills.reinstall') : t('skills.install')}
+                    </Button>
+                  </Group>
+                </Card>
+              ))
+          )}
         </Stack>
       </Modal>
 

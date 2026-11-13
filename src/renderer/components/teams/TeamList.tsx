@@ -3,6 +3,9 @@ import { Badge, Button, Card, Group, Modal, SimpleGrid, Stack, Text, TextInput, 
 import { useTeamStore } from '../../store/teamStore';
 import { useAgentStore } from '../../store/agentStore';
 import TeamEditor from './TeamEditor';
+import { NICHE_PACKS } from '../../lib/nichePacks';
+import { installNichePack } from '../../lib/installPack';
+import { useAppMode } from '../../lib/useAppMode';
 import { useLang } from '../../lib/i18n';
 import PageHeader from '../common/PageHeader';
 import PixelSpinner from '../common/PixelSpinner';
@@ -16,9 +19,12 @@ export default function TeamList() {
   const { agents } = useAgentStore();
   const [editingTeamId, setEditingTeamId] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
+  const [templatesOpen, setTemplatesOpen] = useState(false);
+  const [installingId, setInstallingId] = useState<string | null>(null);
   const [newName, setNewName] = useState('');
   const [newDesc, setNewDesc] = useState('');
   const [isCreating, setCreating2] = useState(false);
+  const { mode: appMode } = useAppMode();
 
   useEffect(() => {
     fetchTeams();
@@ -53,7 +59,12 @@ export default function TeamList() {
         title={t('ph.teams.title')}
         subtitle={t('ph.teams.sub')}
         help={t('ph.teams.help')}
-        actions={<Button size="xs" variant="default" onClick={() => setCreating(true)}>{t('teams.new')}</Button>}
+        actions={
+          <Group gap="xs">
+            <Button size="xs" variant="default" onClick={() => setTemplatesOpen(true)}>{t('teams.templates')}</Button>
+            <Button size="xs" onClick={() => setCreating(true)}>{t('teams.new')}</Button>
+          </Group>
+        }
       />
 
       {teams.length === 0 ? (
@@ -72,8 +83,7 @@ export default function TeamList() {
               withBorder
               padding="md"
               radius="md"
-              className="km-enter"
-              style={{ cursor: 'pointer' }}
+              className="km-enter km-hoverable"
               onClick={() => selectTeam(team.id)}
             >
               <Stack gap="xs">
@@ -155,6 +165,47 @@ export default function TeamList() {
               {t('common.create')}
             </Button>
           </Group>
+        </Stack>
+      </Modal>
+
+      <Modal opened={templatesOpen} onClose={() => setTemplatesOpen(false)} title={t('teams.templatesTitle')} size="lg">
+        <Stack gap="sm">
+          <Text size="sm" c="dimmed">{t('teams.templatesHint')}</Text>
+          {NICHE_PACKS.filter((p) => appMode !== 'personal' || p.audience !== 'corporate').map((pack) => (
+            <Card key={pack.id} withBorder padding="md" radius="md" className="km-enter km-hoverable">
+              <Group justify="space-between" align="flex-start" wrap="nowrap" gap="sm">
+                <Stack gap={4} style={{ minWidth: 0 }}>
+                  <Group gap="xs">
+                    <Badge size="xs" variant="filled" color="dark">{t('wiz.packBadge')}</Badge>
+                    <Text fw={600} size="sm">{pack.name}</Text>
+                  </Group>
+                  <Text size="xs" c="dimmed">{pack.tagline}</Text>
+                  <Text size="xs" c="dimmed">
+                    {pack.agents.length} {t('wiz.packAgents')} · {pack.agents.map((a) => a.name).join(', ')}
+                  </Text>
+                  <Text size="xs" c="dimmed">{t('wiz.packTeam')}: {pack.teamName}</Text>
+                </Stack>
+                <Button
+                  size="compact-sm"
+                  loading={installingId === pack.id}
+                  disabled={installingId !== null && installingId !== pack.id}
+                  onClick={async () => {
+                    setInstallingId(pack.id);
+                    try {
+                      await installNichePack(pack);
+                      void useAgentStore.getState().fetchAgents();
+                      await fetchTeams();
+                      setTemplatesOpen(false);
+                    } finally {
+                      setInstallingId(null);
+                    }
+                  }}
+                >
+                  {t('wiz.installPack')}
+                </Button>
+              </Group>
+            </Card>
+          ))}
         </Stack>
       </Modal>
     </Stack>

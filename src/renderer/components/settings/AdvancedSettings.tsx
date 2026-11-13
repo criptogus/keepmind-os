@@ -68,6 +68,9 @@ export default function AdvancedSettings() {
   const [composioToolkits, setComposioToolkits] = useState<Array<{ slug: string; name: string }>>([]);
   const [composioConnections, setComposioConnections] = useState<Array<{ toolkit: string; connectedAccountId: string; status: string }>>([]);
   const [composioToolkit, setComposioToolkit] = useState('');
+  const [granola, setGranola] = useState<{ enabled: boolean; connected: boolean; account?: string; lastSync?: string; lastSyncError?: string; syncedCount: number; syncMinutes: number } | null>(null);
+  const [granolaBusy, setGranolaBusy] = useState(false);
+  const [granolaMsg, setGranolaMsg] = useState('');
 
   useEffect(() => {
     checkAuthStatus();
@@ -121,6 +124,7 @@ export default function AdvancedSettings() {
     window.electronAPI.personalBrainStatus().then(setPersonalBrain).catch(() => {});
     window.electronAPI.composioGetStatus().then(setComposio).catch(() => {});
     window.electronAPI.composioListConnections().then(setComposioConnections).catch(() => {});
+    window.electronAPI.granolaGetStatus().then(setGranola).catch(() => {});
     const unsubUpdate = window.electronAPI.onUpdateEvent((event) => {
       if (event.type === 'available') setUpdateState(`${t('adv2.updateAvail')}: v${event.version}`);
       else if (event.type === 'not-available') setUpdateState(t('adv2.latestVersion'));
@@ -387,6 +391,123 @@ export default function AdvancedSettings() {
               )}
             </Group>
             {brainStatus && <Text size="xs" c="dimmed">{brainStatus}</Text>}
+          </Stack>
+        </Card>
+      </Card>
+
+      <Card withBorder padding="md" radius="md">
+        <Title order={2} size="h4">Granola</Title>
+        <Text size="sm" c="dimmed">
+          {t('granola.desc')}
+        </Text>
+        <Card withBorder padding="md" radius="md">
+          <Stack gap="sm">
+            <Group justify="space-between">
+              <Text fw={600}>{t('adv2.status')}</Text>
+              <Badge color={granola?.connected ? 'dark' : 'gray'} variant="light">
+                {granola?.connected
+                  ? `${t('adv2.connected')}${granola.account ? ` · ${granola.account}` : ''}`
+                  : t('adv2.notConnected')}
+              </Badge>
+            </Group>
+            {granola?.connected && (
+              <Text size="xs" c="dimmed">
+                {granola.syncedCount > 0
+                  ? `${t('granola.synced')}: ${granola.syncedCount}${granola.lastSync ? ` · ${t('granola.lastSync')} ${new Date(granola.lastSync).toLocaleString()}` : ''}`
+                  : t('granola.neverSynced')}
+                {granola.lastSyncError && (
+                  <Text span c="red"> · {t('granola.lastError')}: {granola.lastSyncError}</Text>
+                )}
+              </Text>
+            )}
+            <Group gap="xs">
+              {!granola?.connected ? (
+                <Button
+                  size="xs"
+                  variant="default"
+                  loading={granolaBusy}
+                  onClick={async () => {
+                    setGranolaBusy(true);
+                    setGranolaMsg('');
+                    try {
+                      const res = await window.electronAPI.granolaConnect();
+                      if (res.ok) {
+                        setGranola(await window.electronAPI.granolaGetStatus());
+                        setGranolaMsg(`${t('granola.connectedOk')}${res.account ? ` (${res.account})` : ''}`);
+                      } else {
+                        setGranolaMsg(`${t('adv2.failed')}: ${res.error || t('adv2.unknownErr')}`);
+                      }
+                    } catch (e) {
+                      setGranolaMsg(`${t('adv2.failed')}: ${e instanceof Error ? e.message : t('adv2.unknownErr')}`);
+                    } finally {
+                      setGranolaBusy(false);
+                    }
+                  }}
+                >
+                  {t('granola.connect')}
+                </Button>
+              ) : (
+                <>
+                  <Button
+                    size="xs"
+                    variant="light"
+                    color="dark"
+                    loading={granolaBusy}
+                    onClick={async () => {
+                      setGranolaBusy(true);
+                      setGranolaMsg('');
+                      try {
+                        const res = await window.electronAPI.granolaSyncNow();
+                        setGranolaMsg(res.error
+                          ? `${t('adv2.failed')}: ${res.error}`
+                          : `${t('granola.syncDone')}: ${res.synced} ${t('granola.newMeetings')}, ${res.skipped} ${t('granola.unchanged')}${res.removed ? `, ${res.removed} ${t('granola.removed')}` : ''}`);
+                        setGranola(await window.electronAPI.granolaGetStatus());
+                      } catch (e) {
+                        setGranolaMsg(`${t('adv2.failed')}: ${e instanceof Error ? e.message : t('adv2.unknownErr')}`);
+                      } finally {
+                        setGranolaBusy(false);
+                      }
+                    }}
+                  >
+                    {t('granola.syncNow')}
+                  </Button>
+                  <Button
+                    size="xs"
+                    variant="subtle"
+                    color="gray"
+                    onClick={async () => {
+                      if (confirm(t('granola.disconnectConfirm'))) {
+                        await window.electronAPI.granolaDisconnect();
+                        setGranola(await window.electronAPI.granolaGetStatus());
+                        setGranolaMsg(t('granola.disconnected'));
+                      }
+                    }}
+                  >
+                    {t('adv2.disconnect')}
+                  </Button>
+                </>
+              )}
+            </Group>
+            {granola?.connected && (
+              <Group gap="xs" align="flex-end">
+                <TextInput
+                  size="xs"
+                  style={{ width: 140 }}
+                  label={t('granola.syncEvery')}
+                  type="number"
+                  min={15}
+                  value={String(granola.syncMinutes)}
+                  onChange={(e) => {
+                    const v = Math.max(15, Math.floor(Number(e.currentTarget.value) || 60));
+                    void window.electronAPI.granolaSetSyncMinutes(v).then(() =>
+                      window.electronAPI.granolaGetStatus().then(setGranola).catch(() => {})
+                    ).catch(() => {});
+                  }}
+                />
+                <Text size="xs" c="dimmed" pb={6}>{t('granola.minutes')}</Text>
+              </Group>
+            )}
+            {granolaMsg && <Text size="xs" c="dimmed">{granolaMsg}</Text>}
           </Stack>
         </Card>
       </Card>

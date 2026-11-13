@@ -27,16 +27,20 @@ import { PersonalBrainManager } from './integrations/PersonalBrainManager.js';
 import { WhatsAppManager } from './integrations/WhatsAppManager.js';
 import { AudioTranscriber } from './integrations/AudioTranscriber.js';
 import { ComposioManager } from './integrations/ComposioManager.js';
+import { GranolaManager } from './integrations/GranolaManager.js';
+import { WebClipper } from './integrations/WebClipper.js';
 import { judgePii } from './integrations/PiiJudge.js';
 import { TriggerManager } from './agent/TriggerManager.js';
 import { LocalAuth } from './auth/LocalAuth.js';
-import { importSkillsFromGitHub } from './integrations/SkillImporter.js';
+import { importSkillsFromGitHub, importSkillsFromFolder } from './integrations/SkillImporter.js';
+import { MARKETPLACE_SKILLS } from '../shared/skillsMarketplace.js';
 import { MemoryManager } from './integrations/MemoryManager.js';
 import { downloadAndOpenInstaller } from './integrations/productInstall.js';
 import { createMemoryJudge } from './integrations/MemoryJudge.js';
 import { getCachedCatalog, isCacheFresh, knownModelIds, refreshModelCatalog, type ProviderCredentials } from './integrations/ModelCatalog.js';
-import { routeModelForTask, DEFAULT_MODEL, costFromUsage, type ModelProvider } from '../shared/models.js';
+import { routeModelForTask, DEFAULT_MODEL, costFromUsage, providerForModel, tierForModel, MODEL_CATALOG, type ModelProvider } from '../shared/models.js';
 import { createServer, type Server } from 'node:http';
+import { RemoteApprovalServer } from './approvals/RemoteApprovalServer.js';
 import { autoUpdater } from 'electron-updater';
 import { installDownloadedMacUpdate } from './updater/macInstaller.js';
 import { exec } from 'node:child_process';
@@ -47,6 +51,7 @@ import type { Skill } from '../shared/types.js';
 import { v4 as uuidv4 } from 'uuid';
 import type { AgentConfig, CreateAgentInput, TeamConfig, GovernanceRule, AppSettings, AgentTrigger, Approval, LocalUser, UserRole, ComputerAccessLevel } from '../shared/types.js';
 import { presetAvatarFor, avatarJson, parseAvatarDefinition } from '../shared/avatars.js';
+import { buildAuditReceipt, renderReceiptHtml } from './audit/receipts.js';
 
 if (process.env.KEEPMIND_DATA_DIR) app.setPath('userData', path.resolve(process.env.KEEPMIND_DATA_DIR));
 
@@ -61,8 +66,11 @@ let personalBrainManager: PersonalBrainManager;
 let memoryManager: MemoryManager;
 let hybridMemory: HybridMemory;
 let webhookServer: Server | null = null;
+let remoteApprovalServer: RemoteApprovalServer | null = null;
 let whatsAppManager: WhatsAppManager;
 let composioManager: ComposioManager;
+let granolaManager: GranolaManager;
+let webClipper: WebClipper;
 let triggerManager: TriggerManager;
 let localAuth: LocalAuth;
 let workManager: WorkManager;
@@ -117,7 +125,7 @@ const currentUserId = (): string | undefined => localAuth?.getCurrentUser()?.id;
 const currentUserEmail = (): string => localAuth?.getCurrentUser()?.email ?? 'system';
 
 /** Gated tools a member must never see offered to the model. */
-const MEMBER_DENIED_TOOLS = ['shell_exec', 'file_write', 'open_url', 'whatsapp_send_message', 'delegate_to_agent', 'create_agent', 'review_agent', 'secondbrain_remember', 'personalbrain_remember', 'composio_execute'];
+const MEMBER_DENIED_TOOLS = ['shell_exec', 'file_write', 'open_url', 'whatsapp_send_message', 'delegate_to_agent', 'create_agent', 'review_agent', 'secondbrain_remember', 'personalbrain_remember', 'web_clip_url', 'composio_execute'];
 
 const ACCESS_RANK: Record<ComputerAccessLevel, number> = { workspace: 0, authorized: 1, full: 2 };
 function computerSettings() {
@@ -196,7 +204,7 @@ async function syncCodexCliAuth(): Promise<void> {
 let activeDelegationDepth = 0;
 
 /** Runs an agent execution end-to-end: streams events, persists the result. */
-async function runAgentExecution(agentId: string, input: Record<string, unknown>, opts?: { userId?: string; resumeId?: string }) {
+async function runAgentExecution(agentId: string, input: Record<string, unknown>, opts?: { userId?: string; resumeId?: string; dryRun?: boolean }) {
   const agent = storageManager.getAgent(agentId);
   if (!agent) throw new Error('Agent not found');
   // Members may only execute agents explicitly shared by an admin.
@@ -213,19 +221,38 @@ async function runAgentExecution(agentId: string, input: Record<string, unknown>
   const userId = opts?.userId ?? currentUserId() ?? 'system';
   const startedAt = previousRun?.startedAt ?? new Date().toISOString();
   if (typeof input.workTaskId === 'string') workManager.attachExecution(input.workTaskId, executionId);
-  storageManager.saveAgentExecution({ id: executionId, agentId, input, userId, startedAt, status: 'running', progress: 0 });
+  storageManager.saveAgentExecution({ id: executionId, agentId, input, userId, startedAt, dryRun: opts?.dryRun === true, activatedSkillIds: previousRun?.activatedSkillIds, status: 'running', progress: 0 });
   try {
     const execution = await agentManager.executeAgent(agentId, agent.config, input, (progress) => {
       storageManager.updateAgentExecutionProgress(executionId, progress);
     }, executionId, (event) => {
       mainWindow?.webContents.send('agents:event', { executionId, ...event });
-    });
+    }, { dryRun: opts?.dryRun === true, onSkillsResolved: (ids) => {
+      const record = storageManager.getAgentExecution(executionId);
+      if (record) storageManager.saveAgentExecution({ ...record, activatedSkillIds: ids });
+    } });
     execution.userId = userId;
     storageManager.saveAgentExecution(execution);
+  if (opts?.dryRun) {
+    try {
+      storageManager.saveAuditLog({
+        id: uuidv4(),
+        timestamp: new Date().toISOString(),
+        agentId,
+        agentName: agent.name,
+        action: 'agent_dry_run',
+        input,
+        output: { executionId, status: execution.status, plannedActions: (execution.output?.plannedActions as unknown[])?.length ?? 0 },
+        metadata: { dryRun: true },
+        userId: execution.userId,
+      });
+    } catch { /* audit is best-effort */ }
+  }
     return execution;
   } catch (error) {
     const previous = storageManager.getAgentExecution(executionId);
     storageManager.saveAgentExecution({ id: executionId, agentId, input, userId, startedAt,
+      dryRun: previous?.dryRun ?? opts?.dryRun === true, activatedSkillIds: previous?.activatedSkillIds,
       status: previous?.status === 'cancelled' ? 'cancelled' : 'failed', progress: previous?.progress ?? 0,
       completedAt: new Date().toISOString(), error: error instanceof Error ? error.message : String(error) });
     throw error;
@@ -329,6 +356,151 @@ Regras:
 - Use pdf_read para extrair texto de PDFs e sheet_read para planilhas de quantitativos
 - Sempre cite a página/seção do documento que embasa cada conclusão`,
       toolNames: ['pdf_read', 'sheet_read', 'file_read', 'file_write', 'file_list', 'web_read_url', 'secondbrain_search', 'secondbrain_remember', 'get_current_time'],
+    },
+    // ---- Domain skills for department team templates ----
+    {
+      name: 'Copywriting — LinkedIn & X',
+      description: 'Writes scroll-stopping posts for LinkedIn and X/Twitter: hooks, threads, CTAs.',
+      prompt: `You write social copy for LinkedIn and X. Rules:
+- First line is the hook — a bold claim, question or number; never "I am excited to announce"
+- LinkedIn: 1,200-1,800 chars ideal, short paragraphs, one idea per post, end with a question or clear CTA
+- X: punchy, under 280 chars for single posts; threads of 5-8 tweets with a payoff in the last one
+- Adapt tone per brand voice; write in the audience's language (PT-BR when appropriate)
+- No hashtag spam on LinkedIn (0-3 max); X allows more but keep them relevant
+- Always offer 2-3 hook variations so a human can pick`,
+      toolNames: ['file_read', 'file_write', 'file_list', 'web_read_url', 'get_current_time'],
+    },
+    {
+      name: 'Copywriting — Instagram',
+      description: 'Captions, carousel scripts and Reels copy for Instagram.',
+      prompt: `You write Instagram content:
+- Captions: hook in line 1 (before "more"), line breaks for readability, emoji used sparingly as visual anchors, CTA + 3-5 niche hashtags at the end
+- Carousels: hook slide, 5-8 value slides (one idea each), CTA slide; write the on-image text AND the caption
+- Reels: 30-60s script with hook in first 2 seconds, pattern interrupt mid-way, CTA at end
+- Save drafts to the workspace as markdown files for review before posting`,
+      toolNames: ['file_read', 'file_write', 'file_list', 'web_read_url', 'get_current_time'],
+    },
+    {
+      name: 'SEO & GEO',
+      description: 'Search engine optimization plus generative engine optimization (being cited by AI answers).',
+      prompt: `You optimize content for search engines AND AI assistants (GEO):
+- SEO: keyword research, search intent mapping, title/meta optimization, heading structure, internal linking, readability
+- GEO: structure content so AI engines can quote it — clear definitions, FAQ blocks, comparison tables, statistics with sources, entity clarity (who/what/when), concise answer-first paragraphs
+- Audit pages with web_read_url + file_read; deliver prioritized fix lists (impact × effort)
+- Never keyword-stuff; optimize for humans first, crawlers second
+- Track which queries the content should win; suggest content gaps vs competitors`,
+      toolNames: ['web_read_url', 'file_read', 'file_write', 'file_list', 'sheet_read', 'sheet_write', 'get_current_time'],
+    },
+    {
+      name: 'Design Direction',
+      description: 'Art direction, design briefs and brand-consistent visual concepts.',
+      prompt: `You are an art director supporting designers:
+- Turn vague requests into concrete design briefs: objective, audience, tone, references, constraints, deliverables
+- Review creative work against the brief: hierarchy, contrast, brand consistency, accessibility (contrast ratios, alt text)
+- Suggest layout/composition improvements with specific reasoning, not taste-only feedback
+- Keep a brand tokens file (colors, type scale, spacing, logo rules) in the workspace and enforce it
+- You direct and critique — you do not produce final production files`,
+      toolNames: ['file_read', 'file_write', 'file_list', 'pdf_read', 'get_current_time'],
+    },
+    {
+      name: 'Content Strategy',
+      description: 'Content calendars, pillars, repurposing plans and editorial workflows.',
+      prompt: `You plan content strategy:
+- Define 3-5 content pillars aligned to business goals; map each piece to funnel stage (awareness → consideration → decision)
+- Build editorial calendars in spreadsheets: date, channel, format, pillar, owner, status, KPI
+- Repurpose long-form into channel-native derivatives (blog → LinkedIn post → carousel → email)
+- Balance evergreen vs timely content; flag gaps in the calendar 2 weeks ahead
+- Store strategy decisions in the second brain with secondbrain_remember`,
+      toolNames: ['sheet_read', 'sheet_write', 'file_read', 'file_write', 'file_list', 'secondbrain_search', 'secondbrain_remember', 'get_current_time'],
+    },
+    {
+      name: 'Financial Analysis',
+      description: 'Ratios, variance analysis, margins and financial health checks.',
+      prompt: `You analyze financial data:
+- Core ratios: gross/net margin, CAC, LTV, churn, runway, current ratio — compute from the data, never guess
+- Variance analysis: actual vs budget vs prior period; explain the top 3 drivers, not every line
+- Always state units (R$, %, months) and the period covered; flag data quality issues (missing months, mixed currencies)
+- Red flags first: negative margins, concentration risk, unusual spikes
+- Output: executive summary (5 lines) → tables → detailed appendix`,
+      toolNames: ['sheet_read', 'sheet_write', 'file_read', 'file_write', 'file_list', 'pdf_read', 'get_current_time'],
+    },
+    {
+      name: 'FP&A & Planning',
+      description: 'Budgets, forecasts, scenarios and rolling plans.',
+      prompt: `You support FP&A work:
+- Build budgets and forecasts in spreadsheets with clear assumptions listed separately from numbers
+- Scenario planning: base / optimistic / pessimistic with the driver that changes each
+- Rolling forecasts beat static budgets — update assumptions monthly, keep version history
+- Headcount and opex planning: model fully-loaded cost (salary + ~40% encargos in Brazil)
+- Always show sensitivity: which assumption moves the result most
+- Never present a forecast without stating confidence and key risks`,
+      toolNames: ['sheet_read', 'sheet_write', 'file_read', 'file_write', 'file_list', 'pdf_read', 'get_current_time'],
+    },
+    {
+      name: 'Billing & Collections',
+      description: 'Invoicing follow-ups, AR aging and payment reminders.',
+      prompt: `You manage billing operations:
+- Track invoices, due dates and payment status in a spreadsheet (AR aging: current, 1-30, 31-60, 60+)
+- Draft collection messages with escalating firmness: friendly reminder → firm notice → final notice before escalation
+- Match payments to invoices; flag partial payments, duplicates and missing NF-e references
+- Brazilian context: mention boleto/pix/boletos correctly, honor legal collection limits (CDC art. 42 — no abusive collection)
+- NEVER process payments or share bank details — draft everything for human approval`,
+      toolNames: ['sheet_read', 'sheet_write', 'file_read', 'file_write', 'file_list', 'pdf_read', 'get_current_time'],
+    },
+    {
+      name: 'Sales Prospecting',
+      description: 'Lead research, personalization and outbound messaging.',
+      prompt: `You research prospects and draft outbound:
+- Research each prospect: company, role, recent news, likely pain points — cite sources
+- Personalization must be specific (their product launch, their hiring, their post) — never "I hope this finds you well"
+- Multi-channel sequences: LinkedIn connection note → value message → email → breakup; spacing over 7-14 days
+- Respect LGPD/GDPR: use publicly available business info, honor opt-outs immediately, never scrape personal data
+- Log every touch in the pipeline sheet with outcome`,
+      toolNames: ['web_read_url', 'file_read', 'file_write', 'file_list', 'sheet_read', 'sheet_write', 'secondbrain_search', 'secondbrain_remember', 'get_current_time'],
+    },
+    {
+      name: 'Proposals & Commercial Writing',
+      description: 'Proposals, quotes, follow-ups and commercial documents.',
+      prompt: `You write commercial documents:
+- Proposals: executive summary, understood problem, proposed solution, timeline, investment, terms — mirror the client's own language from discovery notes
+- Pricing tables: clear tiers or itemized, always show what's included vs extra
+- Follow-ups: reference the last conversation specifically, propose a concrete next step with a date
+- Contracts/terms: flag anything needing legal review with [LEGAL REVIEW]
+- Brazilian formal vs informal register: match the client's tone (vocês/senhor)`,
+      toolNames: ['file_read', 'file_write', 'file_list', 'sheet_read', 'sheet_write', 'pdf_read', 'get_current_time'],
+    },
+    {
+      name: 'Product Discovery',
+      description: 'PRDs, user stories, acceptance criteria and discovery frameworks.',
+      prompt: `You support product discovery:
+- PRDs: problem, evidence, proposed solution, success metrics, out-of-scope, open questions — one page max unless asked
+- User stories in "As a [user], I want [capability] so that [outcome]" with testable acceptance criteria
+- Jobs-to-be-done framing when exploring new areas; opportunity solution trees for mapping
+- Always separate what we KNOW (with evidence) from what we ASSUME (needs validation)
+- Flag solutions looking for problems — push back with discovery questions`,
+      toolNames: ['file_read', 'file_write', 'file_list', 'sheet_read', 'sheet_write', 'secondbrain_search', 'secondbrain_remember', 'get_current_time'],
+    },
+    {
+      name: 'User Research Synthesis',
+      description: 'Interview notes → insights, themes and opportunity maps.',
+      prompt: `You synthesize user research:
+- From interview notes/transcripts: extract verbatim quotes, tag by theme, cluster into insights
+- Distinguish observations (what happened) from interpretations (what it might mean)
+- Output: key findings ranked by frequency × intensity of pain, supporting quotes, recommended experiments
+- Never invent quotes — only use text present in the source material
+- Small samples: state confidence limits honestly (5 interviews ≠ statistical proof)`,
+      toolNames: ['file_read', 'file_write', 'file_list', 'pdf_read', 'sheet_read', 'sheet_write', 'secondbrain_search', 'secondbrain_remember', 'get_current_time'],
+    },
+    {
+      name: 'Release Notes & Announcements',
+      description: 'Changelogs, release announcements and internal comms.',
+      prompt: `You write release communications:
+- Changelogs: group by user impact (new / improved / fixed), plain language, link to details
+- Announcements: what changed, why it matters to THIS user, how to use it — benefit-first, not feature-first
+- Internal release notes for the team: technical details, breaking changes, rollout plan
+- Version the docs in the workspace; keep a running CHANGELOG.md
+- Never announce what isn't shipped — mark unreleased items clearly`,
+      toolNames: ['file_read', 'file_write', 'file_list', 'get_current_time'],
     },
   ];
   for (const s of seeds) {
@@ -459,6 +631,7 @@ app.whenReady().then(async () => {
   await credentialStore.warm();
   localAuth = new LocalAuth(storageManager);
   personalBrainManager = new PersonalBrainManager(app.getPath('userData'));
+  webClipper = new WebClipper(personalBrainManager, storageManager);
   memoryManager = new MemoryManager(storageManager);
   hybridMemory = new HybridMemory(storageManager, memoryManager);
   memoryManager.setJudge(createMemoryJudge(() => ({
@@ -517,6 +690,12 @@ app.whenReady().then(async () => {
   secondBrainManager.setPiiJudge((text) =>
     judgePii(text, () => ({ openai: providerApiKeys.openai, anthropic: providerApiKeys.anthropic }))
   );
+  granolaManager = new GranolaManager(storageManager, credentialStore, personalBrainManager, async (url) => {
+    await new Promise<void>((resolve, reject) => {
+      exec(`open ${JSON.stringify(url)}`, (err) => (err ? reject(err) : resolve()));
+    });
+  });
+  if (granolaManager.isConnected()) granolaManager.ensureScheduler();
   applyUpdateFeed();
   void refreshCorpLlmKeys();
   whatsAppManager = new WhatsAppManager(app.getPath('userData'));
@@ -580,6 +759,7 @@ app.whenReady().then(async () => {
     getAgentName: (agentId) => storageManager.getAgent(agentId)?.name,
   });
   startWebhookServer();
+  void startRemoteApprovalsIfEnabled().catch(() => console.error('[remote] approval server failed to start'));
   agentManager.setContextProvider(async (query) => {
     if (!secondBrainManager.isConfigured()) return '';
     return secondBrainManager.search(query, 5);
@@ -599,6 +779,7 @@ app.whenReady().then(async () => {
     const text = JSON.stringify(input).toLowerCase();
     const tokens = text.match(/[a-zá-ú]{4,}/g) || [];
     const assignedIds = new Set(assigned.map((s) => s.id));
+    const outcomes = storageManager.getOutcomeStats(agentId ?? '', input, 'skill');
     const scored = storageManager.getAllSkills()
       .filter((s) => !assignedIds.has(s.id) && !s.id.startsWith('mcp-'))
       .map((s) => {
@@ -606,11 +787,13 @@ app.whenReady().then(async () => {
         const skillTokens = new Set(haystack.match(/[a-zá-ú]{4,}/g) || []);
         let score = 0;
         for (const t of tokens) if (skillTokens.has(t)) score++;
-        return { skill: s, score };
+        const history = outcomes[s.id];
+        const prior = history && history.total >= 3 ? (history.successRate - 0.5) : 0;
+        return { skill: s, score, blendedScore: score + prior };
       });
     const picked = scored
       .filter((x) => x.score >= 2)
-      .sort((a, b) => b.score - a.score)
+      .sort((a, b) => b.blendedScore - a.blendedScore)
       .slice(0, 2);
     try {
       storageManager.saveRoutingDecision({
@@ -619,7 +802,7 @@ app.whenReady().then(async () => {
         subject: text.slice(0, 200),
         candidates: scored.map((x) => ({ id: x.skill.name, score: x.score })).slice(0, 20),
         decision: picked.map((x) => x.skill.name),
-        reason: 'keyword-overlap heuristic (score >= 2, max 2 skills)',
+        reason: 'keyword overlap plus per-agent similar-task outcome prior (at least 3 real executions; max 2 skills)',
       });
     } catch { /* routing audit is best-effort */ }
     return picked.map((x) => x.skill);
@@ -630,16 +813,43 @@ app.whenReady().then(async () => {
   // (bundled + live-fetched). Disable with 'llm.autoRoute'='false'.
   agentManager.setModelRouter((model, input, agentId) => {
     if (storageManager.getSetting('llm.autoRoute') === 'false') return model;
-    const routed = routeModelForTask(model, JSON.stringify(input), knownModelIds(storageManager));
+    const inputText = JSON.stringify(input);
+    let routed = routeModelForTask(model, inputText, knownModelIds(storageManager));
+    let reason = 'task-complexity heuristic within provider family';
+
+    // Outcome prior: among same provider+tier candidates, prefer models with
+    // a proven success rate when the heuristic pick has a poor track record.
+    // Requires ≥3 samples on both sides and a ≥15-point success-rate gap.
+    try {
+      const stats = storageManager.getOutcomeStats(agentId ?? '', input, 'model');
+      const provider = providerForModel(routed);
+      const tier = tierForModel(routed);
+      if (provider && tier && !/^o\d/.test(routed)) {
+        const routedStat = stats[routed];
+        if (routedStat && routedStat.total >= 3) {
+          const candidates = MODEL_CATALOG
+            .filter((c) => c.provider === provider && c.tier === tier && c.id !== routed && !/^o\d/.test(c.id))
+            .map((c) => ({ id: c.id, stat: stats[c.id] }))
+            .filter((c) => c.stat && c.stat.total >= 3)
+            .sort((a, b) => b.stat!.successRate - a.stat!.successRate);
+          const best = candidates[0];
+          if (best && best.stat && best.stat.successRate >= routedStat.successRate + 0.15) {
+            reason = `outcome prior: ${routed} succeeds ${Math.round(routedStat.successRate * 100)}% (${routedStat.total} runs) vs ${best.id} ${Math.round(best.stat.successRate * 100)}% (${best.stat.total} runs)`;
+            routed = best.id;
+          }
+        }
+      }
+    } catch { /* outcome stats are best-effort */ }
+
     if (routed !== model) {
       try {
         storageManager.saveRoutingDecision({
           kind: 'model',
           agentId,
-          subject: JSON.stringify(input).slice(0, 200),
+          subject: inputText.slice(0, 200),
           candidates: [{ id: model, score: 0 }, { id: routed, score: 1 }],
           decision: [routed],
-          reason: 'task-complexity heuristic within provider family',
+          reason,
         });
       } catch { /* routing audit is best-effort */ }
     }
@@ -683,6 +893,11 @@ app.whenReady().then(async () => {
       if (!res.ok) throw new Error(`Jina reader failed (${res.status})`);
       return res.text();
     },
+    webClipUrl: async (url) => {
+      requireRole('admin');
+      const clip = await webClipper.clip(url);
+      return `Clipped "${clip.title}" (${clip.words} words) → ${clip.file}`;
+    },
     agentReachStatus: () => getAgentReachStatus(),
     composioSearch: async (query) => {
       if (!composioManager.isConfigured()) throw new Error('Composio is not configured');
@@ -706,6 +921,16 @@ app.whenReady().then(async () => {
       const summary = await memoryManager.remember(content, file ?? 'fact', evidence);
       void personalBrainManager.remember(content, file).catch(() => {});
       return summary;
+    },
+    granolaSearchMeetings: async (query) => {
+      if (!granolaManager?.isConnected()) throw new Error('Granola is not connected');
+      const result = await granolaManager.searchMeetings(query);
+      return typeof result === 'string' ? result : JSON.stringify(result, null, 2).slice(0, 12000);
+    },
+    granolaGetMeeting: async (id) => {
+      if (!granolaManager?.isConnected()) throw new Error('Granola is not connected');
+      const { note, transcript } = await granolaManager.getMeeting(id, true);
+      return JSON.stringify({ note, transcript }, null, 2).slice(0, 30000);
     },
     delegateTask: async (callerAgentId, agent, task) => {
       if (activeDelegationDepth >= MAX_DELEGATION_DEPTH) {
@@ -842,6 +1067,11 @@ app.whenReady().then(async () => {
   agentManager.setMemoryOutcomeRecorder((_executionId, memoryIds, succeeded) => {
     try { memoryManager.recordOutcome(memoryIds, succeeded); }
     catch (e) { console.error('[memory] outcome record failed:', e); }
+  });
+  // Persist every tool call/result so "what the agent touched" survives the
+  // live event stream and can be audited after the fact.
+  agentManager.setToolCallRecorder((executionId, kind, name, payload) => {
+    storageManager.saveExecutionToolEvent(executionId, kind, name, payload);
   });
 
   // Per-execution constraints: install computer-access ceiling + agent cap +
@@ -1344,6 +1574,9 @@ handle('agents:share', (_event, id: string, shared: boolean) => {
 handle('agents:execute', async (_event, id: string, input: Record<string, unknown>) => {
   return runAgentExecution(id, input, { userId: currentUserId() });
 });
+handle('agents:executeDryRun', async (_event, id: string, input: Record<string, unknown>) => {
+  return runAgentExecution(id, input, { userId: currentUserId(), dryRun: true });
+});
 
 handle('agents:cancelExecution', async (_event, executionId: string) => {
   agentManager.cancelExecution(executionId);
@@ -1359,6 +1592,14 @@ handle('agents:getExecutions', (_event, agentId?: string) => {
     return storageManager.getAgentExecutions(agentId, 50, currentUserId());
   }
   return storageManager.getAgentExecutions(agentId);
+});
+
+// Persisted tool calls for one execution — "what the agent touched".
+handle('executions:getToolCalls', (_event, executionId: string) => {
+  const exec = storageManager.getAgentExecution(executionId);
+  if (!exec) return [];
+  if (currentRole() === 'member' && exec.userId !== currentUserId()) return [];
+  return storageManager.getExecutionToolCalls(executionId);
 });
 
 // A separate account connection, scoped to the signed-in local administrator.
@@ -1434,6 +1675,56 @@ handle('skills:listTools', () => {
 handle('skills:importGitHub', async (_event, url: string) => {
   requireRole('admin');
   return importSkillsFromGitHub(url);
+});
+
+// Local plugin folder import — same SKILL.md format as GitHub sources.
+handle('skills:importFolder', async (_event, dir?: string) => {
+  requireRole('admin');
+  const win = mainWindow;
+  let target = dir;
+  if (!target) {
+    if (!win) throw new Error('No window');
+    const { canceled, filePaths } = await dialog.showOpenDialog(win, {
+      title: 'Select plugin folder',
+      properties: ['openDirectory'],
+    });
+    if (canceled || filePaths.length === 0) return { skills: [], skipped: [], canceled: true };
+    target = filePaths[0];
+  }
+  return importSkillsFromFolder(target);
+});
+
+// Community marketplace: curated catalog + install state.
+handle('skills:listMarketplace', () => {
+  const installed = new Set(storageManager.getAllSkills().map((s) => s.source).filter(Boolean));
+  return MARKETPLACE_SKILLS.map((entry) => ({
+    ...entry,
+    installed: installed.has(entry.source),
+    installedCount: storageManager.getAllSkills().filter((s) => s.source === entry.source).length,
+  }));
+});
+
+// Marketplace install: fetch the entry's source and return the import draft —
+// the renderer reviews/saves through the same createSkill path as GitHub imports.
+handle('skills:installMarketplace', async (_event, id: string) => {
+  requireRole('admin');
+  const entry = MARKETPLACE_SKILLS.find((m) => m.id === id);
+  if (!entry) throw new Error('Marketplace entry not found');
+  const result = await importSkillsFromGitHub(entry.source);
+  try {
+    storageManager.saveAuditLog({
+      id: uuidv4(),
+      timestamp: new Date().toISOString(),
+      agentId: 'system',
+      agentName: 'system',
+      action: 'skill_marketplace_install',
+      input: { id: entry.id, name: entry.name, version: entry.version },
+      output: { found: result.skills.length, skipped: result.skipped.length },
+      metadata: { source: entry.source },
+      userId: currentUserId(),
+    });
+  } catch { /* best-effort */ }
+  return result;
 });
 
 // AI-assisted skill improvement: rewrites a skill prompt using the default
@@ -1741,6 +2032,112 @@ handle('audit:getLogs', (_event, limit = 100, offset = 0) => {
   return storageManager.getAuditLogs(limit, offset);
 });
 
+// Tamper-evident audit receipts: JSON (verifiable hash chain) and printable
+// HTML (browser print → PDF). Exports are themselves audited.
+const exportAuditReceipt = async (format: 'json' | 'html') => {
+  requireRole('admin');
+  const win = mainWindow;
+  if (!win) throw new Error('No window');
+  const entries = storageManager.getAuditLogs(10000, 0);
+  if (entries.length === 0) throw new Error('No audit entries to export');
+  // Fold in the persisted tool calls of recent executions — the receipt then
+  // proves not just what was logged, but exactly which tools agents invoked.
+  const toolCalls = storageManager.getAgentExecutions(undefined, 500)
+    .flatMap((e) => storageManager.getExecutionToolCalls(e.id));
+  const receipt = buildAuditReceipt(entries, app.getVersion(), toolCalls);
+  const ext = format === 'json' ? 'json' : 'html';
+  const { canceled, filePath } = await dialog.showSaveDialog(win, {
+    title: 'Export audit receipt',
+    defaultPath: `keepmind-audit-receipt-${new Date().toISOString().slice(0, 10)}.${ext}`,
+    filters: [{ name: ext === 'json' ? 'JSON receipt' : 'HTML receipt', extensions: [ext] }],
+  });
+  if (canceled || !filePath) return { ok: false, canceled: true };
+  const content = format === 'json'
+    ? JSON.stringify(receipt, null, 2)
+    : renderReceiptHtml(receipt);
+  await fs.writeFile(filePath, content, 'utf8');
+  try {
+    storageManager.saveAuditLog({
+      id: uuidv4(),
+      timestamp: new Date().toISOString(),
+      agentId: 'system',
+      agentName: 'system',
+      action: 'audit_receipt_exported',
+      input: { format, entryCount: receipt.entryCount },
+      output: { path: filePath },
+      metadata: { head: receipt.chain.head },
+      userId: currentUserId(),
+    });
+  } catch { /* best-effort */ }
+  return { ok: true, path: filePath, entryCount: receipt.entryCount, head: receipt.chain.head };
+};
+handle('audit:exportReceiptJson', () => exportAuditReceipt('json'));
+handle('audit:exportReceiptHtml', () => exportAuditReceipt('html'));
+
+// Governance overview — "who did what, where" across audit log + agent
+// executions. Members only see their own activity; admins see everything.
+handle('governance:summary', () => {
+  const isMember = currentRole() === 'member';
+  const uid = isMember ? currentUserId() : undefined;
+  const logs = storageManager.getAuditLogs(2000, 0, uid);
+  const execs = storageManager.getAgentExecutions(undefined, 500, uid);
+
+  const categoryOf = (action: string): string => {
+    if (action.startsWith('approval_')) return 'approvals';
+    if (action.includes('export') || action.includes('download')) return 'exports';
+    if (action.includes('sync') || action === 'web_clip') return 'integrations';
+    if (action.startsWith('agent_') || action === 'team_execute') return 'agents';
+    if (action.includes('access') || action.includes('invite') || action.includes('requested')) return 'access';
+    return 'admin';
+  };
+
+  const byCategory: Record<string, number> = {};
+  const byUser: Record<string, number> = {};
+  const byAction: Record<string, number> = {};
+  let approvalsApproved = 0, approvalsRejected = 0;
+  for (const l of logs) {
+    const cat = categoryOf(l.action);
+    byCategory[cat] = (byCategory[cat] || 0) + 1;
+    const u = l.userId || 'system';
+    byUser[u] = (byUser[u] || 0) + 1;
+    byAction[l.action] = (byAction[l.action] || 0) + 1;
+    if (l.action === 'approval_approved') approvalsApproved++;
+    if (l.action === 'approval_rejected') approvalsRejected++;
+  }
+
+  const execByStatus: Record<string, number> = {};
+  const execByChannel: Record<string, number> = {};
+  for (const e of execs) {
+    execByStatus[e.status] = (execByStatus[e.status] || 0) + 1;
+    const ch = (e.input?.channel as string | undefined) || (e.userId === 'system' ? 'system' : 'manual');
+    execByChannel[ch] = (execByChannel[ch] || 0) + 1;
+  }
+
+  return {
+    totalEntries: logs.length,
+    totalExecutions: execs.length,
+    byCategory,
+    byUser: Object.entries(byUser).map(([userId, count]) => ({ userId, count })).sort((a, b) => b.count - a.count).slice(0, 10),
+    topActions: Object.entries(byAction).map(([action, count]) => ({ action, count })).sort((a, b) => b.count - a.count).slice(0, 12),
+    approvals: {
+      pending: storageManager.getPendingApprovals().length,
+      approved: approvalsApproved,
+      rejected: approvalsRejected,
+    },
+    execByStatus,
+    execByChannel,
+    topTools: storageManager.getToolUsageCounts(new Date(Date.now() - 7 * 24 * 3600_000).toISOString(), uid),
+    recent: logs.slice(0, 20).map((l) => ({
+      id: l.id,
+      timestamp: l.timestamp,
+      userId: l.userId || 'system',
+      agentName: l.agentName,
+      action: l.action,
+      category: categoryOf(l.action),
+    })),
+  };
+});
+
 // Second Brain (KeepMind Corp) integration
 handle('secondbrain:getConfig', () => {
   const { token, ...rest } = secondBrainManager.getConfig();
@@ -1757,6 +2154,36 @@ handle('secondbrain:setConfig', (_event, config: { enabled?: boolean; url?: stri
 
 handle('secondbrain:test', async () => {
   return secondBrainManager.testConnection();
+});
+
+// Granola meetings connector — one-click OAuth, notes sync to personal brain.
+handle('granola:getStatus', () => granolaManager.getStatus());
+handle('granola:connect', async () => {
+  requireRole('admin');
+  return granolaManager.connect();
+});
+handle('granola:disconnect', () => {
+  requireRole('admin');
+  granolaManager.disconnect();
+  return { ok: true };
+});
+handle('granola:test', async () => {
+  if (!granolaManager.isConnected()) return { ok: false, error: 'not connected' };
+  try {
+    const tools = await granolaManager.listTools();
+    return { ok: true, tools: tools.map((t) => t.name) };
+  } catch (error) {
+    return { ok: false, error: error instanceof Error ? error.message : String(error) };
+  }
+});
+handle('granola:syncNow', async () => {
+  requireRole('admin');
+  return granolaManager.syncNow();
+});
+handle('granola:setSyncMinutes', (_event, minutes: number) => {
+  requireRole('admin');
+  granolaManager.setSyncMinutes(Number(minutes) || 60);
+  return { ok: true, syncMinutes: granolaManager.getSyncMinutes() };
 });
 
 // Personal vs corporate mode — chosen at onboarding, editable in Settings.
@@ -1962,6 +2389,70 @@ function startWebhookServer(): void {
   });
 }
 
+// Remote approvals — token-gated LAN page for the human approval queue.
+// The URL itself is the credential; rotate it if the link leaks.
+function remoteToken(): string {
+  let token = storageManager.getSetting('remote.token');
+  if (!token || !/^[a-f0-9]{32,64}$/.test(token)) {
+    token = randomBytes(24).toString('hex');
+    storageManager.setSetting('remote.token', token);
+  }
+  return token;
+}
+
+function decideRemoteApproval(id: string, approve: boolean, reason?: string): void {
+  const approval = storageManager.getApproval(id);
+  if (!approval || approval.status !== 'pending') return;
+  storageManager.updateApprovalStatus(id, approve ? 'approved' : 'rejected', approve ? undefined : reason, 'remote');
+  storageManager.saveAuditLog({
+    id: uuidv4(),
+    timestamp: new Date().toISOString(),
+    agentId: approval.agentId || 'governance',
+    agentName: approval.agentName || 'Governance',
+    action: approve ? 'approval_approved' : 'approval_rejected',
+    input: { approvalId: id, reason: reason ?? null },
+    output: {},
+    metadata: { tool: approval.action, channel: 'remote-lan' },
+  });
+}
+
+async function startRemoteApprovalsIfEnabled(): Promise<void> {
+  if (storageManager.getSetting('remote.enabled') !== 'true') return;
+  if (!remoteApprovalServer) {
+    remoteApprovalServer = new RemoteApprovalServer({
+      getPendingApprovals: () => storageManager.getPendingApprovals(),
+      decide: decideRemoteApproval,
+      getToken: remoteToken,
+      getLanguage: () => storageManager.getSetting('language') || 'en',
+    });
+  }
+  const port = Number(storageManager.getSetting('remote.port')) || 0;
+  await remoteApprovalServer.start(port);
+  console.log('[remote] approval server started; link available to local administrators');
+}
+
+handle('remoteApprovals:status', () => { requireRole('admin'); return ({
+  enabled: storageManager.getSetting('remote.enabled') === 'true' && remoteApprovalServer?.running === true,
+  url: remoteApprovalServer?.url ?? null,
+}); });
+
+handle('remoteApprovals:setEnabled', async (_event, enabled: boolean) => {
+  requireRole('admin');
+  storageManager.setSetting('remote.enabled', enabled ? 'true' : 'false');
+  if (enabled) {
+    try { await startRemoteApprovalsIfEnabled(); } catch { storageManager.setSetting('remote.enabled', 'false'); throw new Error('Não foi possível iniciar as aprovações remotas.'); }
+  } else {
+    remoteApprovalServer?.stop();
+  }
+  return { ok: true, url: remoteApprovalServer?.url ?? null };
+});
+
+handle('remoteApprovals:regenerateLink', () => {
+  requireRole('admin');
+  storageManager.setSetting('remote.token', randomBytes(24).toString('hex'));
+  return { ok: true, url: remoteApprovalServer?.url ?? null };
+});
+
 // Cost/memory/routing inspection for the UI.
 handle('usage:getMonthlySpend', () => {
   const agents = new Map(storageManager.getAllAgents().map((a) => [a.id, a.name]));
@@ -1975,6 +2466,47 @@ handle('usage:list', (_event, limit?: number) => storageManager.getLlmUsage(limi
 handle('routing:list', (_event, limit?: number) => storageManager.getRoutingDecisions(limit ?? 50));
 handle('memory:list', (_event, limit?: number) => memoryManager.list(limit ?? 100));
 handle('memory:retire', (_event, id: string) => ({ ok: memoryManager.retire(id) }));
+
+// "While you were away" digest — what the system did autonomously in the
+// last 24h: scheduled/webhook/WhatsApp agent runs, integration syncs, clips
+// and new memories. Powers the dashboard activity card.
+handle('activity:digest', () => {
+  const sinceIso = new Date(Date.now() - 24 * 3600_000).toISOString();
+  const sinceMs = Date.now() - 24 * 3600_000;
+  const execs = storageManager.getAgentExecutions(undefined, 500)
+    .filter((e) => e.startedAt && e.startedAt >= sinceIso);
+  const byChannel: Record<string, number> = {};
+  for (const e of execs) {
+    const ch = (e.input?.channel as string | undefined) || (e.userId === 'system' ? 'system' : 'manual');
+    byChannel[ch] = (byChannel[ch] || 0) + 1;
+  }
+  const integrations = storageManager.getAuditLogs(1000)
+    .filter((a) => a.timestamp >= sinceIso && ['granola_sync', 'web_clip'].includes(a.action));
+  const whatsappMessages = storageManager.getWhatsAppMessages(500)
+    .filter((m) => m.timestamp >= sinceMs).length;
+  const memories = memoryManager.list(500)
+    .filter((m) => m.createdAt >= sinceIso).length;
+  return {
+    windowHours: 24,
+    executions: execs.length,
+    byChannel,
+    recentExecs: execs.slice(0, 8).map((e) => ({
+      id: e.id,
+      agentId: e.agentId,
+      status: e.status,
+      channel: (e.input?.channel as string | undefined) || 'manual',
+      startedAt: e.startedAt,
+    })),
+    integrations: integrations.slice(0, 8).map((a) => ({
+      action: a.action,
+      agentName: a.agentName,
+      timestamp: a.timestamp,
+      output: a.output,
+    })),
+    whatsappMessages,
+    memories,
+  };
+});
 
 // Data export/import — full SQLite backup as a single file.
 handle('data:export', async () => {

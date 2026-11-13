@@ -66,6 +66,7 @@ export class AgentManager {
   private usageRecorder?: (rec: UsageRecord) => void;
   private budgetChecker?: BudgetChecker;
   private memoryOutcomeRecorder?: MemoryOutcomeRecorder;
+  private toolCallRecorder?: (executionId: string, kind: 'call' | 'result', name: string, payload: { args?: unknown; result?: unknown; error?: unknown }) => void;
   private runContext = new AsyncLocalStorage<{ agentId: string; executionId: string; signal: AbortSignal }>();
   private controllers = new Map<string, AbortController>();
   private reservations = new Map<string, { agentId: string; estimate: number }>();
@@ -226,12 +227,18 @@ export class AgentManager {
     this.memoryOutcomeRecorder = recorder;
   }
 
+  /** Persists tool_call/tool_result events for the execution audit trail. */
+  setToolCallRecorder(recorder?: (executionId: string, kind: 'call' | 'result', name: string, payload: { args?: unknown; result?: unknown; error?: unknown }) => void) {
+    this.toolCallRecorder = recorder;
+  }
+
   getToolRegistry(): ToolRegistry {
     return this.toolRegistry;
   }
 
   previewTools(agentId: string, config: AgentConfig, input: Record<string, unknown>) {
     const skills = this.resolveSkills(config, input, agentId);
+
     const constraints = this.constraintsProvider?.(config);
     const denied = constraints?.denyTools?.length ? new Set(constraints.denyTools) : undefined;
     return this.enabledToolNames(config, skills, denied);
@@ -298,7 +305,7 @@ export class AgentManager {
   async executeAgent(
     agentId: string, config: AgentConfig, input: Record<string, unknown>,
     onProgress?: (progress: number) => void, executionId: string = uuidv4(),
-    onEvent?: (event: AgentStreamEvent) => void
+    onEvent?: (event: AgentStreamEvent) => void, opts?: { dryRun?: boolean; onSkillsResolved?: (ids: string[]) => void }
   ): Promise<AgentExecution> {
     if (this.controllers.has(executionId)) throw new CheckpointError('Execution already active');
     const controller = new AbortController();
@@ -309,7 +316,7 @@ export class AgentManager {
     this.controllers.set(executionId, controller);
     try {
       return await this.runContext.run({ agentId, executionId, signal: controller.signal }, () =>
-        this.executeAgentInternal(agentId, config, input, onProgress, executionId, onEvent));
+        this.executeAgentInternal(agentId, config, input, onProgress, executionId, onEvent, opts));
     } finally {
       parent?.removeEventListener('abort', abort);
       this.controllers.delete(executionId);
@@ -323,9 +330,11 @@ export class AgentManager {
     input: Record<string, unknown>,
     onProgress?: (progress: number) => void,
     executionId: string = uuidv4(),
-    onEvent?: (event: AgentStreamEvent) => void
+    onEvent?: (event: AgentStreamEvent) => void,
+    opts?: { dryRun?: boolean; onSkillsResolved?: (ids: string[]) => void }
   ): Promise<AgentExecution> {
     const execution: AgentExecution = {
+      dryRun: opts?.dryRun === true,
       id: executionId,
       agentId,
       status: 'pending',
@@ -348,6 +357,8 @@ export class AgentManager {
 
       let output: Record<string, unknown>;
       const skills = this.resolveSkills(config, input, agentId);
+      execution.activatedSkillIds = skills.map(skill => skill.id);
+      opts?.onSkillsResolved?.(execution.activatedSkillIds);
       const constraints = this.constraintsProvider?.(config);
       const denied = constraints?.denyTools?.length ? new Set(constraints.denyTools) : undefined;
       const toolNames = this.enabledToolNames(config, skills, denied);
@@ -358,7 +369,28 @@ export class AgentManager {
         systemPrompt: await this.buildSystemPrompt(config, input, skills),
       };
 
-      const checkpoint = this.checkpoints?.open(executionId, { agentId, config, input, routedModel,
+      // Dry-run: collect every tool call the model attempts so the final
+      // output doubles as an actionable plan a human can review/approve.
+      const plannedActions: Array<{ name: string; args: unknown }> = [];
+      const emit = (type: AgentStreamEvent['type'], data?: unknown) => {
+        if (opts?.dryRun && type === 'tool_call' && data && typeof data === 'object') {
+          const d = data as { name?: string; args?: unknown };
+          if (d.name) plannedActions.push({ name: d.name, args: d.args });
+        }
+        if ((type === 'tool_call' || type === 'tool_result') && data && typeof data === 'object' && this.toolCallRecorder) {
+          const d = data as { name?: string; args?: unknown; result?: unknown; error?: unknown };
+          if (d.name) {
+            try {
+              this.toolCallRecorder(executionId, type === 'tool_call' ? 'call' : 'result', d.name, {
+                args: d.args, result: d.result, error: d.error,
+              });
+            } catch { /* audit trail is best-effort */ }
+          }
+        }
+        try { onEvent?.({ type, data }); } catch { /* renderer gone */ }
+      };
+
+      const checkpoint = this.checkpoints?.open(executionId, { agentId, config, input, routedModel, ...(opts?.dryRun ? { dryRun: true } : {}),
         transport: this.oauthTokens.has('openai') && providerForModel(routedModel) === 'openai' ? 'codex' : providerForModel(routedModel),
         schemas: this.toolRegistry.schemasFor(toolNames) }, effectiveConfig.systemPrompt);
       if (checkpoint) effectiveConfig.systemPrompt = checkpoint.systemPrompt;
@@ -367,12 +399,9 @@ export class AgentManager {
         ...(constraints?.policy ?? {}),
         memoryUsage: memoryIds,
         callerAgentId: agentId,
+        dryRun: opts?.dryRun === true,
         executionId, signal, allowedTools: toolNames,
         workTaskId: typeof input.workTaskId === 'string' ? input.workTaskId : undefined,
-      };
-
-      const emit = (type: AgentStreamEvent['type'], data?: unknown) => {
-        try { onEvent?.({ type, data }); } catch { /* renderer gone */ }
       };
 
       const provider = providerForModel(routedModel) || providerForModel(config.model);
@@ -397,7 +426,9 @@ export class AgentManager {
       execution.status = 'completed';
       execution.completedAt = new Date().toISOString();
       execution.progress = 100;
-      execution.output = output;
+      execution.output = opts?.dryRun
+        ? { ...output, dryRun: true, plannedActions }
+        : output;
 
       return execution;
     } catch (error) {

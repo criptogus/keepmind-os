@@ -4,6 +4,9 @@ import { useAgentStore } from '../../store/agentStore';
 import BotAvatar from '../common/BotAvatar';
 import { AVATAR_PRESETS, avatarJson, presetAvatarFor } from '../../../shared/avatars';
 import { AGENT_TEMPLATES, type AgentTemplate } from '../../lib/agentTemplates';
+import { NICHE_PACKS, type NichePack } from '../../lib/nichePacks';
+import { installNichePack } from '../../lib/installPack';
+import { useTeamStore } from '../../store/teamStore';
 import { describeTool } from '../../lib/plainLanguage';
 import { useLang } from '../../lib/i18n';
 import { useAppMode } from '../../lib/useAppMode';
@@ -50,6 +53,7 @@ export default function AgentWizard({ onClose, onCreated, onAdvanced }: AgentWiz
   const { createAgent, loading, error } = useAgentStore();
   const [step, setStep] = useState(0);
   const [template, setTemplate] = useState<AgentTemplate | null>(null);
+  const [pack, setPack] = useState<NichePack | null>(null);
   const [avatarId, setAvatarId] = useState('auto');
   const [name, setName] = useState('');
   const [extra, setExtra] = useState('');
@@ -75,8 +79,8 @@ export default function AgentWizard({ onClose, onCreated, onAdvanced }: AgentWiz
     return Object.entries(acc);
   }, [appMode]);
 
-  const buildConfig = (): AgentConfig => {
-    const base = template?.config ?? BLANK_TEMPLATE.config;
+  const buildConfig = (tpl: AgentTemplate | null = template): AgentConfig => {
+    const base = tpl?.config ?? BLANK_TEMPLATE.config;
     const prompt = extra.trim()
       ? `${base.systemPrompt}\n\nAdditional instructions from the owner:\n${extra.trim()}`
       : base.systemPrompt;
@@ -85,7 +89,7 @@ export default function AgentWizard({ onClose, onCreated, onAdvanced }: AgentWiz
       model: base.model || DEFAULT_MODEL.openai,
       systemPrompt: prompt,
       skillIds,
-      tools: template?.toolNames?.length ? template.toolNames.map(toToolConfig) : base.tools || [],
+      tools: tpl?.toolNames?.length ? tpl.toolNames.map(toToolConfig) : base.tools || [],
     };
   };
 
@@ -117,9 +121,30 @@ export default function AgentWizard({ onClose, onCreated, onAdvanced }: AgentWiz
   };
 
   const pickTemplate = (tpl: AgentTemplate) => {
+    setPack(null);
     setTemplate(tpl);
     setName(tpl.name);
     setStep(1);
+  };
+
+  const pickPack = (p: NichePack) => {
+    setTemplate(null);
+    setPack(p);
+    setStep(2);
+  };
+
+  /** Installs every agent in the pack, then creates the sequential team. */
+  const handleInstallPack = async () => {
+    if (!pack) return;
+    try {
+      const { agents: created } = await installNichePack(pack);
+      void useAgentStore.getState().fetchAgents();
+      void useTeamStore.getState().fetchTeams();
+      onCreated?.(created[created.length - 1]);
+      onClose();
+    } catch (err) {
+      console.error('Failed to install pack:', err);
+    }
   };
 
   return (
@@ -141,6 +166,38 @@ export default function AgentWizard({ onClose, onCreated, onAdvanced }: AgentWiz
 
       {step === 0 && (
         <Stack gap="md" style={{ maxHeight: '55vh', overflowY: 'auto', paddingRight: 4 }}>
+          {(() => {
+            const visiblePacks = NICHE_PACKS.filter((p) => appMode !== 'personal' || p.audience !== 'corporate');
+            return visiblePacks.length > 0 ? (
+              <div>
+                <Text size="xs" fw={600} tt="uppercase" c="dimmed" mb={6}>{t('wiz.packs')}</Text>
+                <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="sm">
+                  {visiblePacks.map((p) => (
+                    <Card
+                      key={p.id}
+                      withBorder
+                      padding="md"
+                      radius="md"
+                      className="km-hoverable"
+                      style={{ cursor: 'pointer', borderColor: 'var(--mantine-color-dark-3)' }}
+                      onClick={() => pickPack(p)}
+                    >
+                      <Stack gap={4}>
+                        <Group gap="xs">
+                          <Badge size="xs" variant="filled" color="dark">{t('wiz.packBadge')}</Badge>
+                          <Text fw={600} size="sm">{p.name}</Text>
+                        </Group>
+                        <Text size="xs" c="dimmed">{p.tagline}</Text>
+                        <Text size="xs" c="dimmed">
+                          {p.agents.length} {t('wiz.packAgents')} · {p.agents.map((a) => a.name).join(', ')}
+                        </Text>
+                      </Stack>
+                    </Card>
+                  ))}
+                </SimpleGrid>
+              </div>
+            ) : null;
+          })()}
           {grouped.map(([group, templates]) => (
             <div key={group}>
               <Text size="xs" fw={600} tt="uppercase" c="dimmed" mb={6}>{group}</Text>
@@ -151,7 +208,7 @@ export default function AgentWizard({ onClose, onCreated, onAdvanced }: AgentWiz
                     withBorder
                     padding="md"
                     radius="md"
-                    style={{ cursor: 'pointer' }}
+                    className="km-hoverable"
                     onClick={() => pickTemplate(tpl)}
                   >
                     <Group gap="sm" wrap="nowrap" align="flex-start">
@@ -220,6 +277,35 @@ export default function AgentWizard({ onClose, onCreated, onAdvanced }: AgentWiz
         </Stack>
       )}
 
+      {step === 2 && pack && (
+        <Stack gap="md">
+          <Card withBorder padding="md" radius="md">
+            <Stack gap="xs">
+              <Group gap="xs">
+                <Badge size="sm" variant="filled" color="dark">{t('wiz.packBadge')}</Badge>
+                <Text fw={600}>{pack.name}</Text>
+              </Group>
+              <Text size="sm" c="dimmed">{pack.description}</Text>
+            </Stack>
+          </Card>
+          <div>
+            <Text size="sm" fw={500} mb={6}>{t('wiz.packCreates')}</Text>
+            <Stack gap={6}>
+              {pack.agents.map((a) => (
+                <Group key={a.id} gap="sm" wrap="nowrap">
+                  <BotAvatar definition={presetAvatarFor(`tpl:${a.id}`)} size={24} />
+                  <Text size="sm"><Text span fw={600}>{a.name}</Text> <Text span c="dimmed">— {a.tagline}</Text></Text>
+                </Group>
+              ))}
+              <Text size="xs" c="dimmed" mt={4}>
+                {t('wiz.packTeam')}: {pack.teamName} ({pack.agents.length} {t('wiz.packAgents')})
+              </Text>
+            </Stack>
+          </div>
+          {error && <Text size="sm" c="dimmed">{error}</Text>}
+        </Stack>
+      )}
+
       {step === 2 && template && (
         <Stack gap="md">
           <Card withBorder padding="md" radius="md">
@@ -273,6 +359,10 @@ export default function AgentWizard({ onClose, onCreated, onAdvanced }: AgentWiz
               onClick={() => setStep(step + 1)}
             >
               {t('common.next')}
+            </Button>
+          ) : pack ? (
+            <Button size="xs" onClick={handleInstallPack} loading={loading}>
+              {t('wiz.installPack')}
             </Button>
           ) : (
             <Button size="xs" onClick={handleCreate} loading={loading}>

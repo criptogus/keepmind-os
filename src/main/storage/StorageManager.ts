@@ -3,7 +3,7 @@ import { randomUUID } from 'node:crypto';
 import * as path from 'path';
 import * as fs from 'fs';
 import { homedir } from 'node:os';
-import type { Agent, Team, Approval, GovernanceRule, AuditEntry, AgentExecution, Skill, LocalUser, UserRole, LlmUsageRecord, RoutingDecision, MemoryItem } from '../../shared/types.js';
+import type { Agent, Team, Approval, GovernanceRule, AuditEntry, AgentExecution, ExecutionToolCall, Skill, LocalUser, UserRole, LlmUsageRecord, RoutingDecision, MemoryItem } from '../../shared/types.js';
 
 export class StorageManager {
   private db: DatabaseSync;
@@ -116,6 +116,23 @@ export class StorageManager {
         progress INTEGER NOT NULL DEFAULT 0
       )
     `);
+
+    // Tool calls executed during agent runs — the audit trail of "what the
+    // agent touched". One row per event (call or result), ordered by rowid.
+    this.db.exec(`
+      CREATE TABLE IF NOT EXISTS execution_tool_calls (
+        id TEXT PRIMARY KEY,
+        execution_id TEXT NOT NULL,
+        kind TEXT NOT NULL,
+        name TEXT NOT NULL,
+        args TEXT,
+        result TEXT,
+        error TEXT,
+        created_at TEXT NOT NULL
+      )
+    `);
+    this.db.exec(`CREATE INDEX IF NOT EXISTS idx_etc_execution ON execution_tool_calls(execution_id)`);
+    this.db.exec(`CREATE INDEX IF NOT EXISTS idx_etc_created ON execution_tool_calls(created_at)`);
 
     // Skills table
     this.db.exec(`
@@ -256,6 +273,9 @@ export class StorageManager {
       try { this.db.exec(`ALTER TABLE skills ADD COLUMN ${col}`); } catch { /* exists */ }
     }
     try { this.db.exec('ALTER TABLE whatsapp_messages ADD COLUMN indexed_at TEXT'); } catch { /* exists */ }
+    for (const col of ['dry_run INTEGER DEFAULT 0', 'activated_skills TEXT']) {
+      try { this.db.exec(`ALTER TABLE agent_executions ADD COLUMN ${col}`); } catch { /* exists */ }
+    }
     for (const col of ['user_id TEXT']) {
       try { this.db.exec(`ALTER TABLE agent_executions ADD COLUMN ${col}`); } catch { /* exists */ }
       try { this.db.exec(`ALTER TABLE audit_logs ADD COLUMN ${col}`); } catch { /* exists */ }
@@ -592,6 +612,8 @@ export class StorageManager {
     return {
       id: row.id,
       agentId: row.agent_id,
+      dryRun: Boolean(row.dry_run),
+      activatedSkillIds: row.activated_skills ? JSON.parse(row.activated_skills) : [],
       status: row.status,
       input: JSON.parse(row.input),
       output: row.output ? JSON.parse(row.output) : undefined,
@@ -621,8 +643,8 @@ export class StorageManager {
   saveAgentExecution(execution: AgentExecution): void {
     const stmt = this.db.prepare(`
       INSERT OR REPLACE INTO agent_executions
-      (id, agent_id, status, input, output, error, started_at, completed_at, progress, user_id)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      (id, agent_id, status, input, output, error, started_at, completed_at, progress, user_id, dry_run, activated_skills)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
     stmt.run(
       execution.id,
@@ -634,7 +656,9 @@ export class StorageManager {
       execution.startedAt || null,
       execution.completedAt || null,
       execution.progress,
-      execution.userId ?? null
+      execution.userId ?? null,
+      execution.dryRun ? 1 : 0,
+      JSON.stringify(execution.activatedSkillIds ?? [])
     );
   }
 
@@ -657,6 +681,57 @@ export class StorageManager {
     `);
     const rows = stmt.all(...params, limit) as any[];
     return rows.map((row) => this.rowToExecution(row));
+  }
+
+  /** Persists one tool_call/tool_result event from an agent run. Best-effort. */
+  saveExecutionToolEvent(executionId: string, kind: 'call' | 'result', name: string, payload: { args?: unknown; result?: unknown; error?: unknown }): void {
+    try {
+      const stmt = this.db.prepare(`
+        INSERT INTO execution_tool_calls (id, execution_id, kind, name, args, result, error, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      `);
+      stmt.run(
+        randomUUID(),
+        executionId,
+        kind,
+        name,
+        payload.args !== undefined ? JSON.stringify(payload.args) : null,
+        payload.result !== undefined ? String(payload.result).slice(0, 4000) : null,
+        payload.error !== undefined ? String(payload.error) : null,
+        new Date().toISOString()
+      );
+    } catch { /* audit trail must never break a run */ }
+  }
+
+  /** All tool events for one execution, in order. */
+  getExecutionToolCalls(executionId: string): ExecutionToolCall[] {
+    const rows = this.db.prepare(`
+      SELECT * FROM execution_tool_calls WHERE execution_id = ? ORDER BY rowid ASC
+    `).all(executionId) as any[];
+    return rows.map((row) => ({
+      id: row.id,
+      executionId: row.execution_id,
+      kind: row.kind,
+      name: row.name,
+      args: row.args ? JSON.parse(row.args) : undefined,
+      result: row.result ?? undefined,
+      error: row.error ?? undefined,
+      createdAt: row.created_at,
+    }));
+  }
+
+  /** Tool usage counts since an ISO timestamp — powers governance "what agents touched". */
+  getToolUsageCounts(sinceIso: string, userId?: string): Array<{ name: string; count: number }> {
+    const join = userId
+      ? `JOIN agent_executions e ON e.id = etc.execution_id AND e.user_id = ?`
+      : '';
+    const rows = this.db.prepare(`
+      SELECT etc.name AS name, COUNT(*) AS count
+      FROM execution_tool_calls etc ${join}
+      WHERE etc.kind = 'call' AND etc.created_at >= ?
+      GROUP BY etc.name ORDER BY count DESC LIMIT 20
+    `).all(...(userId ? [userId, sinceIso] : [sinceIso])) as any[];
+    return rows.map((r) => ({ name: r.name, count: r.count }));
   }
 
   updateAgentExecutionProgress(id: string, progress: number, status?: AgentExecution['status']): void {
@@ -782,6 +857,45 @@ export class StorageManager {
   getLlmUsage(limit = 100): LlmUsageRecord[] {
     const rows = this.db.prepare('SELECT * FROM llm_usage ORDER BY created_at DESC LIMIT ?').all(limit) as any[];
     return rows.map((r) => this.rowToUsage(r));
+  }
+
+  /**
+   * Per-model execution outcomes, joining the usage ledger to execution
+   * status. Powers outcome-weighted model routing: models with enough history
+   * and poor success rates get demoted in favor of proven alternatives.
+   */
+  getOutcomeStats(agentId: string, input: Record<string, unknown>, kind: 'model' | 'skill'): Record<string, { completed: number; failed: number; total: number; successRate: number }> {
+    // One vote per real execution and candidate, scoped to this agent and
+    // tasks sharing at least two meaningful words (or identical task text).
+    const rows = this.db.prepare(`
+      SELECT e.id, e.status, e.input, e.activated_skills, u.model
+      FROM agent_executions e LEFT JOIN llm_usage u ON e.id = u.execution_id
+      WHERE e.agent_id = ? AND e.status IN ('completed', 'failed')
+        AND COALESCE(e.dry_run, 0) = 0
+        AND COALESCE(json_extract(e.output, '$.dryRun'), 0) = 0
+      GROUP BY e.id, u.model
+    `).all(agentId) as any[];
+    const taskText = (value: Record<string, unknown>) => String(value.task ?? value.goal ?? value.prompt ?? '').toLowerCase();
+    const text = taskText(input);
+    const tokens = new Set(text.match(/[\p{L}]{4,}/gu) ?? []);
+    const seen = new Set<string>();
+    const out: Record<string, { completed: number; failed: number; total: number; successRate: number }> = {};
+    for (const row of rows) {
+      const previous = taskText(JSON.parse(row.input));
+      const shared = new Set((previous.match(/[\p{L}]{4,}/gu) ?? []).filter((word: string) => tokens.has(word)));
+      if (!text || (previous !== text && shared.size < 2)) continue;
+      const ids: string[] = kind === 'model' ? (row.model ? [row.model] : []) : JSON.parse(row.activated_skills || '[]');
+      for (const id of ids) {
+        const key = JSON.stringify([row.id, id]);
+        if (seen.has(key)) continue;
+        seen.add(key);
+        const stat = out[id] ??= { completed: 0, failed: 0, total: 0, successRate: 0 };
+        if (row.status === 'completed') stat.completed++; else stat.failed++;
+        stat.total++;
+        stat.successRate = stat.completed / stat.total;
+      }
+    }
+    return out;
   }
 
   // Routing decisions

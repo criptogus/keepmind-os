@@ -14,6 +14,7 @@ interface AgentStore {
   updateAgent: (id: string, updates: Partial<AgentConfig> & { avatar?: string | null; managerId?: string | null }) => Promise<void>;
   deleteAgent: (id: string) => Promise<void>;
   executeAgent: (id: string, input: Record<string, unknown>) => Promise<void>;
+  simulateAgent: (id: string, input: Record<string, unknown>) => Promise<void>;
   fetchExecutions: (agentId?: string) => Promise<void>;
   cancelExecution: (executionId: string) => Promise<void>;
 }
@@ -89,6 +90,17 @@ export const useAgentStore = create<AgentStore>((set, get) => ({
       set(state => ({ executions: [execution, ...state.executions], loading: false }));
     } catch (error) {
       set({ error: error instanceof Error ? error.message : 'Failed to execute agent', loading: false });
+      throw error;
+    }
+  },
+
+  simulateAgent: async (id: string, input: Record<string, unknown>) => {
+    set({ loading: true, error: null });
+    try {
+      const execution = await window.electronAPI.executeAgentDryRun(id, input);
+      set(state => ({ executions: [execution, ...state.executions], loading: false }));
+    } catch (error) {
+      set({ error: error instanceof Error ? error.message : 'Failed to simulate agent', loading: false });
       throw error;
     }
   },

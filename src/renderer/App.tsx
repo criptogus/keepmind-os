@@ -4,6 +4,7 @@ import React, { Suspense, lazy, useState, useEffect } from 'react';
 const WorkBench = lazy(() => import('./components/work/WorkBench'));
 const AgentList = lazy(() => import('./components/agents/AgentList'));
 const TeamList = lazy(() => import('./components/teams/TeamList'));
+const GovernanceOverview = lazy(() => import('./components/governance/GovernanceOverview'));
 const ApprovalQueue = lazy(() => import('./components/governance/ApprovalQueue'));
 const GovernanceRules = lazy(() => import('./components/governance/GovernanceRules'));
 const AuditLogs = lazy(() => import('./components/logs/AuditLogs'));
@@ -117,6 +118,7 @@ export default function App() {
   const sidebarItems = allSidebarItems;
 
   const governanceTabs = [
+    { id: 'overview', label: t('govsum.title') },
     { id: 'approvals', label: t('gov.pending') },
     { id: 'rules', label: t('gov.rules') },
   ];
@@ -159,7 +161,7 @@ export default function App() {
                 </button>
               ))}
             </div>
-            {governanceTab === 'approvals' ? <ApprovalQueue /> : <GovernanceRules />}
+            {governanceTab === 'overview' ? <GovernanceOverview /> : governanceTab === 'approvals' ? <ApprovalQueue /> : <GovernanceRules />}
           </div>
         );
       case 'logs':
