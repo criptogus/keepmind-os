@@ -1,5 +1,6 @@
 import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
+import { build } from 'esbuild';
 // Smoke test: launch the built Electron app, connect over CDP, and verify
 // the renderer loaded and the preload bridge (window.electronAPI) works.
 // Usage: npm run build && npm run smoke:electron
@@ -12,17 +13,32 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const electronBin = path.join(root, 'node_modules', '.bin', 'electron');
 
 const TIMEOUT_MS = 30_000;
+const evidenceDir = path.resolve(process.argv.includes('--evidence-dir') ? process.argv[process.argv.indexOf('--evidence-dir') + 1] : path.join(root, 'evidence'));
+mkdirSync(evidenceDir, { recursive: true });
+const checks = [];
+let failure = null;
 
 function fail(msg) {
-  console.error(`SMOKE FAIL: ${msg}`);
-  process.exit(1);
+  throw new Error(msg);
 }
 
 // 1. Launch Electron with remote debugging enabled.
-const env = { ...process.env, ELECTRON_ENABLE_LOGGING: '1', KEEPMIND_DATA_DIR: mkdtempSync(path.join(tmpdir(), 'keepmind-smoke-')) };
+const env = { ...process.env, ELECTRON_ENABLE_LOGGING: '1', KEEPMIND_DISABLE_CLI_AUTH: '1', KEEPMIND_DATA_DIR: mkdtempSync(path.join(tmpdir(), 'keepmind-smoke-')) };
 delete env.OPENAI_API_KEY;
 delete env.ANTHROPIC_API_KEY;
 delete env.ELECTRON_RUN_AS_NODE; // must not run as plain Node
+// Seed a synthetic completed delivery using the production storage/domain code.
+// This fixture never invokes a provider and is confined to the temporary data dir.
+const fixtureBundle = await build({ stdin: { contents: `export { StorageManager } from './src/main/storage/StorageManager.ts'; export { WorkManager } from './src/main/work/WorkManager.ts';`, resolveDir: root }, bundle: true, platform: 'node', format: 'esm', packages: 'external', write: false });
+const { StorageManager, WorkManager } = await import('data:text/javascript;base64,' + Buffer.from(fixtureBundle.outputFiles[0].text).toString('base64'));
+const fixtureStorage = new StorageManager(path.join(env.KEEPMIND_DATA_DIR, 'data'));
+const fixtureWork = new WorkManager(fixtureStorage);
+const fixtureAgentId = 'ux-fixture-agent';
+fixtureStorage.saveAgent({ id: fixtureAgentId, name: 'Assistente', description: 'Synthetic smoke fixture', config: { model: 'gpt-4o-mini', temperature: 0, maxTokens: 100, systemPrompt: 'Read only', tools: [] }, capabilities: [], permissions: [], createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
+const fixtureTask = fixtureWork.create({ goal: 'Preparar o resumo do projeto', agentId: fixtureAgentId, project: 'Projeto exemplo', criteria: 'Resumo e próximos passos.', reviewRequired: true }, 'system');
+await fixtureWork.run(fixtureTask.id, async () => ({ id: 'ux-fixture-execution', agentId: fixtureAgentId, status: 'completed', input: {}, progress: 100, output: { content: '# Resumo do projeto\n\nO pedido foi organizado em **três próximos passos**.\n\n- Confirmar o escopo com a equipe.\n- Revisar a documentação.\n- Preparar a primeira entrega.\n\n## Fontes\n\n[Documentação do projeto](https://github.com/criptogus/keepmind-os)\n\n| Etapa | Estado |\n| --- | --- |\n| Planejamento | Pronto |\n| Revisão | Próxima etapa |' } }));
+fixtureStorage.setSetting('theme', 'light');
+fixtureStorage.close();
 let workspaceServer;
 const child = spawn(electronBin, ['.', '--remote-debugging-port=0', '--no-sandbox'], {
   cwd: root,
@@ -111,14 +127,38 @@ try {
   let html = '';
   for (let i = 0; i < 50; i++) {
     html = await evaluate('document.body?.innerHTML ?? ""');
-    if (/keepmind os/i.test(html)) break;
+    if (/keepmind/i.test(html)) break;
     await delay(200);
   }
 
-  if (!/keepmind os/i.test(html)) {
+  if (!/keepmind/i.test(html)) {
     fail(`renderer did not produce expected UI (html length=${html.length})`);
   }
 
+  // Guide a nontechnical customer from their business problem to a real team and draft.
+  const onboarding = await send('Page.captureScreenshot', { format: 'png' });
+  writeFileSync(path.join(evidenceDir, 'onboarding-request.png'), Buffer.from(onboarding.result.data, 'base64'));
+  await evaluate(`([...document.querySelectorAll('button')].find(b => b.textContent === 'Divulgar meu negócio')).click()`);
+  await delay(100);
+  await evaluate(`([...document.querySelectorAll('button')].find(b => b.textContent === 'Sugerir meu time')).click()`);
+  await delay(200);
+  const teamSuggestion = await send('Page.captureScreenshot', { format: 'png' });
+  writeFileSync(path.join(evidenceDir, 'onboarding-team.png'), Buffer.from(teamSuggestion.result.data, 'base64'));
+  if ((await evaluate('window.electronAPI.getTeams()')).length) fail('suggestion created a team before confirmation');
+  await evaluate(`([...document.querySelectorAll('button')].find(b => b.textContent === 'Definir a primeira entrega')).click()`);
+  await delay(200);
+  const firstDelivery = await send('Page.captureScreenshot', { format: 'png' });
+  writeFileSync(path.join(evidenceDir, 'onboarding-connection.png'), Buffer.from(firstDelivery.result.data, 'base64'));
+  await evaluate(`([...document.querySelectorAll('button')].find(b => b.textContent === 'Criar time e salvar primeiro pedido')).click()`);
+  for (let i = 0; i < 50; i++) { if (await evaluate(`!!document.querySelector('.km-workbench')`)) break; await delay(100); }
+  if (!(await evaluate(`!!document.querySelector('.km-workbench')`))) fail('business onboarding without credentials failed');
+  if ((await evaluate('window.electronAPI.getAgentExecutions()')).length) fail('onboarding unexpectedly executed work');
+  const guidedTeams = await evaluate('window.electronAPI.getTeams()');
+  if (guidedTeams.length !== 1 || guidedTeams[0].agentIds.length !== 3) fail('confirmed team was not persisted with specialists');
+  const guidedWork = await evaluate('window.electronAPI.workContext()');
+  const firstDraft = guidedWork.snapshot.tasks.find(t => t.project === 'Time de marketing');
+  if (!firstDraft || firstDraft.status !== 'backlog' || firstDraft.agentId !== guidedTeams[0].agentIds[0]) fail('first request was not saved as a coordinator draft');
+  checks.push('business-problem-to-team', 'team-confirmation-before-creation', 'first-delivery-draft-without-execution', 'onboarding-without-credentials');
   const task = await evaluate(`(async () => {
     const agent = await window.electronAPI.createAgent({ name: 'Maintainer', model: 'gpt-4o-mini', temperature: 0, maxTokens: 100, systemPrompt: 'Read only', tools: [] });
     const task = await window.electronAPI.workCreate({ goal: 'Review repository documentation', agentId: agent.id, project: 'KeepMind OS', criteria: 'Include file references and reproducible steps.' });
@@ -135,10 +175,10 @@ try {
     await delay(200);
   }
   const rendered = await evaluate('document.body?.innerText ?? ""');
-  if (!rendered?.includes('Your work, moving forward.') || !rendered.includes('Review repository documentation')) fail('workspace did not render persisted task');
-  if (!rendered.includes('Need your decision') || !rendered.includes('Now')) fail('focus overview not rendered');
+  if (!rendered?.includes('Vamos trabalhar com seu time?') || !rendered.includes('Review repository documentation')) fail('workspace did not render persisted task');
+  if (!rendered.includes('Need your decision') || !rendered.includes('Delivered')) fail('focus overview not rendered');
   if (!(await evaluate(`!!document.querySelector('.km-sidebar .km-nav-more summary')`))) fail('advanced navigation disclosure missing');
-  mkdirSync(path.join(root, 'evidence'), { recursive: true });
+  mkdirSync(evidenceDir, { recursive: true });
   const overview = await send('Page.captureScreenshot', { format: 'png' });
   writeFileSync(path.join(root, 'evidence/focus-desktop.png'), Buffer.from(overview.result.data, 'base64'));
   await evaluate(`window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, bubbles: true }))`);
@@ -163,23 +203,118 @@ try {
     }
     await delay(200);
   }
-  if (!cp?.available) fail('failed run did not preserve its checkpoint');
+  if (!cp?.available) { const state = await evaluate('window.electronAPI.workList()'); fail('failed run did not preserve its checkpoint: ' + JSON.stringify(state.tasks.find(t => t.id === task.id))); }
   for (let i = 0; i < 50; i++) {
     if ((await evaluate('document.body?.innerText ?? ""')).includes('Resume checkpoint')) break;
     await delay(200);
   }
   if (!(await evaluate('document.body?.innerText ?? ""')).includes('Resume checkpoint')) fail('checkpoint resume action not visible');
 
-  mkdirSync(path.join(root, 'evidence'), { recursive: true });
+  mkdirSync(evidenceDir, { recursive: true });
   const screenshot = await send('Page.captureScreenshot', { format: 'png' });
   if (screenshot.result?.data) writeFileSync(path.join(root, 'evidence/workspace-smoke.png'), Buffer.from(screenshot.result.data, 'base64'));
   await send('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Escape', code: 'Escape', windowsVirtualKeyCode: 27 });
   await send('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Escape', code: 'Escape', windowsVirtualKeyCode: 27 });
+  await evaluate(`document.querySelectorAll('.km-task')[0]?.closest('[data-tour="content"]')?.scrollTo(0, 0)`);
+  await evaluate(`([...document.querySelectorAll('.km-task')].find(el => el.textContent.includes('Preparar o resumo'))).click()`);
+  await delay(400);
+  if (!(await evaluate(`!!document.querySelector('.km-document h1') && !!document.querySelector('.km-document table')`))) fail('delivery Markdown not rendered');
+  const deliveryShot = await send('Page.captureScreenshot', { format: 'png' });
+  writeFileSync(path.join(root, 'evidence/delivery-desktop.png'), Buffer.from(deliveryShot.result.data, 'base64'));
+  await send('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Escape', code: 'Escape', windowsVirtualKeyCode: 27 });
+  await send('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Escape', code: 'Escape', windowsVirtualKeyCode: 27 });
+  checks.push('delivery-markdown');
+  const pdf = await evaluate(`window.electronAPI.exportMaterial('pdf','Plano de negócio','Proposta de ação e revisão para o cliente.')`);
+  if (String.fromCharCode(...pdf.slice(0,5)) !== '%PDF-') fail('PDF export is not a PDF');
+  const ppt = await evaluate(`window.electronAPI.exportMaterial('pptx','Plano de negócio','Proposta de ação e revisão para o cliente.')`);
+  if (ppt[0] !== 80 || ppt[1] !== 75 || ppt.length < 1000) fail('PowerPoint export is not a ZIP package');
+  checks.push('real-pdf-export','real-pptx-export');
+  await evaluate(`([...document.querySelectorAll('.km-task')].find(el => el.textContent.includes('Preparar o resumo'))).click()`);
+  await delay(300);
+  if (!(await evaluate(`!!document.querySelector('.km-chat-composer') && !!document.querySelector('.km-chat-user')`))) fail('chat conversation missing');
+  const approvalStyle = await evaluate(`(() => {const b=document.querySelector('.km-approve-action');if(!b)return null;const s=getComputedStyle(b);return {background:s.backgroundColor,text:s.color,label:b.textContent};})()`);
+  if (!approvalStyle || approvalStyle.background !== 'rgb(197, 245, 66)' || approvalStyle.text !== 'rgb(17, 17, 17)' || !approvalStyle.label.includes('v1')) fail('lime approval or version label missing');
+  await evaluate(`document.querySelector('.km-approve-action').scrollIntoView({block:'center'})`);await delay(200);
+  const approvalShot=await send('Page.captureScreenshot',{format:'png'});writeFileSync(path.join(evidenceDir,'approval-lime.png'),Buffer.from(approvalShot.result.data,'base64'));
+  checks.push('lime-approval-version');
+
+  await evaluate(`([...document.querySelectorAll('button')].find(b => b.textContent === 'Visualizar material')).click()`);
+  await delay(200);
+  if (!(await evaluate(`!!document.querySelector('.km-paper-preview')`))) fail('material preview missing');
+  const materialPreview = await send('Page.captureScreenshot', {format:'png'});
+  writeFileSync(path.join(evidenceDir,'material-preview.png'),Buffer.from(materialPreview.result.data,'base64'));
+  await send('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape'});await send('Input.dispatchKeyEvent',{type:'keyUp',key:'Escape',code:'Escape'});await delay(200);
+  checks.push('chat-and-material-preview');
+  await send('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape'});await send('Input.dispatchKeyEvent',{type:'keyUp',key:'Escape',code:'Escape'});await delay(200);
+  const contrast = await evaluate(`(() => { const el=document.querySelector('.km-task-title'); const style=getComputedStyle(el); const bg=getComputedStyle(el.closest('.km-task')); return {text:style.color,background:bg.backgroundColor}; })()`);
+  const luminance = color => { const rgb = color.match(/[\d.]+/g).slice(0,3).map(Number).map(v => {v /= 255; return v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4;}); return rgb[0]*.2126 + rgb[1]*.7152 + rgb[2]*.0722; };
+  const ratio = (a,b) => { const x=luminance(a), y=luminance(b); return (Math.max(x,y)+.05)/(Math.min(x,y)+.05); };
+  if (ratio(contrast.text, contrast.background) < 4.5) fail('task title contrast below 4.5:1');
+  checks.push('light-title-contrast');
+  await evaluate(`window.electronAPI.updateSettings({theme:'dark'})`);
+  await send('Page.reload');
+  await delay(700);
+  if ((await evaluate(`document.documentElement.getAttribute('data-mantine-color-scheme')`)) !== 'dark') fail('persisted dark theme not applied');
+  const darkShot = await send('Page.captureScreenshot', { format: 'png' });
+  writeFileSync(path.join(root, 'evidence/focus-dark.png'), Buffer.from(darkShot.result.data, 'base64'));
+  const darkContrast = await evaluate(`(() => { const el=document.querySelector('.km-task-title'); return {text:getComputedStyle(el).color,background:getComputedStyle(el.closest('.km-task')).backgroundColor}; })()`);
+  if (ratio(darkContrast.text, darkContrast.background) < 4.5) fail('dark title contrast below 4.5:1');
+  checks.push('dark-theme-and-contrast');
+  await evaluate(`window.electronAPI.updateSettings({theme:'auto'})`);
+  await send('Page.reload'); await delay(500);
+  for (const scheme of ['light', 'dark']) {
+    await send('Emulation.setEmulatedMedia', { features: [{name:'prefers-color-scheme',value:scheme}] }); await delay(200);
+    if (await evaluate(`document.documentElement.getAttribute('data-mantine-color-scheme')`) !== scheme) fail('automatic theme did not follow system');
+  }
+  checks.push('automatic-system-theme');
+  await evaluate(`window.electronAPI.updateSettings({theme:'light'})`);
+  await send('Page.reload'); await delay(600);
+  const command = async label => {
+    await evaluate(`window.dispatchEvent(new KeyboardEvent('keydown', {key:'k',ctrlKey:true,bubbles:true}))`);
+    await delay(200);
+    const clicked = await evaluate(`(() => {const b=[...document.querySelectorAll('[data-command-result]')].find(b => b.textContent === ${JSON.stringify(label)}); if(!b)return false;b.click();return true;})()`);
+    if (!clicked) fail('command unavailable: ' + label);
+    await delay(350);
+  };
+  await command('New request');
+  await command('Agents');
+  await command('Workspace');
+  await evaluate(`window.dispatchEvent(new KeyboardEvent('keydown', {key:'k',ctrlKey:true,bubbles:true}))`); await delay(200);
+  await evaluate(`([...document.querySelectorAll('[data-command-result]')].find(b=>b.textContent.includes('Preparar o resumo'))).click()`); await delay(350);
+  if (!(await evaluate(`!!document.querySelector('.km-document h1')`))) fail('stale new-request command hid delivery');
+  await send('Input.dispatchKeyEvent', {type:'keyDown',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});
+  await send('Input.dispatchKeyEvent', {type:'keyUp',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});
+  await command('Create agent');
+  if (!(await evaluate(`!!document.querySelector('[role="dialog"]')`))) fail('create-agent command did not open wizard');
+  await send('Input.dispatchKeyEvent', {type:'keyDown',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});
+  await send('Input.dispatchKeyEvent', {type:'keyUp',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});
+  await command('Workspace'); await command('Agents');
+  if (await evaluate(`!!document.querySelector('[role="dialog"]')`)) fail('stale create-agent command reopened wizard');
+  await command('Approvals');
+  if (!(await evaluate(`document.body.innerText.includes('Pending approvals') || document.body.innerText.includes('No pending')`))) fail('approvals page not reachable');
+  await command('Skills');
+  if (!(await evaluate(`!!document.querySelector('.km-sak-panel') && document.body.innerText.includes('Conectar minha conta')`))) fail('skills OAuth connection card missing');
+  const sak = await evaluate(`window.electronAPI.sakStatus()`);
+  if (sak.connected || sak.pending) fail('isolated smoke unexpectedly inherited a skill account');
+  const sakShot=await send('Page.captureScreenshot',{format:'png'});writeFileSync(path.join(evidenceDir,'skills-connection.png'),Buffer.from(sakShot.result.data,'base64'));
+  checks.push('skills-oauth-disconnected');
+  await command('Workspace');
+  checks.push('quick-actions-consumed-and-approvals-accessible');
+  await evaluate(`localStorage.setItem('km-lang', 'pt')`); await send('Page.reload'); await delay(500);
+  const portuguese = await send('Page.captureScreenshot', {format:'png'});
+  writeFileSync(path.join(evidenceDir, 'workspace-pt.png'), Buffer.from(portuguese.result.data, 'base64'));
+  await evaluate(`([...document.querySelectorAll('.km-task')].find(b=>b.textContent.includes('Preparar o resumo'))).click()`); await delay(300);
+  const portugueseDelivery = await send('Page.captureScreenshot', {format:'png'});
+  writeFileSync(path.join(evidenceDir, 'delivery-pt.png'), Buffer.from(portugueseDelivery.result.data, 'base64'));
+  await send('Input.dispatchKeyEvent', {type:'keyDown',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});
+  await send('Input.dispatchKeyEvent', {type:'keyUp',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});
+  await evaluate(`localStorage.setItem('km-lang', 'en')`); await send('Page.reload'); await delay(500);
   await send('Emulation.setDeviceMetricsOverride', { width: 780, height: 900, deviceScaleFactor: 1, mobile: false });
   await delay(500);
   if (await evaluate(`getComputedStyle(document.querySelector('.km-sidebar')).display !== 'none'`)) fail('narrow screen sidebar not collapsed');
   const narrow = await send('Page.captureScreenshot', { format: 'png' });
   writeFileSync(path.join(root, 'evidence/focus-narrow.png'), Buffer.from(narrow.result.data, 'base64'));
+  checks.push('narrow-layout');
   // Exercise the actual Electron bridge against the shared server, then a second client.
   const serverDir = mkdtempSync(path.join(tmpdir(), 'keepmind-server-smoke-'));
   const serverConfig = path.join(serverDir, 'workspace.json');
@@ -207,16 +342,19 @@ try {
   if (sharedContext.connection.mode !== 'remote' || sharedContext.snapshot.tasks[0].events.at(-1).actorId !== 'bob') fail('remote state did not synchronize');
   await send('Page.reload');
   for (let i = 0; i < 80; i++) { if ((await evaluate('document.body?.innerText ?? ""')).includes('Collaborative release review')) break; await delay(100); }
-  if (!/shared workspace/i.test(await evaluate('document.body?.innerText ?? ""'))) fail('shared workspace indicator missing');
+  if (!/shared workspace|espaço compartilhado/i.test(await evaluate('document.body?.innerText ?? ""'))) fail('shared workspace indicator missing');
   const sharedShot = await send('Page.captureScreenshot', { format: 'png' });
   writeFileSync(path.join(root, 'evidence/shared-workspace.png'), Buffer.from(sharedShot.result.data, 'base64'));
   await evaluate('window.electronAPI.workspaceDisconnect()');
   const localAgain = await evaluate('window.electronAPI.workList()');
   if (!localAgain.tasks.some(t => t.id === task.id) || localAgain.tasks.some(t => t.id === shared.id)) fail('local and remote data were mixed');
+  checks.push('shared-workspace-isolation', 'checkpoint-recovery', 'persisted-task-search');
+  if (checks.length < 18) fail('incomplete UI checks');
   console.log(`SMOKE PASS: electronAPI OK (version=${version}, agents=${Array.isArray(agents) ? agents.length : '?'}, rootChildren=${rootChildren}, uiRendered=true)`);
 } catch (err) {
-  fail(`CDP evaluation failed: ${err.message}\n${stderrBuf.slice(-2000)}`);
+  failure = err.message; console.error(`SMOKE FAIL: ${err.message}`); process.exitCode = 1;
 } finally {
+  writeFileSync(path.join(evidenceDir, 'ux-report.json'), JSON.stringify({passed: !failure && checks.length >= 18, checks, failure, fixture: 'synthetic; no live providers', timestamp: new Date().toISOString()}, null, 2));
   ws.close();
   workspaceServer?.kill('SIGTERM');
   child.kill('SIGTERM');

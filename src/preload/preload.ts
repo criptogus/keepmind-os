@@ -1,3 +1,5 @@
+import type { SakStatus, SakHit, SakPreview } from '../shared/superAgentSkill.js';
+import type { BusinessTeamInput, BusinessTeamResult } from '../shared/businessTeams.js';
 import type { McpConfig } from '../main/mcp/McpManager.js';
 import type { ToolStep } from '../main/execution/CheckpointStore.js';
 import type { CreateWorkInput, WorkAction, WorkSnapshot, WorkTask, WorkPreview, WorkContext } from '../shared/work.js';
@@ -6,6 +8,8 @@ import type { Agent, Team, Approval, GovernanceRule, AuditEntry, AgentExecution,
 import type { ModelCatalogResponse } from '../shared/models.js';
 
 contextBridge.exposeInMainWorld('electronAPI', {
+  platform: process.platform,
+  loginOpenInSafari: (provider: 'superagentskill' | 'openai' | 'anthropic') => ipcRenderer.invoke('login:openInSafari', provider) as Promise<void>,
   workArtifacts: (id: string) => ipcRenderer.invoke('work:artifacts', id) as Promise<import('../shared/artifacts.js').WorkArtifact[]>,
   workCheckpoint: (id: string) => ipcRenderer.invoke('work:checkpoint', id) as Promise<{ available: boolean; steps: ToolStep[] }>,
   workReconcile: (id: string, key: string, result: string, revision?: number) => ipcRenderer.invoke('work:reconcile', id, key, result, revision) as Promise<void>,
@@ -44,6 +48,15 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // Teams
   getTeams: () => ipcRenderer.invoke('teams:getList') as Promise<Team[]>,
   getTeam: (id: string) => ipcRenderer.invoke('teams:get', id) as Promise<Team | null>,
+  sakStatus: () => ipcRenderer.invoke('sak:status') as Promise<SakStatus>,
+  sakConnect: () => ipcRenderer.invoke('sak:connect') as Promise<SakStatus>,
+  sakCancel: () => ipcRenderer.invoke('sak:cancel') as Promise<SakStatus>,
+  sakDisconnect: () => ipcRenderer.invoke('sak:disconnect') as Promise<SakStatus>,
+  sakSearch: (query: string) => ipcRenderer.invoke('sak:search',query) as Promise<SakHit[]>,
+  sakPreview: (slug: string) => ipcRenderer.invoke('sak:preview',slug) as Promise<SakPreview>,
+  sakInstall: (digest: string, agentId: string) => ipcRenderer.invoke('sak:install',digest,agentId) as Promise<{skillId:string;agentId:string;name:string}>,
+  exportMaterial: (format: 'pdf' | 'pptx', title: string, content: string) => ipcRenderer.invoke('materials:export', format, title, content) as Promise<number[]>,
+  createBusinessTeam: (input: BusinessTeamInput) => ipcRenderer.invoke('teams:guidedCreate', input) as Promise<BusinessTeamResult>,
   createTeam: (config: TeamConfig) => ipcRenderer.invoke('teams:create', config) as Promise<Team>,
   updateTeam: (id: string, config: Partial<TeamConfig>) => ipcRenderer.invoke('teams:update', id, config) as Promise<Team>,
   deleteTeam: (id: string) => ipcRenderer.invoke('teams:delete', id) as Promise<void>,
@@ -98,6 +111,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
     };
     error?: string;
   }>,
+  oauthPendingUrl: (provider: 'openai' | 'anthropic') => ipcRenderer.invoke('oauth:pendingUrl', provider) as Promise<string | null>,
+  oauthCancel: (provider: 'openai' | 'anthropic') => ipcRenderer.invoke('oauth:cancel', provider) as Promise<void>,
   oauthIsAuthenticated: (provider: 'openai' | 'anthropic') => ipcRenderer.invoke('oauth:isAuthenticated', provider) as Promise<boolean>,
   oauthIsConfigured: (provider: 'openai' | 'anthropic') => ipcRenderer.invoke('oauth:isConfigured', provider) as Promise<boolean>,
   oauthGetToken: (provider: 'openai' | 'anthropic') => ipcRenderer.invoke('oauth:getToken', provider) as Promise<string | null>,
@@ -242,6 +257,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
 declare global {
   interface Window {
     electronAPI: {
+      platform: string;
+      loginOpenInSafari: (provider: 'superagentskill' | 'openai' | 'anthropic') => Promise<void>;
       workArtifacts: (id: string) => Promise<import('../shared/artifacts.js').WorkArtifact[]>;
       workCheckpoint: (id: string) => Promise<{ available: boolean; steps: ToolStep[] }>;
       workReconcile: (id: string, key: string, result: string, revision?: number) => Promise<void>;
@@ -273,6 +290,15 @@ declare global {
       getAgentExecutions: (agentId?: string) => Promise<AgentExecution[]>;
       getTeams: () => Promise<Team[]>;
       getTeam: (id: string) => Promise<Team | null>;
+      sakStatus: () => Promise<SakStatus>;
+      sakConnect: () => Promise<SakStatus>;
+      sakCancel: () => Promise<SakStatus>;
+      sakDisconnect: () => Promise<SakStatus>;
+      sakSearch: (query: string) => Promise<SakHit[]>;
+      sakPreview: (slug: string) => Promise<SakPreview>;
+      sakInstall: (digest: string, agentId: string) => Promise<{skillId:string;agentId:string;name:string}>;
+      exportMaterial: (format: 'pdf' | 'pptx', title: string, content: string) => Promise<number[]>;
+      createBusinessTeam: (input: BusinessTeamInput) => Promise<BusinessTeamResult>;
       createTeam: (config: TeamConfig) => Promise<Team>;
       updateTeam: (id: string, config: Partial<TeamConfig>) => Promise<Team>;
       deleteTeam: (id: string) => Promise<void>;
@@ -315,6 +341,8 @@ declare global {
         };
         error?: string;
       }>;
+      oauthPendingUrl: (provider: 'openai' | 'anthropic') => Promise<string | null>;
+      oauthCancel: (provider: 'openai' | 'anthropic') => Promise<void>;
       oauthIsAuthenticated: (provider: 'openai' | 'anthropic') => Promise<boolean>;
       oauthIsConfigured: (provider: 'openai' | 'anthropic') => Promise<boolean>;
       oauthGetToken: (provider: 'openai' | 'anthropic') => Promise<string | null>;

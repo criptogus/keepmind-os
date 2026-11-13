@@ -1,3 +1,4 @@
+import SuperAgentSkillPanel from './SuperAgentSkillPanel';
 import React, { useEffect, useState } from 'react';
 import { Badge, Button, Card, Checkbox, Group, Modal, Select, Stack, Text, Textarea, TextInput } from '@mantine/core';
 import type { Skill } from '../../../shared/types';
@@ -90,6 +91,8 @@ export default function SkillsPanel() {
           </Group>
         }
       />
+
+      <SuperAgentSkillPanel onInstalled={load} />
 
       {error && <Text size="sm" c="dimmed">{error}</Text>}
 

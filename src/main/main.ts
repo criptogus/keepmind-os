@@ -1,3 +1,10 @@
+import { openLoginInSafari } from './auth/openLoginBrowser.js';
+import { SuperAgentSkill } from './integrations/SuperAgentSkill.js';
+import { installSakSkill } from './integrations/installSakSkill.js';
+import { materialHtml } from '../shared/materials.js';
+import { exportPresentation } from './materials/exportPresentation.js';
+import { createBusinessTeam } from './work/BusinessTeamSetup.js';
+import type { BusinessTeamInput } from '../shared/businessTeams.js';
 import { ArtifactStore } from './artifacts/ArtifactStore.js';
 import { actionDecision } from './governance/ActionPolicy.js';
 import { McpManager, mcpConfigSchema } from './mcp/McpManager.js';
@@ -7,7 +14,7 @@ import { CheckpointStore } from './execution/CheckpointStore.js';
 import { HybridMemory, localEmbedder } from './integrations/HybridMemory.js';
 import { WorkManager } from './work/WorkManager.js';
 import type { CreateWorkInput, WorkAction } from '../shared/work.js';
-import { app, BrowserWindow, dialog, ipcMain, Menu, nativeImage, Tray } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain, Menu, nativeImage, shell, Tray, safeStorage } from 'electron';
 import * as path from 'path';
 import { StorageManager } from './storage/StorageManager.js';
 import { AgentManager } from './agent/AgentManager.js';
@@ -149,6 +156,7 @@ const EXPIRY_SKEW_MS = 60_000;
  * the CLI login shares the same OAuth client, so tokens are interchangeable.
  */
 async function syncCodexCliAuth(): Promise<void> {
+  if (process.env.KEEPMIND_DISABLE_CLI_AUTH === '1') return;
   const cli = readCodexCliAuth();
   if (!cli?.accessToken) return;
 
@@ -421,6 +429,12 @@ function createWindow() {
     backgroundColor: '#ffffff',
   });
 
+  // Generated delivery sources open only on an explicit click, in the system browser.
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    try { if (['https:', 'http:'].includes(new URL(url).protocol)) void shell.openExternal(url).catch(() => {}); } catch { /* reject malformed URLs */ }
+    return { action: 'deny' };
+  });
+
   // Load the renderer
   if (process.env.NODE_ENV === 'development') {
     mainWindow.loadURL('http://127.0.0.1:5173');
@@ -463,17 +477,10 @@ app.whenReady().then(async () => {
     const prev = credentialStore.getOAuth(provider);
     credentialStore.setOAuth(provider, { ...tokens, accountId: tokens.accountId ?? prev?.accountId });
   }, async (url) => {
-    logOAuth(`openExternal attempt: ${url.slice(0, 90)}`);
-    // shell.openExternal can hang silently in packaged builds; the platform
-    // command is deterministic. On Windows `start` treats the first quoted
-    // arg as a window title, so an empty title arg is required.
-    const cmd = process.platform === 'darwin' ? `open ${JSON.stringify(url)}`
-      : process.platform === 'win32' ? `cmd /c start "" ${JSON.stringify(url)}`
-      : `xdg-open ${JSON.stringify(url)}`;
-    await new Promise<void>((resolve, reject) => {
-      exec(cmd, (err) => (err ? reject(err) : resolve()));
-    });
-    logOAuth('openExternal done via platform command');
+    // OS acknowledgement is not proof that a browser became visible. The UI
+    // keeps a manual link and cancellation available while waiting for callback.
+    await shell.openExternal(url);
+    logOAuth('OAuth browser open requested');
   });
 
   // Restore persisted credentials so agents keep working across restarts.
@@ -1354,6 +1361,36 @@ handle('agents:getExecutions', (_event, agentId?: string) => {
   return storageManager.getAgentExecutions(agentId);
 });
 
+// A separate account connection, scoped to the signed-in local administrator.
+const sakConnections = new Map<string, SuperAgentSkill>();
+function sakConnection() {
+  requireRole('admin');
+  const owner = currentUserId() || 'local';
+  let connection = sakConnections.get(owner);
+  if (!connection) {
+    connection = new SuperAgentSkill({ secrets: credentialStore, key: `superagentskill.${owner}`, openBrowser: url => shell.openExternal(url), canEncrypt: () => safeStorage.isAsyncEncryptionAvailable() });
+    sakConnections.set(owner, connection);
+  }
+  return connection;
+}
+handle('login:openInSafari', (_event, provider: 'superagentskill' | 'openai' | 'anthropic') => {
+  requireRole('admin');
+  if (!['superagentskill', 'openai', 'anthropic'].includes(provider)) throw new Error('Provedor inválido.');
+  const url = provider === 'superagentskill' ? sakConnection().status().authUrl : oauthManager.getAuthUrl(provider);
+  return openLoginInSafari(url);
+});
+handle('sak:status', () => sakConnection().status());
+handle('sak:connect', () => sakConnection().connect());
+handle('sak:cancel', () => sakConnection().cancel());
+handle('sak:disconnect', () => sakConnection().disconnect());
+handle('sak:search', (_event, query: string) => sakConnection().search(query));
+handle('sak:preview', (_event, slug: string) => sakConnection().preview(slug));
+handle('sak:install', (_event, digest: string, agentId: string) => {
+  const preview = sakConnection().reviewed(digest);
+  if (agentManager.getActiveExecutions().some(run => run.agentId === agentId)) throw new Error('Aguarde o agente terminar o trabalho antes de adicionar uma habilidade.');
+  return installSakSkill(storageManager, preview, agentId);
+});
+
 // Skills
 handle('skills:getAll', () => {
   return storageManager.getAllSkills();
@@ -1507,15 +1544,18 @@ function logOAuth(message: string) {
 handle('oauth:authenticate', async (_event, provider: 'openai' | 'anthropic') => {
   try {
     logOAuth(`authenticate start: ${provider}`);
-    const tokens = await oauthManager.authenticate(provider);
+    await oauthManager.authenticate(provider);
     logOAuth(`authenticate success: ${provider}`);
-    return { success: true, tokens };
+    return { success: true };
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error);
     logOAuth(`authenticate FAILED ${provider}: ${msg}`);
     return { success: false, error: msg };
   }
 });
+
+handle('oauth:pendingUrl', (_event, provider: 'openai' | 'anthropic') => oauthManager.getAuthUrl(provider));
+handle('oauth:cancel', (_event, provider: 'openai' | 'anthropic') => oauthManager.cancelAuthentication(provider));
 
 handle('oauth:isAuthenticated', (_event, provider: 'openai' | 'anthropic') => {
   return oauthManager.isAuthenticated(provider);
@@ -1542,6 +1582,12 @@ handle('teams:getList', () => {
 
 handle('teams:get', (_event, id: string) => {
   return storageManager.getTeam(id);
+});
+
+handle('teams:guidedCreate', (_event, input: BusinessTeamInput) => {
+  requireRole('admin');
+  if (remoteWorkspace()) throw new Error('Crie o time no espaço local.');
+  return createBusinessTeam(storageManager, workManager, input, currentUserId() ?? 'system');
 });
 
 handle('teams:create', (_event, config: TeamConfig) => {
@@ -2231,8 +2277,9 @@ handle('work:create', (_event, input: CreateWorkInput) => {
   if (!agent || (currentRole() === 'member' && !agent.isShared)) throw new Error('Agent unavailable');
   return workManager.create(input, currentUserId() ?? 'system');
 });
-handle('work:action', async (_event, id: string, action: WorkAction, note?: string) => {
+handle('work:action', async (_event, id: string, action: WorkAction, note?: string, expectedRevision?: number) => {
   const existing = requireWorkAccess(id);
+  if (expectedRevision !== undefined && expectedRevision !== existing.revision) throw new Error('O pedido foi atualizado. Confira a versão atual antes de continuar.');
   if (action === 'run' || action === 'resume') {
     if (action === 'resume' && (existing.status !== 'blocked' || !existing.executionId || !checkpoints.read(existing.executionId))) throw new Error('No resumable checkpoint');
     if (action === 'run' && existing.executionId && checkpoints.read(existing.executionId)) throw new Error('Resume the checkpoint or request a revision to start new work');
@@ -2240,6 +2287,10 @@ handle('work:action', async (_event, id: string, action: WorkAction, note?: stri
     // Claim is synchronous, so a second click cannot launch the same task again.
     void workManager.run(id, (agentId, input) => runAgentExecution(agentId, input, { resumeId: action === 'resume' ? existing.executionId : undefined }))
       .catch(error => console.error('[work]', error));
+    return workManager.get(id);
+  }
+  if (action === 'revise') {
+    void workManager.reviseAndRun(id, note || '', (agentId, input) => runAgentExecution(agentId, input), currentUserId()).catch(error => console.error('[work]', error));
     return workManager.get(id);
   }
   if (!['accept','revise','cancel','comment','propose-rule'].includes(action)) throw new Error('Invalid action');
@@ -2265,6 +2316,17 @@ handle('work:reviewRule', (_event, id: string, accept: boolean) => {
 });
 handle('work:export', () => JSON.stringify({ format: 'keepmind-work', version: 1,
   ...workManager.snapshot(currentRole() === 'member' ? currentUserId() : undefined) }, null, 2));
+
+handle('materials:export', async (_event, format: 'pdf' | 'pptx', title: string, content: string) => {
+  if (!['pdf','pptx'].includes(format) || typeof title !== 'string' || !title.trim() || title.length > 200 || typeof content !== 'string' || !content.trim() || content.length > 30000) throw new Error('Material inválido ou muito longo (limite: 30 mil caracteres).');
+  if (format === 'pptx') return Array.from(await exportPresentation(title, content));
+  const preview = new BrowserWindow({ show: false, webPreferences: { nodeIntegration: false, contextIsolation: true, sandbox: true } });
+  try {
+    preview.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
+    await preview.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(materialHtml(title, content))}`);
+    return Array.from(await preview.webContents.printToPDF({ printBackground: true, pageSize: 'A4', preferCSSPageSize: true }));
+  } finally { preview.destroy(); }
+});
 
 handle('work:artifacts', (_event, id: string) => { const task = requireWorkAccess(id); return task.executionId ? new ArtifactStore(storageManager).list(task.executionId) : []; });
 handle('work:checkpoint', (_event, id: string) => {

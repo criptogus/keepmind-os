@@ -1,0 +1,29 @@
+{
+  "date": "2026-11-13",
+  "scenario": "Generic marketing revision of a synthetic business example",
+  "version": 3,
+  "status": "review",
+  "retained_versions": [
+    2,
+    3
+  ],
+  "single_submit_started_revision": true,
+  "ui_verified": [
+    "Preparando a versão 3",
+    "Entrega · Versão 3",
+    "Ver entrega anterior · versão 2",
+    "Aprovar versão 3"
+  ],
+  "pdf": {
+    "pages": 1,
+    "bytes": 106765,
+    "text_validated": true
+  },
+  "pptx": {
+    "slides": 2,
+    "bytes": 57687,
+    "editable_text_validated": true
+  },
+  "delivery_accepted": false,
+  "merge_performed": false
+}

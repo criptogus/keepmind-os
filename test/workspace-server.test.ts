@@ -1,4 +1,4 @@
-import { it,expect } from 'vitest';
+import { it,expect,vi } from 'vitest';
 import fs from 'node:fs';import os from 'node:os';import path from 'node:path';
 import { WorkspaceRuntime,workspaceConfigSchema,type Principal } from '../src/main/server/WorkspaceRuntime';
 import { WorkspaceApi,authenticate } from '../src/main/server/WorkspaceApi';
@@ -74,4 +74,18 @@ it('scopes artifact downloads to authorized tasks and their bound execution',asy
   expect((f.api.call(reader,'work:artifacts',[visible.id]) as any[])[0].content).toBe('Public to project');
   expect(()=>f.api.call(alice,'work:artifacts',[hidden.id])).toThrow('unavailable');
  } finally {await f.close();}
+});
+
+it('starts shared revisions in one action and rejects a stale duplicate submission', async () => {
+ const f=fixture();try {
+  const t=f.runtime.work.create(input,'alice');
+  await f.runtime.work.run(t.id,async()=>({id:'first',agentId:'a',status:'completed',progress:100,input:{},output:{content:'Original'}}));
+  let finish!: (value:any)=>void;
+  vi.spyOn(f.runtime,'execute').mockImplementation(async()=>new Promise(resolve=>{finish=resolve;}));
+  const current=f.runtime.work.get(t.id);
+  const started=f.api.call(alice,'work:action',[t.id,'revise','Make it shorter',current.revision]) as any;
+  expect(started.status).toBe('running');
+  expect(()=>f.api.call(alice,'work:action',[t.id,'revise','duplicate',current.revision])).toThrow('another device');
+  finish({id:'second',agentId:'a',status:'completed',progress:100,input:{},output:{content:'Shorter'}});
+ } finally {await f.close();vi.restoreAllMocks();}
 });

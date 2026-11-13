@@ -1,0 +1,57 @@
+{
+  "summary": {
+    "requested": 1,
+    "completed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "input_tokens": 746,
+    "output_tokens": 131
+  },
+  "results": [
+    {
+      "index": 0,
+      "ok": true,
+      "attempts": 1,
+      "seconds": 0.241,
+      "response": {
+        "model": "jev-1.14.0",
+        "answers": {
+          "live_auth": {
+            "type": "choice",
+            "choice": "insufficient",
+            "confidence": 0.97,
+            "probabilities": {
+              "supports": 0.0,
+              "insufficient": 0.98,
+              "contradicts": 0.02
+            }
+          },
+          "browser_root": {
+            "type": "choice",
+            "choice": "plausible",
+            "confidence": 0.89,
+            "probabilities": {
+              "proven": 0.0,
+              "plausible": 0.93,
+              "unsupported": 0.07
+            }
+          },
+          "tool_authority": {
+            "type": "choice",
+            "choice": "supports",
+            "confidence": 0.88,
+            "probabilities": {
+              "supports": 0.92,
+              "contradicts": 0.01,
+              "insufficient": 0.07
+            }
+          }
+        },
+        "usage": {
+          "input_tokens": 746,
+          "output_tokens": 131
+        }
+      }
+    }
+  ]
+}

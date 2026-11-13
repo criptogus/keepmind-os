@@ -71,3 +71,24 @@ describe('Typed workflow conditions', () => {
     expect(calls).toBe(0);
   });
 });
+
+it('starts a requested revision immediately, passes prior delivery, and keeps both versions', async () => {
+  const { manager } = setup(); const t = manager.create({ goal: 'Plano comercial', agentId: 'a', reviewRequired: true }, 'owner');
+  await manager.run(t.id, async () => execution);
+  let finish!: (value: typeof execution) => void; let received: any;
+  const revision = manager.reviseAndRun(t.id, 'Reduza para três ações', async (_, input) => { received = input; return new Promise(resolve => { finish = resolve; }); });
+  expect(manager.get(t.id).status).toBe('running');
+  expect(received.previousDelivery).toBe('A result with evidence');
+  expect(received.corrections).toEqual(['Reduza para três ações']);
+  expect(() => manager.reviseAndRun(t.id, 'duplicate', async () => execution)).toThrow();
+  finish({ ...execution, id: 'version-2', output: { content: 'Três ações' } }); await revision;
+  expect(manager.get(t.id).status).toBe('review');
+  expect(manager.get(t.id).deliveries?.map(d => [d.version,d.content])).toEqual([[1,'A result with evidence'],[2,'Três ações']]);
+});
+it('preserves the previous version when a revision fails and permits retry', async () => {
+  const { manager } = setup(); const t = manager.create({ goal: 'Plano', agentId: 'a' }, 'owner'); await manager.run(t.id, async () => execution);
+  await manager.reviseAndRun(t.id, 'Ajustar', async () => { throw new Error('Provider unavailable'); });
+  expect(manager.get(t.id)).toMatchObject({ status: 'blocked', output: 'A result with evidence' });
+  await manager.run(t.id, async () => ({ ...execution, output: { content: 'Updated' } }));
+  expect(manager.get(t.id).deliveries?.map(d => d.version)).toEqual([1,2]);
+});
