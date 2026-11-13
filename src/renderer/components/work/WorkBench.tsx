@@ -1,3 +1,5 @@
+import BotAvatar from '../common/BotAvatar';
+import { avatarForAgent } from '../../../shared/avatars';
 import type { ToolStep } from '../../../main/execution/CheckpointStore';
 import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { Alert, Badge, Button, Card, Drawer, Group, MultiSelect, Select, SegmentedControl, Stack, Tabs, Text, Textarea, TextInput, Title } from '@mantine/core';
@@ -61,7 +63,7 @@ export default function WorkBench({ onNavigate, selectedTaskId, onTaskOpened }: 
   const taskCard = (t: WorkTask) => <button key={t.id} className="km-task" onClick={() => { setSelected(t.id); setNote(''); }}>
     <Group justify="space-between"><Text size="xs" c="dimmed">{t.project}</Text><Badge color={color(t.status)} variant="light" size="sm">{labels[t.status]}</Badge></Group>
     <Text fw={600} size="sm" my="xs">{t.title}</Text>
-    <Group justify="space-between"><Text size="xs" c="dimmed">{agents.find(a => a.id === t.agentId)?.name ?? 'Agent'}</Text><Text size="xs" c="dimmed">{approvals.some(a => a.context.workTaskId === t.id) ? tr('Approval needed', 'Aguarda aprovação') : t.status === 'review' ? tr('Review deliverable →', 'Revisar entrega →') : t.status === 'blocked' ? tr('Resolve blocker →', 'Resolver bloqueio →') : t.status === 'backlog' ? tr('Review plan →', 'Conferir plano →') : new Date(t.updatedAt).toLocaleDateString()}</Text></Group>
+    <Group justify="space-between"><Group gap={8}><span aria-hidden="true"><BotAvatar definition={avatarForAgent(agents.find(a => a.id === t.agentId) ?? { id: t.agentId })} mood={t.status === 'running' ? 'thinking' : t.status === 'done' ? 'happy' : 'idle'} size={28} showBadge={false} /></span><Text size="xs" c="dimmed">{agents.find(a => a.id === t.agentId)?.name ?? 'Agent'}</Text></Group><Text size="xs" c="dimmed">{approvals.some(a => a.context.workTaskId === t.id) ? tr('Approval needed', 'Aguarda aprovação') : t.status === 'review' ? tr('Review deliverable →', 'Revisar entrega →') : t.status === 'blocked' ? tr('Resolve blocker →', 'Resolver bloqueio →') : t.status === 'backlog' ? tr('Review plan →', 'Conferir plano →') : new Date(t.updatedAt).toLocaleDateString()}</Text></Group>
   </button>;
   const columns: WorkStatus[] = ['backlog', 'running', 'review', 'done', 'blocked', 'cancelled'];
   const exportWork = () => perform(async () => {
