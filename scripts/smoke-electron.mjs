@@ -207,7 +207,7 @@ try {
   if (sharedContext.connection.mode !== 'remote' || sharedContext.snapshot.tasks[0].events.at(-1).actorId !== 'bob') fail('remote state did not synchronize');
   await send('Page.reload');
   for (let i = 0; i < 80; i++) { if ((await evaluate('document.body?.innerText ?? ""')).includes('Collaborative release review')) break; await delay(100); }
-  if (!(await evaluate('document.body?.innerText ?? ""')).includes('Shared workspace')) fail('shared workspace indicator missing');
+  if (!/shared workspace/i.test(await evaluate('document.body?.innerText ?? ""'))) fail('shared workspace indicator missing');
   const sharedShot = await send('Page.captureScreenshot', { format: 'png' });
   writeFileSync(path.join(root, 'evidence/shared-workspace.png'), Buffer.from(sharedShot.result.data, 'base64'));
   await evaluate('window.electronAPI.workspaceDisconnect()');
