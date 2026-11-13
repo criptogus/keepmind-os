@@ -238,6 +238,7 @@ export class AgentManager {
 
   previewTools(agentId: string, config: AgentConfig, input: Record<string, unknown>) {
     const skills = this.resolveSkills(config, input, agentId);
+
     const constraints = this.constraintsProvider?.(config);
     const denied = constraints?.denyTools?.length ? new Set(constraints.denyTools) : undefined;
     return this.enabledToolNames(config, skills, denied);
@@ -304,7 +305,7 @@ export class AgentManager {
   async executeAgent(
     agentId: string, config: AgentConfig, input: Record<string, unknown>,
     onProgress?: (progress: number) => void, executionId: string = uuidv4(),
-    onEvent?: (event: AgentStreamEvent) => void, opts?: { dryRun?: boolean }
+    onEvent?: (event: AgentStreamEvent) => void, opts?: { dryRun?: boolean; onSkillsResolved?: (ids: string[]) => void }
   ): Promise<AgentExecution> {
     if (this.controllers.has(executionId)) throw new CheckpointError('Execution already active');
     const controller = new AbortController();
@@ -330,9 +331,10 @@ export class AgentManager {
     onProgress?: (progress: number) => void,
     executionId: string = uuidv4(),
     onEvent?: (event: AgentStreamEvent) => void,
-    opts?: { dryRun?: boolean }
+    opts?: { dryRun?: boolean; onSkillsResolved?: (ids: string[]) => void }
   ): Promise<AgentExecution> {
     const execution: AgentExecution = {
+      dryRun: opts?.dryRun === true,
       id: executionId,
       agentId,
       status: 'pending',
@@ -355,6 +357,8 @@ export class AgentManager {
 
       let output: Record<string, unknown>;
       const skills = this.resolveSkills(config, input, agentId);
+      execution.activatedSkillIds = skills.map(skill => skill.id);
+      opts?.onSkillsResolved?.(execution.activatedSkillIds);
       const constraints = this.constraintsProvider?.(config);
       const denied = constraints?.denyTools?.length ? new Set(constraints.denyTools) : undefined;
       const toolNames = this.enabledToolNames(config, skills, denied);

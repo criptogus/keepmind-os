@@ -125,7 +125,7 @@ const currentUserId = (): string | undefined => localAuth?.getCurrentUser()?.id;
 const currentUserEmail = (): string => localAuth?.getCurrentUser()?.email ?? 'system';
 
 /** Gated tools a member must never see offered to the model. */
-const MEMBER_DENIED_TOOLS = ['shell_exec', 'file_write', 'open_url', 'whatsapp_send_message', 'delegate_to_agent', 'create_agent', 'review_agent', 'secondbrain_remember', 'personalbrain_remember', 'composio_execute'];
+const MEMBER_DENIED_TOOLS = ['shell_exec', 'file_write', 'open_url', 'whatsapp_send_message', 'delegate_to_agent', 'create_agent', 'review_agent', 'secondbrain_remember', 'personalbrain_remember', 'web_clip_url', 'composio_execute'];
 
 const ACCESS_RANK: Record<ComputerAccessLevel, number> = { workspace: 0, authorized: 1, full: 2 };
 function computerSettings() {
@@ -221,13 +221,16 @@ async function runAgentExecution(agentId: string, input: Record<string, unknown>
   const userId = opts?.userId ?? currentUserId() ?? 'system';
   const startedAt = previousRun?.startedAt ?? new Date().toISOString();
   if (typeof input.workTaskId === 'string') workManager.attachExecution(input.workTaskId, executionId);
-  storageManager.saveAgentExecution({ id: executionId, agentId, input, userId, startedAt, status: 'running', progress: 0 });
+  storageManager.saveAgentExecution({ id: executionId, agentId, input, userId, startedAt, dryRun: opts?.dryRun === true, activatedSkillIds: previousRun?.activatedSkillIds, status: 'running', progress: 0 });
   try {
     const execution = await agentManager.executeAgent(agentId, agent.config, input, (progress) => {
       storageManager.updateAgentExecutionProgress(executionId, progress);
     }, executionId, (event) => {
       mainWindow?.webContents.send('agents:event', { executionId, ...event });
-    }, { dryRun: opts?.dryRun === true });
+    }, { dryRun: opts?.dryRun === true, onSkillsResolved: (ids) => {
+      const record = storageManager.getAgentExecution(executionId);
+      if (record) storageManager.saveAgentExecution({ ...record, activatedSkillIds: ids });
+    } });
     execution.userId = userId;
     storageManager.saveAgentExecution(execution);
   if (opts?.dryRun) {
@@ -249,6 +252,7 @@ async function runAgentExecution(agentId: string, input: Record<string, unknown>
   } catch (error) {
     const previous = storageManager.getAgentExecution(executionId);
     storageManager.saveAgentExecution({ id: executionId, agentId, input, userId, startedAt,
+      dryRun: previous?.dryRun ?? opts?.dryRun === true, activatedSkillIds: previous?.activatedSkillIds,
       status: previous?.status === 'cancelled' ? 'cancelled' : 'failed', progress: previous?.progress ?? 0,
       completedAt: new Date().toISOString(), error: error instanceof Error ? error.message : String(error) });
     throw error;
@@ -775,6 +779,7 @@ app.whenReady().then(async () => {
     const text = JSON.stringify(input).toLowerCase();
     const tokens = text.match(/[a-zá-ú]{4,}/g) || [];
     const assignedIds = new Set(assigned.map((s) => s.id));
+    const outcomes = storageManager.getOutcomeStats(agentId ?? '', input, 'skill');
     const scored = storageManager.getAllSkills()
       .filter((s) => !assignedIds.has(s.id) && !s.id.startsWith('mcp-'))
       .map((s) => {
@@ -782,11 +787,13 @@ app.whenReady().then(async () => {
         const skillTokens = new Set(haystack.match(/[a-zá-ú]{4,}/g) || []);
         let score = 0;
         for (const t of tokens) if (skillTokens.has(t)) score++;
-        return { skill: s, score };
+        const history = outcomes[s.id];
+        const prior = history && history.total >= 3 ? (history.successRate - 0.5) : 0;
+        return { skill: s, score, blendedScore: score + prior };
       });
     const picked = scored
       .filter((x) => x.score >= 2)
-      .sort((a, b) => b.score - a.score)
+      .sort((a, b) => b.blendedScore - a.blendedScore)
       .slice(0, 2);
     try {
       storageManager.saveRoutingDecision({
@@ -795,7 +802,7 @@ app.whenReady().then(async () => {
         subject: text.slice(0, 200),
         candidates: scored.map((x) => ({ id: x.skill.name, score: x.score })).slice(0, 20),
         decision: picked.map((x) => x.skill.name),
-        reason: 'keyword-overlap heuristic (score >= 2, max 2 skills)',
+        reason: 'keyword overlap plus per-agent similar-task outcome prior (at least 3 real executions; max 2 skills)',
       });
     } catch { /* routing audit is best-effort */ }
     return picked.map((x) => x.skill);
@@ -814,7 +821,7 @@ app.whenReady().then(async () => {
     // a proven success rate when the heuristic pick has a poor track record.
     // Requires ≥3 samples on both sides and a ≥15-point success-rate gap.
     try {
-      const stats = storageManager.getModelOutcomeStats();
+      const stats = storageManager.getOutcomeStats(agentId ?? '', input, 'model');
       const provider = providerForModel(routed);
       const tier = tierForModel(routed);
       if (provider && tier && !/^o\d/.test(routed)) {
@@ -887,6 +894,7 @@ app.whenReady().then(async () => {
       return res.text();
     },
     webClipUrl: async (url) => {
+      requireRole('admin');
       const clip = await webClipper.clip(url);
       return `Clipped "${clip.title}" (${clip.words} words) → ${clip.file}`;
     },
@@ -2415,6 +2423,7 @@ async function startRemoteApprovalsIfEnabled(): Promise<void> {
       getPendingApprovals: () => storageManager.getPendingApprovals(),
       decide: decideRemoteApproval,
       getToken: remoteToken,
+      getLanguage: () => storageManager.getSetting('language') || 'en',
     });
   }
   const port = Number(storageManager.getSetting('remote.port')) || 0;

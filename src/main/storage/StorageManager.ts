@@ -273,6 +273,9 @@ export class StorageManager {
       try { this.db.exec(`ALTER TABLE skills ADD COLUMN ${col}`); } catch { /* exists */ }
     }
     try { this.db.exec('ALTER TABLE whatsapp_messages ADD COLUMN indexed_at TEXT'); } catch { /* exists */ }
+    for (const col of ['dry_run INTEGER DEFAULT 0', 'activated_skills TEXT']) {
+      try { this.db.exec(`ALTER TABLE agent_executions ADD COLUMN ${col}`); } catch { /* exists */ }
+    }
     for (const col of ['user_id TEXT']) {
       try { this.db.exec(`ALTER TABLE agent_executions ADD COLUMN ${col}`); } catch { /* exists */ }
       try { this.db.exec(`ALTER TABLE audit_logs ADD COLUMN ${col}`); } catch { /* exists */ }
@@ -609,6 +612,8 @@ export class StorageManager {
     return {
       id: row.id,
       agentId: row.agent_id,
+      dryRun: Boolean(row.dry_run),
+      activatedSkillIds: row.activated_skills ? JSON.parse(row.activated_skills) : [],
       status: row.status,
       input: JSON.parse(row.input),
       output: row.output ? JSON.parse(row.output) : undefined,
@@ -638,8 +643,8 @@ export class StorageManager {
   saveAgentExecution(execution: AgentExecution): void {
     const stmt = this.db.prepare(`
       INSERT OR REPLACE INTO agent_executions
-      (id, agent_id, status, input, output, error, started_at, completed_at, progress, user_id)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      (id, agent_id, status, input, output, error, started_at, completed_at, progress, user_id, dry_run, activated_skills)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
     stmt.run(
       execution.id,
@@ -651,7 +656,9 @@ export class StorageManager {
       execution.startedAt || null,
       execution.completedAt || null,
       execution.progress,
-      execution.userId ?? null
+      execution.userId ?? null,
+      execution.dryRun ? 1 : 0,
+      JSON.stringify(execution.activatedSkillIds ?? [])
     );
   }
 
@@ -857,24 +864,36 @@ export class StorageManager {
    * status. Powers outcome-weighted model routing: models with enough history
    * and poor success rates get demoted in favor of proven alternatives.
    */
-  getModelOutcomeStats(): Record<string, { completed: number; failed: number; total: number; successRate: number }> {
+  getOutcomeStats(agentId: string, input: Record<string, unknown>, kind: 'model' | 'skill'): Record<string, { completed: number; failed: number; total: number; successRate: number }> {
+    // One vote per real execution and candidate, scoped to this agent and
+    // tasks sharing at least two meaningful words (or identical task text).
     const rows = this.db.prepare(`
-      SELECT u.model AS model, e.status AS status, COUNT(*) AS n
-      FROM llm_usage u
-      JOIN agent_executions e ON e.id = u.execution_id
-      WHERE e.status IN ('completed', 'failed')
-      GROUP BY u.model, e.status
-    `).all() as any[];
-    const acc: Record<string, { completed: number; failed: number }> = {};
-    for (const r of rows) {
-      const m = acc[r.model] ??= { completed: 0, failed: 0 };
-      if (r.status === 'completed') m.completed += Number(r.n);
-      else m.failed += Number(r.n);
-    }
+      SELECT e.id, e.status, e.input, e.activated_skills, u.model
+      FROM agent_executions e LEFT JOIN llm_usage u ON e.id = u.execution_id
+      WHERE e.agent_id = ? AND e.status IN ('completed', 'failed')
+        AND COALESCE(e.dry_run, 0) = 0
+        AND COALESCE(json_extract(e.output, '$.dryRun'), 0) = 0
+      GROUP BY e.id, u.model
+    `).all(agentId) as any[];
+    const taskText = (value: Record<string, unknown>) => String(value.task ?? value.goal ?? value.prompt ?? '').toLowerCase();
+    const text = taskText(input);
+    const tokens = new Set(text.match(/[\p{L}]{4,}/gu) ?? []);
+    const seen = new Set<string>();
     const out: Record<string, { completed: number; failed: number; total: number; successRate: number }> = {};
-    for (const [model, s] of Object.entries(acc)) {
-      const total = s.completed + s.failed;
-      out[model] = { ...s, total, successRate: total > 0 ? s.completed / total : 0 };
+    for (const row of rows) {
+      const previous = taskText(JSON.parse(row.input));
+      const shared = new Set((previous.match(/[\p{L}]{4,}/gu) ?? []).filter((word: string) => tokens.has(word)));
+      if (!text || (previous !== text && shared.size < 2)) continue;
+      const ids: string[] = kind === 'model' ? (row.model ? [row.model] : []) : JSON.parse(row.activated_skills || '[]');
+      for (const id of ids) {
+        const key = JSON.stringify([row.id, id]);
+        if (seen.has(key)) continue;
+        seen.add(key);
+        const stat = out[id] ??= { completed: 0, failed: 0, total: 0, successRate: 0 };
+        if (row.status === 'completed') stat.completed++; else stat.failed++;
+        stat.total++;
+        stat.successRate = stat.completed / stat.total;
+      }
     }
     return out;
   }

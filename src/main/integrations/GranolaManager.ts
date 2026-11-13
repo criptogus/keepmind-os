@@ -38,7 +38,7 @@ const KEY_SYNC_MINUTES = 'granola.syncMinutes';
 const KEY_ACCOUNT = 'granola.account';
 const KEY_LAST_ERROR = 'granola.lastError';
 const SECRET_TOKENS = 'granola';
-const SYNC_LIST_LIMIT = 50; // listMeetings cap — cleanup only safe below this
+const SYNC_LIST_LIMIT = 50; // bounded fetch; never used to infer completeness
 
 interface GranolaTokens {
   accessToken: string;
@@ -525,10 +525,10 @@ export class GranolaManager {
   // ---------- meetings ----------
 
   private extractItems(result: unknown): MeetingSummary[] {
-    if (!result) return [];
+    if (!result) throw new Error('Invalid meeting list response');
     const obj = result as Record<string, unknown>;
     const arr = (obj.notes ?? obj.meetings ?? obj.items ?? (Array.isArray(result) ? result : null)) as unknown[] | null;
-    if (!Array.isArray(arr)) return [];
+    if (!Array.isArray(arr)) throw new Error('Invalid meeting list response');
     return arr
       .map((n) => n as MeetingSummary)
       .filter((n) => typeof n?.id === 'string' && n.id.length > 0);
@@ -640,8 +640,7 @@ export class GranolaManager {
       try {
         const { note, transcript } = await this.getMeeting(meta.id, true);
         const body = this.formatMeeting(note, transcript, meta);
-        const day = (meta.meeting_at || meta.created_at || new Date().toISOString()).slice(0, 10);
-        const filename = `granola-${day}-${this.slugify(String(meta.title || meta.id))}.md`;
+        const filename = `granola-${crypto.createHash('sha256').update(meta.id).digest('hex')}.md`;
         await fs.writeFile(path.join(dir, filename), body, 'utf8');
         return { filename };
       } catch (e) {
@@ -680,24 +679,19 @@ export class GranolaManager {
       await this.personalBrain.ensureDir();
       let synced = 0;
       let skipped = 0;
-      let removed = 0;
+      const removed = 0;
       let failures = 0;
-      const seenIds = new Set<string>();
 
       for (const meta of meetings) {
-        seenIds.add(meta.id);
         const stamp = meta.updated_at || meta.meeting_at || meta.created_at || '';
-        if (syncedMap[meta.id] === stamp) {
+        if (syncedMap[meta.id] === stamp && fileMap[meta.id] === `granola-${crypto.createHash('sha256').update(meta.id).digest('hex')}.md`) {
           skipped++;
           continue;
         }
         try {
           const { filename } = await this.syncMeetingWithRetry(meta, dir);
-          // If the meeting moved/renamed, drop the previous file for this note.
-          const prevFile = fileMap[meta.id];
-          if (prevFile && prevFile !== filename) {
-            await fs.unlink(path.join(dir, prevFile)).catch(() => {});
-          }
+          // Preserve old files during migration: they may contain user edits or
+          // have been shared by colliding legacy meeting titles.
           fileMap[meta.id] = filename;
           syncedMap[meta.id] = stamp || new Date().toISOString();
           synced++;
@@ -709,24 +703,8 @@ export class GranolaManager {
         await new Promise((r) => setTimeout(r, 120));
       }
 
-      // Cleanup: only safe when the list is complete (fewer than the cap).
-      // A note deleted in Granola gets its vault file removed and mappings dropped.
-      if (meetings.length < SYNC_LIST_LIMIT) {
-        for (const id of Object.keys(fileMap)) {
-          if (seenIds.has(id)) continue;
-          const fp = path.join(dir, fileMap[id]);
-          // Only delete files we can prove are Granola-synced (frontmatter check).
-          try {
-            const head = await fs.readFile(fp, 'utf8');
-            if (head.includes(`granola_id: ${id}`)) {
-              await fs.unlink(fp);
-              removed++;
-            }
-          } catch { /* file already gone */ }
-          delete fileMap[id];
-          delete syncedMap[id];
-        }
-      }
+      // A short page does not prove an authoritative complete listing.
+      // Keep local notes until an explicit deletion policy is available.
 
       this.saveSynced(syncedMap);
       this.saveFiles(fileMap);
@@ -749,7 +727,9 @@ export class GranolaManager {
   ensureScheduler(): void {
     if (this.syncTimer) return;
     this.syncTimer = setInterval(() => {
-      if (this.isConnected() && this.isEnabled()) {
+      const lastSync = Date.parse(this.storage.getSetting(KEY_LAST_SYNC) || '');
+      const due = !Number.isFinite(lastSync) || Date.now() - lastSync >= this.getSyncMinutes() * 60_000;
+      if (this.isConnected() && this.isEnabled() && due) {
         void this.syncNow().catch((e) => console.error('[granola] scheduled sync failed:', e));
       }
     }, SYNC_TICK_MS);

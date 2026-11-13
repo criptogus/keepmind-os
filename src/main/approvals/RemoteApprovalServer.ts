@@ -8,6 +8,7 @@ export interface RemoteApprovalDeps {
   decide(id: string, approve: boolean, reason?: string): void;
   /** Unguessable token embedded in every URL — the only auth. */
   getToken(): string;
+  getLanguage?(): string;
 }
 
 /**
@@ -63,7 +64,7 @@ export class RemoteApprovalServer {
     const sub = m[2] ?? '/';
 
     if (req.method === 'GET' && (sub === '/' || sub === '')) {
-      send(200, PAGE_HTML(this.deps.getToken(), this.port), 'text/html; charset=utf-8');
+      send(200, PAGE_HTML(this.deps.getToken(), this.deps.getLanguage?.() ?? 'en'), 'text/html; charset=utf-8');
       return;
     }
     if (req.method === 'GET' && sub === '/api') {
@@ -102,19 +103,23 @@ function lanIPv4(): string | null {
 }
 
 /** Self-contained approvals page — no external assets, mobile-friendly. */
-function PAGE_HTML(token: string, _port: number): string {
+function PAGE_HTML(token: string, language: string): string {
+  const pt = language.toLowerCase().startsWith('pt');
+  const labels = pt
+    ? { title: 'Aprovações', loading: 'Carregando…', pending: 'pendentes', empty: 'Nenhuma aprovação pendente', approve: 'Aprovar', reject: 'Recusar', agent: 'Agente', unreachable: 'Não foi possível conectar ao KeepMind OS' }
+    : { title: 'Approvals', loading: 'Loading…', pending: 'pending', empty: 'No pending approvals', approve: 'Approve', reject: 'Reject', agent: 'Agent', unreachable: 'Cannot reach KeepMind OS' };
   return `<!DOCTYPE html>
-<html lang="en">
+<html lang="${pt ? 'pt-BR' : 'en'}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>KeepMind OS — Approvals</title>
+<title>KeepMind OS — ${labels.title}</title>
 <style>
   * { box-sizing: border-box; }
-  body { font-family: -apple-system, 'Segoe UI', sans-serif; margin: 0; background: #f6f6f4; color: #16161a; }
+  body { font-family: -apple-system, 'Segoe UI', sans-serif; margin: 0; background: #ffffff; color: #16161a; }
   header { padding: 16px 20px; background: #16161a; color: #fff; display: flex; justify-content: space-between; align-items: center; }
   header h1 { font-size: 17px; margin: 0; font-weight: 600; }
-  header .dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; display: inline-block; margin-right: 6px; }
+  header .dot { width: 8px; height: 8px; border-radius: 50%; background: #c5f542; display: inline-block; margin-right: 6px; }
   main { padding: 16px; max-width: 720px; margin: 0 auto; }
   .card { background: #fff; border: 1px solid #e5e5e0; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
   .card .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
@@ -124,15 +129,15 @@ function PAGE_HTML(token: string, _port: number): string {
   .args { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: #555; white-space: pre-wrap; word-break: break-word; background: #fafaf8; border-radius: 6px; padding: 8px; max-height: 140px; overflow: auto; }
   .btns { display: flex; gap: 8px; margin-top: 12px; }
   button { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; }
-  .ok { background: #16161a; color: #fff; }
+  .ok { background: #c5f542; color: #111; }
   .no { background: #fff; color: #16161a; border: 1px solid #d4d4cf; }
   .empty { text-align: center; color: #888; padding: 48px 0; }
   .err { color: #b91c1c; font-size: 13px; }
 </style>
 </head>
 <body>
-<header><h1><span class="dot"></span>KeepMind OS — Approvals</h1><span id="count"></span></header>
-<main id="list"><div class="empty">Loading…</div></main>
+<header><h1><span class="dot"></span>KeepMind OS — ${labels.title}</h1><span id="count"></span></header>
+<main id="list"><div class="empty">${labels.loading}</div></main>
 <script>
 const TOKEN = ${JSON.stringify(token)};
 const BASE = '/a/' + TOKEN;
@@ -142,8 +147,8 @@ async function load() {
     const r = await fetch(BASE + '/api', { cache: 'no-store' });
     const d = await r.json();
     const list = document.getElementById('list');
-    document.getElementById('count').textContent = d.approvals.length ? d.approvals.length + ' pending' : '';
-    if (!d.approvals.length) { list.innerHTML = '<div class="empty">No pending approvals 🎉</div>'; return; }
+    document.getElementById('count').textContent = d.approvals.length ? d.approvals.length + ' ${labels.pending}' : '';
+    if (!d.approvals.length) { list.innerHTML = '<div class="empty">${labels.empty}</div>'; return; }
     list.innerHTML = '';
     for (const a of d.approvals) {
       const card = document.createElement('div');
@@ -153,9 +158,9 @@ async function load() {
         '<div class="top"><div class="agent"></div><div class="time"></div></div>' +
         '<div class="action"></div>' +
         (ctx.args !== undefined ? '<div class="args"></div>' : '') +
-        '<div class="btns"><button class="ok">Approve</button><button class="no">Reject</button></div>' +
+        '<div class="btns"><button class="ok">${labels.approve}</button><button class="no">${labels.reject}</button></div>' +
         '<div class="err"></div>';
-      card.querySelector('.agent').textContent = a.agentName || 'Agent';
+      card.querySelector('.agent').textContent = a.agentName || '${labels.agent}';
       card.querySelector('.time').textContent = new Date(a.createdAt).toLocaleString();
       card.querySelector('.action').textContent = a.action || '';
       if (ctx.args !== undefined) card.querySelector('.args').textContent = JSON.stringify(ctx.args, null, 2);
@@ -164,7 +169,7 @@ async function load() {
       list.appendChild(card);
     }
   } catch (e) {
-    document.getElementById('list').innerHTML = '<div class="empty err">Cannot reach KeepMind OS</div>';
+    document.getElementById('list').innerHTML = '<div class="empty err">${labels.unreachable}</div>';
   }
 }
 async function decide(card, id, approve) {

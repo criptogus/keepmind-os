@@ -83,6 +83,36 @@ export async function importSkillsFromFolder(dir: string): Promise<SkillImportRe
   };
   await walk(root, '', 0);
 
+  const manifestFile = all.find(file => file.rel === 'plugin.json');
+  if (manifestFile) {
+    if ((await fs.stat(manifestFile.abs)).size > MAX_SKILL_MD_BYTES) throw new Error('Plugin manifest too large');
+    const manifest = JSON.parse(await fs.readFile(manifestFile.abs, 'utf8'));
+    if (!manifest || typeof manifest.name !== 'string' || !manifest.name.trim()
+      || typeof manifest.version !== 'string' || !manifest.version.trim()
+      || typeof manifest.description !== 'string' || !Array.isArray(manifest.skills)
+      || !manifest.skills.length || manifest.skills.length > MAX_FILES) throw new Error('Invalid plugin manifest');
+    const skills: ImportedSkill[] = [];
+    const seen = new Set<string>();
+    let totalBytes = 0;
+    for (const entry of manifest.skills) {
+      const file = entry?.file;
+      if (typeof file !== 'string' || !file.endsWith('.md') || file.includes('\\')
+        || path.isAbsolute(file) || file.split('/').some(part => !part || part === '..' || part === '.')
+        || seen.has(file)) throw new Error('Invalid or duplicate plugin skill path');
+      seen.add(file);
+      // Only regular files found by the bounded, symlink-free traversal qualify.
+      const found = all.find(candidate => candidate.rel === file);
+      if (!found) throw new Error('Plugin skill file missing or outside folder');
+      const size = (await fs.stat(found.abs)).size;
+      totalBytes += size;
+      if (size > MAX_SKILL_MD_BYTES || totalBytes > MAX_TEXT_BYTES) throw new Error('Plugin skills too large');
+      const skill = parseSkillMarkdown(await fs.readFile(found.abs, 'utf8'), `local:${root}`);
+      skill.sourceRef = file;
+      skills.push(skill);
+    }
+    return { skills, skipped: [] };
+  }
+
   // Skill folders = dirs containing SKILL.md (case-insensitive), up to 6 deep.
   const skillDirs = new Set<string>();
   for (const f of all) {

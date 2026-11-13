@@ -165,6 +165,8 @@ export interface AuditEntry {
 }
 
 export interface AgentExecution {
+  dryRun?: boolean;
+  activatedSkillIds?: string[];
   id: string;
   agentId: string;
   status: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';

@@ -1,0 +1,37 @@
+{
+  "summary": {
+    "requested": 1,
+    "completed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "input_tokens": 453,
+    "output_tokens": 41
+  },
+  "results": [
+    {
+      "index": 0,
+      "ok": true,
+      "attempts": 1,
+      "seconds": 0.291,
+      "response": {
+        "model": "jev-1.14.0",
+        "answers": {
+          "violation": {
+            "type": "choice",
+            "choice": "yes",
+            "confidence": 0.98,
+            "probabilities": {
+              "yes": 0.99,
+              "no": 0.0,
+              "uncertain": 0.01
+            }
+          }
+        },
+        "usage": {
+          "input_tokens": 453,
+          "output_tokens": 41
+        }
+      }
+    }
+  ]
+}
