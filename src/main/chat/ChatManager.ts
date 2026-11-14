@@ -237,7 +237,15 @@ export class ChatManager {
     try {
       const execution = await this.deps.runAgent(
         agent.id,
-        { message: text, channel: channel.name, mentionedBy: 'user' },
+        {
+          message: text, channel: channel.name, mentionedBy: 'user',
+          conversation: (parentId
+            ? [storage.getMessage(parentId), ...storage.getThreadMessages(parentId)]
+            : storage.getMessages(channel.id, { limit: 21 }))
+            .filter((item): item is ChannelMessage => !!item && item.id !== msg.id && item.status === 'done')
+            .slice(-20)
+            .map(item => ({ role: item.authorKind, author: item.authorName, content: item.body.slice(0, 3000) })),
+        },
         (event) => {
           if (event.executionId) this.executionChannel.set(event.executionId, channel.id);
           if (event.type === 'chunk' && typeof event.data === 'string') {

@@ -1,3 +1,4 @@
+import Deliverable from '../work/Deliverable.js';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import type { Agent, ChannelMessage, ChatAttachment, Team } from '../../../shared/types.js';
 import BotAvatar from '../common/BotAvatar.js';
@@ -275,9 +276,9 @@ export function MessageBubble({ message: m, agent, team, meId, onReact, onReply,
           marginTop: 3, fontSize: 14, lineHeight: 1.5, whiteSpace: 'pre-wrap', wordBreak: 'break-word',
           color: m.status === 'error' ? 'var(--mantine-color-dark-5)' : 'inherit',
         }}>
-          <span className={m.status === 'streaming' ? 'km-stream-caret' : undefined}>
-            {m.body || (m.status === 'streaming' ? '…' : '')}
-          </span>
+          <div className={m.status === 'streaming' ? 'km-stream-caret' : undefined}>
+            {isAgent ? <Deliverable content={m.body || (m.status === 'streaming' ? '…' : '')} /> : m.body}
+          </div>
         </div>
         {Object.keys(reactions).length > 0 && (
           <div className="km-reactions">

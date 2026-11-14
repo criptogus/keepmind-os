@@ -107,6 +107,17 @@ describe('ChatManager', () => {
     expect(tc.some((t) => t.name === 'file_read')).toBe(true);
   });
 
+  it('passes recent conversation so short answers retain their meaning', async () => {
+    const ch = storage.listChannels('u1').find(c => c.name === 'geral')!;
+    await chat.sendMessage(ch.id, 'Quero um time de marketing para minha loja');
+    await chat.sendMessage(ch.id, '@Ana gerar leads');
+    await vi.waitFor(() => expect(runAgent).toHaveBeenCalled());
+    expect(runAgent.mock.calls[0][1].conversation).toEqual(expect.arrayContaining([
+      expect.objectContaining({ content: 'Quero um time de marketing para minha loja' }),
+    ]));
+    await vi.waitFor(() => expect(storage.getMessages(ch.id).some(m => m.authorKind === 'agent' && m.status === 'done')).toBe(true));
+  });
+
   it('does not trigger on unknown mention', async () => {
     const ch = storage.listChannels('u1').find((c) => c.name === 'geral')!;
     await chat.sendMessage(ch.id, '@Fantasma olá');
