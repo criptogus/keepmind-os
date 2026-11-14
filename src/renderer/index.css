@@ -309,3 +309,12 @@ body {
 .km-choice-list button:disabled { cursor: default; opacity: .6; }
 .km-choice-list button[aria-pressed=true] { opacity: 1; background: light-dark(#e3e8da,#30382a); }
 .km-choice-hint { font-size: 13px; color: var(--mantine-color-dimmed); }
+
+/* Skills library: grouped, searchable rows and review before applying AI changes. */
+.km-skill-row { display: flex; gap: 20px; align-items: flex-start; padding: 18px 0; border-top: 1px solid var(--mantine-color-default-border); }
+.km-skill-actions { flex-shrink: 0; }
+.km-skill-instructions { margin-top: 10px; }
+.km-skill-instructions summary { cursor: pointer; color: var(--mantine-color-dimmed); font-size: 13px; padding: 4px 0; }
+.km-skill-instructions[open] summary { margin-bottom: 8px; }
+.km-skill-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 900px) { .km-skill-row { flex-direction: column; gap: 12px; } .km-skill-compare { grid-template-columns: 1fr; } }

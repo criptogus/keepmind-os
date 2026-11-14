@@ -16,7 +16,7 @@ export default function SuperAgentSkillPanel({ onInstalled }: { onInstalled: () 
   const search = () => perform(async()=>{const id=++request.current;setPreview(null);setHits([]);setSearched(false);const results=await window.electronAPI.sakSearch(query);if(id===request.current){setHits(results);setSearched(true);}});
   const inspect = (slug:string) => perform(async()=>{const [p,a]=await Promise.all([window.electronAPI.sakPreview(slug),window.electronAPI.getAgents()]);setPreview(p);setAgents(a);setAgentId(null);});
   return <Card withBorder radius="lg" padding="lg" className="km-sak-panel"><Stack gap="md">
-    <Group justify="space-between"><div><Text className="km-eyebrow">CATÁLOGO DE HABILIDADES</Text><Title order={3}>Super Agent Skill</Title></div><Badge className={status.connected?'km-lime-badge':''} color="gray">{status.connected?'Conta conectada':status.pending?'Aguardando login':'Não conectado'}</Badge></Group>
+    <Group justify="space-between"><div><Title order={3}>Super Agent Skill</Title></div><Badge className={status.connected?'km-lime-badge':''} color="gray">{status.connected?'Conta conectada':status.pending?'Aguardando login':'Não conectado'}</Badge></Group>
     <Text size="sm" c="dimmed">Encontre habilidades, confira as instruções e escolha qual agente vai usá-las.</Text>
     {error && <Alert color="red" role="alert">{error}</Alert>}
     {status.error && <Alert color="red" role="alert">{status.error}</Alert>}

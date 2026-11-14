@@ -269,7 +269,7 @@ export class StorageManager {
     ]) {
       try { this.db.exec(`ALTER TABLE agents ADD COLUMN ${col}`); } catch { /* exists */ }
     }
-    for (const col of ['source TEXT', 'source_ref TEXT', 'version INTEGER DEFAULT 1']) {
+    for (const col of ['source TEXT', 'source_ref TEXT', 'version INTEGER DEFAULT 1', 'category TEXT', 'tags TEXT']) {
       try { this.db.exec(`ALTER TABLE skills ADD COLUMN ${col}`); } catch { /* exists */ }
     }
     try { this.db.exec('ALTER TABLE whatsapp_messages ADD COLUMN indexed_at TEXT'); } catch { /* exists */ }
@@ -814,11 +814,11 @@ export class StorageManager {
   // Skills
   saveSkill(skill: Skill): void {
     const stmt = this.db.prepare(`
-      INSERT OR REPLACE INTO skills (id, name, description, prompt, tool_names, created_at, updated_at, usage_count, last_used_at, source, source_ref, version)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT OR REPLACE INTO skills (id, name, description, prompt, tool_names, created_at, updated_at, usage_count, last_used_at, source, source_ref, version, category, tags)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
     stmt.run(skill.id, skill.name, skill.description, skill.prompt, JSON.stringify(skill.toolNames), skill.createdAt, skill.updatedAt,
-      skill.usageCount ?? 0, skill.lastUsedAt ?? null, skill.source ?? null, skill.sourceRef ?? null, skill.version ?? 1);
+      skill.usageCount ?? 0, skill.lastUsedAt ?? null, skill.source ?? null, skill.sourceRef ?? null, skill.version ?? 1, skill.category ?? null, JSON.stringify(skill.tags ?? null));
   }
 
   getSkill(id: string): Skill | null {
@@ -862,6 +862,8 @@ export class StorageManager {
       lastUsedAt: row.last_used_at ?? undefined,
       source: row.source ?? undefined,
       sourceRef: row.source_ref ?? undefined,
+      category: row.category ?? undefined,
+      tags: JSON.parse(row.tags || 'null') ?? undefined,
       version: row.version ?? 1,
     };
   }

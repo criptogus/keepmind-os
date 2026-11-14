@@ -195,11 +195,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
   listSkillTools: () => ipcRenderer.invoke('skills:listTools') as Promise<Array<{ name: string; description: string }>>,
   improveSkill: (id: string) => ipcRenderer.invoke('skills:improve', id) as Promise<{ improvedPrompt: string }>,
   importSkillFromGitHub: (url: string) => ipcRenderer.invoke('skills:importGitHub', url) as Promise<{
-    skills: Array<{ name: string; description: string; prompt: string; toolNames: string[]; source: string; sourceRef?: string; files?: string[]; ignored?: string[] }>;
+    skills: Array<{ name: string; description: string; prompt: string; toolNames: string[]; source: string; sourceRef?: string; category?: string; tags?: string[]; files?: string[]; ignored?: string[] }>;
     skipped: Array<{ name: string; reason: string }>;
   }>,
   importSkillFromFolder: (dir?: string) => ipcRenderer.invoke('skills:importFolder', dir) as Promise<{
-    skills: Array<{ name: string; description: string; prompt: string; toolNames: string[]; source: string; sourceRef?: string; files?: string[]; ignored?: string[] }>;
+    skills: Array<{ name: string; description: string; prompt: string; toolNames: string[]; source: string; sourceRef?: string; category?: string; tags?: string[]; files?: string[]; ignored?: string[] }>;
     skipped: Array<{ name: string; reason: string }>;
     canceled?: boolean;
   }>,
@@ -209,7 +209,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     installed: boolean; installedCount: number;
   }>>,
   installSkillFromMarketplace: (id: string) => ipcRenderer.invoke('skills:installMarketplace', id) as Promise<{
-    skills: Array<{ name: string; description: string; prompt: string; toolNames: string[]; source: string; sourceRef?: string; files?: string[]; ignored?: string[] }>;
+    skills: Array<{ name: string; description: string; prompt: string; toolNames: string[]; source: string; sourceRef?: string; category?: string; tags?: string[]; files?: string[]; ignored?: string[] }>;
     skipped: Array<{ name: string; reason: string }>;
   }>,
   onAgentEvent: (callback: (event: { executionId: string; type: string; data?: unknown }) => void) => {
@@ -528,11 +528,11 @@ declare global {
       listSkillTools: () => Promise<Array<{ name: string; description: string }>>;
       improveSkill: (id: string) => Promise<{ improvedPrompt: string }>;
       importSkillFromGitHub: (url: string) => Promise<{
-        skills: Array<{ name: string; description: string; prompt: string; toolNames: string[]; source: string; sourceRef?: string; files?: string[]; ignored?: string[] }>;
+        skills: Array<{ name: string; description: string; prompt: string; toolNames: string[]; source: string; sourceRef?: string; category?: string; tags?: string[]; files?: string[]; ignored?: string[] }>;
         skipped: Array<{ name: string; reason: string }>;
       }>;
       importSkillFromFolder: (dir?: string) => Promise<{
-        skills: Array<{ name: string; description: string; prompt: string; toolNames: string[]; source: string; sourceRef?: string; files?: string[]; ignored?: string[] }>;
+        skills: Array<{ name: string; description: string; prompt: string; toolNames: string[]; source: string; sourceRef?: string; category?: string; tags?: string[]; files?: string[]; ignored?: string[] }>;
         skipped: Array<{ name: string; reason: string }>;
         canceled?: boolean;
       }>;
@@ -542,7 +542,7 @@ declare global {
         installed: boolean; installedCount: number;
       }>>;
       installSkillFromMarketplace: (id: string) => Promise<{
-        skills: Array<{ name: string; description: string; prompt: string; toolNames: string[]; source: string; sourceRef?: string; files?: string[]; ignored?: string[] }>;
+        skills: Array<{ name: string; description: string; prompt: string; toolNames: string[]; source: string; sourceRef?: string; category?: string; tags?: string[]; files?: string[]; ignored?: string[] }>;
         skipped: Array<{ name: string; reason: string }>;
       }>;
       onAgentEvent: (callback: (event: { executionId: string; type: string; data?: unknown }) => void) => () => void;
