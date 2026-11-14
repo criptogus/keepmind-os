@@ -9,6 +9,8 @@ const WA_QUEUE_KEY = 'whatsapp.retryQueue';
 export interface TriggerRunContext {
   runAgent: (agentId: string, input: Record<string, unknown>) => Promise<unknown>;
   getAgentName: (agentId: string) => string | undefined;
+  /** Called after scheduled/webhook runs so results can surface in chat. */
+  onRunResult?: (info: { agentId: string; label: string; ok: boolean; output?: string; error?: string }) => void;
 }
 
 /**
@@ -169,7 +171,7 @@ export class TriggerManager {
       triggerId: rule.id,
       task: rule.prompt,
       webhookPayload: payload,
-    }, `webhook:${rule.id}`);
+    }, `webhook:${rule.id}`, rule.prompt.slice(0, 80));
     return true;
   }
 
@@ -198,7 +200,8 @@ export class TriggerManager {
         await this.fire(
           rule.agentId,
           { channel: 'schedule', triggerId: rule.id, task: rule.prompt },
-          `trigger:${rule.id}`
+          `trigger:${rule.id}`,
+          rule.prompt.slice(0, 80)
         );
       }
     } finally {
@@ -226,13 +229,28 @@ export class TriggerManager {
     return new Date(rule.lastRunAt) < dueToday;
   }
 
-  private async fire(agentId: string, input: Record<string, unknown>, source: string): Promise<void> {
+  private async fire(agentId: string, input: Record<string, unknown>, source: string, label = ''): Promise<void> {
     if (!this.ctx) return;
     if (!this.ctx.getAgentName(agentId)) return; // agent deleted
     try {
-      await this.ctx.runAgent(agentId, input);
+      const result = await this.ctx.runAgent(agentId, input);
+      const output = extractRunOutput(result);
+      this.ctx.onRunResult?.({ agentId, label, ok: true, output });
     } catch (error) {
       console.error(`[triggers] ${source} run failed:`, error);
+      this.ctx.onRunResult?.({ agentId, label, ok: false, error: error instanceof Error ? error.message : String(error) });
     }
   }
+}
+
+function extractRunOutput(result: unknown): string | undefined {
+  const r = result as Record<string, any> | null | undefined;
+  const content = r?.output?.content ?? r?.result?.content ?? r?.content;
+  if (typeof content === 'string' && content.trim()) return content.slice(0, 3000);
+  if (content && typeof content === 'object') {
+    const text = JSON.stringify(content);
+    if (text && text !== '{}') return text.slice(0, 3000);
+  }
+  if (r?.status === 'draft') return '(rascunho criado — requer revisão)';
+  return undefined;
 }

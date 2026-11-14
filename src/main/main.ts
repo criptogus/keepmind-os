@@ -284,7 +284,7 @@ function seedAssistantAgent() {
       'app_automation_create', 'app_automation_delete',
       'delegate_to_agent', 'create_agent', 'review_agent',
       'secondbrain_search', 'personalbrain_search',
-      'app_chat_read', 'app_chat_post',
+      'app_chat_read', 'app_chat_post', 'app_channel_create',
     ];
     storageManager.saveAgent({
       id: uuidv4(),
@@ -858,6 +858,15 @@ app.whenReady().then(async () => {
       return workManager.run(task.id, (id, workInput) => runAgentExecution(id, workInput));
     },
     getAgentName: (agentId) => storageManager.getAgent(agentId)?.name,
+    onRunResult: ({ agentId, label, ok, output, error }) => {
+      const agent = storageManager.getAgent(agentId);
+      if (!agent || !chatManager) return;
+      const head = ok ? '✅ Rotina concluída' : '⚠ Rotina falhou';
+      const detail = ok ? (output ?? '_sem saída_') : `_${error ?? 'erro desconhecido'}_`;
+      try {
+        chatManager.postAgentMessage('rotinas', agent, `${head}${label ? ` — ${label}` : ''}\n\n${detail}`);
+      } catch { /* channel may not exist yet on very old DBs */ }
+    },
   });
   startWebhookServer();
   void startRemoteApprovalsIfEnabled().catch(() => console.error('[remote] approval server failed to start'));
@@ -1082,6 +1091,17 @@ app.whenReady().then(async () => {
         return JSON.stringify({ id: rule.id, name: rule.name, kind: rule.kind, enabled: rule.enabled });
       },
       chatRead: (channel, limit) => chatManager.readChannel(String(channel), limit ? Number(limit) : 20),
+      channelCreate: (name, agentNames, topic) => {
+        const clean = String(name).toLowerCase().replace(/^#/, '').replace(/[^\w-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+        if (!clean) throw new Error('Invalid channel name');
+        if (storageManager.listChannels().some((c) => c.name === clean)) throw new Error(`Channel #${clean} already exists`);
+        const ids = (agentNames ?? [])
+          .map((n) => storageManager.getAllAgents().find((a) => a.name.toLowerCase() === String(n).toLowerCase())?.id)
+          .filter((x): x is string => !!x);
+        const ch = storageManager.createChannel({ name: clean, topic, agentIds: ids });
+        mainWindow?.webContents.send('chat:event', { type: 'channels-changed' });
+        return `Channel #${ch.name} created${ids.length ? ` with ${ids.length} agent(s)` : ''}`;
+      },
       chatPost: (channel, text, parentId, callerAgentId) => {
         const agent = callerAgentId ? storageManager.getAgent(callerAgentId) : undefined;
         if (!agent) throw new Error('chat_post requires an agent caller');
@@ -2200,6 +2220,17 @@ handle('chat:uploadFile', async (_e, name: string, mime: string, data: ArrayBuff
     preview = buf.toString('utf8').slice(0, 8192);
   }
   return { id, name: safe, mime, size: buf.length, preview };
+});
+handle('chat:attachmentData', async (_e, id: string) => {
+  const dir = path.join(app.getPath('userData'), 'chat-files');
+  const file = (await fs.readdir(dir)).find((f: string) => f.startsWith(id + '-'));
+  if (!file) throw new Error('Attachment not found');
+  const buf = await fs.readFile(path.join(dir, file));
+  if (buf.length > 15 * 1024 * 1024) throw new Error('File too large to preview');
+  const ext = file.split('.').pop()?.toLowerCase() ?? '';
+  const mime = ({ png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', gif: 'image/gif', webp: 'image/webp', svg: 'image/svg+xml' } as Record<string, string>)[ext] ?? 'application/octet-stream';
+  const ab = buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength) as ArrayBuffer;
+  return { mime, data: ab };
 });
 handle('chat:openAttachment', async (_e, id: string, name: string) => {
   const dir = path.join(app.getPath('userData'), 'chat-files');

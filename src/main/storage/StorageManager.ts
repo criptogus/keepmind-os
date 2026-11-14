@@ -1212,6 +1212,15 @@ export class StorageManager {
       this.db.prepare('INSERT INTO channels (id, name, kind, created_at) VALUES (?, ?, ?, ?)')
         .run(randomUUID(), 'approvals', 'channel', now);
     }
+    if (!has('rotinas')) {
+      const id = randomUUID();
+      this.db.prepare('INSERT INTO channels (id, name, kind, topic, created_at) VALUES (?, ?, ?, ?, ?)')
+        .run(id, 'rotinas', 'channel', 'Resultados automáticos de agentes e rotinas', now);
+      for (const a of this.getAllAgents()) {
+        this.db.prepare('INSERT OR IGNORE INTO channel_agents (channel_id, agent_id) VALUES (?, ?)')
+          .run(id, a.id);
+      }
+    }
   }
 
   listChannels(userId?: string): ChatChannelView[] {

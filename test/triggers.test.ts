@@ -50,6 +50,34 @@ describe('TriggerManager', () => {
     expect(ctx.ran[0].agentId).toBe('a1');
   });
 
+  it('onRunResult fires with output after a scheduled run', async () => {
+    const results: Array<{ ok: boolean; output?: string; error?: string; label: string }> = [];
+    ctx.tm.attach({
+      runAgent: async () => ({ status: 'completed', output: { content: 'relatório pronto' } }),
+      getAgentName: () => 'Ana',
+      onRunResult: (i) => results.push(i),
+    });
+    ctx.tm.create({ agentId: 'a1', name: 't', kind: 'interval', intervalMinutes: 1, prompt: 'resume vendas', enabled: true });
+    await (ctx.tm as any).tick();
+    expect(results).toHaveLength(1);
+    expect(results[0].ok).toBe(true);
+    expect(results[0].output).toBe('relatório pronto');
+    expect(results[0].label).toBe('resume vendas');
+  });
+
+  it('onRunResult reports failures', async () => {
+    const results: Array<{ ok: boolean; error?: string }> = [];
+    ctx.tm.attach({
+      runAgent: async () => { throw new Error('provider down'); },
+      getAgentName: () => 'Ana',
+      onRunResult: (i) => results.push(i),
+    });
+    ctx.tm.create({ agentId: 'a1', name: 't', kind: 'interval', intervalMinutes: 1, prompt: 'p', enabled: true });
+    await (ctx.tm as any).tick();
+    expect(results[0].ok).toBe(false);
+    expect(results[0].error).toBe('provider down');
+  });
+
   it('disabled trigger does not fire', async () => {
     ctx.tm.create({ agentId: 'a1', name: 't', kind: 'interval', intervalMinutes: 1, prompt: 'p', enabled: false });
     await (ctx.tm as any).tick();

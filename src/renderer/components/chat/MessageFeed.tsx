@@ -28,6 +28,77 @@ function useElapsed(startIso?: string, active?: boolean): string {
 
 const QUICK_REACTIONS = ['👍', '✅', '🎉', '👀'];
 
+function AttachmentChip({ a }: { a: ChatAttachment }) {
+  const [url, setUrl] = useState<string | null>(null);
+  const [expanded, setExpanded] = useState(false);
+  const isImage = a.mime.startsWith('image/') && !a.mime.includes('svg');
+  const hasPreview = !!a.preview;
+
+  useEffect(() => {
+    if (!isImage) return;
+    let obj: string | null = null;
+    let dead = false;
+    void window.electronAPI.getChatAttachmentData?.(a.id)
+      .then(({ data }) => {
+        if (dead) return;
+        obj = URL.createObjectURL(new Blob([data], { type: a.mime }));
+        setUrl(obj);
+      })
+      .catch(() => {});
+    return () => { dead = true; if (obj) URL.revokeObjectURL(obj); };
+  }, [a.id, a.mime, isImage]);
+
+  if (isImage) {
+    return (
+      <div style={{ marginTop: 6 }}>
+        {url ? (
+          <img
+            src={url}
+            alt={a.name}
+            onClick={() => void window.electronAPI.openChatAttachment?.(a.id, a.name).catch(() => {})}
+            style={{ maxWidth: 320, maxHeight: 240, borderRadius: 10, border: '1px solid var(--mantine-color-gray-3)', cursor: 'zoom-in', display: 'block' }}
+          />
+        ) : (
+          <button onClick={() => void window.electronAPI.openChatAttachment?.(a.id, a.name).catch(() => {})} style={{ fontSize: 12 }}>🖼 {a.name}</button>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ marginTop: 6 }}>
+      <button
+        onClick={() => void window.electronAPI.openChatAttachment?.(a.id, a.name).catch(() => {})}
+        title={a.preview ? a.preview.slice(0, 300) : a.mime}
+        style={{
+          display: 'inline-flex', alignItems: 'center', gap: 6,
+          padding: '5px 10px', borderRadius: 8, border: '1px solid var(--mantine-color-gray-3)',
+          background: 'var(--mantine-color-gray-0, #fff)', fontSize: 12, cursor: 'pointer', fontFamily: 'inherit',
+        }}
+      >
+        <span style={{ fontSize: 13 }}>📎</span>
+        <span style={{ fontWeight: 600, maxWidth: 220, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{a.name}</span>
+        <span style={{ color: 'var(--mantine-color-dimmed)' }}>{a.size > 1048576 ? `${(a.size / 1048576).toFixed(1)}MB` : `${Math.max(1, Math.round(a.size / 1024))}KB`}</span>
+      </button>
+      {hasPreview && (
+        <div style={{ marginTop: 4 }}>
+          <button
+            onClick={() => setExpanded((v) => !v)}
+            style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: 11, color: 'var(--mantine-color-dimmed)', padding: 0, fontFamily: 'inherit' }}
+          >{expanded ? '▾ ocultar' : '▸ preview'}</button>
+          {expanded && (
+            <pre style={{
+              marginTop: 4, padding: 8, borderRadius: 8, fontSize: 11, lineHeight: 1.4,
+              background: 'var(--mantine-color-gray-0, #f8f8f8)', border: '1px solid var(--mantine-color-gray-3)',
+              maxHeight: 180, overflow: 'auto', whiteSpace: 'pre-wrap', wordBreak: 'break-word',
+            }}>{a.preview!.slice(0, 4000)}</pre>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 interface MessageFeedProps {
   channelId?: string;
   messages: ChannelMessage[];
@@ -222,22 +293,7 @@ export function MessageBubble({ message: m, agent, team, meId, onReact, onReply,
         )}
         {(m.meta?.attachments as ChatAttachment[] | undefined)?.length ? (
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 6 }}>
-            {(m.meta!.attachments as ChatAttachment[]).map((a) => (
-              <button
-                key={a.id}
-                onClick={() => void window.electronAPI.openChatAttachment?.(a.id, a.name).catch(() => {})}
-                title={a.preview ? a.preview.slice(0, 300) : a.mime}
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 6,
-                  padding: '5px 10px', borderRadius: 8, border: '1px solid var(--mantine-color-gray-3)',
-                  background: 'var(--mantine-color-gray-0, #fff)', fontSize: 12, cursor: 'pointer', fontFamily: 'inherit',
-                }}
-              >
-                <span style={{ fontSize: 13 }}>📎</span>
-                <span style={{ fontWeight: 600, maxWidth: 220, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{a.name}</span>
-                <span style={{ color: 'var(--mantine-color-dimmed)' }}>{a.size > 1048576 ? `${(a.size / 1048576).toFixed(1)}MB` : `${Math.max(1, Math.round(a.size / 1024))}KB`}</span>
-              </button>
-            ))}
+            {(m.meta!.attachments as ChatAttachment[]).map((a) => <AttachmentChip key={a.id} a={a} />)}
           </div>
         ) : null}
         {(m.replyCount ?? 0) > 0 && !m.parentId && onOpenThread && (
