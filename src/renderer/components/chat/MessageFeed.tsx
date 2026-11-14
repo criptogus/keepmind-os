@@ -1,3 +1,4 @@
+import { approvalCopy } from '../../../shared/approvalCopy';
 import ChoiceReply from './ChoiceReply';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import type { Agent, ChannelMessage, ChatAttachment, Team } from '../../../shared/types.js';
@@ -320,7 +321,7 @@ export function MessageBubble({ message: m, agent, team, meId, onReact, onReply,
                 border: '1px solid var(--mantine-color-default-border)', color: 'var(--mantine-color-dimmed)',
                 display: 'inline-flex', alignItems: 'center', gap: 4,
               }}>
-                {tc.status === 'pending' ? <PixelSpinner size={14} /> : tc.status === 'done' ? '✓' : '·'} {tc.name}
+                {tc.status === 'pending' ? <PixelSpinner size={14} /> : tc.status === 'done' ? '✓' : '·'} {approvalCopy(tc.name).title}
               </span>
             ))}
           </div>

@@ -123,6 +123,7 @@ export default function SettingsPanel() {
         </Stack>
       </Card>
 
+      <details className="km-details"><summary>{lang === 'pt' ? 'Configurações avançadas de execução e histórico' : 'Advanced execution and history settings'}</summary>
       <Card withBorder padding="md" radius="md">
         <Stack gap="sm">
           <Text fw={600}>{t('settings.execution')}</Text>
@@ -172,6 +173,8 @@ export default function SettingsPanel() {
           </div>
         </Stack>
       </Card>
+
+      </details>
 
       {error && (
         <Text size="sm" c="dimmed">{t('settings.error')}: {error}</Text>

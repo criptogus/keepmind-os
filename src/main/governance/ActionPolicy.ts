@@ -1,5 +1,5 @@
 /** Deterministic policy: tool descriptions and model output never grant authority. */
-const routine = new Set(['artifact_create','get_current_time','file_read','file_list','pdf_read','sheet_read',
+const routine = new Set(['app_status', 'app_agents_list', 'app_teams_list','artifact_create','get_current_time','file_read','file_list','pdf_read','sheet_read',
   'personalbrain_search','personalbrain_remember','secondbrain_search','web_read_url',
   'whatsapp_read_messages','agent_reach_status','composio_search_tools','review_agent','delegate_to_agent']);
 export function actionDecision(name: string, trustedMcpRead = false) {

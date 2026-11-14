@@ -1,3 +1,4 @@
+import { approvalCopy } from '../../shared/approvalCopy.js';
 import type { StorageManager } from '../storage/StorageManager.js';
 import type { AgentStreamEvent } from '../agent/AgentManager.js';
 import { parseMentions } from '../../shared/mentions.js';
@@ -56,14 +57,16 @@ export class ChatManager {
     const origin = (execId && this.channelForExecution(execId))
       ?? this.channelForAgent(approval.agentId);
     const approvalsCh = storage.listChannels().find((c) => c.name === 'approvals');
+    const copy = approvalCopy(approval.action, (approval.context.args ?? {}) as Record<string, unknown>);
     const cardMeta = {
+      approvalCopy: copy,
       kind: 'approval',
       approvalId: approval.id,
       agentName: approval.agentName,
       action: approval.action,
       status: approval.status,
     };
-    const body = `⚠ Aprovação necessária — **${approval.agentName}** quer executar \`${approval.action}\``;
+    const body = `${copy.title}\n${copy.description}${copy.detail ? `\n\n${copy.detail}` : ''}`;
     if (origin) this.postSystemMessage(origin, body, cardMeta);
     if (approvalsCh && approvalsCh.id !== origin) {
       this.postSystemMessage(approvalsCh.id, body, cardMeta);

@@ -3,6 +3,7 @@ import { Badge, Button, Card, Group, Modal, SimpleGrid, Stack, Text, TextInput, 
 import { useTeamStore } from '../../store/teamStore';
 import { useAgentStore } from '../../store/agentStore';
 import TeamEditor from './TeamEditor';
+import BusinessGuide from '../work/BusinessGuide';
 import { NICHE_PACKS } from '../../lib/nichePacks';
 import { installNichePack } from '../../lib/installPack';
 import { useAppMode } from '../../lib/useAppMode';
@@ -19,11 +20,12 @@ export default function TeamList() {
   const { agents } = useAgentStore();
   const [editingTeamId, setEditingTeamId] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
-  const [templatesOpen, setTemplatesOpen] = useState(false);
-  const [installingId, setInstallingId] = useState<string | null>(null);
   const [newName, setNewName] = useState('');
   const [newDesc, setNewDesc] = useState('');
-  const [isCreating, setCreating2] = useState(false);
+  const [manualBusy, setManualBusy] = useState(false);
+  const [manualError, setManualError] = useState('');
+  const [templatesOpen, setTemplatesOpen] = useState(false);
+  const [installingId, setInstallingId] = useState<string | null>(null);
   const { mode: appMode } = useAppMode();
 
   useEffect(() => {
@@ -128,44 +130,23 @@ export default function TeamList() {
         {editingTeamId && <TeamEditor teamId={editingTeamId} onClose={() => setEditingTeamId(null)} />}
       </Modal>
 
-      <Modal opened={creating} onClose={() => setCreating(false)} title={t('teams.new')} size="md">
-        <Stack gap="md">
-          <TextInput
-            label={t('teams.nameLabel')}
-            placeholder={t('teams.namePlaceholder')}
-            value={newName}
-            onChange={(e) => setNewName(e.currentTarget.value)}
-          />
-          <Textarea
-            label={t('common.description')}
-            placeholder={t('teams.descPlaceholder')}
-            minRows={3}
-            value={newDesc}
-            onChange={(e) => setNewDesc(e.currentTarget.value)}
-          />
-          <Group justify="flex-end" gap="xs">
-            <Button variant="default" size="xs" onClick={() => setCreating(false)}>{t('common.cancel')}</Button>
-            <Button
-              size="xs"
-              loading={isCreating}
-              disabled={!newName.trim()}
-              onClick={async () => {
-                setCreating2(true);
-                try {
-                  await createTeam({ name: newName.trim(), description: newDesc.trim() });
-                  setCreating(false);
-                  setNewName('');
-                  setNewDesc('');
-                  await fetchTeams();
-                } finally {
-                  setCreating2(false);
-                }
-              }}
-            >
-              {t('common.create')}
-            </Button>
-          </Group>
-        </Stack>
+      <Modal opened={creating} onClose={() => setCreating(false)} title={t('teams.new')} size="lg">
+        <BusinessGuide onCreated={async result => {
+          await useAgentStore.getState().fetchAgents(); await fetchTeams();
+          setCreating(false); setEditingTeamId(result.teamId);
+        }} onSkip={() => setCreating(false)} />
+        <details className="km-details"><summary>Montar manualmente com agentes existentes</summary><Stack gap="sm" mt="md">
+          <Text size="sm" c="dimmed">Crie um time vazio e escolha os agentes e o fluxo de trabalho no editor.</Text>
+          <TextInput label={t('teams.name')} value={newName} onChange={e => setNewName(e.currentTarget.value)} />
+          <Textarea label={t('common.description')} value={newDesc} onChange={e => setNewDesc(e.currentTarget.value)} />
+          {manualError && <Text role="alert" c="red">{manualError}</Text>}
+          <Button variant="default" disabled={!newName.trim()} loading={manualBusy} onClick={async () => {
+            setManualBusy(true); setManualError('');
+            try { await createTeam({ name: newName.trim(), description: newDesc.trim() }); setCreating(false); setNewName(''); setNewDesc(''); await fetchTeams(); }
+            catch (e) { setManualError(e instanceof Error ? e.message : String(e)); }
+            finally { setManualBusy(false); }
+          }}>Criar time vazio</Button>
+        </Stack></details>
       </Modal>
 
       <Modal opened={templatesOpen} onClose={() => setTemplatesOpen(false)} title={t('teams.templatesTitle')} size="lg">

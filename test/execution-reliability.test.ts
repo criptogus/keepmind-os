@@ -54,3 +54,14 @@ it('previews assigned and routed tools while enforcing current role restrictions
   expect(manager.previewTools('a', config, { task: 'read' })).toEqual(['file_read']);
   expect(ran).toBe(false);
 });
+
+it('keeps curated teams free of automatically routed tools', () => {
+  const manager = new AgentManager();
+  manager.setAutoSkillSelector(() => [{ id: 'skill', name: 'Skill', description: '', prompt: '', toolNames: ['sheet_write','secondbrain_remember'], createdAt: '', updatedAt: '' }]);
+  expect(manager.previewTools('a', { ...config, autoSkills: false }, { task: 'Marketing plan' })).toEqual([]);
+});
+it('permits only explicit local overview reads without approving team creation or settings changes', async () => {
+  const { actionDecision } = await import('../src/main/governance/ActionPolicy');
+  for (const name of ['app_status','app_agents_list','app_teams_list']) expect(actionDecision(name).requiresApproval).toBe(false);
+  for (const name of ['app_team_create','app_settings_update','app_unknown','create_agent']) expect(actionDecision(name).requiresApproval).toBe(true);
+});

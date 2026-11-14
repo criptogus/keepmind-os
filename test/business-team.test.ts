@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { StorageManager } from '../src/main/storage/StorageManager';
 import { WorkManager } from '../src/main/work/WorkManager';
-import { createBusinessTeam } from '../src/main/work/BusinessTeamSetup';
+import { createBusinessTeam, createTeamFromBrief } from '../src/main/work/BusinessTeamSetup';
 import { TEAM_STARTERS, type BusinessTeamInput } from '../src/shared/businessTeams';
 const dirs: string[] = []; const stores: StorageManager[] = [];
 afterEach(() => { vi.restoreAllMocks(); stores.forEach(s => s.close()); stores.length = 0; dirs.forEach(d => rmSync(d, { recursive: true, force: true })); dirs.length = 0; });
@@ -33,3 +33,24 @@ it('rolls back agents, team and in-memory draft when the final write fails, then
   spy.mockRestore(); const result = createBusinessTeam(storage, work, input(), 'owner'); expect(work.get(result.taskId).status).toBe('backlog');
 });
 it('rejects invalid roles before persisting', () => { const { storage, work } = setup(); expect(() => createBusinessTeam(storage, work, { ...input(), roles: [] }, 'owner')).toThrow(); expect(storage.getAllAgents()).toHaveLength(0); });
+
+it('creates and runs a complete team once, inheriting the working model without automatic skills', async () => {
+  const { storage, work } = setup();
+  const execute = vi.fn(async (agentId: string) => ({ id: 'execution', agentId, status: 'completed' as const, input: {}, output: { content: 'Plano e post para revisão' }, progress: 100 }));
+  const brief = { name: 'Marketing de palestras', problem: 'Vender palestras de IA para RH', priority: 'marketing', firstRequest: 'Plano de 7 dias e post', startFirstTask: true };
+  const result = await createTeamFromBrief(storage, work, brief, { id: 'caller', model: 'gpt-6.1-terra' }, 'owner', execute);
+  expect(result.taskStatus).toBe('review'); expect(result.delivery).toContain('Plano e post');
+  expect(storage.getAllTeams()).toHaveLength(1);
+  expect(storage.getAllAgents()).toHaveLength(3);
+  for (const agent of storage.getAllAgents()) { expect(agent.config.model).toBe('gpt-6.1-terra'); expect(agent.config.autoSkills).toBe(false); }
+  expect(await createTeamFromBrief(storage, work, brief, { id: 'caller', model: 'gpt-6.1-terra' }, 'owner', execute)).toEqual(result);
+  expect(execute).toHaveBeenCalledTimes(1);
+});
+it('retains a failed first task for recovery without claiming a delivery or duplicating agents', async () => {
+  const { storage, work } = setup(); const execute = vi.fn(async () => { throw new Error('Provider unavailable'); });
+  const brief = { name: 'Marketing', problem: 'Palestras', priority: 'marketing', firstRequest: 'Plano', startFirstTask: true };
+  const result = await createTeamFromBrief(storage, work, brief, { id: 'caller', model: 'gpt-6.1-terra' }, 'owner', execute);
+  expect(result.taskStatus).toBe('blocked'); expect(result.error).toBe('Provider unavailable'); expect(result.delivery).toBeUndefined();
+  await createTeamFromBrief(storage, work, brief, { id: 'caller', model: 'gpt-6.1-terra' }, 'owner', execute);
+  expect(storage.getAllAgents()).toHaveLength(3); expect(execute).toHaveBeenCalledTimes(1);
+});

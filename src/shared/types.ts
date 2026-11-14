@@ -56,6 +56,8 @@ export interface AgentConfig {
   systemPrompt: string;
   tools: ToolConfig[];
   skillIds?: string[];
+  /** Disable automatic skill/tool expansion for curated, bounded teams. */
+  autoSkills?: boolean;
   /** Per-agent computer access ceiling — can only narrow the install level. */
   computerAccess?: ComputerAccessLevel;
   /** Monthly LLM spend cap in USD; unset = unlimited. Enforced before each call. */
