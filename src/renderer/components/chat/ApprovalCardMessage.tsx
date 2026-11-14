@@ -72,7 +72,7 @@ export default function ApprovalCardMessage({ message, onResolved }: ApprovalCar
     }}>
       <Text size="sm" fw={700} mb={4}>{copy.title}</Text>
       <Text size="sm" mb={10} style={{ whiteSpace: 'pre-wrap' }}>{copy.description}</Text>
-      {copy.detail && <Text size="sm" mb={10} style={{ whiteSpace: 'pre-wrap' }}>{copy.detail}</Text>}
+      {copy.detail && <details className="km-details" style={{ marginBottom: 12 }}><summary>Ver objetivo e primeira entrega</summary><Text size="sm" mt="sm" style={{ whiteSpace: 'pre-wrap' }}>{copy.detail}</Text></details>}
       {error && <Text role="alert" c="red" size="sm" mb={10}>{error}</Text>}
       {!rejecting ? (
         <Group gap={8}>

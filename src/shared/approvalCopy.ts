@@ -8,6 +8,8 @@ export function approvalCopy(action: string, args: Record<string, unknown> = {})
     detail: [value('problem'), value('firstRequest') && `Primeira entrega: ${value('firstRequest')}`].filter(Boolean).join('\n\n'),
   };
   const names: Record<string, [string, string]> = {
+    delegate_to_agent: ['Trabalhar com um especialista', 'Encaminhar a tarefa ao especialista responsável.'],
+    review_agent: ['Revisar a entrega', 'Registrar a avaliação do trabalho do especialista.'],
     app_status: ['Consultar o status do aplicativo', 'Ver os times, agentes e trabalhos em andamento.'],
     app_agents_list: ['Consultar seus agentes', 'Ver os agentes já configurados.'],
     app_teams_list: ['Consultar seus times', 'Ver os times e seus integrantes.'],

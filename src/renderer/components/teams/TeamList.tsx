@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Badge, Button, Card, Group, Modal, SimpleGrid, Stack, Text } from '@mantine/core';
+import { Badge, Button, Card, Group, Modal, SimpleGrid, Stack, Text, TextInput, Textarea } from '@mantine/core';
 import { useTeamStore } from '../../store/teamStore';
 import { useAgentStore } from '../../store/agentStore';
 import TeamEditor from './TeamEditor';
@@ -16,10 +16,14 @@ import { IconTeam } from '../common/icons.js';
 
 export default function TeamList() {
   const { t } = useLang();
-  const { teams, loading, error, fetchTeams, selectTeam, deleteTeam } = useTeamStore();
+  const { teams, loading, error, fetchTeams, selectTeam, deleteTeam, createTeam } = useTeamStore();
   const { agents } = useAgentStore();
   const [editingTeamId, setEditingTeamId] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
+  const [newName, setNewName] = useState('');
+  const [newDesc, setNewDesc] = useState('');
+  const [manualBusy, setManualBusy] = useState(false);
+  const [manualError, setManualError] = useState('');
   const [templatesOpen, setTemplatesOpen] = useState(false);
   const [installingId, setInstallingId] = useState<string | null>(null);
   const { mode: appMode } = useAppMode();
@@ -131,6 +135,18 @@ export default function TeamList() {
           await useAgentStore.getState().fetchAgents(); await fetchTeams();
           setCreating(false); setEditingTeamId(result.teamId);
         }} onSkip={() => setCreating(false)} />
+        <details className="km-details"><summary>Montar manualmente com agentes existentes</summary><Stack gap="sm" mt="md">
+          <Text size="sm" c="dimmed">Crie um time vazio e escolha os agentes e o fluxo de trabalho no editor.</Text>
+          <TextInput label={t('teams.name')} value={newName} onChange={e => setNewName(e.currentTarget.value)} />
+          <Textarea label={t('common.description')} value={newDesc} onChange={e => setNewDesc(e.currentTarget.value)} />
+          {manualError && <Text role="alert" c="red">{manualError}</Text>}
+          <Button variant="default" disabled={!newName.trim()} loading={manualBusy} onClick={async () => {
+            setManualBusy(true); setManualError('');
+            try { await createTeam({ name: newName.trim(), description: newDesc.trim() }); setCreating(false); setNewName(''); setNewDesc(''); await fetchTeams(); }
+            catch (e) { setManualError(e instanceof Error ? e.message : String(e)); }
+            finally { setManualBusy(false); }
+          }}>Criar time vazio</Button>
+        </Stack></details>
       </Modal>
 
       <Modal opened={templatesOpen} onClose={() => setTemplatesOpen(false)} title={t('teams.templatesTitle')} size="lg">

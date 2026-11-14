@@ -143,18 +143,14 @@ try {
   // Guide a nontechnical customer from their business problem to a real team and draft.
   const onboarding = await send('Page.captureScreenshot', { format: 'png' });
   writeFileSync(path.join(evidenceDir, 'onboarding-request.png'), Buffer.from(onboarding.result.data, 'base64'));
-  await evaluate(`([...document.querySelectorAll('button')].find(b => b.textContent === 'Divulgar meu negócio')).click()`);
-  await delay(100);
-  await evaluate(`([...document.querySelectorAll('button')].find(b => b.textContent === 'Sugerir meu time')).click()`);
+  await evaluate(`([...document.querySelectorAll('button')].find(b => b.textContent === 'Vender mais')).click()`);
+  await evaluate(`(() => { const el = document.querySelector('.km-business-guide textarea'); Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value').set.call(el, 'Vender minhas palestras de inovação para diretores de RH.'); el.dispatchEvent(new Event('input', { bubbles: true })); })()`);
   await delay(200);
   const teamSuggestion = await send('Page.captureScreenshot', { format: 'png' });
   writeFileSync(path.join(evidenceDir, 'onboarding-team.png'), Buffer.from(teamSuggestion.result.data, 'base64'));
   if ((await evaluate('window.electronAPI.getTeams()')).length) fail('suggestion created a team before confirmation');
-  await evaluate(`([...document.querySelectorAll('button')].find(b => b.textContent === 'Definir a primeira entrega')).click()`);
-  await delay(200);
-  const firstDelivery = await send('Page.captureScreenshot', { format: 'png' });
-  writeFileSync(path.join(evidenceDir, 'onboarding-connection.png'), Buffer.from(firstDelivery.result.data, 'base64'));
-  await evaluate(`([...document.querySelectorAll('button')].find(b => b.textContent === 'Criar time e salvar primeiro pedido')).click()`);
+  if (await evaluate(`document.querySelector('.km-business-guide details').open`)) fail('technical settings should start collapsed');
+  await evaluate(`([...document.querySelectorAll('button')].find(b => b.textContent === 'Criar meu time')).click()`);
   // Chat-first shell is the landing surface; open Admin to reach the workbench.
   for (let i = 0; i < 50; i++) { if (await evaluate(`!!document.querySelector('[data-tour="chat-composer"]')`)) break; await delay(100); }
   if (!(await evaluate(`!!document.querySelector('[data-tour="chat-composer"]')`))) fail('chat shell did not render after onboarding');
@@ -199,8 +195,12 @@ try {
   }
   const openedTask = await evaluate(`(() => { const button = [...document.querySelectorAll('[data-command-result]')].find(el => el.textContent.includes('Review repository documentation')); if (!button) return false; button.click(); return true; })()`);
   if (!openedTask) fail('command search could not open persisted task');
-  await delay(400);
-  const detail = await evaluate('document.body?.innerText ?? ""');
+  let detail = '';
+  for (let i = 0; i < 50; i++) {
+    detail = await evaluate('document.body?.innerText ?? ""');
+    if (detail.includes('Include file references and reproducible steps.')) break;
+    await delay(100);
+  }
   if (!detail.includes('Include file references and reproducible steps.')) fail('task drawer missing criteria');
   const plan = await evaluate(`window.electronAPI.workPreview(${JSON.stringify(task.id)})`);
   if (plan.agentName !== 'Maintainer' || !Array.isArray(plan.tools)) fail('execution plan unavailable');
