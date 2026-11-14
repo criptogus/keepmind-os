@@ -50,6 +50,7 @@ export interface ToolContext {
   /** Id of the agent running this execution (set per-execution via policy). */
   callerAgentId?: string;
   /** Creates a subordinate agent reporting to the caller; returns a summary. */
+  createTeam?: (callerAgentId: string | undefined, input: Record<string, unknown>) => Promise<string>;
   createAgent?: (callerAgentId: string | undefined, spec: { name: string; description?: string; systemPrompt?: string; model?: string; skillNames?: string[] }) => Promise<string>;
   /** Records a structured review/rating of another agent in the audit log. */
   reviewAgent?: (callerAgentId: string | undefined, agent: string, rating: number, note: string) => Promise<string>;
@@ -316,6 +317,21 @@ export class ToolRegistry {
         if (!ctx.delegateTask) throw new Error('Agent delegation is not available');
         const result = await ctx.delegateTask(ctx.callerAgentId, String(args.agent), String(args.task));
         return result.slice(0, 8000);
+      },
+    });
+
+    this.register({
+      name: 'app_team_create',
+      description: 'Create a complete business team (coordinator and two specialists) and save its first task in one operation. Reuses an identical request. Uses the caller model and text-only specialists. Requires one human approval. Set startFirstTask only when the user asked to execute the first delivery; returns its actual result. Prefer this over creating individual agents for a team.',
+      parameters: { type: 'object', additionalProperties: false, properties: {
+        name: { type: 'string' }, problem: { type: 'string', description: 'Complete business context, audience, goal and constraints already provided.' },
+        priority: { type: 'string', enum: ['marketing', 'consulting', 'operations', 'general'] },
+        firstRequest: { type: 'string', description: 'Concrete first deliverable, for human review. No external publishing.' },
+        startFirstTask: { type: 'boolean' },
+      }, required: ['name', 'problem', 'priority', 'firstRequest', 'startFirstTask'] },
+      handler: async (args, ctx) => {
+        if (!ctx.createTeam) throw new Error('Team creation is unavailable');
+        return ctx.createTeam(ctx.callerAgentId, args);
       },
     });
 

@@ -280,7 +280,7 @@ export class AgentManager {
   /** Assigned skills + auto-routed skills, deduped by id. */
   private resolveSkills(config: AgentConfig, input: Record<string, unknown>, agentId?: string): Skill[] {
     const assigned = this.loadSkills(config);
-    if (!this.autoSkillSelector) return assigned;
+    if (config.autoSkills === false || !this.autoSkillSelector) return assigned;
     try {
       const assignedIds = new Set(assigned.map((s) => s.id));
       const extra = this.autoSkillSelector(input, assigned, agentId).filter((s) => !assignedIds.has(s.id));

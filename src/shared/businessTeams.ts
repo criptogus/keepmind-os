@@ -33,11 +33,11 @@ export function validateBusinessTeam(input: BusinessTeamInput): void {
     || input.roles.some(r => !text(r?.name, 100) || !text(r?.purpose, 1000))) throw new Error('Confira o problema, o nome do time, os papéis e o primeiro pedido.');
 }
 /** Pure construction: no calls, credentials, filesystem tools or publishing permissions. */
-export function buildBusinessTeam(input: BusinessTeamInput, id: () => string, now: string): { agents: Agent[]; team: Team } {
+export function buildBusinessTeam(input: BusinessTeamInput, id: () => string, now: string, model?: string): { agents: Agent[]; team: Team } {
   validateBusinessTeam(input);
   const teamId = id(); const coordinatorId = id();
   const boundaries = 'Trabalhe em português claro para uma pessoa não técnica. Use apenas o contexto fornecido. Não invente fatos, fontes, resultados ou ações executadas. Se faltar informação, indique a lacuna e peça esclarecimento. Não publique, não envie mensagens, não acesse arquivos nem sistemas externos.';
-  const base = { model: DEFAULT_MODEL[input.provider], temperature: 0.3, maxTokens: 4096, computerAccess: 'workspace' as const };
+  const base = { model: model || DEFAULT_MODEL[input.provider], autoSkills: false, temperature: 0.3, maxTokens: 4096, computerAccess: 'workspace' as const };
   const permissions = { canAccessNetwork: true, canAccessFileSystem: false, canExecuteCode: false, maxExecutionTime: 300 };
   const specialists: Agent[] = input.roles.map(role => ({ id: id(), name: role.name.trim(), description: role.purpose.trim(), managerId: coordinatorId,
     config: { ...base, systemPrompt: `${boundaries}\nSeu papel: ${role.name}. ${role.purpose}\nContexto informado pelo cliente:\n${input.problem}`, tools: [] },

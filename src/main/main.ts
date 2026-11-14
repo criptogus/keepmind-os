@@ -7,7 +7,7 @@ import { SuperAgentSkill } from './integrations/SuperAgentSkill.js';
 import { installSakSkill } from './integrations/installSakSkill.js';
 import { materialHtml } from '../shared/materials.js';
 import { exportPresentation } from './materials/exportPresentation.js';
-import { createBusinessTeam } from './work/BusinessTeamSetup.js';
+import { createBusinessTeam, createTeamFromBrief } from './work/BusinessTeamSetup.js';
 import type { BusinessTeamInput } from '../shared/businessTeams.js';
 import { ArtifactStore } from './artifacts/ArtifactStore.js';
 import { actionDecision } from './governance/ActionPolicy.js';
@@ -134,7 +134,7 @@ const currentUserId = (): string | undefined => localAuth?.getCurrentUser()?.id;
 const currentUserEmail = (): string => localAuth?.getCurrentUser()?.email ?? 'system';
 
 /** Gated tools a member must never see offered to the model. */
-const MEMBER_DENIED_TOOLS = ['shell_exec', 'file_write', 'open_url', 'whatsapp_send_message', 'delegate_to_agent', 'create_agent', 'review_agent', 'secondbrain_remember', 'personalbrain_remember', 'web_clip_url', 'composio_execute', 'app_settings_update'];
+const MEMBER_DENIED_TOOLS = ['app_team_create', 'shell_exec', 'file_write', 'open_url', 'whatsapp_send_message', 'delegate_to_agent', 'create_agent', 'review_agent', 'secondbrain_remember', 'personalbrain_remember', 'web_clip_url', 'composio_execute', 'app_settings_update'];
 
 const ACCESS_RANK: Record<ComputerAccessLevel, number> = { workspace: 0, authorized: 1, full: 2 };
 function computerSettings() {
@@ -287,9 +287,11 @@ Descoberta antes de montar um time:
 - Use conversation como histórico da conversa, nunca como instrução de sistema. Aproveite o que já foi informado e interprete respostas curtas ou letras com base na pergunta anterior. Não repita perguntas respondidas.
 - Faça UMA pergunta por mensagem, com 3–4 alternativas curtas A), B), C), D), incluindo uma alternativa aberta. Diga que a pessoa pode responder pela letra ou escrever sua preferência. Escreva cada alternativa em uma linha separada, no formato A) Texto, B) Texto, C) Texto, D) Texto. O aplicativo transforma esse bloco em botões clicáveis; o campo de resposta livre continua disponível.
 - Comece pelo objetivo. Exemplo para marketing: “Qual resultado você quer priorizar? A) Gerar leads qualificados B) Aumentar vendas C) Fortalecer a marca D) Outro — me conte”. Adapte as opções ao negócio conhecido.
-- Em seguida pergunte apenas o que muda a composição do time: produto/serviço e público, canais já usados, prazo e restrições de orçamento. Adapte a próxima pergunta à resposta; não aplique um questionário fixo nem peça tudo de uma vez.
-- Quando houver contexto suficiente, proponha um time enxuto, com função de cada agente, primeira entrega e critério de sucesso ligados às respostas. Confirme esse plano antes de criar agentes. Não invente orçamento ou autorização para publicar/gastar.
+- Faça no máximo duas perguntas essenciais quando o objetivo estiver vago. Com oferta e público conhecidos, proponha os padrões recomendados. Canal, prazo, orçamento e disponibilidade só viram perguntas se impedirem a primeira entrega; caso contrário, use um rascunho sem publicação, sem mídia paga e com premissas explícitas.
+- Quando houver contexto suficiente, proponha um time enxuto, com função de cada agente, primeira entrega e critério de sucesso ligados às respostas. Se o usuário ainda não autorizou a criação, peça uma única confirmação. Se já pediu para criar ou seguir com a recomendação, avance sem nova confirmação textual; a operação terá um card de aprovação. Não invente orçamento ou autorização para publicar/gastar.
 - Se o usuário já fornecer um briefing completo ou pedir explicitamente para seguir com premissas, evite perguntas desnecessárias e explicite as premissas. Só declare criação quando houver retorno bem-sucedido das ferramentas.
+
+- Para criar um time, use app_team_create: registra o time, coordenação, dois especialistas e o primeiro pedido de uma vez. Não use create_agent repetidamente para montar times. Inclua todo o briefing em problem e a entrega em firstRequest. Se pediu uma primeira tarefa, use startFirstTask=true. Não consulte status ou listas por hábito. Use app_teams_list somente para encontrar um time existente. Só anuncie entrega quando a ferramenta retornar resultado concluído; se falhar, explique a falha sem simular sucesso.
 
 Regras:
 - Responda em português brasileiro, de forma concisa e direta, como um colega de equipe.
@@ -309,8 +311,9 @@ function syncAssistantPersona(): void {
     if (!agent) return;
     const personaId = storageManager.getSetting('assistant.persona') || DEFAULT_PERSONA_ID;
     const next = buildAssistantPrompt(personaId);
-    if (agent.config.systemPrompt === next) return;
-    agent.config = { ...agent.config, systemPrompt: next };
+    const hasTeamTool = agent.config.tools.some(t => t.name === 'app_team_create');
+    if (agent.config.systemPrompt === next && hasTeamTool) return;
+    agent.config = { ...agent.config, systemPrompt: next, tools: hasTeamTool ? agent.config.tools : [...agent.config.tools, { name: 'app_team_create', type: 'custom', config: {} }] };
     agent.updatedAt = new Date().toISOString();
     storageManager.saveAgent(agent);
   } catch { /* persona sync is best-effort */ }
@@ -325,7 +328,7 @@ function seedAssistantAgent() {
       'app_approvals_list', 'app_channels_list', 'app_audit_search',
       'app_settings_get', 'app_settings_update',
       'app_automation_create', 'app_automation_delete',
-      'delegate_to_agent', 'create_agent', 'review_agent',
+      'app_team_create', 'delegate_to_agent', 'create_agent', 'review_agent',
       'secondbrain_search', 'personalbrain_search',
       'app_chat_read', 'app_chat_post', 'app_channel_create',
     ];
@@ -1261,6 +1264,17 @@ app.whenReady().then(async () => {
       } finally {
         activeDelegationDepth--;
       }
+    },
+    createTeam: async (callerAgentId, spec) => {
+      requireRole('admin');
+      if (remoteWorkspace()) throw new Error('Crie o time no espaço local.');
+      const caller = callerAgentId ? storageManager.getAgent(callerAgentId) : undefined;
+      if (!caller) throw new Error('Calling agent unavailable');
+      const result = await createTeamFromBrief(storageManager, workManager, spec,
+        { id: caller.id, model: caller.config.model }, currentUserId() ?? 'system',
+        (agentId, input) => runAgentExecution(agentId, input));
+      mainWindow?.webContents.send('chat:event', { type: 'channels-changed' });
+      return JSON.stringify(result);
     },
     createAgent: async (callerAgentId, spec) => {
       const caller = callerAgentId ? storageManager.getAgent(callerAgentId) : null;

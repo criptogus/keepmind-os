@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { approvalCopy } from '../../../shared/approvalCopy';
+import React, { useEffect, useState } from 'react';
 import { Button, Group, Text, TextInput } from '@mantine/core';
 import type { ChannelMessage } from '../../../shared/types.js';
 import { useLang } from '../../lib/i18n.js';
@@ -19,11 +20,21 @@ export default function ApprovalCardMessage({ message, onResolved }: ApprovalCar
   const [busy, setBusy] = useState(false);
   const [rejecting, setRejecting] = useState(false);
   const [reason, setReason] = useState('');
+  const copy = meta.approvalCopy as ReturnType<typeof approvalCopy> | undefined ?? approvalCopy(String(meta.action ?? ''));
+  const [error, setError] = useState('');
   const [done, setDone] = useState<string | null>(null);
+
+  useEffect(() => {
+    let live = true;
+    void window.electronAPI.getPendingApprovals().then(items => {
+      if (live && !items.some(item => item.id === approvalId)) setDone('closed');
+    }).catch(() => {});
+    return () => { live = false; };
+  }, [approvalId]);
 
   const decide = async (decision: 'approve' | 'reject') => {
     if (!approvalId || busy) return;
-    setBusy(true);
+    setBusy(true); setError('');
     try {
       if (decision === 'approve') {
         await window.electronAPI.approveAction(approvalId);
@@ -34,7 +45,7 @@ export default function ApprovalCardMessage({ message, onResolved }: ApprovalCar
       }
       onResolved();
     } catch (e) {
-      console.error('approval decision failed', e);
+      setError(e instanceof Error ? e.message : 'Não foi possível registrar sua decisão. Tente novamente.');
     } finally {
       setBusy(false);
       setRejecting(false);
@@ -48,7 +59,7 @@ export default function ApprovalCardMessage({ message, onResolved }: ApprovalCar
         padding: '10px 14px', maxWidth: 520, opacity: 0.75,
       }}>
         <Text size="sm" c="dimmed">
-          {String(meta.agentName ?? '')} · {String(meta.action ?? '')} — {done === 'approved' ? t('chat.approve').toLowerCase() : t('chat.reject').toLowerCase()} ✓
+          {copy.title} — {done === 'closed' ? 'Solicitação encerrada' : done === 'approved' ? 'Autorizado' : 'Recusado'}
         </Text>
       </div>
     );
@@ -56,11 +67,13 @@ export default function ApprovalCardMessage({ message, onResolved }: ApprovalCar
 
   return (
     <div className="km-enter" style={{
-      border: '1px solid #111', borderRadius: 10, padding: '12px 14px',
+      border: '1px solid var(--mantine-color-default-border)', borderRadius: 10, padding: '12px 14px',
       maxWidth: 520, backgroundColor: 'var(--mantine-color-body)',
     }}>
-      <Text size="sm" fw={700} mb={4}>{t('chat.approvalNeeded')}</Text>
-      <Text size="sm" mb={10} style={{ whiteSpace: 'pre-wrap' }}>{message.body}</Text>
+      <Text size="sm" fw={700} mb={4}>{copy.title}</Text>
+      <Text size="sm" mb={10} style={{ whiteSpace: 'pre-wrap' }}>{copy.description}</Text>
+      {copy.detail && <Text size="sm" mb={10} style={{ whiteSpace: 'pre-wrap' }}>{copy.detail}</Text>}
+      {error && <Text role="alert" c="red" size="sm" mb={10}>{error}</Text>}
       {!rejecting ? (
         <Group gap={8}>
           <Button size="xs" onClick={() => void decide('approve')} loading={busy}>{t('chat.approve')}</Button>
