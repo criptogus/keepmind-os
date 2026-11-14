@@ -236,7 +236,7 @@ export default function ChatShell({ onOpenAdmin, pendingApprovals }: ChatShellPr
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
         <header style={{
           display: 'flex', alignItems: 'center', gap: 10,
-          padding: '10px 20px', borderBottom: '1px solid var(--mantine-color-gray-3)',
+          padding: '10px 20px', borderBottom: '1px solid var(--mantine-color-default-border)',
           WebkitAppRegion: 'drag',
         } as React.CSSProperties}>
           <span style={{ fontSize: 16, fontWeight: 600 }}>
@@ -249,10 +249,10 @@ export default function ChatShell({ onOpenAdmin, pendingApprovals }: ChatShellPr
           <button
             data-tour="chat-admin"
             onClick={() => onOpenAdmin()}
+            className="km-primary-action"
             style={{
               WebkitAppRegion: 'no-drag',
-              padding: '6px 14px', borderRadius: 8, border: '1px solid var(--mantine-color-gray-3)',
-              background: '#111', color: '#fff', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
+              padding: '6px 14px', fontSize: 13, cursor: 'pointer', fontFamily: 'inherit',
             } as React.CSSProperties}
           >
             {t('chat.admin')}

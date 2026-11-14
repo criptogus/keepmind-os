@@ -66,9 +66,10 @@ export default function ChannelRail({ channels, agents: allAgents, activeId, onS
         style={{
           display: 'flex', alignItems: 'center', gap: 8, padding: '7px 10px',
           borderRadius: 8, cursor: 'pointer', fontSize: 14,
-          backgroundColor: isActive ? 'var(--mantine-color-gray-2)' : 'transparent',
+          backgroundColor: isActive ? 'var(--mantine-color-default-hover)' : 'transparent',
           fontWeight: isActive ? 600 : 400,
           position: 'relative',
+          boxShadow: isActive ? 'inset 3px 0 var(--km-lime, #c4ff3d)' : 'none',
         }}
         onContextMenu={(e) => { e.preventDefault(); setMenuFor(menuFor === ch.id ? null : ch.id); }}
       >
@@ -82,13 +83,13 @@ export default function ChannelRail({ channels, agents: allAgents, activeId, onS
         </span>
         {isApprovals && pendingApprovals > 0 && (
           <span style={{
-            minWidth: 18, height: 18, borderRadius: 9, backgroundColor: '#111', color: '#fff',
+            minWidth: 18, height: 18, borderRadius: 9, backgroundColor: 'var(--km-lime, #c4ff3d)', color: '#111',
             fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 5px',
           }}>{pendingApprovals}</span>
         )}
         {!isActive && ch.unread > 0 && (
           <span style={{
-            minWidth: 18, height: 18, borderRadius: 9, backgroundColor: '#111', color: '#fff',
+            minWidth: 18, height: 18, borderRadius: 9, backgroundColor: 'var(--km-lime, #c4ff3d)', color: '#111',
             fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 5px',
           }}>{ch.unread > 99 ? '99+' : ch.unread}</span>
         )}
@@ -111,7 +112,7 @@ export default function ChannelRail({ channels, agents: allAgents, activeId, onS
   return (
     <aside style={{
       width: 240, flexShrink: 0, display: 'flex', flexDirection: 'column',
-      backgroundColor: 'var(--mantine-color-gray-0)', borderRight: '1px solid var(--mantine-color-gray-3)',
+      backgroundColor: 'var(--mantine-color-body)', borderRight: '1px solid var(--mantine-color-default-border)',
       height: '100vh',
     }}>
       <div style={{ padding: '14px 14px 8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -143,11 +144,11 @@ export default function ChannelRail({ channels, agents: allAgents, activeId, onS
           </>
         )}
       </div>
-      <div style={{ padding: '10px 14px', borderTop: '1px solid var(--mantine-color-gray-3)', fontSize: 11, color: 'var(--mantine-color-dimmed)' }}>
+      <div style={{ padding: '10px 14px', borderTop: '1px solid var(--mantine-color-default-border)', fontSize: 11, color: 'var(--mantine-color-dimmed)' }}>
         <button
           onClick={onOpenAdmin}
           style={{
-            width: '100%', padding: '7px 0', borderRadius: 8, border: '1px solid var(--mantine-color-gray-3)',
+            width: '100%', padding: '7px 0', borderRadius: 8, border: '1px solid var(--mantine-color-default-border)',
             background: 'transparent', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
             color: 'var(--mantine-color-dark-6)', marginBottom: 8,
           }}

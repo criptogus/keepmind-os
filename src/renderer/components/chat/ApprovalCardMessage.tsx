@@ -44,7 +44,7 @@ export default function ApprovalCardMessage({ message, onResolved }: ApprovalCar
   if (done) {
     return (
       <div className="km-enter" style={{
-        border: '1px solid var(--mantine-color-gray-3)', borderRadius: 10,
+        border: '1px solid var(--mantine-color-default-border)', borderRadius: 10,
         padding: '10px 14px', maxWidth: 520, opacity: 0.75,
       }}>
         <Text size="sm" c="dimmed">
@@ -57,7 +57,7 @@ export default function ApprovalCardMessage({ message, onResolved }: ApprovalCar
   return (
     <div className="km-enter" style={{
       border: '1px solid #111', borderRadius: 10, padding: '12px 14px',
-      maxWidth: 520, backgroundColor: '#fff',
+      maxWidth: 520, backgroundColor: 'var(--mantine-color-body)',
     }}>
       <Text size="sm" fw={700} mb={4}>{t('chat.approvalNeeded')}</Text>
       <Text size="sm" mb={10} style={{ whiteSpace: 'pre-wrap' }}>{message.body}</Text>

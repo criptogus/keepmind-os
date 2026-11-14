@@ -129,11 +129,11 @@ export default function Composer({ agents, teams, onSend, disabled, replyTo, onC
   };
 
   return (
-    <div data-tour="chat-composer" style={{ position: 'relative', padding: '12px 20px 16px', borderTop: '1px solid var(--mantine-color-gray-3)' }}>
+    <div data-tour="chat-composer" style={{ position: 'relative', padding: '12px 20px 16px', borderTop: '1px solid var(--mantine-color-default-border)' }}>
       {showPopup && (
         <div className="km-enter" style={{
           position: 'absolute', bottom: '100%', left: 20, right: 20, marginBottom: 6,
-          backgroundColor: '#fff', border: '1px solid var(--mantine-color-gray-3)', borderRadius: 10,
+          backgroundColor: 'var(--mantine-color-body)', border: '1px solid var(--mantine-color-default-border)', borderRadius: 10,
           boxShadow: '0 8px 24px rgba(0,0,0,0.08)', overflow: 'hidden', zIndex: 10,
         }}>
           {isCommand
@@ -143,7 +143,7 @@ export default function Composer({ agents, teams, onSend, disabled, replyTo, onC
                 onMouseDown={(e) => { e.preventDefault(); applyCommand(c.name); }}
                 style={{
                   display: 'flex', alignItems: 'center', gap: 8, width: '100%',
-                  padding: '8px 12px', border: 'none', background: i === sel ? 'var(--mantine-color-gray-1)' : 'transparent',
+                  padding: '8px 12px', border: 'none', background: i === sel ? 'var(--mantine-color-default-hover)' : 'transparent',
                   cursor: 'pointer', fontSize: 14, fontFamily: 'inherit', textAlign: 'left',
                 }}
               >
@@ -158,7 +158,7 @@ export default function Composer({ agents, teams, onSend, disabled, replyTo, onC
               onMouseDown={(e) => { e.preventDefault(); applySuggestion(c); }}
               style={{
                 display: 'flex', alignItems: 'center', gap: 8, width: '100%',
-                padding: '8px 12px', border: 'none', background: i === sel ? 'var(--mantine-color-gray-1)' : 'transparent',
+                padding: '8px 12px', border: 'none', background: i === sel ? 'var(--mantine-color-default-hover)' : 'transparent',
                 cursor: 'pointer', fontSize: 14, fontFamily: 'inherit', textAlign: 'left',
               }}
             >
@@ -177,7 +177,7 @@ export default function Composer({ agents, teams, onSend, disabled, replyTo, onC
         <div className="km-enter" style={{
           display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6,
           padding: '6px 10px', borderRadius: 8, fontSize: 12,
-          backgroundColor: 'var(--mantine-color-gray-1)', borderLeft: '3px solid #111',
+          backgroundColor: 'var(--mantine-color-default-hover)', borderLeft: '3px solid var(--km-lime)',
         }}>
           <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             <b>{t('chat.replyingTo')} {replyTo.authorName}</b> — {replyTo.snippet}
@@ -190,7 +190,7 @@ export default function Composer({ agents, teams, onSend, disabled, replyTo, onC
           {atts.map((a, i) => (
             <span key={String(a.id)} style={{
               display: 'inline-flex', alignItems: 'center', gap: 6, padding: '3px 8px',
-              borderRadius: 8, border: '1px solid var(--mantine-color-gray-3)', fontSize: 12,
+              borderRadius: 8, border: '1px solid var(--mantine-color-default-border)', fontSize: 12,
             }}>
               📎 {String(a.name)}
               <button onClick={() => setAtts((p) => p.filter((_, j) => j !== i))} style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: 11 }}>✕</button>
@@ -200,8 +200,8 @@ export default function Composer({ agents, teams, onSend, disabled, replyTo, onC
       )}
       <div style={{
         display: 'flex', gap: 10, alignItems: 'flex-end',
-        border: '1px solid var(--mantine-color-gray-3)', borderRadius: 12,
-        padding: '8px 10px', backgroundColor: '#fff',
+        border: '1px solid var(--mantine-color-default-border)', borderRadius: 12,
+        padding: '8px 10px', backgroundColor: 'var(--mantine-color-body)',
       }}>
         <input
           ref={fileRef}
@@ -241,11 +241,8 @@ export default function Composer({ agents, teams, onSend, disabled, replyTo, onC
         <button
           onClick={send}
           disabled={disabled || uploading || (!text.trim() && !atts.length)}
-          style={{
-            padding: '7px 16px', borderRadius: 8, border: 'none',
-            backgroundColor: disabled || uploading || (!text.trim() && !atts.length) ? 'var(--mantine-color-gray-3)' : '#111',
-            color: '#fff', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
-          }}
+          className="km-primary-action"
+          style={{ padding: '7px 16px', fontSize: 13, cursor: 'pointer', fontFamily: 'inherit', opacity: disabled || uploading || (!text.trim() && !atts.length) ? 0.55 : 1 }}
         >
           {t('chat.send')}
         </button>

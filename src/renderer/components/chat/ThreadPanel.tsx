@@ -42,11 +42,11 @@ export default function ThreadPanel({ parent, channelId, agents, teams, meId, re
   return (
     <div style={{
       width: 380, flexShrink: 0, display: 'flex', flexDirection: 'column',
-      borderLeft: '1px solid var(--mantine-color-gray-3)', backgroundColor: 'var(--mantine-color-body)',
+      borderLeft: '1px solid var(--mantine-color-default-border)', backgroundColor: 'var(--mantine-color-body)',
     }}>
       <div style={{
         display: 'flex', alignItems: 'center', gap: 8, padding: '12px 16px',
-        borderBottom: '1px solid var(--mantine-color-gray-3)',
+        borderBottom: '1px solid var(--mantine-color-default-border)',
       }}>
         <span style={{ fontSize: 14, fontWeight: 700, flex: 1 }}>{t('chat.thread')}</span>
         <button onClick={onClose} style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: 15, color: 'var(--mantine-color-dimmed)' }}>✕</button>

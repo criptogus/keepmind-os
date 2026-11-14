@@ -56,7 +56,7 @@ function AttachmentChip({ a }: { a: ChatAttachment }) {
             src={url}
             alt={a.name}
             onClick={() => void window.electronAPI.openChatAttachment?.(a.id, a.name).catch(() => {})}
-            style={{ maxWidth: 320, maxHeight: 240, borderRadius: 10, border: '1px solid var(--mantine-color-gray-3)', cursor: 'zoom-in', display: 'block' }}
+            style={{ maxWidth: 320, maxHeight: 240, borderRadius: 10, border: '1px solid var(--mantine-color-default-border)', cursor: 'zoom-in', display: 'block' }}
           />
         ) : (
           <button onClick={() => void window.electronAPI.openChatAttachment?.(a.id, a.name).catch(() => {})} style={{ fontSize: 12 }}>🖼 {a.name}</button>
@@ -72,8 +72,8 @@ function AttachmentChip({ a }: { a: ChatAttachment }) {
         title={a.preview ? a.preview.slice(0, 300) : a.mime}
         style={{
           display: 'inline-flex', alignItems: 'center', gap: 6,
-          padding: '5px 10px', borderRadius: 8, border: '1px solid var(--mantine-color-gray-3)',
-          background: 'var(--mantine-color-gray-0, #fff)', fontSize: 12, cursor: 'pointer', fontFamily: 'inherit',
+          padding: '5px 10px', borderRadius: 8, border: '1px solid var(--mantine-color-default-border)',
+          background: 'var(--mantine-color-default)', fontSize: 12, cursor: 'pointer', fontFamily: 'inherit',
         }}
       >
         <span style={{ fontSize: 13 }}>📎</span>
@@ -89,7 +89,7 @@ function AttachmentChip({ a }: { a: ChatAttachment }) {
           {expanded && (
             <pre style={{
               marginTop: 4, padding: 8, borderRadius: 8, fontSize: 11, lineHeight: 1.4,
-              background: 'var(--mantine-color-gray-0, #f8f8f8)', border: '1px solid var(--mantine-color-gray-3)',
+              background: 'var(--mantine-color-default)', border: '1px solid var(--mantine-color-default-border)',
               maxHeight: 180, overflow: 'auto', whiteSpace: 'pre-wrap', wordBreak: 'break-word',
             }}>{a.preview!.slice(0, 4000)}</pre>
           )}
@@ -150,7 +150,7 @@ export default function MessageFeed({ messages, agents, teams, meId, onReact, on
       {messages.length === 0 && (
         <div className="km-enter" style={{ margin: 'auto', textAlign: 'center', maxWidth: 420 }}>
           <div style={{
-            width: 44, height: 44, borderRadius: 12, backgroundColor: '#111', color: '#fff',
+            width: 44, height: 44, borderRadius: 12, backgroundColor: 'var(--km-lime, #c4ff3d)', color: '#111',
             fontSize: 20, fontWeight: 700, margin: '0 auto 14px',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>K</div>
@@ -161,7 +161,7 @@ export default function MessageFeed({ messages, agents, teams, meId, onReact, on
               <button
                 key={s}
                 style={{
-                  padding: '9px 14px', borderRadius: 10, border: '1px dashed var(--mantine-color-gray-4)',
+                  padding: '9px 14px', borderRadius: 10, border: '1px dashed var(--mantine-color-default-border)',
                   background: 'transparent', fontSize: 13, cursor: 'pointer', fontFamily: 'inherit', textAlign: 'left',
                 }}
               >
@@ -301,7 +301,7 @@ export function MessageBubble({ message: m, agent, team, meId, onReact, onReply,
             onClick={() => onOpenThread(m)}
             style={{
               marginTop: 6, display: 'inline-flex', alignItems: 'center', gap: 5,
-              padding: '3px 10px', borderRadius: 12, border: '1px solid var(--mantine-color-gray-3)',
+              padding: '3px 10px', borderRadius: 12, border: '1px solid var(--mantine-color-default-border)',
               background: 'transparent', fontSize: 12, color: 'var(--mantine-color-dimmed)', cursor: 'pointer', fontFamily: 'inherit',
             }}
           >
@@ -313,7 +313,7 @@ export function MessageBubble({ message: m, agent, team, meId, onReact, onReply,
             {toolCalls.map((tc, i) => (
               <span key={i} style={{
                 fontSize: 11, padding: '2px 8px', borderRadius: 10,
-                border: '1px solid var(--mantine-color-gray-3)', color: 'var(--mantine-color-dimmed)',
+                border: '1px solid var(--mantine-color-default-border)', color: 'var(--mantine-color-dimmed)',
                 display: 'inline-flex', alignItems: 'center', gap: 4,
               }}>
                 {tc.status === 'pending' ? <PixelSpinner size={14} /> : tc.status === 'done' ? '✓' : '·'} {tc.name}
