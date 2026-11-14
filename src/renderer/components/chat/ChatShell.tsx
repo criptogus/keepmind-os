@@ -53,7 +53,7 @@ export default function ChatShell({ onOpenAdmin, pendingApprovals }: ChatShellPr
     void reloadChannels();
     void window.electronAPI.getAgents().then(setAgents).catch(() => {});
     void window.electronAPI.getTeams().then(setTeams).catch(() => {});
-    void window.electronAPI.authGetState().then((s) => setMeId(s.currentUser?.id)).catch(() => {});
+    void window.electronAPI.authGetState().then((s) => setMeId(s.currentUser?.id ?? 'system')).catch(() => {});
 
     const unsub = window.electronAPI.onChatEvent?.((event) => {
       if (event.type === 'channels-changed') {

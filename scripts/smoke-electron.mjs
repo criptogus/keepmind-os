@@ -312,6 +312,9 @@ try {
   await command('Approvals');
   if (!(await evaluate(`document.body.innerText.includes('Pending approvals') || document.body.innerText.includes('No pending')`))) fail('approvals page not reachable');
   await command('Skills');
+  if (!(await evaluate(`document.body.innerText.includes('Search skills') && document.body.innerText.includes('My skills')`))) fail('searchable installed skills library missing');
+  await evaluate(`Array.from(document.querySelectorAll('[role=tab]')).find(el => el.textContent.includes('SuperAgentSkill')).click()`);
+  await delay(250);
   if (!(await evaluate(`!!document.querySelector('.km-sak-panel') && document.body.innerText.includes('Conectar minha conta')`))) fail('skills OAuth connection card missing');
   const sak = await evaluate(`window.electronAPI.sakStatus()`);
   if (sak.connected || sak.pending) fail('isolated smoke unexpectedly inherited a skill account');

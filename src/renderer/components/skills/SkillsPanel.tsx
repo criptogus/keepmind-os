@@ -1,8 +1,9 @@
 import SuperAgentSkillPanel from './SuperAgentSkillPanel';
-import React, { useEffect, useState } from 'react';
-import { Badge, Button, Card, Checkbox, Group, Modal, Select, Stack, Text, Textarea, TextInput } from '@mantine/core';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Alert, Badge, Button, Card, Checkbox, Group, Modal, MultiSelect, Select, Stack, Tabs, TagsInput, Text, Textarea, TextInput, Title } from '@mantine/core';
 import type { Skill } from '../../../shared/types';
 import { useLang } from '../../lib/i18n';
+import { SKILL_CATEGORIES, categoryLabel, cleanSkillTags, filterSkills, skillCategory, skillTags } from '../../../shared/skillLibrary';
 import PageHeader from '../common/PageHeader';
 
 interface ToolInfo {
@@ -11,18 +12,29 @@ interface ToolInfo {
 }
 
 export default function SkillsPanel() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
+  const copy = (pt: string, en: string) => lang === 'pt' ? pt : en;
+  const [query, setQuery] = useState('');
+  const [category, setCategory] = useState<string | null>(null);
+  const [tags, setTags] = useState<string[]>([]);
+  const [sort, setSort] = useState('relevance');
+  const [tab, setTab] = useState<string | null>('installed');
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [improveOpen, setImproveOpen] = useState(false);
+  const [improveId, setImproveId] = useState<string | null>(null);
+  const [proposal, setProposal] = useState<{ skill: Skill; prompt: string } | null>(null);
   const [skills, setSkills] = useState<Skill[]>([]);
   const [tools, setTools] = useState<ToolInfo[]>([]);
   const [editing, setEditing] = useState<Skill | null>(null);
   const [isNew, setIsNew] = useState(false);
-  const [form, setForm] = useState({ name: '', description: '', prompt: '', toolNames: [] as string[] });
+  const [form, setForm] = useState({ name: '', description: '', prompt: '', toolNames: [] as string[], category: '', tags: [] as string[] });
   const [improving, setImproving] = useState<string | null>(null);
   const [error, setError] = useState('');
   const [importOpen, setImportOpen] = useState(false);
   const [importUrl, setImportUrl] = useState('');
   const [importing, setImporting] = useState(false);
-  const [importPreview, setImportPreview] = useState<{ skills: Array<{ name: string; description: string; prompt: string; toolNames: string[]; source: string; sourceRef?: string; files?: string[]; ignored?: string[] }>; skipped: Array<{ name: string; reason: string }> } | null>(null);
+  const [importPreview, setImportPreview] = useState<{ skills: Array<{ name: string; description: string; prompt: string; toolNames: string[]; source: string; sourceRef?: string; category?: string; tags?: string[]; files?: string[]; ignored?: string[] }>; skipped: Array<{ name: string; reason: string }> } | null>(null);
   const [importSel, setImportSel] = useState(0);
   const [marketOpen, setMarketOpen] = useState(false);
   const [marketItems, setMarketItems] = useState<Array<{ id: string; name: string; description: string; source: string; tags: string[]; audience: string; version: string; featured?: boolean; installed: boolean; installedCount: number }>>([]);
@@ -31,9 +43,10 @@ export default function SkillsPanel() {
   const [marketBusy, setMarketBusy] = useState<string | null>(null);
 
   const load = async () => {
-    const [s, t] = await Promise.all([window.electronAPI.getSkills(), window.electronAPI.listSkillTools()]);
-    setSkills(s);
-    setTools(t);
+    try {
+      const [s, t] = await Promise.all([window.electronAPI.getSkills(), window.electronAPI.listSkillTools()]);
+      setSkills(s); setTools(t);
+    } catch (e) { setError(String(e)); } finally { setLoading(false); }
   };
 
   useEffect(() => { void load(); }, []);
@@ -60,6 +73,8 @@ export default function SkillsPanel() {
           toolNames: s.toolNames.filter((n) => tools.some((t) => t.name === n)),
           source: s.source,
           sourceRef: s.sourceRef,
+          category: s.category,
+          tags: s.tags ?? marketItems.find(item => item.id === id)?.tags,
           version: 1,
         });
       }
@@ -91,15 +106,17 @@ export default function SkillsPanel() {
   };
 
   const openNew = () => {
+    setError('');
     setIsNew(true);
     setEditing(null);
-    setForm({ name: '', description: '', prompt: '', toolNames: [] });
+    setForm({ name: '', description: '', prompt: '', toolNames: [], category: '', tags: [] });
   };
 
   const openEdit = (skill: Skill) => {
+    setError('');
     setIsNew(false);
     setEditing(skill);
-    setForm({ name: skill.name, description: skill.description, prompt: skill.prompt, toolNames: skill.toolNames });
+    setForm({ name: skill.name, description: skill.description, prompt: skill.prompt, toolNames: skill.toolNames, category: skillCategory(skill), tags: skillTags(skill) });
   };
 
   const save = async () => {
@@ -108,30 +125,31 @@ export default function SkillsPanel() {
       return;
     }
     setError('');
-    if (isNew) {
-      await window.electronAPI.createSkill(form);
-    } else if (editing) {
-      await window.electronAPI.updateSkill(editing.id, form);
-    }
-    setEditing(null);
-    setIsNew(false);
-    await load();
+    setSaving(true);
+    try {
+      const values = { ...form, tags: cleanSkillTags(form.tags), category: form.category || undefined };
+      if (isNew) await window.electronAPI.createSkill(values);
+      else if (editing) await window.electronAPI.updateSkill(editing.id, values);
+      setEditing(null); setIsNew(false); await load();
+    } catch (e) { setError(String(e)); } finally { setSaving(false); }
   };
 
   const improve = async (skill: Skill) => {
-    setImproving(skill.id);
-    setError('');
+    setImproving(skill.id); setError(''); setProposal(null);
     try {
       const res = await window.electronAPI.improveSkill(skill.id);
-      setForm({ ...form, prompt: res.improvedPrompt });
-      setEditing(skill);
-      setIsNew(false);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : t('skills.improveFailed'));
-    } finally {
-      setImproving(null);
-    }
+      setProposal({ skill, prompt: res.improvedPrompt });
+    } catch (e) { setError(e instanceof Error ? e.message : t('skills.improveFailed')); }
+    finally { setImproving(null); }
   };
+  const startImprove = (skill?: Skill) => {
+    setImproveId(skill?.id ?? null); setProposal(null); setError(''); setImproveOpen(true);
+  };
+  const availableTags = useMemo(() => cleanSkillTags(skills.flatMap(skillTags)).sort(), [skills]);
+  const categories = useMemo(() => [...new Set([...SKILL_CATEGORIES.map(c => c.id), ...skills.map(skillCategory)])]
+    .map(id => ({ value: id, label: categoryLabel(id, lang) })), [skills, lang]);
+  const visibleSkills = useMemo(() => filterSkills(skills, query, category, tags, sort), [skills, query, category, tags, sort]);
+  const groups = useMemo(() => categories.map(c => ({ ...c, skills: visibleSkills.filter(s => skillCategory(s) === c.value) })).filter(c => c.skills.length), [categories, visibleSkills]);
 
   const modalOpen = editing !== null || isNew;
 
@@ -143,6 +161,7 @@ export default function SkillsPanel() {
         help={t('ph.skills.help')}
         actions={
           <Group gap="xs">
+            <Button size="xs" className="km-primary-action" disabled={!skills.length} onClick={() => startImprove()}>{t('skills.improve')}</Button>
             <Button size="xs" variant="default" onClick={() => void openMarketplace()}>{t('skills.marketplace')}</Button>
             <Button size="xs" variant="default" onClick={() => void importFolder()} loading={importing}>{t('skills.importFolder')}</Button>
             <Button size="xs" variant="default" onClick={() => { setImportOpen(true); setImportPreview(null); setImportSel(0); setImportUrl(''); }}>{t('skills.importGithub')}</Button>
@@ -151,57 +170,85 @@ export default function SkillsPanel() {
         }
       />
 
-      <SuperAgentSkillPanel onInstalled={load} />
-
-      {error && <Text size="sm" c="dimmed">{error}</Text>}
-
-      {skills.length === 0 ? (
-        <Card withBorder padding="xl" radius="md">
-          <Text size="sm" c="dimmed" ta="center">{t('skills.empty2')}</Text>
-        </Card>
-      ) : (
-        skills.map((skill) => (
-          <Card key={skill.id} withBorder padding="md" radius="md" className="km-enter">
-            <Group justify="space-between" align="flex-start">
-              <div style={{ flex: 1 }}>
-                <Group gap="xs">
-                  <Text fw={600}>{skill.name}</Text>
-                  {skill.toolNames.length > 0 && (
-                    <Badge size="sm" variant="light" color="gray">{skill.toolNames.length} {t('agents.tools')}</Badge>
-                  )}
-                  {(skill.usageCount ?? 0) > 0 && (
-                    <Badge size="sm" variant="outline" color="gray" title={skill.lastUsedAt ? `${t('skills.lastUsed')} ${new Date(skill.lastUsedAt).toLocaleString()}` : undefined}>
-                      {skill.usageCount}× {t('skills.uses')}
-                    </Badge>
-                  )}
-                </Group>
-                {skill.description && <Text size="sm" c="dimmed">{skill.description}</Text>}
-                <Text size="xs" c="dimmed" lineClamp={2} mt={4} style={{ whiteSpace: 'pre-wrap' }}>{skill.prompt}</Text>
-              </div>
-              <Group gap="xs">
-                <Button size="xs" variant="subtle" color="gray" onClick={() => openEdit(skill)}>{t('common.edit')}</Button>
-                <Button
-                  size="xs"
-                  variant="subtle"
-                  color="gray"
-                  loading={improving === skill.id}
-                  onClick={() => improve(skill)}
-                >
-                  {t('skills.improve')}
-                </Button>
-                <Button
-                  size="xs"
-                  variant="subtle"
-                  color="gray"
-                  onClick={async () => { if (confirm(`${t('skills.deleteConfirm')} "${skill.name}"?`)) { await window.electronAPI.deleteSkill(skill.id); await load(); } }}
-                >
-                  {t('common.delete')}
-                </Button>
-              </Group>
+      <Tabs value={tab} onChange={setTab} keepMounted>
+        <Tabs.List>
+          <Tabs.Tab value="installed">{copy('Minhas habilidades', 'My skills')} · {skills.length}</Tabs.Tab>
+          <Tabs.Tab value="discover">SuperAgentSkill · {copy('Descobrir', 'Discover')}</Tabs.Tab>
+        </Tabs.List>
+        <Tabs.Panel value="discover" pt="md"><SuperAgentSkillPanel onInstalled={load} /></Tabs.Panel>
+        <Tabs.Panel value="installed" pt="lg">
+          <Stack gap="md">
+            <TextInput label={copy('Buscar habilidades', 'Search skills')}
+              placeholder={copy('Nome, descrição, tag ou trecho das instruções…', 'Name, description, tag or instructions…')}
+              value={query} onChange={e => setQuery(e.currentTarget.value)} />
+            <Group align="flex-end" grow>
+              <Select label={copy('Categoria', 'Category')} placeholder={copy('Todas as categorias', 'All categories')}
+                clearable searchable data={categories.map(c => ({ ...c, label: `${c.label} (${skills.filter(s => skillCategory(s) === c.value).length})` }))}
+                value={category} onChange={setCategory} />
+              <MultiSelect label="Tags" placeholder={copy('Todas as tags', 'All tags')} searchable clearable data={availableTags} value={tags} onChange={setTags} />
+              <Select label={copy('Ordenar por', 'Sort by')} value={sort} onChange={v => setSort(v ?? 'relevance')}
+                data={[{ value: 'relevance', label: copy('Relevância / nome', 'Relevance / name') }, { value: 'usage', label: copy('Mais usadas', 'Most used') }, { value: 'updated', label: copy('Atualizadas recentemente', 'Recently updated') }]} />
             </Group>
-          </Card>
-        ))
-      )}
+            <Text size="xs" c="dimmed">{copy('Categorias e tags são sugeridas para habilidades antigas. Use Editar para personalizar.', 'Categories and tags are suggested for existing skills. Use Edit to customize.')}</Text>
+            <Group justify="space-between">
+              <Text size="sm" c="dimmed" role="status">{visibleSkills.length} / {skills.length} {copy('habilidades', 'skills')}</Text>
+              {(query || category || tags.length > 0) && <Button size="xs" variant="subtle" color="gray" onClick={() => { setQuery(''); setCategory(null); setTags([]); }}>{copy('Limpar filtros', 'Clear filters')}</Button>}
+            </Group>
+            {error && !modalOpen && !improveOpen && <Alert color="red" role="alert">{error}</Alert>}
+            {loading ? <Text role="status">{t('nav.loading')}</Text> : !skills.length ?
+              <Text c="dimmed">{t('skills.empty2')}</Text> : !visibleSkills.length ?
+              <Text c="dimmed">{copy('Nenhuma habilidade encontrada. Tente outro termo ou limpe os filtros.', 'No skills found. Try another term or clear the filters.')}</Text> :
+              groups.map(group => <section key={group.value} aria-label={group.label}>
+                <Group gap="xs" mb="sm"><Title order={3} size="h4">{group.label}</Title><Text size="sm" c="dimmed">{group.skills.length}</Text></Group>
+                {group.skills.map(skill => <div key={skill.id} className="km-skill-row">
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <Group gap="xs"><Text fw={600}>{skill.name}</Text>
+                      {(skill.usageCount ?? 0) > 0 && <Badge color="gray" variant="outline" title={skill.lastUsedAt ? `${t('skills.lastUsed')} ${new Date(skill.lastUsedAt).toLocaleString()}` : undefined}>{skill.usageCount}× {t('skills.uses')}</Badge>}
+                    </Group>
+                    <Text size="sm" c="dimmed">{skill.description}</Text>
+                    <Group gap={6} mt={8}>
+                      {skillTags(skill).map(tag => <Button key={tag} size="compact-xs" variant={tags.includes(tag) ? 'light' : 'default'} color="gray" aria-pressed={tags.includes(tag)} onClick={() => setTags(old => old.includes(tag) ? old.filter(t => t !== tag) : [...old, tag])}>{tag}</Button>)}
+                      <Text size="xs" c="dimmed">{skill.toolNames.length} {t('agents.tools')}</Text>
+                    </Group>
+                    <details className="km-skill-instructions"><summary>{copy('Ver instruções', 'View instructions')}</summary><Text size="sm" style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>{skill.prompt}</Text></details>
+                  </div>
+                  <Group gap="xs" className="km-skill-actions">
+                    <Button size="xs" variant="default" onClick={() => startImprove(skill)}>{t('skills.improve')}</Button>
+                    <Button size="xs" variant="subtle" color="gray" onClick={() => openEdit(skill)}>{t('common.edit')}</Button>
+                    <Button size="xs" variant="subtle" color="gray" onClick={async () => {
+                      if (confirm(`${t('skills.deleteConfirm')} "${skill.name}"?`)) {
+                        try { await window.electronAPI.deleteSkill(skill.id); await load(); } catch (e) { setError(String(e)); }
+                      }
+                    }}>{t('common.delete')}</Button>
+                  </Group>
+                </div>)}
+              </section>)}
+          </Stack>
+        </Tabs.Panel>
+      </Tabs>
+
+      <Modal opened={improveOpen} onClose={() => { if (!improving && !saving) setImproveOpen(false); }} title={t('skills.improve')} size="xl" closeOnClickOutside={!improving && !saving} closeOnEscape={!improving && !saving} withCloseButton={!improving && !saving}>
+        <Stack>
+          <Text size="sm" c="dimmed">{copy('A IA configurada no KeepMind propõe instruções mais claras com base na skill e no histórico de uso. Você revisa antes de aplicar. Pode haver custo do provedor.', 'Your configured KeepMind AI proposes clearer instructions using the skill and its usage history. Review before applying. Provider charges may apply.')}</Text>
+          <Select label={copy('Habilidade para melhorar', 'Skill to improve')} searchable data={skills.map(s => ({ value: s.id, label: s.name }))} value={improveId} disabled={!!improving || !!proposal} onChange={setImproveId} />
+          {error && <Alert color="red" role="alert">{error}</Alert>}
+          {proposal ? <>
+            <Alert color="gray">{copy('Esta é uma proposta, ainda não testada em tarefas reais. Nome, tags, categoria e ferramentas serão preservados.', 'This is a proposal, not yet tested on real tasks. Name, tags, category and tools will be preserved.')}</Alert>
+            <div className="km-skill-compare">
+              <Textarea label={copy('Instruções atuais', 'Current instructions')} value={proposal.skill.prompt} readOnly minRows={8} autosize maxRows={12} />
+              <Textarea label={copy('Proposta de melhoria', 'Proposed improvement')} value={proposal.prompt} onChange={e => setProposal({ ...proposal, prompt: e.currentTarget.value })} minRows={8} autosize maxRows={12} />
+            </div>
+            <Group justify="flex-end" className="km-skill-footer">
+              <Button variant="default" disabled={saving} onClick={() => { setProposal(null); setImproveOpen(false); }}>{copy('Descartar proposta', 'Discard proposal')}</Button>
+              <Button className="km-primary-action" loading={saving} disabled={!proposal.prompt.trim()} onClick={async () => {
+                setSaving(true); setError('');
+                try { await window.electronAPI.updateSkill(proposal.skill.id, { prompt: proposal.prompt }); await load(); setImproveOpen(false); setProposal(null); }
+                catch (e) { setError(String(e)); } finally { setSaving(false); }
+              }}>{copy('Aplicar melhoria', 'Apply improvement')}</Button>
+            </Group>
+          </> : <Button className="km-primary-action" loading={!!improving} disabled={!improveId} onClick={() => { const skill = skills.find(s => s.id === improveId); if (skill) void improve(skill); }}>{copy('Gerar proposta de melhoria', 'Generate improvement proposal')}</Button>}
+        </Stack>
+      </Modal>
 
       <Modal opened={importOpen} onClose={() => setImportOpen(false)} title={t('skills.importTitle')} size="lg">
         <Stack gap="sm">
@@ -278,6 +325,8 @@ export default function SkillsPanel() {
                     toolNames: sel.toolNames.filter((n) => tools.some((t) => t.name === n)),
                     source: sel.source,
                     sourceRef: sel.sourceRef,
+                    category: sel.category,
+                    tags: sel.tags,
                     version: 1,
                   });
                   setImportOpen(false);
@@ -355,16 +404,18 @@ export default function SkillsPanel() {
             value={form.description}
             onChange={(e) => setForm({ ...form, description: e.currentTarget.value })}
           />
+          <Select label={copy('Categoria', 'Category')} placeholder={copy('Sugerir automaticamente', 'Suggest automatically')} clearable searchable data={categories} value={form.category || null} onChange={v => setForm({ ...form, category: v ?? '' })} />
+          <TagsInput label="Tags" description={copy('Digite uma tag e pressione Enter. Use vírgula para separar várias.', 'Type a tag and press Enter. Separate multiple tags with commas.')} data={availableTags} value={form.tags} onChange={value => setForm({ ...form, tags: value })} />
           <Textarea
             label={t('skills.promptLabel')}
             description={t('skills.promptDesc')}
-            minRows={8}
+            autosize minRows={5} maxRows={10}
             value={form.prompt}
             onChange={(e) => setForm({ ...form, prompt: e.currentTarget.value })}
           />
           {tools.length > 0 && (
-            <div>
-              <Text size="sm" fw={500} mb={4}>{t('skills.toolsLabel')}</Text>
+            <details className="km-skill-instructions">
+              <summary>{t('skills.toolsLabel')} · {form.toolNames.length} {copy('selecionadas', 'selected')}</summary>
               <Text size="xs" c="dimmed" mb={8}>{t('skills.toolsDesc')}</Text>
               {tools.map((t) => (
                 <Checkbox
@@ -383,12 +434,12 @@ export default function SkillsPanel() {
                   mb={4}
                 />
               ))}
-            </div>
+            </details>
           )}
           {error && <Text size="sm" c="dimmed">{error}</Text>}
-          <Group justify="flex-end">
-            <Button variant="default" onClick={() => { setEditing(null); setIsNew(false); }}>{t('common.cancel')}</Button>
-            <Button onClick={save}>{t('common.save')}</Button>
+          <Group justify="flex-end" className="km-skill-footer">
+            <Button variant="default" disabled={saving} onClick={() => { setEditing(null); setIsNew(false); }}>{t('common.cancel')}</Button>
+            <Button loading={saving} onClick={save}>{t('common.save')}</Button>
           </Group>
         </Stack>
       </Modal>

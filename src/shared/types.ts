@@ -31,6 +31,8 @@ export interface Agent {
 }
 
 export interface Skill {
+  category?: string;
+  tags?: string[];
   id: string;
   name: string;
   description: string;

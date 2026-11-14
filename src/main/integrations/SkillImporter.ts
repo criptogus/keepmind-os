@@ -3,6 +3,8 @@ import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 
 export interface ImportedSkill {
+  category?: string;
+  tags?: string[];
   name: string;
   description: string;
   prompt: string;
@@ -369,6 +371,8 @@ export function parseSkillMarkdown(text: string, source: string): ImportedSkill 
   let name = '';
   let description = '';
   let toolNames: string[] = [];
+  let category: string | undefined;
+  let tags: string[] | undefined;
 
   const fm = text.match(/^---\s*\n([\s\S]*?)\n---\s*\n?/);
   if (fm) {
@@ -376,6 +380,10 @@ export function parseSkillMarkdown(text: string, source: string): ImportedSkill 
     body = text.slice(fm[0].length);
     name = scalar(header, 'name');
     description = scalar(header, 'description');
+    category = scalar(header, 'category') || undefined;
+    const tagLine = scalar(header, 'tags');
+    const tagBlock = header.match(/^tags:\s*\n((?:[ \t]+-.*\n?)+)/m)?.[1];
+    if (tagLine || tagBlock) tags = (tagBlock ? tagBlock.split('\n').map(t => t.replace(/^\s*-\s*/, '')) : tagLine.replace(/^\[|\]$/g, '').split(',')).map(t => t.trim().replace(/^['"]|['"]$/g, '')).filter(Boolean);
     const tools = scalar(header, 'tools');
     if (tools) {
       toolNames = tools.replace(/[\[\]]/g, '').split(',').map((t) => t.trim()).filter(Boolean);
@@ -395,7 +403,7 @@ export function parseSkillMarkdown(text: string, source: string): ImportedSkill 
   if (description.length > 1024) description = description.slice(0, 1024);
 
   const prompt = body.trim() || description;
-  return { name, description, prompt, toolNames, source };
+  return { name, description, prompt, toolNames, source, ...(category ? { category } : {}), ...(tags ? { tags } : {}) };
 }
 
 function scalar(frontmatter: string, key: string): string {

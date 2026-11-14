@@ -238,29 +238,35 @@ body {
 .km-typing i:nth-child(2) { animation-delay: 150ms; }.km-typing i:nth-child(3) { animation-delay: 300ms; }
 @media (prefers-reduced-motion: reduce) { .km-typing i { animation: none; } }
 
-/* Chat: Slack-style hover actions, reactions, streaming caret */
+/* Chat: outline actions, reactions, streaming caret */
 .km-msg { position: relative; border-radius: 8px; padding: 2px 6px; margin: 0 -6px; transition: background var(--km-dur-fast) ease; }
-.km-msg:hover { background: color-mix(in srgb, var(--mantine-color-gray-1) 60%, transparent); }
+.km-msg:hover { background: color-mix(in srgb, var(--mantine-color-text) 3%, transparent); }
 .km-msg-actions {
   position: absolute; top: -12px; right: 16px; z-index: 5;
-  display: flex; gap: 1px; padding: 2px;
+  display: flex; gap: 2px; padding: 4px;
   background: var(--mantine-color-body); border: 1px solid var(--mantine-color-default-border);
   border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,.10);
   opacity: 0; transform: translateY(2px); pointer-events: none;
   transition: opacity var(--km-dur-fast) var(--km-out), transform var(--km-dur-fast) var(--km-out);
 }
 .km-msg:hover .km-msg-actions, .km-msg-actions:focus-within { opacity: 1; transform: translateY(0); pointer-events: auto; }
-.km-msg-action { border: none; background: transparent; font-size: 14px; cursor: pointer; padding: 3px 5px; border-radius: 6px; line-height: 1; }
-.km-msg-action:hover { background: var(--mantine-color-gray-1); transform: scale(1.15); }
+.km-msg-action {
+  display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px;
+  border: none; background: transparent; color: var(--mantine-color-dimmed); cursor: pointer; padding: 0; border-radius: 6px;
+}
+.km-msg-action:hover, .km-reaction:hover { background: color-mix(in srgb, var(--mantine-color-text) 6%, transparent); color: var(--mantine-color-text); }
+.km-msg-action:focus-visible, .km-reaction:focus-visible { outline: 2px solid var(--mantine-color-text); outline-offset: 2px; }
+.km-msg-action[aria-pressed=true], .km-reaction.mine { background: var(--km-lime); color: var(--km-ink); }
+.km-msg-action:last-child:not([aria-pressed]) { border-left: 1px solid var(--mantine-color-default-border); border-radius: 0 6px 6px 0; margin-left: 2px; }
+@media (hover: none) { .km-msg-actions { position: static; opacity: 1; transform: none; pointer-events: auto; } .km-msg { flex-wrap: wrap; } }
 .km-reactions { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
 .km-reaction {
-  font-size: 12px; padding: 1px 8px; border-radius: 10px; cursor: pointer;
+  font-size: 12px; min-height: 28px; padding: 3px 8px; border-radius: 10px; cursor: pointer;
   border: 1px solid var(--mantine-color-default-border); background: transparent;
   font-family: inherit; color: inherit; display: inline-flex; align-items: center; gap: 4px;
   transition: transform var(--km-dur-fast) var(--km-out), background var(--km-dur-fast) ease;
 }
-.km-reaction:hover { background: var(--mantine-color-gray-1); }
-.km-reaction.mine { background: var(--mantine-color-gray-1); border-color: var(--mantine-color-text); font-weight: 600; }
+.km-reaction.mine { border-color: var(--km-lime); font-weight: 600; }
 .km-reaction.pop { animation: km-reaction-pop .18s var(--km-out); }
 @keyframes km-reaction-pop { 0% { transform: scale(.5); } 60% { transform: scale(1.2); } 100% { transform: scale(1); } }
 .km-stream-caret::after { content: '\258d'; animation: km-caret 1s steps(1) infinite; color: var(--mantine-color-dimmed); }
@@ -303,3 +309,14 @@ body {
 .km-choice-list button:disabled { cursor: default; opacity: .6; }
 .km-choice-list button[aria-pressed=true] { opacity: 1; background: light-dark(#e3e8da,#30382a); }
 .km-choice-hint { font-size: 13px; color: var(--mantine-color-dimmed); }
+
+/* Skills library: grouped, searchable rows and review before applying AI changes. */
+.km-skill-row { display: flex; gap: 20px; align-items: flex-start; padding: 18px 0; border-top: 1px solid var(--mantine-color-default-border); }
+.km-skill-actions { flex-shrink: 0; }
+.km-skill-instructions { margin-top: 10px; }
+.km-skill-instructions summary { cursor: pointer; color: var(--mantine-color-dimmed); font-size: 13px; padding: 4px 0; }
+.km-skill-instructions[open] summary { margin-bottom: 8px; }
+.km-skill-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 900px) { .km-skill-row { flex-direction: column; gap: 12px; } .km-skill-compare { grid-template-columns: 1fr; } }
+
+.km-skill-footer { position: sticky; bottom: 0; padding: 12px 0; background: var(--mantine-color-body); border-top: 1px solid var(--mantine-color-default-border); z-index: 2; }
