@@ -519,7 +519,8 @@ const aheadLive = (a: Pick<Approval, "runAt" | "status" | "executedAt">) =>
  * Whether only admins decide it: `request_permission` turns a connector or a built-in on for good, which
  * is an admin's call like the agent's scopes (`setAgentScopes`); the agent's owner decides the others.
  */
-export const adminsDecide = (approval: Pick<Approval, "tool">) => approval.tool === REQUEST_PERMISSION_TOOL;
+export const adminsDecide = (approval: Pick<Approval, "tool">) =>
+  approval.tool === REQUEST_PERMISSION_TOOL || approval.tool === "activate_plugin";
 
 const BROWSER_PROFILE_PREFIX = "browser-profile:";
 

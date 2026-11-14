@@ -40,6 +40,7 @@ import {
   approvalDoing,
   approvalGroupWaitsFor,
   approvalWaitsFor,
+  isLocalPluginApproval,
   requesterDecidesLine,
 } from "@agenteschat/client/lib/approval-words";
 import { fromServer, itemName } from "@agenteschat/client/lib/connected";
@@ -711,6 +712,7 @@ export function ExactAction({
           {approvalReadsOnly(approval) && <Chip icon="eye">{t("approvals.readsOnly")}</Chip>}
         </div>
       )}
+      {isLocalPluginApproval(approval) && <p style={{ whiteSpace: "pre-wrap" }}>{approval.detail}</p>}
       {values.length > 0 &&
         (full ? (
           <dl className="ap-exact__rows">

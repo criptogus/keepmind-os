@@ -102,3 +102,19 @@ describe("an email folded to its first lines", () => {
     expect(document.activeElement === text).toBe(true);
   });
 });
+
+test("a KeepMind plugin card explains the fields and agent without requiring technical arguments", async () => {
+  const card = await openCard((a) => {
+    a.tool = "activate_plugin";
+    a.title = "Ativar CRM de palestras";
+    a.detail = "Campos: Nome, Empresa. Ações: Buscar, Cadastrar, Atualizar. Agente: Ada. Dados ficam no workspace.";
+    a.scope = "setup:write";
+    a.connector = null;
+    a.params = { id: "crm_palestras", digest: "technical-digest", revision: 1, agentIds: ["internal-agent-id"] };
+    a.email = null;
+  });
+  expect(card.textContent).toContain("Ativar CRM de palestras");
+  expect(card.textContent).toContain("Campos: Nome, Empresa");
+  expect(card.querySelector(".rq__well")?.textContent).not.toContain("technical-digest");
+  expect(card.querySelector(".rq__well")?.textContent).not.toContain("internal-agent-id");
+});

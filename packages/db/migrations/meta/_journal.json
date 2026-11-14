@@ -1898,6 +1898,13 @@
       "when": 1794756800000,
       "tag": "0274_personal_skills",
       "breakpoints": true
+    },
+    {
+      "idx": 273,
+      "version": "7",
+      "when": 1794756800001,
+      "tag": "0275_keepmind_plugins",
+      "breakpoints": true
     }
   ]
 }

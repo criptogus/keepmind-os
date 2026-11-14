@@ -474,3 +474,27 @@ describe("a request the agent asked for again, and a connector's message", () =>
     ]);
   });
 });
+
+test("KeepMind plugin approvals show the concrete result, with arguments only in technical details", () => {
+  const instance = i18next.createInstance();
+  void instance.init({
+    lng: "pt-BR",
+    fallbackLng: "en",
+    resources,
+    initAsync: false,
+    interpolation: { escapeValue: false },
+  });
+  const pt = instance.t;
+  const a = {
+    tool: "activate_plugin",
+    title: "Ativar CRM de palestras",
+    scope: "setup:write",
+    params: { id: "crm_palestras", digest: "digest", revision: 1, agentIds: ["internal-id"] },
+    connector: null,
+    email: null,
+  };
+  expect(approvalTitle(pt, a)).toBe("Ativar CRM de palestras");
+  expect(approvalDoing(pt, a, "pt-BR")).toBe("ativar CRM de palestras");
+  expect(approvalValues(a, { long: true })).toEqual([]);
+  expect(approvalValues({ ...a, connector: "custom:external" }, { long: true }).length).toBeGreaterThan(0);
+});

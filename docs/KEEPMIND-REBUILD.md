@@ -15,10 +15,10 @@ User choice: a shared server for teams at https://keepmind.io. Bun/Hono, Postgre
 | Agents and teams | Agents, channels, roles and routing | Upstream engine retained; SQLite import pending |
 | Skills and improvement | Versioned skills and SuperAgentSkill MCP | OAuth connected in local validation; improvement proposals and library search implemented; real AI acceptance pending |
 | MCP tools | Organization connectors and per-agent scopes | SuperAgentSkill and Liquid presets added |
-| Second brain | Native memory, wiki, Drive; KeepMind SB integration | SB stdio needs an authenticated server-side bridge; no endpoint invented |
+| Second brain | Native memory, wiki, Drive; KeepMind SB integration | Native memory retained; authenticated legacy Corp HTTP bridge implemented; personal stdio bridge and real account acceptance pending |
 | Cron jobs | Durable routines and PostgreSQL jobs | Upstream scheduler retained; existing cron import pending |
 | Guardrails | Roles, tool policies, approvals, budgets | No privilege expansion during rebrand |
-| Plugins created in chat | Custom connectors and native tool engine | The previous local records-plugin draft is preserved separately; not migrated yet |
+| Plugins created in chat | Custom connectors and native tool engine | Declarative records plugins ported with per-agent approval and persistence; old record import pending |
 | Existing records and credentials | Explicit import with preview | No automatic conversion or credential copy |
 
 ## Deployment
@@ -48,4 +48,40 @@ The first full workspace typecheck and server/web build passed. Targeted backend
 - New OAuth registrations identify the client as KeepMind OS. Existing registrations are retained.
 - Verified with native proposal/permission/version tests, library UI dispatch/readiness/search tests, language validation, type checks and build. A simulated agent/tool test is not a real-provider acceptance run.
 
-Remaining migrations still include existing user data, the KeepMind SB bridge, local records/CRM plugins and native packaging. This increment does not claim full parity with 0.1.22.
+The next section implements native Second Brain access, the legacy Corp bridge and declarative records plugins. Existing user data imports, personal stdio vault support and native packaging remain pending; this branch does not claim full parity with 0.1.22.
+
+## Second Brain and chat plugins migration
+
+### What people can ask
+
+- “Guarde esta decisão” / “O que combinamos sobre as palestras?”: the coordinator uses the native persistent Second Brain, preserving the same sources, private/team audience rules, corrections with history and reversible archival. Native tool names are unchanged so gateway policy and existing integrations continue to apply.
+- “Crie um CRM para vender minhas palestras”: `list_plugins` supplies a ready template; `propose_plugin` saves a declarative draft; `activate_plugin` shows one approval with fields, actions and selected agents. No JSON form is needed. Managers can also ask for a different field/action schema.
+- After activation, assigned agents discover generated list/create/update tools. Creation uses a stable request ID; updates require the current revision. Search ignores accents and returns pagination, including `nextOffset`, for complete retrieval/export. Disable revokes tools immediately and keeps records. A later activation restores access to the saved records.
+- “Conecte este MCP”: the existing `offer_connect_app` card handles authentication, discovery and per-agent grants. Credentials stay in its protected form. MCP plugins reuse that path, rather than launching arbitrary generated code.
+
+### Access and storage
+
+Plugin records live in PostgreSQL within the workspace, not in the Mac's old settings store. This first port preserves the old manager-only plugin restriction: a current person with `manage_agents` must be behind every plugin call, and an agent must also be explicitly assigned. Background runs without a person are refused. Activation always requires an exact, one-time approval by someone who can manage agents; neither “never ask” nor “approve always” bypasses it. A draft/disable revision invalidates older pending activation requests. Transactions lock the plugin row, preventing concurrent lost updates. Limits: 2,000 records per plugin, 5,000,000 serialized characters, 30 fields and 12 actions. Secret-shaped values are refused; this is not comprehensive PII detection for custom CRM records.
+
+The native Second Brain is not a silent import or sync of the existing personal/corporate vault. Existing memory and CRM stores remain untouched. Advanced KeepMind SB features such as GitHub sync, encrypted personal vaults, knowledge graphs and sleep cycles are not claimed to be migrated by this increment.
+
+### Optional legacy Corp bridge
+
+`apps/server/scripts/keepmind-sb-bridge.ts` exposes the legacy Corp HTTP runtime as authenticated MCP at `/mcp`. It follows [the upstream Corp bridge](https://github.com/criptogus/keepmind-corp/blob/main/tools/corp-mcp-bridge.mjs): `/api/mcp/call`, registered `agentId`, `x-keepmind-corp`, and `sb_search`, `sb_read`, `sb_list`, `sb_append`. It does not implement the personal stdio vault protocol.
+
+An operator configures these values in a protected environment file, never in chat:
+
+- `KEEPMIND_SB_URL`: actual Corp base URL (HTTPS, or HTTP loopback).
+- `KEEPMIND_SB_AGENT_ID`: agent registered in that Corp installation for audit/policy/quota checks.
+- `KEEPMIND_SB_UPSTREAM_TOKEN`: credential with only the intended vault access.
+- `KEEPMIND_SB_BRIDGE_TOKEN`: separate random credential, at least 32 characters, scoped operationally to that one bridge/vault. Do not reuse an upstream token or share a bridge across unrelated workspaces.
+- `KEEPMIND_SB_ALLOW_WRITE`: defaults off. When explicitly enabled, append goes only to `inbox/keepmind-os-captures.md`, rejecting obvious personal identifiers and secret-shaped content. The Corp server still enforces its own policy and scopes.
+- `KEEPMIND_SB_BRIDGE_PORT`: optional loopback port (default 3090).
+
+Run `bun --env-file=/path/to/protected.env apps/server/scripts/keepmind-sb-bridge.ts`. The process binds to 127.0.0.1 only. Deploy behind HTTPS infrastructure reachable by the team server, then connect that actual `/mcp` URL through the existing custom connector card and enter the bridge token in its protected form. This increment does not expose a local Mac service, create a startup service, change DNS, or invent a public KeepMind SB endpoint. Read tools work by default; write tools are not listed unless enabled. Upstream redirects are refused, calls time out, oversized results fail explicitly, and credential-bearing error bodies are not forwarded.
+
+### Evidence and remaining acceptance
+
+Deterministic tests exercise real database mutations, plugin permission/tenant/assignment checks, duplicate retries, stale revisions, disable/restore, gateway approval policy, native memory save/search/correct/archive and the bridge's MCP protocol against a simulated upstream. Existing memory trust/team and approval-level/run-policy suites cover regressions. The bridge's real Corp account and an actual model executing the full conversation remain pending. No credentials or real vault content were used in these tests.
+
+The native plugin approval was visually checked at 1280×800 and 390×844: the primary review shows the human title, fields, actions and agents; identifiers/digest/revision stay in expandable technical details. The synthetic local preview was refused after inspection, leaving its plugin disabled. Build and affected package type checks passed; targeted UI tests and permission/concurrency/native-memory/bridge suites passed. The visual finish review found no blocking issue; existing design tokens and documentation remain unchanged. These checks do not substitute for real-model acceptance or connection to a real Corp vault.

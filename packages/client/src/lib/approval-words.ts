@@ -70,7 +70,12 @@ export const approvalTitle = (t: TFunction, approval: TitledApproval): string =>
 type TitledApproval = Pick<Approval, "tool" | "title" | "params" | "email"> &
   Partial<Pick<Approval, "connector" | "scope">>;
 
+/** Built-in declarative plugins provide a concrete human review; raw arguments remain in technical details. */
+export const isLocalPluginApproval = (approval: { tool?: string; connector?: string | null }) =>
+  !approval.connector && (approval.tool === "activate_plugin" || approval.tool?.startsWith("plugin_") === true);
+
 function wordedTitle(t: TFunction, approval: TitledApproval): string | null {
+  if (isLocalPluginApproval(approval)) return approval.title;
   if (approval.email) {
     const words = emailTitleWords(approval.email);
     return (t as unknown as Tt)(words.key, words.values);
@@ -264,7 +269,7 @@ export function approvalValues(
         new Intl.NumberFormat(locale, { maximumFractionDigits: 4, useGrouping: Math.abs(v) >= 10000 }).format(v)
     : null;
   // An email is said by its sentence and its letter; its fields aren't values.
-  if (approval.email) return [];
+  if (approval.email || isLocalPluginApproval(approval)) return [];
   const skip = innerTool(approval) ? "name" : null;
   const letter = !long && approvalLetter(approval);
   const out: [string, string][] = [];
