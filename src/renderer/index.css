@@ -273,3 +273,22 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .km-msg-actions, .km-msg-action, .km-reaction, .km-stream-caret::after, .km-chat-typing-dots i { transition: none; animation: none; }
 }
+
+/* Desktop conversation workspace: quiet chrome, readable content, clear focus. */
+.km-conversation-shell {
+  --km-rail-bg: light-dark(#f4f5f1, #181a17);
+  --km-rail-selected: light-dark(#e3e8da, #30382a);
+}
+.km-brand { display: inline-flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 650; letter-spacing: -.025em; }
+.km-brand-mark { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; color: #c4ff3d; background: #20251b; font-size: 18px; font-weight: 700; }
+.km-channel-item { min-height: 38px; margin: 3px 0; outline-offset: 2px; }
+.km-channel-item:hover { background: var(--mantine-color-default-hover); }
+.km-channel-item:focus-visible { outline: 2px solid light-dark(#526c2a, #c4ff3d); }
+.km-conversation-header { min-height: 72px; flex-shrink: 0; }
+.km-conversation-header > span:first-child { letter-spacing: -.02em; }
+.km-chat-settings { color: var(--mantine-color-text); background: var(--mantine-color-body); border: 1px solid var(--mantine-color-default-border); border-radius: 8px; }
+.km-chat-settings:hover { background: var(--mantine-color-default-hover); }
+.km-chat-settings:focus-visible { outline: 2px solid light-dark(#526c2a, #c4ff3d); outline-offset: 3px; }
+.km-conversation-shell [data-tour="chat-composer"] { width: 100%; max-width: 1040px; align-self: center; }
+.km-conversation-shell [data-tour="chat-composer"] textarea { line-height: 1.6; }
+@media (max-width: 900px) { .km-channel-rail { width: 210px !important; } }

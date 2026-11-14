@@ -222,7 +222,7 @@ export default function App() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: '6px 24px 6px 84px',
+          padding: '12px 24px',
           borderBottom: '1px solid var(--mantine-color-default-border)',
           backgroundColor: 'var(--mantine-color-body)',
           WebkitAppRegion: 'drag',
