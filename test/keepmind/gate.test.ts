@@ -7,7 +7,7 @@ import { clientIdFor, spaceFor, vaultDir, scopesFor, writeScopes, gateCall, auth
 it('maps only validated company identities', () => {
     expect(clientIdFor('acme')).toBe('zaos-acme');
     expect(spaceFor('acme')).toBe('company-acme');
-    expect(vaultDir('/data', 'acme')).toBe('/data/companies/acme/memory');
+    expect(vaultDir('/data', 'acme')).toBe(join('/data', 'companies', 'acme', 'memory'));
     for (const id of ['', '../beta', '/acme', 'a b', 'a'.repeat(65), 'acme\0']) expect(() => clientIdFor(id)).toThrow();
 });
 it('writes scopes with exactly one client and no write authority', () => {

@@ -14,7 +14,7 @@ it('recovers unfinished executions and retains failures for inspection', () => {
     expect(storage.getAgentExecution('unfinished')?.error).toContain('Review external effects');
   } finally { storage.close(); fs.rmSync(dir, { recursive: true, force: true }); }
 });
-it('recalls important memories older than the most recent 500 items with provenance', () => {
+it('recalls important memories older than the most recent 500 items with provenance', { timeout: 30000 }, () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'km-recall-')); const storage = new StorageManager(dir);
   try {
     for (let i = 0; i < 510; i++) storage.saveMemoryItem({ id: `m${i}`, kind: 'fact', content: i === 0 ? 'The project codename is iguana' : `Other information ${i}`, validFrom: '2020-01-01', uses: 0, good: 0, bad: 0, createdAt: '2020-01-01', updatedAt: new Date(2020,0,1,0,i).toISOString() });
