@@ -18,6 +18,7 @@ export const CHAT_COMMANDS: ChatCommandDef[] = [
   { name: 'auto-aprovar', descKey: 'chat.cmd.autoapprove', usage: 'on|off' },
   { name: 'tema', descKey: 'chat.cmd.theme', usage: 'light|dark|auto' },
   { name: 'idioma', descKey: 'chat.cmd.lang', usage: 'pt|en|es' },
+  { name: 'persona', descKey: 'chat.cmd.persona', usage: '[id]' },
 ];
 
 export interface ParsedCommand {

@@ -52,7 +52,8 @@ import { exec } from 'node:child_process';
 import { createHash, randomBytes } from 'node:crypto';
 import * as fs from 'node:fs/promises';
 import { appendFileSync } from 'node:fs';
-import type { Skill } from '../shared/types.js';
+import type { Skill } from '../shared/types.js'
+import { personaById, DEFAULT_PERSONA_ID } from '../shared/personas.js';
 import { v4 as uuidv4 } from 'uuid';
 import type { AgentConfig, CreateAgentInput, TeamConfig, GovernanceRule, AppSettings, AgentTrigger, Approval, LocalUser, UserRole, ComputerAccessLevel } from '../shared/types.js';
 import { presetAvatarFor, avatarJson, parseAvatarDefinition } from '../shared/avatars.js';
@@ -273,6 +274,39 @@ async function runAgentExecution(agentId: string, input: Record<string, unknown>
 }
 
 /** Seeds built-in skills once so agents can opt into computer/delegation tools. */
+const ASSISTANT_BASE_PROMPT = `Você é o KeepMind, assistente nativo do KeepMind OS. Você conversa com o usuário no chat do workspace e pode operar o próprio aplicativo através das ferramentas app_*.
+
+Suas capacidades:
+- Consultar status geral (app_status), agentes, equipes, automações, aprovações pendentes, canais e auditoria.
+- Ler e alterar configurações do app via app_settings_get/app_settings_update (somente chaves permitidas; mudanças sensíveis podem exigir aprovação humana — nesse caso explique ao usuário que há um card de aprovação no chat).
+- Orientar o usuário a criar agentes, canais e rotinas — você pode criar agentes subordinados com create_agent quando fizer sentido.
+- Proatividade: quando o usuário descrever uma tarefa recorrente, ofereça criar uma rotina com app_automation_create em vez de esperar que ele peça. Quando um resultado de rotina parecer relevante para o time, compartilhe-o com app_chat_post.
+
+Regras:
+- Responda em português brasileiro, de forma concisa e direta, como um colega de equipe.
+- Você NUNCA aprova ações sensíveis — isso é sempre decisão humana.
+- Você recebe mensagens do canal mesmo sem menção explícita — responda de forma útil e concisa; se o pedido for de negócio, use delegate_to_agent para entregar ao especialista certo ou create_agent quando faltar uma função na equipe.
+- Para executar trabalho de negócio diretamente, também pode usar secondbrain_search/personalbrain_search para consultar memória.
+- Quando pedirem algo que exija configuração, prefira fazer você mesmo via ferramentas a mandar o usuário para telas.`;
+
+function buildAssistantPrompt(personaId?: string | null): string {
+  return `${ASSISTANT_BASE_PROMPT}\n\n${personaById(personaId ?? DEFAULT_PERSONA_ID).prompt}`;
+}
+
+/** Re-applies the stored persona prompt onto the KeepMind agent (idempotent). */
+function syncAssistantPersona(): void {
+  try {
+    const agent = storageManager.getAllAgents().find((a) => a.name === 'KeepMind');
+    if (!agent) return;
+    const personaId = storageManager.getSetting('assistant.persona') || DEFAULT_PERSONA_ID;
+    const next = buildAssistantPrompt(personaId);
+    if (agent.config.systemPrompt === next) return;
+    agent.config = { ...agent.config, systemPrompt: next };
+    agent.updatedAt = new Date().toISOString();
+    storageManager.saveAgent(agent);
+  } catch { /* persona sync is best-effort */ }
+}
+
 function seedAssistantAgent() {
   try {
     if (storageManager.getAllAgents().some((a) => a.name === 'KeepMind')) return;
@@ -295,19 +329,7 @@ function seedAssistantAgent() {
         model: DEFAULT_MODEL.openai,
         temperature: 0.3,
         maxTokens: 2000,
-        systemPrompt: `Você é o KeepMind, assistente nativo do KeepMind OS. Você conversa com o usuário no chat do workspace e pode operar o próprio aplicativo através das ferramentas app_*.
-
-Suas capacidades:
-- Consultar status geral (app_status), agentes, equipes, automações, aprovações pendentes, canais e auditoria.
-- Ler e alterar configurações do app via app_settings_get/app_settings_update (somente chaves permitidas; mudanças sensíveis podem exigir aprovação humana — nesse caso explique ao usuário que há um card de aprovação no chat).
-- Orientar o usuário a criar agentes, canais e rotinas — você pode criar agentes subordinados com create_agent quando fizer sentido.
-
-Regras:
-- Responda em português brasileiro, de forma concisa e direta, como um colega de equipe.
-- Você NUNCA aprova ações sensíveis — isso é sempre decisão humana.
-- Você recebe mensagens do canal mesmo sem menção explícita — responda de forma útil e concisa; se o pedido for de negócio, use delegate_to_agent para entregar ao especialista certo ou create_agent quando faltar uma função na equipe.
-- Para executar trabalho de negócio diretamente, também pode usar secondbrain_search/personalbrain_search para consultar memória.
-- Quando pedirem algo que exija configuração, prefira fazer você mesmo via ferramentas a mandar o usuário para telas.`,
+        systemPrompt: buildAssistantPrompt(storageManager.getSetting('assistant.persona')),
         tools: appTools.map((name) => ({ name, type: 'custom' as const, config: {} })),
       },
       capabilities: ['workspace_administration', 'configuration', 'guidance'],
@@ -322,6 +344,53 @@ Regras:
     });
   } catch (error) {
     console.error('[chat] failed to seed assistant agent:', error);
+  }
+}
+
+const CHAT_FILE_MIME: Record<string, string> = {
+  png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', gif: 'image/gif', webp: 'image/webp', svg: 'image/svg+xml',
+  txt: 'text/plain', md: 'text/markdown', csv: 'text/csv', json: 'application/json', pdf: 'application/pdf',
+  html: 'text/html', xml: 'application/xml', yaml: 'application/x-yaml', yml: 'application/x-yaml',
+};
+
+/** Reads a workspace file into the chat attachment store; paths must stay inside the workspace dir. */
+async function chatAttachmentFromWorkspacePath(relPath: string): Promise<Record<string, unknown>> {
+  const { randomUUID } = await import('node:crypto');
+  const root = workspaceDir;
+  const resolved = path.resolve(root, String(relPath));
+  if (resolved !== root && !resolved.startsWith(root + path.sep)) throw new Error(`Attachment path outside workspace: ${relPath}`);
+  const buf = await fs.readFile(resolved);
+  if (buf.length > 15 * 1024 * 1024) throw new Error(`Attachment too large: ${relPath}`);
+  const name = path.basename(resolved);
+  const ext = name.split('.').pop()?.toLowerCase() ?? '';
+  const mime = CHAT_FILE_MIME[ext] ?? 'application/octet-stream';
+  const dir = path.join(app.getPath('userData'), 'chat-files');
+  await fs.mkdir(dir, { recursive: true });
+  const id = randomUUID();
+  await fs.writeFile(path.join(dir, `${id}-${name}`), buf);
+  let preview: string | undefined;
+  if (/^(text\/|application\/(json|xml|javascript|x-yaml)|image\/svg)/.test(mime) && buf.length <= 512 * 1024) {
+    preview = buf.toString('utf8').slice(0, 8192);
+  }
+  return { id, name, mime, size: buf.length, preview };
+}
+
+/** Seeds a daily 08:00 digest routine for the KeepMind assistant (idempotent). */
+function seedAssistantDigest(): void {
+  try {
+    const km = storageManager.getAllAgents().find((a) => a.name === 'KeepMind');
+    if (!km || !triggerManager) return;
+    if (triggerManager.list().some((t) => t.name === 'Digest matinal')) return;
+    triggerManager.create({
+      agentId: km.id,
+      name: 'Digest matinal',
+      kind: 'daily',
+      timeOfDay: '08:00',
+      enabled: true,
+      prompt: 'Escreva o digest matinal do workspace: leia os canais recentes com app_chat_read (geral, rotinas, approvals), verifique aprovações pendentes com app_approvals_list e resultados de rotinas. Depois poste um resumo curto em português no canal geral usando app_chat_post (channel: "geral"), em bullets: pendências que precisam de humano, resultados de rotinas da madrugada, e o que merece atenção hoje.',
+    } as any);
+  } catch (error) {
+    console.error('[chat] failed to seed digest:', error);
   }
 }
 
@@ -707,6 +776,7 @@ app.whenReady().then(async () => {
   })));
   seedBuiltInSkills();
   seedAssistantAgent();
+  syncAssistantPersona();
   agentManager = new AgentManager();
   agentManager.setCompatibleProviders(compatibleProviders);
   agentManager.setExecutionSpendProvider(id => storageManager.getExecutionSpend(id));
@@ -868,6 +938,7 @@ app.whenReady().then(async () => {
       } catch { /* channel may not exist yet on very old DBs */ }
     },
   });
+  seedAssistantDigest();
   startWebhookServer();
   void startRemoteApprovalsIfEnabled().catch(() => console.error('[remote] approval server failed to start'));
   agentManager.setContextProvider(async (query, agentId) => {
@@ -1102,11 +1173,13 @@ app.whenReady().then(async () => {
         mainWindow?.webContents.send('chat:event', { type: 'channels-changed' });
         return `Channel #${ch.name} created${ids.length ? ` with ${ids.length} agent(s)` : ''}`;
       },
-      chatPost: (channel, text, parentId, callerAgentId) => {
+      chatPost: async (channel, text, parentId, callerAgentId, attachPaths) => {
         const agent = callerAgentId ? storageManager.getAgent(callerAgentId) : undefined;
         if (!agent) throw new Error('chat_post requires an agent caller');
-        chatManager.postAgentMessage(String(channel), agent, String(text), parentId ? String(parentId) : undefined);
-        return `Posted to #${String(channel).replace(/^#/, '')}`;
+        const attachments = attachPaths?.length ? await Promise.all(attachPaths.map(chatAttachmentFromWorkspacePath)) : undefined;
+        chatManager.postAgentMessage(String(channel), agent, String(text), parentId ? String(parentId) : undefined,
+          attachments?.length ? { attachments } : undefined);
+        return `Posted to #${String(channel).replace(/^#/, '')}${attachments?.length ? ` with ${attachments.length} attachment(s)` : ''}`;
       },
       automationDelete: (id) => {
         const ok = triggerManager.delete(id);
@@ -2890,6 +2963,7 @@ handle('settings:get', () => {
     memorySemanticSearch: settings['memory.semantic'] === 'true',
     memoryEmbeddingModel: settings['memory.embeddingModel'] || 'nomic-embed-text',
     soundEvents: settings.soundEvents || 'attention,done,error,start',
+    assistantPersona: settings['assistant.persona'] || 'coordenador',
   };
 });
 
@@ -2902,10 +2976,12 @@ handle('settings:update', (_event, settings: Partial<AppSettings>) => {
     skillsAutoRoute: 'skills.autoRoute',
     llmAutoRoute: 'llm.autoRoute',
     toolApprovalRequired: 'gov.toolApproval',
+    assistantPersona: 'assistant.persona',
   };
   Object.entries(settings).forEach(([key, value]) => {
     storageManager.setSetting(KEY_MAP[key] ?? key, String(value));
   });
+  if (settings.assistantPersona) syncAssistantPersona();
   return storageManager.getAllSettings();
 });
 

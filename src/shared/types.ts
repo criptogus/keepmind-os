@@ -305,6 +305,8 @@ export interface AppSettings {
   soundEffects?: boolean;
   /** Comma-separated enabled sound events; undefined/empty = all enabled. */
   soundEvents?: string;
+  /** Built-in assistant persona id (see shared/personas). */
+  assistantPersona?: string;
 }
 
 

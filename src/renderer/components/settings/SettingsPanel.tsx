@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Button, Card, Checkbox, Group, Select, Slider, Stack, Switch, Text, TextInput } from '@mantine/core';
+import { ASSISTANT_PERSONAS } from '../../../shared/personas.js';
 import { useSettingsStore } from '../../store/settingsStore';
 import { useModelOptions } from '../../lib/useModelOptions';
 import { DEFAULT_MODEL } from '../../../shared/models.js';
@@ -63,6 +64,15 @@ export default function SettingsPanel() {
             value={settings.language}
             onChange={(v) => { handleChange('language', v); setLang((v || 'pt') as Lang); }}
             allowDeselect={false}
+          />
+          <Select
+            label={t('settings.assistantPersona')}
+            description={t('settings.assistantPersonaDesc')}
+            data={ASSISTANT_PERSONAS.map((p) => ({ value: p.id, label: `${p.name} — ${p.tagline}` }))}
+            value={settings.assistantPersona ?? 'coordenador'}
+            onChange={(v) => handleChange('assistantPersona', v)}
+            allowDeselect={false}
+            searchable
           />
           <Select
             label={t('settings.mode')}

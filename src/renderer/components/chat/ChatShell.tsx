@@ -7,6 +7,7 @@ import ThreadPanel from './ThreadPanel.js';
 import { useLang } from '../../lib/i18n.js';
 import { useThemeStore } from '../../store/themeStore.js';
 import { parseCommand, CHAT_COMMANDS } from './commands.js';
+import { ASSISTANT_PERSONAS } from '../../../shared/personas.js';
 
 interface ChatShellProps {
   onOpenAdmin: (section?: string) => void;
@@ -182,6 +183,22 @@ export default function ChatShell({ onOpenAdmin, pendingApprovals }: ChatShellPr
         await api.updateSettings({ language: v });
         setLang(v as 'pt' | 'en' | 'es');
         say(`🌐 ${v}`);
+        return;
+      }
+      case 'persona': {
+        if (!args) {
+          const list = ASSISTANT_PERSONAS.map((p) => `• \`/persona ${p.id}\` — **${p.name}**: ${p.tagline}`).join('\n');
+          say(`${lang === 'pt' ? 'Perfis do assistente' : 'Assistant personas'}:\n\n${list}`);
+          return;
+        }
+        const p = ASSISTANT_PERSONAS.find((x) => x.id === args.toLowerCase() || x.name.toLowerCase() === args.toLowerCase());
+        if (!p) { say(`⚠ ${lang === 'pt' ? 'Perfil não encontrado' : 'Persona not found'}: ${args} — ${lang === 'pt' ? 'use /persona sem argumentos para listar' : 'use /persona with no args to list'}`); return; }
+        try {
+          await api.updateSettings({ assistantPersona: p.id });
+          say(`${lang === 'pt' ? 'Perfil do assistente alterado para' : 'Assistant persona set to'} **${p.name}** — ${p.tagline}`);
+        } catch {
+          say(`⚠ ${lang === 'pt' ? 'Sem permissão para alterar configurações' : 'Not allowed to change settings'}`);
+        }
         return;
       }
       default:

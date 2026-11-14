@@ -71,7 +71,7 @@ export interface AppAdminApi {
   automationCreate(input: Record<string, unknown>): string;
   automationDelete(id: string): string;
   chatRead(channel: string, limit?: number): string;
-  chatPost(channel: string, text: string, parentId?: string, callerAgentId?: string): string;
+  chatPost(channel: string, text: string, parentId?: string, callerAgentId?: string, attachPaths?: string[]): Promise<string>;
   channelCreate(name: string, agentNames?: string[], topic?: string): string;
 }
 
@@ -618,7 +618,7 @@ export class ToolRegistry {
         return `Opened ${url}`;
       },
     });
-    const appTool = (name: string, description: string, parameters: Record<string, unknown>, run: (args: Record<string, unknown>) => string) => {
+    const appTool = (name: string, description: string, parameters: Record<string, unknown>, run: (args: Record<string, unknown>) => string | Promise<string>) => {
       this.register({
         name,
         description,
@@ -651,9 +651,10 @@ export class ToolRegistry {
     appTool('app_chat_read', 'Read recent messages of a chat channel (name without #). Returns author, timestamp, body and attachment previews.', {
       channel: { type: 'string' }, limit: { type: 'number' },
     }, (a) => this.context.appAdmin!.chatRead(String(a.channel), a.limit ? Number(a.limit) : 20));
-    appTool('app_chat_post', 'Post a message into a chat channel as yourself (the calling agent). Use channel name without #. Optionally reply inside a thread via parentId.', {
+    appTool('app_chat_post', 'Post a message into a chat channel as yourself (the calling agent). Use channel name without #. Optionally reply inside a thread via parentId, and attach workspace files (paths relative to the workspace dir) via attachPaths.', {
       channel: { type: 'string' }, text: { type: 'string' }, parentId: { type: 'string' },
-    }, (a) => this.context.appAdmin!.chatPost(String(a.channel), String(a.text), a.parentId ? String(a.parentId) : undefined, this.context.callerAgentId));
+      attachPaths: { type: 'array', items: { type: 'string' } },
+    }, async (a) => this.context.appAdmin!.chatPost(String(a.channel), String(a.text), a.parentId ? String(a.parentId) : undefined, this.context.callerAgentId, Array.isArray(a.attachPaths) ? a.attachPaths.map(String) : undefined));
     appTool('app_channel_create', 'Create a chat channel (name without #) with optional member agents (names) and topic.', {
       name: { type: 'string' }, agentNames: { type: 'array', items: { type: 'string' } }, topic: { type: 'string' },
     }, (a) => this.context.appAdmin!.channelCreate(String(a.name), Array.isArray(a.agentNames) ? a.agentNames.map(String) : undefined, a.topic ? String(a.topic) : undefined));

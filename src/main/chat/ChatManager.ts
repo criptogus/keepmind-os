@@ -123,7 +123,7 @@ export class ChatManager {
   }
 
   /** Agent-authored message posted via tools (chat_post). */
-  postAgentMessage(channelName: string, agent: Agent, body: string, parentId?: string): ChannelMessage {
+  postAgentMessage(channelName: string, agent: Agent, body: string, parentId?: string, meta?: Record<string, unknown>): ChannelMessage {
     const channel = this.deps.storage.listChannels().find((c) => c.name.toLowerCase() === channelName.toLowerCase().replace(/^#/, ''));
     if (!channel) throw new Error(`Channel not found: ${channelName}`);
     if (parentId) {
@@ -138,6 +138,7 @@ export class ChatManager {
       body: body.slice(0, 8000),
       status: 'done',
       parentId,
+      meta,
     });
     this.deps.emit({ type: 'message-created', channelId: channel.id, message: msg });
     return msg;

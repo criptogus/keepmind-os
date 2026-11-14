@@ -846,6 +846,9 @@ const dict: Record<string, { en: string; pt: string }> = {
   'chat.attach': { en: 'Attach files', pt: 'Anexar arquivos' },
   'chat.thread': { en: 'Thread', pt: 'Thread' },
   'chat.closeThread': { en: 'Close thread', pt: 'Fechar thread' },
+  'chat.cmd.persona': { en: 'Set assistant persona', pt: 'Define o perfil do assistente' },
+  'settings.assistantPersona': { en: 'Assistant persona', pt: 'Perfil do assistente' },
+  'settings.assistantPersonaDesc': { en: 'Communication style of the built-in KeepMind assistant', pt: 'Estilo de comunicação do assistente KeepMind' },
 
 
 
