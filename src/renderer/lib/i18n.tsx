@@ -844,7 +844,7 @@ const dict: Record<string, { en: string; pt: string }> = {
   'chat.celebrate': { en: 'Celebrate', pt: 'Celebrar' },
   'chat.seen': { en: 'Seen', pt: 'Visto' },
   'chat.react': { en: 'React', pt: 'Reagir' },
-  'chat.reply': { en: 'Reply in thread', pt: 'Responder na thread' },
+  'chat.reply': { en: 'Reply in thread', pt: 'Responder na conversa' },
   'chat.replies': { en: 'replies', pt: 'respostas' },
   'chat.replyingTo': { en: 'Replying to', pt: 'Respondendo a' },
   'chat.attach': { en: 'Attach files', pt: 'Anexar arquivos' },

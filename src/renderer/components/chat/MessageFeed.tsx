@@ -1,3 +1,4 @@
+import { Tooltip } from '@mantine/core';
 import MessageActionIcon from './MessageActionIcon';
 import { approvalCopy } from '../../../shared/approvalCopy';
 import ChoiceReply from './ChoiceReply';
@@ -239,22 +240,25 @@ export function MessageBubble({ message: m, agent, team, meId, onReact, onReply,
       {onReact && (
         <div className="km-msg-actions" role="toolbar" aria-label={t('chat.react')}>
           {QUICK_REACTIONS.map((emoji) => (
+            <Tooltip key={emoji} label={t(REACTION_LABELS[emoji as keyof typeof REACTION_LABELS])}
+              position="bottom" openDelay={150} events={{ hover: true, focus: true, touch: true }}>
             <button
-              key={emoji}
               className="km-msg-action"
               onClick={() => onReact(m.id, emoji)}
               aria-label={t(REACTION_LABELS[emoji as keyof typeof REACTION_LABELS])}
-              title={t(REACTION_LABELS[emoji as keyof typeof REACTION_LABELS])}
               aria-pressed={!!meId && !!reactions[emoji]?.includes(meId)}
             ><MessageActionIcon name={emoji} /></button>
+            </Tooltip>
           ))}
           {onReply && (
+            <Tooltip label={t('chat.reply')} position="bottom" openDelay={150}
+              events={{ hover: true, focus: true, touch: true }}>
             <button
               className="km-msg-action"
               onClick={() => onReply(m)}
               aria-label={t('chat.reply')}
-              title={t('chat.reply')}
             ><MessageActionIcon name="reply" /></button>
+            </Tooltip>
           )}
         </div>
       )}
