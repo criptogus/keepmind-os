@@ -729,7 +729,7 @@ function createWindow() {
       contextIsolation: true,
       sandbox: true,
     },
-    titleBarStyle: 'hiddenInset',
+    titleBarStyle: 'default',
     title: 'KeepMind OS',
     backgroundColor: '#ffffff',
   });

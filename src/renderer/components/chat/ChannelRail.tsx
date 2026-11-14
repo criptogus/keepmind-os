@@ -62,14 +62,19 @@ export default function ChannelRail({ channels, agents: allAgents, activeId, onS
     return (
       <div
         key={ch.id}
+        className="km-channel-item"
+        role="button"
+        tabIndex={0}
+        aria-current={isActive ? 'page' : undefined}
+        onKeyDown={(e) => { if (e.target === e.currentTarget && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); onSelect(ch.id); } }}
         onClick={() => onSelect(ch.id)}
         style={{
           display: 'flex', alignItems: 'center', gap: 8, padding: '7px 10px',
           borderRadius: 8, cursor: 'pointer', fontSize: 14,
-          backgroundColor: isActive ? 'var(--mantine-color-default-hover)' : 'transparent',
+          backgroundColor: isActive ? 'var(--km-rail-selected)' : 'transparent',
           fontWeight: isActive ? 600 : 400,
           position: 'relative',
-          boxShadow: isActive ? 'inset 3px 0 var(--km-lime, #c4ff3d)' : 'none',
+
         }}
         onContextMenu={(e) => { e.preventDefault(); setMenuFor(menuFor === ch.id ? null : ch.id); }}
       >
@@ -110,13 +115,13 @@ export default function ChannelRail({ channels, agents: allAgents, activeId, onS
   };
 
   return (
-    <aside style={{
-      width: 240, flexShrink: 0, display: 'flex', flexDirection: 'column',
-      backgroundColor: 'var(--mantine-color-body)', borderRight: '1px solid var(--mantine-color-default-border)',
+    <aside className="km-channel-rail" style={{
+      width: 256, flexShrink: 0, display: 'flex', flexDirection: 'column',
+      backgroundColor: 'var(--km-rail-bg)', borderRight: '1px solid var(--mantine-color-default-border)',
       height: '100vh',
     }}>
-      <div style={{ padding: '14px 14px 8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <span style={{ fontWeight: 700, fontSize: 15 }}>KeepMind OS</span>
+      <div style={{ padding: '22px 18px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <span className="km-brand"><span className="km-brand-mark" aria-hidden="true">K</span>KeepMind OS</span>
         <ActionIcon size="sm" variant="subtle" color="gray" onClick={openCreate} aria-label={t('chat.newChannel')}>+</ActionIcon>
       </div>
       <div style={{ flex: 1, overflowY: 'auto', padding: '4px 8px' }}>
@@ -134,6 +139,10 @@ export default function ChannelRail({ channels, agents: allAgents, activeId, onS
             {agentsWithoutDm.map((a) => (
               <div
                 key={a.id}
+                className="km-channel-item"
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); void openDm(a.id); } }}
                 onClick={() => void openDm(a.id)}
                 style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 10px', borderRadius: 8, cursor: 'pointer', fontSize: 14 }}
               >
@@ -150,7 +159,7 @@ export default function ChannelRail({ channels, agents: allAgents, activeId, onS
           style={{
             width: '100%', padding: '7px 0', borderRadius: 8, border: '1px solid var(--mantine-color-default-border)',
             background: 'transparent', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
-            color: 'var(--mantine-color-dark-6)', marginBottom: 8,
+            color: 'var(--mantine-color-text)', marginBottom: 8,
           }}
         >
           {t('chat.admin')} ⚙

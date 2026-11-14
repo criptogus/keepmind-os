@@ -223,7 +223,7 @@ export default function ChatShell({ onOpenAdmin, pendingApprovals }: ChatShellPr
   }, []);
 
   return (
-    <div style={{ display: 'flex', height: '100vh', backgroundColor: 'var(--mantine-color-body)', fontFamily: 'inherit' }}>
+    <div className="km-conversation-shell" style={{ display: 'flex', height: '100vh', backgroundColor: 'var(--mantine-color-body)', fontFamily: 'inherit' }}>
       <ChannelRail
         channels={channels}
         agents={agents}
@@ -234,7 +234,7 @@ export default function ChatShell({ onOpenAdmin, pendingApprovals }: ChatShellPr
         onChanged={reloadChannels}
       />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
-        <header style={{
+        <header className="km-conversation-header" style={{
           display: 'flex', alignItems: 'center', gap: 10,
           padding: '10px 20px', borderBottom: '1px solid var(--mantine-color-default-border)',
           WebkitAppRegion: 'drag',
@@ -249,7 +249,7 @@ export default function ChatShell({ onOpenAdmin, pendingApprovals }: ChatShellPr
           <button
             data-tour="chat-admin"
             onClick={() => onOpenAdmin()}
-            className="km-primary-action"
+            className="km-chat-settings"
             style={{
               WebkitAppRegion: 'no-drag',
               padding: '6px 14px', fontSize: 13, cursor: 'pointer', fontFamily: 'inherit',
