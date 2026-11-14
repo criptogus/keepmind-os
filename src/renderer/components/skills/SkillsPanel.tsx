@@ -235,10 +235,10 @@ export default function SkillsPanel() {
           {proposal ? <>
             <Alert color="gray">{copy('Esta é uma proposta, ainda não testada em tarefas reais. Nome, tags, categoria e ferramentas serão preservados.', 'This is a proposal, not yet tested on real tasks. Name, tags, category and tools will be preserved.')}</Alert>
             <div className="km-skill-compare">
-              <Textarea label={copy('Instruções atuais', 'Current instructions')} value={proposal.skill.prompt} readOnly minRows={12} autosize maxRows={20} />
-              <Textarea label={copy('Proposta de melhoria', 'Proposed improvement')} value={proposal.prompt} onChange={e => setProposal({ ...proposal, prompt: e.currentTarget.value })} minRows={12} autosize maxRows={20} />
+              <Textarea label={copy('Instruções atuais', 'Current instructions')} value={proposal.skill.prompt} readOnly minRows={8} autosize maxRows={12} />
+              <Textarea label={copy('Proposta de melhoria', 'Proposed improvement')} value={proposal.prompt} onChange={e => setProposal({ ...proposal, prompt: e.currentTarget.value })} minRows={8} autosize maxRows={12} />
             </div>
-            <Group justify="flex-end">
+            <Group justify="flex-end" className="km-skill-footer">
               <Button variant="default" disabled={saving} onClick={() => { setProposal(null); setImproveOpen(false); }}>{copy('Descartar proposta', 'Discard proposal')}</Button>
               <Button className="km-primary-action" loading={saving} disabled={!proposal.prompt.trim()} onClick={async () => {
                 setSaving(true); setError('');
@@ -409,13 +409,13 @@ export default function SkillsPanel() {
           <Textarea
             label={t('skills.promptLabel')}
             description={t('skills.promptDesc')}
-            minRows={8}
+            autosize minRows={5} maxRows={10}
             value={form.prompt}
             onChange={(e) => setForm({ ...form, prompt: e.currentTarget.value })}
           />
           {tools.length > 0 && (
-            <div>
-              <Text size="sm" fw={500} mb={4}>{t('skills.toolsLabel')}</Text>
+            <details className="km-skill-instructions">
+              <summary>{t('skills.toolsLabel')} · {form.toolNames.length} {copy('selecionadas', 'selected')}</summary>
               <Text size="xs" c="dimmed" mb={8}>{t('skills.toolsDesc')}</Text>
               {tools.map((t) => (
                 <Checkbox
@@ -434,11 +434,11 @@ export default function SkillsPanel() {
                   mb={4}
                 />
               ))}
-            </div>
+            </details>
           )}
           {error && <Text size="sm" c="dimmed">{error}</Text>}
-          <Group justify="flex-end">
-            <Button variant="default" onClick={() => { setEditing(null); setIsNew(false); }}>{t('common.cancel')}</Button>
+          <Group justify="flex-end" className="km-skill-footer">
+            <Button variant="default" disabled={saving} onClick={() => { setEditing(null); setIsNew(false); }}>{t('common.cancel')}</Button>
             <Button loading={saving} onClick={save}>{t('common.save')}</Button>
           </Group>
         </Stack>

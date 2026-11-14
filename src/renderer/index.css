@@ -318,3 +318,5 @@ body {
 .km-skill-instructions[open] summary { margin-bottom: 8px; }
 .km-skill-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 @media (max-width: 900px) { .km-skill-row { flex-direction: column; gap: 12px; } .km-skill-compare { grid-template-columns: 1fr; } }
+
+.km-skill-footer { position: sticky; bottom: 0; padding: 12px 0; background: var(--mantine-color-body); border-top: 1px solid var(--mantine-color-default-border); z-index: 2; }
