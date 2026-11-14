@@ -1,4 +1,4 @@
-import Deliverable from '../work/Deliverable.js';
+import ChoiceReply from './ChoiceReply';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import type { Agent, ChannelMessage, ChatAttachment, Team } from '../../../shared/types.js';
 import BotAvatar from '../common/BotAvatar.js';
@@ -109,11 +109,12 @@ interface MessageFeedProps {
   onReact?: (messageId: string, emoji: string) => void;
   onReply?: (message: ChannelMessage) => void;
   onOpenThread?: (message: ChannelMessage) => void;
+  onChoose?: (text: string) => Promise<void>;
   onRefresh: () => void;
   onLoadEarlier?: (beforeId: string) => void;
 }
 
-export default function MessageFeed({ messages, agents, teams, meId, onReact, onReply, onOpenThread, onRefresh, onLoadEarlier }: MessageFeedProps) {
+export default function MessageFeed({ messages, agents, teams, meId, onReact, onReply, onOpenThread, onRefresh, onLoadEarlier, onChoose }: MessageFeedProps) {
   const { t } = useLang();
   const scrollRef = useRef<HTMLDivElement>(null);
   const stickBottom = useRef(true);
@@ -182,6 +183,7 @@ export default function MessageFeed({ messages, agents, teams, meId, onReact, on
           onReact={onReact}
           onReply={onReply}
           onOpenThread={onOpenThread}
+          onChoose={m.id === messages.at(-1)?.id && m.status === 'done' ? onChoose : undefined}
           onRefresh={onRefresh}
         />
       ))}
@@ -196,7 +198,7 @@ export default function MessageFeed({ messages, agents, teams, meId, onReact, on
   );
 }
 
-export function MessageBubble({ message: m, agent, team, meId, onReact, onReply, onOpenThread, onRefresh }: {
+export function MessageBubble({ message: m, agent, team, meId, onReact, onReply, onOpenThread, onRefresh, onChoose }: {
   message: ChannelMessage;
   agent?: Agent;
   team?: Team;
@@ -204,6 +206,7 @@ export function MessageBubble({ message: m, agent, team, meId, onReact, onReply,
   onReact?: (messageId: string, emoji: string) => void;
   onReply?: (message: ChannelMessage) => void;
   onOpenThread?: (message: ChannelMessage) => void;
+  onChoose?: (text: string) => Promise<void>;
   onRefresh: () => void;
 }) {
   const { t } = useLang();
@@ -277,7 +280,7 @@ export function MessageBubble({ message: m, agent, team, meId, onReact, onReply,
           color: m.status === 'error' ? 'var(--mantine-color-dark-5)' : 'inherit',
         }}>
           <div className={m.status === 'streaming' ? 'km-stream-caret' : undefined}>
-            {isAgent ? <Deliverable content={m.body || (m.status === 'streaming' ? '…' : '')} /> : m.body}
+            {isAgent ? <ChoiceReply body={m.body || (m.status === 'streaming' ? '…' : '')} onChoose={onChoose} /> : m.body}
           </div>
         </div>
         {Object.keys(reactions).length > 0 && (

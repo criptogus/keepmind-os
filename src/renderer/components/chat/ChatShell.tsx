@@ -259,6 +259,7 @@ export default function ChatShell({ onOpenAdmin, pendingApprovals }: ChatShellPr
           </button>
         </header>
         <MessageFeed
+          onChoose={async text => { if (!activeId) throw new Error('No active channel'); await window.electronAPI.sendChatMessage(activeId, text); }}
           messages={messages}
           agents={agents}
           teams={teams}
