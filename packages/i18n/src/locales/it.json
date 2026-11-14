@@ -19946,5 +19946,30 @@
     "category": "Categoria",
     "search": "Cerca per nome, descrizione, categoria o etichetta",
     "request": "Rivedi la skill {{name}} (v{{version}}), usando SuperAgentSkill se disponibile. Mantieni capacità e controlli di accesso. {{goal}} Prepara una proposta completa da approvare prima di applicare modifiche. Spiega le modifiche e mostra la scheda di approvazione. Non pubblicare nulla."
+  },
+  "keepmindHome": {
+    "routineBlockers": "Routine che richiedono attenzione",
+    "blockers": "Ci sono attività bloccate",
+    "title": "Oggi",
+    "attention": "Inizia da ciò che richiede il tuo intervento",
+    "clear": "Il tuo lavoro, in prospettiva",
+    "loading": "Raccolta degli aggiornamenti…",
+    "error": "Non è stato possibile aggiornare parte della panoramica. Le informazioni seguenti potrebbero essere incomplete.",
+    "retry": "Riprova",
+    "scope": "Le tue conversazioni e notifiche. Prima le decisioni e i blocchi.",
+    "decisions": "Esamina le richieste",
+    "blocked": "In attesa di una risposta o approvazione",
+    "blockedHint": "Apri la conversazione per vedere chi deve rispondere e cosa manca per continuare.",
+    "blockedAction": "Visualizza il blocco",
+    "work": "Segui il lavoro",
+    "delegate": "Delega un obiettivo",
+    "recent": "Risultati non letti · ultimi 7 giorni",
+    "more": "Mostra altre richieste",
+    "less": "Mostra meno",
+    "partial": "Sono mostrate le notifiche caricate. Apri la posta in arrivo per vederle tutte.",
+    "inbox": "Apri la posta in arrivo",
+    "ready": "Nessuna richiesta in sospeso nelle informazioni caricate. Puoi delegare il prossimo obiettivo.",
+    "unknown": "Aggiornamenti non disponibili",
+    "waiting": "Decisioni e richieste in sospeso"
   }
 }

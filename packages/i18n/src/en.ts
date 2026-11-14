@@ -7,6 +7,32 @@ import type { Widen } from "./widen";
  * no exclamation marks, buttons start with a verb, "agentes" in lower case.
  */
 export const en = {
+  keepmindHome: {
+    routineBlockers: "Routines that need attention",
+    blockers: "Work is blocked",
+    title: "Today",
+    attention: "Start with what needs you",
+    clear: "Your work, in perspective",
+    loading: "Gathering updates…",
+    error: "Part of the dashboard could not be refreshed. The information below may be incomplete.",
+    retry: "Try again",
+    scope: "Your conversations and notifications. Decisions and blockers come first.",
+    decisions: "Review pending items",
+    blocked: "Waiting for an answer or approval",
+    blockedHint: "Open the conversation to see who needs to respond and what is needed to continue.",
+    blockedAction: "View blocker",
+    work: "Follow work",
+    delegate: "Delegate a goal",
+    recent: "Unseen results · last 7 days",
+    more: "Show more pending items",
+    less: "Show less",
+    partial: "Showing loaded notifications. Open your inbox to see all items.",
+    inbox: "Open inbox",
+    ready: "No pending items found in the loaded information. You can delegate your next goal.",
+    unknown: "Updates unavailable",
+    waiting: "Decisions and pending items",
+  },
+
   keepmindSkills: {
     improve: "Improve with AI",
     intro: "Ask an agent that uses this skill to review it, consulting SuperAgentSkill when available.",

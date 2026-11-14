@@ -18810,5 +18810,30 @@
     "category": "类别",
     "search": "按名称、描述、类别或标签搜索",
     "request": "请审查技能{{name}}（v{{version}}），如可用则使用SuperAgentSkill。保留其功能和访问控制。{{goal}} 应用更改前，准备完整提案供我批准。解释更改并显示批准卡片。不要发布任何内容。"
+  },
+  "keepmindHome": {
+    "routineBlockers": "需要关注的例行任务",
+    "blockers": "有工作被阻塞",
+    "title": "今天",
+    "attention": "从需要你处理的事项开始",
+    "clear": "工作概览",
+    "loading": "正在汇总更新…",
+    "error": "部分面板未能刷新。以下信息可能不完整。",
+    "retry": "重试",
+    "scope": "你的对话和通知。优先显示待决事项和阻塞问题。",
+    "decisions": "查看待办事项",
+    "blocked": "等待回复或批准",
+    "blockedHint": "打开对话，查看谁需要回复以及继续所需的条件。",
+    "blockedAction": "查看阻塞原因",
+    "work": "跟进工作",
+    "delegate": "委派目标",
+    "recent": "未查看的结果 · 最近7天",
+    "more": "显示更多待办事项",
+    "less": "收起",
+    "partial": "正在显示已加载的通知。打开收件箱可查看全部。",
+    "inbox": "打开收件箱",
+    "ready": "已加载的信息中没有待办事项。你可以委派下一个目标。",
+    "unknown": "更新不可用",
+    "waiting": "待决事项与待办事项"
   }
 }

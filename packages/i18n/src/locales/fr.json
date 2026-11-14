@@ -19940,5 +19940,30 @@
     "category": "Catégorie",
     "search": "Rechercher par nom, description, catégorie ou étiquette",
     "request": "Révise la skill {{name}} (v{{version}}), avec SuperAgentSkill si disponible. Préserve ses capacités et contrôles d’accès. {{goal}} Prépare une proposition complète à approuver avant toute modification. Explique les changements et affiche la carte d’approbation. Ne publie rien."
+  },
+  "keepmindHome": {
+    "routineBlockers": "Routines nécessitant votre attention",
+    "blockers": "Du travail est bloqué",
+    "title": "Aujourd’hui",
+    "attention": "Commencez par ce qui a besoin de vous",
+    "clear": "Votre travail, en perspective",
+    "loading": "Chargement des nouveautés…",
+    "error": "Une partie du tableau de bord n’a pas pu être actualisée. Les informations ci-dessous peuvent être incomplètes.",
+    "retry": "Réessayer",
+    "scope": "Vos conversations et notifications. Les décisions et blocages en premier.",
+    "decisions": "Examiner les demandes",
+    "blocked": "En attente d’une réponse ou approbation",
+    "blockedHint": "Ouvrez la conversation pour voir qui doit répondre et ce qui manque pour continuer.",
+    "blockedAction": "Voir le blocage",
+    "work": "Suivre le travail",
+    "delegate": "Déléguer un objectif",
+    "recent": "Résultats non consultés · 7 derniers jours",
+    "more": "Afficher plus de demandes",
+    "less": "Afficher moins",
+    "partial": "Seules les notifications chargées sont affichées. Ouvrez la boîte de réception pour tout voir.",
+    "inbox": "Ouvrir la boîte de réception",
+    "ready": "Aucune demande en attente dans les informations chargées. Vous pouvez déléguer votre prochain objectif.",
+    "unknown": "Actualisations indisponibles",
+    "waiting": "Décisions et demandes en attente"
   }
 }

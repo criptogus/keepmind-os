@@ -1,6 +1,7 @@
 import type { AppNotification, Routine, StartChoice } from "../api/types";
 import { isVisible, sortWaiting } from "./notifications";
 import { can } from "./permissions";
+import { routineStateWords } from "./routine-view";
 
 /**
  * Início (ADR 0108): what opens when the app starts and the home's sections. Pure:
@@ -90,3 +91,9 @@ export const stepPermissions = (
   routines: can(org, "manage_routines"),
   pay: can(org, "manage_billing"),
 });
+
+/** A deliberate pause is not a blocker. Preserve server visibility; never infer access from manage rights. */
+export const homeRoutineBlockers = (routines: readonly Routine[]) =>
+  routines.filter(
+    (r) => r.target?.type !== "widget" && (routineStateWords(r).tone === "waiting" || r.state === "usage_paused"),
+  );

@@ -18733,5 +18733,30 @@
     "category": "Kategori",
     "search": "Cari berdasarkan nama, deskripsi, kategori atau tag",
     "request": "Tinjau skill {{name}} (v{{version}}), gunakan SuperAgentSkill jika tersedia. Pertahankan kemampuan dan kontrol akses. {{goal}} Siapkan usulan lengkap untuk persetujuan saya sebelum menerapkan perubahan. Jelaskan perubahan dan tampilkan kartu persetujuan. Jangan terbitkan apa pun."
+  },
+  "keepmindHome": {
+    "routineBlockers": "Rutinitas yang memerlukan perhatian",
+    "blockers": "Ada pekerjaan terhambat",
+    "title": "Hari ini",
+    "attention": "Mulai dari yang membutuhkanmu",
+    "clear": "Ringkasan pekerjaanmu",
+    "loading": "Mengumpulkan pembaruan…",
+    "error": "Sebagian dasbor tidak dapat diperbarui. Informasi berikut mungkin tidak lengkap.",
+    "retry": "Coba lagi",
+    "scope": "Percakapan dan notifikasimu. Keputusan dan hambatan didahulukan.",
+    "decisions": "Tinjau yang tertunda",
+    "blocked": "Menunggu jawaban atau persetujuan",
+    "blockedHint": "Buka percakapan untuk melihat siapa yang perlu menjawab dan apa yang diperlukan untuk melanjutkan.",
+    "blockedAction": "Lihat hambatan",
+    "work": "Pantau pekerjaan",
+    "delegate": "Delegasikan tujuan",
+    "recent": "Hasil belum dilihat · 7 hari terakhir",
+    "more": "Tampilkan lebih banyak yang tertunda",
+    "less": "Tampilkan lebih sedikit",
+    "partial": "Menampilkan notifikasi yang dimuat. Buka kotak masuk untuk melihat semuanya.",
+    "inbox": "Buka kotak masuk",
+    "ready": "Tidak ada hal tertunda dalam informasi yang dimuat. Kamu dapat mendelegasikan tujuan berikutnya.",
+    "unknown": "Pembaruan tidak tersedia",
+    "waiting": "Keputusan dan hal tertunda"
   }
 }

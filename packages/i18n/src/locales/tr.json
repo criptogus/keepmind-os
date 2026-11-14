@@ -19175,5 +19175,30 @@
     "category": "Kategori",
     "search": "Ad, açıklama, kategori veya etikete göre ara",
     "request": "{{name}} becerisini (v{{version}}), varsa SuperAgentSkill ile incele. Yetenekleri ve erişim kontrollerini koru. {{goal}} Değişiklik uygulamadan önce onayım için eksiksiz bir öneri hazırla. Değişiklikleri açıkla ve onay kartını göster. Hiçbir şey yayımlama."
+  },
+  "keepmindHome": {
+    "routineBlockers": "İlgi gerektiren rutinler",
+    "blockers": "İşler engellenmiş durumda",
+    "title": "Bugün",
+    "attention": "Sana ihtiyaç duyan işlerden başla",
+    "clear": "İşlerine genel bakış",
+    "loading": "Güncellemeler toplanıyor…",
+    "error": "Panelin bir bölümü yenilenemedi. Aşağıdaki bilgiler eksik olabilir.",
+    "retry": "Yeniden dene",
+    "scope": "Görüşmelerin ve bildirimlerin. Önce kararlar ve engeller.",
+    "decisions": "Bekleyenleri incele",
+    "blocked": "Yanıt veya onay bekleniyor",
+    "blockedHint": "Kimin yanıt vermesi gerektiğini ve devam etmek için neyin eksik olduğunu görmek için görüşmeyi aç.",
+    "blockedAction": "Engeli görüntüle",
+    "work": "İşleri takip et",
+    "delegate": "Bir hedef devret",
+    "recent": "Görülmemiş sonuçlar · son 7 gün",
+    "more": "Daha fazla bekleyen öğe göster",
+    "less": "Daha az göster",
+    "partial": "Yüklenen bildirimler gösteriliyor. Tümünü görmek için gelen kutusunu aç.",
+    "inbox": "Gelen kutusunu aç",
+    "ready": "Yüklenen bilgilerde bekleyen öğe bulunamadı. Sonraki hedefini devredebilirsin.",
+    "unknown": "Güncellemeler kullanılamıyor",
+    "waiting": "Kararlar ve bekleyen öğeler"
   }
 }

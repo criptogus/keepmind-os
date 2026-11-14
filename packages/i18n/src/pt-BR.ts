@@ -7,6 +7,32 @@ import type { LocaleStrings } from "./plurals";
  * no exclamation marks, buttons start with a verb, "agentes" in lower case.
  */
 export const ptBR = {
+  keepmindHome: {
+    routineBlockers: "Rotinas que precisam de atenção",
+    blockers: "Há trabalho bloqueado",
+    title: "Hoje",
+    attention: "Comece pelo que precisa de você",
+    clear: "Seu trabalho, em perspectiva",
+    loading: "Reunindo as atualizações…",
+    error: "Parte do painel não pôde ser atualizada. As informações abaixo podem estar incompletas.",
+    retry: "Tentar novamente",
+    scope: "Visão das suas conversas e notificações. Decisões e bloqueios vêm primeiro.",
+    decisions: "Revisar pendências",
+    blocked: "Aguardando uma resposta ou aprovação",
+    blockedHint: "Abra a conversa para ver quem precisa responder e o que falta para continuar.",
+    blockedAction: "Ver o bloqueio",
+    work: "Acompanhar trabalho",
+    delegate: "Delegar um objetivo",
+    recent: "Entregas ainda não vistas · últimos 7 dias",
+    more: "Mostrar mais pendências",
+    less: "Mostrar menos",
+    partial: "Exibindo as notificações carregadas. Veja a caixa de entrada para consultar todas.",
+    inbox: "Abrir caixa de entrada",
+    ready: "Nenhuma pendência encontrada nas informações carregadas. Você pode delegar o próximo objetivo.",
+    unknown: "Atualizações indisponíveis",
+    waiting: "Decisões e pendências",
+  },
+
   keepmindSkills: {
     improve: "Melhorar com IA",
     intro: "Peça a um agente que usa esta skill para revisá-la, consultando o SuperAgentSkill quando disponível.",

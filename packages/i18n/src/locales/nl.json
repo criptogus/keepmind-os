@@ -19423,5 +19423,30 @@
     "category": "Categorie",
     "search": "Zoek op naam, beschrijving, categorie of trefwoord",
     "request": "Beoordeel skill {{name}} (v{{version}}), met SuperAgentSkill indien beschikbaar. Behoud mogelijkheden en toegangscontroles. {{goal}} Maak een volledig voorstel voor mijn goedkeuring vóór wijzigingen. Leg de wijzigingen uit en toon de goedkeuringskaart. Publiceer niets."
+  },
+  "keepmindHome": {
+    "routineBlockers": "Routines die aandacht nodig hebben",
+    "blockers": "Er is werk geblokkeerd",
+    "title": "Vandaag",
+    "attention": "Begin met wat jouw aandacht nodig heeft",
+    "clear": "Je werk in perspectief",
+    "loading": "Updates verzamelen…",
+    "error": "Een deel van het overzicht kon niet worden vernieuwd. De onderstaande informatie kan onvolledig zijn.",
+    "retry": "Opnieuw proberen",
+    "scope": "Je gesprekken en meldingen. Beslissingen en blokkades eerst.",
+    "decisions": "Openstaande punten bekijken",
+    "blocked": "Wacht op een antwoord of goedkeuring",
+    "blockedHint": "Open het gesprek om te zien wie moet reageren en wat nodig is om verder te gaan.",
+    "blockedAction": "Blokkade bekijken",
+    "work": "Werk volgen",
+    "delegate": "Een doel delegeren",
+    "recent": "Ongelezen resultaten · afgelopen 7 dagen",
+    "more": "Meer openstaande punten tonen",
+    "less": "Minder tonen",
+    "partial": "Geladen meldingen worden getoond. Open je inbox om alles te bekijken.",
+    "inbox": "Inbox openen",
+    "ready": "Geen openstaande punten gevonden in de geladen informatie. Je kunt je volgende doel delegeren.",
+    "unknown": "Updates niet beschikbaar",
+    "waiting": "Beslissingen en openstaande punten"
   }
 }

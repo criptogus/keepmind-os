@@ -20481,5 +20481,30 @@
     "category": "Kategoria",
     "search": "Szukaj według nazwy, opisu, kategorii lub tagu",
     "request": "Sprawdź umiejętność {{name}} (v{{version}}), używając SuperAgentSkill, jeśli jest dostępny. Zachowaj możliwości i kontrolę dostępu. {{goal}} Przygotuj pełną propozycję do zatwierdzenia przed zmianami. Wyjaśnij zmiany i pokaż kartę zatwierdzenia. Niczego nie publikuj."
+  },
+  "keepmindHome": {
+    "routineBlockers": "Procedury wymagające uwagi",
+    "blockers": "Praca jest zablokowana",
+    "title": "Dzisiaj",
+    "attention": "Zacznij od spraw wymagających Twojej uwagi",
+    "clear": "Twoja praca w skrócie",
+    "loading": "Pobieranie aktualizacji…",
+    "error": "Nie udało się odświeżyć części panelu. Poniższe informacje mogą być niepełne.",
+    "retry": "Spróbuj ponownie",
+    "scope": "Twoje rozmowy i powiadomienia. Najpierw decyzje i blokady.",
+    "decisions": "Przejrzyj oczekujące sprawy",
+    "blocked": "Oczekiwanie na odpowiedź lub zatwierdzenie",
+    "blockedHint": "Otwórz rozmowę, aby zobaczyć, kto musi odpowiedzieć i czego brakuje do kontynuowania.",
+    "blockedAction": "Zobacz blokadę",
+    "work": "Śledź pracę",
+    "delegate": "Deleguj cel",
+    "recent": "Nieprzeczytane wyniki · ostatnie 7 dni",
+    "more": "Pokaż więcej oczekujących spraw",
+    "less": "Pokaż mniej",
+    "partial": "Wyświetlane są załadowane powiadomienia. Otwórz skrzynkę odbiorczą, aby zobaczyć wszystkie.",
+    "inbox": "Otwórz skrzynkę odbiorczą",
+    "ready": "W załadowanych informacjach nie znaleziono oczekujących spraw. Możesz delegować kolejny cel.",
+    "unknown": "Aktualizacje niedostępne",
+    "waiting": "Decyzje i oczekujące sprawy"
   }
 }

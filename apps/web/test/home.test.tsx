@@ -220,12 +220,12 @@ describe("Início", () => {
     await settle(4);
     expect(screen().getByRole("heading", { level: 1 }).textContent).toMatch(/^(Bom dia|Boa tarde|Boa noite), Walter$/);
     expect(document.querySelector(".ac-pagehead__meta")?.textContent).toBe(
-      "4 coisas esperando você · 1 agente trabalhando",
+      "4 coisas esperando você · Há trabalho bloqueado · 1 agente trabalhando",
     );
     expect(screen().getByRole("navigation", { name: "Navegação do workspace" }).textContent).toContain("Início");
 
     // Each waiting thing: who and what, the exact request, and its one button. The read mention isn't here.
-    const waiting = rows("Esperando você").map((r) => r.textContent ?? "");
+    const waiting = rows("Decisões e pendências").map((r) => r.textContent ?? "");
     expect(waiting).toHaveLength(4);
     expect(waiting[0]).toContain("Atlas fez uma pergunta");
     expect(waiting[0]).toContain("Qual tom uso no e-mail?");
@@ -259,7 +259,7 @@ describe("Início", () => {
       ?.observers.map((o) => o.options.refetchInterval);
     expect(every).toContain(WORKING_POLL_MS);
 
-    const done = rows("Desde a sua última visita");
+    const done = rows("Entregas ainda não vistas · últimos 7 dias");
     expect(done.map((r) => r.textContent)).toEqual([expect.stringContaining("Ada terminou uma missão")]);
     expect(done[0]?.textContent).toContain("Corrige o login");
 
@@ -277,10 +277,81 @@ describe("Início", () => {
     expect(screen().queryByText("Tudo em dia")).toBeNull();
 
     // A row opens where the inbox would, and reads the item.
-    await click(within(rows("Esperando você")[1] as HTMLElement).getByRole("button"));
+    await click(within(rows("Decisões e pendências")[1] as HTMLElement).getByRole("button"));
     await settle();
     expect(router.state.location.pathname).toBe(`/org/${ORG_ID}/approvals`);
     expect(state.calls).toContainEqual({ method: "notifications.read", args: [ORG_ID, "n-approval", true] });
+  });
+
+  test("failed sources never claim calm, and retry restores the dashboard", async () => {
+    const base = backend(seedState());
+    let fail = true;
+    const api = {
+      ...base,
+      working: {
+        list: async () => {
+          if (fail) throw new Error("offline");
+          return [];
+        },
+      },
+    };
+    await renderApp(`/org/${ORG_ID}/home`, { api });
+    await settle(4);
+    expect(screen().getByRole("alert").textContent).toContain("incompletas");
+    expect(screen().queryByText("Tudo em dia")).toBeNull();
+    fail = false;
+    await click(screen().getByRole("button", { name: "Tentar novamente" }));
+    await settle(4);
+    expect(screen().queryByRole("alert")).toBeNull();
+    expect(screen().getByRole("navigation", { name: "Hoje" })).toBeTruthy();
+  });
+
+  test("shows blocked routines with their reason but not a deliberate pause", async () => {
+    await renderApp(`/org/${ORG_ID}/home`, {
+      api: backend(seedState(), {
+        routines: [
+          routine({
+            id: "failed",
+            name: "Relatório de vendas",
+            state: "failing",
+            failuresInRow: 3,
+            active: false,
+            nextRunAt: null,
+          }),
+          routine({ id: "pause", name: "Pausa voluntária", state: "paused", active: false, nextRunAt: null }),
+        ],
+      }),
+    });
+    await settle(4);
+    const blocked = section("Rotinas que precisam de atenção");
+    expect(blocked.textContent).toContain("Relatório de vendas");
+    expect(blocked.textContent).toContain("3");
+    expect(blocked.textContent).not.toContain("Pausa voluntária");
+    expect(
+      within(blocked)
+        .getByRole("link", { name: /Relatório de vendas/ })
+        .getAttribute("href"),
+    ).toContain("open=failed");
+  });
+
+  test("expanding priorities preserves requests beyond the first five", async () => {
+    const state = seedState();
+    state.notifications = Array.from({ length: 8 }, (_, i) =>
+      notification({
+        id: `question-${i}`,
+        kind: "agent_question",
+        waiting: true,
+        source: { channelId: ENG_ID, questionId: `q-${i}` },
+        latest: { text: `Pergunta ${i}` },
+      }),
+    );
+    await renderApp(`/org/${ORG_ID}/home`, { api: backend(state) });
+    await settle(4);
+    expect(rows("Decisões e pendências")).toHaveLength(5);
+    await click(screen().getByRole("button", { name: "Mostrar mais pendências" }));
+    expect(rows("Decisões e pendências")).toHaveLength(8);
+    await click(screen().getByRole("button", { name: "Mostrar menos" }));
+    expect(rows("Decisões e pendências")).toHaveLength(5);
   });
 
   test("while Lodi's first-run checklist has a row left: one line back to it, never a second list (ADR 0155 §6)", async () => {
@@ -296,7 +367,7 @@ describe("Início", () => {
     const line = document.querySelector(".home-continue") as HTMLElement;
     expect(line.textContent).toBe("Continue de onde parou · 1 de 3");
     expect(screen().queryByRole("region", { name: "Primeiros passos" })).toBeNull();
-    for (const empty of ["Desde a sua última visita", "Próximas rotinas"])
+    for (const empty of ["Entregas ainda não vistas · últimos 7 dias", "Próximas rotinas"])
       expect(screen().queryByRole("region", { name: empty })).toBeNull();
     await click(line);
     await settle(4);

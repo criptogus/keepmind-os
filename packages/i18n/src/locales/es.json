@@ -19796,5 +19796,30 @@
     "category": "Categoría",
     "search": "Buscar por nombre, descripción, categoría o etiqueta",
     "request": "Revisa la skill {{name}} (v{{version}}), usando SuperAgentSkill si está disponible. Conserva sus capacidades y controles de acceso. {{goal}} Prepara una propuesta completa para mi aprobación antes de aplicar cambios. Explica los cambios y muestra la tarjeta de aprobación. No publiques nada."
+  },
+  "keepmindHome": {
+    "routineBlockers": "Rutinas que necesitan atención",
+    "blockers": "Hay trabajo bloqueado",
+    "title": "Hoy",
+    "attention": "Empieza por lo que necesita tu atención",
+    "clear": "Tu trabajo, en perspectiva",
+    "loading": "Recopilando novedades…",
+    "error": "No se pudo actualizar parte del panel. La información siguiente puede estar incompleta.",
+    "retry": "Intentar de nuevo",
+    "scope": "Tus conversaciones y notificaciones. Primero las decisiones y los bloqueos.",
+    "decisions": "Revisar pendientes",
+    "blocked": "Esperando una respuesta o aprobación",
+    "blockedHint": "Abre la conversación para ver quién debe responder y qué falta para continuar.",
+    "blockedAction": "Ver bloqueo",
+    "work": "Seguir el trabajo",
+    "delegate": "Delegar un objetivo",
+    "recent": "Resultados sin leer · últimos 7 días",
+    "more": "Mostrar más pendientes",
+    "less": "Mostrar menos",
+    "partial": "Se muestran las notificaciones cargadas. Abre la bandeja de entrada para verlas todas.",
+    "inbox": "Abrir bandeja de entrada",
+    "ready": "No se encontraron pendientes en la información cargada. Puedes delegar tu próximo objetivo.",
+    "unknown": "Actualizaciones no disponibles",
+    "waiting": "Decisiones y pendientes"
   }
 }

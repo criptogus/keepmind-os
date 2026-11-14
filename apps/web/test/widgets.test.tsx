@@ -140,7 +140,7 @@ describe("My Home as a mural (ADR 0135)", () => {
     const { sales, orders, builds } = await open(`/org/${ORG_ID}/home`);
     expect(order()).toEqual(["waiting", sales.id, orders.id, "working", builds.id]);
     // The tiles keep their own sections' names and bodies.
-    expect(within(mural()).getByRole("region", { name: "Esperando você" })).toBeTruthy();
+    expect(within(mural()).getByRole("region", { name: "Decisões e pendências" })).toBeTruthy();
     expect(within(mural()).getByRole("region", { name: "Trabalhando agora" })).toBeTruthy();
     // A widget: its title, its number in the app's bold tabular style, who looks after it, when and how often.
     const card = widget("Vendas hoje");
@@ -754,7 +754,7 @@ describe("a board's notices in Waiting on you", () => {
   test("each with what can be done right there: Publish or Keep only for me, Open widget, Resolve", async () => {
     const s = noticed();
     const { state, router } = await open(`/org/${ORG_ID}/home`, s);
-    const waiting = within(mural()).getByRole("region", { name: "Esperando você" });
+    const waiting = within(mural()).getByRole("region", { name: "Decisões e pendências" });
     const rows = within(waiting).getAllByRole("listitem");
     const text = rows.map((r) => r.textContent ?? "");
     const proposal = rows[text.findIndex((x) => x.includes("Ada quer publicar um painel"))] as HTMLElement;

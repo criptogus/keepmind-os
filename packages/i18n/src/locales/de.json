@@ -19244,5 +19244,30 @@
     "category": "Kategorie",
     "search": "Nach Name, Beschreibung, Kategorie oder Schlagwort suchen",
     "request": "Prüfe die Skill {{name}} (v{{version}}), wenn möglich mit SuperAgentSkill. Bewahre Fähigkeiten und Zugriffskontrollen. {{goal}} Erstelle einen vollständigen Vorschlag zur Freigabe vor Änderungen. Erkläre Änderungen und zeige die Freigabekarte. Veröffentliche nichts."
+  },
+  "keepmindHome": {
+    "routineBlockers": "Routinen, die Aufmerksamkeit benötigen",
+    "blockers": "Arbeit ist blockiert",
+    "title": "Heute",
+    "attention": "Beginne mit dem, was dich braucht",
+    "clear": "Deine Arbeit im Überblick",
+    "loading": "Aktualisierungen werden geladen…",
+    "error": "Ein Teil der Übersicht konnte nicht aktualisiert werden. Die folgenden Informationen sind möglicherweise unvollständig.",
+    "retry": "Erneut versuchen",
+    "scope": "Deine Unterhaltungen und Benachrichtigungen. Entscheidungen und Blockaden zuerst.",
+    "decisions": "Offene Punkte prüfen",
+    "blocked": "Warten auf Antwort oder Freigabe",
+    "blockedHint": "Öffne die Unterhaltung, um zu sehen, wer antworten muss und was zum Fortfahren fehlt.",
+    "blockedAction": "Blockade ansehen",
+    "work": "Arbeit verfolgen",
+    "delegate": "Ein Ziel delegieren",
+    "recent": "Ungelesene Ergebnisse · letzte 7 Tage",
+    "more": "Mehr offene Punkte anzeigen",
+    "less": "Weniger anzeigen",
+    "partial": "Geladene Benachrichtigungen werden angezeigt. Öffne den Posteingang, um alle zu sehen.",
+    "inbox": "Posteingang öffnen",
+    "ready": "In den geladenen Informationen wurden keine offenen Punkte gefunden. Du kannst dein nächstes Ziel delegieren.",
+    "unknown": "Aktualisierungen nicht verfügbar",
+    "waiting": "Entscheidungen und offene Punkte"
   }
 }
