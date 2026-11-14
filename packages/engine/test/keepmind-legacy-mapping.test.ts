@@ -42,7 +42,7 @@ test("permission mapping preserves limits but never converts broad legacy flags 
   expect(p?.effectiveTimeoutSeconds).toBe(300);
   expect(p?.declaredMaxExecutionTime).toBe(120);
   expect(p?.sharingRequiresIdentityMapping).toBe(true);
-  expect(p?.blockers).toContain("monthly_run_cap_enforcement");
+  expect(p?.runtimeControls.admission).toBe("native_monthly_cap");
   expect(JSON.stringify(p)).not.toContain("never-copied");
   (s.agents[0] as Record<string, unknown>).permissions = {};
   expect(() => mapLegacyPermissions(s)).toThrow("permission");
@@ -103,4 +103,15 @@ test("unsafe expressions, cycles, nonmembers and absent dependencies fail before
 test("empty workflows remain empty and mocks must be explicit", () => {
   expect(simulateLegacyWorkflow(workflow("sequential", []), {}, {}).trace).toEqual([]);
   expect(simulateLegacyWorkflow(workflow("sequential", [step("one")]), {}, {}).trace[0]?.status).toBe("failed");
+});
+
+test("omitted monthly cap retains legacy default; invalid caps never become unlimited", () => {
+  const s = snapshot();
+  const agent = s.agents[0] as Record<string, unknown>;
+  agent.config = {};
+  expect(mapLegacyPermissions(s)[0]?.monthlyRunCap).toBe(1000);
+  for (const cap of [null, 0, -1, 1.5, 100001]) {
+    agent.config = { monthlyRunCap: cap };
+    expect(() => mapLegacyPermissions(s)).toThrow("monthly run cap");
+  }
 });

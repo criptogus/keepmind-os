@@ -40,7 +40,7 @@ export function parseLegacyCondition(source: string): LegacyCondition {
   }
   return { path, op: match[2] as string, value };
 }
-function conditionHolds(condition: LegacyCondition, context: Record<string, unknown>) {
+export function conditionHolds(condition: LegacyCondition, context: Record<string, unknown>) {
   const left = condition.path.reduce<unknown>(
     (v, k) => (v && typeof v === "object" && Object.hasOwn(v, k) ? (v as Record<string, unknown>)[k] : undefined),
     context,
@@ -194,6 +194,14 @@ export function mapLegacyPermissions(snapshot: KeepMindLegacySnapshot) {
     const flags = ["canAccessNetwork", "canAccessFileSystem", "canExecuteCode"] as const;
     for (const flag of flags)
       if (typeof permissions[flag] !== "boolean") throw new Error("Missing or invalid legacy permission");
+    if (
+      config.monthlyRunCap !== undefined &&
+      (typeof config.monthlyRunCap !== "number" ||
+        !Number.isSafeInteger(config.monthlyRunCap) ||
+        config.monthlyRunCap < 1 ||
+        config.monthlyRunCap > 100_000)
+    )
+      throw new Error("Invalid legacy monthly run cap");
     const usd = optionalLimit(config.monthlyBudgetUsd);
     const nano = usd === null ? null : Math.floor(usd * 1e9);
     if (nano !== null && !Number.isSafeInteger(nano)) throw new Error("Legacy budget exceeds exact native range");
@@ -210,7 +218,7 @@ export function mapLegacyPermissions(snapshot: KeepMindLegacySnapshot) {
       })),
       monthlyBudgetNanoUsd: nano,
       budgetStatus: nano === null ? "unspecified_no_default_inference" : "mapped_conservatively",
-      monthlyRunCap: optionalLimit(config.monthlyRunCap),
+      monthlyRunCap: optionalLimit(config.monthlyRunCap) ?? 1000,
       declaredMaxExecutionTime: optionalLimit(permissions.maxExecutionTime),
       // Legacy execution uses config.executionTimeoutSeconds, not permissions.maxExecutionTime.
       effectiveTimeoutSeconds: optionalLimit(config.executionTimeoutSeconds) ?? 300,
@@ -230,12 +238,16 @@ export function mapLegacyPermissions(snapshot: KeepMindLegacySnapshot) {
       }),
       computerAccess: typeof config.computerAccess === "string" ? config.computerAccess : null,
       autoSkills: typeof config.autoSkills === "boolean" ? config.autoSkills : null,
+      runtimeControls: {
+        admission: "native_monthly_cap",
+        deadline: "persistent_wall_clock",
+        historyRequired: true,
+        tools: "text_only",
+      },
       blockers: [
         "model_and_credential_mapping",
         "tool_and_resource_boundaries",
-        "runtime_timeout_equivalence",
         "governance_mapping",
-        ...(config.monthlyRunCap != null ? ["monthly_run_cap_enforcement"] : []),
         ...(agent.is_shared ? ["sharing_identity_mapping"] : []),
       ],
     };

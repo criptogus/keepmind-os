@@ -4,6 +4,7 @@ import { eq, schema } from "@agenteschat/db";
 import { type KeepMindLegacySnapshot, planKeepMindLegacy, stageKeepMindLegacy } from "../src/keepmind-legacy";
 import { type Fixture, setup } from "./fixtures";
 
+const MONTH = `${new Date().toISOString().slice(0, 7)}-01`;
 let f: Fixture;
 afterEach(async () => {
   const current = f;
@@ -12,6 +13,7 @@ afterEach(async () => {
 });
 const snapshot = (): KeepMindLegacySnapshot => ({
   sourceRef: "synthetic-legacy",
+  usage: [{ agentId: "a1", month: MONTH, runs: 7, costNanoUsd: 500_000_000 }],
   timezone: "America/Sao_Paulo",
   agents: [
     {
@@ -95,6 +97,10 @@ test("staging is private, inert, relationship-preserving and repeatable", async 
   const second = await stageKeepMindLegacy(deps, f.owner.id, f.org.id, snapshot());
   expect(second.items.every((i) => i.action === "unchanged")).toBe(true);
   expect(await f.db.select().from(schema.agents)).toHaveLength(1);
+  expect((await f.db.select().from(schema.legacyAgentPolicies))[0]?.priorRunsByMonth[MONTH]).toBe(7);
+  const budgets = await f.db.select().from(schema.agentBudgetPeriods);
+  expect(budgets).toHaveLength(1);
+  expect(budgets[0]?.spentNanoUsd).toBe(500_000_000);
 }, 120_000);
 test("staging refuses a live workspace and rolls back truncation", async () => {
   f = await setup();

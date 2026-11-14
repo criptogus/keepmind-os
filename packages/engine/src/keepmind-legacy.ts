@@ -1,4 +1,4 @@
-import { and, eq, inArray, schema } from "@agenteschat/db";
+import { and, eq, inArray, schema, sql } from "@agenteschat/db";
 import { sha256 } from "./crypto";
 import { applyImport, type ImportDeps, type MigrationBundle } from "./imports";
 import { mapLegacyPermissions, mapLegacyWorkflows } from "./keepmind-legacy-mapping";
@@ -16,6 +16,7 @@ export interface KeepMindLegacySnapshot {
   triggers: Record<string, unknown>[];
   governance_rules?: Record<string, unknown>[];
   users?: Record<string, unknown>[];
+  usage?: { agentId: string; month: string; runs: number; costNanoUsd: number }[];
 }
 const text = (value: unknown) => (typeof value === "string" ? value : "");
 function json(value: unknown): unknown {
@@ -165,6 +166,12 @@ export async function stageKeepMindLegacy(
   await requirePermission(deps.db, actorId, orgId, "manage_agents");
   const plan = planKeepMindLegacy(snapshot);
   return deps.db.transaction(async (tx) => {
+    // Serialize first-time policy/history seeding even on a shared PostgreSQL server.
+    await tx
+      .select({ id: schema.organizations.id })
+      .from(schema.organizations)
+      .where(eq(schema.organizations.id, orgId))
+      .for("update");
     const members = await tx
       .select()
       .from(schema.organizationMembers)
@@ -314,6 +321,128 @@ export async function stageKeepMindLegacy(
       targetChannelId: mapped("channel", w.teamId),
       steps: w.steps.map((s) => ({ ...s, targetAgentId: mapped("agent", s.agentId) })),
     }));
+    const sourceDigest = sha256(canonicalJson(snapshot));
+    const usage = snapshot.usage ?? [];
+    const seenUsage = new Set<string>();
+    for (const row of usage) {
+      const key = `${row.agentId}:${row.month}`;
+      if (
+        seenUsage.has(key) ||
+        !mapped("agent", row.agentId) ||
+        !/^\d{4}-(0[1-9]|1[0-2])-01$/.test(row.month) ||
+        !Number.isSafeInteger(row.runs) ||
+        row.runs < 0 ||
+        !Number.isSafeInteger(row.costNanoUsd) ||
+        row.costNanoUsd < 0
+      )
+        throw new Error("Invalid legacy usage history");
+      seenUsage.add(key);
+    }
+    const unseededUsage = new Set<string>();
+    for (const permission of permissions) {
+      const [oldPolicy] = await tx
+        .select()
+        .from(schema.legacyAgentPolicies)
+        .where(eq(schema.legacyAgentPolicies.agentId, permission.targetAgentId as string));
+      if (oldPolicy && oldPolicy.sourceDigest !== sourceDigest)
+        throw new Error("Changed source history requires a fresh migration copy");
+      if (!oldPolicy && permission.targetAgentId) unseededUsage.add(permission.targetAgentId);
+      const priorRunsByMonth = Object.fromEntries(
+        usage.filter((u) => u.agentId === permission.agentId).map((u) => [u.month, u.runs]),
+      );
+      if (
+        !permission.targetAgentId ||
+        !Number.isInteger(permission.effectiveTimeoutSeconds) ||
+        permission.effectiveTimeoutSeconds < 1 ||
+        permission.effectiveTimeoutSeconds > 86400 ||
+        (permission.monthlyRunCap !== null &&
+          (!Number.isInteger(permission.monthlyRunCap) || permission.monthlyRunCap > 2147483647))
+      )
+        throw new Error("Unsupported native legacy limits");
+      await tx
+        .insert(schema.legacyAgentPolicies)
+        .values({
+          agentId: permission.targetAgentId,
+          orgId,
+          ownerUserId: actorId,
+          enabled: false,
+          timeoutSeconds: permission.effectiveTimeoutSeconds,
+          monthlyRunCap: permission.monthlyRunCap,
+          sourceDigest,
+          historyCaptured: snapshot.usage !== undefined,
+          priorRunsByMonth,
+        })
+        .onConflictDoUpdate({
+          target: schema.legacyAgentPolicies.agentId,
+          set: {
+            enabled: false,
+            timeoutSeconds: permission.effectiveTimeoutSeconds,
+            monthlyRunCap: permission.monthlyRunCap,
+            sourceDigest,
+          },
+        });
+    }
+    for (const row of usage) {
+      if (!unseededUsage.has(mapped("agent", row.agentId) as string)) continue;
+      await tx
+        .insert(schema.agentBudgetPeriods)
+        .values({
+          orgId,
+          agentId: mapped("agent", row.agentId) as string,
+          periodStart: row.month,
+          spentNanoUsd: row.costNanoUsd,
+        })
+        .onConflictDoUpdate({
+          target: [schema.agentBudgetPeriods.agentId, schema.agentBudgetPeriods.periodStart],
+          set: { spentNanoUsd: sql`${schema.agentBudgetPeriods.spentNanoUsd} + ${row.costNanoUsd}` },
+        });
+    }
+    for (const workflow of workflows) {
+      if (!workflow.targetChannelId || workflow.steps.some((s) => !s.targetAgentId))
+        throw new Error("Missing native workflow target");
+      const values = {
+        orgId,
+        sourceRef: snapshot.sourceRef,
+        sourceTeamId: workflow.teamId,
+        sourceDigest,
+        channelId: workflow.targetChannelId,
+        ownerUserId: actorId,
+        enabled: false,
+        mode: workflow.mode,
+        steps: workflow.steps.map((s) => ({
+          id: s.id,
+          agentId: s.targetAgentId as string,
+          inputs: s.inputs,
+          dependsOn: s.dependsOn,
+          condition: s.condition,
+        })),
+      };
+      const [prior] = await tx
+        .select()
+        .from(schema.legacyWorkflows)
+        .where(
+          and(
+            eq(schema.legacyWorkflows.orgId, orgId),
+            eq(schema.legacyWorkflows.sourceRef, snapshot.sourceRef),
+            eq(schema.legacyWorkflows.sourceTeamId, workflow.teamId),
+          ),
+        );
+      if (prior && prior.sourceDigest !== sourceDigest) {
+        const [used] = await tx
+          .select()
+          .from(schema.legacyWorkflowRuns)
+          .where(eq(schema.legacyWorkflowRuns.workflowId, prior.id))
+          .limit(1);
+        if (used) throw new Error("An executed workflow is immutable; use a fresh migration copy");
+      }
+      await tx
+        .insert(schema.legacyWorkflows)
+        .values(values)
+        .onConflictDoUpdate({
+          target: [schema.legacyWorkflows.orgId, schema.legacyWorkflows.sourceRef, schema.legacyWorkflows.sourceTeamId],
+          set: values,
+        });
+    }
     return {
       ...result,
       review: plan.review,

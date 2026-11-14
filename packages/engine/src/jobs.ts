@@ -76,6 +76,8 @@ import { FILE_JOIN_REQUEST_JOB, fileJoinRequest } from "./invite-requests";
 import { announceTaskConversation } from "./issues";
 import type { JevKey, JevKeySource } from "./jev-key";
 import { DEEP_MENTION_THRESHOLD, DEEP_WAKE_HOP, MENTION_WAKE_THRESHOLD, mentionNeedsNothing } from "./judge";
+import { legacyToolsBlocked } from "./legacy-run-policy";
+import { advanceLegacyWorkflow, LEGACY_WORKFLOW_JOB } from "./legacy-workflows";
 import { platformCapReached } from "./limits";
 import { wakeForAccessDecision } from "./machine-access";
 import type { MachineCaller } from "./machine-hub";
@@ -556,6 +558,9 @@ export function createJobHandlers(deps: JobDeps): JobHandlers {
   };
 
   const handlers: JobHandlers = {
+    [LEGACY_WORKFLOW_JOB]: async (job) => {
+      await advanceLegacyWorkflow(deps.db, orgOf(job), String(job.payload.runId));
+    },
     // A wake the brakes deferred (its agent at its cap of unrequested work, or its computer full) looks again.
     [LATER_JOB]: async (job) => {
       const orgId = orgOf(job);
@@ -585,6 +590,25 @@ export function createJobHandlers(deps: JobDeps): JobHandlers {
       // A task conversation's root (ADR 0145) stands for the task: nobody is routed either.
       if (message.meta.issueWork || message.meta.issueWorkStart || message.meta.issueTaken) return;
       if (message.meta.taskConversation) return;
+      if (message.authorAgentId && (await legacyToolsBlocked(deps.db, input.orgId, message.authorAgentId))) return;
+      if (typeof message.meta.legacyWorkflowRunId === "string") {
+        const [workflowRun] = await deps.db
+          .select()
+          .from(schema.legacyWorkflowRuns)
+          .where(
+            and(
+              eq(schema.legacyWorkflowRuns.id, message.meta.legacyWorkflowRunId),
+              eq(schema.legacyWorkflowRuns.orgId, input.orgId),
+            ),
+          );
+        if (workflowRun && workflowRun.actorId === message.authorUserId) {
+          const [native] = await deps.db
+            .select()
+            .from(schema.agentRuns)
+            .where(and(eq(schema.agentRuns.triggerMessageId, message.id), eq(schema.agentRuns.orgId, input.orgId)));
+          if (native && workflowRun.states.some((s) => s.runId === native.id)) return;
+        }
+      }
       // A fast reply while the task works (talker.ts): its task reads it; it starts nobody, not even by mention.
       if (message.meta.talker) return;
       // A GIF or a sticker alone (ADR 0091), an agent's silent one after its reply too: it starts nobody, routes

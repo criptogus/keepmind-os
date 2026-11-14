@@ -89,3 +89,6 @@ The native plugin approval was visually checked at 1280×800 and 390×844: the p
 ### Migração de dados do app legado
 
 Há um caminho offline de backup consistente e importação para uma base isolada, documentado em [KEEPMIND-LEGACY-MIGRATION.md](./KEEPMIND-LEGACY-MIGRATION.md). Preserva a origem e registra IDs para repetir sem duplicatas. Agentes ficam bloqueados, times privados, skills pessoais e rotinas inativas. Workflows, permissões sem equivalente e cronologias de memória exigem revisão antes de uma troca definitiva. Não é uma migração automática do app instalado ou do servidor de equipe.
+
+
+O executor de workflows migrados já usa a fila nativa, com estado persistente por etapa, cotas mensais e prazo conservado nas retomadas. Os saldos e contagens do legado são carregados sem duplicação. A primeira execução suportada é somente texto via modelo de API; ferramentas e brains de computador são bloqueados. Drafts e políticas importados permanecem desabilitados, e a validação de execução usa provedor simulado. A troca definitiva e a ativação por interface ainda não foram realizadas.

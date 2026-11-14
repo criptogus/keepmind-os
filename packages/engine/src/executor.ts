@@ -221,6 +221,7 @@ import {
   kickKeyLine,
   rateLimited,
 } from "./key-line";
+import { admitLegacyRun, legacyToolsBlocked } from "./legacy-run-policy";
 import { answerNoTurn, deliverLive, listenLiveSteering, renderSteered } from "./live-steer";
 import {
   accountFailureCause,
@@ -1060,9 +1061,46 @@ type RunJobOptions = {
  * run fails.
  */
 export async function executeRun(deps: EngineDeps, runId: string, options: RunJobOptions) {
+  let legacyDeadline: Date | null;
+  try {
+    legacyDeadline = await admitLegacyRun(deps.db, runId);
+  } catch (error) {
+    await deps.db
+      .update(agentRuns)
+      .set({
+        status: "failed",
+        error: error instanceof Error ? error.message : "legacy.policy_blocked",
+        finishedAt: new Date(),
+      })
+      .where(
+        and(
+          eq(agentRuns.id, runId),
+          inArray(agentRuns.status, ["queued", "running", "waiting_input", "waiting_approval"]),
+        ),
+      );
+    return;
+  }
   const prof = createProfiler();
   // A person can cancel it: the signal aborts the model stream, tools and running code.
   const abort = registerRunAbort(runId);
+  const legacyTimer = legacyDeadline
+    ? setTimeout(
+        () => abort.abort(new Error("legacy.deadline_exceeded")),
+        Math.max(0, legacyDeadline.getTime() - Date.now()),
+      )
+    : null;
+  let checkingLegacy = false;
+  const legacyWatch = legacyDeadline
+    ? setInterval(() => {
+        if (checkingLegacy) return;
+        checkingLegacy = true;
+        void admitLegacyRun(deps.db, runId)
+          .catch(() => abort.abort(new Error("legacy.policy_revoked")))
+          .finally(() => {
+            checkingLegacy = false;
+          });
+      }, 1000)
+    : null;
   // Heartbeat: a run whose worker died (deploy, crash) is found and recovered (`recoverStaleRuns`).
   const beat = () =>
     deps.db
@@ -1075,6 +1113,8 @@ export async function executeRun(deps: EngineDeps, runId: string, options: RunJo
   try {
     return await executeRunInner(deps, runId, options, prof, abort.signal, steerGate);
   } finally {
+    if (legacyTimer) clearTimeout(legacyTimer);
+    if (legacyWatch) clearInterval(legacyWatch);
     steerGate.close();
     clearInterval(heartbeat);
     unregisterRunAbort(runId, abort);
@@ -1732,6 +1772,10 @@ async function executeRunInner(
     stored && isRightHand(stored)
       ? (await withPersonalBrain(db, stored, await rightHandPerson(db, stored, run))).agent
       : stored;
+  if (agent && agent.brain !== "model" && (await legacyToolsBlocked(db, run.orgId, agent.id))) {
+    await finished("failed", "legacy.computer_brain_blocked");
+    return;
+  }
   // Claude Code defers our tools itself (its ToolSearch): a new run lists every tool the agent has, the same in every
   // run, instead of the groups a judge picks, so its cached prefix holds across runs and sessions (ADR 0043).
   if (needsContext && deps.toolsOnDemand && agent && brainOf(agent.brain) === "claude_code") {

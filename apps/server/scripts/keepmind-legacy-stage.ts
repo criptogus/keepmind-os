@@ -90,6 +90,21 @@ try {
     const saved = persistedAgents.find((a) => a.id === p.targetAgentId);
     if (!saved || saved.monthlyBudgetNanoUsd !== p.monthlyBudgetNanoUsd) fail();
   }
+  const policies = await handle.db.select().from(schema.legacyAgentPolicies);
+  const drafts = await handle.db.select().from(schema.legacyWorkflows);
+  if (
+    policies.length !== snapshot.agents.length ||
+    drafts.length !== snapshot.teams.length ||
+    policies.some((p) => p.enabled || p.historyCaptured !== (snapshot.usage !== undefined)) ||
+    drafts.some((w) => w.enabled)
+  )
+    fail();
+  const periods = await handle.db.select().from(schema.agentBudgetPeriods);
+  for (const usage of snapshot.usage ?? []) {
+    const policy = policies.find((p) => p.agentId === target("agent", usage.agentId));
+    const budget = periods.find((p) => p.agentId === policy?.agentId && p.periodStart === usage.month);
+    if (policy?.priorRunsByMonth[usage.month] !== usage.runs || budget?.spentNanoUsd !== usage.costNanoUsd) fail();
+  }
   const counts = {
     agents: (await handle.db.select().from(schema.agents)).length,
     skills: (await handle.db.select().from(schema.skills)).length,
@@ -97,6 +112,9 @@ try {
     routines: (await handle.db.select().from(schema.routines)).length,
     memories: (await handle.db.select().from(schema.contextItems)).length,
     scopes: (await handle.db.select().from(schema.agentScopes)).length,
+    policies: policies.length,
+    workflowDrafts: drafts.length,
+    usagePeriods: (snapshot.usage ?? []).length,
   };
   if (
     counts.agents !== snapshot.agents.length ||

@@ -42,6 +42,7 @@ import { provenReadOnly } from "../databases/guard";
 import { isUnexpectedError, ToolOffError } from "../errors";
 import { cutMarked, cutText, pgSafeJson, pgSafeText } from "../format";
 import { mergeReposOfCall, recordMergeDone, reposOfGithubCall } from "../git/repos";
+import { legacyToolsBlocked } from "../legacy-run-policy";
 import { recordRead } from "../outbound";
 import { routineCreatorOf } from "../requester";
 import { isRightHand, RIGHT_HAND_NOT_OFFERED } from "../right-hand";
@@ -593,6 +594,7 @@ export function createToolGateway(deps: {
    * `heldBack` collects the names its scopes grant that the run's policy refused.
    */
   async function granted(ctx: ToolContext, heldBack?: string[]): Promise<ToolDefinition[]> {
+    if (await legacyToolsBlocked(ctx.db, ctx.orgId, ctx.agentId)) return [];
     return grantedFor(ctx, await authorityOf(ctx), undefined, heldBack);
   }
 
@@ -688,6 +690,8 @@ export function createToolGateway(deps: {
   }
 
   async function outputOf(tool: ToolDefinition, input: Record<string, unknown>, ctx: ToolContext): Promise<ToolOutput> {
+    if (await legacyToolsBlocked(ctx.db, ctx.orgId, ctx.agentId))
+      return { content: "legacy.text_only_policy", isError: true };
     const done = startInFlight(`tool ${tool.name}`, ctx.runId);
     try {
       const output = await tool.execute(input, ctx);
@@ -1062,6 +1066,11 @@ export function createToolGateway(deps: {
    * the arguments' rules are re-checked (they may have changed while it waited). `toolUseId`: the call it answers.
    */
   async function runApproved(ctx: ToolContext, approval: Approval, toolUseId: string): Promise<ToolOutput> {
+    if (await legacyToolsBlocked(ctx.db, ctx.orgId, ctx.agentId))
+      return {
+        content: "Este agente migrado só pode responder em texto enquanto as ferramentas aguardam validação.",
+        isError: true,
+      };
     if (approval.status !== "approved") return { content: "This action was not approved", isError: true };
     if (approval.executedAt) return ranBefore(approval);
     const expected = actionHash({
@@ -1073,6 +1082,8 @@ export function createToolGateway(deps: {
     const tool = (await allTools(ctx)).get(approval.tool);
     // Why the approved action can't run any more; null = it may.
     const refusal = async (): Promise<string | null> => {
+      if (await legacyToolsBlocked(ctx.db, ctx.orgId, ctx.agentId))
+        return "Legacy text-only policy blocks tools, including existing approvals";
       if (expected !== approval.actionHash) return "Approval does not match the action";
       if (!tool || tool.scope !== approval.scope || (tool.connectionId ?? null) !== approval.connectionId)
         return `The tool ${approval.tool} is no longer available (its connector was removed or changed since the approval): say so, and that once it's connected again, asking again runs it`;
@@ -1168,6 +1179,14 @@ export function createToolGateway(deps: {
     granted,
 
     async invoke(ctx: ToolContext, raw: ToolCall): Promise<InvokeResult> {
+      if (await legacyToolsBlocked(ctx.db, ctx.orgId, ctx.agentId))
+        return {
+          type: "result",
+          output: {
+            content: "Este agente migrado só pode responder em texto enquanto as ferramentas aguardam validação.",
+            isError: true,
+          },
+        };
       // The model's arguments land in jsonb and text columns (steps, approvals, the audit): a NUL would fail them.
       const requested = { ...raw, input: pgSafeJson(raw.input) };
       // Who is behind the run decides what it may do: listing already hid refused tools, this is the call.
@@ -1302,6 +1321,15 @@ export function createToolGateway(deps: {
         return { type: "result" as const, output, ...(autoApproved ? { autoApproved } : {}) };
       };
 
+      if (await legacyToolsBlocked(ctx.db, ctx.orgId, ctx.agentId))
+        return finish(
+          {
+            content:
+              "Este agente migrado está limitado a respostas de texto. Ferramentas aguardam validação de permissões.",
+            isError: true,
+          },
+          "refused",
+        );
       if (unknownInDirectory) return finish({ content: unknownInDirectory, isError: true });
       if (!tool) return finish({ content: `Unknown tool ${call.name}`, isError: true });
       // A tool that runs other actions (Composio's executor): a call whose actions all only read is the
@@ -1715,6 +1743,11 @@ export function createToolGateway(deps: {
      * ahead waits for its time instead: the routine's run then does it (`aheadFor`), and this run hears when.
      */
     async executeApproved(ctx: ToolContext, approval: Approval): Promise<ToolOutput> {
+      if (await legacyToolsBlocked(ctx.db, ctx.orgId, ctx.agentId))
+        return {
+          content: "Este agente migrado só pode responder em texto enquanto as ferramentas aguardam validação.",
+          isError: true,
+        };
       const runAt = approval.runAt;
       if (approval.status === "approved" && runAt) return { content: await aheadNote(ctx, { ...approval, runAt }) };
       return runApproved(ctx, approval, approval.toolUseId);
