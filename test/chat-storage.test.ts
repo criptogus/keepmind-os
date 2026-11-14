@@ -109,6 +109,24 @@ describe('StorageManager chat', () => {
     expect(msgs[0].meta?.toolCalls).toEqual([{ name: 'x' }]);
   });
 
+  it('threads: replies excluded from main feed, getThreadMessages returns them, replyCount set', () => {
+    storage.ensureDefaultChannels();
+    const ch = storage.createChannel({ name: 'thr' });
+    const parent = storage.saveMessage({ channelId: ch.id, authorKind: 'user', authorId: 'u', authorName: 'U', body: 'top', status: 'done' });
+    storage.saveMessage({ channelId: ch.id, authorKind: 'user', authorId: 'u', authorName: 'U', body: 'r1', status: 'done', parentId: parent.id });
+    storage.saveMessage({ channelId: ch.id, authorKind: 'agent', authorId: 'a', authorName: 'A', body: 'r2', status: 'done', parentId: parent.id });
+    storage.saveMessage({ channelId: ch.id, authorKind: 'user', authorId: 'u', authorName: 'U', body: 'top2', status: 'done' });
+
+    const feed = storage.getMessages(ch.id);
+    expect(feed.map((m) => m.body)).toEqual(['top', 'top2']);
+    expect(feed[0].replyCount).toBe(2);
+    expect(feed[1].replyCount).toBe(0);
+
+    const thread = storage.getThreadMessages(parent.id);
+    expect(thread.map((m) => m.body)).toEqual(['r1', 'r2']);
+    expect(thread[0].parentId).toBe(parent.id);
+  });
+
   it('channel agent membership add/remove', () => {
     storage.saveAgent(makeAgent('a3', 'Cida'));
     const ch = storage.createChannel({ name: 'eq' });

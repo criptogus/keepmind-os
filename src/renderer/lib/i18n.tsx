@@ -840,6 +840,12 @@ const dict: Record<string, { en: string; pt: string }> = {
   'chat.cmd.theme': { en: 'Set theme (light/dark/auto)', pt: 'Define o tema (light/dark/auto)' },
   'chat.cmd.lang': { en: 'Set language (pt/en/es)', pt: 'Define o idioma (pt/en/es)' },
   'chat.react': { en: 'React', pt: 'Reagir' },
+  'chat.reply': { en: 'Reply in thread', pt: 'Responder na thread' },
+  'chat.replies': { en: 'replies', pt: 'respostas' },
+  'chat.replyingTo': { en: 'Replying to', pt: 'Respondendo a' },
+  'chat.attach': { en: 'Attach files', pt: 'Anexar arquivos' },
+  'chat.thread': { en: 'Thread', pt: 'Thread' },
+  'chat.closeThread': { en: 'Close thread', pt: 'Fechar thread' },
 
 
 

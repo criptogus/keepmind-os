@@ -333,8 +333,21 @@ export interface ChannelMessage {
   body: string;
   status: 'streaming' | 'done' | 'error';
   executionId?: string;
+  /** Set when this message is a thread reply to another message. */
+  parentId?: string;
+  /** Number of thread replies (top-level messages only). */
+  replyCount?: number;
   meta?: Record<string, unknown>;
   createdAt: string;
+}
+
+export interface ChatAttachment {
+  id: string;
+  name: string;
+  mime: string;
+  size: number;
+  /** UTF-8 text preview extracted for text-like files (agents can read it). */
+  preview?: string;
 }
 
 export interface ChatChannelView extends Channel {

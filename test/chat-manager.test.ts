@@ -124,6 +124,29 @@ describe('ChatManager', () => {
     expect(runAgent).toHaveBeenCalledTimes(2);
   });
 
+  it('thread replies without mentions do not auto-dispatch', async () => {
+    const ch = storage.listChannels('u1').find((c) => c.name === 'geral')!;
+    const parent = await chat.sendMessage(ch.id, 'assunto');
+    await chat.sendMessage(ch.id, 'concordo', { parentId: parent.id });
+    await new Promise((r) => setTimeout(r, 20));
+    expect(runAgent).not.toHaveBeenCalled();
+    expect(runTeam).not.toHaveBeenCalled();
+    expect(storage.getThreadMessages(parent.id)).toHaveLength(1);
+    expect(storage.getMessages(ch.id).some((m) => m.parentId)).toBe(false);
+  });
+
+  it('mention inside a thread replies inside the thread', async () => {
+    const ch = storage.listChannels('u1').find((c) => c.name === 'geral')!;
+    const parent = await chat.sendMessage(ch.id, 'preciso de ajuda');
+    await chat.sendMessage(ch.id, '@Ana detalha isso', { parentId: parent.id });
+    await vi.waitFor(() => {
+      expect(storage.getThreadMessages(parent.id).some((m) => m.authorKind === 'agent' && m.status === 'done')).toBe(true);
+    });
+    const reply = storage.getThreadMessages(parent.id).find((m) => m.authorKind === 'agent')!;
+    expect(reply.parentId).toBe(parent.id);
+    expect(storage.getMessages(ch.id).filter((m) => m.authorKind === 'agent')).toHaveLength(0);
+  });
+
   it('marks failed executions as error status', async () => {
     runAgent.mockRejectedValueOnce(new Error('provider down'));
     const ch = storage.listChannels('u1').find((c) => c.name === 'geral')!;

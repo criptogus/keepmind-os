@@ -317,6 +317,7 @@ export class StorageManager {
         body TEXT NOT NULL,
         status TEXT NOT NULL DEFAULT 'done',
         execution_id TEXT,
+        parent_id TEXT,
         meta TEXT,
         created_at TEXT NOT NULL
       )
@@ -333,7 +334,12 @@ export class StorageManager {
       CREATE INDEX IF NOT EXISTS idx_routing_created ON routing_decisions(created_at);
       CREATE INDEX IF NOT EXISTS idx_memory_active ON memory_items(valid_until, demoted);
       CREATE INDEX IF NOT EXISTS idx_messages_channel ON messages(channel_id, created_at);
+      CREATE INDEX IF NOT EXISTS idx_messages_parent ON messages(parent_id);
     `);
+    const msgCols = this.db.prepare(`PRAGMA table_info(messages)`).all() as Array<{ name: string }>;
+    if (!msgCols.some((c) => c.name === 'parent_id')) {
+      this.db.exec(`ALTER TABLE messages ADD COLUMN parent_id TEXT`);
+    }
   }
 
   // Agent operations
@@ -1181,6 +1187,8 @@ export class StorageManager {
       body: row.body,
       status: row.status,
       executionId: row.execution_id ?? undefined,
+      parentId: row.parent_id ?? undefined,
+      replyCount: row.reply_count !== undefined ? Number(row.reply_count) : undefined,
       meta: row.meta ? JSON.parse(row.meta) : undefined,
       createdAt: row.created_at,
     };
@@ -1283,20 +1291,29 @@ export class StorageManager {
 
   getMessages(channelId: string, opts?: { limit?: number; before?: string }): ChannelMessage[] {
     const limit = opts?.limit ?? 100;
+    const cols = 'm.*, (SELECT COUNT(*) FROM messages r WHERE r.parent_id = m.id) AS reply_count';
     let rows: any[];
     if (opts?.before) {
       const cursor = this.db.prepare('SELECT created_at, rowid FROM messages WHERE id = ?').get(opts.before) as any;
       if (!cursor) return [];
       rows = this.db.prepare(
-        'SELECT * FROM messages WHERE channel_id = ? AND (created_at < ? OR (created_at = ? AND rowid < ?)) ORDER BY created_at DESC, rowid DESC LIMIT ?'
+        `SELECT ${cols} FROM messages m WHERE m.channel_id = ? AND m.parent_id IS NULL AND (m.created_at < ? OR (m.created_at = ? AND m.rowid < ?)) ORDER BY m.created_at DESC, m.rowid DESC LIMIT ?`
       ).all(channelId, cursor.created_at, cursor.created_at, cursor.rowid, limit) as any[];
       rows.reverse();
     } else {
       rows = this.db.prepare(
-        'SELECT * FROM messages WHERE channel_id = ? ORDER BY created_at DESC, rowid DESC LIMIT ?'
+        `SELECT ${cols} FROM messages m WHERE m.channel_id = ? AND m.parent_id IS NULL ORDER BY m.created_at DESC, m.rowid DESC LIMIT ?`
       ).all(channelId, limit) as any[];
       rows.reverse();
     }
+    return rows.map((r) => this.rowToMessage(r));
+  }
+
+  /** All replies inside a thread, oldest first. */
+  getThreadMessages(parentId: string, limit = 100): ChannelMessage[] {
+    const rows = this.db.prepare(
+      'SELECT * FROM messages WHERE parent_id = ? ORDER BY created_at ASC, rowid ASC LIMIT ?'
+    ).all(parentId, limit) as any[];
     return rows.map((r) => this.rowToMessage(r));
   }
 
@@ -1307,11 +1324,11 @@ export class StorageManager {
       createdAt: msg.createdAt ?? new Date().toISOString(),
     };
     this.db.prepare(`
-      INSERT INTO messages (id, channel_id, author_kind, author_id, author_name, body, status, execution_id, meta, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO messages (id, channel_id, author_kind, author_id, author_name, body, status, execution_id, parent_id, meta, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `).run(
       full.id, full.channelId, full.authorKind, full.authorId, full.authorName,
-      full.body, full.status, full.executionId ?? null,
+      full.body, full.status, full.executionId ?? null, full.parentId ?? null,
       full.meta ? JSON.stringify(full.meta) : null, full.createdAt
     );
     return full;

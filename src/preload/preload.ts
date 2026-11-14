@@ -309,8 +309,14 @@ contextBridge.exposeInMainWorld('electronAPI', {
   listChatChannels: () => ipcRenderer.invoke('chat:listChannels') as Promise<ChatChannelView[]>,
   getChatMessages: (channelId: string, opts?: { limit?: number; before?: string }) =>
     ipcRenderer.invoke('chat:getMessages', channelId, opts) as Promise<ChannelMessage[]>,
-  sendChatMessage: (channelId: string, text: string) =>
-    ipcRenderer.invoke('chat:sendMessage', channelId, text) as Promise<ChannelMessage>,
+  sendChatMessage: (channelId: string, text: string, opts?: { parentId?: string; attachments?: Array<Record<string, unknown>> }) =>
+    ipcRenderer.invoke('chat:sendMessage', channelId, text, opts) as Promise<ChannelMessage>,
+  getChatThread: (parentId: string) =>
+    ipcRenderer.invoke('chat:getThread', parentId) as Promise<ChannelMessage[]>,
+  uploadChatFile: (name: string, mime: string, data: ArrayBuffer) =>
+    ipcRenderer.invoke('chat:uploadFile', name, mime, data) as Promise<Record<string, unknown>>,
+  openChatAttachment: (id: string, name: string) =>
+    ipcRenderer.invoke('chat:openAttachment', id, name) as Promise<void>,
   createChatChannel: (input: { name: string; agentIds?: string[]; topic?: string }) =>
     ipcRenderer.invoke('chat:createChannel', input) as Promise<Channel>,
   renameChatChannel: (id: string, name: string) =>
@@ -573,7 +579,10 @@ declare global {
         Promise<{ level: ComputerAccessLevel; allowedRoots: string[]; shellAllow: string[]; shellDeny: string[] }>;
       listChatChannels: () => Promise<ChatChannelView[]>;
       getChatMessages: (channelId: string, opts?: { limit?: number; before?: string }) => Promise<ChannelMessage[]>;
-      sendChatMessage: (channelId: string, text: string) => Promise<ChannelMessage>;
+      sendChatMessage: (channelId: string, text: string, opts?: { parentId?: string; attachments?: Array<Record<string, unknown>> }) => Promise<ChannelMessage>;
+      getChatThread: (parentId: string) => Promise<ChannelMessage[]>;
+      uploadChatFile: (name: string, mime: string, data: ArrayBuffer) => Promise<Record<string, unknown>>;
+      openChatAttachment: (id: string, name: string) => Promise<void>;
       createChatChannel: (input: { name: string; agentIds?: string[]; topic?: string }) => Promise<Channel>;
       renameChatChannel: (id: string, name: string) => Promise<Channel | null>;
       deleteChatChannel: (id: string) => Promise<void>;

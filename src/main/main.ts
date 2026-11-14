@@ -284,6 +284,7 @@ function seedAssistantAgent() {
       'app_automation_create', 'app_automation_delete',
       'delegate_to_agent', 'create_agent', 'review_agent',
       'secondbrain_search', 'personalbrain_search',
+      'app_chat_read', 'app_chat_post',
     ];
     storageManager.saveAgent({
       id: uuidv4(),
@@ -1079,6 +1080,13 @@ app.whenReady().then(async () => {
           enabled: input.enabled !== false,
         });
         return JSON.stringify({ id: rule.id, name: rule.name, kind: rule.kind, enabled: rule.enabled });
+      },
+      chatRead: (channel, limit) => chatManager.readChannel(String(channel), limit ? Number(limit) : 20),
+      chatPost: (channel, text, parentId, callerAgentId) => {
+        const agent = callerAgentId ? storageManager.getAgent(callerAgentId) : undefined;
+        if (!agent) throw new Error('chat_post requires an agent caller');
+        chatManager.postAgentMessage(String(channel), agent, String(text), parentId ? String(parentId) : undefined);
+        return `Posted to #${String(channel).replace(/^#/, '')}`;
       },
       automationDelete: (id) => {
         const ok = triggerManager.delete(id);
@@ -2175,8 +2183,31 @@ handle('teams:execute', async (_event, teamId: string, input: Record<string, unk
 handle('chat:listChannels', () => storageManager.listChannels(currentUserId()));
 handle('chat:getMessages', (_e, channelId: string, opts?: { limit?: number; before?: string }) =>
   storageManager.getMessages(channelId, opts));
-handle('chat:sendMessage', (_e, channelId: string, text: string) =>
-  chatManager.sendMessage(channelId, text));
+handle('chat:sendMessage', (_e, channelId: string, text: string, opts?: { parentId?: string; attachments?: Array<Record<string, unknown>> }) =>
+  chatManager.sendMessage(channelId, text, opts));
+handle('chat:getThread', (_e, parentId: string) => storageManager.getThreadMessages(parentId));
+handle('chat:uploadFile', async (_e, name: string, mime: string, data: ArrayBuffer) => {
+  const { randomUUID } = await import('node:crypto');
+  const dir = path.join(app.getPath('userData'), 'chat-files');
+  await fs.mkdir(dir, { recursive: true });
+  const safe = String(name).replace(/[^\w.\- ()]/g, '_').slice(-80) || 'file';
+  const id = randomUUID();
+  const buf = Buffer.from(data);
+  await fs.writeFile(path.join(dir, `${id}-${safe}`), buf);
+  // text-like preview for agents/humans (cap 8KB)
+  let preview: string | undefined;
+  if (/^(text\/|application\/(json|xml|javascript|x-yaml)|image\/svg)/.test(mime) && buf.length <= 512 * 1024) {
+    preview = buf.toString('utf8').slice(0, 8192);
+  }
+  return { id, name: safe, mime, size: buf.length, preview };
+});
+handle('chat:openAttachment', async (_e, id: string, name: string) => {
+  const dir = path.join(app.getPath('userData'), 'chat-files');
+  const file = (await fs.readdir(dir)).find((f: string) => f.startsWith(id + '-'));
+  if (!file) throw new Error('Attachment not found');
+  const { shell } = await import('electron');
+  await shell.openPath(path.join(dir, file));
+});
 handle('chat:createChannel', (_e, input: { name: string; agentIds?: string[]; topic?: string }) => {
   const name = String(input?.name ?? '').trim();
   if (!name) throw new Error('Channel name required');

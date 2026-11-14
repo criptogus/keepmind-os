@@ -9,8 +9,10 @@ import { useLang } from '../../lib/i18n.js';
 interface ComposerProps {
   agents: Agent[];
   teams: Team[];
-  onSend: (text: string) => void;
+  onSend: (text: string, attachments?: Array<Record<string, unknown>>) => void;
   disabled?: boolean;
+  replyTo?: { authorName: string; snippet: string } | null;
+  onCancelReply?: () => void;
 }
 
 interface Candidate {
@@ -20,11 +22,29 @@ interface Candidate {
   avatar?: Agent['avatar'];
 }
 
-export default function Composer({ agents, teams, onSend, disabled }: ComposerProps) {
+export default function Composer({ agents, teams, onSend, disabled, replyTo, onCancelReply }: ComposerProps) {
   const { t } = useLang();
   const [text, setText] = useState('');
   const [sel, setSel] = useState(0);
+  const [atts, setAtts] = useState<Array<Record<string, unknown>>>([]);
+  const [uploading, setUploading] = useState(false);
   const taRef = useRef<HTMLTextAreaElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const onPickFiles = async (files: FileList | null) => {
+    if (!files?.length) return;
+    setUploading(true);
+    try {
+      for (const f of Array.from(files)) {
+        if (f.size > 25 * 1024 * 1024) continue;
+        const buf = await f.arrayBuffer();
+        const meta = await window.electronAPI.uploadChatFile(f.name, f.type || 'application/octet-stream', buf);
+        setAtts((prev) => [...prev, meta]);
+      }
+    } catch (e) { console.error('chat upload failed', e); }
+    setUploading(false);
+    if (fileRef.current) fileRef.current.value = '';
+  };
 
   const candidates: Candidate[] = useMemo(() => [
     ...agents.map((a) => ({ kind: 'agent' as const, id: a.id, name: a.name, avatar: a.avatar })),
@@ -74,9 +94,10 @@ export default function Composer({ agents, teams, onSend, disabled }: ComposerPr
 
   const send = () => {
     const trimmed = text.trim();
-    if (!trimmed || disabled) return;
-    onSend(trimmed);
+    if ((!trimmed && !atts.length) || disabled || uploading) return;
+    onSend(trimmed, atts.length ? atts : undefined);
     setText('');
+    setAtts([]);
     setSel(0);
   };
 
@@ -152,11 +173,53 @@ export default function Composer({ agents, teams, onSend, disabled }: ComposerPr
           ))}
         </div>
       )}
+      {replyTo && (
+        <div className="km-enter" style={{
+          display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6,
+          padding: '6px 10px', borderRadius: 8, fontSize: 12,
+          backgroundColor: 'var(--mantine-color-gray-1)', borderLeft: '3px solid #111',
+        }}>
+          <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            <b>{t('chat.replyingTo')} {replyTo.authorName}</b> — {replyTo.snippet}
+          </span>
+          <button onClick={onCancelReply} style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: 14, color: 'var(--mantine-color-dimmed)' }}>✕</button>
+        </div>
+      )}
+      {atts.length > 0 && (
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 6 }}>
+          {atts.map((a, i) => (
+            <span key={String(a.id)} style={{
+              display: 'inline-flex', alignItems: 'center', gap: 6, padding: '3px 8px',
+              borderRadius: 8, border: '1px solid var(--mantine-color-gray-3)', fontSize: 12,
+            }}>
+              📎 {String(a.name)}
+              <button onClick={() => setAtts((p) => p.filter((_, j) => j !== i))} style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: 11 }}>✕</button>
+            </span>
+          ))}
+        </div>
+      )}
       <div style={{
         display: 'flex', gap: 10, alignItems: 'flex-end',
         border: '1px solid var(--mantine-color-gray-3)', borderRadius: 12,
         padding: '8px 10px', backgroundColor: '#fff',
       }}>
+        <input
+          ref={fileRef}
+          type="file"
+          multiple
+          style={{ display: 'none' }}
+          onChange={(e) => void onPickFiles(e.currentTarget.files)}
+        />
+        <button
+          onClick={() => fileRef.current?.click()}
+          disabled={disabled || uploading}
+          title={t('chat.attach')}
+          aria-label={t('chat.attach')}
+          style={{
+            border: 'none', background: 'transparent', cursor: 'pointer', fontSize: 17,
+            padding: '4px 6px', opacity: uploading ? 0.4 : 1,
+          }}
+        >{uploading ? '⏳' : '📎'}</button>
         <textarea
           ref={taRef}
           value={text}
@@ -177,10 +240,10 @@ export default function Composer({ agents, teams, onSend, disabled }: ComposerPr
         />
         <button
           onClick={send}
-          disabled={disabled || !text.trim()}
+          disabled={disabled || uploading || (!text.trim() && !atts.length)}
           style={{
             padding: '7px 16px', borderRadius: 8, border: 'none',
-            backgroundColor: disabled || !text.trim() ? 'var(--mantine-color-gray-3)' : '#111',
+            backgroundColor: disabled || uploading || (!text.trim() && !atts.length) ? 'var(--mantine-color-gray-3)' : '#111',
             color: '#fff', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
           }}
         >

@@ -3,6 +3,7 @@ import type { Agent, ChannelMessage, ChatChannelView, Team } from '../../../shar
 import ChannelRail from './ChannelRail.js';
 import MessageFeed from './MessageFeed.js';
 import Composer from './Composer.js';
+import ThreadPanel from './ThreadPanel.js';
 import { useLang } from '../../lib/i18n.js';
 import { useThemeStore } from '../../store/themeStore.js';
 import { parseCommand, CHAT_COMMANDS } from './commands.js';
@@ -20,10 +21,15 @@ export default function ChatShell({ onOpenAdmin, pendingApprovals }: ChatShellPr
   const [agents, setAgents] = useState<Agent[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
   const [meId, setMeId] = useState<string | undefined>(undefined);
+  const [replyTo, setReplyTo] = useState<ChannelMessage | null>(null);
+  const [threadParent, setThreadParent] = useState<ChannelMessage | null>(null);
+  const [threadKey, setThreadKey] = useState(0);
   const { setLang, lang } = useLang();
   const { setTheme } = useThemeStore();
   const activeIdRef = useRef<string | null>(null);
   activeIdRef.current = activeId;
+  const threadParentRef = useRef<ChannelMessage | null>(null);
+  threadParentRef.current = threadParent;
 
   const reloadChannels = useCallback(async () => {
     try {
@@ -57,6 +63,11 @@ export default function ChatShell({ onOpenAdmin, pendingApprovals }: ChatShellPr
       }
       const { channelId, message } = event;
       void reloadChannels();
+      if (message.parentId) {
+        setThreadKey((k) => k + 1);
+        if (channelId === activeIdRef.current) void loadMessages(channelId);
+        return;
+      }
       if (channelId !== activeIdRef.current) return;
       setMessages((prev) => {
         const idx = prev.findIndex((m) => m.id === message.id);
@@ -73,6 +84,8 @@ export default function ChatShell({ onOpenAdmin, pendingApprovals }: ChatShellPr
   }, [reloadChannels]);
 
   useEffect(() => {
+    setThreadParent(null);
+    setReplyTo(null);
     if (activeId) void loadMessages(activeId);
     else setMessages([]);
   }, [activeId, loadMessages]);
@@ -176,16 +189,17 @@ export default function ChatShell({ onOpenAdmin, pendingApprovals }: ChatShellPr
     }
   }, [activeId, agents, lang, onOpenAdmin, reloadChannels, setLang, setTheme, systemMsg, t]);
 
-  const handleSend = useCallback(async (text: string) => {
+  const handleSend = useCallback(async (text: string, attachments?: Array<Record<string, unknown>>) => {
     if (!activeId) return;
     const cmd = parseCommand(text);
     if (cmd) { await executeCommand(cmd.name, cmd.args); return; }
     try {
-      await window.electronAPI.sendChatMessage(activeId, text);
+      await window.electronAPI.sendChatMessage(activeId, text, replyTo ? { parentId: replyTo.id, attachments } : { attachments });
+      setReplyTo(null);
     } catch (e) {
       console.error('chat send failed', e);
     }
-  }, [activeId, executeCommand]);
+  }, [activeId, executeCommand, replyTo]);
 
   const handleReact = useCallback((messageId: string, emoji: string) => {
     void window.electronAPI.reactChatMessage(messageId, emoji).catch(() => {});
@@ -227,9 +241,38 @@ export default function ChatShell({ onOpenAdmin, pendingApprovals }: ChatShellPr
             {t('chat.admin')}
           </button>
         </header>
-        <MessageFeed messages={messages} agents={agents} teams={teams} meId={meId} onReact={handleReact} onRefresh={() => activeId && loadMessages(activeId)} onLoadEarlier={handleLoadEarlier} />
-        <Composer agents={agents} teams={teams} onSend={handleSend} disabled={!activeId} />
+        <MessageFeed
+          messages={messages}
+          agents={agents}
+          teams={teams}
+          meId={meId}
+          onReact={handleReact}
+          onReply={setReplyTo}
+          onOpenThread={setThreadParent}
+          onRefresh={() => activeId && loadMessages(activeId)}
+          onLoadEarlier={handleLoadEarlier}
+        />
+        <Composer
+          agents={agents}
+          teams={teams}
+          onSend={handleSend}
+          disabled={!activeId}
+          replyTo={replyTo ? { authorName: replyTo.authorName, snippet: replyTo.body.slice(0, 60) } : null}
+          onCancelReply={() => setReplyTo(null)}
+        />
       </div>
+      {threadParent && activeId && (
+        <ThreadPanel
+          parent={threadParent}
+          channelId={activeId}
+          agents={agents}
+          teams={teams}
+          meId={meId}
+          refreshKey={threadKey}
+          onClose={() => setThreadParent(null)}
+          onChanged={() => activeId && loadMessages(activeId)}
+        />
+      )}
     </div>
   );
 }

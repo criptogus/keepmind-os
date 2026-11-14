@@ -70,6 +70,8 @@ export interface AppAdminApi {
   settingsUpdate(patch: Record<string, unknown>): string;
   automationCreate(input: Record<string, unknown>): string;
   automationDelete(id: string): string;
+  chatRead(channel: string, limit?: number): string;
+  chatPost(channel: string, text: string, parentId?: string, callerAgentId?: string): string;
 }
 
 /** Per-execution policy computed from install settings + agent config + caller role. */
@@ -645,6 +647,12 @@ export class ToolRegistry {
       prompt: { type: 'string' }, enabled: { type: 'boolean' },
     }, (a) => this.context.appAdmin!.automationCreate(a));
     appTool('app_automation_delete', 'Delete a scheduled automation by id.', { id: { type: 'string' } }, (a) => this.context.appAdmin!.automationDelete(String(a.id)));
+    appTool('app_chat_read', 'Read recent messages of a chat channel (name without #). Returns author, timestamp, body and attachment previews.', {
+      channel: { type: 'string' }, limit: { type: 'number' },
+    }, (a) => this.context.appAdmin!.chatRead(String(a.channel), a.limit ? Number(a.limit) : 20));
+    appTool('app_chat_post', 'Post a message into a chat channel as yourself (the calling agent). Use channel name without #. Optionally reply inside a thread via parentId.', {
+      channel: { type: 'string' }, text: { type: 'string' }, parentId: { type: 'string' },
+    }, (a) => this.context.appAdmin!.chatPost(String(a.channel), String(a.text), a.parentId ? String(a.parentId) : undefined, this.context.callerAgentId));
   }
 
   register(tool: ToolDefinition): void {

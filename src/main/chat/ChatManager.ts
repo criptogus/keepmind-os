@@ -70,12 +70,17 @@ export class ChatManager {
     }
   }
 
-  async sendMessage(channelId: string, text: string): Promise<ChannelMessage> {
+  async sendMessage(channelId: string, text: string, opts?: { parentId?: string; attachments?: Array<Record<string, unknown>> }): Promise<ChannelMessage> {
     const { storage } = this.deps;
     const channel = storage.getChannel(channelId);
     if (!channel) throw new Error('Channel not found');
     const trimmed = text.trim();
-    if (!trimmed) throw new Error('Empty message');
+    const attachments = opts?.attachments?.length ? opts.attachments : undefined;
+    if (!trimmed && !attachments?.length) throw new Error('Empty message');
+    if (opts?.parentId) {
+      const parent = storage.getMessage(opts.parentId);
+      if (!parent || parent.channelId !== channelId) throw new Error('Thread parent not found');
+    }
 
     const user = this.deps.currentUser();
     const msg = storage.saveMessage({
@@ -85,10 +90,16 @@ export class ChatManager {
       authorName: user?.name ?? user?.email ?? 'Você',
       body: trimmed,
       status: 'done',
+      parentId: opts?.parentId,
+      meta: attachments?.length ? { attachments } : undefined,
     });
     this.deps.emit({ type: 'message-created', channelId, message: msg });
 
-    this.dispatchMentions(msg, channel, trimmed);
+    const attPreviews = (attachments ?? [])
+      .map((a) => `[anexo: ${String(a.name ?? 'arquivo')}${a.preview ? ` — ${String(a.preview).slice(0, 4000)}` : ''}]`)
+      .join('\n');
+    const agentText = [trimmed, attPreviews].filter(Boolean).join('\n\n');
+    this.dispatchMentions(msg, channel, agentText || trimmed);
     return msg;
   }
 
@@ -111,6 +122,41 @@ export class ChatManager {
     return reactions;
   }
 
+  /** Agent-authored message posted via tools (chat_post). */
+  postAgentMessage(channelName: string, agent: Agent, body: string, parentId?: string): ChannelMessage {
+    const channel = this.deps.storage.listChannels().find((c) => c.name.toLowerCase() === channelName.toLowerCase().replace(/^#/, ''));
+    if (!channel) throw new Error(`Channel not found: ${channelName}`);
+    if (parentId) {
+      const parent = this.deps.storage.getMessage(parentId);
+      if (!parent || parent.channelId !== channel.id) throw new Error('Thread parent not found');
+    }
+    const msg = this.deps.storage.saveMessage({
+      channelId: channel.id,
+      authorKind: 'agent',
+      authorId: agent.id,
+      authorName: agent.name,
+      body: body.slice(0, 8000),
+      status: 'done',
+      parentId,
+    });
+    this.deps.emit({ type: 'message-created', channelId: channel.id, message: msg });
+    return msg;
+  }
+
+  /** Recent messages of a channel for agent tools. */
+  readChannel(channelName: string, limit = 20): string {
+    const channel = this.deps.storage.listChannels().find((c) => c.name.toLowerCase() === channelName.toLowerCase().replace(/^#/, ''));
+    if (!channel) throw new Error(`Channel not found: ${channelName}`);
+    const msgs = this.deps.storage.getMessages(channel.id, { limit: Math.min(limit, 50) });
+    const lines = msgs.map((m) => {
+      const atts = (m.meta?.attachments as Array<{ name: string; preview?: string }> | undefined) ?? [];
+      const attTxt = atts.length ? ` [anexos: ${atts.map((a) => a.name + (a.preview ? ` — ${a.preview.slice(0, 200)}` : '')).join('; ')}]` : '';
+      const parent = m.parentId ? ' (thread)' : '';
+      return `[${m.createdAt}] ${m.authorName}${parent}: ${m.body.slice(0, 500)}${attTxt}`;
+    });
+    return lines.join('\n') || '(canal vazio)';
+  }
+
   /** System-authored message (approval cards, notices). */
   postSystemMessage(channelId: string, body: string, meta?: Record<string, unknown>): ChannelMessage {
     const msg = this.deps.storage.saveMessage({
@@ -127,33 +173,35 @@ export class ChatManager {
   }
 
   private dispatchMentions(userMsg: ChannelMessage, channel: Channel, text: string): void {
+    const parentId = userMsg.parentId;
     const mentions = parseMentions(text, this.deps.getAgents(), this.deps.getTeams());
     // Agentic routing: explicit mentions win; otherwise DMs go to their agent
     // and channel messages go to the built-in KeepMind assistant, which can
     // answer, configure the app or delegate to specialists on its own.
     if (mentions.length === 0) {
+      if (parentId) return; // thread replies stay conversational — no auto-dispatch
       const agents = this.deps.getAgents();
       if (channel.kind === 'dm' && channel.agentId) {
         const dmAgent = agents.find((a) => a.id === channel.agentId);
-        if (dmAgent) void this.runAgentReply(channel, dmAgent, text);
+        if (dmAgent) void this.runAgentReply(channel, dmAgent, text, parentId);
         return;
       }
       const assistant = agents.find((a) => a.name === 'KeepMind');
-      if (assistant) void this.runAgentReply(channel, assistant, text);
+      if (assistant) void this.runAgentReply(channel, assistant, text, parentId);
       return;
     }
     for (const m of mentions) {
       if (m.kind === 'agent') {
         const agent = this.deps.getAgents().find((a) => a.name === m.name);
-        if (agent) void this.runAgentReply(channel, agent, text);
+        if (agent) void this.runAgentReply(channel, agent, text, parentId);
       } else {
         const team = this.deps.getTeams().find((t) => t.name === m.name);
-        if (team) void this.runTeamReply(channel, team, text);
+        if (team) void this.runTeamReply(channel, team, text, parentId);
       }
     }
   }
 
-  private async runAgentReply(channel: Channel, agent: Agent, text: string): Promise<void> {
+  private async runAgentReply(channel: Channel, agent: Agent, text: string, parentId?: string): Promise<void> {
     const { storage } = this.deps;
     this.agentChannel.set(agent.id, channel.id);
     const msg = storage.saveMessage({
@@ -163,6 +211,7 @@ export class ChatManager {
       authorName: agent.name,
       body: '',
       status: 'streaming',
+      parentId,
     });
     this.deps.emit({ type: 'message-created', channelId: channel.id, message: msg });
 
@@ -217,7 +266,7 @@ export class ChatManager {
     }
   }
 
-  private async runTeamReply(channel: Channel, team: Team, text: string): Promise<void> {
+  private async runTeamReply(channel: Channel, team: Team, text: string, parentId?: string): Promise<void> {
     const { storage } = this.deps;
     const msg = storage.saveMessage({
       channelId: channel.id,
@@ -226,6 +275,7 @@ export class ChatManager {
       authorName: team.name,
       body: '',
       status: 'streaming',
+      parentId,
     });
     this.deps.emit({ type: 'message-created', channelId: channel.id, message: msg });
 

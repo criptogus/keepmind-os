@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import type { Agent, ChannelMessage, Team } from '../../../shared/types.js';
+import type { Agent, ChannelMessage, ChatAttachment, Team } from '../../../shared/types.js';
 import BotAvatar from '../common/BotAvatar.js';
 import PixelSpinner from '../common/PixelSpinner.js';
 import ApprovalCardMessage from './ApprovalCardMessage.js';
@@ -35,11 +35,13 @@ interface MessageFeedProps {
   teams: Team[];
   meId?: string;
   onReact?: (messageId: string, emoji: string) => void;
+  onReply?: (message: ChannelMessage) => void;
+  onOpenThread?: (message: ChannelMessage) => void;
   onRefresh: () => void;
   onLoadEarlier?: (beforeId: string) => void;
 }
 
-export default function MessageFeed({ messages, agents, teams, meId, onReact, onRefresh, onLoadEarlier }: MessageFeedProps) {
+export default function MessageFeed({ messages, agents, teams, meId, onReact, onReply, onOpenThread, onRefresh, onLoadEarlier }: MessageFeedProps) {
   const { t } = useLang();
   const scrollRef = useRef<HTMLDivElement>(null);
   const stickBottom = useRef(true);
@@ -106,6 +108,8 @@ export default function MessageFeed({ messages, agents, teams, meId, onReact, on
           team={m.authorKind === 'team' ? teamById.get(m.authorId) : undefined}
           meId={meId}
           onReact={onReact}
+          onReply={onReply}
+          onOpenThread={onOpenThread}
           onRefresh={onRefresh}
         />
       ))}
@@ -120,12 +124,14 @@ export default function MessageFeed({ messages, agents, teams, meId, onReact, on
   );
 }
 
-function MessageBubble({ message: m, agent, team, meId, onReact, onRefresh }: {
+export function MessageBubble({ message: m, agent, team, meId, onReact, onReply, onOpenThread, onRefresh }: {
   message: ChannelMessage;
   agent?: Agent;
   team?: Team;
   meId?: string;
   onReact?: (messageId: string, emoji: string) => void;
+  onReply?: (message: ChannelMessage) => void;
+  onOpenThread?: (message: ChannelMessage) => void;
   onRefresh: () => void;
 }) {
   const { t } = useLang();
@@ -162,6 +168,14 @@ function MessageBubble({ message: m, agent, team, meId, onReact, onRefresh }: {
               aria-label={`${t('chat.react')} ${emoji}`}
             >{emoji}</button>
           ))}
+          {onReply && (
+            <button
+              className="km-msg-action"
+              onClick={() => onReply(m)}
+              aria-label={t('chat.reply')}
+              title={t('chat.reply')}
+            >↩</button>
+          )}
         </div>
       )}
       {isAgent && avatarDef ? (
@@ -205,6 +219,38 @@ function MessageBubble({ message: m, agent, team, meId, onReact, onRefresh }: {
               >{emoji} {users.length}</button>
             ))}
           </div>
+        )}
+        {(m.meta?.attachments as ChatAttachment[] | undefined)?.length ? (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 6 }}>
+            {(m.meta!.attachments as ChatAttachment[]).map((a) => (
+              <button
+                key={a.id}
+                onClick={() => void window.electronAPI.openChatAttachment?.(a.id, a.name).catch(() => {})}
+                title={a.preview ? a.preview.slice(0, 300) : a.mime}
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 6,
+                  padding: '5px 10px', borderRadius: 8, border: '1px solid var(--mantine-color-gray-3)',
+                  background: 'var(--mantine-color-gray-0, #fff)', fontSize: 12, cursor: 'pointer', fontFamily: 'inherit',
+                }}
+              >
+                <span style={{ fontSize: 13 }}>📎</span>
+                <span style={{ fontWeight: 600, maxWidth: 220, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{a.name}</span>
+                <span style={{ color: 'var(--mantine-color-dimmed)' }}>{a.size > 1048576 ? `${(a.size / 1048576).toFixed(1)}MB` : `${Math.max(1, Math.round(a.size / 1024))}KB`}</span>
+              </button>
+            ))}
+          </div>
+        ) : null}
+        {(m.replyCount ?? 0) > 0 && !m.parentId && onOpenThread && (
+          <button
+            onClick={() => onOpenThread(m)}
+            style={{
+              marginTop: 6, display: 'inline-flex', alignItems: 'center', gap: 5,
+              padding: '3px 10px', borderRadius: 12, border: '1px solid var(--mantine-color-gray-3)',
+              background: 'transparent', fontSize: 12, color: 'var(--mantine-color-dimmed)', cursor: 'pointer', fontFamily: 'inherit',
+            }}
+          >
+            💬 {m.replyCount} {t('chat.replies')}
+          </button>
         )}
         {toolCalls.length > 0 && (
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginTop: 6 }}>
