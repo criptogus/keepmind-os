@@ -307,3 +307,42 @@ export interface AppSettings {
   soundEvents?: string;
 }
 
+
+export type ChannelKind = 'channel' | 'dm';
+
+export interface Channel {
+  id: string;
+  name: string;
+  kind: ChannelKind;
+  topic?: string;
+  agentId?: string;
+  createdAt: string;
+}
+
+export interface ChannelAgent {
+  channelId: string;
+  agentId: string;
+}
+
+export interface ChannelMessage {
+  id: string;
+  channelId: string;
+  authorKind: 'user' | 'agent' | 'team' | 'system';
+  authorId: string;
+  authorName: string;
+  body: string;
+  status: 'streaming' | 'done' | 'error';
+  executionId?: string;
+  meta?: Record<string, unknown>;
+  createdAt: string;
+}
+
+export interface ChatChannelView extends Channel {
+  agents: Array<{ id: string; name: string; avatar?: string | null }>;
+  unread: number;
+}
+
+export type ChatEvent =
+  | { type: 'message-updated'; channelId: string; message: ChannelMessage }
+  | { type: 'message-created'; channelId: string; message: ChannelMessage }
+  | { type: 'channels-changed' };

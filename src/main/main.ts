@@ -21,8 +21,9 @@ import type { CreateWorkInput, WorkAction } from '../shared/work.js';
 import { app, BrowserWindow, dialog, ipcMain, Menu, nativeImage, shell, Tray, safeStorage } from 'electron';
 import * as path from 'path';
 import { StorageManager } from './storage/StorageManager.js';
-import { AgentManager } from './agent/AgentManager.js';
+import { AgentManager, type AgentStreamEvent } from './agent/AgentManager.js';
 import { TeamExecutionEngine } from './agent/TeamExecutionEngine.js';
+import { ChatManager } from './chat/ChatManager.js';
 import { OAuthManager } from './auth/OAuthManager.js';
 import { CredentialStore } from './auth/CredentialStore.js';
 import { readCodexCliAuth, codexAuthToOAuthTokens } from './auth/CodexCliAuth.js';
@@ -63,6 +64,7 @@ let mainWindow: BrowserWindow | null = null;
 let storageManager: StorageManager;
 let agentManager: AgentManager;
 let teamExecutionEngine: TeamExecutionEngine;
+let chatManager: ChatManager;
 let oauthManager: OAuthManager;
 let credentialStore: CredentialStore;
 let compatibleProviders: CompatibleProviders;
@@ -210,7 +212,7 @@ async function syncCodexCliAuth(): Promise<void> {
 let activeDelegationDepth = 0;
 
 /** Runs an agent execution end-to-end: streams events, persists the result. */
-async function runAgentExecution(agentId: string, input: Record<string, unknown>, opts?: { userId?: string; resumeId?: string; dryRun?: boolean }) {
+async function runAgentExecution(agentId: string, input: Record<string, unknown>, opts?: { userId?: string; resumeId?: string; dryRun?: boolean; onEvent?: (event: AgentStreamEvent & { executionId: string }) => void }) {
   const agent = storageManager.getAgent(agentId);
   if (!agent) throw new Error('Agent not found');
   // Members may only execute agents explicitly shared by an admin.
@@ -235,6 +237,7 @@ async function runAgentExecution(agentId: string, input: Record<string, unknown>
       storageManager.updateAgentExecutionProgress(executionId, progress);
     }, executionId, (event) => {
       mainWindow?.webContents.send('agents:event', { executionId, ...event });
+      try { opts?.onEvent?.({ ...event, executionId }); } catch { /* chat listener gone */ }
     }, { dryRun: opts?.dryRun === true, onSkillsResolved: (ids) => {
       const record = storageManager.getAgentExecution(executionId);
       if (record) storageManager.saveAgentExecution({ ...record, activatedSkillIds: ids });
@@ -659,6 +662,37 @@ app.whenReady().then(async () => {
   mcpManager = new McpManager(agentManager.getToolRegistry());
   try { await mcpManager.configure(JSON.parse(storageManager.getSetting("mcp.servers") || "[]")); } catch { console.error("[MCP] Invalid saved configuration"); }
   teamExecutionEngine = new TeamExecutionEngine();
+  storageManager.ensureDefaultChannels();
+  chatManager = new ChatManager({
+    storage: storageManager,
+    runAgent: (agentId, input, onEvent) => runAgentExecution(agentId, input, { onEvent }),
+    runTeam: async (teamId, input) => {
+      if (currentRole() === 'member') throw new Error('Members cannot run teams');
+      const team = storageManager.getTeam(teamId);
+      if (!team) throw new Error('Team not found');
+      const result = await teamExecutionEngine.executeTeam(team, storageManager.getAllAgents(), input, async (agentId, agentInput) => {
+        return runAgentExecution(agentId, agentInput);
+      });
+      storageManager.saveAuditLog({
+        id: uuidv4(),
+        timestamp: new Date().toISOString(),
+        agentId: 'team-execution',
+        agentName: team.name,
+        action: 'team_execute',
+        input,
+        output: result as unknown as Record<string, unknown>,
+        metadata: { teamId, duration: result.duration, via: 'chat' },
+      });
+      return result;
+    },
+    getAgents: () => storageManager.getAllAgents(),
+    getTeams: () => storageManager.getAllTeams(),
+    currentUser: () => {
+      const u = localAuth?.getCurrentUser();
+      return u ? { id: u.id, name: u.name, email: u.email } : null;
+    },
+    emit: (event) => mainWindow?.webContents.send('chat:event', event),
+  });
   oauthManager = new OAuthManager(agentManager, (provider, tokens) => {
     // Preserve accountId across refreshes — refresh responses don't include it.
     const prev = credentialStore.getOAuth(provider);
@@ -1167,6 +1201,7 @@ app.whenReady().then(async () => {
     storageManager.saveApproval(approval);
     if (policy?.executionId && policy.toolCallKey) policy.checkpoint?.approval(policy.executionId, policy.toolCallKey, approval.id);
     mainWindow?.webContents.send('governance:approvalRequested', approval);
+    try { chatManager?.notifyApprovalRequested(approval, policy?.executionId); } catch { /* chat not ready */ }
 
     const deadline = Date.parse(approval.createdAt) + APPROVAL_TIMEOUT_MS;
     while (Date.now() < deadline) {
@@ -2001,6 +2036,52 @@ handle('teams:execute', async (_event, teamId: string, input: Record<string, unk
 
   return result;
 });
+
+// Chat (Slack-style channels)
+handle('chat:listChannels', () => storageManager.listChannels(currentUserId()));
+handle('chat:getMessages', (_e, channelId: string, opts?: { limit?: number; before?: string }) =>
+  storageManager.getMessages(channelId, opts));
+handle('chat:sendMessage', (_e, channelId: string, text: string) =>
+  chatManager.sendMessage(channelId, text));
+handle('chat:createChannel', (_e, input: { name: string; agentIds?: string[]; topic?: string }) => {
+  const name = String(input?.name ?? '').trim();
+  if (!name) throw new Error('Channel name required');
+  const ch = storageManager.createChannel({ name, agentIds: input.agentIds ?? [] });
+  mainWindow?.webContents.send('chat:event', { type: 'channels-changed' });
+  return ch;
+});
+handle('chat:renameChannel', (_e, id: string, name: string) => {
+  const ch = storageManager.renameChannel(id, String(name).trim());
+  mainWindow?.webContents.send('chat:event', { type: 'channels-changed' });
+  return ch;
+});
+handle('chat:deleteChannel', (_e, id: string) => {
+  if (['geral', 'approvals'].includes(storageManager.getChannel(id)?.name ?? '')) {
+    throw new Error('Default channels cannot be deleted');
+  }
+  storageManager.deleteChannel(id);
+  mainWindow?.webContents.send('chat:event', { type: 'channels-changed' });
+});
+handle('chat:openDm', (_e, agentId: string) => {
+  const agent = storageManager.getAgent(agentId);
+  if (!agent) throw new Error('Agent not found');
+  const existing = storageManager.findDmChannel(agentId);
+  if (existing) return existing;
+  return storageManager.createChannel({ name: agent.name, kind: 'dm', agentId });
+});
+handle('chat:addChannelAgent', (_e, channelId: string, agentId: string) => {
+  storageManager.addChannelAgent(channelId, agentId);
+  mainWindow?.webContents.send('chat:event', { type: 'channels-changed' });
+});
+handle('chat:removeChannelAgent', (_e, channelId: string, agentId: string) => {
+  storageManager.removeChannelAgent(channelId, agentId);
+  mainWindow?.webContents.send('chat:event', { type: 'channels-changed' });
+});
+handle('chat:react', (_e, messageId: string, emoji: string, userId?: string) =>
+  chatManager.react(messageId, emoji, userId));
+handle('chat:systemMessage', (_e, channelId: string, text: string) =>
+  chatManager.postSystemMessage(channelId, String(text)));
+handle('chat:markRead', (_e, channelId: string) => storageManager.markChannelRead(channelId, currentUserId() ?? 'system'));
 
 // Governance
 handle('governance:getState', () => {

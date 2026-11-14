@@ -14,6 +14,7 @@ const SkillsPanel = lazy(() => import('./components/skills/SkillsPanel'));
 const AutomationPanel = lazy(() => import('./components/automation/AutomationPanel'));
 const AnalyticsDashboard = lazy(() => import('./components/dashboard/AnalyticsDashboard'));
 const OnboardingWizard = lazy(() => import('./components/onboarding/OnboardingWizard'));
+const ChatShell = lazy(() => import('./components/chat/ChatShell'));
 const LoginScreen = lazy(() => import('./components/auth/LoginScreen'));
 
 import type { LocalUser } from '../shared/types.js';
@@ -58,6 +59,7 @@ export default function App() {
   const [needsOnboarding, setNeedsOnboarding] = useState<boolean | null>(null);
   const [authState, setAuthState] = useState<{ hasUsers: boolean; currentUser: LocalUser | null } | null>(null);
   const [tourActive, setTourActive] = useState(false);
+  const [adminOpen, setAdminOpen] = useState(false);
 
   const tourSteps = (tt: (k: string) => string): TourStep[] => [
     { title: tt('tour.welcome.title'), text: tt('tour.welcome.text') },
@@ -196,6 +198,17 @@ export default function App() {
     );
   }
 
+  if (!adminOpen) {
+    return (
+      <Suspense fallback={null}>
+        <ChatShell
+          onOpenAdmin={(section) => { setActiveSection(section ?? 'work'); setAdminOpen(true); }}
+          pendingApprovals={pendingApprovals}
+        />
+      </Suspense>
+    );
+  }
+
   return (
     <div style={{
       display: 'flex',
@@ -225,6 +238,7 @@ export default function App() {
         </div>
         <Group style={{ WebkitAppRegion: 'no-drag' } as React.CSSProperties} gap="xs">
           <Button className="km-nav-toggle" variant="default" size="xs" aria-expanded={mobileNav} onClick={() => setMobileNav(v => !v)}>{lang === 'pt' ? 'Menu' : 'Menu'}</Button>
+          <Button variant="default" size="xs" onClick={() => setAdminOpen(false)}>← {lang === 'pt' ? 'Chat' : 'Chat'}</Button>
           <Button variant="default" size="xs" onClick={() => setCommandsOpen(true)}>{lang === 'pt' ? 'Buscar' : 'Search'} <span className="km-keycap">⌘ / Ctrl K</span></Button>
         </Group>
       </header>

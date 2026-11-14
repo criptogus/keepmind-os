@@ -237,3 +237,39 @@ body {
 .km-typing i { width: 6px; height: 6px; background: var(--km-lime); box-shadow: 0 0 8px #c4ff3d55; border-radius: 50%; animation: km-status-breathe 1.2s ease-in-out infinite; }
 .km-typing i:nth-child(2) { animation-delay: 150ms; }.km-typing i:nth-child(3) { animation-delay: 300ms; }
 @media (prefers-reduced-motion: reduce) { .km-typing i { animation: none; } }
+
+/* Chat: Slack-style hover actions, reactions, streaming caret */
+.km-msg { position: relative; border-radius: 8px; padding: 2px 6px; margin: 0 -6px; transition: background var(--km-dur-fast) ease; }
+.km-msg:hover { background: color-mix(in srgb, var(--mantine-color-gray-1) 60%, transparent); }
+.km-msg-actions {
+  position: absolute; top: -12px; right: 16px; z-index: 5;
+  display: flex; gap: 1px; padding: 2px;
+  background: var(--mantine-color-body); border: 1px solid var(--mantine-color-default-border);
+  border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,.10);
+  opacity: 0; transform: translateY(2px); pointer-events: none;
+  transition: opacity var(--km-dur-fast) var(--km-out), transform var(--km-dur-fast) var(--km-out);
+}
+.km-msg:hover .km-msg-actions, .km-msg-actions:focus-within { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.km-msg-action { border: none; background: transparent; font-size: 14px; cursor: pointer; padding: 3px 5px; border-radius: 6px; line-height: 1; }
+.km-msg-action:hover { background: var(--mantine-color-gray-1); transform: scale(1.15); }
+.km-reactions { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
+.km-reaction {
+  font-size: 12px; padding: 1px 8px; border-radius: 10px; cursor: pointer;
+  border: 1px solid var(--mantine-color-default-border); background: transparent;
+  font-family: inherit; color: inherit; display: inline-flex; align-items: center; gap: 4px;
+  transition: transform var(--km-dur-fast) var(--km-out), background var(--km-dur-fast) ease;
+}
+.km-reaction:hover { background: var(--mantine-color-gray-1); }
+.km-reaction.mine { background: var(--mantine-color-gray-1); border-color: var(--mantine-color-text); font-weight: 600; }
+.km-reaction.pop { animation: km-reaction-pop .18s var(--km-out); }
+@keyframes km-reaction-pop { 0% { transform: scale(.5); } 60% { transform: scale(1.2); } 100% { transform: scale(1); } }
+.km-stream-caret::after { content: '\258d'; animation: km-caret 1s steps(1) infinite; color: var(--mantine-color-dimmed); }
+@keyframes km-caret { 50% { opacity: 0; } }
+.km-chat-typing-dots { display: inline-flex; gap: 3px; }
+.km-chat-typing-dots i { width: 5px; height: 5px; border-radius: 50%; background: var(--mantine-color-dimmed); animation: km-chat-bounce 1.2s ease-in-out infinite; }
+.km-chat-typing-dots i:nth-child(2) { animation-delay: .15s; }
+.km-chat-typing-dots i:nth-child(3) { animation-delay: .3s; }
+@keyframes km-chat-bounce { 0%, 60%, 100% { transform: translateY(0); opacity: .5; } 30% { transform: translateY(-3px); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .km-msg-actions, .km-msg-action, .km-reaction, .km-stream-caret::after, .km-chat-typing-dots i { transition: none; animation: none; }
+}

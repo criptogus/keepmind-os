@@ -109,6 +109,11 @@ const evaluate = async (expr) => {
   if (res.result?.exceptionDetails) throw new Error(res.result.exceptionDetails.exception?.description || 'Renderer evaluation error');
   return res.result?.result?.value;
 };
+const reopenAdmin = async () => {
+  for (let i = 0; i < 50; i++) { if (await evaluate(`!!document.querySelector('[data-tour="chat-composer"]')`)) break; await delay(100); }
+  await evaluate(`document.querySelector('[data-tour="chat-admin"]')?.click()`);
+  await delay(300);
+};
 
 try {
   // Wait for the React app to mount and preload to expose the bridge.
@@ -150,6 +155,10 @@ try {
   const firstDelivery = await send('Page.captureScreenshot', { format: 'png' });
   writeFileSync(path.join(evidenceDir, 'onboarding-connection.png'), Buffer.from(firstDelivery.result.data, 'base64'));
   await evaluate(`([...document.querySelectorAll('button')].find(b => b.textContent === 'Criar time e salvar primeiro pedido')).click()`);
+  // Chat-first shell is the landing surface; open Admin to reach the workbench.
+  for (let i = 0; i < 50; i++) { if (await evaluate(`!!document.querySelector('[data-tour="chat-composer"]')`)) break; await delay(100); }
+  if (!(await evaluate(`!!document.querySelector('[data-tour="chat-composer"]')`))) fail('chat shell did not render after onboarding');
+  await evaluate(`document.querySelector('[data-tour="chat-admin"]')?.click()`);
   for (let i = 0; i < 50; i++) { if (await evaluate(`!!document.querySelector('.km-workbench')`)) break; await delay(100); }
   if (!(await evaluate(`!!document.querySelector('.km-workbench')`))) fail('business onboarding without credentials failed');
   if ((await evaluate('window.electronAPI.getAgentExecutions()')).length) fail('onboarding unexpectedly executed work');
@@ -169,6 +178,8 @@ try {
   })()`);
   if (!task?.id) fail('work task not created through preload');
   await send('Page.reload');
+  for (let i = 0; i < 50; i++) { if (await evaluate(`!!document.querySelector('[data-tour="chat-composer"]')`)) break; await delay(100); }
+  await evaluate(`document.querySelector('[data-tour="chat-admin"]')?.click()`);
   for (let i = 0; i < 50; i++) {
     const text = await evaluate('document.body?.innerText ?? ""');
     if (text?.includes('Review repository documentation')) break;
@@ -232,7 +243,12 @@ try {
   await evaluate(`([...document.querySelectorAll('.km-task')].find(el => el.textContent.includes('Preparar o resumo'))).click()`);
   await delay(300);
   if (!(await evaluate(`!!document.querySelector('.km-chat-composer') && !!document.querySelector('.km-chat-user')`))) fail('chat conversation missing');
-  const approvalStyle = await evaluate(`(() => {const b=document.querySelector('.km-approve-action');if(!b)return null;const s=getComputedStyle(b);return {background:s.backgroundColor,text:s.color,label:b.textContent};})()`);
+  const approvalEl = await evaluate(`!!document.querySelector('.km-approve-action')`);
+  if (!approvalEl) {
+    const dbg = await evaluate('document.body?.innerText?.slice(0, 3000) ?? ""');
+    fail('approve-action missing; page text: ' + dbg.replace(/\n/g, ' | ').slice(0, 1200));
+  }
+  const approvalStyle = await evaluate(`(() => {const b=document.querySelector('.km-approve-action');const s=getComputedStyle(b);return {background:s.backgroundColor,text:s.color,label:b.textContent};})()`);
   if (!approvalStyle || approvalStyle.background !== 'rgb(196, 255, 61)' || approvalStyle.text !== 'rgb(17, 17, 17)' || !approvalStyle.label.includes('v1')) fail('lime approval or version label missing');
   await evaluate(`document.querySelector('.km-approve-action').scrollIntoView({block:'center'})`);await delay(200);
   const approvalShot=await send('Page.captureScreenshot',{format:'png'});writeFileSync(path.join(evidenceDir,'approval-lime.png'),Buffer.from(approvalShot.result.data,'base64'));
@@ -254,6 +270,7 @@ try {
   await evaluate(`window.electronAPI.updateSettings({theme:'dark'})`);
   await send('Page.reload');
   await delay(700);
+  await reopenAdmin();
   if ((await evaluate(`document.documentElement.getAttribute('data-mantine-color-scheme')`)) !== 'dark') fail('persisted dark theme not applied');
   const darkShot = await send('Page.captureScreenshot', { format: 'png' });
   writeFileSync(path.join(root, 'evidence/focus-dark.png'), Buffer.from(darkShot.result.data, 'base64'));
@@ -262,6 +279,7 @@ try {
   checks.push('dark-theme-and-contrast');
   await evaluate(`window.electronAPI.updateSettings({theme:'auto'})`);
   await send('Page.reload'); await delay(500);
+  await reopenAdmin();
   for (const scheme of ['light', 'dark']) {
     await send('Emulation.setEmulatedMedia', { features: [{name:'prefers-color-scheme',value:scheme}] }); await delay(200);
     if (await evaluate(`document.documentElement.getAttribute('data-mantine-color-scheme')`) !== scheme) fail('automatic theme did not follow system');
@@ -269,6 +287,7 @@ try {
   checks.push('automatic-system-theme');
   await evaluate(`window.electronAPI.updateSettings({theme:'light'})`);
   await send('Page.reload'); await delay(600);
+  await reopenAdmin();
   const command = async label => {
     await evaluate(`window.dispatchEvent(new KeyboardEvent('keydown', {key:'k',ctrlKey:true,bubbles:true}))`);
     await delay(200);
@@ -321,6 +340,7 @@ try {
   for (const scheme of ['light', 'dark']) {
     await evaluate(`window.electronAPI.updateSettings({theme:${JSON.stringify(scheme)}})`);
     await send('Page.reload'); await delay(500);
+    await reopenAdmin();
     for (const page of ['Home', 'Agents', 'Approvals', 'Settings']) {
       await command(page); await delay(250);
       const colors = await evaluate(`({ body:getComputedStyle(document.body).backgroundColor, lime:getComputedStyle(document.documentElement).getPropertyValue('--km-lime').trim() })`);
@@ -330,6 +350,7 @@ try {
     }
   }
   await evaluate(`window.electronAPI.updateSettings({theme:'light'})`); await send('Page.reload'); await delay(500);
+  await reopenAdmin();
   await command('Workspace');
   await send('Emulation.setEmulatedMedia', {features:[{name:'prefers-reduced-motion',value:'reduce'}]});
   const motion = await evaluate(`(() => {const element=document.createElement('div');element.className='km-chat-message';document.body.appendChild(element);const value=getComputedStyle(element).animationDuration;element.remove();return value;})()`);
@@ -338,6 +359,7 @@ try {
   checks.push('cross-area-palette-light-dark', 'reduced-motion');
 
   await evaluate(`localStorage.setItem('km-lang', 'pt')`); await send('Page.reload'); await delay(500);
+  await reopenAdmin();
   const portuguese = await send('Page.captureScreenshot', {format:'png'});
   writeFileSync(path.join(evidenceDir, 'workspace-pt.png'), Buffer.from(portuguese.result.data, 'base64'));
   await evaluate(`([...document.querySelectorAll('.km-task')].find(b=>b.textContent.includes('Preparar o resumo'))).click()`); await delay(300);
@@ -346,6 +368,9 @@ try {
   await send('Input.dispatchKeyEvent', {type:'keyDown',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});
   await send('Input.dispatchKeyEvent', {type:'keyUp',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});
   await evaluate(`localStorage.setItem('km-lang', 'en')`); await send('Page.reload'); await delay(500);
+  // Chat-first shell has no .km-sidebar; reopen Admin for the narrow-layout check.
+  for (let i = 0; i < 50; i++) { if (await evaluate(`!!document.querySelector('[data-tour="chat-composer"]')`)) break; await delay(100); }
+  await evaluate(`document.querySelector('[data-tour="chat-admin"]')?.click()`);
   await send('Emulation.setDeviceMetricsOverride', { width: 780, height: 900, deviceScaleFactor: 1, mobile: false });
   await delay(500);
   if (await evaluate(`getComputedStyle(document.querySelector('.km-sidebar')).display !== 'none'`)) fail('narrow screen sidebar not collapsed');
@@ -378,6 +403,7 @@ try {
   const sharedContext = await evaluate('window.electronAPI.workContext()');
   if (sharedContext.connection.mode !== 'remote' || sharedContext.snapshot.tasks[0].events.at(-1).actorId !== 'bob') fail('remote state did not synchronize');
   await send('Page.reload');
+  await reopenAdmin();
   for (let i = 0; i < 80; i++) { if ((await evaluate('document.body?.innerText ?? ""')).includes('Collaborative release review')) break; await delay(100); }
   if (!/shared workspace|espaço compartilhado/i.test(await evaluate('document.body?.innerText ?? ""'))) fail('shared workspace indicator missing');
   const sharedShot = await send('Page.captureScreenshot', { format: 'png' });

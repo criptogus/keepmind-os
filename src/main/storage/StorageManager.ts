@@ -3,7 +3,7 @@ import { randomUUID } from 'node:crypto';
 import * as path from 'path';
 import * as fs from 'fs';
 import { homedir } from 'node:os';
-import type { Agent, Team, Approval, GovernanceRule, AuditEntry, AgentExecution, ExecutionToolCall, Skill, LocalUser, UserRole, LlmUsageRecord, RoutingDecision, MemoryItem } from '../../shared/types.js';
+import type { Agent, Team, Approval, GovernanceRule, AuditEntry, AgentExecution, ExecutionToolCall, Skill, LocalUser, UserRole, LlmUsageRecord, RoutingDecision, MemoryItem, Channel, ChannelKind, ChannelMessage, ChatChannelView } from '../../shared/types.js';
 
 export class StorageManager {
   private db: DatabaseSync;
@@ -281,6 +281,47 @@ export class StorageManager {
       try { this.db.exec(`ALTER TABLE audit_logs ADD COLUMN ${col}`); } catch { /* exists */ }
     }
 
+    // Chat channels/messages — Slack-style workspace surface.
+    this.db.exec(`
+      CREATE TABLE IF NOT EXISTS channels (
+        id TEXT PRIMARY KEY,
+        name TEXT NOT NULL,
+        kind TEXT NOT NULL,
+        topic TEXT,
+        agent_id TEXT,
+        created_at TEXT NOT NULL
+      )
+    `);
+    this.db.exec(`
+      CREATE TABLE IF NOT EXISTS channel_agents (
+        channel_id TEXT NOT NULL,
+        agent_id TEXT NOT NULL,
+        PRIMARY KEY (channel_id, agent_id)
+      )
+    `);
+    this.db.exec(`
+      CREATE TABLE IF NOT EXISTS channel_user_state (
+        channel_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        last_read_at TEXT NOT NULL,
+        PRIMARY KEY (channel_id, user_id)
+      )
+    `);
+    this.db.exec(`
+      CREATE TABLE IF NOT EXISTS messages (
+        id TEXT PRIMARY KEY,
+        channel_id TEXT NOT NULL,
+        author_kind TEXT NOT NULL,
+        author_id TEXT NOT NULL,
+        author_name TEXT NOT NULL,
+        body TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'done',
+        execution_id TEXT,
+        meta TEXT,
+        created_at TEXT NOT NULL
+      )
+    `);
+
     // Create indexes
     this.db.exec(`
       CREATE INDEX IF NOT EXISTS idx_approvals_status ON approvals(status);
@@ -291,6 +332,7 @@ export class StorageManager {
       CREATE INDEX IF NOT EXISTS idx_llm_usage_agent ON llm_usage(agent_id, created_at);
       CREATE INDEX IF NOT EXISTS idx_routing_created ON routing_decisions(created_at);
       CREATE INDEX IF NOT EXISTS idx_memory_active ON memory_items(valid_until, demoted);
+      CREATE INDEX IF NOT EXISTS idx_messages_channel ON messages(channel_id, created_at);
     `);
   }
 
@@ -1114,6 +1156,189 @@ export class StorageManager {
 
   clearWhatsAppMessages(): void {
     this.db.exec('DELETE FROM whatsapp_messages');
+  }
+
+  // ---- Chat: channels & messages ----
+
+  private rowToChannel(row: any): Channel {
+    return {
+      id: row.id,
+      name: row.name,
+      kind: row.kind as ChannelKind,
+      topic: row.topic ?? undefined,
+      agentId: row.agent_id ?? undefined,
+      createdAt: row.created_at,
+    };
+  }
+
+  private rowToMessage(row: any): ChannelMessage {
+    return {
+      id: row.id,
+      channelId: row.channel_id,
+      authorKind: row.author_kind,
+      authorId: row.author_id,
+      authorName: row.author_name,
+      body: row.body,
+      status: row.status,
+      executionId: row.execution_id ?? undefined,
+      meta: row.meta ? JSON.parse(row.meta) : undefined,
+      createdAt: row.created_at,
+    };
+  }
+
+  /** Idempotent: creates #geral (all agents as members) and #approvals. */
+  ensureDefaultChannels(): void {
+    const now = new Date().toISOString();
+    const has = (name: string) =>
+      this.db.prepare('SELECT id FROM channels WHERE name = ?').get(name) != null;
+    if (!has('geral')) {
+      const id = randomUUID();
+      this.db.prepare('INSERT INTO channels (id, name, kind, created_at) VALUES (?, ?, ?, ?)')
+        .run(id, 'geral', 'channel', now);
+      for (const a of this.getAllAgents()) {
+        this.db.prepare('INSERT OR IGNORE INTO channel_agents (channel_id, agent_id) VALUES (?, ?)')
+          .run(id, a.id);
+      }
+    }
+    if (!has('approvals')) {
+      this.db.prepare('INSERT INTO channels (id, name, kind, created_at) VALUES (?, ?, ?, ?)')
+        .run(randomUUID(), 'approvals', 'channel', now);
+    }
+  }
+
+  listChannels(userId?: string): ChatChannelView[] {
+    const rows = this.db.prepare('SELECT * FROM channels ORDER BY created_at').all() as any[];
+    const agentsById = new Map(this.getAllAgents().map((a) => [a.id, a]));
+    return rows.map((row) => {
+      const ch = this.rowToChannel(row);
+      const memberRows = this.db.prepare('SELECT agent_id FROM channel_agents WHERE channel_id = ?').all(ch.id) as any[];
+      const agents = memberRows
+        .map((r) => agentsById.get(r.agent_id))
+        .filter((a): a is Agent => !!a)
+        .map((a) => ({ id: a.id, name: a.name, avatar: a.avatar ?? null }));
+      let unread = 0;
+      if (userId) {
+        const state = this.db.prepare('SELECT last_read_at FROM channel_user_state WHERE channel_id = ? AND user_id = ?')
+          .get(ch.id, userId) as any;
+        const since = state?.last_read_at ?? '1970-01-01';
+        const row = this.db.prepare(
+          "SELECT COUNT(*) AS c FROM messages WHERE channel_id = ? AND created_at > ? AND author_id != ?"
+        ).get(ch.id, since, userId) as any;
+        unread = row?.c ?? 0;
+      }
+      return { ...ch, agents, unread };
+    }).sort((a, b) => {
+      const rank = (c: ChatChannelView) =>
+        c.name === 'geral' ? 0 : c.name === 'approvals' ? 1 : c.kind === 'dm' ? 3 : 2;
+      const ra = rank(a), rb = rank(b);
+      if (ra !== rb) return ra - rb;
+      return a.name.localeCompare(b.name);
+    });
+  }
+
+  getChannel(id: string): Channel | null {
+    const row = this.db.prepare('SELECT * FROM channels WHERE id = ?').get(id) as any;
+    return row ? this.rowToChannel(row) : null;
+  }
+
+  createChannel(input: { name: string; kind?: ChannelKind; agentId?: string; topic?: string; agentIds?: string[] }): Channel {
+    const ch: Channel = {
+      id: randomUUID(),
+      name: input.name,
+      kind: input.kind ?? 'channel',
+      topic: input.topic,
+      agentId: input.agentId,
+      createdAt: new Date().toISOString(),
+    };
+    this.db.prepare('INSERT INTO channels (id, name, kind, topic, agent_id, created_at) VALUES (?, ?, ?, ?, ?, ?)')
+      .run(ch.id, ch.name, ch.kind, ch.topic ?? null, ch.agentId ?? null, ch.createdAt);
+    for (const agentId of input.agentIds ?? []) this.addChannelAgent(ch.id, agentId);
+    return ch;
+  }
+
+  renameChannel(id: string, name: string): Channel | null {
+    this.db.prepare('UPDATE channels SET name = ? WHERE id = ?').run(name, id);
+    return this.getChannel(id);
+  }
+
+  deleteChannel(id: string): void {
+    this.db.prepare('DELETE FROM messages WHERE channel_id = ?').run(id);
+    this.db.prepare('DELETE FROM channel_agents WHERE channel_id = ?').run(id);
+    this.db.prepare('DELETE FROM channel_user_state WHERE channel_id = ?').run(id);
+    this.db.prepare('DELETE FROM channels WHERE id = ?').run(id);
+  }
+
+  addChannelAgent(channelId: string, agentId: string): void {
+    this.db.prepare('INSERT OR IGNORE INTO channel_agents (channel_id, agent_id) VALUES (?, ?)').run(channelId, agentId);
+  }
+
+  removeChannelAgent(channelId: string, agentId: string): void {
+    this.db.prepare('DELETE FROM channel_agents WHERE channel_id = ? AND agent_id = ?').run(channelId, agentId);
+  }
+
+  findDmChannel(agentId: string): Channel | null {
+    const row = this.db.prepare("SELECT * FROM channels WHERE kind = 'dm' AND agent_id = ?").get(agentId) as any;
+    return row ? this.rowToChannel(row) : null;
+  }
+
+  getMessages(channelId: string, opts?: { limit?: number; before?: string }): ChannelMessage[] {
+    const limit = opts?.limit ?? 100;
+    let rows: any[];
+    if (opts?.before) {
+      const cursor = this.db.prepare('SELECT created_at, rowid FROM messages WHERE id = ?').get(opts.before) as any;
+      if (!cursor) return [];
+      rows = this.db.prepare(
+        'SELECT * FROM messages WHERE channel_id = ? AND (created_at < ? OR (created_at = ? AND rowid < ?)) ORDER BY created_at DESC, rowid DESC LIMIT ?'
+      ).all(channelId, cursor.created_at, cursor.created_at, cursor.rowid, limit) as any[];
+      rows.reverse();
+    } else {
+      rows = this.db.prepare(
+        'SELECT * FROM messages WHERE channel_id = ? ORDER BY created_at DESC, rowid DESC LIMIT ?'
+      ).all(channelId, limit) as any[];
+      rows.reverse();
+    }
+    return rows.map((r) => this.rowToMessage(r));
+  }
+
+  saveMessage(msg: Omit<ChannelMessage, 'id' | 'createdAt'> & { id?: string; createdAt?: string }): ChannelMessage {
+    const full: ChannelMessage = {
+      ...msg,
+      id: msg.id ?? randomUUID(),
+      createdAt: msg.createdAt ?? new Date().toISOString(),
+    };
+    this.db.prepare(`
+      INSERT INTO messages (id, channel_id, author_kind, author_id, author_name, body, status, execution_id, meta, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(
+      full.id, full.channelId, full.authorKind, full.authorId, full.authorName,
+      full.body, full.status, full.executionId ?? null,
+      full.meta ? JSON.stringify(full.meta) : null, full.createdAt
+    );
+    return full;
+  }
+
+  getMessage(id: string): ChannelMessage | null {
+    const row = this.db.prepare('SELECT * FROM messages WHERE id = ?').get(id) as any;
+    return row ? this.rowToMessage(row) : null;
+  }
+
+  updateMessage(id: string, patch: Partial<Pick<ChannelMessage, 'body' | 'status' | 'meta' | 'executionId'>>): void {
+    const sets: string[] = [];
+    const params: unknown[] = [];
+    if (patch.body !== undefined) { sets.push('body = ?'); params.push(patch.body); }
+    if (patch.status !== undefined) { sets.push('status = ?'); params.push(patch.status); }
+    if (patch.meta !== undefined) { sets.push('meta = ?'); params.push(JSON.stringify(patch.meta)); }
+    if (patch.executionId !== undefined) { sets.push('execution_id = ?'); params.push(patch.executionId); }
+    if (!sets.length) return;
+    params.push(id);
+    this.db.prepare(`UPDATE messages SET ${sets.join(', ')} WHERE id = ?`).run(...params as any[]);
+  }
+
+  markChannelRead(channelId: string, userId: string): void {
+    this.db.prepare(`
+      INSERT INTO channel_user_state (channel_id, user_id, last_read_at) VALUES (?, ?, ?)
+      ON CONFLICT(channel_id, user_id) DO UPDATE SET last_read_at = excluded.last_read_at
+    `).run(channelId, userId, new Date().toISOString());
   }
 
   close(): void {

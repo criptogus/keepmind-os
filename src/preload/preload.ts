@@ -4,7 +4,7 @@ import type { McpConfig } from '../main/mcp/McpManager.js';
 import type { ToolStep } from '../main/execution/CheckpointStore.js';
 import type { CreateWorkInput, WorkAction, WorkSnapshot, WorkTask, WorkPreview, WorkContext } from '../shared/work.js';
 import { contextBridge, ipcRenderer } from 'electron';
-import type { Agent, Team, Approval, GovernanceRule, AuditEntry, AgentExecution, ExecutionToolCall, AgentConfig, CreateAgentInput, TeamConfig, AppSettings, Skill, AgentTrigger, LocalUser, UserRole, ComputerAccessLevel, LlmUsageRecord, RoutingDecision, MemoryItem } from '../shared/types.js';
+import type { Agent, Team, Approval, GovernanceRule, AuditEntry, AgentExecution, ExecutionToolCall, AgentConfig, CreateAgentInput, TeamConfig, AppSettings, Skill, AgentTrigger, LocalUser, UserRole, ComputerAccessLevel, LlmUsageRecord, RoutingDecision, MemoryItem, Channel, ChannelMessage, ChatChannelView, ChatEvent } from '../shared/types.js';
 import type { ModelCatalogResponse } from '../shared/models.js';
 
 contextBridge.exposeInMainWorld('electronAPI', {
@@ -304,6 +304,33 @@ contextBridge.exposeInMainWorld('electronAPI', {
     ipcRenderer.invoke('computer:updateSettings', s) as Promise<{ level: ComputerAccessLevel; allowedRoots: string[]; shellAllow: string[]; shellDeny: string[] }>,
 
   // Personal brain (local vault)
+
+  // Chat (Slack-style channels)
+  listChatChannels: () => ipcRenderer.invoke('chat:listChannels') as Promise<ChatChannelView[]>,
+  getChatMessages: (channelId: string, opts?: { limit?: number; before?: string }) =>
+    ipcRenderer.invoke('chat:getMessages', channelId, opts) as Promise<ChannelMessage[]>,
+  sendChatMessage: (channelId: string, text: string) =>
+    ipcRenderer.invoke('chat:sendMessage', channelId, text) as Promise<ChannelMessage>,
+  createChatChannel: (input: { name: string; agentIds?: string[]; topic?: string }) =>
+    ipcRenderer.invoke('chat:createChannel', input) as Promise<Channel>,
+  renameChatChannel: (id: string, name: string) =>
+    ipcRenderer.invoke('chat:renameChannel', id, name) as Promise<Channel | null>,
+  deleteChatChannel: (id: string) => ipcRenderer.invoke('chat:deleteChannel', id) as Promise<void>,
+  openAgentDm: (agentId: string) => ipcRenderer.invoke('chat:openDm', agentId) as Promise<Channel>,
+  addChatChannelAgent: (channelId: string, agentId: string) =>
+    ipcRenderer.invoke('chat:addChannelAgent', channelId, agentId) as Promise<void>,
+  removeChatChannelAgent: (channelId: string, agentId: string) =>
+    ipcRenderer.invoke('chat:removeChannelAgent', channelId, agentId) as Promise<void>,
+  postChatSystemMessage: (channelId: string, text: string) =>
+    ipcRenderer.invoke('chat:systemMessage', channelId, text) as Promise<ChannelMessage>,
+  reactChatMessage: (messageId: string, emoji: string) =>
+    ipcRenderer.invoke('chat:react', messageId, emoji, undefined) as Promise<Record<string, string[]>>,
+  markChatRead: (channelId: string) => ipcRenderer.invoke('chat:markRead', channelId) as Promise<void>,
+  onChatEvent: (listener: (event: ChatEvent) => void) => {
+    const wrapped = (_e: Electron.IpcRendererEvent, event: ChatEvent) => listener(event);
+    ipcRenderer.on('chat:event', wrapped);
+    return () => ipcRenderer.removeListener('chat:event', wrapped);
+  },
   personalBrainStatus: () => ipcRenderer.invoke('personalbrain:status') as Promise<{ dir: string; files: string[] }>,
   personalBrainOpenFolder: () => ipcRenderer.invoke('personalbrain:openFolder') as Promise<{ ok: boolean }>,
 
@@ -544,6 +571,19 @@ declare global {
       computerGetSettings: () => Promise<{ level: ComputerAccessLevel; allowedRoots: string[]; shellAllow: string[]; shellDeny: string[] }>;
       computerUpdateSettings: (s: { level?: ComputerAccessLevel; allowedRoots?: string[]; shellAllow?: string[]; shellDeny?: string[] }) =>
         Promise<{ level: ComputerAccessLevel; allowedRoots: string[]; shellAllow: string[]; shellDeny: string[] }>;
+      listChatChannels: () => Promise<ChatChannelView[]>;
+      getChatMessages: (channelId: string, opts?: { limit?: number; before?: string }) => Promise<ChannelMessage[]>;
+      sendChatMessage: (channelId: string, text: string) => Promise<ChannelMessage>;
+      createChatChannel: (input: { name: string; agentIds?: string[]; topic?: string }) => Promise<Channel>;
+      renameChatChannel: (id: string, name: string) => Promise<Channel | null>;
+      deleteChatChannel: (id: string) => Promise<void>;
+      openAgentDm: (agentId: string) => Promise<Channel>;
+      addChatChannelAgent: (channelId: string, agentId: string) => Promise<void>;
+      removeChatChannelAgent: (channelId: string, agentId: string) => Promise<void>;
+      postChatSystemMessage: (channelId: string, text: string) => Promise<ChannelMessage>;
+      reactChatMessage: (messageId: string, emoji: string) => Promise<Record<string, string[]>>;
+      markChatRead: (channelId: string) => Promise<void>;
+      onChatEvent: (listener: (event: ChatEvent) => void) => () => void;
       personalBrainStatus: () => Promise<{ dir: string; files: string[] }>;
       personalBrainOpenFolder: () => Promise<{ ok: boolean }>;
       brainRequestCorporateAccess: (input: { scope?: 'read' | 'write'; reason?: string }) => Promise<Record<string, unknown>>;
