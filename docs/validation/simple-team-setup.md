@@ -30,4 +30,10 @@ O teste real no Mac usou botões e texto livre para solicitar um time de marketi
 
 256 testes unitários, 1 teste de integração, typecheck, build e smoke do Electron passaram. O smoke percorre o formulário único, confirma que só cria após a ação do usuário, verifica três agentes e primeiro pedido em rascunho, além dos cenários existentes de trabalho, recuperação, exportação e workspace compartilhado.
 
-A validação real do build corrigido depende da autorização das Chaves do macOS. Não confundir o teste real da versão anterior com uma validação completa da correção.
+## Validação real do build corrigido no Mac
+
+Depois da autorização das Chaves do macOS, o canal `marketing-simplificado` foi percorrido usando um botão para escolher empresas e resposta livre para detalhar oferta, público, prazo e primeira tarefa. Houve duas perguntas e uma aprovação de criação/execução. O time `Palestras IA — Marketing` foi persistido com coordenação, estrategista e criador de conteúdo.
+
+As quatro execuções (assistente, coordenação e dois especialistas) terminaram como `completed`, sem erro. O pedido `6d1bdfd6-efaf-4bc0-98de-43c9016e9adf` ficou em `review`, com 7.898 caracteres de entrega integral. O chat exibiu plano de sete dias, post, métricas e direção para 30 dias, com Markdown formatado. As únicas ferramentas chamadas nessa execução foram criação de time e duas delegações; os especialistas não chamaram ferramentas externas. Nenhuma publicação ou mensagem externa foi realizada.
+
+A tela única e a abertura da personalização por teclado foram inspecionadas no app. A build local mantém o número 0.1.20 e não é uma nova release oficial. A autorização de acesso às Chaves pode ser solicitada pelo macOS ao trocar o binário.
