@@ -323,6 +323,11 @@ export class StorageManager {
       )
     `);
 
+    const msgCols = this.db.prepare(`PRAGMA table_info(messages)`).all() as Array<{ name: string }>;
+    if (!msgCols.some((c) => c.name === 'parent_id')) {
+      this.db.exec(`ALTER TABLE messages ADD COLUMN parent_id TEXT`);
+    }
+
     // Create indexes
     this.db.exec(`
       CREATE INDEX IF NOT EXISTS idx_approvals_status ON approvals(status);
@@ -336,10 +341,7 @@ export class StorageManager {
       CREATE INDEX IF NOT EXISTS idx_messages_channel ON messages(channel_id, created_at);
       CREATE INDEX IF NOT EXISTS idx_messages_parent ON messages(parent_id);
     `);
-    const msgCols = this.db.prepare(`PRAGMA table_info(messages)`).all() as Array<{ name: string }>;
-    if (!msgCols.some((c) => c.name === 'parent_id')) {
-      this.db.exec(`ALTER TABLE messages ADD COLUMN parent_id TEXT`);
-    }
+
   }
 
   // Agent operations
