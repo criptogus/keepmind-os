@@ -13311,7 +13311,9 @@
       "youtube": "Video, commenti, playlist e statistiche del canale YouTube.",
       "pinterest": "Pin, bacheche e statistiche di Pinterest.",
       "reddit": "Post, commenti e community di Reddit.",
-      "whatsapp": "Messaggi e modelli di WhatsApp Business."
+      "whatsapp": "Messaggi e modelli di WhatsApp Business.",
+      "superagentskill": "Trova, valuta e migliora le capacità degli agenti.",
+      "liquid_cybersec": "Indaga sui problemi di sicurezza e coordina le correzioni con approvazione."
     }
   },
   "toolNames": {
@@ -19928,5 +19930,21 @@
       "alwaysOn": "D'ora in poi, segnalazioni come questa partono senza chiedere.",
       "askFirst": "Chiedi prima di inviare"
     }
+  },
+  "keepmindSkills": {
+    "improve": "Migliora con IA",
+    "intro": "Chiedi a un agente che usa questa skill di rivederla con SuperAgentSkill, se disponibile.",
+    "agent": "Agente",
+    "goal": "Cosa deve migliorare?",
+    "goalHint": "Facoltativo: descrivi il risultato desiderato.",
+    "submit": "Richiedi miglioramento",
+    "noAgent": "Attiva prima questa skill per un agente.",
+    "noAI": "L’IA dell’agente deve essere disponibile per richiedere il miglioramento.",
+    "setup": "Configura IA",
+    "review": "Rivedi la proposta nella conversazione. Applicandola salvi una nuova versione.",
+    "allCategories": "Tutte le categorie",
+    "category": "Categoria",
+    "search": "Cerca per nome, descrizione, categoria o etichetta",
+    "request": "Rivedi la skill {{name}} (v{{version}}), usando SuperAgentSkill se disponibile. Mantieni capacità e controlli di accesso. {{goal}} Prepara una proposta completa da approvare prima di applicare modifiche. Spiega le modifiche e mostra la scheda di approvazione. Non pubblicare nulla."
   }
 }

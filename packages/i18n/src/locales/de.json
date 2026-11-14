@@ -12831,7 +12831,9 @@
       "youtube": "Videos, Kommentare, Playlists und Statistiken des YouTube-Kanals.",
       "pinterest": "Pins, Pinnwände und Statistiken auf Pinterest.",
       "reddit": "Beiträge, Kommentare und Communitys auf Reddit.",
-      "whatsapp": "Nachrichten und Vorlagen von WhatsApp Business."
+      "whatsapp": "Nachrichten und Vorlagen von WhatsApp Business.",
+      "superagentskill": "Finde, bewerte und verbessere Agentenfähigkeiten.",
+      "liquid_cybersec": "Untersuche Sicherheitsbefunde und koordiniere Korrekturen mit Freigabe."
     }
   },
   "toolNames": {
@@ -19226,5 +19228,21 @@
       "alwaysOn": "Ab jetzt gehen solche Berichte ohne Nachfrage raus.",
       "askFirst": "Vor dem Senden fragen"
     }
+  },
+  "keepmindSkills": {
+    "improve": "Mit KI verbessern",
+    "intro": "Bitte einen Agenten, der diese Skill nutzt, um eine Prüfung mit SuperAgentSkill, sofern verfügbar.",
+    "agent": "KI-Agent",
+    "goal": "Was soll besser werden?",
+    "goalHint": "Optional: Beschreibe das gewünschte Ergebnis.",
+    "submit": "Verbesserung anfordern",
+    "noAgent": "Aktiviere diese Skill zuerst für einen Agenten.",
+    "noAI": "Die KI dieses Agenten muss für die Verbesserung verfügbar sein.",
+    "setup": "KI einrichten",
+    "review": "Prüfe den Vorschlag im Gespräch. Beim Anwenden wird eine neue Version gespeichert.",
+    "allCategories": "Alle Kategorien",
+    "category": "Kategorie",
+    "search": "Nach Name, Beschreibung, Kategorie oder Schlagwort suchen",
+    "request": "Prüfe die Skill {{name}} (v{{version}}), wenn möglich mit SuperAgentSkill. Bewahre Fähigkeiten und Zugriffskontrollen. {{goal}} Erstelle einen vollständigen Vorschlag zur Freigabe vor Änderungen. Erkläre Änderungen und zeige die Freigabekarte. Veröffentliche nichts."
   }
 }

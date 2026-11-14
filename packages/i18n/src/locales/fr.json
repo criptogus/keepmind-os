@@ -13299,7 +13299,9 @@
       "youtube": "Vidéos, commentaires, playlists et statistiques de la chaîne YouTube.",
       "pinterest": "Épingles, tableaux et statistiques Pinterest.",
       "reddit": "Publications, commentaires et communautés Reddit.",
-      "whatsapp": "Messages et modèles WhatsApp Business."
+      "whatsapp": "Messages et modèles WhatsApp Business.",
+      "superagentskill": "Trouvez, évaluez et améliorez les compétences des agents.",
+      "liquid_cybersec": "Examinez les problèmes de sécurité et coordonnez les corrections avec approbation."
     }
   },
   "toolNames": {
@@ -19922,5 +19924,21 @@
       "alwaysOn": "Désormais, les rapports de ce type partent sans demander.",
       "askFirst": "Demander avant d'envoyer"
     }
+  },
+  "keepmindSkills": {
+    "improve": "Améliorer avec l’IA",
+    "intro": "Demandez à un agent utilisant cette skill de la réviser, avec SuperAgentSkill si disponible.",
+    "agent": "Agent IA",
+    "goal": "Que faut-il améliorer ?",
+    "goalHint": "Facultatif : décrivez le résultat souhaité.",
+    "submit": "Demander une amélioration",
+    "noAgent": "Activez d’abord cette skill pour un agent.",
+    "noAI": "L’IA de cet agent doit être disponible pour demander une amélioration.",
+    "setup": "Configurer l’IA",
+    "review": "Examinez la proposition dans la conversation. Son application enregistre une nouvelle version.",
+    "allCategories": "Toutes les catégories",
+    "category": "Catégorie",
+    "search": "Rechercher par nom, description, catégorie ou étiquette",
+    "request": "Révise la skill {{name}} (v{{version}}), avec SuperAgentSkill si disponible. Préserve ses capacités et contrôles d’accès. {{goal}} Prépare une proposition complète à approuver avant toute modification. Explique les changements et affiche la carte d’approbation. Ne publie rien."
   }
 }

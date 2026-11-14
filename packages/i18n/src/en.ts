@@ -7,6 +7,23 @@ import type { Widen } from "./widen";
  * no exclamation marks, buttons start with a verb, "agentes" in lower case.
  */
 export const en = {
+  keepmindSkills: {
+    improve: "Improve with AI",
+    intro: "Ask an agent that uses this skill to review it, consulting SuperAgentSkill when available.",
+    agent: "Agent",
+    goal: "What should improve?",
+    goalHint: "Optional: describe the desired result.",
+    submit: "Request improvement",
+    noAgent: "Enable this skill on an agent first.",
+    noAI: "Make this agent’s AI available before requesting an improvement.",
+    setup: "Configure AI",
+    review: "Review the proposal in the conversation. Applying it saves a new version.",
+    allCategories: "All categories",
+    category: "Category",
+    search: "Search by name, description, category or tag",
+    request:
+      "Review skill {{name}} (v{{version}}), using SuperAgentSkill if available. Preserve its capabilities and access controls. {{goal}} Prepare a complete proposal for my approval before applying any changes. Explain the changes and show the approval card. Do not publish anything.",
+  },
   app: {
     name: "agentes",
     /** The browser tab's title on every screen that doesn't set its own. */

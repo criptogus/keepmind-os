@@ -64,7 +64,7 @@ export interface SkillChange {
   skill?: SkillRow;
   proposalIds: string[];
   scripts: string[];
-  why?: "outside" | "person" | "locked";
+  why?: "outside" | "person" | "locked" | "review";
 }
 
 /**
@@ -153,7 +153,7 @@ export async function changeSkillAsAgent(
   slug: string,
   change: string | { body?: string; files?: SkillFileEdit[] },
   trust: "high" | "low",
-  asked?: { person: string | null; decides: boolean },
+  asked?: { person: string | null; decides: boolean; reviewOnly?: boolean },
 ): Promise<SkillChange> {
   const name = slug.trim().toLowerCase();
   const { body: rawBody, files = [] } = typeof change === "string" ? { body: change } : change;
@@ -209,8 +209,9 @@ export async function changeSkillAsAgent(
     return { action: "unchanged", proposalIds: [], scripts: [] };
   await assertSkillChangeRoom(ctx.db, ctx, skill.id);
 
-  const why =
-    trust === "low"
+  const why = asked?.reviewOnly
+    ? "review"
+    : trust === "low"
       ? "outside"
       : own || asked?.decides
         ? undefined

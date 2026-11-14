@@ -7,6 +7,23 @@ import type { LocaleStrings } from "./plurals";
  * no exclamation marks, buttons start with a verb, "agentes" in lower case.
  */
 export const ptBR = {
+  keepmindSkills: {
+    improve: "Melhorar com IA",
+    intro: "Peça a um agente que usa esta skill para revisá-la, consultando o SuperAgentSkill quando disponível.",
+    agent: "Agente",
+    goal: "O que deve melhorar?",
+    goalHint: "Opcional: descreva o resultado desejado.",
+    submit: "Solicitar melhoria",
+    noAgent: "Ative esta skill em um agente primeiro.",
+    noAI: "Deixe a IA deste agente disponível antes de solicitar a melhoria.",
+    setup: "Configurar IA",
+    review: "Revise a proposta na conversa. Ao aplicá-la, uma nova versão será salva.",
+    allCategories: "Todas as categorias",
+    category: "Categoria",
+    search: "Buscar por nome, descrição, categoria ou tag",
+    request:
+      "Revise a skill {{name}} (v{{version}}), usando o SuperAgentSkill se disponível. Preserve suas capacidades e controles de acesso. {{goal}} Prepare uma proposta completa para minha aprovação antes de aplicar qualquer mudança. Explique as mudanças e mostre o cartão de aprovação. Não publique nada.",
+  },
   app: {
     name: "agentes",
     /** The browser tab's title on every screen that doesn't set its own. */

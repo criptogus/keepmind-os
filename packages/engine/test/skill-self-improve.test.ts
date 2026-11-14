@@ -432,3 +432,27 @@ describe("agents improve skills by themselves (ADR 0120, ADR 0020)", () => {
     expect(md.content).toContain("Invalid file path");
   });
 });
+
+test("reviewOnly keeps the active version intact until an authorized person accepts", async () => {
+  f = await setup({ skillTools: true });
+  const { skill } = await personSkill(f);
+  const run = await personRun(f);
+  await usedSkill(run);
+  const out = await invoke(run, "update_skill", {
+    name: "deploy",
+    body: "# deploy\n1. Build.\n2. Verify the result.",
+    reviewOnly: true,
+  });
+  expect(out.content).toContain("You requested review before applying");
+  expect((await getSkill(f.db, f.owner.id, f.org.id, skill.id)).version).toBe(1);
+  const [proposal] = await proposals();
+  expect(proposal?.status).toBe("pending");
+  const member = await addMember(f.db, f.org.id, "member");
+  await expect(decideProposal(f.db, member.id, f.org.id, proposal?.id ?? "", "accept")).rejects.toBeInstanceOf(
+    ForbiddenError,
+  );
+  await decideProposal(f.db, f.owner.id, f.org.id, proposal?.id ?? "", "accept");
+  const saved = await getSkill(f.db, f.owner.id, f.org.id, skill.id);
+  expect(saved.version).toBe(2);
+  expect(saved.body).toContain("Verify the result.");
+});

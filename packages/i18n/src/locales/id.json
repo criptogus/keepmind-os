@@ -12382,7 +12382,9 @@
       "youtube": "Video, komentar, playlist, dan analitik kanal YouTube.",
       "pinterest": "Pin, papan, dan analitik Pinterest.",
       "reddit": "Postingan, komentar, dan komunitas Reddit.",
-      "whatsapp": "Pesan dan template WhatsApp Business."
+      "whatsapp": "Pesan dan template WhatsApp Business.",
+      "superagentskill": "Temukan, evaluasi, dan tingkatkan keterampilan agen.",
+      "liquid_cybersec": "Selidiki temuan keamanan dan koordinasikan perbaikan dengan persetujuan."
     }
   },
   "toolNames": {
@@ -18715,5 +18717,21 @@
       "alwaysOn": "Mulai sekarang, laporan seperti ini dikirim tanpa bertanya.",
       "askFirst": "Tanya dulu sebelum mengirim"
     }
+  },
+  "keepmindSkills": {
+    "improve": "Tingkatkan dengan AI",
+    "intro": "Minta agen yang memakai skill ini meninjaunya dengan SuperAgentSkill jika tersedia.",
+    "agent": "Agen",
+    "goal": "Apa yang perlu ditingkatkan?",
+    "goalHint": "Opsional: jelaskan hasil yang diinginkan.",
+    "submit": "Minta peningkatan",
+    "noAgent": "Aktifkan skill ini pada agen terlebih dahulu.",
+    "noAI": "AI agen harus tersedia sebelum meminta peningkatan.",
+    "setup": "Atur AI",
+    "review": "Tinjau usulan dalam percakapan. Menerapkannya menyimpan versi baru.",
+    "allCategories": "Semua kategori",
+    "category": "Kategori",
+    "search": "Cari berdasarkan nama, deskripsi, kategori atau tag",
+    "request": "Tinjau skill {{name}} (v{{version}}), gunakan SuperAgentSkill jika tersedia. Pertahankan kemampuan dan kontrol akses. {{goal}} Siapkan usulan lengkap untuk persetujuan saya sebelum menerapkan perubahan. Jelaskan perubahan dan tampilkan kartu persetujuan. Jangan terbitkan apa pun."
   }
 }

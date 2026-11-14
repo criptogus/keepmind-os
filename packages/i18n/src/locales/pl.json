@@ -13774,7 +13774,9 @@
       "youtube": "Filmy, komentarze, playlisty i statystyki kanału YouTube.",
       "pinterest": "Piny, tablice i statystyki na Pintereście.",
       "reddit": "Posty, komentarze i społeczności na Reddicie.",
-      "whatsapp": "Wiadomości i szablony WhatsApp Business."
+      "whatsapp": "Wiadomości i szablony WhatsApp Business.",
+      "superagentskill": "Znajduj, oceniaj i ulepszaj umiejętności agentów.",
+      "liquid_cybersec": "Badaj ustalenia dotyczące bezpieczeństwa i koordynuj poprawki po zatwierdzeniu."
     }
   },
   "toolNames": {
@@ -20463,5 +20465,21 @@
       "alwaysOn": "Od teraz takie zgłoszenia będą wysyłane bez pytania.",
       "askFirst": "Pytaj przed wysłaniem"
     }
+  },
+  "keepmindSkills": {
+    "improve": "Ulepsz z AI",
+    "intro": "Poproś agenta używającego tej umiejętności o przegląd z SuperAgentSkill, jeśli jest dostępny.",
+    "agent": "Agent AI",
+    "goal": "Co należy ulepszyć?",
+    "goalHint": "Opcjonalnie: opisz oczekiwany wynik.",
+    "submit": "Poproś o ulepszenie",
+    "noAgent": "Najpierw włącz tę umiejętność u agenta.",
+    "noAI": "AI agenta musi być dostępna przed wysłaniem prośby.",
+    "setup": "Skonfiguruj AI",
+    "review": "Sprawdź propozycję w rozmowie. Zastosowanie zapisze nową wersję.",
+    "allCategories": "Wszystkie kategorie",
+    "category": "Kategoria",
+    "search": "Szukaj według nazwy, opisu, kategorii lub tagu",
+    "request": "Sprawdź umiejętność {{name}} (v{{version}}), używając SuperAgentSkill, jeśli jest dostępny. Zachowaj możliwości i kontrolę dostępu. {{goal}} Przygotuj pełną propozycję do zatwierdzenia przed zmianami. Wyjaśnij zmiany i pokaż kartę zatwierdzenia. Niczego nie publikuj."
   }
 }

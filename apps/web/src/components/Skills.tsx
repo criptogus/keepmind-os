@@ -87,6 +87,7 @@ import {
   MenuItem,
   SearchField,
   Segmented,
+  Select,
   SettingNote,
   Switch,
   TabPanel,
@@ -106,6 +107,7 @@ import { useRightHandLook } from "@/hooks/useRightHandLook";
 import { inlineWords, Markdown } from "@/lib/markdown";
 import { STORAGE_KEYS, sessionStore } from "@/lib/storage";
 import { useToast } from "@/lib/toast";
+import { SkillImprovement } from "./SkillImprovement";
 
 /** How many skills show without a search: past it, the settings card gets "Ver todas" and an agent's picker a search. */
 const INLINE = 6;
@@ -122,9 +124,32 @@ const sourceKey = (s: Pick<Skill, "source" | "sourceUrl">) =>
 
 const fold = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
 
+export function skillLabels(skill: Pick<Skill, "metadata">) {
+  const outer = skill.metadata ?? {};
+  const nested = outer.metadata;
+  const metadata =
+    nested && typeof nested === "object" && !Array.isArray(nested)
+      ? { ...(nested as Record<string, unknown>), ...outer }
+      : outer;
+  const category = typeof metadata.category === "string" ? metadata.category.trim() : "";
+  const raw = metadata.tags;
+  const tags = Array.isArray(raw)
+    ? raw.filter((v): v is string => typeof v === "string")
+    : typeof raw === "string"
+      ? raw.split(",")
+      : [];
+  return { category, tags: [...new Set(tags.map((tag) => tag.trim()).filter(Boolean))] };
+}
+
 export function searchSkills(skills: Skill[], query: string, { nameOnly = false } = {}) {
-  const q = fold(query.trim());
-  return q ? skills.filter((s) => fold(nameOnly ? s.name : `${s.name} ${s.description}`).includes(q)) : skills;
+  const terms = fold(query.trim()).split(/\s+/).filter(Boolean);
+  return terms.length
+    ? skills.filter((s) => {
+        const labels = skillLabels(s);
+        const text = fold(nameOnly ? s.name : `${s.name} ${s.description} ${labels.category} ${labels.tags.join(" ")}`);
+        return terms.every((term) => text.includes(term));
+      })
+    : skills;
 }
 
 /** A .zip as base64 (writes are JSON only). */
@@ -233,6 +258,11 @@ export function SkillsSection({
   const split = skillsSplit(dir.members.length, everything);
   const scope: SkillScope = !split ? "team" : (picked ?? (admin ? "team" : "personal"));
   const list = scope === "team" ? scopes.team : scopes.mine;
+  const [category, setCategory] = useState("");
+  const categories = [...new Set(list.map((s) => skillLabels(s).category).filter(Boolean))].sort();
+  const activeCategory = categories.includes(category) ? category : "";
+  const filtered = searchSkills(list, q).filter((s) => !activeCategory || skillLabels(s).category === activeCategory);
+  const searching = Boolean(q.trim() || activeCategory);
   const usage = useSkillUsage(org.id, admin && everything.length > 0);
   const settings = useSkillSettings(org.id, admin);
   const action = useSkillAction(org.id);
@@ -300,13 +330,38 @@ export function SkillsSection({
         </EmptyState>
       )}
       {list.length > 0 && (
+        <div className="stack-4">
+          <SearchField
+            value={q}
+            onChange={(event) => setQ(event.target.value)}
+            onClear={() => setQ("")}
+            clearLabel={t("filters.clearSearch")}
+            aria-label={t("keepmindSkills.search")}
+            placeholder={t("keepmindSkills.search")}
+          />
+          {categories.length > 0 && (
+            <Field label={t("keepmindSkills.category")}>
+              <Select
+                value={activeCategory || "__all"}
+                onValueChange={(value) => setCategory(value === "__all" ? "" : value)}
+                options={[
+                  { value: "__all", label: t("keepmindSkills.allCategories") },
+                  ...categories.map((value) => ({ value, label: value })),
+                ]}
+              />
+            </Field>
+          )}
+        </div>
+      )}
+      {searching && filtered.length === 0 && <p role="status">{t("skills.noResults", { q })}</p>}
+      {list.length > 0 && (
         <List aria-label={t("skills.title")}>
-          {list.slice(0, INLINE).map((s) => (
+          {(searching ? filtered : list.slice(0, INLINE)).map((s) => (
             <SkillRow key={s.id} skill={s} users={usage.get(s.id)?.length ?? 0} onOpen={() => setOpen(s.id)} />
           ))}
         </List>
       )}
-      {list.length > INLINE && (
+      {!searching && list.length > INLINE && (
         <div className="row">
           <Button variant="link" onClick={() => setAll(true)}>
             {t("skills.seeAll", { count: list.length })}
@@ -1432,6 +1487,7 @@ export function SkillSheet({
   // Its refusals are said here, a repository none of the workspace's GitHub reads as Instalar skill says it.
   const refresh = useSkillAction(org.id, { silent: true });
   const [editing, setEditing] = useState(false);
+  const [improving, setImproving] = useState(false);
   const [removing, setRemoving] = useState(false);
   const s = skill.data;
   const via = s ? skillSourceViaText(t, s) : null;
@@ -1479,6 +1535,11 @@ export function SkillSheet({
                 {t("skills.refresh")}
               </Button>
             )}
+            {!editing && !s.ownerUserId && (
+              <Button variant="link" onClick={() => setImproving(true)}>
+                {t("keepmindSkills.improve")}
+              </Button>
+            )}
             {!editing && (
               <Button variant="link" onClick={() => setEditing(true)}>
                 {t("skills.edit")}
@@ -1503,6 +1564,24 @@ export function SkillSheet({
         <div className="skill-sheet">
           <div className="skill-sheet__main">
             <p className="muted">{s.description}</p>
+            {(skillLabels(s).category || skillLabels(s).tags.length > 0) && (
+              <div className="row" style={{ gap: 8, flexWrap: "wrap" }}>
+                {[...new Set([skillLabels(s).category, ...skillLabels(s).tags].filter(Boolean))].map((label) => (
+                  <Chip key={label}>{label}</Chip>
+                ))}
+              </div>
+            )}
+            {improving && (
+              <SkillImprovement
+                skill={s}
+                users={users}
+                onClose={() => setImproving(false)}
+                onSent={() => {
+                  setImproving(false);
+                  onClose();
+                }}
+              />
+            )}
             {via && <ViaLine>{via}</ViaLine>}
             {manages && <SourceUpdate skill={s} />}
             {manages && <AgentImprove skill={s} />}

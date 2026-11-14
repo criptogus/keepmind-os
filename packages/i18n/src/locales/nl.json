@@ -12895,7 +12895,9 @@
       "youtube": "Video's, reacties, afspeellijsten en statistieken van het YouTube-kanaal.",
       "pinterest": "Pins, borden en statistieken op Pinterest.",
       "reddit": "Posts, reacties en community's op Reddit.",
-      "whatsapp": "Berichten en sjablonen van WhatsApp Business."
+      "whatsapp": "Berichten en sjablonen van WhatsApp Business.",
+      "superagentskill": "Vind, beoordeel en verbeter vaardigheden van agenten.",
+      "liquid_cybersec": "Onderzoek beveiligingsbevindingen en coördineer correcties met goedkeuring."
     }
   },
   "toolNames": {
@@ -19405,5 +19407,21 @@
       "alwaysOn": "Vanaf nu gaan zulke meldingen weg zonder te vragen.",
       "askFirst": "Vragen voor het versturen"
     }
+  },
+  "keepmindSkills": {
+    "improve": "Verbeteren met AI",
+    "intro": "Vraag een agent die deze skill gebruikt om een beoordeling met SuperAgentSkill, indien beschikbaar.",
+    "agent": "AI-agent",
+    "goal": "Wat moet beter?",
+    "goalHint": "Optioneel: beschrijf het gewenste resultaat.",
+    "submit": "Verbetering aanvragen",
+    "noAgent": "Schakel deze skill eerst in voor een agent.",
+    "noAI": "De AI van deze agent moet beschikbaar zijn voor een verbetering.",
+    "setup": "AI instellen",
+    "review": "Beoordeel het voorstel in het gesprek. Toepassen slaat een nieuwe versie op.",
+    "allCategories": "Alle categorieën",
+    "category": "Categorie",
+    "search": "Zoek op naam, beschrijving, categorie of trefwoord",
+    "request": "Beoordeel skill {{name}} (v{{version}}), met SuperAgentSkill indien beschikbaar. Behoud mogelijkheden en toegangscontroles. {{goal}} Maak een volledig voorstel voor mijn goedkeuring vóór wijzigingen. Leg de wijzigingen uit en toon de goedkeuringskaart. Publiceer niets."
   }
 }

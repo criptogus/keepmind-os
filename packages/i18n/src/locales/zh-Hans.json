@@ -12392,7 +12392,9 @@
       "youtube": "YouTube 频道的视频、评论、播放列表和数据分析。",
       "pinterest": "Pinterest 的 Pin 图、图板和数据分析。",
       "reddit": "Reddit 的帖子、评论和社区。",
-      "whatsapp": "WhatsApp Business 消息和模板。"
+      "whatsapp": "WhatsApp Business 消息和模板。",
+      "superagentskill": "查找、评估并改进智能体技能。",
+      "liquid_cybersec": "调查安全发现，并在批准后协调修复。"
     }
   },
   "toolNames": {
@@ -18792,5 +18794,21 @@
       "alwaysOn": "从现在起，这类报告会直接发送，不再询问。",
       "askFirst": "发送前先询问"
     }
+  },
+  "keepmindSkills": {
+    "improve": "使用AI改进",
+    "intro": "请使用此技能的智能体进行审查，并在可用时咨询SuperAgentSkill。",
+    "agent": "智能体",
+    "goal": "需要改进什么？",
+    "goalHint": "可选：描述期望的结果。",
+    "submit": "请求改进",
+    "noAgent": "请先为智能体启用此技能。",
+    "noAI": "请求改进前，请确保该智能体的AI可用。",
+    "setup": "配置AI",
+    "review": "在对话中审核提案。应用后将保存新版本。",
+    "allCategories": "所有类别",
+    "category": "类别",
+    "search": "按名称、描述、类别或标签搜索",
+    "request": "请审查技能{{name}}（v{{version}}），如可用则使用SuperAgentSkill。保留其功能和访问控制。{{goal}} 应用更改前，准备完整提案供我批准。解释更改并显示批准卡片。不要发布任何内容。"
   }
 }

@@ -810,3 +810,56 @@ describe("activity bar: load_skill", () => {
     );
   });
 });
+
+test("KeepMind searches a small library immediately and matches every normalized term", async () => {
+  const { section } = await settings();
+  const input = within(section()).getByRole("searchbox", { name: "Buscar por nome, descrição, categoria ou tag" });
+  await type(input, "pull revisao");
+  expect(within(section()).getByRole("button", { name: "Revisão de PR" })).toBeTruthy();
+  expect(within(section()).queryByRole("button", { name: "Relatório semanal" })).toBeNull();
+  await type(input, "termo-inexistente");
+  expect(within(section()).getByRole("status").textContent).toContain("termo-inexistente");
+});
+
+test("KeepMind improvement requests a review in an existing agent DM", async () => {
+  const { state, section } = await settings();
+  await click(within(section()).getByRole("button", { name: "Revisão de PR" }));
+  await settle(6);
+  await click(screen().getByRole("button", { name: "Melhorar com IA" }));
+  await settle(6);
+  const dialog = screen().getByRole("dialog", { name: "Melhorar com IA" });
+  await type(within(dialog).getByRole("textbox", { name: "O que deve melhorar?" }), "Adicionar critérios verificáveis");
+  await click(within(dialog).getByRole("button", { name: "Solicitar melhoria" }));
+  await settle(12);
+  expect(JSON.stringify(state.messages)).toContain("antes de aplicar qualquer mudança");
+  expect(JSON.stringify(state.messages)).toContain("Adicionar critérios verificáveis");
+});
+
+test("KeepMind does not enqueue an improvement without AI", async () => {
+  const state = seedState();
+  state.aiStatus = { any: false, agents: state.agents.map((a) => ({ agentId: a.id, state: "no_ai" })) };
+  const { section } = await settings(state);
+  await click(within(section()).getByRole("button", { name: "Revisão de PR" }));
+  await settle(6);
+  await click(screen().getByRole("button", { name: "Melhorar com IA" }));
+  await settle(6);
+  const dialog = screen().getByRole("dialog", { name: "Melhorar com IA" });
+  expect(within(dialog).getByRole("button", { name: "Solicitar melhoria" }).hasAttribute("disabled")).toBe(true);
+  expect(within(dialog).getByRole("button", { name: "Configurar IA" })).toBeTruthy();
+});
+
+test("KeepMind search understands imported category and tags without inventing classification", async () => {
+  const { searchSkills, skillLabels } = await import("@/components/Skills");
+  const state = seedState();
+  const api = createFakeApi(state);
+  const source = (await api.skills.list(ORG_ID))[0];
+  if (!source) throw new Error("missing fixture");
+  const skill = {
+    ...source,
+    metadata: { metadata: { category: "Marketing", tags: ["Palestras", "Conversão", "Palestras", 42] } },
+  };
+  expect(skillLabels(skill)).toEqual({ category: "Marketing", tags: ["Palestras", "Conversão"] });
+  expect(searchSkills([skill], "conversao marketing")).toHaveLength(1);
+  expect(searchSkills([skill], "marketing vendas")).toHaveLength(0);
+  expect(searchSkills([skill], "marketing", { nameOnly: true })).toHaveLength(0);
+});

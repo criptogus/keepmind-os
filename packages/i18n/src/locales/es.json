@@ -13228,7 +13228,9 @@
       "youtube": "Videos, comentarios, listas de reproducción y estadísticas del canal de YouTube.",
       "pinterest": "Pines, tableros y estadísticas de Pinterest.",
       "reddit": "Publicaciones, comentarios y comunidades de Reddit.",
-      "whatsapp": "Mensajes y plantillas de WhatsApp Business."
+      "whatsapp": "Mensajes y plantillas de WhatsApp Business.",
+      "superagentskill": "Encuentra, evalúa y mejora las habilidades de los agentes.",
+      "liquid_cybersec": "Investiga hallazgos de seguridad y coordina correcciones con aprobación."
     }
   },
   "toolNames": {
@@ -19778,5 +19780,21 @@
       "alwaysOn": "De ahora en adelante, informes como este salen sin preguntar.",
       "askFirst": "Preguntar antes de enviar"
     }
+  },
+  "keepmindSkills": {
+    "improve": "Mejorar con IA",
+    "intro": "Pide a un agente que use esta skill que la revise, consultando SuperAgentSkill cuando esté disponible.",
+    "agent": "Agente",
+    "goal": "¿Qué debe mejorar?",
+    "goalHint": "Opcional: describe el resultado deseado.",
+    "submit": "Solicitar mejora",
+    "noAgent": "Activa esta skill en un agente primero.",
+    "noAI": "La IA del agente debe estar disponible antes de solicitar la mejora.",
+    "setup": "Configurar IA",
+    "review": "Revisa la propuesta en la conversación. Al aplicarla se guarda una nueva versión.",
+    "allCategories": "Todas las categorías",
+    "category": "Categoría",
+    "search": "Buscar por nombre, descripción, categoría o etiqueta",
+    "request": "Revisa la skill {{name}} (v{{version}}), usando SuperAgentSkill si está disponible. Conserva sus capacidades y controles de acceso. {{goal}} Prepara una propuesta completa para mi aprobación antes de aplicar cambios. Explica los cambios y muestra la tarjeta de aprobación. No publiques nada."
   }
 }

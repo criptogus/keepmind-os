@@ -12768,7 +12768,9 @@
       "youtube": "YouTube kanalının videoları, yorumları, oynatma listeleri ve analizleri.",
       "pinterest": "Pinterest pinleri, panoları ve analizleri.",
       "reddit": "Reddit gönderileri, yorumları ve toplulukları.",
-      "whatsapp": "WhatsApp Business mesajları ve şablonları."
+      "whatsapp": "WhatsApp Business mesajları ve şablonları.",
+      "superagentskill": "Temsilci becerilerini bulun, değerlendirin ve geliştirin.",
+      "liquid_cybersec": "Güvenlik bulgularını araştırın ve düzeltmeleri onayla koordine edin."
     }
   },
   "toolNames": {
@@ -19157,5 +19159,21 @@
       "alwaysOn": "Bundan sonra bu tür bildirimler sormadan gider.",
       "askFirst": "Göndermeden önce sor"
     }
+  },
+  "keepmindSkills": {
+    "improve": "Yapay zekâyla iyileştir",
+    "intro": "Bu beceriyi kullanan bir ajandan, varsa SuperAgentSkill ile incelemesini isteyin.",
+    "agent": "Temsilci",
+    "goal": "Ne iyileştirilmeli?",
+    "goalHint": "İsteğe bağlı: istediğiniz sonucu açıklayın.",
+    "submit": "İyileştirme iste",
+    "noAgent": "Önce bu beceriyi bir temsilci için etkinleştirin.",
+    "noAI": "İyileştirme istemeden önce temsilcinin yapay zekâsı kullanılabilir olmalıdır.",
+    "setup": "Yapay zekâyı yapılandır",
+    "review": "Öneriyi konuşmada inceleyin. Uygulamak yeni bir sürüm kaydeder.",
+    "allCategories": "Tüm kategoriler",
+    "category": "Kategori",
+    "search": "Ad, açıklama, kategori veya etikete göre ara",
+    "request": "{{name}} becerisini (v{{version}}), varsa SuperAgentSkill ile incele. Yetenekleri ve erişim kontrollerini koru. {{goal}} Değişiklik uygulamadan önce onayım için eksiksiz bir öneri hazırla. Değişiklikleri açıkla ve onay kartını göster. Hiçbir şey yayımlama."
   }
 }
