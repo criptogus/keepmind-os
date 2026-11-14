@@ -53,6 +53,23 @@ export interface ToolContext {
   createAgent?: (callerAgentId: string | undefined, spec: { name: string; description?: string; systemPrompt?: string; model?: string; skillNames?: string[] }) => Promise<string>;
   /** Records a structured review/rating of another agent in the audit log. */
   reviewAgent?: (callerAgentId: string | undefined, agent: string, rating: number, note: string) => Promise<string>;
+  /** Agentic access to the app itself (status, config, audit). */
+  appAdmin?: AppAdminApi;
+}
+
+/** Read/write access to KeepMind OS itself, exposed to agents as app_* tools. */
+export interface AppAdminApi {
+  status(): string;
+  agents(): string;
+  teams(): string;
+  automations(): string;
+  approvals(): string;
+  channels(): string;
+  audit(action?: string, agentId?: string, limit?: number): string;
+  settingsGet(): string;
+  settingsUpdate(patch: Record<string, unknown>): string;
+  automationCreate(input: Record<string, unknown>): string;
+  automationDelete(id: string): string;
 }
 
 /** Per-execution policy computed from install settings + agent config + caller role. */
@@ -598,6 +615,36 @@ export class ToolRegistry {
         return `Opened ${url}`;
       },
     });
+    const appTool = (name: string, description: string, parameters: Record<string, unknown>, run: (args: Record<string, unknown>) => string) => {
+      this.register({
+        name,
+        description,
+        parameters: { type: 'object', properties: parameters, additionalProperties: false },
+        handler: async (args) => {
+          if (!this.context.appAdmin) throw new Error(`${name} is not available`);
+          return run(args);
+        },
+      });
+    };
+    appTool('app_status', 'KeepMind OS overview: agents, teams, pending approvals, recent executions and spend. Call first to understand the workspace.', {}, () => this.context.appAdmin!.status());
+    appTool('app_agents_list', 'List configured agents (id, name, model, manager, shared).', {}, () => this.context.appAdmin!.agents());
+    appTool('app_teams_list', 'List teams and their member agents.', {}, () => this.context.appAdmin!.teams());
+    appTool('app_automations_list', 'List scheduled automations/triggers (agent, schedule, enabled, last run).', {}, () => this.context.appAdmin!.automations());
+    appTool('app_approvals_list', 'List pending human approvals. Agents cannot approve — surface these to the user instead.', {}, () => this.context.appAdmin!.approvals());
+    appTool('app_channels_list', 'List chat channels, DMs and unread counts.', {}, () => this.context.appAdmin!.channels());
+    appTool('app_audit_search', 'Search the audit log. Optional filters: action substring, agentId, limit (max 50).', {
+      action: { type: 'string' }, agentId: { type: 'string' }, limit: { type: 'number' },
+    }, (a) => this.context.appAdmin!.audit(a.action ? String(a.action) : undefined, a.agentId ? String(a.agentId) : undefined, a.limit ? Number(a.limit) : undefined));
+    appTool('app_settings_get', 'Read current app settings (theme, language, sounds, auto-approve, budgets, routing).', {}, () => this.context.appAdmin!.settingsGet());
+    appTool('app_settings_update', 'Update whitelisted app settings. Sensitive changes may require human approval. Keys: theme, language, soundEffects, soundEvents, autoApprove, defaultModel, maxConcurrentExecutions, auditRetentionDays, skillsAutoRoute, llmAutoRoute, toolApprovalRequired.', {
+      patch: { type: 'object', description: 'Settings key/value pairs to change' },
+    }, (a) => this.context.appAdmin!.settingsUpdate((a.patch ?? {}) as Record<string, unknown>));
+    appTool('app_automation_create', 'Create a scheduled automation for an agent. kind: interval (every N minutes), daily (at HH:MM, optional daysOfWeek 0=Sun..6=Sat) or webhook. Sensitive: may require human approval.', {
+      agentId: { type: 'string' }, name: { type: 'string' }, kind: { type: 'string', enum: ['interval', 'daily', 'webhook'] },
+      intervalMinutes: { type: 'number' }, timeOfDay: { type: 'string' }, daysOfWeek: { type: 'array', items: { type: 'number' } },
+      prompt: { type: 'string' }, enabled: { type: 'boolean' },
+    }, (a) => this.context.appAdmin!.automationCreate(a));
+    appTool('app_automation_delete', 'Delete a scheduled automation by id.', { id: { type: 'string' } }, (a) => this.context.appAdmin!.automationDelete(String(a.id)));
   }
 
   register(tool: ToolDefinition): void {

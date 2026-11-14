@@ -133,7 +133,7 @@ const currentUserId = (): string | undefined => localAuth?.getCurrentUser()?.id;
 const currentUserEmail = (): string => localAuth?.getCurrentUser()?.email ?? 'system';
 
 /** Gated tools a member must never see offered to the model. */
-const MEMBER_DENIED_TOOLS = ['shell_exec', 'file_write', 'open_url', 'whatsapp_send_message', 'delegate_to_agent', 'create_agent', 'review_agent', 'secondbrain_remember', 'personalbrain_remember', 'web_clip_url', 'composio_execute'];
+const MEMBER_DENIED_TOOLS = ['shell_exec', 'file_write', 'open_url', 'whatsapp_send_message', 'delegate_to_agent', 'create_agent', 'review_agent', 'secondbrain_remember', 'personalbrain_remember', 'web_clip_url', 'composio_execute', 'app_settings_update'];
 
 const ACCESS_RANK: Record<ComputerAccessLevel, number> = { workspace: 0, authorized: 1, full: 2 };
 function computerSettings() {
@@ -273,6 +273,54 @@ async function runAgentExecution(agentId: string, input: Record<string, unknown>
 }
 
 /** Seeds built-in skills once so agents can opt into computer/delegation tools. */
+function seedAssistantAgent() {
+  try {
+    if (storageManager.getAllAgents().some((a) => a.name === 'KeepMind')) return;
+    const now = new Date().toISOString();
+    const appTools = [
+      'app_status', 'app_agents_list', 'app_teams_list', 'app_automations_list',
+      'app_approvals_list', 'app_channels_list', 'app_audit_search',
+      'app_settings_get', 'app_settings_update',
+      'app_automation_create', 'app_automation_delete',
+    ];
+    storageManager.saveAgent({
+      id: uuidv4(),
+      name: 'KeepMind',
+      description: 'Assistente do workspace — configura e explica o KeepMind OS pelo chat',
+      isShared: true,
+      config: {
+        model: DEFAULT_MODEL.openai,
+        temperature: 0.3,
+        maxTokens: 2000,
+        systemPrompt: `Você é o KeepMind, assistente nativo do KeepMind OS. Você conversa com o usuário no chat do workspace e pode operar o próprio aplicativo através das ferramentas app_*.
+
+Suas capacidades:
+- Consultar status geral (app_status), agentes, equipes, automações, aprovações pendentes, canais e auditoria.
+- Ler e alterar configurações do app via app_settings_get/app_settings_update (somente chaves permitidas; mudanças sensíveis podem exigir aprovação humana — nesse caso explique ao usuário que há um card de aprovação no chat).
+- Orientar o usuário a criar agentes, canais e rotinas — você pode criar agentes subordinados com create_agent quando fizer sentido.
+
+Regras:
+- Responda em português brasileiro, de forma concisa e direta, como um colega de equipe.
+- Você NUNCA aprova ações sensíveis — isso é sempre decisão humana.
+- Para executar trabalho de negócio (pesquisar, escrever, analisar), sugira mencionar o agente especialista adequado com @NomeDoAgente.
+- Quando pedirem algo que exija configuração, prefira fazer você mesmo via ferramentas a mandar o usuário para telas.`,
+        tools: appTools.map((name) => ({ name, type: 'custom' as const, config: {} })),
+      },
+      capabilities: ['workspace_administration', 'configuration', 'guidance'],
+      permissions: {
+        canAccessNetwork: false,
+        canAccessFileSystem: false,
+        canExecuteCode: false,
+        maxExecutionTime: 120,
+      },
+      createdAt: now,
+      updatedAt: now,
+    });
+  } catch (error) {
+    console.error('[chat] failed to seed assistant agent:', error);
+  }
+}
+
 function seedBuiltInSkills() {
   const all = storageManager.getAllSkills();
   const byName = new Map(all.map((s) => [s.name, s]));
@@ -654,6 +702,7 @@ app.whenReady().then(async () => {
     anthropic: providerApiKeys.anthropic ?? credentialStore.getApiKey('anthropic') ?? undefined,
   })));
   seedBuiltInSkills();
+  seedAssistantAgent();
   agentManager = new AgentManager();
   agentManager.setCompatibleProviders(compatibleProviders);
   agentManager.setExecutionSpendProvider(id => storageManager.getExecutionSpend(id));
@@ -951,6 +1000,88 @@ app.whenReady().then(async () => {
       return `Clipped "${clip.title}" (${clip.words} words) → ${clip.file}`;
     },
     agentReachStatus: () => getAgentReachStatus(),
+    appAdmin: {
+      status: () => JSON.stringify({
+        agents: storageManager.getAllAgents().length,
+        teams: storageManager.getAllTeams().length,
+        pendingApprovals: storageManager.getPendingApprovals().length,
+        channels: storageManager.listChannels().length,
+        executions24h: storageManager.getAgentExecutions(undefined, 200).filter((e) => Date.now() - Date.parse(e.startedAt ?? '') < 864e5).length,
+        llmCalls: storageManager.getLlmUsage(500).length,
+      }),
+      agents: () => JSON.stringify(storageManager.getAllAgents().map((a) => ({
+        id: a.id, name: a.name, model: a.config?.model, managerId: a.managerId ?? null, isShared: a.isShared ?? false,
+      }))),
+      teams: () => JSON.stringify(storageManager.getAllTeams().map((t) => ({
+        id: t.id, name: t.name, agentIds: t.agentIds,
+      }))),
+      automations: () => JSON.stringify((triggerManager?.list() ?? []).map((t) => ({
+        id: t.id, agentId: t.agentId, name: t.name, kind: t.kind,
+        intervalMinutes: t.intervalMinutes, timeOfDay: t.timeOfDay, daysOfWeek: t.daysOfWeek,
+        prompt: t.prompt, enabled: t.enabled, lastRunAt: t.lastRunAt ?? null,
+      }))),
+      approvals: () => JSON.stringify(storageManager.getPendingApprovals().map((a) => ({
+        id: a.id, agentName: a.agentName, action: a.action, createdAt: a.createdAt,
+      }))),
+      channels: () => JSON.stringify(storageManager.listChannels().map((c) => ({
+        id: c.id, name: c.name, kind: c.kind, unread: c.unread, agents: c.agents.map((a) => a.name),
+      }))),
+      audit: (action, agentId, limit) => JSON.stringify(
+        storageManager.getAuditLogs(Math.min(limit ?? 20, 50), 0)
+          .filter((e) => (!action || e.action.includes(action)) && (!agentId || e.agentId === agentId))
+          .slice(0, Math.min(limit ?? 20, 50))
+          .map((e) => ({ timestamp: e.timestamp, agent: e.agentName, action: e.action, userId: e.userId })),
+      ),
+      settingsGet: () => JSON.stringify({
+        theme: storageManager.getSetting('theme') || 'auto',
+        language: storageManager.getSetting('language') || 'en',
+        autoApprove: storageManager.getSetting('autoApprove') === 'true',
+        defaultModel: storageManager.getSetting('defaultModel') || DEFAULT_MODEL.openai,
+        maxConcurrentExecutions: storageManager.getSetting('maxConcurrentExecutions') || '5',
+        toolApprovalRequired: storageManager.getSetting('gov.toolApproval') !== 'false',
+        soundEffects: storageManager.getSetting('soundEffects') === 'true',
+        skillsAutoRoute: storageManager.getSetting('skills.autoRoute') !== 'false',
+        llmAutoRoute: storageManager.getSetting('llm.autoRoute') !== 'false',
+      }),
+      settingsUpdate: (patch) => {
+        const KEY_MAP: Record<string, string> = {
+          onboardingCompleted: 'onboarding.completed',
+          skillsAutoRoute: 'skills.autoRoute',
+          llmAutoRoute: 'llm.autoRoute',
+          toolApprovalRequired: 'gov.toolApproval',
+        };
+        const ALLOWED = new Set(['theme', 'language', 'soundEffects', 'soundEvents', 'autoApprove', 'defaultModel', 'maxConcurrentExecutions', 'auditRetentionDays', 'skillsAutoRoute', 'llmAutoRoute', 'toolApprovalRequired', 'onboardingCompleted']);
+        const applied: string[] = [];
+        const rejected: string[] = [];
+        for (const [k, v] of Object.entries(patch)) {
+          if (!ALLOWED.has(k)) { rejected.push(k); continue; }
+          storageManager.setSetting(KEY_MAP[k] ?? k, String(v));
+          applied.push(k);
+        }
+        return JSON.stringify({ applied, rejected });
+      },
+      automationCreate: (input) => {
+        const agentId = String(input.agentId ?? '');
+        if (!storageManager.getAgent(agentId)) throw new Error('Agent not found: ' + agentId);
+        const kind = String(input.kind ?? 'interval');
+        if (!['interval', 'daily', 'webhook'].includes(kind)) throw new Error('kind must be interval|daily|webhook');
+        const rule = triggerManager.create({
+          agentId,
+          name: String(input.name ?? 'Automação via chat').slice(0, 80),
+          kind: kind as 'interval' | 'daily' | 'webhook',
+          intervalMinutes: input.intervalMinutes != null ? Number(input.intervalMinutes) : undefined,
+          timeOfDay: input.timeOfDay != null ? String(input.timeOfDay) : undefined,
+          daysOfWeek: Array.isArray(input.daysOfWeek) ? input.daysOfWeek.map(Number).filter((d) => d >= 0 && d <= 6) : undefined,
+          prompt: String(input.prompt ?? ''),
+          enabled: input.enabled !== false,
+        });
+        return JSON.stringify({ id: rule.id, name: rule.name, kind: rule.kind, enabled: rule.enabled });
+      },
+      automationDelete: (id) => {
+        const ok = triggerManager.delete(id);
+        return JSON.stringify({ deleted: ok });
+      },
+    },
     composioSearch: async (query) => {
       if (!composioManager.isConfigured()) throw new Error('Composio is not configured');
       const tools = await composioManager.searchTools(query);
