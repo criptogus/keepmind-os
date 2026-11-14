@@ -128,6 +128,20 @@ export class ChatManager {
 
   private dispatchMentions(userMsg: ChannelMessage, channel: Channel, text: string): void {
     const mentions = parseMentions(text, this.deps.getAgents(), this.deps.getTeams());
+    // Agentic routing: explicit mentions win; otherwise DMs go to their agent
+    // and channel messages go to the built-in KeepMind assistant, which can
+    // answer, configure the app or delegate to specialists on its own.
+    if (mentions.length === 0) {
+      const agents = this.deps.getAgents();
+      if (channel.kind === 'dm' && channel.agentId) {
+        const dmAgent = agents.find((a) => a.id === channel.agentId);
+        if (dmAgent) void this.runAgentReply(channel, dmAgent, text);
+        return;
+      }
+      const assistant = agents.find((a) => a.name === 'KeepMind');
+      if (assistant) void this.runAgentReply(channel, assistant, text);
+      return;
+    }
     for (const m of mentions) {
       if (m.kind === 'agent') {
         const agent = this.deps.getAgents().find((a) => a.name === m.name);

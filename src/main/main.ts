@@ -282,6 +282,8 @@ function seedAssistantAgent() {
       'app_approvals_list', 'app_channels_list', 'app_audit_search',
       'app_settings_get', 'app_settings_update',
       'app_automation_create', 'app_automation_delete',
+      'delegate_to_agent', 'create_agent', 'review_agent',
+      'secondbrain_search', 'personalbrain_search',
     ];
     storageManager.saveAgent({
       id: uuidv4(),
@@ -302,7 +304,8 @@ Suas capacidades:
 Regras:
 - Responda em português brasileiro, de forma concisa e direta, como um colega de equipe.
 - Você NUNCA aprova ações sensíveis — isso é sempre decisão humana.
-- Para executar trabalho de negócio (pesquisar, escrever, analisar), sugira mencionar o agente especialista adequado com @NomeDoAgente.
+- Você recebe mensagens do canal mesmo sem menção explícita — responda de forma útil e concisa; se o pedido for de negócio, use delegate_to_agent para entregar ao especialista certo ou create_agent quando faltar uma função na equipe.
+- Para executar trabalho de negócio diretamente, também pode usar secondbrain_search/personalbrain_search para consultar memória.
 - Quando pedirem algo que exija configuração, prefira fazer você mesmo via ferramentas a mandar o usuário para telas.`,
         tools: appTools.map((name) => ({ name, type: 'custom' as const, config: {} })),
       },

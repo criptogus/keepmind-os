@@ -169,4 +169,31 @@ describe('ChatManager', () => {
   it('sendMessage to missing channel throws', async () => {
     await expect(chat.sendMessage('nope', 'hi')).rejects.toThrow();
   });
+
+  it('auto-routes DM messages to the channel agent without a mention', async () => {
+    const dm = storage.createChannel({ name: 'Ana', kind: 'dm', agentId: 'a1' });
+    agents = storage.getAllAgents();
+    await chat.sendMessage(dm.id, 'e ai, tudo bem?');
+    await vi.waitFor(() => {
+      expect(storage.getMessages(dm.id).some((m) => m.authorKind === 'agent' && m.status === 'done')).toBe(true);
+    });
+    expect(runAgent).toHaveBeenCalledWith('a1', expect.objectContaining({ message: 'e ai, tudo bem?' }), expect.any(Function));
+  });
+
+  it('auto-routes channel messages to the KeepMind assistant when no mention', async () => {
+    storage.saveAgent(makeAgent('k1', 'KeepMind'));
+    agents = storage.getAllAgents();
+    const ch = storage.listChannels('u1').find((c) => c.name === 'geral')!;
+    await chat.sendMessage(ch.id, 'que horas são?');
+    await vi.waitFor(() => {
+      expect(storage.getMessages(ch.id).some((m) => m.authorKind === 'agent' && m.authorId === 'k1' && m.status === 'done')).toBe(true);
+    });
+  });
+
+  it('does not auto-route when KeepMind assistant is absent', async () => {
+    const ch = storage.listChannels('u1').find((c) => c.name === 'geral')!;
+    await chat.sendMessage(ch.id, 'mensagem solta');
+    await new Promise((r) => setTimeout(r, 30));
+    expect(runAgent).not.toHaveBeenCalled();
+  });
 });
