@@ -294,3 +294,12 @@ body {
 @media (max-width: 900px) { .km-channel-rail { width: 210px !important; } }
 
 .km-msg .km-document { white-space: normal; font-size: 14px; line-height: 1.6; }
+
+.km-choice-list { display: flex; flex-direction: column; align-items: stretch; gap: 8px; max-width: 640px; margin: 14px 0; }
+.km-choice-list button { display: flex; align-items: center; gap: 12px; text-align: left; padding: 12px 16px; min-height: 44px; font: inherit; color: var(--mantine-color-text); background: var(--mantine-color-body); border: 1px solid var(--mantine-color-default-border); border-radius: 10px; cursor: pointer; }
+.km-choice-list button span { font-weight: 650; color: var(--mantine-color-dimmed); }
+.km-choice-list button:hover:not(:disabled) { background: var(--mantine-color-default-hover); border-color: light-dark(#617347,#b8d48f); }
+.km-choice-list button:focus-visible { outline: 2px solid light-dark(#526c2a,#c4ff3d); outline-offset: 3px; }
+.km-choice-list button:disabled { cursor: default; opacity: .6; }
+.km-choice-list button[aria-pressed=true] { opacity: 1; background: light-dark(#e3e8da,#30382a); }
+.km-choice-hint { font-size: 13px; color: var(--mantine-color-dimmed); }

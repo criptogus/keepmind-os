@@ -59,6 +59,7 @@ export default function ThreadPanel({ parent, channelId, agents, teams, meId, re
             agent={m.authorKind === 'agent' ? agentById.get(m.authorId) : undefined}
             team={m.authorKind === 'team' ? teamById.get(m.authorId) : undefined}
             meId={meId}
+            onChoose={m.id === all.at(-1)?.id && m.status === 'done' ? async text => { await window.electronAPI.sendChatMessage(channelId, text, { parentId: parent.id }); await load(); onChanged(); } : undefined}
             onRefresh={load}
           />
         ))}
