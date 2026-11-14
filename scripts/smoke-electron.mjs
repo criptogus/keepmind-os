@@ -254,7 +254,7 @@ try {
   const approvalShot=await send('Page.captureScreenshot',{format:'png'});writeFileSync(path.join(evidenceDir,'approval-lime.png'),Buffer.from(approvalShot.result.data,'base64'));
   checks.push('lime-approval-version');
 
-  await evaluate(`([...document.querySelectorAll('button')].find(b => ['Visualizar material', 'Preview material'].includes(b.textContent))).click()`);
+  await evaluate(`([...document.querySelectorAll('button')].find(b => ['Visualizar / exportar', 'Preview / export'].includes(b.textContent))).click()`);
   await delay(200);
   if (!(await evaluate(`!!document.querySelector('.km-paper-preview')`))) fail('material preview missing');
   const materialPreview = await send('Page.captureScreenshot', {format:'png'});
