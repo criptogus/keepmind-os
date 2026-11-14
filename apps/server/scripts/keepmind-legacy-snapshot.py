@@ -22,7 +22,7 @@ with sqlite3.connect(backup.as_uri() + "?mode=ro", uri=True) as db:
     if db.execute("PRAGMA integrity_check").fetchone()[0] != "ok":
         raise SystemExit("Backup failed integrity check")
     data = {table: [dict(row) for row in db.execute("SELECT * FROM " + table)]
-            for table in ("agents", "teams", "skills", "memory_items")}
+            for table in ("agents", "teams", "skills", "memory_items", "governance_rules", "users")}
     triggers = db.execute("SELECT value FROM settings WHERE key=?", ("triggers.rules",)).fetchone()
     data["triggers"] = json.loads(triggers[0]) if triggers else []
 data["sourceRef"] = hashlib.sha256(str(source_path).encode()).hexdigest()

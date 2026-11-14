@@ -6,6 +6,8 @@ import { createDatabase, eq, schema } from "@agenteschat/db";
 import { createOrganization } from "@agenteschat/engine";
 import { type KeepMindLegacySnapshot, stageKeepMindLegacy } from "../../../packages/engine/src/keepmind-legacy";
 
+import { simulateLegacyWorkflow } from "../../../packages/engine/src/keepmind-legacy-mapping";
+
 const [input, destination] = process.argv.slice(2);
 if (!input || !destination)
   throw new Error("Usage: bun apps/server/scripts/keepmind-legacy-stage.ts PRIVATE_SNAPSHOT.json NEW_DIRECTORY");
@@ -35,6 +37,8 @@ try {
   await handle.close();
   handle = createDatabase({ url, poolMax: 1 });
   const second = await stageKeepMindLegacy({ ...deps, db: handle.db }, actorId, organization.id, snapshot);
+  if (JSON.stringify(first.preparation) !== JSON.stringify(second.preparation))
+    throw new Error("Permission/workflow mapping changed after restart");
   if (second.items.some((i) => i.action !== "unchanged")) throw new Error("Repeat import changed data");
   const persistedAgents = await handle.db.select().from(schema.agents);
   const persistedRoutines = await handle.db.select().from(schema.routines);
@@ -82,6 +86,10 @@ try {
     if (room?.visibility !== "private" || JSON.stringify(expected) !== JSON.stringify(actual)) fail();
   }
   if (persistedRoutines.some((r) => r.active || r.nextRunAt || r.ownActions.length)) fail();
+  for (const p of second.preparation.permissions) {
+    const saved = persistedAgents.find((a) => a.id === p.targetAgentId);
+    if (!saved || saved.monthlyBudgetNanoUsd !== p.monthlyBudgetNanoUsd) fail();
+  }
   const counts = {
     agents: (await handle.db.select().from(schema.agents)).length,
     skills: (await handle.db.select().from(schema.skills)).length,
@@ -98,16 +106,40 @@ try {
     counts.scopes !== 0
   )
     fail();
+  const workflowSimulation = second.preparation.workflows.map((w) => {
+    for (const step of w.steps) if (!persistedAgents.some((a) => a.id === step.targetAgentId)) fail();
+    return {
+      teamId: w.teamId,
+      ...simulateLegacyWorkflow(w, {}, Object.fromEntries(w.steps.map((s) => [s.id, { output: {} }]))),
+    };
+  });
   await writeFile(
     `${root}/report.json`,
     JSON.stringify(
-      { organizationId: organization.id, actorId, counts, restartAndRepeat: "passed", result: first },
+      {
+        organizationId: organization.id,
+        actorId,
+        counts,
+        restartAndRepeat: "passed",
+        result: first,
+        workflowSimulation,
+      },
       null,
       2,
     ),
     { mode: 0o600 },
   );
-  console.log(JSON.stringify({ counts, restartAndRepeat: "passed", pendingReview: first.review.length }));
+  console.log(
+    JSON.stringify({
+      counts,
+      restartAndRepeat: "passed",
+      pendingReview: first.review.length,
+      mappedPermissions: first.preparation.permissions.length,
+      mappedWorkflows: first.preparation.workflows.length,
+      readyForCutover: first.preparation.readyForCutover,
+      simulatedSteps: workflowSimulation.reduce((n, w) => n + w.trace.length, 0),
+    }),
+  );
 } finally {
   await handle.close();
 }

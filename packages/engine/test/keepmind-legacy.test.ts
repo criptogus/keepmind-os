@@ -18,8 +18,13 @@ const snapshot = (): KeepMindLegacySnapshot => ({
       id: "a1",
       name: "Redator",
       description: "Marketing",
-      config: JSON.stringify({ systemPrompt: "Escreva propostas", skillIds: ["s1"] }),
-      permissions: JSON.stringify({ canExecuteCode: false }),
+      config: JSON.stringify({ systemPrompt: "Escreva propostas", monthlyBudgetUsd: 1.25, skillIds: ["s1"] }),
+      permissions: JSON.stringify({
+        canAccessNetwork: false,
+        canAccessFileSystem: false,
+        canExecuteCode: false,
+        maxExecutionTime: 120,
+      }),
     },
   ],
   skills: [
@@ -31,7 +36,7 @@ const snapshot = (): KeepMindLegacySnapshot => ({
       tags: '["vendas"]',
     },
   ],
-  teams: [{ id: "t1", name: "Marketing", agent_ids: '["a1"]', workflow: "{}" }],
+  teams: [{ id: "t1", name: "Marketing", agent_ids: '["a1"]', workflow: '{"executionMode":"sequential","steps":[]}' }],
   triggers: [
     {
       id: "c1",
@@ -68,6 +73,8 @@ test("staging is private, inert, relationship-preserving and repeatable", async 
   const [agent] = await f.db.select().from(schema.agents).where(eq(schema.agents.orgId, f.org.id));
   expect(agent?.operatorHoldAt).not.toBeNull();
   expect(agent?.audienceMode).toBe("owner");
+  expect(agent?.monthlyBudgetNanoUsd).toBe(1_250_000_000);
+  expect(first.preparation.readyForCutover).toBe(false);
   expect(agent?.consultable).toBe(false);
   expect(await f.db.select().from(schema.agentScopes)).toHaveLength(0);
   const [routine] = await f.db.select().from(schema.routines);

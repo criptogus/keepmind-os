@@ -1,7 +1,9 @@
 import { and, eq, inArray, schema } from "@agenteschat/db";
 import { sha256 } from "./crypto";
 import { applyImport, type ImportDeps, type MigrationBundle } from "./imports";
+import { mapLegacyPermissions, mapLegacyWorkflows } from "./keepmind-legacy-mapping";
 import { requirePermission } from "./organizations";
+import { canonicalJson } from "./tools/json-schema";
 
 /** A private export of the legacy SQLite tables. Keep the original snapshot beside it: never upload it as a bundle. */
 export interface KeepMindLegacySnapshot {
@@ -12,6 +14,8 @@ export interface KeepMindLegacySnapshot {
   skills: Record<string, unknown>[];
   memory_items: Record<string, unknown>[];
   triggers: Record<string, unknown>[];
+  governance_rules?: Record<string, unknown>[];
+  users?: Record<string, unknown>[];
 }
 const text = (value: unknown) => (typeof value === "string" ? value : "");
 function json(value: unknown): unknown {
@@ -148,7 +152,7 @@ export function planKeepMindLegacy(snapshot: KeepMindLegacySnapshot) {
       reason: "Imported as private archived memory; original validity and evidence remain in snapshot for review",
     });
   }
-  return { bundle, review };
+  return { bundle, review, permissions: mapLegacyPermissions(snapshot), workflows: mapLegacyWorkflows(snapshot) };
 }
 
 /** Isolated staging only. Not a live-workspace importer. All DB changes and containment commit together. */
@@ -297,6 +301,39 @@ export async function stageKeepMindLegacy(
           .set({ reportsToAgentId: mapped("agent", text(row.manager_id)) })
           .where(eq(schema.agents.id, mapped("agent", key(row)) as string));
     }
-    return { ...result, review: plan.review };
+    for (const permission of plan.permissions) {
+      // Only the explicit spend ceiling has a native, enforceable equivalent. Nothing grants tool access.
+      await tx
+        .update(schema.agents)
+        .set({ monthlyBudgetNanoUsd: permission.monthlyBudgetNanoUsd })
+        .where(eq(schema.agents.id, mapped("agent", permission.agentId) as string));
+    }
+    const permissions = plan.permissions.map((p) => ({ ...p, targetAgentId: mapped("agent", p.agentId) }));
+    const workflows = plan.workflows.map((w) => ({
+      ...w,
+      targetChannelId: mapped("channel", w.teamId),
+      steps: w.steps.map((s) => ({ ...s, targetAgentId: mapped("agent", s.agentId) })),
+    }));
+    return {
+      ...result,
+      review: plan.review,
+      preparation: {
+        version: 1,
+        sourceDigest: sha256(canonicalJson(snapshot)),
+        readyForCutover: false,
+        permissions,
+        workflows,
+        governance: {
+          captured: snapshot.governance_rules !== undefined,
+          rules: snapshot.governance_rules?.length ?? 0,
+          status: "requires_semantic_mapping",
+        },
+        identities: {
+          captured: snapshot.users !== undefined,
+          users: snapshot.users?.length ?? 0,
+          status: "no_identity_grants",
+        },
+      },
+    };
   });
 }
