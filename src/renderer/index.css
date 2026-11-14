@@ -292,3 +292,5 @@ body {
 .km-conversation-shell [data-tour="chat-composer"] { width: 100%; max-width: 1040px; align-self: center; }
 .km-conversation-shell [data-tour="chat-composer"] textarea { line-height: 1.6; }
 @media (max-width: 900px) { .km-channel-rail { width: 210px !important; } }
+
+.km-msg .km-document { white-space: normal; font-size: 14px; line-height: 1.6; }
