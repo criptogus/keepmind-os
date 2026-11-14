@@ -1,157 +1,55 @@
 {
-  "name": "zero-agency-os",
-  "version": "0.1.22",
+  "name": "agentes-chat",
   "private": true,
   "type": "module",
-  "license": "MIT",
-  "engines": {
-    "node": ">=24.11.0"
-  },
-  "main": "dist/main/main.cjs",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "build": "vite build && esbuild src/main/main.ts --bundle --platform=node --format=cjs --packages=external --supported:dynamic-import=true --outfile=dist/main/main.cjs && esbuild src/preload/preload.ts --bundle --platform=node --format=cjs --external:electron --outfile=dist/main/preload.cjs && cp build/tray-icon.png dist/main/tray-icon.png && cp build/icon.png dist/main/icon.png",
-    "dev": "vite --host 127.0.0.1 --port 0",
-    "start": "electron .",
-    "test": "vitest run",
-    "test:integration": "vitest run --config vitest.config.ts --project integration",
-    "typecheck": "tsc --noEmit",
-    "smoke:electron": "node scripts/smoke-electron.mjs",
-    "dist:mac": "npm run build && electron-builder --mac",
-    "astryx": "astryx",
-    "scan:secrets": "node scripts/scan-secrets.mjs",
-    "dist:win": "npm run build && electron-builder --win",
-    "runner": "esbuild src/runner/cli.ts --bundle --platform=node --format=esm --packages=external --outfile=dist/runner/cli.mjs && node dist/runner/cli.mjs",
-    "dist:signed": "npm run build && node scripts/dist-signed.mjs",
-    "verify:ux": "npm run typecheck && npm test && npm run test:integration && npm run build && npm run runner -- --help && npm run smoke:electron && npm run scan:secrets && npm run check:bundle",
-    "check:bundle": "node scripts/bundle-license-policy.mjs"
-  },
-  "dependencies": {
-    "@anthropic-ai/sdk": "^0.32.1",
-    "@composio/core": "0.28.0",
-    "@mantine/core": "8.3.18",
-    "@mantine/hooks": "8.3.18",
-    "@modelcontextprotocol/sdk": "1.32.2",
-    "@tanstack/react-query": "^5.62.0",
-    "@whiskeysockets/baileys": "6.7.24",
-    "defuddle": "0.19.6",
-    "electron-updater": "6.8.11",
-    "jszip": "3.10.1",
-    "open-bot-avatar": "0.2.0",
-    "openai": "^4.73.0",
-    "pptxgenjs": "4.0.1",
-    "qrcode": "1.5.4",
-    "react": "19.2.0",
-    "react-dom": "19.2.0",
-    "turndown": "7.2.5",
-    "react-markdown": "10.1.0",
-    "remark-gfm": "4.0.1",
-    "unpdf": "1.4.0",
-    "uuid": "^11.0.3",
-    "xlsx": "0.18.5",
-    "zod": "^3.25",
-    "zustand": "^5.0.2"
+    "dev": "bun run --filter '@agenteschat/server' --filter '@agenteschat/web' dev",
+    "start": "bun run --filter '@agenteschat/server' start",
+    "build": "bun run --filter '@agenteschat/web' build && bun run --filter '@agenteschat/server' build",
+    "test": "bun test",
+    "typecheck": "bun run --filter '*' typecheck",
+    "lint": "biome check .",
+    "format": "biome check --write .",
+    "check:boundaries": "bun scripts/check-boundaries.ts",
+    "check:licenses": "bun scripts/check-licenses.ts",
+    "check:migrations": "bun scripts/check-migrations.ts",
+    "check:geometry": "bun scripts/geometry/check.ts",
+    "sync:unavailable": "bun scripts/unavailable-page.ts",
+    "ci:local": "bash scripts/ci-local.sh",
+    "db:generate": "cd packages/db && bunx drizzle-kit generate --name",
+    "docs:env": "bun run --filter '@agenteschat/config' docs",
+    "i18n:missing": "bun scripts/i18n.ts missing",
+    "i18n:apply": "bun scripts/i18n.ts apply",
+    "i18n:status": "bun scripts/i18n.ts status",
+    "report:autonomy": "bun --env-file=.env apps/server/scripts/autonomy-report.ts",
+    "smoke": "bun --env-file=.env scripts/smoke.ts",
+    "composio:check": "bun --env-file=.env apps/server/scripts/composio-check.ts",
+    "eval:memory": "bun --env-file=.env packages/engine/eval/memory.ts",
+    "eval:behavior": "bun --env-file=.env packages/engine/eval/behavior.ts",
+    "eval:resilience": "bun --env-file=.env packages/engine/eval/resilience.ts",
+    "eval:mentions": "bun --env-file=.env packages/engine/eval/mention-handoff.ts",
+    "eval:catchup": "bun --env-file=.env packages/engine/eval/catch-up.ts",
+    "eval:router": "bun --env-file=.env packages/engine/eval/router.ts",
+    "eval:turns": "bun --env-file=.env packages/engine/eval/turns-real.ts",
+    "eval:conversation": "bun --env-file=.env packages/engine/eval/conversation.ts",
+    "eval:browser": "bun --env-file=.env packages/engine/eval/browser/ab.ts",
+    "eval:browser:micro": "bun --env-file=.env packages/engine/eval/browser/micro.ts",
+    "eval:desktop:micro": "bun --env-file=.env packages/engine/eval/desktop/micro.ts",
+    "eval:media": "bun --env-file=.env packages/engine/eval/media/run.ts",
+    "eval:brain-floor": "bun apps/server/scripts/brain-floor.ts"
   },
   "devDependencies": {
-    "@types/node": "^24",
-    "@types/qrcode": "1.5.6",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@types/turndown": "5.0.6",
-    "@types/uuid": "^10.0.0",
-    "@vitejs/plugin-react": "^5",
-    "electron": "45.2.3",
-    "electron-builder": "^26",
-    "esbuild": "0.28.2",
-    "typescript": "~5.9.3",
-    "unplugin": "2.3.11",
-    "vite": "^7",
-    "vitest": "^3"
+    "@biomejs/biome": "^2.5.15",
+    "@types/bun": "^1.4.2",
+    "typescript": "^7.0.2"
   },
-  "build": {
-    "appId": "com.keepmind.os",
-    "productName": "KeepMind OS",
-    "directories": {
-      "output": "release"
-    },
-    "files": [
-      "dist/**/*",
-      "assets/**/*",
-      "package.json",
-      "THIRD_PARTY_NOTICES.md",
-      "!**/node_modules/@anthropic-ai/claude-agent-sdk{,-*}{,/**/*}",
-      "!**/node_modules/@cursor/sdk{,-*}{,/**/*}",
-      "!**/node_modules/@github/copilot{,-*}{,/**/*}",
-      "!**/node_modules/@paperclipai/server/provider-assets/copilot{,/**/*}"
-    ],
-    "asar": true,
-    "asarUnpack": [
-      "node_modules/@whiskeysockets/**"
-    ],
-    "mac": {
-      "target": [
-        {
-          "target": "dmg",
-          "arch": [
-            "arm64",
-            "x64"
-          ]
-        },
-        {
-          "target": "zip",
-          "arch": [
-            "arm64",
-            "x64"
-          ]
-        }
-      ],
-      "identity": "-",
-      "hardenedRuntime": false
-    },
-    "icon": "build/icon.icns",
-    "protocols": [
-      {
-        "name": "KeepMind OS",
-        "schemes": [
-          "keepmind"
-        ]
-      }
-    ],
-    "publish": [
-      {
-        "provider": "github",
-        "owner": "criptogus",
-        "repo": "keepmind-os"
-      }
-    ],
-    "win": {
-      "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64"
-          ]
-        },
-        {
-          "target": "zip",
-          "arch": [
-            "x64"
-          ]
-        }
-      ],
-      "icon": "build/icon.png"
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true
-    },
-    "afterPack": "scripts/bundle-after-pack.mjs"
+  "patchedDependencies": {
+    "react-native-screens@4.30.0": "patches/react-native-screens@4.30.0.patch"
   },
-  "description": "KeepMind OS — local agent workspace",
-  "author": "KeepMind",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/criptogus/keepmind-os.git"
-  }
+  "packageManager": "bun@1.4.4",
+  "license": "AGPL-3.0-only"
 }

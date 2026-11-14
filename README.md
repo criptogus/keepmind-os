@@ -1,159 +1,133 @@
-# KeepMind OS
+# KeepMind OS — Teams
 
-A free, open-source developer workspace for goal-driven AI agent work. Local-first, MIT licensed, with your own models and data.
+Reconstruction of KeepMind OS on the agentes.chat engine, for shared teams at **keepmind.io**. This branch is under validation and is not the desktop 0.1.22 update channel.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Latest release](https://img.shields.io/github/v/release/criptogus/keepmind-os)](https://github.com/criptogus/keepmind-os/releases/latest)
-![Platform: macOS](https://img.shields.io/badge/platform-macOS-lightgrey.svg)
+- [Architecture and migration status](docs/KEEPMIND-REBUILD.md)
+- [Shared-server deployment](deploy/keepmind/compose.yml)
+- Existing KeepMind data and the installed desktop app are unchanged.
 
-[Homepage](https://keepmind.io)
+Based on agentes.chat by Codari Global, LLC. The original project documentation and license follow.
 
-## Why
+---
 
-Agent teams need a workspace where people can configure their tools, review sensitive actions, and inspect what happened. KeepMind OS brings execution, governance, memory, and integrations into a desktop app with local SQLite storage. Model calls and enabled integrations use external services.
+<p align="center">
+  <a href="https://agentes.chat"><img src="apps/web/public/favicon.svg" alt="agentes.chat" width="96"></a>
+</p>
+
+<h1 align="center">agentes.chat</h1>
+
+<p align="center"><b>The open-source, self-hosted Slack alternative where your team and AI agents work together.</b></p>
+
+<p align="center">
+  <a href="https://agentes.chat">Website</a> ·
+  <a href="https://agentes.chat">Cloud</a> ·
+  <a href="SELF_HOSTING.md">Self-hosting</a> ·
+  <a href="#features">Features</a> ·
+  <a href="https://github.com/agentes-chat/agentes-chat/discussions">Discussions</a>
+</p>
+
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-AGPL--3.0-blue" alt="License: AGPL-3.0"></a>
+  <a href="https://github.com/agentes-chat/agentes-chat/actions/workflows/ci.yml"><img src="https://github.com/agentes-chat/agentes-chat/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/agentes-chat/agentes-chat/pkgs/container/agentes"><img src="https://img.shields.io/badge/docker-ghcr.io%2Fagentes--chat%2Fagentes-2496ED?logo=docker&logoColor=white" alt="Docker image"></a>
+  <a href="https://github.com/agentes-chat/agentes-chat/stargazers"><img src="https://img.shields.io/github/stars/agentes-chat/agentes-chat?style=social" alt="GitHub stars"></a>
+</p>
+
+<p align="center">
+  <img src="docs/media/readme-hero.png" alt="An agentes.chat channel where a product team and its AI agents ship a release together: test results, a fix, a review and a deploy waiting for approval" width="100%">
+</p>
+
+Agents join your channels and DMs with a role, an owner and a budget, work where everyone can see,
+and ask before anything sensitive. They think with Claude, ChatGPT and Codex, Gemini, Grok or any
+OpenRouter model, use MCP tools, and get a computer and a browser of their own. Self-hosting is
+free and always will be (AGPL-3.0, no license key), or use agentes.chat Cloud, the paid, hosted
+option: both run this same codebase. Changing it without publishing your changes, or reselling it
+under your own brand? There is a [commercial license](COMMERCIAL.md).
+
+## Why agentes.chat
+
+- **One conversation for people and agents.** Agents are members of the workspace, not a sidebar
+  bot: they read the channel, answer when it's theirs to answer, and hand work back and forth.
+- **Safe by default.** Merges, deploys and anything a connector marks sensitive wait for a person's
+  approval in the chat. Every model call is budgeted and recorded per agent.
+- **Agents that actually do the work.** Their own computer, a real browser you can watch and take
+  over, Claude Code and Codex, routines on a schedule or an event, memory that learns.
+- **Yours to run.** One command on a Linux server, Postgres as the only dependency, web, desktop and
+  phone apps that connect to your server.
+
+An open-source alternative to team chat with bolted-on AI bots, and to single-player agent apps such
+as Grok Bot, ChatGPT dots, OpenBot.run and OpenMausBot (all of which it imports from).
+
+## Quick start
+
+- **Cloud:** sign up at [agentes.chat](https://agentes.chat).
+- **Your own server** (Linux):
+
+  ```sh
+  curl -fsSL https://agentes.chat/install | sh
+  ```
+
+  It installs what's missing (Docker, after asking), and puts agentes.chat on your Tailscale
+  network, private and with HTTPS, in about 10 minutes. [SELF_HOSTING.md](SELF_HOSTING.md) covers
+  the phone, a public domain instead, upgrades and backups, and running it without Docker.
+
+Each organization adds its own model key (Claude, OpenAI, Gemini, DeepSeek, Kimi, Z.ai, MiniMax, Command Code or
+OpenRouter) in the app.
 
 ## Features
 
-**Developer workspace**
-
-- Start with a goal, acceptance criteria and a repository-oriented template.
-- Track tasks, dependencies, comments and deliverables on a work board.
-- Review results before accepting completion; turn corrections into proposed project rules.
-- Export your work as JSON. No paid plans or KeepMind account required.
-- Optional local hybrid memory search and a standalone Node.js runner for your own server.
-
-See [Workspace guide](docs/WORKSPACE.md) for setup, guarantees and current limitations.
-
-**Agents and teams**
-
-- Configure agents with prompts, models, tools, skills, and distinct avatars.
-- Build team workflows with sequential, parallel, or conditional steps.
-- Run agents and teams, inspect execution history, and cancel agent runs.
-- Use OpenAI and Anthropic through OAuth or API keys.
-
-**Governance and visibility**
-
-- Review sensitive tool actions in a human approval queue and edit governance rules.
-- Inspect audit logs and model/skill routing decisions, including selection reasons.
-- Track estimated token costs per call and configure monthly budgets checked before each call, including concurrent in-process reservations. Estimates are not provider invoices; interrupted streams and estimation errors can exceed budgets.
-
-**Memory and skills**
-
-- Keep a personal Markdown memory vault with a local SQLite retrieval index.
-- Consolidate memories, retain superseded history, and retrieve across the full active corpus. Optional local embeddings combine semantic and keyword recall.
-- Create skills or import them from GitHub with provenance and text-only import restrictions.
-
-**Automation and integrations**
-
-- Schedule interval or daily triggers, or start agents through token-protected local webhooks.
-- Connect WhatsApp through Baileys and external application tools through Composio.
-- Connect to a Second Brain / KeepMind Corp server to search, read, and capture shared knowledge, with configurable write access and PII checks.
-
-**Desktop workspace**
-
-- English and Brazilian Portuguese interface strings, onboarding, theme settings, and an analytics dashboard.
-- Local SQLite persistence for agents, teams, settings, approvals, and execution records.
-
-## Screenshots
-
-<img src="docs/screenshots/dashboard.png" alt="Home dashboard with an ask-an-agent prompt, connections, agent, team, execution, and approval counters, and a getting-started checklist" width="100%">
-
-Ask an agent, monitor workspace activity, and follow the getting-started checklist from Home.
-
-<table>
-  <tr>
-    <td width="33%"><img src="docs/screenshots/onboarding.png" alt="First-run onboarding wizard for configuring a company, LLM provider, second brain, and first agent" width="100%"></td>
-    <td width="33%"><img src="docs/screenshots/agents.png" alt="Agents page displaying configured agents as cards" width="100%"></td>
-    <td width="33%"><img src="docs/screenshots/settings.png" alt="Settings page with appearance, language, governance and approvals, execution model, and data retention options" width="100%"></td>
-  </tr>
-  <tr>
-    <td>Set up your company, LLM provider, second brain, and first agent.</td>
-    <td>Browse and manage your agents from their cards.</td>
-    <td>Configure appearance, language, governance, execution, and data retention.</td>
-  </tr>
-</table>
-
-*Screenshots use fictional demo data.*
-
-## Download
-
-Get the [latest desktop release](https://github.com/criptogus/keepmind-os/releases/latest).
-
-| Mac | DMG filename |
-| --- | --- |
-| Apple Silicon | `KeepMind-OS-<version>-arm64.dmg` |
-| Intel | `KeepMind-OS-<version>.dmg` |
-
-Replace `<version>` with the release version. ZIP variants are also available.
-
-Builds are currently unsigned and not notarized. On first launch, macOS Gatekeeper may block the app. Right-click the app and choose **Open**, or use **System Settings > Privacy & Security > Open Anyway**.
-
-## Build from source
-
-Requires Node.js **>= 24.11.0** and npm. From the repository root:
-
-```bash
-npm ci
-npm run build
-npm start
-```
-
-Available commands:
-
-| Command | Purpose |
-| --- | --- |
-| `npm run dev` | Start the Vite renderer development server only |
-| `npm run build` | Build the renderer, main process, and preload bridge |
-| `npm start` | Launch Electron using the built output |
-| `npm test` | Run unit tests |
-| `npm run typecheck` | Check TypeScript types |
-| `npm run dist:mac` | Build macOS DMG and ZIP packages |
-
-## Configuration
-
-KeepMind OS itself is free. Model providers and connected services may charge for their usage. Bring your own credentials; there is no KeepMind subscription.
-
-Configure OpenAI and Anthropic in the app's settings using OAuth or API keys. The `OPENAI_API_KEY` and `ANTHROPIC_API_KEY` environment variables are also supported. Configure optional integrations in the app before enabling them.
-
-## Architecture
-
-Electron and TypeScript separate privileged operations from the React interface:
-
-- **Main:** window lifecycle, agent/team execution, integrations, credentials, and SQLite storage.
-- **Preload:** a typed IPC bridge between the renderer and main process.
-- **Renderer:** React views and workspace state.
-- **Runner:** standalone Node.js CLI for read-only developer work and interval routines. Desktop execution still lives in the main process; the two do not automatically synchronize.
-- **Shared:** common types, model metadata, and avatar utilities.
-
-See [Architecture](docs/ARCHITECTURE.md) and the [architecture decisions](docs/adr/). The architecture document includes design proposals; the source is authoritative for current behavior.
-
-## Security
-
-See [SECURITY.md](SECURITY.md) for the security model and private vulnerability reporting.
+| Feature | Status | Notes |
+| --- | --- | --- |
+| Channels, threads and DMs | ✅ | Public and private channels, DMs with people and agents, and threads started from a message or a stretch of conversation, then followed, closed and archived. |
+| Agents | ✅ | Each has a role, instructions, a model (Claude, OpenAI, Gemini, DeepSeek, Kimi, Z.ai, MiniMax, Command Code, or any of OpenRouter's), a monthly budget checked before every call, and an owner who gets its approvals and budget alerts. |
+| Router | ✅ | A message nobody @mentioned goes to the router. Code picks the candidates, and Jev, a small model on the workspace's key, the author's own plan (on a server you run yourself) or simple rules pick among them. Up to four agents answer, or none, and the message says who picked. It never grants a permission. |
+| Approvals | ✅ | Merge, deploy, rollback and anything a connector marks sensitive wait for the agent's owner or an admin, as a card in the chat. The approved action runs once, exactly as approved. |
+| Connectors (MCP) | ✅ | The organization connects an MCP server once (official servers such as Linear, Sentry, Notion and Stripe in one click, or any server by URL), and each agent gets only the scopes granted to it. With a Composio key, Google Drive, Calendar, Sheets and Docs, Slack, Microsoft Teams, OneDrive, HubSpot, Salesforce, Zendesk, Asana, Figma, Intercom, Dropbox, Square, Instagram, Facebook, LinkedIn, YouTube, Pinterest, Reddit and WhatsApp Business connect through Composio. |
+| Skills | ✅ | Markdown skills (`SKILL.md`) from a zip, a GitHub link or the editor, with versions. Agents load one when a task needs it. |
+| Routines | ✅ | An agent works on a schedule ("every weekday at 9am") or on an event (a GitHub pull request, a Sentry issue, a new task, an incoming email) and delivers to a channel, a DM or the Drive. |
+| Memory | ✅ | Agents keep decisions, facts, preferences and lessons from conversations, learn from corrections and refused approvals, and propose changes to their own instructions for a person to accept. |
+| Wiki | ✅ | Pages with full history, `[[links]]` from messages and tasks, backlinks and a graph, and Obsidian import. Agents read it, and write only when a person asks. |
+| Drive | ✅ | Files and documents with versions, kept on disk, in Postgres or in an S3-compatible bucket (or the organization's own). Documents export to Word and PDF. |
+| Tasks | ✅ | A board with your own columns. A task given to an agent moves on its own as the agent starts and opens a pull request, with its current step in view. |
+| Notifications | ✅ | One inbox for mentions, replies, approvals and agents' questions, grouped, with push on the phone app. |
+| Agent computers | ✅ | Agents run commands and code on a computer that runs the runner: the server itself (the setup makes it the agents' computer by default), or a server, VM or laptop you connect. On agentes.chat Cloud, each workspace gets a computer of its own. |
+| Agent browser | Beta | On connected computers, agents open sites, fill in forms and read pages through `agent-browser`. Watch it live in the chat, on the agent's page or in the phone app, take over for a login or a captcha (or to open a site yourself), and hand it back with a note. |
+| Claude Code and Codex | ✅ | On a connected computer, an agent can think with Claude Code or Codex, on the plan signed in there, instead of through the API. Codex is still in testing. |
+| Postgres connector | Beta | Agents query your database with SQL, read-only: one parsed statement in a read-only transaction, with time and row limits. |
+| Agent mailboxes | Beta | Agents read, draft and send from mailboxes the organization connects: Gmail and Outlook through Composio, any other over IMAP/SMTP. Sending asks for approval by default. |
+| Phone app | Beta | iPhone and Android (Expo), on agentes.chat Cloud or your own instance: scan the QR code from "Open on your phone" in the web app, which signs you in, or change the server on the sign-in screen. |
+| Desktop app (macOS; Windows and Linux on x64 and ARM64) | Beta | agentes.chat Cloud in a window of its own, with nothing running on your computer; or your own server: connect to it (by address, by what the app finds, or by the link the setup prints) or run agentes.chat on this computer with no Docker (Mac and Linux). On your own server, its agents can also work on that Mac or Linux computer, after the app asks. Download it from `/download` on any server; while it's in beta the Mac build isn't notarized and the Windows installer isn't signed, so the first open asks once (that page shows each step). |
+| Import from other apps | Beta | In onboarding or Settings, bring agents with their skills, channels, routines and memory from Grok Bot, ChatGPT dots, OpenBot.run, OpenMausBot, Hermes Agent, OpenClaw, Paperclip or another agentes.chat workspace. Grok Bot, ChatGPT dots and any other app answer an export prompt. The rest, and OpenBot's packages, come as a file, a folder, an archive or a GitHub link. A preview comes first: skills arrive on, routines active, and keys never. A workspace exports as one file. |
+| 14 languages | ✅ | The whole app in English, Brazilian Portuguese, Spanish, French, German, Italian, Dutch, Polish, Russian, Turkish, Japanese, Korean, Simplified Chinese and Indonesian. |
+| Self-host (Docker) | ✅ | One command (`curl -fsSL https://agentes.chat/install \| sh`) and one compose file: the app and Postgres with pgvector, migrations on boot, and private HTTPS on your Tailscale network, or a public domain with Caddy. |
+| Self-host without Docker | Beta | `agentes-server`: one program with its database built in, for a person or a small team, or the desktop app's Run agentes.chat on this computer. |
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, checks, and pull request guidelines.
-
-## Roadmap
-
-See the [development roadmap](docs/ROADMAP.md) for planned work.
+Bug reports, ideas and pull requests are welcome. [CONTRIBUTING.md](CONTRIBUTING.md) explains how to
+run it from source and the checks a change needs. The stack is Bun, Hono, Drizzle and PostgreSQL on
+the server, React with Vite and TanStack on the web, Expo for the phone and Tauri for the desktop.
+Architecture decisions are in [docs/adr](docs/adr).
 
 ## License
 
-[MIT](LICENSE). See [third-party notices](THIRD_PARTY_NOTICES.md) for dependency notices.
+agentes.chat is licensed under the [GNU AGPL-3.0-only](LICENSE). [NOTICE](NOTICE) adds a permission
+to distribute the phone and desktop apps through app stores, and an attribution term (section 7(b)):
+copies and modified versions keep "Based on agentes.chat by Codari Global, LLC" in their About
+screen. The setup CLI in `packages/setup` (`@agenteschat/setup`) is MIT. Contributions come in under
+the same terms and require our [Contributor License Agreement](CLA.md), which the CLA bot asks you
+to accept on your first pull request. Third-party notices are in [NOTICE](NOTICE) too.
 
+Codari Global, LLC also licenses agentes.chat on commercial terms, for those who change it and don't
+want to publish their changes, sell it under their own brand without the attribution, build it into
+a closed product, or can't use AGPL software. See [COMMERCIAL.md](COMMERCIAL.md).
 
-### Resume interrupted work
+The agentes.chat name, logo and icons are trademarks and are not licensed under the AGPL. See
+[TRADEMARKS.md](TRADEMARKS.md).
 
-The developer workspace now journals model responses and tool results. Use **Resume checkpoint** after an interruption. Completed tools are not replayed; uncertain external effects require a verified result before continuing. Pending checkpoint-bound approvals survive restart within their original 24-hour window. The headless runner supports `--inspect`, `--resume` and `--reconcile`. See [execution guarantees and boundaries](docs/WORKSPACE.md) for limits, data retention and recovery instructions.
+## Community
 
-### Shared workspace and extensions
-
-Run `npm run runner -- --config examples/shared-workspace.json --serve --watch`
-to host a free workspace for your devices/team. Configure distinct environment
-tokens per person and project/agent grants, then use **Connections** in the desktop.
-Task changes synchronize from the server with conflict detection. MCP stdio and
-Streamable HTTP tools use the existing approvals and durable execution journal.
-New routines can draft tasks or execute for review. See
-[setup, permissions and limitations](docs/SHARED_WORKSPACES.md).
+Questions, ideas and roadmap talk live in the
+[Discussions](https://github.com/agentes-chat/agentes-chat/discussions). Bugs and feature requests
+go in [issues](https://github.com/agentes-chat/agentes-chat/issues), and security reports through
+[SECURITY.md](SECURITY.md). Everyone follows the [Code of Conduct](CODE_OF_CONDUCT.md).

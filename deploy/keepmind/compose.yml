@@ -1,0 +1,61 @@
+# Run from the repository root. Build this fork, never pull the upstream app image.
+name: keepmind
+services:
+  postgres:
+    image: pgvector/pgvector:pg18
+    environment:
+      POSTGRES_DB: keepmind
+      POSTGRES_USER: keepmind
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set a database password}
+    volumes:
+      - postgres:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U keepmind -d keepmind"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+  app:
+    build:
+      context: ../..
+    image: keepmind-os:local
+    env_file: .env
+    environment:
+      DATABASE_URL: postgres://keepmind:${POSTGRES_PASSWORD}@postgres:5432/keepmind
+      PUBLIC_URL: https://keepmind.io
+      APP_VERSION: 0.2.0-alpha.1
+      SOURCE_URL: https://github.com/criptogus/keepmind-os/tree/feat/keepmind-os-rebuild
+      FILES_DIR: /data/files
+      ALLOW_SIGNUP: "false"
+      INSTALL_OWNER_TOKEN_HASH: ${INSTALL_OWNER_TOKEN_HASH:?Set the first-owner claim hash}
+      MODEL_ENDPOINTS_PRIVATE: "false"
+      PUSH_SENDER: "off"
+      FEEDBACK_RELAY: "false"
+      TELEMETRY: "false"
+      DESKTOP_RELEASES_REPO: criptogus/keepmind-os
+    volumes:
+      - files:/data/files
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    init: true
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    stop_grace_period: 40s
+  proxy:
+    image: caddy:2
+    ports: ["80:80", "443:443"]
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy:/data
+      - caddy-config:/config
+    depends_on: [app]
+    restart: unless-stopped
+volumes:
+  postgres:
+  files:
+  caddy:
+  caddy-config:

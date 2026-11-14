@@ -1,0 +1,261 @@
+/*
+ * Bringing a teammate in (ADR 0090, 0184): the addresses as chips (the onboarding's Team step), the invite dialog's one
+ * screen (its fields' labels and ⓘ on top, each control at the form's width), and the workspace's link. Tokens only, so
+ * light and dark follow the theme.
+ */
+
+/* The addresses: chips in a sunken box, typed or pasted, the field after the last one. */
+.email-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  min-height: 52px;
+  padding: 8px;
+  border-radius: 14px;
+  background: var(--sunken);
+  box-shadow: inset 0 0 0 1px var(--line);
+  cursor: text;
+}
+.email-chips:focus-within {
+  box-shadow:
+    inset 0 0 0 1px var(--line2),
+    var(--field-ring);
+}
+/* 16px: a phone doesn't zoom the page when the field takes the focus. */
+.email-chips__input {
+  flex: 1;
+  min-width: min(100%, 220px);
+  height: 34px;
+  padding: 0 8px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+  outline: none;
+}
+.email-chips__input::placeholder {
+  color: var(--faint);
+}
+.email-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 100%;
+  min-height: 34px;
+  padding: 0 3px 0 4px;
+  border-radius: 999px;
+  background: var(--raised);
+  box-shadow: var(--e1), var(--top);
+  font-size: 14px;
+}
+.email-chip[data-invalid] {
+  box-shadow: 0 0 0 1px var(--danger);
+}
+/* A good address that won't be sent (in already, invited already): quiet, its outline only. */
+.email-chip[data-soft] {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--line2);
+  color: var(--muted);
+}
+.email-chip__email {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* On a narrow screen the address gives way (its ellipsis), never the role's word. */
+.email-chip > .ac-select {
+  flex: none;
+}
+/* Why an address isn't sent: "confira" in danger, "já está na Acme" quiet. */
+.email-chip__bad,
+.email-chip__soft {
+  font-size: 12.5px;
+  font-weight: 600;
+}
+.email-chip__bad {
+  color: var(--danger);
+}
+.email-chip__soft {
+  color: var(--muted);
+}
+/* "(opcional)" after a field's label (a suggestion's "Quem é"). */
+.invite-optional {
+  font-weight: 500;
+  color: var(--faint);
+}
+
+/* The line under the addresses: how to paste, who stays out, or the ones to check in danger. */
+.invite-help {
+  margin: -6px 0 0;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--muted);
+}
+.invite-help[data-bad] {
+  color: var(--danger);
+}
+.invite-help--note {
+  margin: 0;
+}
+/* "Prefere mandar um link?": a well pressed into the dialog, its icon on a key-like tile. */
+/* A MediaRow on a well: the tile, the question and its button on one line, what it means under them; the button under
+   that too where the well is under 480px. */
+.invite-orlink {
+  container-type: inline-size;
+  padding: 12px 14px;
+  border-radius: var(--radius-lg) var(--radius-lg) var(--radius-lg) var(--radius-cut);
+  background: var(--card-well, var(--sunken));
+  box-shadow: var(--card-well-shadow, none);
+}
+.invite-orlink__text {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 18px;
+}
+.invite-tile {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 11px 11px 11px 4px;
+  background: var(--raised);
+  box-shadow: var(--card-key, var(--e1));
+  color: var(--ink2);
+}
+
+/* The link's screen: how it works, a step a line, and the requests waiting. */
+.invite-how {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.invite-how > li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  line-height: 20px;
+}
+.invite-how__n {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 7px 7px 7px 3px;
+  background: var(--plate);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink2);
+}
+/* The workspace's link (ADR 0068): the address to copy and until when it works (the onboarding's people step). */
+.invite-link {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.invite-link__row {
+  display: flex;
+  gap: var(--space-2);
+}
+.invite-link__row > .ac-input {
+  flex: 1;
+  min-width: 0;
+}
+.invite-link__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+.invite-link__foot > .ac-icon {
+  color: var(--faint);
+}
+.invite-link__none {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+/* The invite dialog (ADR 0184): one screen of kit fields, the cargo's mark and name in a field-wide trigger. */
+.invite-dialog {
+  container-type: inline-size;
+}
+/* Every picked cargo stays in sight: the trigger grows a line rather than cutting a name. */
+.ac-select__trigger.invite-role {
+  height: auto;
+  min-height: var(--control-h-md);
+  padding-block: calc((var(--control-h-md) - 2px - 20px) / 2);
+}
+.invite-role__value {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  min-width: 0;
+  line-height: 20px;
+  white-space: normal;
+  overflow: visible;
+}
+/* Not the select value's centred icon: `.ac-iconline` puts the mark on the name's capitals. */
+.invite-role__value > .invite-role__item {
+  align-items: flex-start;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+/* The cargos' menu at least the trigger's width, as a select's list is. */
+.invite-rolemenu.ac-menu {
+  min-width: var(--radix-dropdown-menu-trigger-width);
+  max-width: calc(100vw - 2 * var(--space-3));
+}
+/* A line under a field: its icon on the words' capitals, a note muted, what to fix in the danger tone. */
+.invite-line {
+  margin: 0;
+}
+.invite-line.ac-field__example > .ac-icon {
+  color: var(--faint);
+}
+/* "+ Recado no e-mail": a ghost at the form's start, its words on the fields' edge. */
+.invite-extra {
+  display: flex;
+  margin-inline-start: calc(-1 * var(--ghost-plate));
+}
+/* The link and its one button (Copiar link, Copiado or Criar link in one cell): the field never moves. */
+.invite-linkrow {
+  display: flex;
+  gap: var(--space-2);
+}
+.invite-linkrow > .ac-input {
+  flex: 1;
+  min-width: 0;
+  font-variant-numeric: tabular-nums;
+}
+.invite-linkrow > .ac-btn {
+  flex: none;
+}
+/* Validade and Máximo de pessoas side by side, one height and one right edge; under each other when narrow. */
+.invite-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--form-gap);
+}
+@container (max-width: 359px) {
+  .invite-pair {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+/* Editar link's "Desativar link": a ghost on the footer's start, apart from Cancelar and Salvar. */
+.ac-dialog__foot > .invite-foot__lead {
+  margin-inline: calc(-1 * var(--ghost-plate)) auto;
+}
