@@ -15777,7 +15777,7 @@
     },
     "telemetry": {
       "title": "Gebruiksstatistieken",
-      "label": "Anonieme gebruiksstatistieken naar KeepMind OS sturen",
+      "label": "Anonieme gebruiksstatistieken naar agentes.chat sturen",
       "help": "Aantallen zoals mensen, agents, machinegroottes, gebruikte AI-tokens en hoeveel data de browsers van de agents versturen en ontvangen. Nooit berichten, bestanden, namen of sites.",
       "envOff": "Uitgezet in de instellingen van deze server (TELEMETRY=off).",
       "envOffDesktop": "Uitgezet in de KeepMind OS-app op de computer van deze server (Voorkeuren › Servers).",

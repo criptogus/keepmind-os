@@ -15650,7 +15650,7 @@
     },
     "telemetry": {
       "title": "Kullanım istatistikleri",
-      "label": "KeepMind OS'e anonim kullanım istatistikleri gönder",
+      "label": "agentes.chat'e anonim kullanım istatistikleri gönder",
       "help": "Kişi ve ajan sayısı, makine boyutları, kullanılan yapay zeka token'ları ve ajanların tarayıcılarının ne kadar veri gönderip aldığı gibi sayılar. Asla mesajlar, dosyalar, adlar ya da siteler değil.",
       "envOff": "Bu sunucunun ayarlarında kapatıldı (TELEMETRY=off).",
       "envOffDesktop": "Bu sunucunun bilgisayarındaki KeepMind OS uygulamasında kapatıldı (Tercihler › Sunucular).",

@@ -124,7 +124,7 @@ describe("Entrar no servidor que o app roda neste computador", () => {
     await renderApp("/login", { api: signedOut() });
     await settle(6);
     const line = document.querySelector(".auth__place");
-    expect(line?.textContent).toContain("Entrando no agentes.chat deste Mac");
+    expect(line?.textContent).toContain("Entrando no KeepMind OS deste Mac");
     await act(async () =>
       fireEvent.click(within(line as HTMLElement).getByRole("button", { name: "Trocar de servidor" })),
     );

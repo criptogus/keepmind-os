@@ -444,7 +444,7 @@ describe("Quem pensa (its dialog)", () => {
     expect(within(r.d).getByRole("button", { name: "Pedir a Rui" })).toBeTruthy();
     // An app too old on a server: update it there, the command behind "Prefiro no Terminal".
     r = await reason({ name: "Servidor", os: "linux" });
-    expect(r.text).toContain("Atualize o app do agentes.chat no Servidor para ligar daqui.");
+    expect(r.text).toContain("Atualize o app do KeepMind OS no Servidor para ligar daqui.");
     expect(r.text).toContain("Prefiro no Terminal");
     expect(r.d.textContent).toContain("sudo agentes-runner tools enable claude");
   });

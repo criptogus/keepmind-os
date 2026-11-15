@@ -95,7 +95,7 @@ export const envVars = {
   },
   // Mirror: PUBLIC_SOURCE_URL in packages/client/src/lib/about.ts.
   SOURCE_URL: {
-    schema: z.url().default("https://github.com/criptogus/keepmind-os/tree/feat/keepmind-os-rebuild"),
+    schema: z.url().default("https://github.com/criptogus/keepmind-os"),
     description:
       "Where people get this server's source code, shown as \"Source code\" on the About screen of every app (AGPL-3.0 section 13). Running a modified version: point it at your modified source. Default: agentes.chat's public repository.",
     section: "Server",

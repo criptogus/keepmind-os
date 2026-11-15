@@ -15151,7 +15151,7 @@
     },
     "telemetry": {
       "title": "사용 통계",
-      "label": "KeepMind OS에 익명 사용 통계 보내기",
+      "label": "agentes.chat에 익명 사용 통계 보내기",
       "help": "사람 수, 에이전트 수, 머신 크기, 사용한 AI 토큰, 에이전트 브라우저가 주고받은 데이터 양 같은 수치예요. 메시지, 파일, 이름, 사이트는 절대 보내지 않아요.",
       "envOff": "이 서버의 설정에서 꺼져 있어요(TELEMETRY=off).",
       "envOffDesktop": "이 서버 컴퓨터의 KeepMind OS 앱에서 꺼져 있어요(환경설정 › 서버).",

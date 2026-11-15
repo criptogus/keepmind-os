@@ -16161,7 +16161,7 @@
     },
     "telemetry": {
       "title": "Estadísticas de uso",
-      "label": "Enviar estadísticas de uso anónimas a KeepMind OS",
+      "label": "Enviar estadísticas de uso anónimas a agentes.chat",
       "help": "Conteos como personas, agentes, tamaños de máquina, tokens de IA usados y cuántos datos envían y reciben los navegadores de los agentes. Nunca mensajes, archivos, nombres ni sitios.",
       "envOff": "Desactivado en la configuración de este servidor (TELEMETRY=off).",
       "envOffDesktop": "Desactivado en la app KeepMind OS de la computadora de este servidor (Preferencias › Servidores).",

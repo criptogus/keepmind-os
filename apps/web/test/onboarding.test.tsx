@@ -498,7 +498,7 @@ describe("the steps", () => {
   });
 });
 
-describe("the plan step (agentes.chat Cloud)", () => {
+describe("the plan step (KeepMind OS Cloud)", () => {
   test("the team asleep, the plan with its price from the billing service, the link to that plan's Checkout", async () => {
     const state = newcomer(true);
     const asked = plans(PLANS);
@@ -551,7 +551,7 @@ describe("the plan step (agentes.chat Cloud)", () => {
     const state = newcomer(true);
     plans(null);
     await throughTheTeam(state);
-    expect(document.querySelector(".onb__plan-price")?.textContent).toContain("Um plano do agentes.chat");
+    expect(document.querySelector(".onb__plan-price")?.textContent).toContain("Um plano do KeepMind OS");
     expect(screen().queryByRole("button", { name: "Ver todos os planos" })).toBeNull();
     await click(within(planCard()).getByRole("button", { name: "Ligar o time" }), 6);
     expect(calls(state, "orgs.billingLink").map((c) => c.args.length)).toEqual([2]);
@@ -1129,7 +1129,7 @@ describe("for me (ADR 0159)", () => {
     const { router } = await renderApp("/onboarding", { api });
     const landed = landings(router);
     await settle(10);
-    expect(heading()).toBe("Para que você vai usar o agentes.chat?");
+    expect(heading()).toBe("Para que você vai usar o KeepMind OS?");
     expect((button("Continuar") as HTMLButtonElement).disabled).toBe(true);
     // "For me", not "For my team", whose words start the same in Portuguese.
     await click(answer(/^Para mim(?!ha)/), 4);

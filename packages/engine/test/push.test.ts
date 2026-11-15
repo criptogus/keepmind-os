@@ -292,14 +292,14 @@ describe("push delivery", () => {
     const sent = (to: string) => push.sent.filter((p) => p.to === to).map((p) => [p.title, p.body, p.data?.kind]);
     expect(sent(TOKEN_BIA)).toEqual([
       [
-        "Lodi",
+        "KeepMind",
         "Você acabou de entrar na Acme. Do que você cuida por aqui? Me conta e eu monto seu primeiro agente com você.",
         "dm",
       ],
     ]);
     expect(sent(TOKEN_BIA_EN)).toEqual([
       [
-        "Lodi",
+        "KeepMind",
         "You just joined Acme. What do you look after here? Tell me and I set up your first agent with you.",
         "dm",
       ],

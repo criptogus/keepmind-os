@@ -123,7 +123,7 @@ describe("the setup group", () => {
       ["more", 1],
     ]);
     expect(deferrableGroups(granted)[0]?.label).toBe(
-      "Workspace setup (connect an AI, an app or an MCP server, invite people, create channels, propose agents, archive or delete agents; the right hand: approvals, people, any screen)",
+      "Workspace setup (create CRM plugins and custom tools, connect an AI, an app or an MCP server, invite people, create channels, propose agents, archive or delete agents; the right hand: approvals, people, any screen)",
     );
     // Not loaded: behind find_tools; loaded: as they are.
     expect(presentTools(granted, undefined, []).map((t) => t.name)).toEqual(["find_tools", "use_tool"]);

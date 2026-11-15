@@ -38,16 +38,16 @@ describe("the tab's title", () => {
   test("follows the language, keeps the unread count in front and leaves a page's own title", async () => {
     const i18n = createI18n("en");
     translateTabTitle(i18n);
-    expect(document.title).toBe("agentes.chat · Your team and your agents, in the same conversation");
+    expect(document.title).toBe("KeepMind OS · Your team and your agents, in the same conversation");
     document.title = titledWithUnread(document.title, 3).title;
     await i18n.changeLanguage("pt-BR");
-    expect(document.title).toBe("(3) agentes.chat · Seu time e seus agentes, na mesma conversa");
+    expect(document.title).toBe("(3) KeepMind OS · Seu time e seus agentes, na mesma conversa");
     document.title = "#general · Example";
     await i18n.changeLanguage("de");
     expect(document.title).toBe("#general · Example");
     // The page goes and puts back the title it found, an earlier language's.
-    document.title = "(3) agentes.chat · Your team and your agents, in the same conversation";
+    document.title = "(3) KeepMind OS · Your team and your agents, in the same conversation";
     await new Promise((done) => setTimeout(done, 0));
-    expect(document.title).toBe("(3) agentes.chat · Dein Team und deine Agenten, in derselben Unterhaltung");
+    expect(document.title).toBe("(3) KeepMind OS · Dein Team und deine Agenten, in derselben Unterhaltung");
   });
 });

@@ -38,7 +38,7 @@ describe("back from a provider's sign-in that didn't connect", () => {
         other_workspace:
           "Essa conta do GitHub já está ligada a outro workspace. Remova o app de lá antes de instalar aqui.",
         installed_outside:
-          "O app foi instalado nessa conta do GitHub fora do agentes.chat. Remova o app no GitHub e instale de novo em Conectores › GitHub.",
+          "O app foi instalado nessa conta do GitHub fora do KeepMind OS. Remova o app no GitHub e instale de novo em Conectores › GitHub.",
         owner_required:
           "Só o dono da conta do GitHub pode instalar o app. Peça para essa pessoa instalar em Conectores › GitHub neste workspace.",
         owner_unknown:
@@ -57,7 +57,7 @@ describe("back from a provider's sign-in that didn't connect", () => {
         other_workspace:
           "That GitHub account is already linked to another workspace. Remove the app there before installing it here.",
         installed_outside:
-          "The app was installed on that GitHub account outside agentes.chat. Remove it on GitHub and install it again from Connectors › GitHub.",
+          "The app was installed on that GitHub account outside KeepMind OS. Remove it on GitHub and install it again from Connectors › GitHub.",
         owner_required:
           "Only the GitHub account's owner can install the app. Ask them to install it from Connectors › GitHub in this workspace.",
         owner_unknown:
@@ -139,7 +139,7 @@ describe("back from a provider's sign-in that didn't connect", () => {
 
   test("GitHub's return that worked: the app installed, or the server's own app made, on whatever page it lands", () => {
     expect(open(`${CONNECTORS}?github_app=installed&tab=apps`)).toEqual({
-      shown: [["App agentes.chat instalado.", undefined]],
+      shown: [["App KeepMind OS instalado.", undefined]],
       left: `${CONNECTORS}?tab=apps`,
     });
     expect(open(`/org/${ORG_ID}/settings/skills?github_app=created`, "en")).toEqual({

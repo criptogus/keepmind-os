@@ -203,7 +203,7 @@ describe("Onde trabalha and the browser (their dialogs)", () => {
     expect(wait.firstElementChild?.classList.contains("ac-pixspin")).toBe(true);
     expect(wait.textContent).toBe("Esperando");
     // An app too old to switch it from here: update it there. A Mac has the app, so no command.
-    expect(steps.textContent).toContain("Atualize o app do agentes.chat no MacBook para ligar daqui.");
+    expect(steps.textContent).toContain("Atualize o app do KeepMind OS no MacBook para ligar daqui.");
     expect(steps.textContent).not.toContain("Preferências");
     expect(steps.querySelector(".machine-command__code")).toBeNull();
     await click(within(d).getByRole("button", { name: "Usar" }));
@@ -228,7 +228,7 @@ describe("Onde trabalha and the browser (their dialogs)", () => {
     const d = await dialog("Mudar o navegador", "A Ada pode navegar em sites?");
     await click(within(d).getByRole("radio", { name: /^Qualquer site/ }));
     const steps = within(d).getByRole("region", { name: "Falta 1 passo, no próprio Servidor" });
-    expect(steps.textContent).toContain("Atualize o app do agentes.chat no Servidor para ligar daqui.");
+    expect(steps.textContent).toContain("Atualize o app do KeepMind OS no Servidor para ligar daqui.");
     expect(steps.textContent).toContain("Prefiro no Terminal");
     expect(steps.textContent).not.toContain("Preferências");
     expect(steps.querySelector(".machine-command__code")?.textContent).toBe("sudo agentes-runner tools enable browser");

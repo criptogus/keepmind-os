@@ -39,11 +39,11 @@ describe("the list", () => {
       "Armazenamento",
       "Importar e exportar",
       "Auditoria",
-      "Sobre o agentes.chat",
+      "Sobre o KeepMind OS",
     ]);
   });
 
-  test("on agentes.chat Cloud Devices is the seventh entry, and Advanced holds the rest", async () => {
+  test("on KeepMind OS Cloud Devices is the seventh entry, and Advanced holds the rest", async () => {
     await go("settings", seedState({ authConfig: { cloud: true } }));
     expect(rows()).toEqual([
       "Sua conta",
@@ -95,7 +95,7 @@ describe("every old address opens its new home", () => {
     ["storage", "Armazenamento", undefined],
     ["import", "Importar e exportar", undefined],
     ["audit", "Auditoria", undefined],
-    ["about", "Sobre o agentes.chat", undefined],
+    ["about", "Sobre o KeepMind OS", undefined],
   ];
   for (const [section, entry, tab] of homes)
     test(`/settings/${section} → ${entry}${tab ? ` › ${tab}` : ""}`, async () => {
@@ -107,7 +107,7 @@ describe("every old address opens its new home", () => {
 
   test("the tabs of an entry are its sections, and a tab opens that section's address", async () => {
     const { router } = await go("settings/account");
-    expect(tabs()).toEqual(["Perfil", "Notificações", "Apps do agentes.chat", "Aprovações", "Apps de IA"]);
+    expect(tabs()).toEqual(["Perfil", "Notificações", "Apps do KeepMind OS", "Aprovações", "Apps de IA"]);
     await act(async () => fireEvent.mouseDown(screen().getByRole("tab", { name: "Notificações" }), { button: 0 }));
     await settle(6);
     expect(router.state.location.pathname).toBe(`/org/${ORG_ID}/settings/notifications`);

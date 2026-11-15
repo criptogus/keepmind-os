@@ -15223,7 +15223,7 @@
     },
     "telemetry": {
       "title": "使用统计",
-      "label": "向 KeepMind OS 发送匿名使用统计",
+      "label": "向 agentes.chat 发送匿名使用统计",
       "help": "成员数、智能体数、机器规格、使用的 AI token 数，以及智能体浏览器收发的数据量等计数。绝不包括消息、文件、名称或网站。",
       "envOff": "已在此服务器的设置中关闭（TELEMETRY=off）。",
       "envOffDesktop": "已在此服务器所在电脑上的 KeepMind OS 应用中关闭（偏好设置 › 服务器）。",

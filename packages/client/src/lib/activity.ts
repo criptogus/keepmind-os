@@ -226,6 +226,11 @@ const BUILTIN: Record<string, ActivityKind> = {
   update_skill_from_source: "updatingSkills",
   create_skill: "creatingSkill",
   propose_agent: "proposingAgent",
+  list_plugins: "findingTools",
+  keepmind_plugins: "findingTools",
+  propose_plugin: "proposingChange",
+  activate_plugin: "proposingChange",
+  disable_plugin: "workingOnWorkspace",
   // Another agent of the team (the consultation card says who and what it answered).
   ask_agent: "askingAgent",
   tell_agent: "tellingAgent",

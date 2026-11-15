@@ -1019,7 +1019,7 @@ describe("Conectar uma IA: one picker, plans first", () => {
     expect(calls(p.state, "machines.askTool")).toHaveLength(1);
     // An app too old to switch from afar: update it there. On a server, the command too, behind "Prefiro no Terminal".
     p = await panel({ os: "linux", mode: "system" }, "Servidor");
-    expect(p.dialog.textContent).toContain("Atualize o app do agentes.chat no Servidor para ligar daqui.");
+    expect(p.dialog.textContent).toContain("Atualize o app do KeepMind OS no Servidor para ligar daqui.");
     expect(p.dialog.textContent).toContain("Prefiro no Terminal");
     expect(p.dialog.textContent).toContain("sudo agentes-runner tools enable codex");
     expect(p.button("Ligar o Codex")).toBeNull();

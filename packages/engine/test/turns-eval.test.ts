@@ -115,7 +115,9 @@ const size = (r: ModelRequest) =>
  * never told as "the first time", and the DM rule saying what may be said of it elsewhere. Where each workspace gets its
  * own computer, `workspaceComputerText` adds 447 to that (48,078); the ceiling leaves a little room above both.
  */
-const OI_CEILING_CHARS = 48_200;
+// KeepMind plugin discovery and the branded workspace context add ~435 characters (48,513 measured).
+// Keep the autonomy/reachability assertions above; allow less than 500 characters of headroom.
+const OI_CEILING_CHARS = 49_000;
 
 test("a DM 'oi' stays under the size ceiling", async () => {
   const [request] = await play(TURNS.find((t) => t.id === "greet-dm") as ScriptedTurn);

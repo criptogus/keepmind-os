@@ -28,7 +28,7 @@ afterEach(() => {
 type State = ReturnType<typeof seedState>;
 
 const KEPT = "Guardei a sua mensagem";
-const PLANS = "Ver planos do agentes.chat";
+const PLANS = "Ver planos do KeepMind OS";
 const HOLD: OrgStanding = { state: "hold", reason: "payment" };
 const BILLING = "https://billing.example.com";
 
@@ -86,7 +86,7 @@ describe("the wall", () => {
     // A title, one sentence and the button: what the plan brings waits behind the ⓘ beside the title.
     expect(card().querySelector(".rq__title b")?.textContent).toBe(KEPT);
     expect([...card().querySelectorAll("p:not(.rq__title)")].map((p) => p.textContent)).toEqual([
-      "Respondo aqui quando o workspace tiver um plano do agentes.chat.",
+      "Respondo aqui quando o workspace tiver um plano do KeepMind OS.",
     ]);
     const about = within(card()).getByRole("button", { name: `Sobre ${KEPT}` });
     expect(about.closest(".rq__title")).toBeTruthy();
@@ -114,7 +114,7 @@ describe("the wall", () => {
     const state = held(seedState({ aiStatus: noAi(ADA_ID) }), HOLD, "member");
     state.messages.push(wall());
     await open(state);
-    expect(card().textContent).toContain("Respondo aqui quando um admin resolver o plano do agentes.chat.");
+    expect(card().textContent).toContain("Respondo aqui quando um admin resolver o plano do KeepMind OS.");
     expect(card().querySelector(".ac-btn")).toBeNull();
   });
 
@@ -147,7 +147,7 @@ describe("the wall", () => {
     state.messages.push(wall());
     await open(state);
     expect(card().querySelector(".rq__note")?.textContent).toBe(
-      "Respondo aqui quando o pagamento do plano do agentes.chat passar.",
+      "Respondo aqui quando o pagamento do plano do KeepMind OS passar.",
     );
     expect(within(card()).getByRole("button", { name: "Atualizar o pagamento" })).toBeTruthy();
   });
@@ -259,7 +259,7 @@ describe("what stays out of reach on a hold", () => {
     await open(held(seedState()), "settings/keys");
     expect(screen().queryByRole("button", { name: "Trocar a chave" })).toBeNull();
     expect(screen().getByRole("button", { name: "Apagar" })).toBeTruthy();
-    expect(document.body.textContent).toContain("As chaves de API abrem com o plano do agentes.chat");
+    expect(document.body.textContent).toContain("As chaves de API abrem com o plano do KeepMind OS");
   });
 
   test("Membros offers no invitation link that would open on a refusal", async () => {
@@ -329,7 +329,7 @@ describe("Lodi's DM on a hold", () => {
     ]);
     expect(count()).toBe("0 de 4");
     const plan = row("Ligue o time.");
-    expect(plan.textContent).toContain("Com um plano do agentes.chat, os agentes começam a trabalhar.");
+    expect(plan.textContent).toContain("Com um plano do KeepMind OS, os agentes começam a trabalhar.");
     expect(row("Conecte uma IA.").textContent).toContain("É o passo seguinte ao plano.");
     for (const waits of ["Conecte os apps do trabalho.", "Chame quem trabalha com você."])
       expect(row(waits).textContent).toContain("Abre com o plano.");

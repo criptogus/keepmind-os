@@ -278,14 +278,14 @@ describe("Configurações → Importar e exportar", () => {
     expect(steps.map((li) => (li.querySelector(".apps-step > span") ?? li).textContent)).toEqual([
       "Na conversa com o seu bot, mande:",
       "Clique em Add it e depois em Authorize.",
-      "Entre com sua conta do agentes.chat na página que abrir e escolha Criar e editar agentes, rotinas e skills.",
+      "Entre com sua conta do KeepMind OS na página que abrir e escolha Criar e editar agentes, rotinas e skills.",
       "Na conversa, digite @ e escolha agentes.",
       "Cole este pedido no app:",
     ]);
     expect([...mcp.querySelectorAll(".machine-command__code")].map((c) => c.textContent)).toEqual([
       `Add a custom MCP server called agentes at ${SERVER_URL}`,
     ]);
-    const prompt = `Use o servidor MCP do agentes.chat que você acabou de conectar (${SERVER_URL}) para trazer o que você tem para o agentes.chat. Primeiro chame import_summary para ver o que já existe lá e não duplicar nada. Depois, para cada agente, instrução, skill e rotina que você tem, crie o equivalente com create_agent, create_skill e create_routine, e guarde o que cada agente deve lembrar com add_memory.`;
+    const prompt = `Use o servidor MCP do KeepMind OS que você acabou de conectar (${SERVER_URL}) para trazer o que você tem para o KeepMind OS. Primeiro chame import_summary para ver o que já existe lá e não duplicar nada. Depois, para cada agente, instrução, skill e rotina que você tem, crie o equivalente com create_agent, create_skill e create_routine, e guarde o que cada agente deve lembrar com add_memory.`;
     expect((within(mcp).getByLabelText("Pedido para o seu app de IA") as HTMLTextAreaElement).value).toBe(prompt);
     await click(within(mcp).getByRole("button", { name: "Copiar o pedido" }), 2);
     expect(writes).toEqual([prompt]);
@@ -325,7 +325,7 @@ describe("Configurações → Importar e exportar", () => {
     expect(within(mcp).getByText(SERVER_URL)).toBeTruthy();
     expect(mcp.textContent).toContain("Não dá para adicionar pelo app do celular.");
     expect(mcp.textContent).toContain(
-      "Entre com sua conta do agentes.chat na página que abrir e escolha Criar e editar agentes, rotinas e skills.",
+      "Entre com sua conta do KeepMind OS na página que abrir e escolha Criar e editar agentes, rotinas e skills.",
     );
   });
 
@@ -341,7 +341,7 @@ describe("Configurações → Importar e exportar", () => {
     expect(words()).toEqual([
       "Cole em ~/.hermes/config.yaml:",
       "Para entrar, rode hermes mcp login agentes.",
-      "Entre com sua conta do agentes.chat na página que abrir e escolha Criar e editar agentes, rotinas e skills.",
+      "Entre com sua conta do KeepMind OS na página que abrir e escolha Criar e editar agentes, rotinas e skills.",
       "Depois digite /reload-mcp na conversa.",
       "Cole este pedido no app:",
     ]);
@@ -548,7 +548,7 @@ describe("Configurações → Importar e exportar", () => {
     }
   });
 
-  test("agentes.chat, with one other workspace on this server: a link to its export instead of the path", async () => {
+  test("KeepMind OS, with one other workspace on this server: a link to its export instead of the path", async () => {
     const state = seedState();
     state.me?.organizations.push({ id: "org-north", name: "Estúdio Norte", role: "owner", showActivity: true });
     await go(state);

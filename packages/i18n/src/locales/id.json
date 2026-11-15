@@ -15213,7 +15213,7 @@
     },
     "telemetry": {
       "title": "Statistik pemakaian",
-      "label": "Kirim statistik pemakaian anonim ke KeepMind OS",
+      "label": "Kirim statistik pemakaian anonim ke agentes.chat",
       "help": "Angka seperti jumlah orang, agen, ukuran mesin, token AI yang terpakai, dan berapa banyak data yang dikirim dan diterima browser agen. Tidak pernah pesan, file, nama, atau situs.",
       "envOff": "Dimatikan di pengaturan server ini (TELEMETRY=off).",
       "envOffDesktop": "Dimatikan di aplikasi KeepMind OS di komputer server ini (Preferensi › Server).",
