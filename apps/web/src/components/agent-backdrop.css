@@ -1,0 +1,48 @@
+.km-agent-backdrop {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #111111;
+}
+.km-agent-backdrop svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.km-agent-backdrop__fold {
+  fill: #1d2119;
+}
+.km-agent-backdrop__flow {
+  fill: none;
+  stroke: #3a4828;
+  stroke-width: 1;
+  transform-origin: center;
+  animation: km-agent-current 18s ease-in-out infinite alternate paused;
+}
+.km-agent-backdrop__accent {
+  stroke: #c4ff3d;
+  stroke-width: 1.5;
+  stroke-dasharray: 56 660;
+  stroke-dashoffset: -220;
+  opacity: 0.7;
+}
+.km-agent-backdrop[data-moving] .km-agent-backdrop__flow {
+  animation-play-state: running;
+}
+.km-agent-backdrop[data-busy] .km-agent-backdrop__flow {
+  animation-duration: 10s;
+}
+@keyframes km-agent-current {
+  from {
+    transform: translate(-14px, -5px) rotate(-3deg);
+  }
+  to {
+    transform: translate(14px, 5px) rotate(3deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .km-agent-backdrop__flow {
+    animation: none;
+  }
+}

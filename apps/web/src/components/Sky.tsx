@@ -32,6 +32,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AgentAvatar } from "@/components/AgentAvatar";
+import { AgentBackdrop } from "@/components/AgentBackdrop";
 import { useOrg } from "@/components/org-context";
 import { useCloseAfterUse } from "@/hooks/useCloseAfterUse";
 import { useDirectory } from "@/hooks/useDirectory";
@@ -182,27 +183,11 @@ export function ChannelWelcome({
 /** The faces and pills on a sky, which its pixel agents keep clear of (`SkyOptions.clear`). */
 type Clear = SkyOptions["clear"];
 
-/**
- * The agent page's cover: only the light tones of the agent's color, fading into the page at the bottom, with a pool
- * of light behind its face so the face's own dither never melts into the sky's. Pixels are 2px and the few pixel
- * agents are all faint, so the cover stays calm next to the page's text; faster while it works. `clear`: its face
- * (first) and the buttons on it; the pool follows the face, else sits at `at` (0..1 across) near the bottom.
- */
-export function AgentCover({
-  color,
-  busy,
-  at = 0.1,
-  clear,
-}: {
-  color: AgentColor;
-  busy: boolean;
-  at?: number;
-  clear?: Clear;
-}) {
-  const host = useRef<HTMLDivElement>(null);
+/** The shared KeepMind stage, with a gentle increase in motion while the agent works. */
+export function AgentCover({ busy }: { color: AgentColor; busy: boolean; at?: number; clear?: Clear }) {
   return (
-    <div className="agp-cover__sky" data-busy={busy || undefined} aria-hidden="true" ref={host}>
-      <PixelSky options={agentCoverOptions(color, { busy, clear, pool: facePool(host, clear, at) })} />
+    <div className="agp-cover__sky" data-busy={busy || undefined} aria-hidden="true">
+      <AgentBackdrop busy={busy} />
     </div>
   );
 }
@@ -281,30 +266,18 @@ export function agentCoverOptions(
   };
 }
 
-/**
- * The banner of a profile card: an agent's cover sky in its color (faster while it works, no sprites in so short a
- * band), or a person's soft sky fading into the card.
- */
+/** Agents share the KeepMind stage; people retain their personal profile treatment. */
 export function ProfileSky({ color, person, busy = false }: { color: AgentColor; person?: boolean; busy?: boolean }) {
+  if (!person) return <AgentBackdrop busy={busy} />;
   return (
     <PixelSky
-      options={
-        person
-          ? {
-              pixel: 4,
-              surface: "--raised",
-              palette: (bg) => softTones(color, bg),
-              light: 0.04,
-              base: (u, v, tt) => Math.max(0, 1 - v * 0.9) * (0.5 + 0.3 * u + 0.06 * S(u * 7 + tt * 0.5)),
-            }
-          : {
-              pixel: 4,
-              palette: agentTones(color),
-              speed: busy ? 2.6 : 1,
-              light: 0,
-              base: (u, v, tt) => 0.86 - 0.22 * u - 0.46 * v + 0.06 * S(u * 5 + tt * 0.6),
-            }
-      }
+      options={{
+        pixel: 4,
+        surface: "--raised",
+        palette: (bg) => softTones(color, bg),
+        light: 0.04,
+        base: (u, v, tt) => Math.max(0, 1 - v * 0.9) * (0.5 + 0.3 * u + 0.06 * S(u * 7 + tt * 0.5)),
+      }}
     />
   );
 }
