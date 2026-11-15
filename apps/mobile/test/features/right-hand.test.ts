@@ -296,8 +296,9 @@ test("its wave moves, then ends on its still frame, so stopping shows no jump", 
 });
 
 test("its profile tells where its name comes from only while it keeps it, and only for the right hand", () => {
-  expect(tellsNameStory(lodi)).toBe(true);
+  expect(tellsNameStory({ ...lodi, name: "Kivo" })).toBe(true);
+  expect(tellsNameStory(lodi)).toBe(false);
   expect(tellsNameStory({ ...lodi, name: "Tuca" })).toBe(false);
-  expect(tellsNameStory(agent({ id: "a-other", name: "Lodi" }))).toBe(false);
+  expect(tellsNameStory(agent({ id: "a-other", name: "Kivo" }))).toBe(false);
   expect(tellsNameStory(undefined)).toBe(false);
 });
