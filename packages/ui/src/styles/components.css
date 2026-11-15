@@ -2211,9 +2211,10 @@ html:not([data-pointer]) .ac-chip--button:focus-visible {
   white-space: nowrap;
 }
 
-/* Logo: the agent mark + the wordmark set in Onest */
+/* Keep the brand mark and its wordmark on one line at every size. */
 .ac-logo {
   display: inline-flex;
+  white-space: nowrap;
   align-items: center;
   gap: 0.35em;
   /* Funnel Display light (the landing's headings); the app falls back to its sans. */

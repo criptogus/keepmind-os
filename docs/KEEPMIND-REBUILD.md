@@ -92,3 +92,11 @@ Há um caminho offline de backup consistente e importação para uma base isolad
 
 
 O executor de workflows migrados já usa a fila nativa, com estado persistente por etapa, cotas mensais e prazo conservado nas retomadas. Os saldos e contagens do legado são carregados sem duplicação. A primeira execução suportada é somente texto via modelo de API; ferramentas e brains de computador são bloqueados. Drafts e políticas importados permanecem desabilitados, e a validação de execução usa provedor simulado. A troca definitiva e a ativação por interface ainda não foram realizadas.
+
+## Main integration validation
+
+The imported upstream test suite now distinguishes KeepMind product labels from upstream attribution, protocol identifiers and services that still belong to agentes.chat. Telemetry settings name the actual upstream recipient in both the shared UI and desktop UI. Desktop update tests use keepmind.io and explicitly reject upstream installer URLs; this does not enable native updating or publish an installer.
+
+Web assets use the expected favicon/touch-icon sizes. The fallback page follows KeepMind branding. Logo text stays on one line, the narrow legal header retains its accessible brand mark beside the language selector, the boot mark scales to the viewport, and permission icons align with the first text line. Onboarding progress can wrap between its two facts.
+
+The geometry check still tests squeezed UI words. Its long-token case now distinguishes an unbroken identifier in a readable column (at least 160 px) from the same identifier squeezed into a 40 px column; both fixtures run in its browser self-test. This preserves complete pasted text and filenames without treating their necessary wrapping as a layout defect. No geometry baseline entries were added. Queueing tests synchronize at the actual claimed-run event, retain the one-run/one-answer assertions, and no longer depend on polling a short-lived running state.

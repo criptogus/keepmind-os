@@ -509,7 +509,7 @@ export function BootSplash() {
         }}
       />
       <div className="sky-boot__in" ref={mark}>
-        <Logo size={40} />
+        <Logo size={40} style={{ fontSize: "clamp(24px, 9vw, 40px)" }} />
         <span>{t("sky.boot")}</span>
       </div>
     </div>

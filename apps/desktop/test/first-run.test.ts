@@ -46,7 +46,7 @@ describe("which screen", () => {
     expect(INSTALL_COMMAND).toBe("curl -fsSL https://agentes.chat/install | sh");
   });
 
-  test("Esc: back a screen, or the window closes; never while agentes.chat is being set up here", () => {
+  test("Esc: back a screen, or the window closes; never while KeepMind OS is being set up here", () => {
     expect(escapeAction(2, false)).toBe("back");
     expect(escapeAction(0, false)).toBe("close");
     expect(escapeAction(2, true)).toBe("stay");
@@ -68,7 +68,7 @@ describe("discovery", () => {
     expect(foundServers(candidates, [])).toEqual([]);
   });
 
-  test("one that answered with a problem is listed with it, never hidden; one that isn't agentes.chat isn't", () => {
+  test("one that answered with a problem is listed with it, never hidden; one that isn't KeepMind OS isn't", () => {
     const mini = "https://agentes-mini.tail1234.ts.net";
     const candidates = [
       { server: "http://127.0.0.1:4310", where: "here" as const },
@@ -110,7 +110,7 @@ describe("a typed address", () => {
     });
   });
 
-  test("this computer's own agentes.chat opens at once at the address people use, never a sheet about another host", () => {
+  test("this computer's own KeepMind OS opens at once at the address people use, never a sheet about another host", () => {
     const own = ownAddresses({ url: "http://127.0.0.1:4310", publicUrl: BOX });
     expect(own).toEqual(["http://127.0.0.1:4310", BOX]);
     expect(connectOutcome("http://127.0.0.1:4310", ok(BOX), own)).toEqual({ kind: "use", server: BOX });
@@ -239,7 +239,7 @@ describe("the menu bar and the labels Rust shows", () => {
         // Another server's new notifications (ADR 0154): Rust fills the count in.
         expect(labels.workspaceNewsMany).toContain("{count}");
         expect(labels.workspaceNewsOne).not.toContain("{count}");
-        expect(labels.serversCloud).toBe("agentes.chat");
+        expect(labels.serversCloud).toBe("KeepMind OS");
       }
     }
   });

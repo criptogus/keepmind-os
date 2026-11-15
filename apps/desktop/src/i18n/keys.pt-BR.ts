@@ -247,7 +247,7 @@ export const desktopPtBR = {
     approveStop: "Parar de esperar",
     openTailscale: "Abrir o Tailscale",
     getTailscale: "Baixar o Tailscale",
-    usage: "Enviar estatísticas de uso anônimas ao KeepMind OS",
+    usage: "Enviar estatísticas de uso anônimas ao agentes.chat",
     usageText:
       "Contagens como pessoas, agentes, tamanho das máquinas, tokens de IA usados e o volume de dados que os navegadores dos agentes enviam e recebem. Nunca mensagens, arquivos, nomes ou sites.",
     start: "Começar",

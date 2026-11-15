@@ -177,7 +177,7 @@ test("Sign in by address: what it finds on the Tailscale network by Tailscale's 
       row.querySelector(".dk-logo--lg svg")?.getAttribute("class"),
     ]);
     expect(rows).toEqual([
-      ["agentes.chat is running here", "ac-icon"],
+      ["KeepMind OS is running here", "ac-icon"],
       ["On your team's network", "dk-tailscale"],
     ]);
   } finally {

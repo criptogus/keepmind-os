@@ -131,7 +131,7 @@ describe("Preferences: a setting's explanation behind its ⓘ", () => {
       },
     ));
 
-  test("Servers: what the usage switch sends and that changing it restarts agentes.chat sit behind its ⓘ", () =>
+  test("Servers: what the usage switch sends and that changing it restarts KeepMind OS sit behind its ⓘ", () =>
     pane(
       "here",
       <Servers />,
@@ -141,13 +141,13 @@ describe("Preferences: a setting's explanation behind its ⓘ", () => {
       (el) => {
         expect(row(el, "Send anonymous usage statistics to agentes.chat")).toEqual({
           title: "Send anonymous usage statistics to agentes.chat",
-          hint: "Counts such as people, agents, machine sizes, AI tokens used and how much data the agents' browsers send and receive. Never messages, files, names or sites. Changing it restarts agentes.chat for a moment.",
+          hint: "Counts such as people, agents, machine sizes, AI tokens used and how much data the agents' browsers send and receive. Never messages, files, names or sites. Changing it restarts KeepMind OS for a moment.",
           switch:
-            "Counts such as people, agents, machine sizes, AI tokens used and how much data the agents' browsers send and receive. Never messages, files, names or sites. Changing it restarts agentes.chat for a moment.",
+            "Counts such as people, agents, machine sizes, AI tokens used and how much data the agents' browsers send and receive. Never messages, files, names or sites. Changing it restarts KeepMind OS for a moment.",
           line: null,
         });
         expect(el.textContent).not.toContain("nothing is sent");
-        expect(el.querySelector(".dk-phead .dk-lead")?.textContent).toBe("Where this app opens agentes.chat.");
+        expect(el.querySelector(".dk-phead .dk-lead")?.textContent).toBe("Where this app opens KeepMind OS.");
       },
     ));
 
@@ -229,7 +229,7 @@ describe("Preferences: a setting's explanation behind its ⓘ", () => {
           },
           {
             title: "Commands",
-            hint: "Tests, builds and other Terminal commands. Each one shows in Activity. Commands run as you. They can read anything you can on this Mac, agentes.chat's database and keys included. Turn them on only for workspaces you trust with all of it.",
+            hint: "Tests, builds and other Terminal commands. Each one shows in Activity. Commands run as you. They can read anything you can on this Mac, KeepMind OS's database and keys included. Turn them on only for workspaces you trust with all of it.",
           },
           {
             title: "Browser",
@@ -293,7 +293,7 @@ describe("Preferences: a setting's explanation behind its ⓘ", () => {
         await until(() => document.querySelector('[role="dialog"]'));
         const dialog = document.querySelector('[role="dialog"]') as HTMLElement;
         expect(dialog.textContent).toContain("Turn on Commands for Horizonte?");
-        expect(dialog.textContent).toContain("agentes.chat's database and keys included");
+        expect(dialog.textContent).toContain("KeepMind OS's database and keys included");
         const turnOn = [...dialog.querySelectorAll("button")].find((b) => b.textContent === "Turn on");
         await act(async () => turnOn?.click());
         await until(() => switchOf("Horizonte").getAttribute("aria-checked") === "true");
@@ -397,7 +397,7 @@ describe("Preferences: a setting's explanation behind its ⓘ", () => {
     ));
 
   test("Updates: no lead; Update and reopen alone, and the manual way keeps what stays", async () => {
-    const latest = { version: "9.9.9", url: "https://app.agentes.chat/api/desktop/download/9.9.9/agentes.dmg" };
+    const latest = { version: "9.9.9", url: "https://keepmind.io/api/desktop/download/9.9.9/agentes.dmg" };
     const update: UpdateCheck = {
       state: { latest, available: true, required: false },
       checkedAt: null,
@@ -470,7 +470,7 @@ describe("Preferences: a setting's explanation behind its ⓘ", () => {
   });
 
   test("Updates: the download with its bar and Cancel, which drops it; once whole, Installing… with no Cancel", async () => {
-    const latest = { version: "9.9.9", url: "https://app.agentes.chat/api/desktop/download/9.9.9/agentes.dmg" };
+    const latest = { version: "9.9.9", url: "https://keepmind.io/api/desktop/download/9.9.9/agentes.dmg" };
     const update: UpdateCheck = {
       state: { latest, available: true, required: false },
       checkedAt: null,

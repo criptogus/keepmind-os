@@ -769,6 +769,14 @@
     midword(out) {
       for (const el of document.body.querySelectorAll("*")) {
         if (!ownText(el) || !seen(el) || el.closest("svg,pre,code,table") || style(el).hyphens === "auto") continue;
+        // Full identifiers, pasted keys and unspaced user text must wrap without being truncated.
+        // A readable column is not squeezed merely because one token spans several lines. Keep
+        // narrow boxes checked, including long tokens beside controls.
+        if (
+          [...el.childNodes].some((n) => n.nodeType === 3 && /\S{40,}/u.test(n.textContent ?? "")) &&
+          el.getBoundingClientRect().width >= 160
+        )
+          continue;
         let count = 0;
         const tops = new Set();
         for (const n of el.childNodes) {

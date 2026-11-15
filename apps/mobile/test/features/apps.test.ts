@@ -122,7 +122,7 @@ describe("Apps de IA on the phone (ADR 0119)", () => {
     });
     const ready = aiAppImport(pt, open, { state: "active", reason: null });
     expect(ready?.available && ready.prompt).toStartWith(
-      "Use o servidor MCP do agentes.chat que você acabou de conectar (https://app.agentes.chat/mcp)",
+      "Use o servidor MCP do KeepMind OS que você acabou de conectar (https://app.agentes.chat/mcp)",
     );
     // The phone shows the request itself, selectable, not only a Copiar button.
     const card = readFileSync(

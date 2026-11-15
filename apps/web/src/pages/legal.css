@@ -68,3 +68,9 @@
     padding: 16px 16px 0;
   }
 }
+
+@media (max-width: 384px) {
+  .legal__bar .ac-logo > :not(.ac-logo__mark) {
+    display: none;
+  }
+}

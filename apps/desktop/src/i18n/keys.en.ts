@@ -249,7 +249,7 @@ export const desktopEn = {
     approveStop: "Stop waiting",
     openTailscale: "Open Tailscale",
     getTailscale: "Get Tailscale",
-    usage: "Send anonymous usage statistics to KeepMind OS",
+    usage: "Send anonymous usage statistics to agentes.chat",
     usageText:
       "Counts such as people, agents, machine sizes, AI tokens used and how much data the agents' browsers send and receive. Never messages, files, names or sites.",
     start: "Start",

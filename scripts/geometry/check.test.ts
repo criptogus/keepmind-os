@@ -120,6 +120,8 @@ describe("geometry check", () => {
     expect(rules).toContain('".ac-facts__value, .ac-factline__fact"');
     // A word broken at its syllables in a box that hyphenates (a narrow calendar item's title) is no midword.
     expect(fixture).toContain("good-midword--hyphens");
+    // Long user identifiers wrap in readable columns but remain offenders when controls squeeze them.
+    for (const twin of ["good-midword--identifier", "bad-midword--identifier"]) expect(fixture).toContain(twin);
     // The face on a menu's top that changes the photo (`MenuFace`) is no row: neither its height nor its room.
     for (const twin of ["good-menuitem--face", "good-rim--face"]) expect(fixture).toContain(twin);
     // A chip field grown to a second line of tokens is still the stack's height on its first.
