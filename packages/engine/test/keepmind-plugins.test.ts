@@ -263,3 +263,87 @@ test("chat can define a custom plugin and typed actions beyond the CRM template"
     (await call(ctx, "propose_plugin", { manifest: { ...manifest, fields: manifest.fields.slice(0, 1) } })).isError,
   ).toBe(true);
 });
+
+test("one-time approval grants bounded background record operations and revocation is immediate", async () => {
+  f = await setup();
+  const ctx = await context();
+  const draft = JSON.parse((await call(ctx, "propose_plugin", { template: "autonomous_crm" })).content);
+  const activation = { id: draft.id, digest: draft.digest, revision: draft.revision, agentIds: [ctx.agentId] };
+  expect((await call(ctx, "activate_plugin", activation)).isError).toBe(true);
+  expect((await call({ ...ctx, approved: true }, "activate_plugin", activation)).isError).toBeUndefined();
+  if (!ctx.runId) throw new Error("Expected persisted run");
+  await f.db.update(schema.agentRuns).set({ background: true }).where(eq(schema.agentRuns.id, ctx.runId));
+  const unattended = { ...ctx, background: true };
+  await grantScopes(
+    f.db,
+    f.org.id,
+    f.agent.id,
+    [
+      { scope: "memory:write", connectionId: null },
+      { scope: "context:read", connectionId: null },
+    ],
+    f.owner.id,
+  );
+  const gateway = createToolGateway({ sources: [source] });
+  const automatic = await gateway.invoke(unattended, {
+    name: "plugin_crm_relacionamentos_cadastrar",
+    input: { requestId: "gateway-1", values: { nome: "Background lead" } },
+    toolUseId: "background-crm",
+  });
+  expect(automatic.type).toBe("result");
+  if (automatic.type !== "result") throw new Error(JSON.stringify(automatic));
+  expect(automatic.output.isError).toBeUndefined();
+  const first = JSON.parse(
+    (
+      await call(unattended, "plugin_crm_relacionamentos_cadastrar", {
+        requestId: "routine-1",
+        values: { nome: "Acme", proximo_contato: "2020-01-01", fonte: "meeting:123" },
+      })
+    ).content,
+  );
+  expect(first.revision).toBe(1);
+  expect((await call(unattended, "propose_plugin", { template: "autonomous_crm" })).isError).toBe(true);
+  const result = await call(unattended, "plugin_crm_relacionamentos_atualizar", {
+    id: first.id,
+    revision: 1,
+    values: { notas: "Confirmed in meeting:123" },
+  });
+  const updated = JSON.parse(result.content);
+  expect(updated.history[0].values.nome).toBe("Acme");
+  expect(updated.history[0].runId).toBe(ctx.runId);
+  const review = JSON.parse((await call(unattended, "plugin_crm_relacionamentos_priorizar", {})).content);
+  expect(review.items[0].reasons).toContain("overdue");
+  const filtered = JSON.parse(
+    (await call(unattended, "plugin_crm_relacionamentos_priorizar", { query: "acme", limit: 1 })).content,
+  );
+  expect(filtered.items.map((item: { id: string }) => item.id)).toEqual([first.id]);
+  expect(filtered.matchingAttentionCount).toBe(1);
+  expect(filtered.nextOffset).toBeNull();
+  const interaction = {
+    id: first.id,
+    revision: 2,
+    requestId: "meeting-123",
+    note: "Customer requested a proposal",
+    source: "meeting:123",
+    occurredAt: "2026-11-14T15:00:00-03:00",
+  };
+  const logged = JSON.parse(
+    (await call(unattended, "plugin_crm_relacionamentos_registrar_interacao", interaction)).content,
+  );
+  expect(logged.interactions).toHaveLength(1);
+  expect(logged.interactions[0].runId).toBe(ctx.runId);
+  const retry = JSON.parse(
+    (await call(unattended, "plugin_crm_relacionamentos_registrar_interacao", interaction)).content,
+  );
+  expect(retry.revision).toBe(logged.revision);
+  expect(
+    (await call(unattended, "plugin_crm_relacionamentos_registrar_interacao", { ...interaction, note: "Changed" }))
+      .isError,
+  ).toBe(true);
+  const held = (await source.tools(unattended)).find((t) => t.name === "plugin_crm_relacionamentos_buscar");
+  if (!held) throw new Error("Expected assigned CRM tool");
+  expect((await held.execute({}, { ...unattended, runId: crypto.randomUUID() })).isError).toBe(true);
+  const admin = await context();
+  await call(admin, "disable_plugin", { id: draft.id });
+  expect((await held.execute({}, unattended)).isError).toBe(true);
+});

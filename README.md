@@ -2,6 +2,8 @@
 
 Reconstruction of KeepMind OS on the agentes.chat engine, for shared teams at **keepmind.io**. This branch is under validation and is not the desktop 0.1.22 update channel.
 
+- [KeepMind developer quickstart](docs/KEEPMIND-QUICKSTART.md)
+- [Roadmap and acceptance gates](docs/KEEPMIND-ROADMAP.md)
 - [Architecture and migration status](docs/KEEPMIND-REBUILD.md)
 - [Shared-server deployment](deploy/keepmind/compose.yml)
 - Existing KeepMind data and the installed desktop app are unchanged.

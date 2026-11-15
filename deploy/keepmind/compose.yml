@@ -24,7 +24,7 @@ services:
       DATABASE_URL: postgres://keepmind:${POSTGRES_PASSWORD}@postgres:5432/keepmind
       PUBLIC_URL: https://keepmind.io
       APP_VERSION: 0.2.0-alpha.1
-      SOURCE_URL: https://github.com/criptogus/keepmind-os/tree/feat/keepmind-os-rebuild
+      SOURCE_URL: https://github.com/criptogus/keepmind-os
       FILES_DIR: /data/files
       ALLOW_SIGNUP: "false"
       INSTALL_OWNER_TOKEN_HASH: ${INSTALL_OWNER_TOKEN_HASH:?Set the first-owner claim hash}
