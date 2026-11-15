@@ -1,0 +1,4 @@
+# Synthetic, incomplete PEM fixtures imported from the upstream test suite.
+# Exact import-commit/file/rule/line fingerprints only; new occurrences remain scanned.
+466fa0a99b4e3d573f2e62ce7565fcddf2b15309:packages/config/src/index.test.ts:private-key:324
+466fa0a99b4e3d573f2e62ce7565fcddf2b15309:packages/engine/test/run-policy.test.ts:private-key:628
