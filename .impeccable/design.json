@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-14T21:27:30.218015+00:00",
+  "generatedAt": "2026-11-15T12:05:33.289202+00:00",
   "title": "Design System: KeepMind OS",
   "extensions": {
     "colorMeta": {
@@ -723,6 +723,26 @@
           "oklch(84% 0.00761 106.65)",
           "oklch(95% 0.00761 106.65)"
         ]
+      },
+      "companion-fallback": {
+        "role": "neutral",
+        "displayName": "Companion fallback charcoal",
+        "canonical": "#333630"
+      },
+      "companion-face": {
+        "role": "neutral",
+        "displayName": "Companion face charcoal",
+        "canonical": "#181b16"
+      },
+      "companion-tile-light": {
+        "role": "neutral",
+        "displayName": "Companion light tile",
+        "canonical": "#e9ece4"
+      },
+      "companion-tile-dark": {
+        "role": "neutral",
+        "displayName": "Companion dark tile",
+        "canonical": "#22251f"
       }
     },
     "typographyMeta": {
@@ -823,6 +843,21 @@
         "name": "dur-panel",
         "value": "240ms",
         "purpose": "Existing source motion token; not a visual validation claim."
+      },
+      {
+        "name": "companion-active-interval",
+        "value": "40ms",
+        "purpose": "Shared visible-avatar loop while working or reacting."
+      },
+      {
+        "name": "companion-rest-interval",
+        "value": "80ms",
+        "purpose": "Shared visible-avatar loop at rest."
+      },
+      {
+        "name": "companion-reaction-duration",
+        "value": "1.6s",
+        "purpose": "Existing feedback face; reduced motion preserves expression without hop or turn."
       }
     ],
     "breakpoints": [
@@ -892,26 +927,42 @@
       "description": "Extracted representative primitive; application behavior remains in the source component.",
       "html": "<section class=\"ds-card\">Workspace details</section>",
       "css": ".ds-card{padding:var(--space-4,16px);font:15px/22px var(--font-sans,sans-serif);color:var(--ink,#151514);border-radius:var(--radius-section,20px) var(--radius-section,20px) var(--radius-section,20px) 4px;background:linear-gradient(180deg,var(--card-face-top,var(--surface-raised,#fff)),var(--surface-raised,#fff) 64px);box-shadow:var(--card-shadow,0 0 0 1px rgba(23,23,22,.1))}"
+    },
+    {
+      "name": "Companion fallback silhouette",
+      "kind": "custom",
+      "refersTo": "companion-fallback",
+      "description": "Exact source fallback geometry and color, normalized to a 100px canvas. The production renderer uses the local atlas and live eyes; this snippet previews only its loading/error silhouette.",
+      "html": "<svg class=\"ds-companion-fallback\" viewBox=\"0 0 100 100\" role=\"img\" aria-label=\"Companion loading silhouette\"><rect x=\"14\" y=\"10\" width=\"72\" height=\"80\" rx=\"30\" /></svg>",
+      "css": ".ds-companion-fallback{width:100px;height:100px}.ds-companion-fallback rect{fill:#333630}"
     }
   ],
   "narrative": {
-    "northStar": "",
-    "overview": "Preserve the incumbent KeepMind K mark and black/lime identity while using the upstream component kit. The workspace is a legible, compact working environment for objectives, execution, approvals and evidence. Brand accents identify action without replacing the semantic meaning of status, access controls or provider identities.",
+    "northStar": "KeepMind companions at work",
+    "overview": "Preserve the incumbent KeepMind K mark and black/lime identity while using the upstream component kit. The workspace is a legible, compact working environment for objectives, execution, approvals and evidence. Brand accents identify action without replacing the semantic meaning of status, access controls or provider identities.\n\nThe approved abstract companion family extends the existing operating UI rather than redesigning whole pages. Kivo, Luma, Nexo and Faro add matte charcoal bodies and expressive faces; recognizing work states takes priority over decoration. The original K mark, black/lime identity and Onest typography remain unchanged.",
     "keyCharacteristics": [
       "Original K mark and KeepMind OS wordmark.",
       "Warm white light surfaces and charcoal dark surfaces.",
       "Lime primary actions with black labels; theme-specific agent text.",
-      "Existing responsive controls, keyboard focus and semantic states."
+      "Existing responsive controls, keyboard focus and semantic states.",
+      "Original abstract companions with live expressions and preserved user appearances."
     ],
     "rules": [
       {
         "name": "The Semantic Accent Rule",
         "body": "Use action tokens for primary actions and agent tokens for agent emphasis; retain the separate meaning of warning, danger and provider identity.",
         "section": "colors"
+      },
+      {
+        "name": "The Work-State Rule",
+        "body": "Preserve readable state, expression, accessible naming and user appearance when using companion artwork; the family never replaces status text, evidence or permission controls.",
+        "section": "components"
       }
     ],
     "dos": [
       "Do retain the original K mark and semantic action tokens.",
+      "Do reuse the local companion atlas and shared live renderer for agent identity.",
+      "Do preserve custom agent names, saved eye styles, accessories and reduced-motion behavior.",
       "Do preserve capabilities, evidence, approvals and permission boundaries when simplifying a surface.",
       "Do use the final CSS cascade and mirrored tokens when adding screens.",
       "Do retain required upstream attribution in About."

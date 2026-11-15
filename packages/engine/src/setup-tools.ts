@@ -1417,7 +1417,7 @@ function rightHandCards(deps: { pubsub?: PubSub }): ToolDefinition[] {
                   ? "Weekly card: off."
                   : `Weekly card: every ${WEEK_DAYS[next.day]} at ${next.weekHour}:00 (${next.timezone}), when there is something to say.`,
               ...ownSwitches.map((o) => `${o.name}: ${next[o.pref] ? "off" : "on"}.`),
-              "They can change each in Settings › Lodi.",
+              "They can change each in Settings › Kivo.",
             ]
               .filter(Boolean)
               .join(" "),

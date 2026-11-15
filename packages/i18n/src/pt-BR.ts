@@ -989,7 +989,7 @@ export const ptBR = {
       done: "Tudo certo",
     },
     /**
-     * The blue rail with Lodi (ADR 0162): its steps, Lodi's line on each, the preview, the team step's question and
+     * The blue rail with Kivo (ADR 0162): its steps, Kivo's line on each, the preview, the team step's question and
      * import, the plan step and the AI step. `<key>Personal`: a personal workspace's words (ADR 0159).
      */
     flow: {
@@ -2347,7 +2347,7 @@ export const ptBR = {
       subSector: "Cada setor com seus agentes. {{name}} trabalha com todos.",
       workspace: "Workspace",
       responsible: "Responsáveis: {{names}}",
-      /** O Lodi ao lado do workspace, fora da linha de quem responde a quem. */
+      /** O Kivo ao lado do workspace, fora da linha de quem responde a quem. */
       lodi: "acompanha tudo com você",
       supervisor: "Supervisor: {{name}}",
       dragSector: "Arraste até um agente para os agentes deste setor responderem a ele",
@@ -2739,7 +2739,7 @@ export const ptBR = {
   },
   /**
    * O braço direito do time (ADR 0137): a linha fixa, a DM, o perfil, a página nas Configurações e os cards. O nome é
-   * dos admins (`{{name}}`); "Lodi" só por padrão.
+   * dos admins (`{{name}}`); "Kivo" só por padrão.
    */
   rightHand: {
     label: "seu braço direito",
@@ -2792,7 +2792,7 @@ export const ptBR = {
       model: "Modelo",
       message: "Mensagem",
       configure: "Configurar",
-      nameStory: "O nome vem de lodestar, a estrela que guia os navegantes.",
+      nameStory: "Kivo conecta suas ideias, coordena o trabalho e pede sua decisão quando precisa.",
     },
     saved: {
       workspace: "O {{name}} agora pensa com {{label}} para todo mundo sem plano próprio.",
@@ -19530,7 +19530,7 @@ export const ptBR = {
       sub: "Contabilidade, advocacia, consultoria",
       desc: "Para um escritório que agenda clientes, manda propostas e cobra.",
     },
-    /** The team's hello in #general once it can work (ADR 0162): Lodi's line, then each agent's. */
+    /** The team's hello in #general once it can work (ADR 0162): Kivo's line, then each agent's. */
     hello: {
       lodi: {
         starting: "Plano ativo. Meu computador já está iniciando. Vamos começar o trabalho.",

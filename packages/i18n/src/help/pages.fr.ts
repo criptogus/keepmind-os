@@ -435,7 +435,7 @@ export const helpFr: Partial<Record<HelpSlug, HelpDocument>> = {
             ],
           },
           "Une action dans la boîte mail de quelqu’un attend cette personne seule. Un nouvel accès pour un agent attend ceux qui gèrent les agents.",
-          "Lodi, votre bras droit, peut aussi approuver pour vous les nouveaux agents que d’autres agents proposent et les changements de modèle, de budget et de canaux d’un agent, seulement quand c’est vous qui l’avez demandé. Qui vous couvre et ce que Lodi approuve se choisissent dans **Paramètres\u00a0›\u00a0Vous\u00a0›\u00a0Approbations**.",
+          "Kivo, votre bras droit, peut aussi approuver pour vous les nouveaux agents que d’autres agents proposent et les changements de modèle, de budget et de canaux d’un agent, seulement quand c’est vous qui l’avez demandé. Qui vous couvre et ce que Kivo approuve se choisissent dans **Paramètres\u00a0›\u00a0Vous\u00a0›\u00a0Approbations**.",
         ],
       },
       {

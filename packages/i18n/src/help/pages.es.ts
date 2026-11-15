@@ -435,7 +435,7 @@ export const helpEs: Partial<Record<HelpSlug, HelpDocument>> = {
             ],
           },
           "Una acción en el correo de alguien espera solo a esa persona. Un acceso nuevo para un agente espera a quien gestiona agentes.",
-          "Lodi, tu mano derecha, también puede aprobar por ti los agentes nuevos que proponen otros agentes y los cambios de modelo, presupuesto y canales de un agente, solo cuando tú lo pediste. Quién te cubre y lo que aprueba Lodi se eligen en **Configuración\u00a0›\u00a0Tú\u00a0›\u00a0Aprobaciones**.",
+          "Kivo, tu mano derecha, también puede aprobar por ti los agentes nuevos que proponen otros agentes y los cambios de modelo, presupuesto y canales de un agente, solo cuando tú lo pediste. Quién te cubre y lo que aprueba Kivo se eligen en **Configuración\u00a0›\u00a0Tú\u00a0›\u00a0Aprobaciones**.",
         ],
       },
       {

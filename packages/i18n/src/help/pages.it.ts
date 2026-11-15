@@ -433,7 +433,7 @@ export const helpIt: Partial<Record<HelpSlug, HelpDocument>> = {
             ],
           },
           "Un’azione nella casella di posta di qualcuno aspetta solo quella persona. Un nuovo accesso per un agente aspetta chi gestisce gli agenti.",
-          "Lodi, il tuo braccio destro, può anche approvare per te i nuovi agenti proposti da altri agenti e le modifiche a modello, budget e canali di un agente, solo quando l’hai chiesto tu. Chi ti copre e cosa approva Lodi si scelgono in **Impostazioni\u00a0›\u00a0Tu\u00a0›\u00a0Approvazioni**.",
+          "Kivo, il tuo braccio destro, può anche approvare per te i nuovi agenti proposti da altri agenti e le modifiche a modello, budget e canali di un agente, solo quando l’hai chiesto tu. Chi ti copre e cosa approva Kivo si scelgono in **Impostazioni\u00a0›\u00a0Tu\u00a0›\u00a0Approvazioni**.",
         ],
       },
       {

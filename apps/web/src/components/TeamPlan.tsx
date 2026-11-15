@@ -710,7 +710,7 @@ export function TeamTemplatesDialog({
   const actions = useChannelActions();
   const held = usePlanHold() !== null;
   const lodi = dir.agents.find(isRightHand);
-  const name = lodi?.name ?? "Lodi";
+  const name = lodi?.name ?? "Kivo";
   const personal = isPersonal(org);
   const list = useTeamTemplates(org.id, i18n.language, open);
   const use = useApplyTeamTemplate(org.id);

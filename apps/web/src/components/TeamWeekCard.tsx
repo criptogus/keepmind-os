@@ -196,7 +196,7 @@ export function TeamWeekCardView({ message, card }: { message: Message; card: Te
                     line={text.line}
                     action={text.action}
                     proposal={proposals.find((p) => "proposalId" in row && p.id === row.proposalId)}
-                    doneText={teamWeekDoneText(t, row, lodi?.name ?? "Lodi")}
+                    doneText={teamWeekDoneText(t, row, lodi?.name ?? "Kivo")}
                     onApply={() => apply(row).catch(failed)}
                     onSkip={
                       skipsAlone(row)
