@@ -1,16 +1,12 @@
 <!-- install -->
-## Installing (first open)
+## Installing
 
-The desktop app is in beta: the Mac build isn't notarized by Apple yet and the Windows installer isn't signed by Microsoft, so the first open asks once. After that it opens and updates by itself.
+KeepMind OS is a pre-release of the new base. Automatic updates are disabled.
 
-**macOS**: drag agentes.chat to Applications and open it, click **Done**, then open **System Settings › Privacy & Security** and click **Open Anyway** (it shows up only right after you try to open the app, for about an hour). Confirm with Touch ID or your password.
+**macOS**: open the DMG and drag KeepMind OS to Applications. This build is ad-hoc signed, not notarized. If macOS blocks the first launch, use System Settings → Privacy & Security → Open Anyway after trying to open it.
 
-![Open the app, click Done, then Open Anyway in Privacy & Security](https://github.com/{{repo}}/raw/main/docs/images/first-open-mac.png)
+**Windows**: choose the x64 or ARM64 installer for your computer. This installer has no publisher certificate; Windows may show SmartScreen.
 
-If the button never shows up, or macOS says the app is damaged, run `xattr -dr com.apple.quarantine /Applications/agentes.chat.app` in Terminal and open it again.
+**Linux**: install the .deb for your architecture, or make the AppImage executable and open it.
 
-**Windows** (`x64-setup.exe`, or `arm64-setup.exe` on an ARM computer): if your browser asks, choose **Keep**. When **Windows protected your PC** shows up, click **More info**, then **Run anyway**.
-
-**Linux**: `sudo apt install ./agentes_{{version}}_amd64.deb` (`_arm64.deb` on an ARM computer).
-
-Every step, with pictures: https://app.agentes.chat/download (also at `/download` on your own server).
+SHA-256 checksums accompany each installer. Existing legacy data is not automatically migrated. Connect to your KeepMind server or start a local server from the app.
