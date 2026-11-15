@@ -3,7 +3,8 @@
 466fa0a99b4e3d573f2e62ce7565fcddf2b15309:packages/config/src/index.test.ts:private-key:324
 466fa0a99b4e3d573f2e62ce7565fcddf2b15309:packages/engine/test/run-policy.test.ts:private-key:628
 
-# Verified historical CSS selectors in axe accessibility evidence; exact commit/file/rule/line only.
+# Historical axe CSS selectors, not credentials (onboard-auth class names).
+# Exact legacy commit fingerprints; future additions remain scanned.
 ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-connection-error-dark.json:generic-api-key:1196
 ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-connection-error-dark.json:generic-api-key:1928
 ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-connection-error-dark.json:generic-api-key:2394
@@ -88,18 +89,6 @@ ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q3-pricing
 ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q3-pricing-confirm-dark.json:generic-api-key:6889
 ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q3-pricing-confirm-dark.json:generic-api-key:8516
 ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q3-pricing-confirm-dark.json:generic-api-key:8912
-ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q4-dark.json:generic-api-key:1041
-ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q4-dark.json:generic-api-key:1873
-ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q4-dark.json:generic-api-key:2339
-ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q4-dark.json:generic-api-key:2955
-ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q4-dark.json:generic-api-key:3421
-ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q4-dark.json:generic-api-key:3745
-ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q4-dark.json:generic-api-key:4561
-ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q4-dark.json:generic-api-key:5519
-ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q4-dark.json:generic-api-key:6088
-ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q4-dark.json:generic-api-key:6973
-ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q4-dark.json:generic-api-key:8700
-ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q4-dark.json:generic-api-key:9186
 ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q3-pricing-confirm-light.json:generic-api-key:1135
 ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q3-pricing-confirm-light.json:generic-api-key:1943
 ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q3-pricing-confirm-light.json:generic-api-key:2355
@@ -112,6 +101,18 @@ ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q3-pricing
 ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q3-pricing-confirm-light.json:generic-api-key:6889
 ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q3-pricing-confirm-light.json:generic-api-key:8516
 ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q3-pricing-confirm-light.json:generic-api-key:8912
+ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q4-dark.json:generic-api-key:1041
+ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q4-dark.json:generic-api-key:1873
+ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q4-dark.json:generic-api-key:2339
+ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q4-dark.json:generic-api-key:2955
+ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q4-dark.json:generic-api-key:3421
+ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q4-dark.json:generic-api-key:3745
+ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q4-dark.json:generic-api-key:4561
+ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q4-dark.json:generic-api-key:5519
+ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q4-dark.json:generic-api-key:6088
+ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q4-dark.json:generic-api-key:6973
+ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q4-dark.json:generic-api-key:8700
+ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q4-dark.json:generic-api-key:9186
 ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q4-light.json:generic-api-key:1041
 ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q4-light.json:generic-api-key:1873
 ed024389845a237a7d03e9b4b4435096a67d8b4f:evidence/a11y/onboarding-axe-q4-light.json:generic-api-key:2339
