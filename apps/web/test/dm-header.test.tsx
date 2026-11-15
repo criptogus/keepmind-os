@@ -214,7 +214,7 @@ describe("the profile in the panel closes", () => {
     const state = withRightHand(seedState());
     seedDm(state, { type: "agent", id: LODI_ID });
     const header = await go(state, `dm/agent/${LODI_ID}`);
-    const trigger = within(header).getByRole("button", { name: "Perfil de Kivo" });
+    const trigger = within(header).getByRole("button", { name: "Perfil de Lodi" });
     await click(trigger);
     const panel = () => screen().queryByRole("complementary", { name: /Lodi/ });
     await click(within(panel() as HTMLElement).getByRole("button", { name: "Fechar" }));
