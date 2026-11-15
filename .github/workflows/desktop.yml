@@ -366,6 +366,22 @@ jobs:
           xcrun stapler validate "$APP"
           spctl --assess --type execute --verbose=4 "$APP"
 
+      - name: Open the macOS app once
+        shell: bash
+        run: |
+          APP=$(ls -d apps/desktop/src-tauri/target/universal-apple-darwin/release/bundle/macos/*.app | head -1)
+          EXE=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$APP/Contents/Info.plist")
+          "$APP/Contents/MacOS/$EXE" > "$RUNNER_TEMP/keepmind-startup.log" 2>&1 &
+          APP_PID=$!
+          sleep 15
+          if ! kill -0 "$APP_PID" 2>/dev/null; then
+            cat "$RUNNER_TEMP/keepmind-startup.log"
+            echo "::error::KeepMind exited during startup"
+            exit 1
+          fi
+          kill "$APP_PID"
+          wait "$APP_PID" || true
+
       - name: Name the build files and the checksum
         shell: bash
         run: |

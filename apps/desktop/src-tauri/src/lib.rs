@@ -582,7 +582,8 @@ pub fn run() {
         // the site may not do, so the click did nothing. The main window routes those itself (`on_new_window`).
         .plugin(tauri_plugin_opener::Builder::new().open_js_links_on_click(false).build())
         .plugin(tauri_plugin_positioner::init())
-        .plugin(tauri_plugin_updater::Builder::new().build())
+        // KeepMind disables automatic updates and ships no updater configuration.
+        // Registering the plugin without that configuration aborts startup.
         .manage(Runners::default())
         .manage(PopoverClock(Mutex::new(None)))
         .manage(servers::Servers::default())
