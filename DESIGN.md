@@ -176,7 +176,7 @@ The primary palette is incumbent lime and black, supported by warm neutral light
 
 `action` and `on-action` define primary button surfaces and labels in both themes. `agent` is a darker green for legible light-theme text and lime in dark mode. `agent-soft` supports restrained agent emphasis.
 
-Companion face, fallback silhouette and framed tile colors are recorded separately in the frontmatter. The atlas contains shaded matte charcoal artwork, not a new flat body-color palette. Default eyes use the existing lime action color; a saved custom hex color remains the eye color.
+Companion face, fallback silhouette and framed tile colors are recorded separately in the frontmatter. The atlas contains shaded matte charcoal artwork, not a new flat body-color palette. Default eyes use the existing lime action color. A saved custom hex color remains the eye color when its contrast against the companion face is at least 3:1; lower-contrast values render in the default lime without changing the saved appearance.
 
 ### Neutral
 
@@ -226,7 +226,7 @@ Cards retain their asymmetric lower-left corner, internal spacing and outlined s
 
 The original family is Kivo, Luma, Nexo and Faro. The local two-by-two image atlas is `packages/ui/src/brand/assets/companions.png`; `packages/ui/src/agent/companion.ts` draws its body cells and overlays a live face. The atlas is bundled locally. The rounded fallback silhouette remains available while the image loads or fails.
 
-Existing saved appearance colors select bodies without rewriting appearance data: absent, graphite and teal select Kivo; sky, indigo and violet select Luma; rose and amber select Nexo; all remaining values select Faro. Custom hex values also retain their color in the live eyes. Family names describe the artwork; user-defined agent names remain intact. The default coordinator displays Kivo; the migration changes only built-in right-hand agents still named Lodi or KeepMind.
+Existing saved appearance colors select bodies without rewriting appearance data: absent, graphite and teal select Kivo; sky, indigo and violet select Luma; rose and amber select Nexo; all remaining values select Faro. Custom hex values retain their color in the live eyes only when `companionEyeColor` measures at least 3:1 contrast against the face; otherwise the renderer uses the default lime for readability. Family names describe the artwork; user-defined agent names remain intact. The default coordinator displays Kivo; the migration changes only built-in right-hand agents still named Lodi or KeepMind.
 
 The shared visible-avatar loop in `packages/ui/src/agent/live.ts` retains idle, thinking, writing, waiting and sleeping states, saved eye styles, accessories and feedback reactions. The shared scheduler uses a 40ms active interval and an 80ms rest interval; actual frames depend on animation-frame scheduling. Reduced motion stops the continuous loop while preserving static state and expression updates. Positive and negative reactions retain their existing 1.6-second duration. The renderer applies the existing body frame transform to the atlas and draws accessories afterward; do not replace this integration with independent decorative animation loops.
 
@@ -237,6 +237,7 @@ The shared visible-avatar loop in `packages/ui/src/agent/live.ts` retains idle, 
 - Do retain the original K mark and semantic action tokens.
 - Do reuse the local companion atlas and shared live renderer for agent identity.
 - Do preserve custom agent names, saved eye styles, accessories and reduced-motion behavior.
+- Do retain custom hex eye colors only at 3:1 contrast or higher against the companion face; otherwise render the default lime without changing saved appearance.
 - Do preserve capabilities, evidence, approvals and permission boundaries when simplifying a surface.
 - Do use the final CSS cascade and mirrored tokens when adding screens.
 - Do retain required upstream attribution in About.

@@ -1,5 +1,5 @@
 /** KeepMind's original companion family. The atlas is bundled locally, never fetched from a third party. */
-import { bodyFrame, type DrawAgentOptions, drawEyes, eyeShapes } from "./engine.js";
+import { bodyFrame, contrastOf, type DrawAgentOptions, drawEyes, eyeShapes } from "./engine.js";
 
 export const COMPANIONS = ["Kivo", "Luma", "Nexo", "Faro"] as const;
 export const companionAtlasUrl = new URL("../brand/assets/companions.png", import.meta.url).href;
@@ -28,6 +28,11 @@ export function companionIndex(color?: string): number {
   if (["sky", "indigo", "violet"].includes(color)) return 1;
   if (["rose", "amber"].includes(color)) return 2;
   return 3;
+}
+
+/** Custom accents must keep the live face readable on its charcoal inset. */
+export function companionEyeColor(color?: string): string {
+  return color?.startsWith("#") && contrastOf(color, "#181b16") >= 3 ? color : "#c4ff3d";
 }
 
 export function drawCompanion(
@@ -69,7 +74,7 @@ export function drawCompanion(
     w: e.w * 0.6,
     h: e.h * 0.6,
   }));
-  drawEyes(ctx, 0, 0, s, eyes, opts.color?.startsWith("#") ? opts.color : "#c4ff3d");
+  drawEyes(ctx, 0, 0, s, eyes, companionEyeColor(opts.color));
   opts.after?.(ctx, s, frame);
   ctx.restore();
 }
