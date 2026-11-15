@@ -27,8 +27,8 @@ pub const LABEL: &str = "main-cover";
 pub const OPENING: Duration = Duration::from_secs(1);
 /// The cover fades out (cover.css) before it is hidden.
 const FADE: Duration = Duration::from_millis(260);
-/// The sky's deepest tone (packages/ui sky SKY_TONES[0]), before the cover's page paints.
-const SKY: Color = Color(10, 63, 156, 255);
+/// KeepMind charcoal, matching cover.css before its first paint.
+const SKY: Color = Color(17, 17, 17, 255);
 /// Written when the window opens, removed when the site paints: still there at the next opening, the last one
 /// never painted.
 const PENDING_FILE: &str = "page-pending";
@@ -323,7 +323,7 @@ pub fn cover_details(app: AppHandle, webview: tauri::Webview) -> Result<String, 
 pub fn window_details(version: &str, os: &str, server: &str, log: &str) -> String {
     let lines: Vec<&str> = log.lines().collect();
     let tail = lines[lines.len().saturating_sub(40)..].join("\n");
-    format!("agentes.chat {version} ({os})\nserver: {server}\n\nwindow.log:\n{tail}\n")
+    format!("KeepMind OS {version} ({os})\nserver: {server}\n\nwindow.log:\n{tail}\n")
 }
 
 /// The cover: the person chose to see the page as it is ("Mostrar assim mesmo"), after it didn't open.
@@ -345,7 +345,7 @@ mod tests {
     fn the_windows_own_details() {
         let log: String = (1..=50).map(|n| format!("{n} 0.6.0 step {n}\n")).collect();
         let text = window_details("0.6.0", "macos", "https://chat.example.com", &log);
-        assert!(text.starts_with("agentes.chat 0.6.0 (macos)\nserver: https://chat.example.com\n"));
+        assert!(text.starts_with("KeepMind OS 0.6.0 (macos)\nserver: https://chat.example.com\n"));
         // The last 40 lines only.
         assert!(text.contains("11 0.6.0 step 11") && !text.contains("\n10 0.6.0 step 10"));
         assert!(window_details("0.6.0", "macos", "", "").ends_with("window.log:\n\n"));

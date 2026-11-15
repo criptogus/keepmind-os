@@ -1,7 +1,7 @@
 ---
 {
   "name": "KeepMind OS",
-  "description": "Existing KeepMind identity on the agentes-chat component system.",
+  "description": "KeepMind operating UI with original abstract companions and the incumbent K identity.",
   "colors": {
     "light-bg": "#fbfbfa",
     "light-raised": "#ffffff",
@@ -50,7 +50,11 @@
     "dark-info": "#5cc4ea",
     "dark-line": "rgba(255, 255, 255, 0.1)",
     "dark-line2": "rgba(255, 255, 255, 0.15)",
-    "dark-line-strong": "#71716c"
+    "dark-line-strong": "#71716c",
+    "companion-fallback": "#333630",
+    "companion-face": "#181b16",
+    "companion-tile-light": "#e9ece4",
+    "companion-tile-dark": "#22251f"
   },
   "typography": {
     "display": {
@@ -139,6 +143,9 @@
     "card": {
       "rounded": "20px 20px 20px 4px",
       "padding": "16px"
+    },
+    "companion-fallback": {
+      "backgroundColor": "{colors.companion-fallback}"
     }
   }
 }
@@ -150,13 +157,16 @@
 
 Preserve the incumbent KeepMind K mark and black/lime identity while using the upstream component kit. The workspace is a legible, compact working environment for objectives, execution, approvals and evidence. Brand accents identify action without replacing the semantic meaning of status, access controls or provider identities.
 
-This is an authorized refresh of the existing direction contract from implemented code, not a new identity exploration. No new creative metaphor is introduced.
+**Creative North Star: "KeepMind companions at work"**
+
+The approved abstract companion family extends the existing operating UI rather than redesigning whole pages. Kivo, Luma, Nexo and Faro add matte charcoal bodies and expressive faces; recognizing work states takes priority over decoration. The original K mark, black/lime identity and Onest typography remain unchanged.
 
 **Key Characteristics:**
 - Original K mark and KeepMind OS wordmark.
 - Warm white light surfaces and charcoal dark surfaces.
 - Lime primary actions with black labels; theme-specific agent text.
 - Existing responsive controls, keyboard focus and semantic states.
+- Original abstract companions with live expressions and preserved user appearances.
 
 ## Colors
 
@@ -165,6 +175,8 @@ The primary palette is incumbent lime and black, supported by warm neutral light
 ### Primary
 
 `action` and `on-action` define primary button surfaces and labels in both themes. `agent` is a darker green for legible light-theme text and lime in dark mode. `agent-soft` supports restrained agent emphasis.
+
+Companion face, fallback silhouette and framed tile colors are recorded separately in the frontmatter. The atlas contains shaded matte charcoal artwork, not a new flat body-color palette. Default eyes use the existing lime action color. A saved custom hex color remains the eye color when its contrast against the companion face is at least 3:1; lower-contrast values render in the default lime without changing the saved appearance.
 
 ### Neutral
 
@@ -210,9 +222,22 @@ Navigation cards use the chosen inset state and keyboard focus. Tags are compact
 
 Cards retain their asymmetric lower-left corner, internal spacing and outlined surface. The K mark's accessible naming follows Logo.tsx: decorative instances are hidden from assistive technology and labeled instances expose an image role. The full wordmark exposes KeepMind OS once.
 
+### Abstract companions
+
+The original family is Kivo, Luma, Nexo and Faro. The local two-by-two image atlas is `packages/ui/src/brand/assets/companions.png`; `packages/ui/src/agent/companion.ts` draws its body cells and overlays a live face. The atlas is bundled locally. The rounded fallback silhouette remains available while the image loads or fails.
+
+Existing saved appearance colors select bodies without rewriting appearance data: absent, graphite and teal select Kivo; sky, indigo and violet select Luma; rose and amber select Nexo; all remaining values select Faro. Custom hex values retain their color in the live eyes only when `companionEyeColor` measures at least 3:1 contrast against the face; otherwise the renderer uses the default lime for readability. Family names describe the artwork; user-defined agent names remain intact. The default coordinator displays Kivo; the migration changes only built-in right-hand agents still named Lodi or KeepMind.
+
+The shared visible-avatar loop in `packages/ui/src/agent/live.ts` retains idle, thinking, writing, waiting and sleeping states, saved eye styles, accessories and feedback reactions. The shared scheduler uses a 40ms active interval and an 80ms rest interval; actual frames depend on animation-frame scheduling. Reduced motion stops the continuous loop while preserving static state and expression updates. Positive and negative reactions retain their existing 1.6-second duration. The renderer applies the existing body frame transform to the atlas and draws accessories afterward; do not replace this integration with independent decorative animation loops.
+
+**The Work-State Rule.** Preserve readable state, expression, accessible naming and user appearance when using companion artwork; the family never replaces status text, evidence or permission controls.
+
 ## Do's and Don'ts
 
 - Do retain the original K mark and semantic action tokens.
+- Do reuse the local companion atlas and shared live renderer for agent identity.
+- Do preserve custom agent names, saved eye styles, accessories and reduced-motion behavior.
+- Do retain custom hex eye colors only at 3:1 contrast or higher against the companion face; otherwise render the default lime without changing saved appearance.
 - Do preserve capabilities, evidence, approvals and permission boundaries when simplifying a surface.
 - Do use the final CSS cascade and mirrored tokens when adding screens.
 - Do retain required upstream attribution in About.
@@ -221,4 +246,4 @@ Cards retain their asymmetric lower-left corner, internal spacing and outlined s
 - Do not turn documentation or static inspection into a claim of usability validation.
 - Do not infer deployed or native-packaged status from this design record.
 
-Source record: `docs/design/design-system/tokens.css`, `packages/ui/src/styles/tokens.css`, `packages/tokens/src/index.ts`, `packages/ui/src/styles/components.css`, `packages/ui/src/components/Logo.tsx` and `PRODUCT.md`. The CSS mirror differs only by its generated-file header. This documentation is a code extraction; native packaging, deployment and end-to-end usability validation remain outside its evidence.
+Source record: `docs/design/design-system/tokens.css`, `packages/ui/src/styles/tokens.css`, `packages/tokens/src/index.ts`, `packages/ui/src/styles/components.css`, `packages/ui/src/components/Logo.tsx` and `PRODUCT.md`. The CSS mirror differs only by its generated-file header. Companion sources also include `packages/ui/src/agent/companion.ts`, `packages/ui/src/agent/live.ts` and `packages/db/migrations/0277_keepmind_companion.sql`. Browser review captures exist at `.impeccable/review/companions/desktop.png`, `mobile.png`, `user-428.png` and `mac.png`; the mac capture is a browser surface, not proof of an installed native app. Native cover and installer evidence is limited to source/build verification; the binary was not installed. This document adds no test-pass or deployment claim. Reviewer rescoring remains required after this documentation reconciliation.

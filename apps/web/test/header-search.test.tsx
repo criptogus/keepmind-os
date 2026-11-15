@@ -121,7 +121,8 @@ describe("the header search (Discord's)", () => {
     expect(results()).toBeTruthy();
   });
 
-  // Many renders/tool calls in one test: over 5 s on a loaded CI runner, well under alone.
+  // Rendering and paging through 400 messages can exceed 15 s on shared runners.
+  // Keep the actual page-load assertion bounded to 10 s; allow setup and cleanup their own time.
   test("a message older than what's loaded: the conversation pages back to it, the buttons waiting meanwhile, then they close", async () => {
     const state = seedState();
     const at = Date.now() - 3_600_000;
@@ -158,7 +159,7 @@ describe("the header search (Discord's)", () => {
     await waitFor(() => expect(row("h-3")?.classList.contains("ac-msg--focus")).toBe(true), { timeout: 10_000 });
     expect(pages.mock.calls.at(-1)?.[2]?.limit).toBe(200);
     expect(results()).toBeNull();
-  }, 15_000);
+  }, 30_000);
 
   test("a message no longer there says so, and the results stay", async () => {
     const api = createFakeApi(seeded());

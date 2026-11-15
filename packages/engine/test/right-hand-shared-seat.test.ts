@@ -288,7 +288,7 @@ test("the shared seat is one row with its own id, however many first uses come a
   expect(await viewerScope(f.db, f.org.id, lodi.id, f.owner.id, undefined, false)).toMatchObject({ scope: null });
   // The computer lists it like an agent of its own, named for what it is.
   const listed = await machineAgents(f.db, f.org.id, machineId);
-  expect(listed.find((a) => a.id === rows[0]?.id)).toMatchObject({ handle: lodi.handle, name: "KeepMind (shared)" });
+  expect(listed.find((a) => a.id === rows[0]?.id)).toMatchObject({ handle: lodi.handle, name: "Kivo (shared)" });
 });
 
 test("a channel run goes out under the shared seat's id: never a person's, never the agent's own", async () => {

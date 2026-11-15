@@ -137,8 +137,8 @@ describe("the DM's search is the channel's, held to the DM", () => {
   });
 });
 
-describe("where Lodi's name comes from", () => {
-  const story = "O nome vem de lodestar, a estrela que guia os navegantes.";
+describe("KeepMind companion identity", () => {
+  const story = "Kivo conecta suas ideias, coordena o trabalho e pede sua decisão quando precisa.";
   const cardOf = async (state: FakeState) => {
     seedDm(state, { type: "agent", id: LODI_ID });
     await go(state, `dm/agent/${LODI_ID}`);
@@ -147,11 +147,11 @@ describe("where Lodi's name comes from", () => {
   };
 
   test("its profile card and its page tell it while it keeps its name", async () => {
-    const card = await cardOf(withRightHand(seedState()));
+    const card = await cardOf(withRightHand(seedState(), { name: "Kivo" }));
     expect(card.textContent).toContain(story);
     cleanup();
-    const header = await go(withRightHand(seedState()), `dm/agent/${LODI_ID}`);
-    await click(within(header).getByRole("button", { name: "Perfil de Lodi" }));
+    const header = await go(withRightHand(seedState(), { name: "Kivo" }), `dm/agent/${LODI_ID}`);
+    await click(within(header).getByRole("button", { name: "Perfil de Kivo" }));
     expect(document.body.textContent).toContain(story);
   });
 

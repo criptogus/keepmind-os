@@ -31,7 +31,7 @@ test("who joins finds one greeting in their own conversation with the right hand
   await t.drain();
   const [dm, ...others] = await dmsOf(nina, orgId);
   expect(others).toEqual([]);
-  expect(dm).toMatchObject({ with: { type: "agent", name: "KeepMind" }, unread: 1 });
+  expect(dm).toMatchObject({ with: { type: "agent", name: "Kivo" }, unread: 1 });
   const read = await nina(`${org}/channels/${dm?.channelId}/messages`);
   const { messages } = (await read.json()) as { messages: Message[] };
   expect(messages).toHaveLength(1);

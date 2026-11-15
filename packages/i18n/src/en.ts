@@ -1000,7 +1000,7 @@ export const en = {
       done: "All set",
     },
     /**
-     * The blue rail with Lodi (ADR 0162): its steps, Lodi's line on each, the preview, the team step's question and
+     * The blue rail with Kivo (ADR 0162): its steps, Kivo's line on each, the preview, the team step's question and
      * import, the plan step and the AI step. `<key>Personal`: a personal workspace's words (ADR 0159).
      */
     flow: {
@@ -1048,7 +1048,7 @@ export const en = {
         bringMcp: "Follow the steps in the app and it creates the agents here itself. I'll watch for them.",
         found: "Found your team. Check that everyone is here.",
         foundPersonal: "Found your agents. Check that they're all here.",
-        /** The AI step: picking an AI wakes the team (or, alone, Lodi). */
+        /** The AI step: picking an AI wakes the team (or, alone, Kivo). */
         ai: "Last step. Pick the AI you already use and the team wakes up.",
         aiPersonal: "Last step. Pick the AI you already use and I wake up.",
         /** The same where inviting people comes after it (a team's rail), for the team or the right hand alone. */
@@ -1193,7 +1193,7 @@ export const en = {
       ai: {
         /** A personal workspace's heading for the step (a team's is `arrival.connect.title`). */
         titlePersonal: "Connect an AI for your agents to think",
-        /** A team's heading for it with no agents but its right hand: `{{name}}`, the right hand ("Lodi"). */
+        /** A team's heading for it with no agents but its right hand: `{{name}}`, the right hand ("Kivo"). */
         titleAlone: "Connect an AI for {{name}} to think",
         later: "Connect later",
         /** `{{org}}`: the workspace's name. */
@@ -1206,7 +1206,7 @@ export const en = {
         /** The tag on the card of the AI just connected ("Claude"). */
         connected: "Connected",
         enter: "Go to the workspace",
-        /** Under the team, once it wakes. `{{names}}`: the agents, already joined ("Lodi, Nina and Leo"). */
+        /** Under the team, once it wakes. `{{names}}`: the agents, already joined ("Kivo, Nina and Leo"). */
         awake: "Your team woke up",
         answer_one: "{{names}} answers now.",
         answer_other: "{{names}} answer now.",
@@ -2443,7 +2443,7 @@ export const en = {
       subSector: "Each department with its agents. {{name}} works with everyone.",
       workspace: "Workspace",
       responsible: "Responsible: {{names}}",
-      /** Lodi beside the workspace, out of the reporting line. */
+      /** Kivo beside the workspace, out of the reporting line. */
       lodi: "follows everything with you",
       supervisor: "Supervisor: {{name}}",
       dragSector: "Drag onto an agent to make this sector's agents report to it",
@@ -2837,7 +2837,7 @@ export const en = {
   },
   /**
    * The team's right hand (ADR 0137): its pin row, its DM, its profile, its page in Settings and its cards. Its name
-   * is the admins' to change (`{{name}}`); "Lodi" only by default.
+   * is the admins' to change (`{{name}}`); "Kivo" only by default.
    */
   rightHand: {
     /** Muted, lowercase, on the right of its row in the sidebar. */
@@ -2896,7 +2896,7 @@ export const en = {
       model: "Model",
       message: "Message",
       configure: "Configure",
-      nameStory: "The name comes from lodestar, the star sailors steer by.",
+      nameStory: "Kivo connects your ideas, coordinates the work and asks for your decision when needed.",
     },
     /** What a connect flow says: the right hand has two AIs, and the words say which moved. */
     saved: {
@@ -3163,7 +3163,7 @@ export const en = {
       remove_ai_key: 'Delete the API key "{{name}}".',
     },
   },
-  /** Lodi's weekly card in an admin's DM with it (ADR 0137 §9). */
+  /** Kivo's weekly card in an admin's DM with it (ADR 0137 §9). */
   teamWeek: {
     title: "Team week",
     /** The same card, daily ("Resumo do dia"). */
@@ -19513,7 +19513,7 @@ export const en = {
       sub: "Accounting, law, consulting",
       desc: "For an office that books clients, sends proposals and bills them.",
     },
-    /** The team's hello in #general once it can work (ADR 0162): Lodi's line, then each agent's. */
+    /** The team's hello in #general once it can work (ADR 0162): Kivo's line, then each agent's. */
     hello: {
       lodi: {
         starting: "Plan active. My computer is starting up. Let's get to work.",

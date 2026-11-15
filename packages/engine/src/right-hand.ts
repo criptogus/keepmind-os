@@ -38,7 +38,7 @@ export const isRightHand = (a: { builtin?: string | null } | null | undefined) =
 
 /** What it starts with. The name is the same in every language; admins may rename it and change its look. */
 export const RIGHT_HAND_DEFAULTS = {
-  name: "KeepMind",
+  name: "Kivo",
   handle: "lodi",
   model: AUTO_MODEL,
   appearance: { color: "graphite", eyes: "happy", accessory: "headset" },

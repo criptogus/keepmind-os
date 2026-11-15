@@ -190,11 +190,11 @@ export function sceneTeam<A extends { id: string }>(agents: readonly A[], lead: 
  * `RIGHT_HAND_DEFAULTS` (packages/engine/src/right-hand.ts).
  */
 export const RIGHT_HAND_DEFAULT = {
-  name: "Lodi",
+  name: "Kivo",
   appearance: { color: "teal", eyes: "happy", accessory: "headset" },
 } as const;
 
-/** Where its name comes from ("lodestar") is told only while it keeps that name: a renamed one has another story. */
+/** The default companion introduction is shown only while it keeps its default name. */
 export const tellsNameStory = (agent: Pick<Agent, "builtin" | "name"> | null | undefined) =>
   isRightHand(agent) && agent?.name === RIGHT_HAND_DEFAULT.name;
 

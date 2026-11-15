@@ -2573,7 +2573,7 @@
       "model": "モデル",
       "message": "メッセージ",
       "configure": "設定",
-      "nameStory": "名前の由来は lodestar、船乗りを導く星です。"
+      "nameStory": "Kivo · KeepMind OS"
     },
     "saved": {
       "workspace": "{{name}}は、自分のプランがないすべての人に{{label}}で動くようになりました。",

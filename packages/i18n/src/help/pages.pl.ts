@@ -431,7 +431,7 @@ export const helpPl: Partial<Record<HelpSlug, HelpDocument>> = {
             ],
           },
           "Działanie we własnej skrzynce pocztowej kogoś czeka tylko na tę osobę. Nowy dostęp dla agenta czeka na tych, którzy zarządzają agentami.",
-          "Lodi, twoja prawa ręka, może też zatwierdzać za ciebie nowych agentów proponowanych przez innych agentów oraz zmiany modelu, budżetu i kanałów agenta, tylko gdy prośba wyszła od ciebie. Kto cię zastępuje i co zatwierdza Lodi, wybierasz w **Ustawienia\u00a0›\u00a0Ty\u00a0›\u00a0Zatwierdzenia**.",
+          "Kivo, twoja prawa ręka, może też zatwierdzać za ciebie nowych agentów proponowanych przez innych agentów oraz zmiany modelu, budżetu i kanałów agenta, tylko gdy prośba wyszła od ciebie. Kto cię zastępuje i co zatwierdza Kivo, wybierasz w **Ustawienia\u00a0›\u00a0Ty\u00a0›\u00a0Zatwierdzenia**.",
         ],
       },
       {

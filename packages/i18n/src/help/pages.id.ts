@@ -433,7 +433,7 @@ export const helpId: Partial<Record<HelpSlug, HelpDocument>> = {
             ],
           },
           "Tindakan di kotak surat milik seseorang hanya menunggu orang itu. Akses baru untuk agen menunggu orang yang mengelola agen.",
-          "Lodi, tangan kananmu, juga bisa menyetujui untukmu agen baru yang diusulkan agen lain dan perubahan model, anggaran, serta kanal sebuah agen, hanya kalau kamu yang memintanya. Siapa yang menggantikanmu dan apa yang disetujui Lodi dipilih di **Pengaturan\u00a0›\u00a0Kamu\u00a0›\u00a0Persetujuan**.",
+          "Kivo, tangan kananmu, juga bisa menyetujui untukmu agen baru yang diusulkan agen lain dan perubahan model, anggaran, serta kanal sebuah agen, hanya kalau kamu yang memintanya. Siapa yang menggantikanmu dan apa yang disetujui Kivo dipilih di **Pengaturan\u00a0›\u00a0Kamu\u00a0›\u00a0Persetujuan**.",
         ],
       },
       {
