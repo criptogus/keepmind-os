@@ -48,12 +48,12 @@ const rightHandOf = async (orgId: string) =>
     .from(schema.agents)
     .where(and(eq(schema.agents.orgId, orgId), eq(schema.agents.builtin, RIGHT_HAND)));
 
-test("every workspace comes with one right hand, Lodi, owned by its owner", async () => {
+test("every workspace comes with one right hand, Kivo, owned by its owner", async () => {
   f = await setup({ rightHand: true });
   const [lodi, ...more] = await rightHandOf(f.org.id);
   expect(more).toEqual([]);
   expect(lodi).toMatchObject({
-    name: "KeepMind",
+    name: "Kivo",
     handle: "lodi",
     model: "auto",
     ownerUserId: f.owner.id,
@@ -208,7 +208,7 @@ test("its prompt says what the person may do, and shows only the agents they may
   const prompt = (personId: string) =>
     rightHandPrompt({ db: f.db }, { orgId: f.org.id, agent: lodi, personId, inDm: true });
   const owner = await prompt(f.owner.id);
-  expect(owner).toContain("You are KeepMind (@lodi)");
+  expect(owner).toContain("You are Kivo (@lodi)");
   expect(owner).toContain("an owner of this workspace");
   expect(owner).toContain("They may: create agents; change any agent's settings");
   expect(owner).not.toContain("They can't");
