@@ -1385,11 +1385,11 @@ describe("Onboarding: the workspace's name", () => {
   const next = () => click(button("Continuar"), 8);
   const calls = (state: ReturnType<typeof seedState>, method: string) => state.calls.filter((c) => c.method === method);
 
-  test("the name, step 1 on the rail, Lodi's line on its horizon, never a guide among the presets", async () => {
+  test("the name, step 1 on the rail, Kivo's line on its horizon, never a guide among the presets", async () => {
     await start();
     expect(screen().getByRole("heading", { name: "Como se chama o seu workspace?" })).toBeTruthy();
     expect(screen().getByRole("navigation", { name: "Passos para começar" })).toBeTruthy();
-    expect(document.querySelector(".onb__say")?.textContent).toContain("Eu sou o Lodi.");
+    expect(document.querySelector(".onb__say")?.textContent).toContain("Eu sou o Kivo.");
     expect(document.body.textContent).not.toContain("Oi, eu sou a Ada");
     // A name is no misspelling.
     expect(screen().getByLabelText("Nome").getAttribute("spellcheck")).toBe("false");

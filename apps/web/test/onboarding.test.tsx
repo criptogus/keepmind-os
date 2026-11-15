@@ -233,7 +233,7 @@ describe("the steps", () => {
     const state = newcomer(false);
     await renderApp("/onboarding", { api: createFakeApi(state) });
     await settle(10);
-    expect(document.querySelector(".onb__say")?.textContent).toContain("Eu sou o Lodi.");
+    expect(document.querySelector(".onb__say")?.textContent).toContain("Eu sou o Kivo.");
     await forATeam();
     expect(eyebrow()).toBe("Passo 1 de 6");
     // The whole path on the rail, connecting an AI last.
