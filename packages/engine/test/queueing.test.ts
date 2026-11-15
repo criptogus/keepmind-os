@@ -140,14 +140,6 @@ describe("mid-round queueing (ADR 0029 section 1)", () => {
 describe("messages in a row (ADR 0112)", () => {
   const postIn = (channelId: string, body: string, threadId?: string) =>
     postPersonMessage({ db: f.db, pubsub: f.pubsub }, f.owner.id, f.org.id, channelId, { body, threadId });
-  // A loaded CI machine can take more than 5 s to start a run on PGlite: wait up to 20 s, the test's own limit below.
-  const waitRunning = async () => {
-    const start = Date.now();
-    while (!(await runs()).some((r) => r.status === "running")) {
-      if (Date.now() - start > 20_000) throw new Error("the run never started");
-      await Bun.sleep(5);
-    }
-  };
 
   test.each([
     ["a DM", "dm"],
@@ -167,11 +159,24 @@ describe("messages in a row (ADR 0112)", () => {
       const root = where === "thread" ? await post("o relatório de ontem") : null;
       const channelId = dm ?? f.general.id;
       await postIn(channelId, dm ? "oi" : "@dev oi", root?.id);
-      const drained = drainOutbox(f.db, f.handlers);
-      await waitRunning();
-      await postIn(channelId, "preciso de uma coisa", root?.id);
-      await postIn(channelId, "olha o relatório de ontem e me diz se bate com o quadro", root?.id);
-      await drained;
+      // Join at the claimed-run event, before context is read. Polling a short-lived "running" status
+      // can miss the whole run on loaded CI, even with a longer timeout.
+      const publish = f.pubsub.publish.bind(f.pubsub);
+      let joined = false;
+      const publishing = spyOn(f.pubsub, "publish").mockImplementation(async (topic, event) => {
+        await publish(topic, event);
+        if (event.type !== "agent.thinking" || joined) return;
+        joined = true;
+        expect((await runs()).some((r) => r.status === "running")).toBe(true);
+        await postIn(channelId, "preciso de uma coisa", root?.id);
+        await postIn(channelId, "olha o relatório de ontem e me diz se bate com o quadro", root?.id);
+      });
+      try {
+        await drainOutbox(f.db, f.handlers);
+      } finally {
+        publishing.mockRestore();
+      }
+      expect(joined).toBe(true);
       await drainOutbox(f.db, f.handlers);
       expect(await runs()).toHaveLength(1);
       expect(f.provider.calls).toHaveLength(1);
