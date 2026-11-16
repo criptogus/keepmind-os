@@ -288,12 +288,12 @@ describe("Criar agente: steps", () => {
       within(step)
         .getAllByRole("heading", { level: 2 })
         .map((h) => h.textContent),
-    ).toEqual(["Produto e tecnologia", "Clientes", "Operação"]);
+    ).toEqual(["Produto e tecnologia", "Clientes", "Operação", "Consultoria e futuro", "Perfis inspirados"]);
     const names = (heading: string) =>
       within(within(step).getByRole("region", { name: heading }))
         .getAllByRole("button")
         .map((b) => b.querySelector(".newag__role-name b")?.textContent);
-    expect(names("Produto e tecnologia")).toEqual(["Dev", "Ops", "QA", "PM"]);
+    expect(names("Produto e tecnologia")).toEqual(["Dev", "Ops", "QA", "PM", "Cybersec"]);
     expect(names("Clientes")).toEqual(["Atendimento", "Vendas", "Marketing", "Conteúdo"]);
     expect(names("Operação")).toEqual(["Dados", "Financeiro", "Pessoas", "Pesquisa", "Assistente"]);
     expect(within(step).getAllByRole("button")[0]?.textContent).toContain("Do zero");
@@ -1770,10 +1770,10 @@ describe("Criar agente in a personal workspace (ADR 0159)", () => {
 
   test("alone: no owner and no who can talk on the screen; it is created mine, answering only me", async () => {
     const state = await open(personal(true));
-    // One person's starting points: the right hand's personal agents, not a company's roles (ADR 0159 §3).
+    // Personal starters remain available alongside the shared template library.
     expect(screen().getByRole("heading", { name: "Para o seu dia" })).toBeTruthy();
-    expect(screen().queryByRole("heading", { name: "Produto e tecnologia" })).toBeNull();
-    expect(screen().queryByRole("button", { name: /^QA/ })).toBeNull();
+    expect(screen().getByRole("heading", { name: "Produto e tecnologia" })).toBeTruthy();
+    expect(screen().getByRole("button", { name: /^QA/ })).toBeTruthy();
     await startAs("Clara");
     expect((screen().getByLabelText("Nome") as HTMLInputElement).value).toBe("Clara");
     // Its technical steps start filled in and are passed over (ADR 0159 §3): four steps, Instruções on to Revisar.

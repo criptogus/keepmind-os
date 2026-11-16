@@ -968,3 +968,13 @@ html:not([data-pointer]) .nac__dice:focus-visible {
   line-height: 20px;
   white-space: pre-wrap;
 }
+
+/* Search stays alongside the existing starting points, including keyboard selection. */
+.nac__list > input {
+  flex-shrink: 0;
+}
+.nac__list > [role="listbox"] {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}

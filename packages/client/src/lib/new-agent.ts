@@ -40,17 +40,65 @@ export const ROLE_IDS = [
   "people",
   "research",
   "assistant",
+  "cybersec",
+  "consulting",
+  "strategy",
+  "trends",
+  "inspired_musk",
+  "inspired_gates",
+  "inspired_buffett",
+  "inspired_welch",
+  "inspired_jobs",
+  "inspired_ma",
+  "inspired_kawasaki",
+  "inspired_bezos",
+  "inspired_nadella",
+  "inspired_drucker",
   "custom",
 ] as const;
 export type RoleId = (typeof ROLE_IDS)[number];
 
 /** The role step in groups, in order (titles in i18n: `newAgent.roleGroups.{id}`); "custom" stays apart, last. */
 export const ROLE_GROUPS = [
-  { id: "tech", roles: ["dev", "ops", "qa", "pm"] },
+  { id: "tech", roles: ["dev", "ops", "qa", "pm", "cybersec"] },
   { id: "customers", roles: ["support", "sales", "marketing", "content"] },
   { id: "operations", roles: ["data", "finance", "people", "research", "assistant"] },
+  { id: "advisory", roles: ["consulting", "strategy", "trends"] },
+  {
+    id: "inspired",
+    roles: [
+      "inspired_musk",
+      "inspired_gates",
+      "inspired_buffett",
+      "inspired_welch",
+      "inspired_jobs",
+      "inspired_ma",
+      "inspired_kawasaki",
+      "inspired_bezos",
+      "inspired_nadella",
+      "inspired_drucker",
+    ],
+  },
 ] as const satisfies readonly { id: string; roles: readonly Exclude<RoleId, "custom">[] }[];
 export type RoleGroupId = (typeof ROLE_GROUPS)[number]["id"];
+
+/** New specialist/advisor templates never grant connections implicitly, including personal workspaces. */
+export const RESTRICTED_ROLE_IDS: readonly RoleId[] = [
+  "cybersec",
+  "consulting",
+  "strategy",
+  "trends",
+  "inspired_musk",
+  "inspired_gates",
+  "inspired_buffett",
+  "inspired_welch",
+  "inspired_jobs",
+  "inspired_ma",
+  "inspired_kawasaki",
+  "inspired_bezos",
+  "inspired_nadella",
+  "inspired_drucker",
+];
 
 /* ---------- What a role starts with ---------- */
 
@@ -141,6 +189,32 @@ export const ROLE_DEFAULTS = {
     levels: { asana: "write", notion: "read", drive: "read" },
     channels: ["geral", "general", "agenda", "secretaria", "admin"],
   }),
+  cybersec: starts({ look: { color: "green", eyes: "round", accessory: "none" }, levels: {}, channels: [] }),
+  consulting: starts({ look: { color: "graphite", eyes: "wide", accessory: "antenna" }, levels: {}, channels: [] }),
+  strategy: starts({ look: { color: "indigo", eyes: "dots", accessory: "headphones" }, levels: {}, channels: [] }),
+  trends: starts({ look: { color: "sky", eyes: "round", accessory: "hat" }, levels: {}, channels: [] }),
+  inspired_musk: starts({ look: { color: "green", eyes: "wide", accessory: "none" }, levels: {}, channels: [] }),
+  inspired_gates: starts({ look: { color: "graphite", eyes: "dots", accessory: "antenna" }, levels: {}, channels: [] }),
+  inspired_buffett: starts({
+    look: { color: "indigo", eyes: "round", accessory: "headphones" },
+    levels: {},
+    channels: [],
+  }),
+  inspired_welch: starts({ look: { color: "sky", eyes: "wide", accessory: "hat" }, levels: {}, channels: [] }),
+  inspired_jobs: starts({ look: { color: "green", eyes: "dots", accessory: "none" }, levels: {}, channels: [] }),
+  inspired_ma: starts({ look: { color: "graphite", eyes: "round", accessory: "antenna" }, levels: {}, channels: [] }),
+  inspired_kawasaki: starts({
+    look: { color: "indigo", eyes: "wide", accessory: "headphones" },
+    levels: {},
+    channels: [],
+  }),
+  inspired_bezos: starts({ look: { color: "sky", eyes: "dots", accessory: "hat" }, levels: {}, channels: [] }),
+  inspired_nadella: starts({ look: { color: "green", eyes: "round", accessory: "none" }, levels: {}, channels: [] }),
+  inspired_drucker: starts({
+    look: { color: "graphite", eyes: "wide", accessory: "antenna" },
+    levels: {},
+    channels: [],
+  }),
   custom: starts({ look: { color: "sky", eyes: "round", accessory: "none" }, levels: {}, channels: [] }),
 } satisfies Record<RoleId, RoleDefaults>;
 
@@ -206,6 +280,8 @@ export const BLANK_LOOK = { color: "sky", eyes: "round", accessory: "none" } as 
  */
 export function presetLevels(role: RoleId, items: { id: string; def: { id: string } | null }[], broad = false) {
   const levels: Record<string, Level> = ROLE_DEFAULTS[role].levels;
+  if (RESTRICTED_ROLE_IDS.includes(role))
+    return Object.fromEntries(items.map((i) => [i.id, levels[i.def?.id ?? ""] ?? "none"])) as Record<string, Level>;
   const level = (i: (typeof items)[number]): Level =>
     i.def ? (levels[i.def.id] ?? "write") : broad ? "write" : "none";
   return Object.fromEntries(items.map((i) => [i.id, level(i)])) as Record<string, Level>;

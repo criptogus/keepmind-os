@@ -668,7 +668,7 @@ function NewAgentForm({
             </GroupedList>
           </>
         ) : null}
-        {(personal ? [] : ROLE_GROUPS).map((group) => (
+        {ROLE_GROUPS.map((group) => (
           <Fragment key={group.id}>
             <GroupedHeader>{t(`newAgent.roleGroups.${group.id}`)}</GroupedHeader>
             <GroupedList>

@@ -154,7 +154,7 @@ import { useToast } from "@/lib/toast";
 import "./new-agent.css";
 
 /** The icon next to each group of roles on the first step. */
-const GROUP_ICON: Record<RoleGroupId, IconName> = { tech: "code", customers: "members", operations: "layers" };
+const GROUP_ICON: Record<RoleGroupId, IconName> = { tech: "code", customers: "members", advisory: "layers", inspired: "members", operations: "layers" };
 
 /** How long the preview keeps writing after a keystroke. */
 const TYPING_MS = 700;
@@ -1156,7 +1156,7 @@ function NewAgentFlow({
                 </div>
               </section>
             )}
-            {(personal ? [] : ROLE_GROUPS).map((group) => (
+            {ROLE_GROUPS.map((group) => (
               <section key={group.id} className="newag__section" aria-labelledby={`ag-roles-${group.id}`}>
                 <div className="newag__sect">
                   <h2 id={`ag-roles-${group.id}`}>
