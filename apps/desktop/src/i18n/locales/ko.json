@@ -150,7 +150,7 @@
     "lead": "에이전트는 워크스페이스가 있는 곳에서 일해요. 나중에 바꿀 수 있어요.",
     "recommended": "추천",
     "cloud": "KeepMind OS 클라우드",
-    "cloudText": "항상 켜져 있어요. 관리는 저희가 다 해요. 쓰기만 하세요.",
+    "cloudText": "keepmind.io에서 사용하는 팀 워크스페이스.",
     "here": "이 {{device}}",
     "hereText": "앱이 열려 있는 동안 에이전트가 일해요.",
     "box": "항상 켜져 있는 컴퓨터",

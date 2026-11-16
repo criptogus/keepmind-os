@@ -895,7 +895,7 @@ function NewAgentDialog({
                   value={templateQuery}
                   onChange={(e) => setTemplateQuery(e.target.value)}
                 />
-                <div role="listbox" aria-label={t("newAgentCard.list")}>
+                <div className="nac__options" role="listbox" aria-label={t("newAgentCard.list")}>
                   <ListRow
                     pick="zero"
                     on={sel === "zero"}

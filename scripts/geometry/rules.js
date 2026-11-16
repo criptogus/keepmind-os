@@ -84,7 +84,10 @@
     if (on === undefined) {
       const s = style(el);
       const r = el.getBoundingClientRect();
+      const closed = el.closest("details:not([open])");
+      const summary = closed?.querySelector(":scope > summary");
       on =
+        (!closed || el === closed || summary?.contains(el)) &&
         s.display !== "none" &&
         s.visibility !== "hidden" &&
         +s.opacity !== 0 &&

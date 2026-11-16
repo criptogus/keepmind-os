@@ -41,7 +41,7 @@
 }
 .zero-area__actions {
   display: flex;
-  gap: 12px;
+  gap: var(--space-2);
   align-items: center;
   flex-wrap: wrap;
 }

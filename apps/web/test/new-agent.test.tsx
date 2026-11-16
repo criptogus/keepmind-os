@@ -305,7 +305,9 @@ describe("Criar agente: steps", () => {
     expect(firstRows).toEqual([...ROLE_IDS, "import"].map(() => "newag__role-head"));
     expect(step.querySelector(".newag__role .ac-captop, .newag__role .ac-faceline")).toBeNull();
     const css = await Bun.file(new URL("../src/layout.css", import.meta.url).pathname).text();
-    expect(css).toMatch(/\n\.newag__role-head \{\s*display: flex;\s*align-items: center;/);
+    expect(css).toMatch(
+      /\n\.newag__role-head \{\s*display: grid;\s*grid-template-columns: auto minmax\(0, 1fr\);\s*align-items: center;/,
+    );
     // Smaller tiles than a profile's 56px face, the + as big as a face.
     expect(css).toMatch(/\n\.newag__role-head > \.ac-avatar \{\s*width: 44px;\s*height: 44px;/);
     expect(css).toMatch(/\n\.newag__blank-icon \{[^}]*width: 44px;\s*height: 44px;/);

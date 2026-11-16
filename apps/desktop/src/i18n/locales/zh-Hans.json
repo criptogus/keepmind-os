@@ -150,7 +150,7 @@
     "lead": "你的智能体会在工作区所在的地方工作。以后可以更改。",
     "recommended": "推荐",
     "cloud": "在 KeepMind OS 云端",
-    "cloudText": "始终在线。一切由我们打理，你只管使用。",
+    "cloudText": "团队在 keepmind.io 上的工作空间。",
     "here": "在这台 {{device}} 上",
     "hereText": "应用打开时，你的智能体会一直工作。",
     "box": "在一台始终开机的电脑上",

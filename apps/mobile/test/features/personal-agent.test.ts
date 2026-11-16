@@ -47,9 +47,9 @@ describe("a personal workspace's agent", () => {
     expect(profile).toContain("onPress={() => openAgentMore(id)}");
   });
 
-  test("creating one by hand starts from the right hand's personal agents, not a company's roles", () => {
+  test("creating one offers personal starters and the shared template library", () => {
     const create = read("src/features/agents/NewAgentScreen.tsx");
-    expect(create).toContain("{(personal ? [] : ROLE_GROUPS).map((group) => (");
+    expect(create).toContain("{ROLE_GROUPS.map((group) => (");
     expect(create).toContain("{PERSONAL_STARTERS.map((s) => (");
     expect(create).toContain("onPress={() => pickStarter(s)}");
   });
