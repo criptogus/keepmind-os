@@ -66,13 +66,13 @@ const PROVIDER_ID = /^[a-z0-9][a-z0-9._-]{0,39}$/;
 const MAX_MODELS = 50;
 const MAX_COMPUTERS = 50;
 
-/** KeepMind OS's own servers: their report always goes out, and nobody there has the switch. */
+/** KeepMind OS hosting, used to label the report's edition. */
 export function isKeepMindCloud(publicUrl: string) {
   const host = new URL(publicUrl).hostname;
   return host === "keepmind.io" || host.endsWith(".keepmind.io");
 }
 
-/** Whether the report goes out: always on KeepMind OS's own servers; elsewhere unless `TELEMETRY=off` or the switch is off. */
+/** Reports require both operator opt-in and the installation's enabled switch. */
 export function telemetrySends(config: { TELEMETRY: "on" | "off"; PUBLIC_URL: string }, enabled: boolean) {
   return config.TELEMETRY === "on" && enabled;
 }

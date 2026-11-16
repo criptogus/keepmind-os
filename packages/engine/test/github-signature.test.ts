@@ -28,6 +28,9 @@ describe("the line and the credit (ADR 0156)", () => {
       `Fixes #1\n\n${SIGNATURE_MARK}\n<sub>Dev, agent for &#64;everyone &#60;b&#62;x&#60;/b&#62; on KeepMind OS</sub>`,
     );
     expect(signedBody(signed, "Dev")).toBe(`Fixes #1\n\n${SIGNATURE_MARK}\n<sub>Dev</sub>`);
+    expect(signedBody(signed.replace(SIGNATURE_MARK, "<!-- agentes.chat -->"), "Dev")).toBe(
+      `Fixes #1\n\n${SIGNATURE_MARK}\n<sub>Dev</sub>`,
+    );
     // An edit that wrote on after the old line keeps all it wrote; the old line goes.
     expect(signedBody(`${signed}\n\nmore`, "Dev")).toBe(`Fixes #1\n\nmore\n\n${SIGNATURE_MARK}\n<sub>Dev</sub>`);
     expect(signedBody(signed.replaceAll("\n", "\r\n"), "Dev")).toBe(`Fixes #1\n\n${SIGNATURE_MARK}\n<sub>Dev</sub>`);

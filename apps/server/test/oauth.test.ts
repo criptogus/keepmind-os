@@ -67,7 +67,7 @@ describe("discovery", () => {
         authorization_servers: [ORIGIN],
         scopes_supported: ["read", "write", "manage"],
         bearer_methods_supported: ["header"],
-        resource_name: "keepmind.io",
+        resource_name: "KeepMind OS",
         resource_documentation: "https://keepmind.io/docs/apps-de-ia",
       });
     }

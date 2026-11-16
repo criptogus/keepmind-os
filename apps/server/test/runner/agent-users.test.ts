@@ -805,7 +805,7 @@ test("ensureContainers: started when it isn't, left when it runs as it would sta
   expect(calls[0]).toEqual(show);
   const [file, description = "", ...rest] = calls[1] ?? [];
   expect(file).toBe("/usr/bin/systemd-run");
-  expect(description).toMatch(/^--description=agentes\.chat containers [0-9a-f]{16}$/);
+  expect(description).toMatch(/^--description=KeepMind OS containers [0-9a-f]{16}$/);
   expect(rest).toEqual(containersCommand(user).slice(1));
   shown = `ActiveState=active\nDescription=${description.slice("--description=".length)}\n`;
   calls.length = 0;

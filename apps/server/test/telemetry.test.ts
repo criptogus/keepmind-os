@@ -17,7 +17,7 @@ import {
 import { browser, createTestServer, deletionCode, deletionsDue, signUp, type TestServer } from "./harness";
 
 const log = createLogger("error");
-const PROD = { NODE_ENV: "production" };
+const PROD = { NODE_ENV: "production", TELEMETRY: "on" };
 
 /**
  * Timers that run only when a test fires them, on a clock of their own. `fire(ms)` runs the newest one with
@@ -223,12 +223,11 @@ describe("sending", () => {
     expect(http.calls).toEqual([]);
   });
 
-  test("KeepMind OS's own server always sends, whatever TELEMETRY and the switch say", async () => {
+  test("KeepMind hosting does not bypass TELEMETRY=off or the owner switch", async () => {
     const { clock, http } = await start({ PUBLIC_URL: "https://keepmind.io", TELEMETRY: "off" });
     await setTelemetryEnabled(db, false);
-    await clock.fire(FIRST_REPORT_MS);
-    expect(http.calls).toHaveLength(1);
-    expect(http.calls[0]?.body.edition).toBe("cloud");
+    expect(clock.delays()).toEqual([]);
+    expect(http.calls).toEqual([]);
   });
 
   test("a development server sends nothing", async () => {
@@ -294,7 +293,7 @@ test("agentes telemetry prints exactly the next report, on or off, and sends not
 
 describe("the switch in Settings", () => {
   async function server(env: Record<string, string> = {}) {
-    t = await createTestServer({ env: { ALLOW_SIGNUP: "true", ...env } });
+    t = await createTestServer({ env: { ALLOW_SIGNUP: "true", TELEMETRY: "on", ...env } });
     const owner = browser(t);
     await signUp(owner, "owner@example.com");
     const other = browser(t);

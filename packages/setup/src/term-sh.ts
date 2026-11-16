@@ -118,7 +118,7 @@ t_intro() {
     return 0
   fi
   if [ "$T_UNI" = 1 ] && [ "$T_COLS" -ge 64 ]; then t_logo; fi
-  t_b=KeepMind OS
+  t_b="KeepMind OS"
   if [ "$T_DEPTH" != 0 ]; then t_b="$C_BADGE KeepMind OS $C_OFF"; fi
   T_OPEN=1
   t_style

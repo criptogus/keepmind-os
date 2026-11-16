@@ -88,7 +88,7 @@ function setup(over: Partial<ConnectionOptions> = {}) {
 const sock = (sockets: FakeSocket[], i: number) => sockets[i] as FakeSocket;
 
 test("the connect URL comes from the server URL", () => {
-  expect(connectUrl("https://keepmind.io")).toBe("wss://keepmind-os/api/machines/connect");
+  expect(connectUrl("https://keepmind.io")).toBe("wss://keepmind.io/api/machines/connect");
   expect(connectUrl("http://localhost:3000")).toBe("ws://localhost:3000/api/machines/connect");
 });
 

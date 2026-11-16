@@ -198,9 +198,9 @@ test("the WebSocket carries the cookie and the app header", () => {
     close() {}
   }
   const factory = createSocketFactory(() => "better-auth.session_token=abc", FakeSocket);
-  factory("wss://keepmind-os/api/ws?orgId=o1");
+  factory("wss://keepmind.io/api/ws?orgId=o1");
   expect(made[0]).toEqual({
-    url: "wss://keepmind-os/api/ws?orgId=o1",
+    url: "wss://keepmind.io/api/ws?orgId=o1",
     protocols: undefined,
     options: { headers: { "X-Agentes-Client": "mobile", Cookie: "better-auth.session_token=abc" } },
   });

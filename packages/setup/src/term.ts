@@ -497,7 +497,7 @@ export function createTerm(o: TermOptions = {}) {
       if (inherited) return;
       if (!tty) return say([`KeepMind OS ${title}`]);
       if (logo && unicode && width >= LOGO_WIDTH + 1) say(["", ...logoLines(depth), ""]);
-      const badge = depth > 1 ? `\x1b[${BADGE[depth]}m agentes.chat \x1b[0m` : "keepmind.io";
+      const badge = depth > 1 ? `\x1b[${BADGE[depth]}m KeepMind OS \x1b[0m` : "KeepMind OS";
       say([...wrap(`${badge} ${title}`, width - 3).map((l, i) => lineOf(i === 0 ? dim(S.start) : bar(), l)), bar()]);
       gapped = true;
     },

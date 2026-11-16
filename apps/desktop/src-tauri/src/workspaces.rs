@@ -848,7 +848,7 @@ mod tests {
     #[test]
     fn notice_words() {
         let labels: HashMap<String, String> = [
-            ("serversCloud", "keepmind.io"),
+            ("serversCloud", "KeepMind OS"),
             ("serverTitle", "O KeepMind OS neste Mac"),
             ("workspaceNewsOne", "1 notificação nova"),
             ("workspaceNewsMany", "{count} notificações novas"),

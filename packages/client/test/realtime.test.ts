@@ -53,7 +53,7 @@ function manualTimers() {
 describe("RealtimeConnection", () => {
   test("url uses ws/wss and the org id", () => {
     expect(realtimeUrl({ protocol: "https:", host: "keepmind.io" }, "o 1")).toBe(
-      "wss://keepmind-os/api/ws?orgId=o%201",
+      "wss://keepmind.io/api/ws?orgId=o%201",
     );
     expect(realtimeUrl({ protocol: "http:", host: "localhost:5173" }, "o1")).toBe(
       "ws://localhost:5173/api/ws?orgId=o1",

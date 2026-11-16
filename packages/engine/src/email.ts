@@ -42,7 +42,7 @@ const { users, organizations, organizationInvitations, agents, approvals, channe
  * The sender's name when `EMAIL_FROM` is unset: the name on the logo and in the subjects. The self-host setup
  * writes the same into a new server's `.env` (`senderAt` in packages/setup/src/lib.ts).
  */
-const SENDER_NAME = "keepmind.io";
+const SENDER_NAME = "KeepMind OS";
 
 /** The sender when `EMAIL_FROM` is unset, at this server's host (`loadConfig` sets the Cloud's: contact@zeroagency.ai). */
 export const defaultEmailFrom = (publicUrl: string) => `${SENDER_NAME} <ping@${new URL(publicUrl).hostname}>`;

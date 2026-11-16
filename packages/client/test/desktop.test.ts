@@ -143,21 +143,21 @@ describe("the agent's screen", () => {
   test("socket addresses: ws or wss on the page's host; no keyboard layout, in either mode", () => {
     const base = { protocol: "https:", host: "keepmind.io" };
     expect(desktopSocketUrl(base, { orgId: "o1", agentId: "a1", mode: "watch" })).toBe(
-      "wss://keepmind-os/api/desktop?orgId=o1&agentId=a1&mode=watch",
+      "wss://keepmind.io/api/desktop?orgId=o1&agentId=a1&mode=watch",
     );
     expect(desktopSocketUrl("http://localhost:5173/x", { orgId: "o 1", agentId: "a1", mode: "control" })).toBe(
       "ws://localhost:5173/api/desktop?orgId=o%201&agentId=a1&mode=control",
     );
     // One that takes its mode changing in place says so.
     expect(desktopSocketUrl(base, { orgId: "o1", agentId: "a1", mode: "watch", switches: true })).toBe(
-      "wss://keepmind-os/api/desktop?orgId=o1&agentId=a1&switch=1&mode=watch",
+      "wss://keepmind.io/api/desktop?orgId=o1&agentId=a1&switch=1&mode=watch",
     );
     // A browser card's view only watches, and never changes mode.
     const card = { orgId: "o1", agentId: "a1", mode: "control", switches: true, preview: true } as const;
-    expect(desktopSocketUrl(base, card)).toBe("wss://keepmind-os/api/desktop?orgId=o1&agentId=a1&preview=1&mode=watch");
+    expect(desktopSocketUrl(base, card)).toBe("wss://keepmind.io/api/desktop?orgId=o1&agentId=a1&preview=1&mode=watch");
     // The right hand's shared place is asked for by name; the viewer's own needs none.
     expect(desktopSocketUrl(base, { orgId: "o1", agentId: "a1", mode: "watch", seat: SHARED_SEAT })).toBe(
-      "wss://keepmind-os/api/desktop?orgId=o1&agentId=a1&seat=shared&mode=watch",
+      "wss://keepmind.io/api/desktop?orgId=o1&agentId=a1&seat=shared&mode=watch",
     );
   });
 

@@ -166,7 +166,7 @@ describe("the look", () => {
     expect(html).toContain(":root{color-scheme:light dark;");
     expect(html).toContain("@media (prefers-color-scheme:dark){.bg{background:#0f0f0e!important}");
     expect(html).toContain("[data-ogsb] .logo-ink{display:none!important}");
-    expect(html).toContain('<!--[if !mso]><!--><img class="logo-bone"');
+    expect(html).toContain('<!--[if !mso]><!--><span class="logo-bone"');
   });
 
   test("the button is the app's primary at its large size, in layers a client can drop one by one", () => {
@@ -297,7 +297,7 @@ describe("the look", () => {
   });
 
   test("without EMAIL_FROM, the sender is KeepMind OS at this server's host", () => {
-    expect(defaultEmailFrom("https://keepmind.io")).toBe("KeepMind OS <contact@zeroagency.ai>");
+    expect(defaultEmailFrom("https://keepmind.io")).toBe("KeepMind OS <ping@keepmind.io>");
     expect(defaultEmailFrom("https://chat.acme.com:8443/")).toBe("KeepMind OS <ping@chat.acme.com>");
   });
 
@@ -355,7 +355,7 @@ describe("the look", () => {
     const html = (id: string) => renderEmail(EMAIL_SAMPLES[id] as EmailTemplate, art).html;
     expect(html("verify_email.pt-BR")).toContain(`pode ignorar ${nobr}este e-mail.</span></p>`);
     expect(html("join_request.pt-BR")).toContain(`e pediu ${nobr}para entrar.</span></p>`);
-    expect(html("join_code.en")).toContain(`Souza Bakery ${nobr}on KeepMind OS.</span></p>`);
+    expect(html("join_code.en")).toContain(`Souza Bakery on ${nobr}KeepMind OS.</span></p>`);
     // A name in bold moves down with its period, still bold.
     expect(html("join_code.en")).toContain(
       `to ask to join ${nobr}<b class="ink" style="font-weight:600;color:#151514">Souza Bakery</b>.</span></p>`,
@@ -585,11 +585,9 @@ describe("where the pictures come from", () => {
     const lia = { color: "rose", eyes: "dots", accessory: "flower" };
     const teal = { color: "teal", eyes: "round", accessory: "none" };
     const { html, inline } = renderEmail({ ...ready, crew: [lia, lia, teal, { color: "rose" }] }, attached);
-    expect(html).toContain('src="cid:contact@zeroagency.ai"');
-    expect(html).toContain('src="cid:contact@zeroagency.ai"');
+    expect(html).toContain('src="cid:sky-band@keepmind.io"');
+    expect(html).toContain('src="cid:sky-band@keepmind.io"');
     expect(inline.map((p) => p.filename)).toEqual([
-      "logo-ink-tile.png",
-      "logo-bone.png",
       "computer.png",
       "sky-band.png",
       "agent-rose.png",
@@ -600,7 +598,7 @@ describe("where the pictures come from", () => {
 
   test("linked from this server's /email/, with the web font", () => {
     const { html, inline } = renderEmail(EMAIL_SAMPLES["verify_email.en"] as EmailTemplate, art);
-    expect(html).toContain('src="https://x.test/email/logo-ink-tile.png"');
+    expect(html).toContain('src="https://x.test/email/sky-band.png"');
     expect(html).toContain("src:url('https://x.test/email/source-sans-3-latin.woff2')");
     expect(html).toContain('<a href="https://x.test" target="_blank"');
     expect(inline).toEqual([]);
@@ -651,14 +649,9 @@ describe("where the pictures come from", () => {
       },
       attached,
     );
-    expect(html).toContain('src="cid:contact@zeroagency.ai"');
-    expect(inline.map((p) => p.filename)).toEqual([
-      "logo-ink-tile.png",
-      "logo-bone.png",
-      "sky-band.png",
-      "agent-rose.png",
-    ]);
-    expect(inline[0]).toMatchObject({ cid: "contact@zeroagency.ai", contentType: "image/png" });
+    expect(html).toContain('src="cid:sky-band@keepmind.io"');
+    expect(inline.map((p) => p.filename)).toEqual(["sky-band.png", "agent-rose.png"]);
+    expect(inline[0]).toMatchObject({ cid: "sky-band@keepmind.io", contentType: "image/png" });
     expect([...(inline[0]?.content ?? []).slice(1, 4)].map((c) => String.fromCharCode(c)).join("")).toBe("PNG");
   });
 
@@ -753,11 +746,7 @@ describe("outbox delivery", () => {
     const sender = createFakeEmailSender();
     const attached: EmailArt = await emailArtFor("http://localhost:3000", WEB_DIR, "attach");
     await sendQueuedEmail(sender, { key: "k", to: ["a@b.c"], template: EMAIL_SAMPLES["verify_email.en"] }, attached);
-    expect(sender.sent[0]?.inline?.map((p) => p.cid)).toEqual([
-      "contact@zeroagency.ai",
-      "contact@zeroagency.ai",
-      "contact@zeroagency.ai",
-    ]);
+    expect(sender.sent[0]?.inline?.map((p) => p.cid)).toEqual(["sky-band@keepmind.io"]);
     await sendQueuedEmail(sender, { key: "k2", to: ["a@b.c"], template: EMAIL_SAMPLES["verify_email.en"] }, art);
     expect(sender.sent[1]).not.toHaveProperty("inline");
   });

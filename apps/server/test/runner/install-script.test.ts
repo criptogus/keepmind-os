@@ -1056,7 +1056,7 @@ test("service files: systemd unit, launchd plist and the Windows task command", 
   );
 
   const plist = launchdPlist({ ...launch, script: "/Users/me/a&b/agentes-runner.mjs" });
-  expect(plist).toContain("<string>chat.agentes.runner</string>");
+  expect(plist).toMatch(/<string>chat\.agentes\.runner\.[0-9a-f]{12}<\/string>/);
   expect(plist).toContain("<string>/Users/me/a&amp;b/agentes-runner.mjs</string>");
   expect(plist).toContain("<key>RunAtLoad</key>");
   expect(plist).toContain("<key>AbandonProcessGroup</key>\n  <true/>");

@@ -200,12 +200,10 @@ test("a server people outside can't reach attaches the pictures to each email", 
   await t.drain();
   const sent = t.email.sent.at(-1);
   expect(sent?.subject).toBe("Confirme seu e-mail no KeepMind OS");
-  expect(sent?.html).toContain('src="cid:contact@zeroagency.ai"');
+  expect(sent?.html).toContain('src="cid:sky-band@keepmind.io"');
   expect(sent?.html).not.toContain(`${ORIGIN}/email/`);
   expect(sent?.inline?.map((p) => [p.cid, p.filename, p.contentType])).toEqual([
-    ["contact@zeroagency.ai", "logo-ink-tile.png", "image/png"],
-    ["contact@zeroagency.ai", "logo-bone.png", "image/png"],
-    ["contact@zeroagency.ai", "sky-band.png", "image/png"],
+    ["sky-band@keepmind.io", "sky-band.png", "image/png"],
   ]);
 });
 

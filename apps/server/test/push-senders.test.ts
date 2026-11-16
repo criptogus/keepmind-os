@@ -29,18 +29,19 @@ describe("phone push without the Apple key (ADR 0178)", () => {
   });
 
   test("auto: its own credentials first, else the relay", () => {
-    const c = config({ PUBLIC_URL: "https://chat.example.com" });
+    const c = config({ PUSH_SENDER: "auto", PUBLIC_URL: "https://chat.example.com" });
     expect(phonePushMode(c, createFakePushSender())).toBe("direct");
     expect(phonePushMode(c, null)).toBe("relay");
   });
 
   test("auto on the server that is the relay: a platform without credentials is off, never a call to itself", () => {
-    const c = config({ PUBLIC_URL: "https://keepmind.io" });
+    const c = config({ PUSH_SENDER: "auto", PUBLIC_URL: "https://keepmind.io" });
     expect(relayIsThisServer(c)).toBe(true);
     expect(phonePushMode(c, null)).toBe("off");
     expect(phonePushMode(c, createFakePushSender())).toBe("direct");
     // Someone's own relay at their own address is the same case; the default relay from elsewhere is not.
     const own = config({
+      PUSH_SENDER: "auto",
       PUBLIC_URL: "https://chat.example.com",
       PUSH_RELAY_URL: "https://chat.example.com/api/push-relay/v1",
     });

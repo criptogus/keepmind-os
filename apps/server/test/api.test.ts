@@ -23,12 +23,12 @@ describe("sign-up policy (self-host)", () => {
     expect(JSON.stringify(await res.json())).toContain("Sign-up is closed");
   });
 
-  test("auth-config: no legal links or support address unless configured; password reset when email goes out", async () => {
+  test("auth-config: no legal links unless configured, with KeepMind support; password reset when email goes out", async () => {
     // The test server's fake email sender delivers; people connect their own computers.
     expect(await (await browser(t)("/api/app/auth-config")).json()).toMatchObject({
       termsUrl: null,
       privacyUrl: null,
-      supportEmail: null,
+      supportEmail: "contact@zeroagency.ai",
       passwordReset: true,
       workspaceComputer: false,
       cloud: false,

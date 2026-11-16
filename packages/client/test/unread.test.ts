@@ -37,7 +37,7 @@ describe("what looks unread", () => {
   });
 
   test("the tab title carries the total in front, replaced, gone at zero, 99+ past 99", () => {
-    expect(titledWithUnread("keepmind.io", 3)).toEqual({ title: "(3) agentes.chat", prefix: "(3) " });
+    expect(titledWithUnread("KeepMind OS", 3)).toEqual({ title: "(3) KeepMind OS", prefix: "(3) " });
     expect(titledWithUnread("(3) KeepMind OS", 5, "(3) ").title).toBe("(5) KeepMind OS");
     expect(titledWithUnread("(99+) #geral", 0, "(99+) ").title).toBe("#geral");
     expect(titledWithUnread("#geral", 120).title).toBe("(99+) #geral");

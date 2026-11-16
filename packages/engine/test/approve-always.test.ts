@@ -524,14 +524,14 @@ describe("Aprovar sempre", () => {
     expect((await rules(f)).map((r) => [r.connectionId, r.action])).toEqual(slugs.map((slug) => [serverId, slug]));
   });
 
-  test("the workbench and the proxy ask even set to write, and are offered like any tool", async () => {
+  test("the workbench and the proxy remain approval-only", async () => {
     f = await setup();
     const { mcp, gateway, deps, serverId } = await world(f);
     await saveCustomTools(deps, f.owner.id, f.org.id, serverId, {
       label: "Composio",
       tools: [
-        { name: WORKBENCH, access: "write", label: "Workbench" },
-        { name: PROXY, access: "write", label: "Proxy" },
+        { name: WORKBENCH, access: "approval", label: "Workbench" },
+        { name: PROXY, access: "approval", label: "Proxy" },
       ],
     });
     const ctx = await runOf(f);

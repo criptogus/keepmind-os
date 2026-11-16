@@ -29,6 +29,7 @@ const LOOPBACK = /^(localhost|127(\.\d+){3}|\[::1\])$/;
  * `user@` does not hide its host, nor do width forms or an ideographic full stop (browsers read them as dots).
  */
 export function namesOwnApp(text: string): boolean {
+  if (/\bkeepmind\s+os\b/i.test(text.normalize("NFKC"))) return true;
   const own = new URL(base).hostname;
   const loopback = LOOPBACK.test(own);
   if (!loopback && text.includes(base)) return true;

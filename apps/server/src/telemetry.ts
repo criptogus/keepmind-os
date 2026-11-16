@@ -142,7 +142,7 @@ export function startTelemetry(deps: TelemetryDeps) {
 
   const cloud = isKeepMindCloud(config.PUBLIC_URL);
   // A development server is nobody's installation.
-  const sends = (cloud || config.TELEMETRY === "on") && config.NODE_ENV === "production";
+  const sends = config.TELEMETRY === "on" && config.NODE_ENV === "production";
   const ready = (async () => {
     const kept = await markServerStarted(db, new Date(now())).catch((error: unknown) => {
       quiet(error);
@@ -185,12 +185,10 @@ export async function printTelemetry(
   out.write(`${JSON.stringify(report, null, 2)}\n`);
   const on = `On: sent once a day to ${config.TELEMETRY_URL}.`;
   err.write(
-    isKeepMindCloud(config.PUBLIC_URL)
-      ? `${on}\n`
-      : telemetrySends(config, state.enabled)
-        ? `${on} TELEMETRY=off in .env turns it off.\n`
-        : config.TELEMETRY === "off"
-          ? "Off (TELEMETRY=off): nothing is sent.\n"
-          : "Off (turned off in Settings): nothing is sent.\n",
+    telemetrySends(config, state.enabled)
+      ? `${on} TELEMETRY=off in .env turns it off.\n`
+      : config.TELEMETRY === "off"
+        ? "Off (TELEMETRY=off): nothing is sent.\n"
+        : "Off (turned off in Settings): nothing is sent.\n",
   );
 }

@@ -276,7 +276,7 @@ const PB = `font-family:${SANS};mso-line-height-rule:at-least`;
 const LIFT =
   "inset 0 1px 0 rgba(255,255,255,.18),inset 0 -1px 0 rgba(0,0,0,.3),0 1px 2px rgba(0,0,0,.18),0 6px 14px -6px rgba(0,0,0,.45)";
 
-const cidOf = (file: string) => `${file.replace(/\.png$/, "")}@KeepMind OS`;
+const cidOf = (file: string) => `${file.replace(/\.png$/, "")}@keepmind.io`;
 
 /** The pictures one email shows: linked, or attached (only those its HTML names). */
 function pictures(art: EmailArt) {

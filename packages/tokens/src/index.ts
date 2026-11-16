@@ -111,7 +111,7 @@ export const dark: ThemeColors = {
   focusColor: "#71716c",
   agent: "#c4ff3d",
   agent2: "#d7ff80",
-  agentSoft: "#26330e",
+  agentSoft: "#242424",
   onAgent: "#111111",
   ok: "#5fc48a",
   warn: "#e0a84a",

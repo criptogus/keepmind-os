@@ -25,7 +25,7 @@ export const SIGNATURE_MARK = "<!-- KeepMind OS -->";
  * A line of ours left in a body the agent sends again (an edit): the mark on a line of its own, then the line. One
  * quoted from another comment (`> `) is the agent's text, and so is everything around it.
  */
-const OWN_LINE = /[\r\n]*^[ \t]*<!-- agentes\.chat -->[ \t]*\r?\n<sub>[^<\r\n]*<\/sub>[ \t]*$/gm;
+const OWN_LINE = /[\r\n]*^[ \t]*<!-- (?:KeepMind OS|agentes\.chat) -->[ \t]*\r?\n<sub>[^<\r\n]*<\/sub>[ \t]*$/gm;
 
 /** A name as GitHub shows it: one line, no markup, no @mention, no link. */
 const escapeLine = (s: string) => s.replace(/\s+/g, " ").replace(/[&<>@#*_`~|\\[\]]/g, (c) => `&#${c.charCodeAt(0)};`);
@@ -41,7 +41,7 @@ export function signedBody(body: string, line: string) {
 
 /** One of our agents wrote this body (its line ends it): through an account's connection it isn't the app's bot. */
 export const signedByAgent = (body: string) =>
-  /(?:^|\n)[ \t]*<!-- agentes\.chat -->[ \t]*\r?\n<sub>[^<\r\n]*<\/sub>$/.test(body.trimEnd());
+  /(?:^|\n)[ \t]*<!-- (?:KeepMind OS|agentes\.chat) -->[ \t]*\r?\n<sub>[^<\r\n]*<\/sub>$/.test(body.trimEnd());
 
 /**
  * `message` with each trailer on a last line of its own, inside its trailer block when it ends with one; each once,

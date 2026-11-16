@@ -635,9 +635,9 @@ describe("browser_ask_person", () => {
   test("what names our own app: its domains and this server's address, never a mailbox there", () => {
     expect(namesOwnApp("Entre no KeepMind OS com a conta administradora")).toBe(true);
     expect(namesOwnApp("https://keepmind.io/org/1/settings")).toBe(true);
-    expect(namesOwnApp("Abra https://contact@zeroagency.ai/login")).toBe(true);
-    expect(namesOwnApp("Abra app.agentes。chat e entre")).toBe(true);
-    expect(namesOwnApp("Abra APP.AGENTES.CHAT. e entre")).toBe(true);
+    expect(namesOwnApp("Abra https://user@keepmind.io/login")).toBe(true);
+    expect(namesOwnApp("Abra app.keepmind。io e entre")).toBe(true);
+    expect(namesOwnApp("Abra APP.KEEPMIND.IO. e entre")).toBe(true);
     expect(namesOwnApp("Type the code sent to contact@zeroagency.ai")).toBe(false);
     expect(namesOwnApp("Sign in to KeepMind OSbot.com")).toBe(false);
     expect(namesOwnApp("Sign in to Stripe")).toBe(false);
