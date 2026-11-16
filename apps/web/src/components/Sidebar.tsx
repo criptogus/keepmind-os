@@ -969,6 +969,11 @@ export function Sidebar() {
       {/* Beta: the way to the feedback form, a row of its own at the bottom, where this server takes it. Not beside
           the person's name, which it would leave no room for; the rail has no room for a row's words. */}
       {!rail && <FeedbackMark />}
+      {!rail && (
+        <a className="sidebar__powered" href="https://zeroagency.ai" target="_blank" rel="noopener noreferrer">
+          Powered by ZeroAgency.ai
+        </a>
+      )}
       {/* No foot in a personal workspace (ADR 0159): the person, the bell and the collapse are on top. */}
       {!personal && (
         <div className="sidebar__foot">

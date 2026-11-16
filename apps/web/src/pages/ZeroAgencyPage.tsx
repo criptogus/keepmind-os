@@ -106,7 +106,10 @@ export function ZeroAgencyPage({ area }: { area: string }) {
           <section className="zero-area__option" aria-labelledby="zero-goal">
             <div>
               <h2 id="zero-goal">{t(`zero.${key}.goal`)}</h2>
-              <p>{key === "cyber" && "Powered by Liquid Cybersec. "}{t(`zero.${key}.help`)}</p>
+              <p>
+                {key === "cyber" && "Powered by Liquid Cybersec. "}
+                {t(`zero.${key}.help`)}
+              </p>
             </div>
             <Field label={t(`zero.${key}.context`)} id="zero-context">
               <Input
@@ -169,7 +172,11 @@ export function ZeroAgencyPage({ area }: { area: string }) {
         </>
       )}
       <footer className="zero-area__footer">
-        Zero Agency · <a href={`mailto:${ZERO_CONTACT}`}>{ZERO_CONTACT}</a>
+        <a href="https://zeroagency.ai" target="_blank" rel="noopener noreferrer">
+          Powered by ZeroAgency.ai
+        </a>
+        {" · "}
+        <a href={`mailto:${ZERO_CONTACT}`}>{ZERO_CONTACT}</a>
       </footer>
       <ConnectFlow flow={flow} onChange={setFlow} onClose={() => setFlow(null)} />
     </div>
