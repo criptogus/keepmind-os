@@ -2364,6 +2364,7 @@ export const ptBR = {
     },
     noOwner: "Sem responsável",
     workingNow: "Trabalhando agora",
+    askKivo: "Conte ao {{name}} o que você precisa",
     available: "Disponível",
     archived: "Arquivados",
     restore: "Restaurar",

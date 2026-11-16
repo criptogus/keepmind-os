@@ -622,6 +622,7 @@ export function ChannelPage({
   focusMessageId,
   adjustThreadId,
   thread,
+  sayOnce,
 }: {
   channelId: string;
   chrome?: ChannelChrome;
@@ -633,6 +634,8 @@ export function ChannelPage({
   focusMessageId?: string;
   /** DMs may not be in the channel list: the page still works with this. */
   fallback?: Channel;
+  /** A message to send once, as if typed (the Team page's "tell the right hand" lands here via `?say=`). */
+  sayOnce?: string;
 }) {
   const { t } = useTranslation();
   const { org } = useOrg();
@@ -689,6 +692,7 @@ export function ChannelPage({
           focusMessageId={focusMessageId}
           adjustThreadId={adjustThreadId}
           thread={thread}
+          sayOnce={sayOnce}
         />
       </InPlaceProvider>
     </MissionPanelProvider>
@@ -800,12 +804,14 @@ function ChannelView({
   focusMessageId,
   adjustThreadId,
   thread,
+  sayOnce,
 }: {
   channel: Channel;
   chrome?: ChannelChrome;
   focusMessageId?: string;
   adjustThreadId?: string;
   thread?: ThreadInfo;
+  sayOnce?: string;
 }) {
   const { t, i18n } = useTranslation();
   const { org, me } = useOrg();
@@ -1187,6 +1193,15 @@ function ChannelView({
     },
   });
   const { send, retry } = sendHelpers(post);
+  // `?say=` (the Team page's way into the right hand's interview): send once, only where writing is allowed —
+  // a locked DM or a read-only channel keeps the param for nothing.
+  const saySent = useRef(false);
+  useEffect(() => {
+    if (!sayOnce || saySent.current) return;
+    if (chrome?.locked || chrome?.composerReplacement || channel.can?.post === false || org.deletion) return;
+    saySent.current = true;
+    send(sayOnce, thread ? thread.id : null);
+  }, [sayOnce, chrome?.locked, chrome?.composerReplacement, channel.can?.post, org.deletion, thread, send]);
   const sendVoice = useSendVoice(org.id, channel.id, {
     me: { id: me.user.id },
     onRefused: (error) =>

@@ -2462,6 +2462,8 @@ export const en = {
     },
     noOwner: "No one responsible",
     workingNow: "Working now",
+    /** The Team page's way into the right hand's interview: opens its DM and sends the starter. */
+    askKivo: "Tell {{name}} what you need",
     available: "Available",
     archived: "Archived",
     restore: "Restore",
