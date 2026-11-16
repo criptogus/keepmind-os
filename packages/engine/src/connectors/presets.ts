@@ -99,6 +99,15 @@ export const composioToolkitOf = (serverUrl: string | null | undefined) =>
 
 export const MCP_PRESETS: readonly McpPreset[] = [
   {
+    id: "composio-connect",
+    label: "Composio Connect",
+    description: "Connect apps through your Composio account with browser authorization.",
+    category: "automation",
+    icon: "composio-connect",
+    serverUrl: "https://connect.composio.dev/mcp",
+    auth: ["oauth"],
+  },
+  {
     id: "superagentskill",
     label: "SuperAgentSkill",
     description: "Find, evaluate and improve agent skills.",

@@ -87,11 +87,12 @@ export function suggestFor(tool: ToolToClassify, readTools: readonly string[] = 
 /**
  * Composio's meta tools (docs.composio.dev/reference/meta-tools). The executor runs other Composio actions by
  * slug. The workbench and bash run code in Composio's sandbox, which can call any action, and the proxy sends any
- * HTTP request to a connected app's API (`PUT …/pulls/12/merge` too): they always ask a person whatever their
+ * HTTP request to a connected app's API (`PUT …/pulls/12/merge` too); managing connections can revoke access. They always ask a person whatever their
  * annotations or stored level say.
  */
 export const COMPOSIO_EXECUTOR = "COMPOSIO_MULTI_EXECUTE_TOOL";
 export const COMPOSIO_ANY_ACTION: ReadonlySet<string> = new Set([
+  "COMPOSIO_MANAGE_CONNECTIONS",
   "COMPOSIO_REMOTE_WORKBENCH",
   "COMPOSIO_REMOTE_BASH_TOOL",
   "COMPOSIO_PROXY_EXECUTE",
@@ -678,7 +679,9 @@ export async function syncCustomTools(deps: CustomDeps, c: ConnectorConnection) 
     seen.add(tool.name);
     const old = byName.get(tool.name);
     const description = (tool.description ?? "").slice(0, 2000);
-    const cls = classes.get(tool.name) ?? classifyByRules(tool, preset?.readTools, writeTools) ?? UNKNOWN_CLASS;
+    const cls: ToolClass = COMPOSIO_ANY_ACTION.has(tool.name)
+      ? { level: "approval", source: "verb", reason: "verb_sensitive", sensitive: true }
+      : classes.get(tool.name) ?? classifyByRules(tool, preset?.readTools, writeTools) ?? UNKNOWN_CLASS;
     const suggestion = {
       suggestedAccess: cls.level,
       suggestionSource: cls.source,

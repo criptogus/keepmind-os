@@ -7,6 +7,11 @@ import type { Widen } from "./widen";
  * no exclamation marks, buttons start with a verb, "agentes" in lower case.
  */
 export const en = {
+  "keepmind.connect.githubSetup":
+    "Connect in your browser without copying tokens. The first time, GitHub creates the KeepMind app in your account; then you choose repositories and authorize access.",
+  "keepmind.connect.oauthSetup":
+    "{{name}} supports OAuth, but it is not configured on this server yet. The server owner needs to enable it. An API key is a manual alternative in the meantime.",
+  "keepmind.connect.prepareGitHub": "Set up connection on GitHub",
   "keepmind.ai.manualKey": "I already have an API key",
   "keepmind.ai.localTitle": "Connect a local model or another provider",
   "keepmind.ai.advanced": "Advanced options",
@@ -12779,6 +12784,7 @@ export const en = {
     },
     how: {
       oneClick: "One click: you authorize on the service's page",
+      oauthSetup: "Browser authorization: initial setup required",
       oauthOrKey: "You authorize on the service's page, or use an API key",
       key: "Needs an API key",
       appPassword: "Needs an app password",
@@ -13016,6 +13022,7 @@ export const en = {
       intercom_eu: "Intercom (EU)",
     },
     descriptions: {
+      composio_connect: "Connect services through your Composio account with browser authorization.",
       superagentskill: "Find, evaluate and improve agent skills.",
       liquid_cybersec: "Investigate security findings and coordinate corrections with approval.",
       github: "Code, PRs, issues and Actions.",

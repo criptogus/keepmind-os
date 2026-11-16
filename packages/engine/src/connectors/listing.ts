@@ -17,6 +17,7 @@ import { composioToolkitUrl, MCP_PRESETS, type McpPreset, presetForServer } from
  * flatten (PayPal's three blues, Canva's gradient).
  */
 export const CONNECTOR_BRANDS: Record<string, { file: string; color: string | null; own?: true }> = {
+  "composio-connect": { file: "composio-connect", color: null },
   superagentskill: { file: "superagentskill", color: null, own: true },
   "liquid-cybersec": { file: "liquid-cybersec", color: null, own: true },
   github: { file: "github", color: null },

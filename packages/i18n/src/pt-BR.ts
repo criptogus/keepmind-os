@@ -7,6 +7,11 @@ import type { LocaleStrings } from "./plurals";
  * no exclamation marks, buttons start with a verb, "agentes" in lower case.
  */
 export const ptBR = {
+  "keepmind.connect.githubSetup":
+    "Conecte pelo navegador, sem copiar tokens. Na primeira vez, o GitHub cria o app KeepMind na sua conta; depois você escolhe os repositórios e autoriza o acesso.",
+  "keepmind.connect.oauthSetup":
+    "{{name}} oferece OAuth, mas ele ainda não foi configurado neste servidor. O responsável pelo servidor precisa habilitá-lo. Enquanto isso, a chave é uma alternativa manual.",
+  "keepmind.connect.prepareGitHub": "Configurar conexão no GitHub",
   "keepmind.ai.manualKey": "Já tenho uma chave de API",
   "keepmind.ai.localTitle": "Conectar um modelo local ou outro provedor",
   "keepmind.ai.advanced": "Opções avançadas",
@@ -12809,6 +12814,7 @@ export const ptBR = {
     },
     how: {
       oneClick: "Um clique: você autoriza na página do serviço",
+      oauthSetup: "Autorização pelo navegador: requer configuração inicial",
       oauthOrKey: "Você autoriza na página do serviço, ou usa uma chave de API",
       key: "Precisa de uma chave de API",
       appPassword: "Precisa de uma senha de app",
@@ -13040,6 +13046,7 @@ export const ptBR = {
       intercom_eu: "Intercom (Europa)",
     },
     descriptions: {
+      composio_connect: "Conecte serviços pela sua conta Composio, com autorização no navegador.",
       superagentskill: "Encontre, avalie e melhore habilidades dos agentes.",
       liquid_cybersec: "Investigue problemas de segurança e coordene correções com aprovação.",
       github: "Código, PRs, issues e Actions.",

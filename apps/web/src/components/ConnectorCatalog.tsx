@@ -47,10 +47,11 @@ export function searchCatalog(list: ConnectorDef[], query: string, shown: (d: Co
 }
 
 /** How it connects, for the card: one click (OAuth), OAuth or a key, a key only, or through Composio. */
-export function authKind(d: ConnectorDef): "oneClick" | "oauthOrKey" | "key" | "composio" {
+export function authKind(d: ConnectorDef): "oneClick" | "oauthOrKey" | "oauthSetup" | "key" | "composio" {
   if (d.via === "composio") return "composio";
   if (d.kind === "remote_mcp" && d.oauthConfigured) return "oneClick";
-  return d.oauthConfigured && d.auth.includes("oauth") ? "oauthOrKey" : "key";
+  if (d.auth.includes("oauth")) return d.oauthConfigured ? "oauthOrKey" : "oauthSetup";
+  return "key";
 }
 
 /**
@@ -492,6 +493,7 @@ function TileIcon({ entry, size }: { entry: Entry; size: "md" | "lg" }) {
 const HOW_ICON: Record<HowKind, IconName> = {
   oneClick: "bolt",
   oauthOrKey: "bolt",
+  oauthSetup: "bolt",
   key: "key",
   composio: "plug",
   appPassword: "lock",

@@ -383,7 +383,7 @@ describe("Adicionar conector: one catalog", () => {
       const d = byId(id);
       return d ? authKind(d) : null;
     };
-    expect([kind("linear"), kind("github"), kind("sentry")]).toEqual(["oneClick", "oauthOrKey", "key"]);
+    expect([kind("linear"), kind("github"), kind("sentry")]).toEqual(["oneClick", "oauthOrKey", "oauthSetup"]);
     expect(searchCatalog(CATALOG.connectors, "ciclos").map((d) => d.id)).toEqual(["linear"]);
   });
 

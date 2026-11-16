@@ -20,6 +20,17 @@ let f: Fixture;
 afterEach(() => f?.close());
 
 describe("one-click MCP connectors", () => {
+  test("Composio Connect uses its official OAuth MCP without an administrative API key", () => {
+    const entry = connectorListing({ oauthApps: {}, composio: null }).find((p) => p.id === "composio-connect");
+    expect(entry).toMatchObject({
+      serverUrl: "https://connect.composio.dev/mcp",
+      auth: ["oauth"],
+      oauthConfigured: true,
+      available: true,
+      kind: "remote_mcp",
+    });
+    expect(entry?.via).toBeUndefined();
+  });
   test("presets are official https servers with unique ids; matched by canonical URL", () => {
     const ids = MCP_PRESETS.map((p) => p.id);
     expect(new Set(ids).size).toBe(ids.length);

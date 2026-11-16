@@ -7,7 +7,7 @@ import type { Connection, GitHubAppInstallation, GitHubAppSetup } from "@agentes
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { setNavigateAway } from "@/lib/navigate";
 import { rowMenu } from "./catalog";
-import { createFakeApi, type FakeState, meAsAdmin, meWithRole, ORG_ID, seedState } from "./fake-api";
+import { CATALOG, createFakeApi, type FakeState, meAsAdmin, meWithRole, ORG_ID, seedState } from "./fake-api";
 import { renderApp, screen, settle } from "./render";
 
 afterEach(() => {
@@ -16,9 +16,15 @@ afterEach(() => {
 });
 
 const CONNECTORS = `/org/${ORG_ID}/settings/connectors`;
-const go = async (state: FakeState, search = "") => {
+const go = async (state: FakeState, search = "", withoutOAuth = false) => {
   window.history.replaceState(null, "", `${CONNECTORS}${search}`);
-  const r = await renderApp(`${CONNECTORS}${search}`, { api: createFakeApi(state) });
+  const api = createFakeApi(state);
+  if (withoutOAuth)
+    api.connectors.catalog = async () => ({
+      ...CATALOG,
+      connectors: CATALOG.connectors.map((c) => (c.id === "github" ? { ...c, oauthConfigured: false } : c)),
+    });
+  const r = await renderApp(`${CONNECTORS}${search}`, { api });
   await settle(8);
   return { ...r, state };
 };
@@ -186,8 +192,8 @@ describe("Conectores › GitHub with the KeepMind OS app", () => {
 });
 
 describe("Conectar GitHub: the KeepMind OS app first", () => {
-  const connect = async (state: FakeState) => {
-    const r = await go(state);
+  const connect = async (state: FakeState, withoutOAuth = false) => {
+    const r = await go(state, "", withoutOAuth);
     await click(screen().getAllByRole("button", { name: "Adicionar conector" })[0] as HTMLElement);
     const add = screen().getByRole("dialog", { name: "Adicionar conector" });
     await click(within(add).getByRole("button", { name: "GitHub" }));
@@ -228,6 +234,32 @@ describe("Conectar GitHub: the KeepMind OS app first", () => {
     await click(within(flow).getByRole("button", { name: "Continuar no GitHub" }));
     await settle(4);
     expect(state.calls.find((c) => c.method === "connectors.startOAuth")?.args.slice(0, 2)).toEqual([ORG_ID, "github"]);
+  });
+
+  test("unconfigured GitHub offers browser setup first and keeps manual tokens optional", async () => {
+    const left: string[] = [];
+    setNavigateAway((url) => left.push(url));
+    const { state, flow } = await connect(
+      seedState({ connections: [], githubApp: { installable: false, installations: [], setup: NO_APP } }),
+      true,
+    );
+    expect(within(flow).getByRole("button", { name: "Configurar conexão no GitHub" })).toBeTruthy();
+    expect(within(flow).queryByRole("button", { name: "Salvar chave" })).toBeNull();
+    expect(flow.textContent).toContain("sem copiar tokens");
+    await click(within(flow).getByRole("button", { name: "Configurar conexão no GitHub" }));
+    await settle(4);
+    expect(state.calls.find((c) => c.method === "githubApp.startManifest")?.args).toEqual([CONNECTORS]);
+    expect(left).toEqual(["https://chat.example.com/api/app/github-app/manifest/start?state=s"]);
+    expect(state.calls.some((c) => c.method === "connectors.withKey")).toBe(false);
+  });
+
+  test("non-owner cannot create the OAuth app and receives the setup explanation", async () => {
+    const { flow } = await connect(
+      seedState({ connections: [], githubApp: { installable: false, installations: [], setup: null } }),
+      true,
+    );
+    expect(within(flow).queryByRole("button", { name: "Configurar conexão no GitHub" })).toBeNull();
+    expect(flow.textContent).toContain("ainda não foi configurado neste servidor");
   });
 
   test("a server without the app: GitHub's sign-in as before", async () => {

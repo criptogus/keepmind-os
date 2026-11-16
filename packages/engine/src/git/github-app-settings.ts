@@ -1,9 +1,11 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
+import { isIP } from "node:net";
 import type { KeyWrapper } from "@agenteschat/adapters";
 import { type Database, type Executor, eq, schema } from "@agenteschat/db";
 import { type AuditEntry, auditEveryOrg } from "../audit";
 import { deriveSecret, openSecret, sealSecret } from "../crypto";
 import { ConflictError, ValidationError } from "../errors";
+import { isBlockedAddress, isPublicHostName } from "../net-guard";
 import {
   appRegistration,
   forgetAllInstallationTokens,
@@ -248,19 +250,24 @@ export async function missingGitHubAppEvents(app: GitHubAppConfig, http: GitHubH
  */
 export function githubAppManifest(publicUrl: string) {
   const base = publicUrl.replace(/\/$/, "");
-  const host = new URL(base).host;
-  const room = APP_NAME_MAX - "agentes.chat ()".length;
+  const address = new URL(base);
+  const host = address.host;
+  const hostname = address.hostname.replace(/^\[|\]$/g, "");
+  const webhook =
+    address.protocol === "https:" && (isIP(hostname) ? !isBlockedAddress(hostname) : isPublicHostName(hostname));
+  const room = APP_NAME_MAX - "KeepMind OS ()".length;
   return {
-    name: `agentes.chat (${host.slice(0, room)})`,
+    name: `KeepMind OS (${host.slice(0, room)})`,
     url: base,
     redirect_url: githubAppManifestCallbackUri(base),
     callback_urls: [githubAppCallbackUri(base)],
     request_oauth_on_install: true,
     setup_on_update: true,
     public: true,
-    hook_attributes: { url: `${base}/api/github-app/webhook`, active: base.startsWith("https://") },
+    // GitHub validates the URL even with active:false. Omit the hook entirely for local installs.
+    ...(webhook ? { hook_attributes: { url: `${base}/api/github-app/webhook`, active: true } } : {}),
     default_permissions: APP_PERMISSIONS,
-    default_events: [...GITHUB_APP_EVENTS],
+    default_events: webhook ? [...GITHUB_APP_EVENTS] : [],
   };
 }
 

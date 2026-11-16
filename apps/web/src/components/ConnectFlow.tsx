@@ -12,6 +12,7 @@ import {
   useInstallGitHubApp,
   useRenameConnection,
   useStartOAuth,
+  useStartGitHubAppManifest,
 } from "@agenteschat/client";
 import {
   catalogToolClass,
@@ -253,6 +254,7 @@ function ConnectStep({
   const oauth = useStartOAuth(org.id);
   const githubApp = useGitHubApp(org.id);
   const installApp = useInstallGitHubApp(org.id);
+  const prepareGitHub = useStartGitHubAppManifest();
   const [how, setHow] = useState<"app" | "account">("app");
   const [url, setUrl] = useState(initialUrl ?? "");
   const [label, setLabel] = useState("");
@@ -280,7 +282,11 @@ function ConnectStep({
   const appOffered =
     def?.id === "github" && !viaComposio && !mode && !accountOnly && githubApp.data?.installable === true;
   const viaApp = appOffered && how === "app";
-  const busy = connect.isPending || withKey.isPending || oauth.isPending || installApp.isPending;
+  const missingOAuth = !viaComposio && !byAddress && !!listed?.auth.includes("oauth") && !canOAuth && !viaApp;
+  const canPrepareGitHub = missingOAuth && def?.id === "github" && githubApp.data?.setup?.canCreate === true;
+  const oauthFirst = canOAuth || canPrepareGitHub;
+  const busy =
+    connect.isPending || withKey.isPending || oauth.isPending || installApp.isPending || prepareGitHub.isPending;
   const sent = busy || withKey.isSuccess || connect.data?.status === "connected";
   // As the server does: a server by address takes another account, a catalog connector a new sign-in.
   const accounts = useHeldWhile(
@@ -453,7 +459,15 @@ function ConnectStep({
               ]}
             />
           )}
-          {!viaApp && canOAuth && canKey && (
+          {missingOAuth && (
+            <p className="muted cflow__text" role="status">
+              {t(canPrepareGitHub ? "keepmind.connect.githubSetup" : "keepmind.connect.oauthSetup", {
+                name: def?.label,
+              })}
+            </p>
+          )}
+          {prepareGitHub.isError && <Alert tone="danger">{errorText(t, prepareGitHub.error)}</Alert>}
+          {!viaApp && oauthFirst && canKey && (
             <details
               className="cflow__more"
               open={keyOpen}
@@ -463,7 +477,7 @@ function ConnectStep({
               {keyForm}
             </details>
           )}
-          {!viaApp && !canOAuth && canKey && keyForm}
+          {!viaApp && !oauthFirst && canKey && keyForm}
         </DialogBody>
       </Locked>
       <DialogFooter
@@ -485,7 +499,16 @@ function ConnectStep({
           <Button variant="primary" disabled={busy} loading={installApp.isPending} onClick={startApp}>
             {t("githubApp.install")}
           </Button>
-        ) : canKey && (keyOpen || !canOAuth) ? (
+        ) : canPrepareGitHub && !keyOpen ? (
+          <Button
+            variant="primary"
+            disabled={busy}
+            loading={prepareGitHub.isPending}
+            onClick={() => prepareGitHub.mutate(back, { onSuccess: (url) => navigateAway(url) })}
+          >
+            {t("keepmind.connect.prepareGitHub")}
+          </Button>
+        ) : canKey && (keyOpen || !oauthFirst) ? (
           <Button
             variant="primary"
             disabled={busy}

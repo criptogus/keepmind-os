@@ -151,7 +151,7 @@ describe("GitHub's manifest flow", () => {
   test("the manifest asks what agentes.chat's own app has, at this server's addresses", () => {
     const manifest = githubAppManifest("https://chat.example.com/");
     expect(manifest).toMatchObject({
-      name: "agentes.chat (chat.example.com)",
+      name: "KeepMind OS (chat.example.com)",
       url: "https://chat.example.com",
       redirect_url: "https://chat.example.com/api/app/github-app/manifest/callback",
       callback_urls: ["https://chat.example.com/api/app/github-app/callback"],
@@ -204,7 +204,21 @@ describe("GitHub's manifest flow", () => {
       "discussion_comment",
     ]);
     // GitHub can't deliver to plain http; a long host keeps the name within GitHub's 34 characters.
-    expect(githubAppManifest("http://192.168.0.10:3000").hook_attributes.active).toBe(false);
+    for (const address of [
+      "http://localhost:3088",
+      "https://localhost:3088",
+      "https://127.0.0.1:3088",
+      "https://[::1]:3088",
+      "http://192.168.0.10:3000",
+      "https://192.168.0.10:3000",
+      "https://keepmind.local",
+    ]) {
+      const local = githubAppManifest(address);
+      expect(local).not.toHaveProperty("hook_attributes");
+      expect(local.default_events).toEqual([]);
+      expect(local.redirect_url).toBe(`${address}/api/app/github-app/manifest/callback`);
+      expect(local.default_permissions).toEqual(manifest.default_permissions);
+    }
     expect(githubAppManifest("https://agents.a-very-long-company-name.example").name.length).toBeLessThanOrEqual(34);
   });
 
