@@ -777,7 +777,9 @@ export function TeamTemplatesDialog({
                     className="tp-gallery__item ac-iconline"
                     onClick={() => {
                       onClose();
-                      actions?.focusComposer();
+                      // Sends the interview's first turn to the right hand's DM (the "# Starting the team" /
+                      // "# Setting up their agents" prompt takes it from there).
+                      actions?.resend(t(modeKey(org, "teamPlan.templates.describeSend")));
                     }}
                   >
                     <span className="tp-gallery__faces" aria-hidden="true">

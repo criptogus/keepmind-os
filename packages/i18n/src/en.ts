@@ -19397,6 +19397,9 @@ export const en = {
       failedPersonal: "Your agents weren't created. The reason is on the card in the chat.",
       noneSubPersonal: "Tell what you need and {{name}} sets them up",
       tailorPersonal: "Later, just ask me to fit them to your routine.",
+      /** What "None of these" sends to the right hand: the interview's first turn. */
+      describeSend: "I want to set up my team. Can you interview me?",
+      describeSendPersonal: "I want to set up my agents. Can you interview me?",
     },
     weekly: {
       name: "The team's week",

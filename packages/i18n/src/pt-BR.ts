@@ -19421,6 +19421,8 @@ export const ptBR = {
       failedPersonal: "Os agentes não foram criados. O motivo está no card da conversa.",
       noneSubPersonal: "Conte do que você precisa e o {{name}} monta",
       tailorPersonal: "Depois é só me pedir para ajustar à sua rotina.",
+      describeSend: "Quero montar meu time. Pode me entrevistar?",
+      describeSendPersonal: "Quero configurar meus agentes. Pode me entrevistar?",
     },
     weekly: {
       name: "A semana do time",
