@@ -1,9 +1,9 @@
-import type { AppNotification } from "@agenteschat/client";
-import { appCreatedLine } from "@agenteschat/client/lib/apps";
-import { formatUsd } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { restrictionOf, workspaceHeadline } from "@agenteschat/client/lib/notifications";
-import { teamWatchLine } from "@agenteschat/client/lib/team-watch";
+import type { AppNotification } from "@keepmind/client";
+import { appCreatedLine } from "@keepmind/client/lib/apps";
+import { formatUsd } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { restrictionOf, workspaceHeadline } from "@keepmind/client/lib/notifications";
+import { teamWatchLine } from "@keepmind/client/lib/team-watch";
 import { useTranslation } from "react-i18next";
 import { useOrg } from "@/providers/org";
 import { isDashboardNotice } from "../dashboards/logic";

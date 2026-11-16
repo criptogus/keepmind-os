@@ -1,5 +1,5 @@
-import { oauthReturnText } from "@agenteschat/client/lib/errors";
-import { appNameOf } from "@agenteschat/client/lib/tool-labels";
+import { oauthReturnText } from "@keepmind/client/lib/errors";
+import { appNameOf } from "@keepmind/client/lib/tool-labels";
 import type { TFunction } from "i18next";
 import type { ToastStore } from "./toast";
 

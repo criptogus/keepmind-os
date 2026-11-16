@@ -1,9 +1,9 @@
-import type { AppNotification } from "@agenteschat/client";
-import { useDecideDashboardProposal, useRefreshWidget } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { namesText } from "@agenteschat/client/lib/format";
-import { widgetNoticeOf } from "@agenteschat/client/lib/notifications";
-import { Button } from "@agenteschat/ui";
+import type { AppNotification } from "@keepmind/client";
+import { useDecideDashboardProposal, useRefreshWidget } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { namesText } from "@keepmind/client/lib/format";
+import { widgetNoticeOf } from "@keepmind/client/lib/notifications";
+import { Button } from "@keepmind/ui";
 import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 import type { Dir } from "@/components/NotificationParts";
