@@ -195,10 +195,10 @@ describe("what each terminal gets", () => {
     term.stop();
   };
 
-  test("24-bit color: the logo, the badge on the agent blue, the line and the marks", () => {
+  test("24-bit color: the logo, the badge in KeepMind lime, the line and the marks", () => {
     const { term, screen, text } = capture({ depth: 24 });
     steps(term);
-    expect(text()).toContain("\x1b[48;2;0;99;209;97m KeepMind OS \x1b[0m setup");
+    expect(text()).toContain("\x1b[48;2;196;255;61;30m KeepMind OS \x1b[0m setup");
     expect(screen()).toBe(
       [
         "",
@@ -228,7 +228,7 @@ describe("what each terminal gets", () => {
     steps(term);
     // Only the cursor moves a wait needs: no color, bold or dim.
     expect(text().match(COLORS)).toBeNull();
-    expect(text()).toContain("████ ██ ████");
+    expect(text()).toContain("████████████");
     expect(text()).toContain("┌  KeepMind OS setup\n│\n");
     expect(text()).toContain("◇  Docker 27.3.1");
   });
