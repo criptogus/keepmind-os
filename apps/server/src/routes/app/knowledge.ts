@@ -1,3 +1,4 @@
+import { createRoute, z } from "@hono/zod-openapi";
 import { MESSAGE_HAS, type MessageHas } from "@keepmind/adapters";
 import { and, desc, eq, inArray, schema } from "@keepmind/db";
 import {
@@ -20,7 +21,6 @@ import {
   requirePermission,
   searchForUser,
 } from "@keepmind/engine";
-import { createRoute, z } from "@hono/zod-openapi";
 import {
   type AppDeps,
   body,

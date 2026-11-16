@@ -1,3 +1,4 @@
+import { createRoute, z } from "@hono/zod-openapi";
 import {
   APP_SCOPES,
   appsUrls,
@@ -10,7 +11,6 @@ import {
   revokeGrant,
   TOKEN_EXPIRY_DAYS,
 } from "@keepmind/engine";
-import { createRoute, z } from "@hono/zod-openapi";
 import { signedInLately } from "../../auth";
 import { apiError, errorResponse } from "../../http/errors";
 import {

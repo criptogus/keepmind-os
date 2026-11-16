@@ -1,7 +1,7 @@
 import { afterEach, expect, test } from "bun:test";
+import { PGlite } from "@electric-sql/pglite";
 import { createFakeDatabaseDriver, DatabaseError } from "@keepmind/adapters";
 import { DATABASES_SQL } from "@keepmind/engine";
-import { PGlite } from "@electric-sql/pglite";
 import { browser, createTestServer, seedOrg, signUp, type TestServer } from "./harness";
 
 let t: TestServer;

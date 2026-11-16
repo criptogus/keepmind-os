@@ -2,13 +2,7 @@ import type { Routine, Team, TeamAgent } from "@keepmind/client";
 import { useAgentGroups, useApprovals, useProposeChannelMove, useRoutines } from "@keepmind/client";
 import { errorText } from "@keepmind/client/lib/errors";
 import { can } from "@keepmind/client/lib/permissions";
-import {
-  mapColumns,
-  mayReportTo,
-  sharedSupervisor,
-  supervisorOf,
-  supervisors,
-} from "@keepmind/client/lib/team-views";
+import { mapColumns, mayReportTo, sharedSupervisor, supervisorOf, supervisors } from "@keepmind/client/lib/team-views";
 import { excerpt } from "@keepmind/client/lib/text";
 import { Button, EmptyState, HintLine, Icon } from "@keepmind/ui";
 import { Link, useNavigate } from "@tanstack/react-router";

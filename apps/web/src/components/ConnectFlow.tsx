@@ -11,8 +11,8 @@ import {
   useGithubAccess,
   useInstallGitHubApp,
   useRenameConnection,
-  useStartOAuth,
   useStartGitHubAppManifest,
+  useStartOAuth,
 } from "@keepmind/client";
 import {
   catalogToolClass,
@@ -39,13 +39,7 @@ import { humanize, isHttpsUrl, sameServer } from "@keepmind/client/lib/custom-to
 import { errorText } from "@keepmind/client/lib/errors";
 import { useHeldWhile } from "@keepmind/client/lib/hold";
 import { connectorBrand, connectorDescription, connectorName } from "@keepmind/client/lib/scopes";
-import {
-  partsOf,
-  type ReviewTool,
-  reviewDecisions,
-  reviewToolsOf,
-  toolName,
-} from "@keepmind/client/lib/tool-review";
+import { partsOf, type ReviewTool, reviewDecisions, reviewToolsOf, toolName } from "@keepmind/client/lib/tool-review";
 import {
   Alert,
   Button,

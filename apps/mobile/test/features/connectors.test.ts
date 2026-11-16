@@ -302,15 +302,11 @@ describe("the browser round trip", () => {
 });
 
 test("icons only from our own path; brand colors only as #rrggbb; monograms; https addresses", () => {
-  expect(iconUri("https://keepmind.io", "/connectors/github.svg")).toBe(
-    "https://keepmind.io/connectors/github.svg",
-  );
+  expect(iconUri("https://keepmind.io", "/connectors/github.svg")).toBe("https://keepmind.io/connectors/github.svg");
   expect(iconUri("https://keepmind.io", "https://evil.example/x.svg")).toBeNull();
   expect(iconUri("https://keepmind.io", null)).toBeNull();
   // A mark in its maker's colors (PayPal's, Canva's) is drawn as it is, never tinted, and only a file of ours.
-  expect(ownMarkUri("https://keepmind.io", "/brands/paypal.svg")).toBe(
-    "https://keepmind.io/brands/paypal.svg",
-  );
+  expect(ownMarkUri("https://keepmind.io", "/brands/paypal.svg")).toBe("https://keepmind.io/brands/paypal.svg");
   expect(iconUri("https://keepmind.io", "/brands/paypal.svg")).toBeNull();
   expect(ownMarkUri("https://keepmind.io", "/connectors/github.svg")).toBeNull();
   expect(ownMarkUri("https://keepmind.io", "/brands/../x.svg")).toBeNull();

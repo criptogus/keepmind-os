@@ -9,13 +9,7 @@ import {
   joinNames,
 } from "@keepmind/client/lib/format";
 import { agentGrammar } from "@keepmind/client/lib/grammar";
-import {
-  brandOf,
-  noWindowsText,
-  partedUsage,
-  usageSourceName,
-  usageSourcePart,
-} from "@keepmind/client/lib/plan-usage";
+import { brandOf, noWindowsText, partedUsage, usageSourceName, usageSourcePart } from "@keepmind/client/lib/plan-usage";
 import { gradientOf } from "@keepmind/ui/agent/engine";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";

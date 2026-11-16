@@ -1,11 +1,6 @@
 import type { Artifact, ArtifactSharing } from "@keepmind/client";
 import { keys, useRoles, useSetArtifactSharing } from "@keepmind/client";
-import {
-  CONVERSATION_ONLY,
-  isPrivateArtifact,
-  onlyItsConversation,
-  toggledSharing,
-} from "@keepmind/client/lib/drive";
+import { CONVERSATION_ONLY, isPrivateArtifact, onlyItsConversation, toggledSharing } from "@keepmind/client/lib/drive";
 import { errorText } from "@keepmind/client/lib/errors";
 import { joinNames } from "@keepmind/client/lib/format";
 import { rolePicksInSight } from "@keepmind/client/lib/personal-view";

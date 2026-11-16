@@ -1,8 +1,8 @@
+import type { OpenAPIHono } from "@hono/zod-openapi";
 import type { Adapters } from "@keepmind/adapters";
 import type { Config } from "@keepmind/config";
 import type { Database } from "@keepmind/db";
 import type { ModelProvider } from "@keepmind/providers";
-import type { OpenAPIHono } from "@hono/zod-openapi";
 
 /**
  * Which build of KeepMind OS is running.

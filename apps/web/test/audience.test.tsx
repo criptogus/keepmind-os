@@ -4,13 +4,7 @@ import { setupDom } from "@keepmind/ui/testing/dom";
 setupDom();
 
 import type { Agent, OrgSummary } from "@keepmind/client";
-import {
-  audienceNotice,
-  audienceSummary,
-  canEditAudience,
-  canTalk,
-  listsAgent,
-} from "@keepmind/client/lib/audience";
+import { audienceNotice, audienceSummary, canEditAudience, canTalk, listsAgent } from "@keepmind/client/lib/audience";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { createI18n } from "@/i18n";
 import { ADA_ID, ADMIN_ROLE_ID, createFakeApi, ENG_ID, ORG_ID, seedDm, seedRoles, seedState } from "./fake-api";

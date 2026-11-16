@@ -1068,7 +1068,10 @@ export const envVars = {
     example: "support@example.com",
   },
   FEEDBACK_EMAIL: {
-    schema: z.union([z.email(), z.literal("off")]).default("contact@zeroagency.ai").transform((value) => value === "off" ? undefined : value),
+    schema: z
+      .union([z.email(), z.literal("off")])
+      .default("contact@zeroagency.ai")
+      .transform((value) => (value === "off" ? undefined : value)),
     description:
       "For KeepMind OS Cloud. Defaults to contact@zeroagency.ai. The address the KeepMind OS team reads feedback at: what people write in the apps' feedback form there, and what other servers send to its inbox (`POST /api/feedback/inbox`, there only), one email per message, nothing kept. A self-hosted server leaves it unset: its feedback goes to that team (`FEEDBACK_RELAY`).",
     section: "Operator",

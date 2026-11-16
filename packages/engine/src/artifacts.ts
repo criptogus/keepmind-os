@@ -15,13 +15,7 @@ import {
   schema,
   sql,
 } from "@keepmind/db";
-import {
-  type BlockSpec,
-  BlockSpecError,
-  blockSpecText,
-  dryRunBlock,
-  parseBlockSpec,
-} from "@keepmind/ui/blocks/spec";
+import { type BlockSpec, BlockSpecError, blockSpecText, dryRunBlock, parseBlockSpec } from "@keepmind/ui/blocks/spec";
 import { type AgentsDmReads, agentsDmReads, readerOfRun } from "./agents-dm-reads";
 import { recordAudit } from "./audit";
 import { runAuthorityById, runPerson, UUID } from "./authority";

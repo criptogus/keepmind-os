@@ -11,13 +11,7 @@ import {
 } from "@keepmind/client/lib/computer";
 import { errorText } from "@keepmind/client/lib/errors";
 import { agentGrammar } from "@keepmind/client/lib/grammar";
-import {
-  computerKind,
-  computerState,
-  folderName,
-  foldersOfAgent,
-  machineTitle,
-} from "@keepmind/client/lib/machines";
+import { computerKind, computerState, folderName, foldersOfAgent, machineTitle } from "@keepmind/client/lib/machines";
 import { can } from "@keepmind/client/lib/permissions";
 import { modeKey } from "@keepmind/client/lib/workspace-mode";
 import {

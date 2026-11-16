@@ -1,3 +1,4 @@
+import { createRoute, z } from "@hono/zod-openapi";
 import {
   type CalendarDeps,
   calendarRange,
@@ -8,7 +9,6 @@ import {
   respondToEvent,
   updateCalendarEvent,
 } from "@keepmind/engine";
-import { createRoute, z } from "@hono/zod-openapi";
 import {
   type AppDeps,
   body,

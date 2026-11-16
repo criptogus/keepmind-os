@@ -3,17 +3,7 @@ import { useDesktopLatest } from "@keepmind/client";
 import { type AudienceIcon, audienceWords, portraitOf, statusLook, statusPill } from "@keepmind/client/lib/devices";
 import { downloadHref } from "@keepmind/client/lib/machines";
 import { isPersonal } from "@keepmind/client/lib/workspace-mode";
-import {
-  Avatar,
-  Button,
-  Chip,
-  ComputerPortrait,
-  Icon,
-  Menu,
-  MenuItem,
-  PixelSpinner,
-  ProviderLogo,
-} from "@keepmind/ui";
+import { Avatar, Button, Chip, ComputerPortrait, Icon, Menu, MenuItem, PixelSpinner, ProviderLogo } from "@keepmind/ui";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { AgentAvatar } from "@/components/AgentAvatar";

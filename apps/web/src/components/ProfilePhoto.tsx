@@ -1,15 +1,5 @@
 import { keys } from "@keepmind/client";
-import {
-  Avatar,
-  type AvatarProps,
-  Button,
-  cx,
-  Dialog,
-  DialogBody,
-  DialogFooter,
-  Locked,
-  LogoMark,
-} from "@keepmind/ui";
+import { Avatar, type AvatarProps, Button, cx, Dialog, DialogBody, DialogFooter, Locked, LogoMark } from "@keepmind/ui";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { type PointerEvent, type ReactNode, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

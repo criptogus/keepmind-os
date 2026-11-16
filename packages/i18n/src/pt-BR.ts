@@ -1,4 +1,4 @@
-import { libraryRolesPt, libraryHelloPt } from "./agent-library";
+import { libraryHelloPt, libraryRolesPt } from "./agent-library";
 import type { LocaleStrings } from "./plurals";
 
 /**
@@ -18,26 +18,31 @@ export const ptBR = {
   "zero.progress": "O Kivo conduz o trabalho no chat, mostra os bloqueios e pede apenas as decisões necessárias.",
   "zero.skills.title": "Skills",
   "zero.skills.intro": "Conhecimento prático para seus agentes. Encontre, aplique e aprimore suas skills.",
-  "zero.skills.help": "Use suas skills normalmente. Se quiser avaliá-las e aprimorá-las com o SuperAgentSkill, conecte sua conta. Abra uma skill e escolha Melhorar com IA para revisar a proposta antes de aplicar.",
+  "zero.skills.help":
+    "Use suas skills normalmente. Se quiser avaliá-las e aprimorá-las com o SuperAgentSkill, conecte sua conta. Abra uma skill e escolha Melhorar com IA para revisar a proposta antes de aplicar.",
   "zero.skills.connect": "Conectar SuperAgentSkill",
   "zero.skills.visit": "Explorar o catálogo",
   "zero.brain.title": "Second Brain",
   "zero.brain.intro": "Memórias e decisões que continuam úteis depois da conversa.",
   "zero.brain.goal": "Escolha onde seu conhecimento vai viver",
-  "zero.brain.help": "Mantenha as memórias do workspace ou prepare um Second Brain versionado em um repositório privado do GitHub. Para um cofre próprio, peça a instalação do KeepMind SB.",
+  "zero.brain.help":
+    "Mantenha as memórias do workspace ou prepare um Second Brain versionado em um repositório privado do GitHub. Para um cofre próprio, peça a instalação do KeepMind SB.",
   "zero.brain.context": "Nome do repositório ou contexto (opcional)",
   "zero.brain.placeholder": "keepmind-brain",
-  "zero.brain.boundary": "Nada é exportado automaticamente. Você aprova o repositório ou a instalação antes da execução. Memórias pessoais e de equipe preservam acessos separados.",
+  "zero.brain.boundary":
+    "Nada é exportado automaticamente. Você aprova o repositório ou a instalação antes da execução. Memórias pessoais e de equipe preservam acessos separados.",
   "zero.brain.start": "Preparar no GitHub",
   "zero.brain.install": "Preparar instalação KeepMind SB",
   "zero.brain.download": "Baixar schema",
   "zero.cyber.title": "Cybersegurança",
   "zero.cyber.intro": "Um time dedicado a entender riscos e acompanhar correções, com evidências.",
   "zero.cyber.goal": "Prepare seu time de Cybersec",
-  "zero.cyber.help": "O Kivo verifica a conexão e o plano pago da Liquid, prepara os agentes e propõe o escopo. Se a assinatura não puder ser verificada, a ativação fica pendente.",
+  "zero.cyber.help":
+    "O Kivo verifica a conexão e o plano pago da Liquid, prepara os agentes e propõe o escopo. Se a assinatura não puder ser verificada, a ativação fica pendente.",
   "zero.cyber.context": "Produto ou sistema que quer proteger",
   "zero.cyber.placeholder": "Meu aplicativo e seus repositórios",
-  "zero.cyber.boundary": "Requer plano pago ativo na Liquid Cybersec. Não contratamos planos aqui. Criar o time não inicia testes: alvos, acessos e consumo de créditos exigem autorização.",
+  "zero.cyber.boundary":
+    "Requer plano pago ativo na Liquid Cybersec. Não contratamos planos aqui. Criar o time não inicia testes: alvos, acessos e consumo de créditos exigem autorização.",
   "zero.cyber.start": "Preparar meu time",
   "zero.cyber.connect": "Conectar Liquid Cybersec",
   "zero.cyber.plans": "Conhecer os planos",

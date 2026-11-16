@@ -1,3 +1,4 @@
+import { createRoute, z } from "@hono/zod-openapi";
 import {
   buildTelemetryReport,
   isKeepMindCloud,
@@ -6,7 +7,6 @@ import {
   setTelemetryEnabled,
   telemetryState,
 } from "@keepmind/engine";
-import { createRoute, z } from "@hono/zod-openapi";
 import { telemetryFacts } from "../../telemetry";
 import { type AppDeps, body, createAppRouter, errors, json, requireSession, security } from "./context";
 

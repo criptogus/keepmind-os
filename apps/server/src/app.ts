@@ -1,8 +1,8 @@
+import { OpenAPIHono } from "@hono/zod-openapi";
 import { MisconfiguredError, requestLocale } from "@keepmind/engine";
 import { helpDocsUrl } from "@keepmind/i18n/help";
 import { appLocale } from "@keepmind/i18n/locale";
 import type { AgentesModule, Edition, ModuleContext } from "@keepmind/modules";
-import { OpenAPIHono } from "@hono/zod-openapi";
 import { Scalar } from "@scalar/hono-api-reference";
 import { serveStatic } from "hono/bun";
 import { requestId } from "hono/request-id";

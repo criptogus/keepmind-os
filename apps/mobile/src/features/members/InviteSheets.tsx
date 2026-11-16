@@ -1,9 +1,4 @@
-import {
-  type InvitationWithStatus,
-  useAuthConfig,
-  useResendInvitation,
-  useRevokeInvitation,
-} from "@keepmind/client";
+import { type InvitationWithStatus, useAuthConfig, useResendInvitation, useRevokeInvitation } from "@keepmind/client";
 import { errorText } from "@keepmind/client/lib/errors";
 import { formatShortDate } from "@keepmind/client/lib/format";
 import { sendsEmail } from "@keepmind/client/lib/join-requests";

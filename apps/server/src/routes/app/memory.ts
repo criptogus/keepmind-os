@@ -1,3 +1,4 @@
+import { createRoute, z } from "@hono/zod-openapi";
 import { and, type Database, eq, inArray, schema, sql } from "@keepmind/db";
 import {
   announceMessageMemories,
@@ -32,7 +33,6 @@ import {
   userVisibleChannels,
   WAITING_GROUP,
 } from "@keepmind/engine";
-import { createRoute, z } from "@hono/zod-openapi";
 import { type AppDeps, body, createAppRouter, errors, json, OrgParams, requireSession, security } from "./context";
 
 const tags = ["Knowledge"];

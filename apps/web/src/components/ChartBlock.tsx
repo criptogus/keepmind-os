@@ -1,13 +1,5 @@
 import { type ChartSpec, chartShares, chartTable, formatChartValue, parseChart } from "@keepmind/client/lib/chart";
-import {
-  type AgentColor,
-  Button,
-  Dialog,
-  DialogBody,
-  paintCells,
-  paintLineArea,
-  useElementWidth,
-} from "@keepmind/ui";
+import { type AgentColor, Button, Dialog, DialogBody, paintCells, paintLineArea, useElementWidth } from "@keepmind/ui";
 import {
   barCells,
   CHART_CELL,

@@ -1,3 +1,4 @@
+import { createRoute, type OpenAPIHono, z } from "@hono/zod-openapi";
 import {
   confirmWaitlist,
   joinPartnerWaitlist,
@@ -6,7 +7,6 @@ import {
   PARTNER_ANSWER_MAX_PICKS,
   WAITLIST_LOCALES,
 } from "@keepmind/engine";
-import { createRoute, type OpenAPIHono, z } from "@hono/zod-openapi";
 import { cors } from "hono/cors";
 import { requestLimitIp } from "../http/client-ip";
 import { apiError, errorResponse } from "../http/errors";

@@ -1,11 +1,5 @@
 import type { SpeechKey, SpeechProvider } from "@keepmind/client";
-import {
-  useRemoveSpeechKey,
-  useSaveSpeechKey,
-  useSettings,
-  useSpeechKey,
-  useUpdateSettings,
-} from "@keepmind/client";
+import { useRemoveSpeechKey, useSaveSpeechKey, useSettings, useSpeechKey, useUpdateSettings } from "@keepmind/client";
 import { errorText } from "@keepmind/client/lib/errors";
 import { can } from "@keepmind/client/lib/permissions";
 import {

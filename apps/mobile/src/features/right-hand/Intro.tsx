@@ -10,13 +10,7 @@ import {
 import { agentGrammar } from "@keepmind/client/lib/grammar";
 import { aiStateOf, noAiCardOf } from "@keepmind/client/lib/no-ai";
 import { can } from "@keepmind/client/lib/permissions";
-import {
-  introCards,
-  introLeadKey,
-  isRightHand,
-  offersTeamSetup,
-  welcomeOpen,
-} from "@keepmind/client/lib/right-hand";
+import { introCards, introLeadKey, isRightHand, offersTeamSetup, welcomeOpen } from "@keepmind/client/lib/right-hand";
 import { modeKey } from "@keepmind/client/lib/workspace-mode";
 import { WAVE_SECONDS } from "@keepmind/ui/agent/stickers";
 import { type ReactNode, useState } from "react";

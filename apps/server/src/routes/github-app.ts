@@ -1,4 +1,5 @@
 import { randomBytes } from "node:crypto";
+import { createRoute, type OpenAPIHono, z } from "@hono/zod-openapi";
 import { escapeHtml } from "@keepmind/client/lib/text";
 import { connectorOAuthApps, githubAppConfig } from "@keepmind/config";
 import { eq, schema } from "@keepmind/db";
@@ -16,9 +17,9 @@ import {
   githubAppManifest,
   githubOrgAccess,
   handleGitHubAppWebhook,
-  isKeepMindCloud,
   isAppReturn,
   isDesktopReturn,
+  isKeepMindCloud,
   issueManifestState,
   listGitHubAppInstallations,
   listOrgRepositories,
@@ -36,7 +37,6 @@ import {
   validGitHubAppSignature,
 } from "@keepmind/engine";
 import { serverText } from "@keepmind/i18n";
-import { createRoute, type OpenAPIHono, z } from "@hono/zod-openapi";
 import { sessionUser } from "../auth";
 import { apiError, errorResponse, isExpectedError } from "../http/errors";
 import {

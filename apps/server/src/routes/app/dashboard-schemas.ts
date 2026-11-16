@@ -1,3 +1,4 @@
+import { z } from "@hono/zod-openapi";
 import {
   WIDGET_FORMATS,
   WIDGET_KINDS,
@@ -6,7 +7,6 @@ import {
   WIDGET_SIZES,
   WIDGET_STATUSES,
 } from "@keepmind/ui/widgets/spec";
-import { z } from "@hono/zod-openapi";
 
 /**
  * Request and response bodies of the boards and widgets routes (ADR 0135), mirroring the engine's views

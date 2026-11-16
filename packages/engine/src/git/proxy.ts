@@ -1,9 +1,5 @@
 import { gunzipSync } from "node:zlib";
-import {
-  DELETE_BRANCHES_POINTER,
-  NO_TERMINAL_COMMANDS,
-  otherBranchPointer,
-} from "@keepmind/adapters/command-policy";
+import { DELETE_BRANCHES_POINTER, NO_TERMINAL_COMMANDS, otherBranchPointer } from "@keepmind/adapters/command-policy";
 import { and, type Database, eq, isNull, schema } from "@keepmind/db";
 import { recordAudit } from "../audit";
 import { connectorScope } from "../connectors/catalog";

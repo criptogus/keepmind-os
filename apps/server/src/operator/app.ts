@@ -1,8 +1,8 @@
+import { OpenAPIHono } from "@hono/zod-openapi";
 import type { HumanCheck, PubSub } from "@keepmind/adapters";
 import type { Config } from "@keepmind/config";
 import type { Database } from "@keepmind/db";
 import { type MachineHub, type SessionScreening, safeEqual } from "@keepmind/engine";
-import { OpenAPIHono } from "@hono/zod-openapi";
 import { apiError, domainErrorResponse, routeOf, validationHook } from "../http/errors";
 import type { Logger } from "../logger";
 import { registerOperatorAccess } from "./access";

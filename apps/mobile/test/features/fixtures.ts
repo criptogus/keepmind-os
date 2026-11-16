@@ -1,12 +1,4 @@
-import type {
-  Agent,
-  AppNotification,
-  Approval,
-  Message,
-  Mission,
-  MissionDecision,
-  ThreadInfo,
-} from "@keepmind/client";
+import type { Agent, AppNotification, Approval, Message, Mission, MissionDecision, ThreadInfo } from "@keepmind/client";
 import { resources } from "@keepmind/i18n";
 import i18next, { type TFunction } from "i18next";
 import { featureKeysEn } from "../../src/features/i18n/keys.en";

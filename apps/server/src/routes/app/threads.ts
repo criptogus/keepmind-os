@@ -1,3 +1,4 @@
+import { createRoute, z } from "@hono/zod-openapi";
 import {
   archiveThread,
   closeThread,
@@ -16,7 +17,6 @@ import {
   unreadTaskConversations,
   updateThread,
 } from "@keepmind/engine";
-import { createRoute, z } from "@hono/zod-openapi";
 import {
   type AppDeps,
   body,

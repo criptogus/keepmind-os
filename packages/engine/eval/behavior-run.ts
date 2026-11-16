@@ -13,13 +13,7 @@ import {
 } from "@keepmind/adapters";
 import { and, asc, eq, gt, gte, inArray, schema, sql } from "@keepmind/db";
 import { createTestDatabase } from "@keepmind/db/testing";
-import {
-  type ContentBlock,
-  costNanoUsd,
-  type ModelProvider,
-  type ModelRequest,
-  systemText,
-} from "@keepmind/providers";
+import { type ContentBlock, costNanoUsd, type ModelProvider, type ModelRequest, systemText } from "@keepmind/providers";
 import { ptBR } from "../../i18n/src/pt-BR";
 import {
   addChannelMember,

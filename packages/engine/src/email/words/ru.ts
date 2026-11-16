@@ -119,11 +119,7 @@ export const words: EmailWords = {
     preheader: (days) =>
       `Создайте аккаунт в течение ${plural("ru", days, { one: `${days} дня`, few: `${days} дней`, many: `${days} дней`, other: `${days} дня` })} с этого адреса почты.`,
     headline: "Ваш доступ готов",
-    body: (email) => [
-      "С адреса ",
-      { b: email },
-      " теперь можно создать аккаунт и рабочее пространство в KeepMind OS.",
-    ],
+    body: (email) => ["С адреса ", { b: email }, " теперь можно создать аккаунт и рабочее пространство в KeepMind OS."],
     what: "KeepMind OS: место, где люди и ИИ-агенты работают вместе.",
     button: "Создать аккаунт",
     small: (days) =>

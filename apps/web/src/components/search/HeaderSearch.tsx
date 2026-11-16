@@ -1,10 +1,4 @@
-import {
-  chipFitsDm,
-  DM_SEARCH_OPS,
-  inDmOnly,
-  parseSearch,
-  searchChipKey,
-} from "@keepmind/client/lib/search-filters";
+import { chipFitsDm, DM_SEARCH_OPS, inDmOnly, parseSearch, searchChipKey } from "@keepmind/client/lib/search-filters";
 import { modeKey } from "@keepmind/client/lib/workspace-mode";
 import { Button } from "@keepmind/ui";
 import { type ReactNode, useEffect, useRef, useState } from "react";

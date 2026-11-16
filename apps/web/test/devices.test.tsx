@@ -4,12 +4,7 @@ import { domWindow, setupDom } from "@keepmind/ui/testing/dom";
 setupDom();
 
 import type { ComputerDevice, PhoneDevice } from "@keepmind/client";
-import {
-  ANDROID_SLOW_MS,
-  ANDROID_USB_DRIVERS,
-  IPHONE_RESTART_MS,
-  SETUP_STALL_MS,
-} from "@keepmind/client/lib/devices";
+import { ANDROID_SLOW_MS, ANDROID_USB_DRIVERS, IPHONE_RESTART_MS, SETUP_STALL_MS } from "@keepmind/client/lib/devices";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { createFakeApi, ENG_ID, fakeDevicesOf, fakeMachinesOf } from "./fake-api";
 import { notification } from "./fakes/notifications";

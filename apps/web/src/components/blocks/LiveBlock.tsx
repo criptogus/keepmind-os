@@ -1,11 +1,5 @@
 import { type BlockChange, useArtifact, useBlockReply, useKeepBlock, useSharedBlock } from "@keepmind/client";
-import {
-  type BlockEvent,
-  type BlockHost,
-  blockEvent,
-  blockPage,
-  DRAFT_SETTLE_MS,
-} from "@keepmind/client/lib/blocks";
+import { type BlockEvent, type BlockHost, blockEvent, blockPage, DRAFT_SETTLE_MS } from "@keepmind/client/lib/blocks";
 import { formatTime } from "@keepmind/client/lib/format";
 import { PAGE_SANDBOX } from "@keepmind/client/lib/isolated-page";
 import { Button, Menu, MenuItem, Spinner } from "@keepmind/ui";

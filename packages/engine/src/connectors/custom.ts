@@ -681,7 +681,7 @@ export async function syncCustomTools(deps: CustomDeps, c: ConnectorConnection) 
     const description = (tool.description ?? "").slice(0, 2000);
     const cls: ToolClass = COMPOSIO_ANY_ACTION.has(tool.name)
       ? { level: "approval", source: "verb", reason: "verb_sensitive", sensitive: true }
-      : classes.get(tool.name) ?? classifyByRules(tool, preset?.readTools, writeTools) ?? UNKNOWN_CLASS;
+      : (classes.get(tool.name) ?? classifyByRules(tool, preset?.readTools, writeTools) ?? UNKNOWN_CLASS);
     const suggestion = {
       suggestedAccess: cls.level,
       suggestionSource: cls.source,

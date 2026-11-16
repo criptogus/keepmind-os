@@ -35,12 +35,7 @@ import { AUTO } from "@keepmind/client/lib/providers";
 import { isRightHand } from "@keepmind/client/lib/right-hand";
 import { isEveryone, sortRoles } from "@keepmind/client/lib/roles";
 import { connectorName } from "@keepmind/client/lib/scopes";
-import {
-  firstRunAppList,
-  setupRole,
-  suggestedChannels,
-  suggestedLevels,
-} from "@keepmind/client/lib/setup-checklist";
+import { firstRunAppList, setupRole, suggestedChannels, suggestedLevels } from "@keepmind/client/lib/setup-checklist";
 import {
   aboutYouContext,
   LIFE_AREAS,

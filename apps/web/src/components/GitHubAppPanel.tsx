@@ -16,18 +16,7 @@ import {
   removeInstallationText,
 } from "@keepmind/client/lib/github-app";
 import { can } from "@keepmind/client/lib/permissions";
-import {
-  Button,
-  Card,
-  CardHeader,
-  Chip,
-  Dialog,
-  DialogFooter,
-  Icon,
-  InfoHint,
-  List,
-  SettingNote,
-} from "@keepmind/ui";
+import { Button, Card, CardHeader, Chip, Dialog, DialogFooter, Icon, InfoHint, List, SettingNote } from "@keepmind/ui";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { KEY_STATE_CHIP } from "@/components/GifKeyCard";

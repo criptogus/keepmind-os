@@ -1,10 +1,4 @@
-import {
-  useCreateVaultItem,
-  useVault,
-  type VaultAccess,
-  type VaultItemKind,
-  type VaultScope,
-} from "@keepmind/client";
+import { useCreateVaultItem, useVault, type VaultAccess, type VaultItemKind, type VaultScope } from "@keepmind/client";
 import { errorText } from "@keepmind/client/lib/errors";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

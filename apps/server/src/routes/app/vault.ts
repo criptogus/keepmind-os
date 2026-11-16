@@ -1,3 +1,4 @@
+import { createRoute, z } from "@hono/zod-openapi";
 import { MAX_SECRET_BYTES, SECRET_NAME, VaultSourceError } from "@keepmind/adapters";
 import {
   connectVaultSource,
@@ -19,7 +20,6 @@ import {
   type VaultDeps,
   VaultRefusal,
 } from "@keepmind/engine";
-import { createRoute, z } from "@hono/zod-openapi";
 import type { Context } from "hono";
 import { bodyLimit } from "hono/body-limit";
 import { apiError, errorResponse } from "../../http/errors";

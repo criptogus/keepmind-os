@@ -158,18 +158,14 @@ describe("shared copies", () => {
       uri: "https://keepmind.io/file",
       needsSession: true,
     });
-    expect(
-      resolveDownloadUrl("https://keepmind.io/", "/api/app/organizations/o/artifacts/a/file?version=2"),
-    ).toEqual({
+    expect(resolveDownloadUrl("https://keepmind.io/", "/api/app/organizations/o/artifacts/a/file?version=2")).toEqual({
       uri: "https://keepmind.io/api/app/organizations/o/artifacts/a/file?version=2",
       needsSession: true,
     });
   });
 
   test("the web Drive at the file", () => {
-    expect(driveWebUrl("https://keepmind.io/", "org1", "a1")).toBe(
-      "https://keepmind.io/org/org1/drive?artifact=a1",
-    );
+    expect(driveWebUrl("https://keepmind.io/", "org1", "a1")).toBe("https://keepmind.io/org/org1/drive?artifact=a1");
     expect(driveWebUrl("https://keepmind.io", "org1", "a1", 3)).toBe(
       "https://keepmind.io/org/org1/drive?artifact=a1&v=3",
     );

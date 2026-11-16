@@ -1,3 +1,4 @@
+import { createRoute, type OpenAPIHono, z } from "@hono/zod-openapi";
 import { pairAddress } from "@keepmind/adapters";
 import {
   approveDeviceJoin,
@@ -23,7 +24,6 @@ import {
   wifiPairingState,
   xcodeFix,
 } from "@keepmind/engine";
-import { createRoute, type OpenAPIHono, z } from "@hono/zod-openapi";
 import type { Context } from "hono";
 import {
   expiredLinkScript,

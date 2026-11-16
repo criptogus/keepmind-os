@@ -17,13 +17,7 @@ import { agentGrammar } from "@keepmind/client/lib/grammar";
 import { settingUp } from "@keepmind/client/lib/guards";
 import { sendsEmail } from "@keepmind/client/lib/join-requests";
 import { type AiChoice, planLabel, teamThinks } from "@keepmind/client/lib/no-ai";
-import {
-  landingOf,
-  type OnboardingStepId,
-  type RailStep,
-  railState,
-  stepIndex,
-} from "@keepmind/client/lib/onboarding";
+import { landingOf, type OnboardingStepId, type RailStep, railState, stepIndex } from "@keepmind/client/lib/onboarding";
 import { finishOnboarding, isRightHand, RIGHT_HAND_DEFAULT } from "@keepmind/client/lib/right-hand";
 import { browserTimezone, timezoneName } from "@keepmind/client/lib/routines";
 import { aboutOf, type BusinessType } from "@keepmind/client/lib/team-plan";

@@ -1,9 +1,4 @@
-import {
-  BROWSER_VIEW,
-  encodeBrowserFrame,
-  type RunnerFrame,
-  STREAM_CLOSE,
-} from "@keepmind/adapters/machine-protocol";
+import { BROWSER_VIEW, encodeBrowserFrame, type RunnerFrame, STREAM_CLOSE } from "@keepmind/adapters/machine-protocol";
 import type { DataSocket } from "./streams";
 
 type Frame = Extract<RunnerFrame, { type: "browser.frame" }>;

@@ -3,13 +3,7 @@ import { useAllowMachineTool, useMachines } from "@keepmind/client";
 import { errorText } from "@keepmind/client/lib/errors";
 import { firstName } from "@keepmind/client/lib/format";
 import { messageToolOff } from "@keepmind/client/lib/machine-outages";
-import {
-  allowsInApp,
-  type ToolOneClick,
-  toolOnCommand,
-  toolOneClick,
-  toolWords,
-} from "@keepmind/client/lib/machines";
+import { allowsInApp, type ToolOneClick, toolOnCommand, toolOneClick, toolWords } from "@keepmind/client/lib/machines";
 import { Button, type ButtonProps, SettingNote } from "@keepmind/ui";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";

@@ -1,10 +1,4 @@
-import type {
-  VaultConnectField,
-  VaultConnection,
-  VaultOverview,
-  VaultScope,
-  VaultSourceInfo,
-} from "@keepmind/client";
+import type { VaultConnectField, VaultConnection, VaultOverview, VaultScope, VaultSourceInfo } from "@keepmind/client";
 import { vaultConnectRefusal } from "@keepmind/client/lib/errors";
 import { relativeTime } from "@keepmind/client/lib/format";
 import { vaultNoAgents } from "@keepmind/client/lib/vault";

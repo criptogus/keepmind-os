@@ -10,13 +10,7 @@ import {
 import { CUSTOM_PROVIDER } from "@keepmind/client/lib/endpoints";
 import { errorText, keyRefusal } from "@keepmind/client/lib/errors";
 import { agentGrammar } from "@keepmind/client/lib/grammar";
-import {
-  aiStateOf,
-  choiceOfIntent,
-  freePlanAccount,
-  noAiLockedLine,
-  PLAN_CHOICES,
-} from "@keepmind/client/lib/no-ai";
+import { aiStateOf, choiceOfIntent, freePlanAccount, noAiLockedLine, PLAN_CHOICES } from "@keepmind/client/lib/no-ai";
 import { can, makesAgents } from "@keepmind/client/lib/permissions";
 import {
   keyLooksValid,

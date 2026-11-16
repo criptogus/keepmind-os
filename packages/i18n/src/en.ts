@@ -1,4 +1,4 @@
-import { libraryRolesEn, libraryHelloEn } from "./agent-library";
+import { libraryHelloEn, libraryRolesEn } from "./agent-library";
 import type { Widen } from "./widen";
 
 /**
@@ -18,26 +18,31 @@ export const en = {
   "zero.progress": "Kivo carries out the work in chat, reports blockers and asks only for necessary decisions.",
   "zero.skills.title": "Skills",
   "zero.skills.intro": "Practical knowledge for your agents. Find, apply and improve your skills.",
-  "zero.skills.help": "Use your skills as usual. Optionally connect SuperAgentSkill to evaluate and improve them. Open a skill and choose Improve with AI to review changes before applying.",
+  "zero.skills.help":
+    "Use your skills as usual. Optionally connect SuperAgentSkill to evaluate and improve them. Open a skill and choose Improve with AI to review changes before applying.",
   "zero.skills.connect": "Connect SuperAgentSkill",
   "zero.skills.visit": "Explore the catalogue",
   "zero.brain.title": "Second Brain",
   "zero.brain.intro": "Memories and decisions that stay useful after the conversation.",
   "zero.brain.goal": "Choose where your knowledge lives",
-  "zero.brain.help": "Keep workspace memories or prepare a versioned Second Brain in a private GitHub repository. For your own vault, request a KeepMind SB installation.",
+  "zero.brain.help":
+    "Keep workspace memories or prepare a versioned Second Brain in a private GitHub repository. For your own vault, request a KeepMind SB installation.",
   "zero.brain.context": "Repository name or context (optional)",
   "zero.brain.placeholder": "keepmind-brain",
-  "zero.brain.boundary": "Nothing is exported automatically. Approve the repository or installation before execution. Personal and team memories retain separate access.",
+  "zero.brain.boundary":
+    "Nothing is exported automatically. Approve the repository or installation before execution. Personal and team memories retain separate access.",
   "zero.brain.start": "Prepare in GitHub",
   "zero.brain.install": "Prepare KeepMind SB installation",
   "zero.brain.download": "Download schema",
   "zero.cyber.title": "Cybersecurity",
   "zero.cyber.intro": "A dedicated team to understand risks and follow corrections with evidence.",
   "zero.cyber.goal": "Prepare your Cybersec team",
-  "zero.cyber.help": "Kivo checks the Liquid connection and paid plan, prepares agents and proposes scope. Activation remains pending if subscription status cannot be verified.",
+  "zero.cyber.help":
+    "Kivo checks the Liquid connection and paid plan, prepares agents and proposes scope. Activation remains pending if subscription status cannot be verified.",
   "zero.cyber.context": "Product or system to protect",
   "zero.cyber.placeholder": "My application and repositories",
-  "zero.cyber.boundary": "Requires an active paid Liquid Cybersec plan. No plans are purchased here. Creating a team does not start tests: targets, access and credit usage require authorization.",
+  "zero.cyber.boundary":
+    "Requires an active paid Liquid Cybersec plan. No plans are purchased here. Creating a team does not start tests: targets, access and credit usage require authorization.",
   "zero.cyber.start": "Prepare my team",
   "zero.cyber.connect": "Connect Liquid Cybersec",
   "zero.cyber.plans": "Explore plans",

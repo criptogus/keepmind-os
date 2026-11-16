@@ -1708,9 +1708,22 @@ function MoreTools({
             <div className="ac-menu__separator" aria-hidden="true" />
           </>
         )}
-        {([['skills', 'skills', 'book'], ['second-brain', 'brain', 'book'], ['cybersecurity', 'cyber', 'shield']] as const).map(([area, label, icon]) => (
-          <Link key={area} to="/org/$orgId/ecosystem/$area" params={{ orgId: org.id, area }} className="ac-menu__item sidebar__more-item" onClick={() => setOpen(false)}>
-            <Icon name={icon} /><span className="ac-menu__label">{t(`zero.${label}.title`)}</span>
+        {(
+          [
+            ["skills", "skills", "book"],
+            ["second-brain", "brain", "book"],
+            ["cybersecurity", "cyber", "shield"],
+          ] as const
+        ).map(([area, label, icon]) => (
+          <Link
+            key={area}
+            to="/org/$orgId/ecosystem/$area"
+            params={{ orgId: org.id, area }}
+            className="ac-menu__item sidebar__more-item"
+            onClick={() => setOpen(false)}
+          >
+            <Icon name={icon} />
+            <span className="ac-menu__label">{t(`zero.${label}.title`)}</span>
           </Link>
         ))}
         <div className="ac-menu__separator" aria-hidden="true" />

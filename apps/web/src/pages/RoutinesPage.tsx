@@ -44,12 +44,7 @@ import {
 } from "@keepmind/client/lib/format";
 import { agentGrammar } from "@keepmind/client/lib/grammar";
 import { can } from "@keepmind/client/lib/permissions";
-import {
-  blankLeft,
-  ownWords,
-  type RoutineTemplateOption,
-  templateRule,
-} from "@keepmind/client/lib/routine-templates";
+import { blankLeft, ownWords, type RoutineTemplateOption, templateRule } from "@keepmind/client/lib/routine-templates";
 import {
   busyOnComputer,
   eventWebhook,

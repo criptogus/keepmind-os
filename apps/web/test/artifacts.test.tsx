@@ -4,14 +4,7 @@ import { setupDom } from "@keepmind/ui/testing/dom";
 setupDom();
 
 import type { ApiClient, Artifact } from "@keepmind/client";
-import {
-  documentPreview,
-  parsePatch,
-  patchCounts,
-  sideBySide,
-  sortRows,
-  toCsv,
-} from "@keepmind/client/lib/artifacts";
+import { documentPreview, parsePatch, patchCounts, sideBySide, sortRows, toCsv } from "@keepmind/client/lib/artifacts";
 import {
   artifactPlace,
   daysLeft,

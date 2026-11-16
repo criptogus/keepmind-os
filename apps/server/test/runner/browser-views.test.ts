@@ -1,10 +1,5 @@
 import { expect, test } from "bun:test";
-import {
-  BROWSER_VIEW,
-  decodeBrowserFrame,
-  type RunnerFrame,
-  STREAM_CLOSE,
-} from "@keepmind/adapters/machine-protocol";
+import { BROWSER_VIEW, decodeBrowserFrame, type RunnerFrame, STREAM_CLOSE } from "@keepmind/adapters/machine-protocol";
 import { BrowserViews } from "../../runner/browser-views";
 import type { DataListener, DataSocket } from "../../runner/streams";
 import { waitFor } from "./helpers";

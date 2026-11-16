@@ -7,8 +7,7 @@ import type { EmailWords } from "./index";
  * forms with `plural("nl", n, { one, few, many, other })` from `@keepmind/i18n/format`.
  */
 export const words: EmailWords = {
-  sentBy: (host) =>
-    host ? atHost("Verstuurd door de KeepMind OS-server", "op", host) : "Verstuurd door KeepMind OS.",
+  sentBy: (host) => (host ? atHost("Verstuurd door de KeepMind OS-server", "op", host) : "Verstuurd door KeepMind OS."),
   fallback: "Werkt de knop niet? Kopieer dit adres naar je browser:",
   role: { owner: "eigenaar", member: "lid" },
   anAgent: "Een agent",

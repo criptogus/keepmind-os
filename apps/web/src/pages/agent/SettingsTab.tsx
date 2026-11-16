@@ -1,11 +1,4 @@
-import {
-  type AgentAudience,
-  useAgentDetail,
-  useAgentGroups,
-  useModels,
-  useSettings,
-  useUsage,
-} from "@keepmind/client";
+import { type AgentAudience, useAgentDetail, useAgentGroups, useModels, useSettings, useUsage } from "@keepmind/client";
 import { groupOf, NO_GROUP } from "@keepmind/client/lib/agent-groups";
 import { audienceSummary } from "@keepmind/client/lib/audience";
 import { engineOfBrain } from "@keepmind/client/lib/brain";

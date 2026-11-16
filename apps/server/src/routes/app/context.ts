@@ -1,3 +1,4 @@
+import { OpenAPIHono, z } from "@hono/zod-openapi";
 import type { Adapters } from "@keepmind/adapters";
 import { type Config, connectorOAuthApps } from "@keepmind/config";
 import type { Database } from "@keepmind/db";
@@ -17,7 +18,6 @@ import {
   requireAgentDetails,
   withComposio,
 } from "@keepmind/engine";
-import { OpenAPIHono, z } from "@hono/zod-openapi";
 import { createMiddleware } from "hono/factory";
 import { type Auth, type SessionUser, sessionUser, signInPageUrl } from "../../auth";
 import { apiError, errorResponse, validationHook } from "../../http/errors";

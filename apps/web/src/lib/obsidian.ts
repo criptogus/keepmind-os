@@ -1,10 +1,4 @@
-import type {
-  ApiClient,
-  WikiImportNote,
-  WikiImportResult,
-  WikiImportSource,
-  WikiPageSummary,
-} from "@keepmind/client";
+import type { ApiClient, WikiImportNote, WikiImportResult, WikiImportSource, WikiPageSummary } from "@keepmind/client";
 import { readZip } from "@keepmind/client/lib/zip";
 
 /*

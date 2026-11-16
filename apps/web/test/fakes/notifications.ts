@@ -4,13 +4,7 @@
  * done / snooze, and "Marcar tudo como lido". Same rules as the contract:
  * done and snoozed ones are hidden, waiting ones first, then the newest.
  */
-import type {
-  ApiClient,
-  AppNotification,
-  NoticePrefs,
-  NotificationCounts,
-  NotificationFilter,
-} from "@keepmind/client";
+import type { ApiClient, AppNotification, NoticePrefs, NotificationCounts, NotificationFilter } from "@keepmind/client";
 import { compareNotifications, matchesFilter, NOTIFICATION_FILTERS } from "@keepmind/client/lib/notifications";
 import { MockNotFoundError } from "./context";
 

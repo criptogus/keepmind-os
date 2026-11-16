@@ -10,15 +10,7 @@ import {
 } from "@keepmind/client/lib/plan-usage";
 import { planName } from "@keepmind/client/lib/plans";
 import { mixHex } from "@keepmind/ui/agent/engine";
-import {
-  PLAN_ALMOST,
-  PLAN_TONE,
-  planLevel,
-  planLine,
-  planState,
-  planWindows,
-  renewals,
-} from "@keepmind/ui/plan-state";
+import { PLAN_ALMOST, PLAN_TONE, planLevel, planLine, planState, planWindows, renewals } from "@keepmind/ui/plan-state";
 import { Canvas, createPicture, Picture, Skia } from "@shopify/react-native-skia";
 import { type ReactNode, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";

@@ -1,3 +1,4 @@
+import { createRoute, z } from "@hono/zod-openapi";
 import { connectorOAuthApps } from "@keepmind/config";
 import {
   appendSourceToWiki,
@@ -39,7 +40,6 @@ import {
   wikiGraph,
   wikiTree,
 } from "@keepmind/engine";
-import { createRoute, z } from "@hono/zod-openapi";
 import { errorResponse } from "../../http/errors";
 import { githubAppOf } from "../github-app";
 import {

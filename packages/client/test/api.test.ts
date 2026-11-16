@@ -128,9 +128,7 @@ describe("transport options (the phone app)", () => {
       expect(headers["x-agentes-client"]).toBe("mobile");
     }
     expect(((calls[0] as Call).init.headers as Record<string, string>).accept).toBe("application/json");
-    expect(api.artifacts.fileUrl("o1", "a1")).toBe(
-      "https://keepmind.io/api/app/organizations/o1/artifacts/a1/file",
-    );
+    expect(api.artifacts.fileUrl("o1", "a1")).toBe("https://keepmind.io/api/app/organizations/o1/artifacts/a1/file");
   });
 
   test("without options: same origin and the browser's cookie", async () => {

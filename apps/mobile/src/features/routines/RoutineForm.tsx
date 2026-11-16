@@ -15,12 +15,7 @@ import { FIELD_LIMITS } from "@keepmind/client/lib/field-limits";
 import { agentGrammar } from "@keepmind/client/lib/grammar";
 import { splitAddresses } from "@keepmind/client/lib/mail";
 import { routineReachWarnings } from "@keepmind/client/lib/reach";
-import {
-  blankLeft,
-  ownWords,
-  type RoutineTemplateOption,
-  templateRule,
-} from "@keepmind/client/lib/routine-templates";
+import { blankLeft, ownWords, type RoutineTemplateOption, templateRule } from "@keepmind/client/lib/routine-templates";
 import { busyOnComputer, eventWebhook, runsPerDay } from "@keepmind/client/lib/routine-view";
 import {
   connectionReader,

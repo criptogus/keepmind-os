@@ -31,7 +31,13 @@ export async function finishOpenRouterOAuth(
   });
   if (!response.ok) throw new Error("oauth.exchange_failed");
   const data = await response.json();
-  if (!data || typeof data !== "object" || !("key" in data) || typeof data.key !== "string" || !/^sk-or-v\d+-[A-Za-z0-9]{32,}$/.test(data.key))
+  if (
+    !data ||
+    typeof data !== "object" ||
+    !("key" in data) ||
+    typeof data.key !== "string" ||
+    !/^sk-or-v\d+-[A-Za-z0-9]{32,}$/.test(data.key)
+  )
     throw new Error("oauth.exchange_failed");
   return data.key;
 }

@@ -154,9 +154,7 @@ describe("the agent's screen", () => {
     );
     // A browser card's view only watches, and never changes mode.
     const card = { orgId: "o1", agentId: "a1", mode: "control", switches: true, preview: true } as const;
-    expect(desktopSocketUrl(base, card)).toBe(
-      "wss://keepmind-os/api/desktop?orgId=o1&agentId=a1&preview=1&mode=watch",
-    );
+    expect(desktopSocketUrl(base, card)).toBe("wss://keepmind-os/api/desktop?orgId=o1&agentId=a1&preview=1&mode=watch");
     // The right hand's shared place is asked for by name; the viewer's own needs none.
     expect(desktopSocketUrl(base, { orgId: "o1", agentId: "a1", mode: "watch", seat: SHARED_SEAT })).toBe(
       "wss://keepmind-os/api/desktop?orgId=o1&agentId=a1&seat=shared&mode=watch",

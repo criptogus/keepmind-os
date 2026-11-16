@@ -26,7 +26,7 @@ describe("loadConfig", () => {
     expect(config.SUPPORT_EMAIL).toBe("contact@zeroagency.ai");
     expect(config.FEEDBACK_EMAIL).toBe("contact@zeroagency.ai");
     expect(config.FEEDBACK_RELAY).toBe(false);
-    expect(loadConfig({...valid, FEEDBACK_EMAIL: "off"}).FEEDBACK_EMAIL).toBeUndefined();
+    expect(loadConfig({ ...valid, FEEDBACK_EMAIL: "off" }).FEEDBACK_EMAIL).toBeUndefined();
     expect(config.RUN_MIGRATIONS_ON_BOOT).toBe(true);
     expect(config.ALLOW_SIGNUP).toBe(false);
     expect(config.AGENT_DEFAULT_MODEL).toBe("claude-sonnet-5-5");

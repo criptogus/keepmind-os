@@ -25,14 +25,7 @@ import {
   machineReasonText,
   toolOnCommand,
 } from "@keepmind/client/lib/machines";
-import {
-  type AiChoice,
-  aiChoiceOf,
-  aiStateOf,
-  planLabel,
-  planMark,
-  planOfAccount,
-} from "@keepmind/client/lib/no-ai";
+import { type AiChoice, aiChoiceOf, aiStateOf, planLabel, planMark, planOfAccount } from "@keepmind/client/lib/no-ai";
 import { can as canDo } from "@keepmind/client/lib/permissions";
 import { brainModelChoice, brainModelChoices, isPlanId, planOf } from "@keepmind/client/lib/plans";
 import { apiProviderOf, isAuto } from "@keepmind/client/lib/providers";

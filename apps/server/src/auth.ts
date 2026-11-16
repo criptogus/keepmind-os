@@ -1,5 +1,6 @@
 import { AsyncLocalStorage } from "node:async_hooks";
 import { randomBytes, sign as signWithKey } from "node:crypto";
+import { expo } from "@better-auth/expo";
 import type { HumanAction, HumanCheck, PubSub, RateLimiter } from "@keepmind/adapters";
 import { jwtClaims, nameIsPassword } from "@keepmind/client/lib/text";
 import type { Config } from "@keepmind/config";
@@ -26,8 +27,8 @@ import {
   holdsInvitation,
   INVITATION_MAIL_HEADER,
   INVITATION_TOKEN_HEADER,
-  isKeepMindCloud,
   isFeedbackRelay,
+  isKeepMindCloud,
   onUserCreated,
   queueEmail,
   recordSession,
@@ -48,7 +49,6 @@ import {
   ValidationError,
   type WorkspacePolicy,
 } from "@keepmind/engine";
-import { expo } from "@better-auth/expo";
 import { type BetterAuthPlugin, betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import {

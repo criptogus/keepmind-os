@@ -431,9 +431,7 @@ describe("install.sh", () => {
     expect(run.out).toContain(bunZip("linux-x64-baseline"));
     expect(run.out).toContain("$ mv <tmp>/bun-linux-x64-baseline/bun /opt/agentes/.runtime/bun");
     expect(run.out).toContain("$ cd /opt/agentes");
-    expect(run.out).toContain(
-      "$ /opt/agentes/.runtime/bun x --bun @keepmind/setup@0.1.1 --network local </dev/null",
-    );
+    expect(run.out).toContain("$ /opt/agentes/.runtime/bun x --bun @keepmind/setup@0.1.1 --network local </dev/null");
     expect(run.changes).toEqual([]);
   });
 

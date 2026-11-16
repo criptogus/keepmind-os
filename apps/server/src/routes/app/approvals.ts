@@ -1,3 +1,4 @@
+import { createRoute, z } from "@hono/zod-openapi";
 import {
   APPROVAL_REASON_MAX,
   COVER_MODES,
@@ -17,7 +18,6 @@ import {
   setRightHandApprovals,
   undoRightHandDecision,
 } from "@keepmind/engine";
-import { createRoute, z } from "@hono/zod-openapi";
 import {
   type AppDeps,
   body,

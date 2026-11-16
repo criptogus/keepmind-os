@@ -1,5 +1,5 @@
-import type { Config } from "@keepmind/config";
 import type { OpenAPIHono } from "@hono/zod-openapi";
+import type { Config } from "@keepmind/config";
 import type { Context } from "hono";
 
 /**

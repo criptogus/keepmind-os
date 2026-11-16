@@ -1110,8 +1110,7 @@ describe("whether a push waits for a person", () => {
   });
 
   test("our git proxy's URLs", () => {
-    const at =
-      "https://keepmind.io/api/git/0190a7b2-3c4d-7e5f-8a9b-0c1d2e3f4a5b/0190a7b2-3c4d-7e5f-8a9b-0c1d2e3f4a5c/";
+    const at = "https://keepmind.io/api/git/0190a7b2-3c4d-7e5f-8a9b-0c1d2e3f4a5b/0190a7b2-3c4d-7e5f-8a9b-0c1d2e3f4a5c/";
     expect(isProxyUrl(`${at}acme/app.git`)).toBe(true);
     expect(isProxyUrl(`http://localhost:3000${at.slice("https://keepmind.io".length)}acme/app`)).toBe(true);
     expect(isProxyUrl("https://github.com/acme/app.git")).toBe(false);

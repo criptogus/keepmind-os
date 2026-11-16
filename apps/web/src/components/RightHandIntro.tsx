@@ -11,13 +11,7 @@ import { formatTime } from "@keepmind/client/lib/format";
 import { agentGrammar } from "@keepmind/client/lib/grammar";
 import { aiStateOf, noAiCardOf } from "@keepmind/client/lib/no-ai";
 import { can } from "@keepmind/client/lib/permissions";
-import {
-  introCards,
-  introLeadKey,
-  isRightHand,
-  offersTeamSetup,
-  welcomeOpen,
-} from "@keepmind/client/lib/right-hand";
+import { introCards, introLeadKey, isRightHand, offersTeamSetup, welcomeOpen } from "@keepmind/client/lib/right-hand";
 import { modeKey } from "@keepmind/client/lib/workspace-mode";
 import { AgentSticker, Button, Message, MessageText, WAVE_SECONDS } from "@keepmind/ui";
 import { useState } from "react";

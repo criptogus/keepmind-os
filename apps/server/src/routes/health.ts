@@ -1,5 +1,5 @@
-import type { Edition } from "@keepmind/modules";
 import { createRoute, type OpenAPIHono, z } from "@hono/zod-openapi";
+import type { Edition } from "@keepmind/modules";
 
 const HealthResponse = z
   .object({

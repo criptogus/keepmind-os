@@ -1,3 +1,4 @@
+import { createRoute, z } from "@hono/zod-openapi";
 import { connectorOAuthApps } from "@keepmind/config";
 import {
   abandonComposioOAuth,
@@ -17,10 +18,10 @@ import {
   desktopReturnPath,
   GITHUB_APP_AUTH,
   getAgent,
-  isKeepMindCloud,
   isAppReturn,
   isCustom,
   isDesktopReturn,
+  isKeepMindCloud,
   listAgentScopes,
   listConnections,
   listGitHubAppInstallations,
@@ -37,7 +38,6 @@ import {
   uninstallInstallation,
   withComposio,
 } from "@keepmind/engine";
-import { createRoute, z } from "@hono/zod-openapi";
 import { sessionUser } from "../../auth";
 import { isExpectedError } from "../../http/errors";
 import { githubAccess } from "../github-app";

@@ -62,13 +62,7 @@ import { capitalize } from "@keepmind/client/lib/format";
 import { issueTakenOf, issueWorkOf, taskConversationOf } from "@keepmind/client/lib/issues";
 import { workIsOver } from "@keepmind/client/lib/long-work";
 import { supersededBrainNotices } from "@keepmind/client/lib/machine-outages";
-import {
-  isMediaAfterReply,
-  isMediaAlone,
-  mediaTabsOf,
-  messageMediaOf,
-  textOrMedia,
-} from "@keepmind/client/lib/media";
+import { isMediaAfterReply, isMediaAlone, mediaTabsOf, messageMediaOf, textOrMedia } from "@keepmind/client/lib/media";
 import { isEventLine } from "@keepmind/client/lib/notices";
 import { can } from "@keepmind/client/lib/permissions";
 import { pinsIn } from "@keepmind/client/lib/pins";

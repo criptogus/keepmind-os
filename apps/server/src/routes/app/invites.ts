@@ -1,3 +1,4 @@
+import { createRoute, z } from "@hono/zod-openapi";
 import { nameIsPassword } from "@keepmind/client/lib/text";
 import {
   approveJoinRequest,
@@ -31,7 +32,6 @@ import {
   suggestPerson,
   turnOffInviteLink,
 } from "@keepmind/engine";
-import { createRoute, z } from "@hono/zod-openapi";
 import { hashPassword, mintUserSignIn, NAME_IS_PASSWORD, NAME_IS_PASSWORD_MESSAGE, sessionUser } from "../../auth";
 import { requestLimitIp } from "../../http/client-ip";
 import { apiError, errorResponse } from "../../http/errors";

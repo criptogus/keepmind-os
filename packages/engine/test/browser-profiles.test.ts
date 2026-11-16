@@ -1,10 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import {
-  ACCESS_ALLOW_PROTOCOL,
-  BROWSER_PROFILE_PROTOCOL,
-  channelTopic,
-  type MachineRequest,
-} from "@keepmind/adapters";
+import { ACCESS_ALLOW_PROTOCOL, BROWSER_PROFILE_PROTOCOL, channelTopic, type MachineRequest } from "@keepmind/adapters";
 import { and, eq, schema, sql } from "@keepmind/db";
 import {
   absorbBrowserCall,

@@ -1,11 +1,4 @@
-import {
-  bodyTones,
-  drawAccessory,
-  drawAgent,
-  drawSleep,
-  type Expression,
-  EYE_COLOR,
-} from "@keepmind/ui/agent/engine";
+import { bodyTones, drawAccessory, drawAgent, drawSleep, type Expression, EYE_COLOR } from "@keepmind/ui/agent/engine";
 import { avatarSkyCell, avatarSkyCells, avatarSkyTones } from "@keepmind/ui/sky/avatar";
 import { Canvas, createPicture, Picture } from "@shopify/react-native-skia";
 import { memo, useMemo } from "react";

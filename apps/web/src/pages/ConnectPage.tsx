@@ -5,18 +5,7 @@ import { errorText } from "@keepmind/client/lib/errors";
 import { relativeTime } from "@keepmind/client/lib/format";
 import { computerKind, formatUserCode, locationText } from "@keepmind/client/lib/machines";
 import { can } from "@keepmind/client/lib/permissions";
-import {
-  Alert,
-  Button,
-  Card,
-  ComputerPortrait,
-  EmptyState,
-  Field,
-  Input,
-  Locked,
-  Select,
-  Switch,
-} from "@keepmind/ui";
+import { Alert, Button, Card, ComputerPortrait, EmptyState, Field, Input, Locked, Select, Switch } from "@keepmind/ui";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";

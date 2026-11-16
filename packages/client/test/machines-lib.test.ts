@@ -63,9 +63,7 @@ describe("connected computers helpers (ADR 0036)", () => {
   });
 
   test("commands: the installer has no code; granting quotes paths that need it", () => {
-    expect(installCommand("https://keepmind.io/")).toBe(
-      "curl -fsSL https://keepmind.io/api/machines/install.sh | sh",
-    );
+    expect(installCommand("https://keepmind.io/")).toBe("curl -fsSL https://keepmind.io/api/machines/install.sh | sh");
     expect(allowFolderCommand("/Users/you/Projects/loja-v5", "bento")).toBe(
       "agentes-runner folders allow /Users/you/Projects/loja-v5 --agent bento",
     );

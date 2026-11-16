@@ -22,13 +22,7 @@ import {
 import { cardInstallAgent, cardInstallOf } from "@keepmind/client/lib/action-cards";
 import { fromConnection } from "@keepmind/client/lib/connected";
 import { errorText } from "@keepmind/client/lib/errors";
-import {
-  formatBytes,
-  SKILL_ASSET_MB,
-  SKILL_TEXT_MB,
-  SKILL_ZIP_BYTES,
-  SKILL_ZIP_MB,
-} from "@keepmind/client/lib/files";
+import { formatBytes, SKILL_ASSET_MB, SKILL_TEXT_MB, SKILL_ZIP_BYTES, SKILL_ZIP_MB } from "@keepmind/client/lib/files";
 import { formatPercent, relativeTime } from "@keepmind/client/lib/format";
 import { can } from "@keepmind/client/lib/permissions";
 import {

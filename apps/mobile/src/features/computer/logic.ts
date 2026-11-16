@@ -1,9 +1,4 @@
-import {
-  type AgentComputerFacts,
-  type EntryState,
-  entryButton,
-  surfaceOf,
-} from "@keepmind/client/lib/agent-computer";
+import { type AgentComputerFacts, type EntryState, entryButton, surfaceOf } from "@keepmind/client/lib/agent-computer";
 import { type EtaView, etaLine, type SetupView, setupNoticeStatusKey } from "@keepmind/client/lib/computer";
 import { endSentence } from "@keepmind/client/lib/text";
 import type { TFunction } from "i18next";
