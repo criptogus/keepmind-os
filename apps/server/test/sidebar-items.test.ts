@@ -11,7 +11,7 @@ import {
   sidebarPlaceAllowed,
   sidebarToolOrderOf,
   sidebarViewOf,
-} from "@agenteschat/engine";
+} from "@keepmind/engine";
 import {
   SIDEBAR_COUNTED as APP_COUNTED,
   SIDEBAR_ITEMS as APP_ITEMS,

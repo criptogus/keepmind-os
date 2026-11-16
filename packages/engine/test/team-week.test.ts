@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { and, eq, inArray, schema, sql } from "@agenteschat/db";
-import { en, STRINGS } from "@agenteschat/i18n";
+import { and, eq, inArray, schema, sql } from "@keepmind/db";
+import { en, STRINGS } from "@keepmind/i18n";
 import {
   actOnTeamWeek,
   createSetupToolSource,

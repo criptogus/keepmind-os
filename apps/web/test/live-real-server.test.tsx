@@ -45,11 +45,11 @@ afterAll(async () => {
   await t.close();
 });
 
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { createHttpApi, UNREAD_REFRESH_MS } from "@agenteschat/client";
+import { createHttpApi, UNREAD_REFRESH_MS } from "@keepmind/client";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { DESKTOP_QUERY } from "@/components/NavDrawer";
 import { renderApp, settle } from "./render";

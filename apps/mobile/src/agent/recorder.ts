@@ -1,4 +1,4 @@
-import type { Ctx2D } from "@agenteschat/ui/agent/engine";
+import type { Ctx2D } from "@keepmind/ui/agent/engine";
 
 /**
  * The engine's 2D context subset (engine.d.ts `Ctx2D`), recorded as plain commands so a Skia canvas can

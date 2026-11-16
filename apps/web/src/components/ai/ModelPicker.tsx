@@ -1,4 +1,4 @@
-import type { Agent, AgentBrain, Message } from "@agenteschat/client";
+import type { Agent, AgentBrain, Message } from "@keepmind/client";
 import {
   keys,
   useAgentBrain,
@@ -8,8 +8,8 @@ import {
   useModels,
   usePlatformKey,
   useUpdateAgent,
-} from "@agenteschat/client";
-import { type EffortLevel, effortLevelsOf, effortOf, effortTextOf } from "@agenteschat/client/lib/brain-advanced";
+} from "@keepmind/client";
+import { type EffortLevel, effortLevelsOf, effortOf, effortTextOf } from "@keepmind/client/lib/brain-advanced";
 import {
   mayPickModel,
   modelPickerModels,
@@ -18,12 +18,12 @@ import {
   modelPickerUndo,
   type PickerBefore,
   type PickerModel,
-} from "@agenteschat/client/lib/brain-picker";
-import { can } from "@agenteschat/client/lib/permissions";
-import { modelStandInKey, planMeterText } from "@agenteschat/client/lib/plan-usage";
-import { planOf } from "@agenteschat/client/lib/plans";
-import { modelChoices } from "@agenteschat/client/lib/providers";
-import { isRightHand } from "@agenteschat/client/lib/right-hand";
+} from "@keepmind/client/lib/brain-picker";
+import { can } from "@keepmind/client/lib/permissions";
+import { modelStandInKey, planMeterText } from "@keepmind/client/lib/plan-usage";
+import { planOf } from "@keepmind/client/lib/plans";
+import { modelChoices } from "@keepmind/client/lib/providers";
+import { isRightHand } from "@keepmind/client/lib/right-hand";
 import {
   BrainIcon,
   Button,
@@ -36,7 +36,7 @@ import {
   Popover,
   ProviderLogo,
   planLine,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { type CSSProperties, type ReactElement, useState } from "react";
 import { useTranslation } from "react-i18next";

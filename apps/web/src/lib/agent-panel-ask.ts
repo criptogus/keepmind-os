@@ -1,4 +1,4 @@
-import type { AgentTab } from "@agenteschat/client/lib/agent-edit";
+import type { AgentTab } from "@keepmind/client/lib/agent-edit";
 
 /**
  * An agent's page in the panel, asked from outside the conversation's page (a sidebar row's settings button): the page

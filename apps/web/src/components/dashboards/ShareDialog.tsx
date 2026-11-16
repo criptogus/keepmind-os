@@ -1,7 +1,7 @@
-import type { DashboardSummary } from "@agenteschat/client";
-import { dashboardAccessOf, editorsInput, useMembers, useShareDashboard } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { Button, Dialog, DialogBody, DialogFooter, Locked } from "@agenteschat/ui";
+import type { DashboardSummary } from "@keepmind/client";
+import { dashboardAccessOf, editorsInput, useMembers, useShareDashboard } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { Button, Dialog, DialogBody, DialogFooter, Locked } from "@keepmind/ui";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { PersonAvatar } from "@/components/AgentAvatar";

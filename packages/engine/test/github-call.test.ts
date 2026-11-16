@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { generateKeyPairSync } from "node:crypto";
-import { schema } from "@agenteschat/db";
+import { schema } from "@keepmind/db";
 import {
   appPermissionsFor,
   CONNECTOR_CATALOG,
@@ -359,7 +359,7 @@ describe("what agents write on GitHub is signed (ADR 0156)", () => {
   test("API commits end with the agent's own line, and credit the person when they linked GitHub to sign in", async () => {
     const w = await world({ account: true });
     const files = [{ path: "a.txt", content: "x" }];
-    const dev = "Co-authored-by: Dev <noreply@agentes.chat>";
+    const dev = "Co-authored-by: Dev <contact@zeroagency.ai>";
     const plain = await w.call("github_push_files", { owner: "acme", repo: "app", branch: "b", files, message: "Fix" });
     expect(plain.args?.message).toBe(`Fix\n\n${dev}`);
     await f.db.insert(schema.accounts).values({

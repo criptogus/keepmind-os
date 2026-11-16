@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { createHash } from "node:crypto";
-import { schema } from "@agenteschat/db";
-import { deleteAccount } from "@agenteschat/engine";
+import { schema } from "@keepmind/db";
+import { deleteAccount } from "@keepmind/engine";
 import { browser, createTestServer, signUp, type TestServer } from "./harness";
 
 /**

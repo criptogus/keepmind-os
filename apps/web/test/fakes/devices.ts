@@ -23,8 +23,8 @@ import type {
   WifiIphone,
   WifiPairing,
   XcodeFixView,
-} from "@agenteschat/client";
-import { ApiError } from "@agenteschat/client";
+} from "@keepmind/client";
+import { ApiError } from "@keepmind/client";
 import { clone } from "./context";
 
 export interface FakeDevices {
@@ -138,8 +138,8 @@ export function createFakeDevices(
         code,
         expiresAt: new Date(now().getTime() + 10 * 60_000).toISOString(),
         commands: {
-          unix: `curl -fsSL https://app.agentes.chat/i/${code} | sh`,
-          windows: `irm https://app.agentes.chat/i/${code}/ps | iex`,
+          unix: `curl -fsSL https://keepmind.io/i/${code} | sh`,
+          windows: `irm https://keepmind.io/i/${code}/ps | iex`,
         },
       };
       return made;

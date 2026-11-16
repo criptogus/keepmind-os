@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, setDefaultTimeout, test } from "bun:test";
-import { type MachineReplies, type MachineRequest, type RealtimeEvent, ROUTE_PROTOCOL } from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
+import { type MachineReplies, type MachineRequest, type RealtimeEvent, ROUTE_PROTOCOL } from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
 import {
   createAgent,
   createCredential,
@@ -208,7 +208,7 @@ describe("the author's own plan", () => {
     expect(old.hub.calls).toHaveLength(0);
     await f.close();
 
-    const cloud = await plansOnly(fakeHub(), "https://app.agentes.chat");
+    const cloud = await plansOnly(fakeHub(), "https://keepmind.io");
     const m = await post(f.owner.id, "alguém viu o relatório?");
     await drain(cloud.handlers);
     expect(cloud.hub.calls).toHaveLength(0);

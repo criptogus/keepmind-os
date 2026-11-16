@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { and, eq, schema } from "@agenteschat/db";
-import { mentionsEveryone } from "@agenteschat/i18n/everyone";
+import { and, eq, schema } from "@keepmind/db";
+import { mentionsEveryone } from "@keepmind/i18n/everyone";
 import {
   addChannelMember,
   answersForEveryone,

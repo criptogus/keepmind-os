@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { and, type Database, eq, inArray, schema } from "@agenteschat/db";
+import { and, type Database, eq, inArray, schema } from "@keepmind/db";
 import { recordAudit } from "../audit";
 import { cutText } from "../format";
 import { canonicalJson } from "../tools/json-schema";

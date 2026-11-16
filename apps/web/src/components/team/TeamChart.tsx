@@ -1,7 +1,7 @@
-import type { AgentGroup, Team, TeamAgent } from "@agenteschat/client";
-import { useRoles } from "@agenteschat/client";
-import { agentSections } from "@agenteschat/client/lib/agent-groups";
-import { can } from "@agenteschat/client/lib/permissions";
+import type { AgentGroup, Team, TeamAgent } from "@keepmind/client";
+import { useRoles } from "@keepmind/client";
+import { agentSections } from "@keepmind/client/lib/agent-groups";
+import { can } from "@keepmind/client/lib/permissions";
 import {
   type ChartNode,
   chartByPerson,
@@ -10,9 +10,9 @@ import {
   reportsTo,
   sectorLineChanges,
   sectorSupervisor,
-} from "@agenteschat/client/lib/team-views";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
-import { CountChip, RoleMark, Segmented } from "@agenteschat/ui";
+} from "@keepmind/client/lib/team-views";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
+import { CountChip, RoleMark, Segmented } from "@keepmind/ui";
 import { Link } from "@tanstack/react-router";
 import { type DragEvent, Fragment, type HTMLAttributes, useState } from "react";
 import { useTranslation } from "react-i18next";

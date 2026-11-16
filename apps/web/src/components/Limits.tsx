@@ -1,15 +1,9 @@
-import { keys, useAuthConfig, useWorkspaceLimits } from "@agenteschat/client";
-import { errorCode, errorText } from "@agenteschat/client/lib/errors";
-import { formatBytes } from "@agenteschat/client/lib/files";
-import {
-  membersFull,
-  membersFullText,
-  membersFullWho,
-  STORAGE_NEAR,
-  storageLevel,
-} from "@agenteschat/client/lib/limits";
-import { can } from "@agenteschat/client/lib/permissions";
-import { Meter, SettingNote, SettingRow } from "@agenteschat/ui";
+import { keys, useAuthConfig, useWorkspaceLimits } from "@keepmind/client";
+import { errorCode, errorText } from "@keepmind/client/lib/errors";
+import { formatBytes } from "@keepmind/client/lib/files";
+import { membersFull, membersFullText, membersFullWho, STORAGE_NEAR, storageLevel } from "@keepmind/client/lib/limits";
+import { can } from "@keepmind/client/lib/permissions";
+import { Meter, SettingNote, SettingRow } from "@keepmind/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";

@@ -1,6 +1,6 @@
 import { execFile } from "node:child_process";
 import { isIP } from "node:net";
-import type { MachineEgress } from "@agenteschat/adapters/machine-protocol";
+import type { MachineEgress } from "@keepmind/adapters/machine-protocol";
 import { type AgentUser, systemLauncher } from "./agent-users";
 
 export function publicAddress(ip: string): boolean {

@@ -8,8 +8,8 @@ import type {
   SearchIndexResolver,
   SearchKind,
   WebPushSender,
-} from "@agenteschat/adapters";
-import { and, count, eq, inArray, isNull, ne, queryTrace, schema, sql } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { and, count, eq, inArray, isNull, ne, queryTrace, schema, sql } from "@keepmind/db";
 import { ACCOUNT_CONTACT_JOB, saveAccountContact } from "./account-contacts";
 import { AGENT_MEDIA_JOB, enqueueAgentMedia, maybeSendAgentMedia } from "./agent-media";
 import { aiConnectIntent, type ConnectIntent } from "./ai-intent";
@@ -129,7 +129,7 @@ import { purgeOrgFiles, purgeUserFiles, runMigration, type StorageDeps } from ".
 import { postStretchCard, STRETCH_JOB, type StretchHold } from "./stretch";
 import { sayTeamHello } from "./team-templates";
 import { postTeamWeek, TEAM_DAY_JOB, TEAM_WEEK_JOB } from "./team-week";
-import { isAgentesCloud } from "./telemetry";
+import { isKeepMindCloud } from "./telemetry";
 import { assessThread } from "./thread-assess";
 import { runVaultSync, VAULT_SYNC_JOB, type VaultDeps } from "./vault";
 import { transcribeVoiceClip, VOICE_JOB, type VoiceDeps } from "./voice";
@@ -170,7 +170,7 @@ export interface JobDeps extends RunExecutorDeps {
   email?: EmailSender;
   /** Where feedback's pictures and videos are kept (jobs `feedback.send`, `feedback.file.purge`). */
   feedbackBlobs?: BlobStore;
-  /** How a feedback reaches the agentes.chat team's inbox (ADR 0160 §13); the network's own by default. */
+  /** How a feedback reaches the KeepMind OS team's inbox (ADR 0160 §13); the network's own by default. */
   feedbackFetch?: typeof fetch;
   /** Where emails get their pictures (`emailArtFor`); absent: from each link's own server. */
   emailArt?: EmailArt;
@@ -229,7 +229,7 @@ export interface JobDeps extends RunExecutorDeps {
     jev?: { key: JevKeySource; timeoutMs?: number; fetch?: typeof fetch; baseURL?: string };
     /**
      * The author's own plan as a step (ADR 0074 §3): the computers it picks on, and this server's address. Off
-     * on the Cloud (`isAgentesCloud`), where Jev is ours. Absent: no plan step.
+     * on the Cloud (`isKeepMindCloud`), where Jev is ours. Absent: no plan step.
      */
     plans?: { hub: Pick<MachineCaller, "call" | "status">; publicUrl: string };
     /** How long a person's message waits for their next one (`ROUTER_QUIET_MS` on a server); absent: no wait. */
@@ -256,7 +256,7 @@ export function messageRouter(deps: JobDeps): RouterDeps | null {
   const perProvider = { anthropic: router.model, ...router.cheapModels };
   const smallModel = (orgId: string) => smallModelFor(deps, orgId, perProvider);
   const jev = router.jev;
-  const plans = router.plans && !isAgentesCloud(router.plans.publicUrl) ? router.plans.hub : null;
+  const plans = router.plans && !isKeepMindCloud(router.plans.publicUrl) ? router.plans.hub : null;
   const steps = [
     ...(jev
       ? [

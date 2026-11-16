@@ -1,6 +1,6 @@
-import type { AgentGroup, Channel, Member, TeamAgent } from "@agenteschat/client";
-import { agentSections } from "@agenteschat/client/lib/agent-groups";
-import { type ChartNode, chartByPerson, mapColumns } from "@agenteschat/client/lib/team-views";
+import type { AgentGroup, Channel, Member, TeamAgent } from "@keepmind/client";
+import { agentSections } from "@keepmind/client/lib/agent-groups";
+import { type ChartNode, chartByPerson, mapColumns } from "@keepmind/client/lib/team-views";
 
 export type TeamView = "list" | "chart" | "map";
 

@@ -1,4 +1,4 @@
-import type { Hosting } from "@agenteschat/ui/sky/team";
+import type { Hosting } from "@keepmind/ui/sky/team";
 
 /**
  * "Onde fica o seu workspace?" on the phone, the pure part: what the sheet's one button does with the option chosen,

@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { audienceKind, audienceOfKind, pickedOf, wikiAudienceOf } from "@agenteschat/client/lib/who-sees";
+import { audienceKind, audienceOfKind, pickedOf, wikiAudienceOf } from "@keepmind/client/lib/who-sees";
 import { buildConversations } from "../../src/features/chats/logic";
 
 const src = (path: string) => readFileSync(join(import.meta.dir, "../../src", path), "utf8");

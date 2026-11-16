@@ -16,7 +16,7 @@
  */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join, relative, resolve } from "node:path";
-import { createMillionSendSender, createSmtpEmailSender } from "@agenteschat/adapters";
+import { createMillionSendSender, createSmtpEmailSender } from "@keepmind/adapters";
 import { defaultEmailFrom, emailArtFor, renderEmail } from "../src/email";
 import { EMAIL_SAMPLES, PERSONAL_EMAIL_SAMPLES } from "../test/email-samples";
 
@@ -54,7 +54,7 @@ if (to) {
   };
   for (const [id, template] of Object.entries(samples)) {
     if (!template) continue;
-    const home = id.endsWith("selfhost.en") ? "https://chat.alvesstudio.com" : "https://agentes.chat";
+    const home = id.endsWith("selfhost.en") ? "https://chat.alvesstudio.com" : "https://keepmind.io";
     const email = renderEmail(template, { home, base, files: null });
     writeFileSync(join(out, `${id}.html`), email.html);
     writeFileSync(join(out, `${id}.txt`), `Subject: ${email.subject}\nPreheader: ${email.preheader}\n\n${email.text}`);

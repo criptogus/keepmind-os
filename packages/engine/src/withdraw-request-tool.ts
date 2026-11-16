@@ -1,5 +1,5 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
+import type { PubSub } from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
 import { withdrawHandoff } from "./browser/handoff";
 import { hasOpenRequest, openRequestsOf, WITHDRAW_REQUEST_TOOL, WITHDRAW_RULE } from "./open-requests";
 import { quietEnd, withdrawMoot } from "./parked-asks";

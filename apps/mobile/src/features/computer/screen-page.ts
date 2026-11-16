@@ -1,6 +1,6 @@
-import type { DesktopMode, DesktopViewState } from "@agenteschat/client";
-import type { Seat } from "@agenteschat/client/lib/seat";
-import { originOf } from "@agenteschat/client/lib/server";
+import type { DesktopMode, DesktopViewState } from "@keepmind/client";
+import type { Seat } from "@keepmind/client/lib/seat";
+import { originOf } from "@keepmind/client/lib/server";
 
 /*
  * The agent's screen on the phone (ADR 0098): the app's side of the server's `/screen.html`, in a WebView. The page

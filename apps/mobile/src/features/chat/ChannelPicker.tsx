@@ -1,5 +1,5 @@
-import { useChannels } from "@agenteschat/client";
-import { channelOptions } from "@agenteschat/client/lib/channel-refs";
+import { useChannels } from "@keepmind/client";
+import { channelOptions } from "@keepmind/client/lib/channel-refs";
 import { useTranslation } from "react-i18next";
 import { Pressable, StyleSheet, View } from "react-native";
 import Animated, { FadeInDown, FadeOut } from "react-native-reanimated";

@@ -1,5 +1,5 @@
-import type { OrgRole } from "@agenteschat/client";
-import { Checkbox, RoleMark } from "@agenteschat/ui";
+import type { OrgRole } from "@keepmind/client";
+import { Checkbox, RoleMark } from "@keepmind/ui";
 import { useTranslation } from "react-i18next";
 
 /** Roles to tick, each with its mark and how many hold it: an agent's audience and a channel's (ADR 0125). */

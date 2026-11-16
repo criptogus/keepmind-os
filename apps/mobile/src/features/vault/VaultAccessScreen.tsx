@@ -6,9 +6,9 @@ import {
   useVaultItem,
   type VaultAccess,
   type VaultScope,
-} from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { isEveryone, sortRoles } from "@agenteschat/client/lib/roles";
+} from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { isEveryone, sortRoles } from "@keepmind/client/lib/roles";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, StyleSheet, View } from "react-native";

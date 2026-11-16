@@ -1,38 +1,38 @@
-import { plural } from "@agenteschat/i18n/format";
+import { plural } from "@keepmind/i18n/format";
 import { atHost, sentences } from "./en";
 import type { EmailWords } from "./index";
 
 /**
  * The emails in de: whatever is here replaces English, word group by word group (`deepMerge`); write a count's
- * forms with `plural("de", n, { one, few, many, other })` from `@agenteschat/i18n/format`.
+ * forms with `plural("de", n, { one, few, many, other })` from `@keepmind/i18n/format`.
  */
 export const words: EmailWords = {
-  sentBy: (host) => (host ? atHost("Gesendet vom agentes.chat-Server", "auf", host) : "Gesendet von agentes.chat."),
+  sentBy: (host) => (host ? atHost("Gesendet vom KeepMind OS-Server", "auf", host) : "Gesendet von KeepMind OS."),
   fallback: "Der Button funktioniert nicht? Kopiere diese Adresse in deinen Browser:",
   role: { owner: "Inhaber", member: "Mitglied" },
   anAgent: "Ein Agent",
   someone: "Jemand",
   verify: {
-    subject: "Bestätige deine E-Mail-Adresse für agentes.chat",
+    subject: "Bestätige deine E-Mail-Adresse für KeepMind OS",
     preheader: "Ein Klick, um diese Adresse zu bestätigen. Der Link gilt eine Stunde lang.",
     headline: "Bestätige deine E-Mail-Adresse",
     body: "Nur noch ein Schritt: Bestätige, dass diese Adresse dir gehört.",
     button: "E-Mail-Adresse bestätigen",
     small: "Der Link gilt eine Stunde lang. Wenn du dich nicht registriert hast, kannst du diese E-Mail ignorieren.",
-    why: "Du erhältst diese E-Mail, weil mit dieser Adresse ein Konto bei agentes.chat erstellt wurde.",
+    why: "Du erhältst diese E-Mail, weil mit dieser Adresse ein Konto bei KeepMind OS erstellt wurde.",
   },
   reset: {
-    subject: "Setze dein Passwort für agentes.chat zurück",
+    subject: "Setze dein Passwort für KeepMind OS zurück",
     preheader: "Wähle ein neues Passwort. Der Link gilt eine Stunde lang.",
     headline: "Wähle ein neues Passwort",
     body: "Wir haben eine Anfrage erhalten, das Passwort für diese Adresse zurückzusetzen.",
     button: "Neues Passwort wählen",
     note: "Das warst nicht du? Ignoriere diese E-Mail. Dein Passwort bleibt, wie es ist.",
     small: "Der Link gilt eine Stunde lang.",
-    why: "Du erhältst diese E-Mail, weil jemand das Passwort für diese Adresse bei agentes.chat zurücksetzen wollte.",
+    why: "Du erhältst diese E-Mail, weil jemand das Passwort für diese Adresse bei KeepMind OS zurücksetzen wollte.",
   },
   invitation: {
-    subject: "Du bist zu einem Workspace auf agentes.chat eingeladen",
+    subject: "Du bist zu einem Workspace auf KeepMind OS eingeladen",
     preheader: "Nimm die Einladung innerhalb von 7 Tagen mit dieser E-Mail-Adresse an.",
     headline: "Du bist zu einem Workspace eingeladen",
     body: (inviter, email, org, role) =>
@@ -45,7 +45,7 @@ export const words: EmailWords = {
         agents && ["Du arbeitest mit ", ...agents, " zusammen."],
       ),
     more: (n) => `${n} weiteren`,
-    what: "Auf agentes.chat arbeiten Menschen und KI-Agenten zusammen.",
+    what: "Auf KeepMind OS arbeiten Menschen und KI-Agenten zusammen.",
     noteFrom: (inviter, note) => [{ b: inviter ? `${inviter}: ` : "Nachricht: " }, `„${note}“`],
     button: "Einladung annehmen",
     small: "Die Einladung gilt 7 Tage lang. Nimm sie mit dieser E-Mail-Adresse an.",
@@ -56,9 +56,9 @@ export const words: EmailWords = {
         inviter
           ? [
               { b: inviter },
-              `${email ? ` (${email})` : ""} lädt dich in einen persönlichen Workspace auf agentes.chat ein.`,
+              `${email ? ` (${email})` : ""} lädt dich in einen persönlichen Workspace auf KeepMind OS ein.`,
             ]
-          : "Du bist zu einem persönlichen Workspace auf agentes.chat eingeladen.",
+          : "Du bist zu einem persönlichen Workspace auf KeepMind OS eingeladen.",
       why: () =>
         "Du erhältst diese E-Mail, weil jemand diese Adresse in einen persönlichen Workspace eingeladen hat. Wenn du die Person nicht kennst, ignoriere sie einfach. Es passiert nichts, solange du nicht annimmst.",
     },
@@ -97,29 +97,29 @@ export const words: EmailWords = {
     },
   },
   waitlist: {
-    subject: "Bestätige deinen Platz auf der Warteliste von agentes.chat",
+    subject: "Bestätige deinen Platz auf der Warteliste von KeepMind OS",
     preheader: "Ein Klick und dein Platz ist gesichert.",
     headline: "Bestätige deinen Platz auf der Liste",
     body: (email) =>
       email
-        ? ["Wir haben eine Anfrage erhalten, ", { b: email }, " auf die Warteliste von agentes.chat zu setzen."]
-        : "Wir haben eine Anfrage erhalten, diese Adresse auf die Warteliste von agentes.chat zu setzen.",
+        ? ["Wir haben eine Anfrage erhalten, ", { b: email }, " auf die Warteliste von KeepMind OS zu setzen."]
+        : "Wir haben eine Anfrage erhalten, diese Adresse auf die Warteliste von KeepMind OS zu setzen.",
     approve: "Bei uns passiert nichts Wichtiges, ohne dass ein Mensch es freigibt. Das gilt auch für diese Anfrage.",
     button: "Meine E-Mail-Adresse bestätigen",
     small:
       "Der Link gilt 48 Stunden lang. Das warst nicht du? Ignoriere diese E-Mail. Ohne den Klick kommt die Adresse nie auf die Liste.",
-    why: "Du erhältst diese E-Mail, weil diese Adresse auf der Warteliste von agentes.chat eingetragen wurde.",
+    why: "Du erhältst diese E-Mail, weil diese Adresse auf der Warteliste von KeepMind OS eingetragen wurde.",
   },
   earlyAccess: {
-    subject: "Deine Einladung zu agentes.chat ist da",
+    subject: "Deine Einladung zu KeepMind OS ist da",
     preheader: (days) => `Erstelle dein Konto innerhalb von ${days} Tagen mit dieser E-Mail-Adresse.`,
     headline: "Dein Zugang ist bereit",
-    body: (email) => [{ b: email }, " kann jetzt ein Konto und einen Workspace auf agentes.chat erstellen."],
-    what: "Auf agentes.chat arbeiten Menschen und KI-Agenten zusammen.",
+    body: (email) => [{ b: email }, " kann jetzt ein Konto und einen Workspace auf KeepMind OS erstellen."],
+    what: "Auf KeepMind OS arbeiten Menschen und KI-Agenten zusammen.",
     button: "Mein Konto erstellen",
     small: (days) =>
       `Der Link gilt ${days} Tage lang und nur für diese Adresse. Registriere dich mit einem Passwort oder mit Google, GitHub oder Apple unter derselben Adresse.`,
-    why: "Du erhältst diese E-Mail, weil diese Adresse auf der Warteliste von agentes.chat steht oder zu agentes.chat eingeladen wurde. Es passiert nichts, solange du dich nicht registrierst.",
+    why: "Du erhältst diese E-Mail, weil diese Adresse auf der Warteliste von KeepMind OS steht oder zu KeepMind OS eingeladen wurde. Es passiert nichts, solange du dich nicht registrierst.",
   },
   earlyAccessAllowed: {
     subject: "Du kannst jetzt deinen eigenen Workspace erstellen",
@@ -128,10 +128,10 @@ export const words: EmailWords = {
     body: (email) => [
       "Du kannst jetzt mit ",
       { b: email },
-      ", deinem bestehenden Konto, deinen eigenen Workspace auf agentes.chat erstellen.",
+      ", deinem bestehenden Konto, deinen eigenen Workspace auf KeepMind OS erstellen.",
     ],
     button: "Meinen Workspace erstellen",
-    why: "Du erhältst diese E-Mail, weil dieses Konto frühen Zugang zu agentes.chat bekommen hat.",
+    why: "Du erhältst diese E-Mail, weil dieses Konto frühen Zugang zu KeepMind OS bekommen hat.",
   },
   budget: {
     subject: {
@@ -221,7 +221,7 @@ export const words: EmailWords = {
     },
     button: { ai: "KI verbinden", task: "Erste Aufgabe geben", create: "Agenten erstellen" },
     why: (org) =>
-      `Du erhältst diese E-Mail, weil du Inhaber von ${org} auf agentes.chat bist. Es ist die einzige E-Mail zu diesem Computer.`,
+      `Du erhältst diese E-Mail, weil du Inhaber von ${org} auf KeepMind OS bist. Es ist die einzige E-Mail zu diesem Computer.`,
     personal: {
       body: () =>
         "Danke fürs Warten. Der Computer deiner Agenten ist an und eingerichtet, mit einem eigenen Benutzer für jeden Agenten. Er läuft Tag und Nacht, damit deine Agenten jederzeit arbeiten können.",
@@ -229,7 +229,7 @@ export const words: EmailWords = {
         task: ["Gib eine erste Aufgabe.", "Öffne eine Unterhaltung mit einem deiner Agenten und sag, was du brauchst."],
       },
       why: () =>
-        "Du erhältst diese E-Mail, weil dieser Workspace auf agentes.chat dir gehört. Es ist die einzige E-Mail zu diesem Computer.",
+        "Du erhältst diese E-Mail, weil dieser Workspace auf KeepMind OS dir gehört. Es ist die einzige E-Mail zu diesem Computer.",
     },
   },
   joinRequest: {
@@ -279,7 +279,7 @@ export const words: EmailWords = {
       small: "Wenn du denkst, dass das ein Fehler ist, bitte jemanden dort, dich per E-Mail einzuladen.",
     },
     why: (org) =>
-      `Du erhältst diese E-Mail, weil mit dieser Adresse der Beitritt zu ${org} auf agentes.chat angefragt wurde.`,
+      `Du erhältst diese E-Mail, weil mit dieser Adresse der Beitritt zu ${org} auf KeepMind OS angefragt wurde.`,
     personal: {
       joined: { body: (who) => `${who} hat deine Anfrage freigegeben. Du bist jetzt im Workspace.` },
       invited: { body: (who) => `${who} hat deine Anfrage freigegeben, dem Workspace beizutreten.` },
@@ -289,27 +289,27 @@ export const words: EmailWords = {
         small: "Wenn du denkst, dass das ein Fehler ist, bitte sie, dich per E-Mail einzuladen.",
       },
       why: () =>
-        "Du erhältst diese E-Mail, weil mit dieser Adresse der Beitritt zu einem persönlichen Workspace auf agentes.chat angefragt wurde.",
+        "Du erhältst diese E-Mail, weil mit dieser Adresse der Beitritt zu einem persönlichen Workspace auf KeepMind OS angefragt wurde.",
     },
   },
   joinCode: {
-    subject: (code) => `${code} ist dein Code für agentes.chat`,
+    subject: (code) => `${code} ist dein Code für KeepMind OS`,
     preheader: "Gib ihn auf der Seite ein, um den Beitritt anzufragen. Er gilt 10 Minuten lang.",
     headline: "Dein Code",
     body: (org) => ["Gib diesen Code auf der Seite ein, um den Beitritt zu ", { b: org }, " anzufragen."],
     small: ["Er gilt 10 Minuten lang. Wenn du nichts angefragt hast, ", { nobr: "ignoriere diese E-Mail." }],
     why: (org) =>
-      `Du erhältst diese E-Mail, weil jemand diese Adresse eingegeben hat, um den Beitritt zu ${org} auf agentes.chat anzufragen.`,
+      `Du erhältst diese E-Mail, weil jemand diese Adresse eingegeben hat, um den Beitritt zu ${org} auf KeepMind OS anzufragen.`,
     personal: {
       body: () => "Gib diesen Code auf der Seite ein, um den Beitritt zu diesem Workspace anzufragen.",
       why: () =>
-        "Du erhältst diese E-Mail, weil jemand diese Adresse eingegeben hat, um den Beitritt zu einem persönlichen Workspace auf agentes.chat anzufragen.",
+        "Du erhältst diese E-Mail, weil jemand diese Adresse eingegeben hat, um den Beitritt zu einem persönlichen Workspace auf KeepMind OS anzufragen.",
     },
   },
   deletionCode: {
     subjectWorkspace: (code) => `${code} ist dein Code zum Löschen eines Workspace`,
     subjectAccount: (code) => `${code} ist dein Code zum Löschen deines ganzen Kontos`,
-    preheader: "Gib ihn in agentes.chat ein, um zu bestätigen. Er gilt 10 Minuten lang.",
+    preheader: "Gib ihn in KeepMind OS ein, um zu bestätigen. Er gilt 10 Minuten lang.",
     headline: "Dein Code",
     workspace: (org) => [
       "Gib diesen Code ein, um den Workspace ",
@@ -329,8 +329,8 @@ export const words: EmailWords = {
     noSupport:
       "Er gilt 10 Minuten lang, und ohne ihn wird nichts gelöscht. Wenn du das nicht warst, gib ihn nicht weiter und sag den Leuten Bescheid, die diesen Server betreiben.",
     whyWorkspace: (org) =>
-      `Du erhältst diese E-Mail, weil über dein Konto das Löschen von ${org} auf agentes.chat angefragt wurde.`,
-    whyAccount: "Du erhältst diese E-Mail, weil über dein Konto dessen Löschung auf agentes.chat angefragt wurde.",
+      `Du erhältst diese E-Mail, weil über dein Konto das Löschen von ${org} auf KeepMind OS angefragt wurde.`,
+    whyAccount: "Du erhältst diese E-Mail, weil über dein Konto dessen Löschung auf KeepMind OS angefragt wurde.",
     personal: {
       workspace: (org) => [
         "Gib diesen Code ein, um deinen Workspace ",
@@ -342,7 +342,7 @@ export const words: EmailWords = {
   emailChange: {
     code: {
       subject: (code) => `${code} ist dein Code zum Ändern deiner E-Mail-Adresse`,
-      preheader: "Gib ihn in agentes.chat ein, um zu bestätigen. Er gilt 10 Minuten lang.",
+      preheader: "Gib ihn in KeepMind OS ein, um zu bestätigen. Er gilt 10 Minuten lang.",
       headline: "Dein Code",
       body: (email, newEmail) => [
         "Gib diesen Code ein, um die E-Mail-Adresse des Kontos ",
@@ -358,19 +358,19 @@ export const words: EmailWords = {
       ],
       noSupport:
         "Er gilt 10 Minuten lang, und ohne ihn bleibt deine E-Mail-Adresse, wie sie ist. Wenn du das nicht warst, gib ihn nicht weiter und sag den Leuten Bescheid, die diesen Server betreiben.",
-      why: "Du erhältst diese E-Mail, weil über dein Konto eine neue E-Mail-Adresse auf agentes.chat angefragt wurde.",
+      why: "Du erhältst diese E-Mail, weil über dein Konto eine neue E-Mail-Adresse auf KeepMind OS angefragt wurde.",
     },
     link: {
-      subject: "Bestätige deine neue E-Mail-Adresse für agentes.chat",
+      subject: "Bestätige deine neue E-Mail-Adresse für KeepMind OS",
       preheader: "Ein Klick, und du meldest dich ab jetzt mit dieser Adresse an. Der Link gilt eine Stunde lang.",
       headline: "Bestätige deine neue E-Mail-Adresse",
       body: "Nur noch ein Schritt: Bestätige, dass diese Adresse dir gehört. Danach meldet sich dein Konto mit ihr an.",
       button: "Neue E-Mail-Adresse bestätigen",
       small: "Der Link gilt eine Stunde lang. Wenn du das nicht angefragt hast, kannst du diese E-Mail ignorieren.",
-      why: "Du erhältst diese E-Mail, weil jemand diese Adresse für ein agentes.chat-Konto verwenden möchte.",
+      why: "Du erhältst diese E-Mail, weil jemand diese Adresse für ein KeepMind OS-Konto verwenden möchte.",
     },
     changed: {
-      subject: "Die E-Mail-Adresse deines agentes.chat-Kontos wurde geändert",
+      subject: "Die E-Mail-Adresse deines KeepMind OS-Kontos wurde geändert",
       preheader: "Wenn du das nicht warst, kannst du diese Adresse 7 Tage lang zurückholen.",
       headline: "Deine E-Mail-Adresse wurde geändert",
       body: (email, newEmail) => ["Das Konto ", { b: email }, " meldet sich jetzt mit ", { b: newEmail }, " an."],
@@ -378,7 +378,7 @@ export const words: EmailWords = {
         "Das warst nicht du? Drück innerhalb von 7 Tagen auf den Button. Diese Adresse kommt zurück, alle Sitzungen werden abgemeldet, die KI-Apps getrennt, und Anmeldewege, die seitdem hinzugekommen sind, funktionieren nicht mehr. Auch das Passwort wird gelöscht: Mit „Passwort vergessen“ legst du das nächste fest.",
       button: "Das war ich nicht",
       small: "Wenn du das warst, musst du nichts tun.",
-      why: "Du erhältst diese E-Mail, weil diese Adresse die E-Mail-Adresse eines agentes.chat-Kontos war.",
+      why: "Du erhältst diese E-Mail, weil diese Adresse die E-Mail-Adresse eines KeepMind OS-Kontos war.",
     },
   },
   deleting: {
@@ -394,10 +394,10 @@ export const words: EmailWords = {
     owner: "Doch anders überlegt? Stell ihn vorher wieder her.",
     button: "Workspace wiederherstellen",
     member: "Wenn das ein Fehler ist, bitte einen Inhaber, ihn wiederherzustellen.",
-    why: (org) => `Du erhältst diese E-Mail, weil du in ${org} auf agentes.chat bist.`,
+    why: (org) => `Du erhältst diese E-Mail, weil du in ${org} auf KeepMind OS bist.`,
     personal: {
       member: "Wenn das ein Fehler ist, bitte die Person, die ihn gelöscht hat, ihn wiederherzustellen.",
-      why: () => "Du erhältst diese E-Mail, weil du in diesem Workspace auf agentes.chat bist.",
+      why: () => "Du erhältst diese E-Mail, weil du in diesem Workspace auf KeepMind OS bist.",
     },
   },
   restored: {
@@ -406,28 +406,27 @@ export const words: EmailWords = {
     headline: "Der Workspace ist wieder da",
     body: (by, org) => [{ b: by }, " hat ", { b: org }, " wiederhergestellt. Er funktioniert wieder."],
     button: "Workspace öffnen",
-    why: (org) => `Du erhältst diese E-Mail, weil du in ${org} auf agentes.chat bist.`,
+    why: (org) => `Du erhältst diese E-Mail, weil du in ${org} auf KeepMind OS bist.`,
     personal: {
-      why: () => "Du erhältst diese E-Mail, weil du in diesem Workspace auf agentes.chat bist.",
+      why: () => "Du erhältst diese E-Mail, weil du in diesem Workspace auf KeepMind OS bist.",
     },
   },
   appConnected: {
-    subject: "Eine App wurde mit deinem agentes.chat-Konto verbunden",
+    subject: "Eine App wurde mit deinem KeepMind OS-Konto verbunden",
     preheader: "Sie kann in einem Workspace in deinem Namen lesen und Agenten Aufgaben schicken.",
     headline: "Eine App wurde verbunden",
     body: (app, org) => [{ b: app }, " hat jetzt Zugriff auf dein Konto in ", { b: org }, "."],
     note: "Das warst nicht du? Trenne die Verbindung sofort und ändere dein Passwort.",
     button: "Verbundene Apps ansehen",
-    why: (org) =>
-      `Du erhältst diese E-Mail, weil eine App mit deinem Konto in ${org} auf agentes.chat verbunden wurde.`,
+    why: (org) => `Du erhältst diese E-Mail, weil eine App mit deinem Konto in ${org} auf KeepMind OS verbunden wurde.`,
     personal: {
       body: (app) => [{ b: app }, " hat jetzt Zugriff auf dein Konto in deinem persönlichen Workspace."],
       why: () =>
-        "Du erhältst diese E-Mail, weil eine App mit deinem Konto in deinem persönlichen Workspace auf agentes.chat verbunden wurde.",
+        "Du erhältst diese E-Mail, weil eine App mit deinem Konto in deinem persönlichen Workspace auf KeepMind OS verbunden wurde.",
     },
   },
   accountDeleting: {
-    subject: (day) => `Dein agentes.chat-Konto wird am ${day} gelöscht`,
+    subject: (day) => `Dein KeepMind OS-Konto wird am ${day} gelöscht`,
     preheader: "Du hast 7 Tage Zeit, es dir anders zu überlegen.",
     headline: "Dein Konto wird gelöscht",
     body: (email, day, time) => [
@@ -445,10 +444,10 @@ export const words: EmailWords = {
     ],
     undo: "Doch anders überlegt? Melde dich vor diesem Datum an und tippe auf Wiederherstellen.",
     button: "Anmelden und wiederherstellen",
-    why: "Du erhältst diese E-Mail, weil diese Adresse ein Konto auf agentes.chat hat.",
+    why: "Du erhältst diese E-Mail, weil diese Adresse ein Konto auf KeepMind OS hat.",
   },
   accountDeleted: {
-    subject: "Dein agentes.chat-Konto wurde gelöscht",
+    subject: "Dein KeepMind OS-Konto wurde gelöscht",
     preheader: "Es ist überall abgemeldet und kann sich nicht mehr anmelden.",
     headline: "Dein Konto wurde gelöscht",
     body: (email) => ["Wir haben das Konto ", { b: email }, " gelöscht."],
@@ -462,7 +461,7 @@ export const words: EmailWords = {
     ],
     support: (address) => ["Wenn du das nicht warst, schreib an ", { mail: address }, "."],
     noSupport: "Wenn du das nicht warst, sag den Leuten Bescheid, die diesen Server betreiben.",
-    why: "Du erhältst diese E-Mail, weil diese Adresse ein Konto auf agentes.chat hatte.",
+    why: "Du erhältst diese E-Mail, weil diese Adresse ein Konto auf KeepMind OS hatte.",
   },
   autonomy: {
     subject: (day, stalls, noise) => `Agenten am ${day}: ${stalls} Hänger, ${noise} Leerläufe`,
@@ -542,29 +541,29 @@ export const words: EmailWords = {
   },
   planWaiting: {
     subject: "Dein Team wartet",
-    preheader: "Dein Workspace ist bereit. Zum Start fehlt ein agentes.chat-Tarif.",
+    preheader: "Dein Workspace ist bereit. Zum Start fehlt ein KeepMind OS-Tarif.",
     headline: "Dein Team wartet",
     body: (agents, channels, routines) => {
       const a = plural("de", agents, { one: `1 Agent`, other: `${agents} Agenten` });
       const c = plural("de", channels, { one: `1 Kanal`, other: `${channels} Kanäle` });
       const r = plural("de", routines, { one: `1 Routine`, other: `${routines} Routinen` });
       return routines > 0
-        ? `${a}, ${c} und ${r} sind bereit. Zum Start fehlt ein agentes.chat-Tarif.`
-        : `${a} und ${c} sind bereit. Zum Start fehlt ein agentes.chat-Tarif.`;
+        ? `${a}, ${c} und ${r} sind bereit. Zum Start fehlt ein KeepMind OS-Tarif.`
+        : `${a} und ${c} sind bereit. Zum Start fehlt ein KeepMind OS-Tarif.`;
     },
-    button: "agentes.chat-Tarife ansehen",
+    button: "KeepMind OS-Tarife ansehen",
     why: (org) =>
-      `Du bekommst diese E-Mail, weil du ${org} auf agentes.chat leitest. Wir senden nur zwei solche Hinweise.`,
+      `Du bekommst diese E-Mail, weil du ${org} auf KeepMind OS leitest. Wir senden nur zwei solche Hinweise.`,
     personal: {
       subject: "Deine Agenten warten",
       headline: "Deine Agenten warten",
       body: (agents, _channels, routines) => {
         const a = plural("de", agents, { one: `1 Agent`, other: `${agents} Agenten` });
         const r = plural("de", routines, { one: `1 Routine`, other: `${routines} Routinen` });
-        return `Alles bereit: ${routines > 0 ? `${a} und ${r}` : a}. Es fehlt nur noch ein agentes.chat-Tarif.`;
+        return `Alles bereit: ${routines > 0 ? `${a} und ${r}` : a}. Es fehlt nur noch ein KeepMind OS-Tarif.`;
       },
       why: () =>
-        "Du bekommst diese E-Mail, weil dieser Workspace auf agentes.chat dir gehört. Wir senden nur zwei solche Hinweise.",
+        "Du bekommst diese E-Mail, weil dieser Workspace auf KeepMind OS dir gehört. Wir senden nur zwei solche Hinweise.",
     },
   },
 };

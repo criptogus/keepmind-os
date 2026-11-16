@@ -2,7 +2,7 @@ import { afterEach, expect, test } from "bun:test";
 import { spawnSync } from "node:child_process";
 import { chmodSync, existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { MISSION_DENY_RULES, PUSH_ASK_RULES } from "@agenteschat/adapters/command-policy";
+import { MISSION_DENY_RULES, PUSH_ASK_RULES } from "@keepmind/adapters/command-policy";
 import {
   type AccountKind,
   PERMISSION_PROMPT_TOOL,
@@ -10,7 +10,7 @@ import {
   parseServerFrame,
   type RunnerFrame,
   TASKS_PROTOCOL,
-} from "@agenteschat/adapters/machine-protocol";
+} from "@keepmind/adapters/machine-protocol";
 import { ACCOUNT_MISSING_MESSAGE, ACCOUNT_SIGNED_OUT } from "../../runner/accounts";
 import { handleRequest } from "../../runner/handlers";
 import { agentWorkspace } from "../../runner/paths";

@@ -9,9 +9,9 @@ import type {
   RoutineReport,
   RoutineTarget,
   RoutineTargetInput,
-} from "@agenteschat/client";
-import type { RunStatus } from "@agenteschat/client/lib/calendar";
-import { type RoutineFix, runPixels } from "@agenteschat/client/lib/routine-view";
+} from "@keepmind/client";
+import type { RunStatus } from "@keepmind/client/lib/calendar";
+import { type RoutineFix, runPixels } from "@keepmind/client/lib/routine-view";
 import type { IconName } from "@/ui";
 import { defaultRule, fromApiRule, onceAt, onceRule, type RecurrenceRule, toApiRule } from "./rule";
 

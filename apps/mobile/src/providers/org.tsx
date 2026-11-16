@@ -1,5 +1,5 @@
-import { type OrgSummary, useApi, useMe } from "@agenteschat/client";
-import { useLocaleSync } from "@agenteschat/client/lib/locale-sync";
+import { type OrgSummary, useApi, useMe } from "@keepmind/client";
+import { useLocaleSync } from "@keepmind/client/lib/locale-sync";
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { accountFailed, chooseOrg, openOrgs } from "@/lib/org-choice";
 import { orgValueName, usePlace } from "@/lib/server";

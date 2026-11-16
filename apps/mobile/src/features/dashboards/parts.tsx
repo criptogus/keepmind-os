@@ -7,8 +7,8 @@ import {
   type WidgetFormat,
   type WidgetSchedule,
   withEditRoles,
-} from "@agenteschat/client";
-import { WIDGET_SCHEDULES, WIDGET_SIZES, type WidgetSize } from "@agenteschat/ui/widgets/spec";
+} from "@keepmind/client";
+import { WIDGET_SCHEDULES, WIDGET_SIZES, type WidgetSize } from "@keepmind/ui/widgets/spec";
 import { Canvas } from "@shopify/react-native-skia";
 import { type ReactNode, useEffect } from "react";
 import { useTranslation } from "react-i18next";

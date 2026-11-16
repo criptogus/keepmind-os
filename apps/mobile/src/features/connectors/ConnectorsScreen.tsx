@@ -5,14 +5,14 @@ import {
   useConnections,
   useCustomServers,
   useMailAccounts,
-} from "@agenteschat/client";
-import { composioOffText, composioUsageText, nearComposioLimit } from "@agenteschat/client/lib/composio";
-import { type ConnectedItem, connectedItems, isMcpItem, itemName } from "@agenteschat/client/lib/connected";
-import { settingsFrozen } from "@agenteschat/client/lib/deletion";
-import { choiceOf, MAIL_BRANDS } from "@agenteschat/client/lib/mail";
-import { can } from "@agenteschat/client/lib/permissions";
-import { connectorDescription, connectorName } from "@agenteschat/client/lib/scopes";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client";
+import { composioOffText, composioUsageText, nearComposioLimit } from "@keepmind/client/lib/composio";
+import { type ConnectedItem, connectedItems, isMcpItem, itemName } from "@keepmind/client/lib/connected";
+import { settingsFrozen } from "@keepmind/client/lib/deletion";
+import { choiceOf, MAIL_BRANDS } from "@keepmind/client/lib/mail";
+import { can } from "@keepmind/client/lib/permissions";
+import { connectorDescription, connectorName } from "@keepmind/client/lib/scopes";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import { useLocalSearchParams } from "expo-router";
 import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

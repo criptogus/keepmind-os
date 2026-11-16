@@ -1,15 +1,9 @@
-import { type BlockChange, useArtifact, useBlockReply, useKeepBlock, useSharedBlock } from "@agenteschat/client";
-import {
-  type BlockEvent,
-  type BlockHost,
-  blockEvent,
-  blockPage,
-  DRAFT_SETTLE_MS,
-} from "@agenteschat/client/lib/blocks";
-import { formatTime } from "@agenteschat/client/lib/format";
-import { PAGE_SANDBOX } from "@agenteschat/client/lib/isolated-page";
-import { Button, Menu, MenuItem, Spinner } from "@agenteschat/ui";
-import { chartRamp } from "@agenteschat/ui/sky/chart";
+import { type BlockChange, useArtifact, useBlockReply, useKeepBlock, useSharedBlock } from "@keepmind/client";
+import { type BlockEvent, type BlockHost, blockEvent, blockPage, DRAFT_SETTLE_MS } from "@keepmind/client/lib/blocks";
+import { formatTime } from "@keepmind/client/lib/format";
+import { PAGE_SANDBOX } from "@keepmind/client/lib/isolated-page";
+import { Button, Menu, MenuItem, Spinner } from "@keepmind/ui";
+import { chartRamp } from "@keepmind/ui/sky/chart";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useArtifactViewer } from "@/components/artifacts/ArtifactViewer";

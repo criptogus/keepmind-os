@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
-import type { BlobStore } from "@agenteschat/adapters";
-import { and, type Database, eq, schema, sql } from "@agenteschat/db";
+import type { BlobStore } from "@keepmind/adapters";
+import { and, type Database, eq, schema, sql } from "@keepmind/db";
 import { recordAudit } from "./audit";
 import { caches } from "./cache";
 import { NotFoundError, ValidationError } from "./errors";

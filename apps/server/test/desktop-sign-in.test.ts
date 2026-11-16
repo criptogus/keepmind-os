@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
 import { randomBytes } from "node:crypto";
-import { eq, schema } from "@agenteschat/db";
+import { eq, schema } from "@keepmind/db";
 import { desktopChallenge } from "../src/desktop-sign-in";
 import { browser, createTestServer, signUp, type TestServer } from "./harness";
 

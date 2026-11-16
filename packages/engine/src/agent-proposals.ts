@@ -1,18 +1,6 @@
-import { isAccountKind, type PubSub } from "@agenteschat/adapters";
-import {
-  and,
-  asc,
-  type Database,
-  eq,
-  inArray,
-  isNotNull,
-  isNull,
-  like,
-  notInArray,
-  schema,
-  sql,
-} from "@agenteschat/db";
-import { AUTO_MODEL } from "@agenteschat/providers";
+import { isAccountKind, type PubSub } from "@keepmind/adapters";
+import { and, asc, type Database, eq, inArray, isNotNull, isNull, like, notInArray, schema, sql } from "@keepmind/db";
+import { AUTO_MODEL } from "@keepmind/providers";
 import { orgToolCatalog, setAgentAccess } from "./access";
 import { type Agent, createAgent, getAgent, HANDLE_PATTERN, NEW_AGENT_DEFAULTS, takenHandles } from "./agents";
 import { type AiStatusDeps, agentAiState } from "./ai-status";

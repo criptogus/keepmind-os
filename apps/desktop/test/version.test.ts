@@ -52,7 +52,7 @@ describe("latest release", () => {
     expect(ok?.version).toBe("0.2.0");
     expect(parseLatest({ version: "0.2.0", url: "https://evil.example/agentes.dmg" })).toBeNull();
     expect(
-      parseLatest({ version: "0.2.0", url: "https://app.agentes.chat/api/desktop/download/upstream.dmg" }),
+      parseLatest({ version: "0.2.0", url: "https://upstream.example/api/desktop/download/upstream.dmg" }),
     ).toBeNull();
     expect(parseLatest({ version: "x", url: "https://keepmind.io/x" })).toBeNull();
     expect(parseLatest(null)).toBeNull();

@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, setSystemTime, spyOn, test } from "bun:test";
-import type { OrgRole } from "@agenteschat/client";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import type { OrgRole } from "@keepmind/client";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 

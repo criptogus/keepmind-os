@@ -1,5 +1,5 @@
-import type { LIMIT_ICON } from "@agenteschat/client/lib/presence";
-import { cx, Icon } from "@agenteschat/ui";
+import type { LIMIT_ICON } from "@keepmind/client/lib/presence";
+import { cx, Icon } from "@keepmind/ui";
 import { useTranslation } from "react-i18next";
 import { agentLine, personLine, useAgentPresence, usePersonPresence } from "@/hooks/usePresence";
 import "./presence.css";

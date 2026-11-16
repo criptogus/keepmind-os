@@ -2,8 +2,8 @@ import { describe, expect, test } from "bun:test";
 import { createHash } from "node:crypto";
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
-import type { MigrationBundle } from "@agenteschat/client";
-import { cronOf, everyMinutes, sha256, splitNote } from "@agenteschat/client/lib/import/shared";
+import type { MigrationBundle } from "@keepmind/client";
+import { cronOf, everyMinutes, sha256, splitNote } from "@keepmind/client/lib/import/shared";
 import {
   detectSource,
   EXPORT_PROMPT,
@@ -887,7 +887,7 @@ const ourBundle = {
   leftOut: [{ kind: "projects", label: "Q4 planning" }],
 };
 
-describe("agentes.chat bundle", () => {
+describe("KeepMind OS bundle", () => {
   test("our own shape is read like any other source: nothing in it is trusted", () => {
     const b = parseImport([{ name: "agentes-chat-export.json", text: JSON.stringify(ourBundle) }], { models: MODELS });
     expect(b.source).toEqual({

@@ -1,10 +1,10 @@
-import type { AgentLineChange, TeamAgent } from "@agenteschat/client";
-import { useSetAgentLines, useTeam } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { can } from "@agenteschat/client/lib/permissions";
-import { rightHandOf } from "@agenteschat/client/lib/right-hand";
-import { mayReportTo, reportsOf, supervisorOf } from "@agenteschat/client/lib/team-views";
-import { Field, Icon, MenuRadioGroup, Select } from "@agenteschat/ui";
+import type { AgentLineChange, TeamAgent } from "@keepmind/client";
+import { useSetAgentLines, useTeam } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { can } from "@keepmind/client/lib/permissions";
+import { rightHandOf } from "@keepmind/client/lib/right-hand";
+import { mayReportTo, reportsOf, supervisorOf } from "@keepmind/client/lib/team-views";
+import { Field, Icon, MenuRadioGroup, Select } from "@keepmind/ui";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { AgentAvatar } from "@/components/AgentAvatar";

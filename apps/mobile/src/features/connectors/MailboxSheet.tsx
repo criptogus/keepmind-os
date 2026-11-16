@@ -1,5 +1,5 @@
-import { keys, useApi, useMailAccounts, useMailAction } from "@agenteschat/client";
-import type { Level } from "@agenteschat/client/lib/access-levels";
+import { keys, useApi, useMailAccounts, useMailAction } from "@keepmind/client";
+import type { Level } from "@keepmind/client/lib/access-levels";
 import {
   choiceOf,
   fromMailLevel,
@@ -7,8 +7,8 @@ import {
   mailReviewTools,
   onlyForOwner,
   setMailLevel,
-} from "@agenteschat/client/lib/mail";
-import { can } from "@agenteschat/client/lib/permissions";
+} from "@keepmind/client/lib/mail";
+import { can } from "@keepmind/client/lib/permissions";
 import { useQueryClient } from "@tanstack/react-query";
 import { type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";

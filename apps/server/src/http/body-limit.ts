@@ -1,5 +1,5 @@
-import { FEEDBACK_INBOX_BYTES } from "@agenteschat/engine";
-import { SKILL_ZIP_BASE64_CHARS } from "@agenteschat/tokens/skills";
+import { FEEDBACK_INBOX_BYTES } from "@keepmind/engine";
+import { SKILL_ZIP_BASE64_CHARS } from "@keepmind/tokens/skills";
 import type { Context } from "hono";
 import { bodyLimit } from "hono/body-limit";
 import { createMiddleware } from "hono/factory";

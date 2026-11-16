@@ -28,7 +28,7 @@ never sent to browsers.
   Without Docker, it also runs as one program with its database built in (On this computer, without
   Docker).
 - Nothing else: the installer fetches the Bun it runs the setup on. With Node.js 18 or newer,
-  `npx @agenteschat/setup` is the same setup, and it also runs from the app's image.
+  `npx @keepmind/setup` is the same setup, and it also runs from the app's image.
 - Sizing has not been measured yet. As a starting point for a small team: 2 vCPUs, 4 GB of RAM and
   20 GB of disk. The image is large (about 2 GB of dependencies), and the database and the files
   volume grow with use.
@@ -126,7 +126,7 @@ it at its first question (Ctrl-C), then run the setup command the installer prin
 Without a terminal (cloud-init, a CI job) nothing is asked: the setup takes its defaults and the
 options given, and Docker is installed only with `--yes`.
 
-Without the installer, the same setup runs with `npx @agenteschat/setup` in an empty directory
+Without the installer, the same setup runs with `npx @keepmind/setup` in an empty directory
 (Node.js 18 or newer), or from the app's image, on the current directory:
 
 ```sh
@@ -273,7 +273,7 @@ tailnet policy file limits who reaches what, let your people reach `tag:agentes`
 **The command**, in an empty directory on the server:
 
 ```sh
-AGENTES_SETUP_TAILSCALE_KEY='tskey-client-…' npx -y @agenteschat/setup --network tailscale --email skip --json
+AGENTES_SETUP_TAILSCALE_KEY='tskey-client-…' npx -y @keepmind/setup --network tailscale --email skip --json
 ```
 
 No Node.js or Docker on the server? As root, the installer gets what's missing and then runs the
@@ -1754,7 +1754,7 @@ package.json names the version):
 git clone https://github.com/agentes-chat/agentes-chat.git
 cd agentes-chat
 bun install
-bun run --filter '@agenteschat/setup' build
+bun run --filter '@keepmind/setup' build
 docker build -t ghcr.io/agentes-chat/agentes:latest .
 mkdir -p ~/agentes && cp docker-compose.yml ~/agentes/
 AGENTES_INSTALL_SETUP=$PWD/packages/setup/dist/index.js sh install.sh --dir ~/agentes

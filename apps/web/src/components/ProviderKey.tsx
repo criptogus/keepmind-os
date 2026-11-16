@@ -1,7 +1,7 @@
-import { CUSTOM_PROVIDER } from "@agenteschat/client/lib/endpoints";
-import type { keyRefusal } from "@agenteschat/client/lib/errors";
-import { PROVIDERS, type ProviderId, providerOf, providersForKey } from "@agenteschat/client/lib/providers";
-import { Button, ProviderLogo, SearchSelect, type SearchSelectProps, SettingNote } from "@agenteschat/ui";
+import { CUSTOM_PROVIDER } from "@keepmind/client/lib/endpoints";
+import type { keyRefusal } from "@keepmind/client/lib/errors";
+import { PROVIDERS, type ProviderId, providerOf, providersForKey } from "@keepmind/client/lib/providers";
+import { Button, ProviderLogo, SearchSelect, type SearchSelectProps, SettingNote } from "@keepmind/ui";
 import { useTranslation } from "react-i18next";
 
 /** One provider from a list, by its logo and name, with a search: every AI picker's select. */

@@ -1,4 +1,4 @@
-import { domWindow } from "@agenteschat/ui/testing/dom";
+import { domWindow } from "@keepmind/ui/testing/dom";
 
 const SCRIPT = 'script[src^="https://challenges.cloudflare.com/"]';
 

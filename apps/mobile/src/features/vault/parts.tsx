@@ -1,4 +1,4 @@
-import { useRoles, type VaultAccess, type VaultScope } from "@agenteschat/client";
+import { useRoles, type VaultAccess, type VaultScope } from "@keepmind/client";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, TextInput, type TextInputProps, View } from "react-native";

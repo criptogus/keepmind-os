@@ -1,6 +1,6 @@
-import { type Issue, useStartAgentOnTask } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
+import { type Issue, useStartAgentOnTask } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
 import { useTranslation } from "react-i18next";
 import { Alert } from "react-native";
 import { useToast } from "@/ui";

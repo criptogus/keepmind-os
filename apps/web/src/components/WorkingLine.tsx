@@ -1,4 +1,4 @@
-import { elapsedClock } from "@agenteschat/client";
+import { elapsedClock } from "@keepmind/client";
 import {
   type ActivityEntry,
   activitySentence,
@@ -11,8 +11,8 @@ import {
   markedPieces,
   markInk,
   peopleGroups,
-} from "@agenteschat/client/lib/activity";
-import { Avatar, Icon } from "@agenteschat/ui";
+} from "@keepmind/client/lib/activity";
+import { Avatar, Icon } from "@keepmind/ui";
 import { Fragment, type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AgentAvatar, AgentWho } from "@/components/AgentAvatar";

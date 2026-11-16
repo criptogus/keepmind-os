@@ -1,7 +1,7 @@
 import { afterEach, expect, test } from "bun:test";
-import { CODEX_FOLDER_PROTOCOL, MACHINE_PROTOCOL_VERSION } from "@agenteschat/adapters";
-import { asc, eq, schema } from "@agenteschat/db";
-import { createAnthropicProvider, type ModelRequest } from "@agenteschat/providers";
+import { CODEX_FOLDER_PROTOCOL, MACHINE_PROTOCOL_VERSION } from "@keepmind/adapters";
+import { asc, eq, schema } from "@keepmind/db";
+import { createAnthropicProvider, type ModelRequest } from "@keepmind/providers";
 import {
   addRunStep,
   type Brain,

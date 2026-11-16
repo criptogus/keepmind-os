@@ -37,15 +37,15 @@ import {
   type MailAdapters,
   postgresJsNotifier,
   type WebPushSender,
-} from "@agenteschat/adapters";
-import { type Config, ConfigError, composioAuthConfigs, loadConfig, redactConfig } from "@agenteschat/config";
+} from "@keepmind/adapters";
+import { type Config, ConfigError, composioAuthConfigs, loadConfig, redactConfig } from "@keepmind/config";
 import {
   createDatabase,
   type Database,
   type DatabaseHandle,
   ensureMessagePartitions,
   MigrationMismatchError,
-} from "@agenteschat/db";
+} from "@keepmind/db";
 import {
   APP_JOB_KINDS,
   adoptRestoredOperatorEvents,
@@ -64,8 +64,8 @@ import {
   enableOperatorEvents,
   ensureRightHands,
   type GifKey,
-  isAgentesCloud,
   isBlockedAddress,
+  isKeepMindCloud,
   laneLimits,
   memoryBudget,
   meterComposio,
@@ -84,9 +84,9 @@ import {
   vapidKeys,
   vapidSubject,
   widenDmHowTos,
-} from "@agenteschat/engine";
-import { type AgentesModule, type Edition, type ModuleContext, resolveAdapters } from "@agenteschat/modules";
-import { createModelProviders, enableOpenRouterModels } from "@agenteschat/providers";
+} from "@keepmind/engine";
+import { type AgentesModule, type Edition, type ModuleContext, resolveAdapters } from "@keepmind/modules";
+import { createModelProviders, enableOpenRouterModels } from "@keepmind/providers";
 import { createApp } from "./app";
 import { createAuth } from "./auth";
 import { buildEngine } from "./engine";
@@ -130,7 +130,7 @@ export interface StartOptions {
  * test that boots like a given setup (the Cloud) sets them the same way.
  */
 export function applyBootSwitches(config: Config) {
-  // On agentes.chat Cloud a restriction names its kind and how to contest it, elsewhere it reads as before.
+  // On KeepMind OS Cloud a restriction names its kind and how to contest it, elsewhere it reads as before.
   setRestrictionNotices(config.PUBLIC_URL);
   // The links to messages that agents write and their tools return.
   setMessageLinkBase(config.PUBLIC_URL);
@@ -141,7 +141,7 @@ export function applyBootSwitches(config: Config) {
 }
 
 /**
- * Boots an agentes.chat server: config → database → migrations → adapters
+ * Boots an KeepMind OS server: config → database → migrations → adapters
  * (core defaults, then module overrides) → HTTP + WebSocket → workers.
  * Shared by the self-hosted entrypoint (`src/main.ts`) and any entrypoint
  * that adds public modules (ADR 0002); only `modules` differ.
@@ -194,7 +194,7 @@ async function boot(
   release: string,
   errors: ErrorReporter,
 ) {
-  log.info("starting agentes.chat", { version: release, edition, config: redactConfig(config) });
+  log.info("starting KeepMind OS", { version: release, edition, config: redactConfig(config) });
   log.info(
     "error reports",
     config.SENTRY_DSN
@@ -331,7 +331,7 @@ async function boot(
     modules,
     base,
     defaults,
-    // A workspace's own model endpoint (ADR 0146): on agentes.chat Cloud every call connects only to public addresses.
+    // A workspace's own model endpoint (ADR 0146): on KeepMind OS Cloud every call connects only to public addresses.
     createModelProviders({
       endpointFetch: allowsPrivateEndpoints(config) ? undefined : publicHttpsFetch(),
       version: release,
@@ -339,7 +339,7 @@ async function boot(
   );
   if (overridden.length > 0) log.info("adapters overridden by modules", { overridden });
   resolved = adapters;
-  if (!isAgentesCloud(config.PUBLIC_URL)) {
+  if (!isKeepMindCloud(config.PUBLIC_URL)) {
     // Sealed with the installation's key wrappers, like the Jev key (ADR 0073), and read before anything serves.
     gifKey = createGifKey({
       db: database.db,
@@ -793,11 +793,11 @@ function webPushSender(config: Config, db: Database, wrappers: () => KeyWrapper[
 }
 
 /**
- * GIF search (ADR 0091): on agentes.chat's own servers GIPHY only with `GIPHY_API_KEY`; elsewhere a provider that
+ * GIF search (ADR 0091): on KeepMind OS's own servers GIPHY only with `GIPHY_API_KEY`; elsewhere a provider that
  * follows the installation's key (`GIPHY_API_KEY`, or the one its owner adds in Settings), there while it has one.
  */
 function gifProvider(config: Config, key: () => string | null): GifProvider | null {
-  if (!isAgentesCloud(config.PUBLIC_URL)) return createKeyedGifs({ key });
+  if (!isKeepMindCloud(config.PUBLIC_URL)) return createKeyedGifs({ key });
   return config.GIPHY_API_KEY ? createGiphyGifs({ apiKey: config.GIPHY_API_KEY }) : null;
 }
 

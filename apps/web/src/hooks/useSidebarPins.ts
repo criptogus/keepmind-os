@@ -1,7 +1,7 @@
-import { useAgentGroups, useChannels, useDms, useSetSidebarView, useSidebarView } from "@agenteschat/client";
-import { hiddenAgentIds } from "@agenteschat/client/lib/audience";
-import { isRightHand } from "@agenteschat/client/lib/right-hand";
-import { dayOnePins, type PinKind, pinsOf, togglePin } from "@agenteschat/client/lib/sidebar-view";
+import { useAgentGroups, useChannels, useDms, useSetSidebarView, useSidebarView } from "@keepmind/client";
+import { hiddenAgentIds } from "@keepmind/client/lib/audience";
+import { isRightHand } from "@keepmind/client/lib/right-hand";
+import { dayOnePins, type PinKind, pinsOf, togglePin } from "@keepmind/client/lib/sidebar-view";
 import { useTranslation } from "react-i18next";
 import { useOrg } from "@/components/org-context";
 import type { MenuEntry } from "@/lib/context-menu";

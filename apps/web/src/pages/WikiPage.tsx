@@ -1,8 +1,8 @@
-import type { WikiPageSummary } from "@agenteschat/client";
-import { keys, useWikiPage, useWikiReads, useWikiTrash, useWikiTree } from "@agenteschat/client";
-import { relativeTime } from "@agenteschat/client/lib/format";
-import { can } from "@agenteschat/client/lib/permissions";
-import { isImportedPage, outlineOf, type WikiFolder, wikiSlug, wikiTree } from "@agenteschat/client/lib/wiki";
+import type { WikiPageSummary } from "@keepmind/client";
+import { keys, useWikiPage, useWikiReads, useWikiTrash, useWikiTree } from "@keepmind/client";
+import { relativeTime } from "@keepmind/client/lib/format";
+import { can } from "@keepmind/client/lib/permissions";
+import { isImportedPage, outlineOf, type WikiFolder, wikiSlug, wikiTree } from "@keepmind/client/lib/wiki";
 import {
   Button,
   Checkbox,
@@ -14,7 +14,7 @@ import {
   MenuItem,
   PageHeader,
   SearchField,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
 import type { TFunction } from "i18next";

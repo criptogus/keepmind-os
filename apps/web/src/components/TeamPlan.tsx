@@ -1,10 +1,10 @@
-import type { Message, TeamAgentDraft, TeamPlan, TeamProposalCard } from "@agenteschat/client";
-import { useAiStatus, useApplyTeamTemplate, useMessages, useTeamCard, useTeamTemplates } from "@agenteschat/client";
-import { setDraftFor } from "@agenteschat/client/lib/drafts";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { joinNames, whenAt } from "@agenteschat/client/lib/format";
-import { can } from "@agenteschat/client/lib/permissions";
-import { isRightHand, RIGHT_HAND_DEFAULT } from "@agenteschat/client/lib/right-hand";
+import type { Message, TeamAgentDraft, TeamPlan, TeamProposalCard } from "@keepmind/client";
+import { useAiStatus, useApplyTeamTemplate, useMessages, useTeamCard, useTeamTemplates } from "@keepmind/client";
+import { setDraftFor } from "@keepmind/client/lib/drafts";
+import { errorText } from "@keepmind/client/lib/errors";
+import { joinNames, whenAt } from "@keepmind/client/lib/format";
+import { can } from "@keepmind/client/lib/permissions";
+import { isRightHand, RIGHT_HAND_DEFAULT } from "@keepmind/client/lib/right-hand";
 import {
   answerAfter,
   answerPicks,
@@ -18,8 +18,8 @@ import {
   teamRoutines,
   teamStatus,
   teamUndoable,
-} from "@agenteschat/client/lib/team-plan";
-import { isPersonal, modeKey } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client/lib/team-plan";
+import { isPersonal, modeKey } from "@keepmind/client/lib/workspace-mode";
 import {
   AgentSticker,
   Button,
@@ -33,7 +33,7 @@ import {
   Spinner,
   Textarea,
   WAVE_SECONDS,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useNavigate } from "@tanstack/react-router";
 import type { TFunction } from "i18next";
 import { type ReactNode, useState } from "react";

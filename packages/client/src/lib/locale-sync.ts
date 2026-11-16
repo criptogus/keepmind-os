@@ -1,4 +1,4 @@
-import { type AppLocale, isAppLocale } from "@agenteschat/i18n/locale";
+import { type AppLocale, isAppLocale } from "@keepmind/i18n/locale";
 import { useEffect, useRef } from "react";
 
 /** What a device keeps: the language it shows (or "auto", this device's own) and whether the server has yet to hear it. */

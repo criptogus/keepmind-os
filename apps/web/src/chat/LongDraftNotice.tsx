@@ -1,5 +1,5 @@
-import { tooLongText } from "@agenteschat/client/lib/message-length";
-import { Icon } from "@agenteschat/ui";
+import { tooLongText } from "@keepmind/client/lib/message-length";
+import { Icon } from "@keepmind/ui";
 import { useTranslation } from "react-i18next";
 
 /**

@@ -10,7 +10,7 @@ import {
   searchSortFor,
   searchWords,
   typingOperator,
-} from "@agenteschat/client/lib/search-filters";
+} from "@keepmind/client/lib/search-filters";
 import { useIsFocused } from "expo-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

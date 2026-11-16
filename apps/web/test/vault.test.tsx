@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
@@ -11,8 +11,8 @@ import type {
   VaultItem,
   VaultItemDetail,
   VaultOverview,
-} from "@agenteschat/client";
-import { ApiError } from "@agenteschat/client";
+} from "@keepmind/client";
+import { ApiError } from "@keepmind/client";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { generateSecretKeyPair } from "../../../packages/adapters/src/secret-box";
 import { defaultAccess } from "../src/components/vault/lib";

@@ -1,11 +1,11 @@
-import { ApiError, type OrgSummary, useApi, useAuthConfig, useDeleteWorkspace, useMe } from "@agenteschat/client";
-import { formatTimeLeft } from "@agenteschat/client/lib/actions";
-import { computerEdition } from "@agenteschat/client/lib/computer";
-import { deletionDueFrom, deletionProof, proofToSend } from "@agenteschat/client/lib/deletion";
-import { errorCode, errorText } from "@agenteschat/client/lib/errors";
-import { formatShortDate, formatTime } from "@agenteschat/client/lib/format";
-import { sendsEmail, typedCode } from "@agenteschat/client/lib/join-requests";
-import { matchesName } from "@agenteschat/client/lib/text";
+import { ApiError, type OrgSummary, useApi, useAuthConfig, useDeleteWorkspace, useMe } from "@keepmind/client";
+import { formatTimeLeft } from "@keepmind/client/lib/actions";
+import { computerEdition } from "@keepmind/client/lib/computer";
+import { deletionDueFrom, deletionProof, proofToSend } from "@keepmind/client/lib/deletion";
+import { errorCode, errorText } from "@keepmind/client/lib/errors";
+import { formatShortDate, formatTime } from "@keepmind/client/lib/format";
+import { sendsEmail, typedCode } from "@keepmind/client/lib/join-requests";
+import { matchesName } from "@keepmind/client/lib/text";
 import {
   Alert,
   Button,
@@ -18,7 +18,7 @@ import {
   InfoHint,
   Input,
   Locked,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useMutation } from "@tanstack/react-query";
 import { type ReactNode, useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";

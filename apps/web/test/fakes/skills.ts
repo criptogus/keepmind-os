@@ -9,7 +9,7 @@
  * workspace's GitHub connection reads it (`github()`: that connection, none or one GitHub refuses). Scripts are listed
  * as `ignored`. "Revisão de PR" was changed by Ada since its link last wrote it, so its update from its link waits.
  */
-import { type ApiClient, ApiError, type SkillDetail } from "@agenteschat/client";
+import { type ApiClient, ApiError, type SkillDetail } from "@keepmind/client";
 import { clone, type MockContext, MockNotFoundError, mockId, perOrg } from "./context";
 
 const CHOICES = [

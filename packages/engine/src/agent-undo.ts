@@ -1,5 +1,5 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, type Database, desc, eq, gt, gte, isNull, ne, or, schema, sql } from "@agenteschat/db";
+import type { PubSub } from "@keepmind/adapters";
+import { and, type Database, desc, eq, gt, gte, isNull, ne, or, schema, sql } from "@keepmind/db";
 import { actionsFor, actionView, describeAction, publishMessageActions, UNDO_WINDOW_MS } from "./agent-actions";
 import { getAgentCached } from "./agents";
 import { recordAudit } from "./audit";

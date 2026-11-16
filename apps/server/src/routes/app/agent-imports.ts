@@ -1,4 +1,5 @@
-import { connectorOAuthApps } from "@agenteschat/config";
+import { createRoute, z } from "@hono/zod-openapi";
+import { connectorOAuthApps } from "@keepmind/config";
 import {
   ARTIFACT_LIMITS,
   applyImport,
@@ -12,8 +13,7 @@ import {
   NOTE_KINDS,
   readGithubImport,
   ValidationError,
-} from "@agenteschat/engine";
-import { createRoute, z } from "@hono/zod-openapi";
+} from "@keepmind/engine";
 import { bodyLimit } from "hono/body-limit";
 import { apiError, errorResponse } from "../../http/errors";
 import { githubAppOf } from "../github-app";
@@ -219,7 +219,7 @@ const ImportedSources = z
 
 /**
  * Bring agents and what's around them from another app (or another
- * agentes.chat): the backend reads the files behind a GitHub link (only
+ * KeepMind OS): the backend reads the files behind a GitHub link (only
  * github.com and raw.githubusercontent.com over HTTPS, 15 s per request);
  * the web app parses them into a bundle, plans it here and applies the
  * items picked. Admins also download this workspace as a bundle.

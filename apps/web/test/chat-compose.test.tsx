@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { localMeta, quoteExcerpt, replyOf } from "@agenteschat/client/lib/reply";
-import { installTitleTips, TITLE_TIP_ID, TITLE_TIP_OPEN_MS } from "@agenteschat/ui";
+import { localMeta, quoteExcerpt, replyOf } from "@keepmind/client/lib/reply";
+import { installTitleTips, TITLE_TIP_ID, TITLE_TIP_OPEN_MS } from "@keepmind/ui";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { objectUrls } from "@/components/artifacts/FileView";
 import { ADA_ID, createFakeApi, ENG_ID, ORG_ID, seedState } from "./fake-api";

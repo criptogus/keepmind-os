@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { resources } from "@agenteschat/i18n";
-import { matchesWords } from "@agenteschat/ui/search";
+import { resources } from "@keepmind/i18n";
+import { matchesWords } from "@keepmind/ui/search";
 import i18next, { type TFunction } from "i18next";
 import type { AiAccounts, BrainMachine, BrainOption, Model } from "../src/api/types";
 import {

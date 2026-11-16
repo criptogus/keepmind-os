@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
-import { and, eq, schema } from "@agenteschat/db";
+import { and, eq, schema } from "@keepmind/db";
 import {
   APP_MANAGE_TOOL_NAMES,
   APP_TOOL_NAMES,
@@ -9,7 +9,7 @@ import {
   MACHINE_CONTROL_TOPIC,
   parseScopes,
   reachableFromInternet,
-} from "@agenteschat/engine";
+} from "@keepmind/engine";
 import { callTool, connectApp, mcp } from "./ai-apps";
 import { browser, createTestServer, joinByInvitation, seedOrg, signUp, type TestServer } from "./harness";
 
@@ -92,8 +92,8 @@ describe("scopes", () => {
     // The test server is http://localhost:3000.
     expect(list.serverPublic).toBe(false);
     const dns = (address: string) => async () => [address];
-    expect(await reachableFromInternet("https://app.agentes.chat", dns("203.0.113.7"))).toBe(true);
-    expect(await reachableFromInternet("http://app.agentes.chat", dns("203.0.113.7"))).toBe(false);
+    expect(await reachableFromInternet("https://keepmind.io", dns("203.0.113.7"))).toBe(true);
+    expect(await reachableFromInternet("http://keepmind.io", dns("203.0.113.7"))).toBe(false);
     expect(await reachableFromInternet("https://agentes.lan", dns("203.0.113.7"))).toBe(false);
     expect(await reachableFromInternet("https://192.168.1.20", dns("203.0.113.7"))).toBe(false);
     // Split DNS: a public-looking name that resolves only to an office address.

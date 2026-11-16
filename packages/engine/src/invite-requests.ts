@@ -1,4 +1,4 @@
-import type { PubSub, RateLimiter } from "@agenteschat/adapters";
+import type { PubSub, RateLimiter } from "@keepmind/adapters";
 import {
   and,
   asc,
@@ -17,7 +17,7 @@ import {
   type SQL,
   schema,
   sql,
-} from "@agenteschat/db";
+} from "@keepmind/db";
 import { recordAudit } from "./audit";
 import { inviteLinkToken, safeEqual, sha256 } from "./crypto";
 import {

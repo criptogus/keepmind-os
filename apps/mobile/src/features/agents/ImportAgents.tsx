@@ -1,8 +1,8 @@
-import { useApps, useMe } from "@agenteschat/client";
-import type { GuideIcon } from "@agenteschat/client/lib/app-clients";
-import { aiAppImport } from "@agenteschat/client/lib/apps";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { stripCodeTags } from "@agenteschat/client/lib/format";
+import { useApps, useMe } from "@keepmind/client";
+import type { GuideIcon } from "@keepmind/client/lib/app-clients";
+import { aiAppImport } from "@keepmind/client/lib/apps";
+import { errorText } from "@keepmind/client/lib/errors";
+import { stripCodeTags } from "@keepmind/client/lib/format";
 import {
   bundleOrigin,
   cardName,
@@ -16,10 +16,10 @@ import {
   mcpClient,
   retryable,
   todoLine,
-} from "@agenteschat/client/lib/import/flow";
-import { EXPORT_PROMPT } from "@agenteschat/client/lib/import/index";
-import { can } from "@agenteschat/client/lib/permissions";
-import { helpUrl } from "@agenteschat/client/lib/server";
+} from "@keepmind/client/lib/import/flow";
+import { EXPORT_PROMPT } from "@keepmind/client/lib/import/index";
+import { can } from "@keepmind/client/lib/permissions";
+import { helpUrl } from "@keepmind/client/lib/server";
 import * as Clipboard from "expo-clipboard";
 import * as DocumentPicker from "expo-document-picker";
 import { File } from "expo-file-system";

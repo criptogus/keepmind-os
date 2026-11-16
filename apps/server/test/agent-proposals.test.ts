@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, expect, test } from "bun:test";
-import type { ModelRequest } from "@agenteschat/providers";
+import type { ModelRequest } from "@keepmind/providers";
 import { browser, createTestServer, joinByInvitation, seedOrg, signUp, type TestServer } from "./harness";
 
 /** "cria um agente" proposes Ada; the tool's answer gets a short reply. */

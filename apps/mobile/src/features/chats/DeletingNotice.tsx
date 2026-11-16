@@ -1,6 +1,6 @@
-import { type OrgDeletion, type OrgSummary, useClosingMe, useRestoreWorkspace } from "@agenteschat/client";
-import { deletedByText, deletingText, restorable } from "@agenteschat/client/lib/deletion";
-import { errorText } from "@agenteschat/client/lib/errors";
+import { type OrgDeletion, type OrgSummary, useClosingMe, useRestoreWorkspace } from "@keepmind/client";
+import { deletedByText, deletingText, restorable } from "@keepmind/client/lib/deletion";
+import { errorText } from "@keepmind/client/lib/errors";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
 import { useOrg } from "@/providers/org";

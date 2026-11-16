@@ -17,21 +17,21 @@ import {
   useNewAgentSetup,
   usePlatformKey,
   useSkills,
-} from "@agenteschat/client";
-import { type Level, saveLevels } from "@agenteschat/client/lib/access-levels";
-import { draftLevels, draftMailLevels, suggestedAiText } from "@agenteschat/client/lib/action-cards";
-import { newAgentStart, newAgentStartText } from "@agenteschat/client/lib/agent-setup";
+} from "@keepmind/client";
+import { type Level, saveLevels } from "@keepmind/client/lib/access-levels";
+import { draftLevels, draftMailLevels, suggestedAiText } from "@keepmind/client/lib/action-cards";
+import { newAgentStart, newAgentStartText } from "@keepmind/client/lib/agent-setup";
 import {
   type BrainPickOption,
   brainPickOptions,
   newPlanAccountOption,
   planAccountOption,
   planAccountOptionOf,
-} from "@agenteschat/client/lib/brain-picker";
-import { connectedItems, itemName } from "@agenteschat/client/lib/connected";
-import { FIELD_LIMITS } from "@agenteschat/client/lib/field-limits";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { defaultPolicy, toMailLevel } from "@agenteschat/client/lib/mail";
+} from "@keepmind/client/lib/brain-picker";
+import { connectedItems, itemName } from "@keepmind/client/lib/connected";
+import { FIELD_LIMITS } from "@keepmind/client/lib/field-limits";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { defaultPolicy, toMailLevel } from "@keepmind/client/lib/mail";
 import {
   cleanHandle,
   freeHandle,
@@ -46,10 +46,10 @@ import {
   type RoleId,
   savePart,
   takenHandles,
-} from "@agenteschat/client/lib/new-agent";
-import { addsAgentsTo, can } from "@agenteschat/client/lib/permissions";
-import { AUTO, modelChoices, usableModels } from "@agenteschat/client/lib/providers";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client/lib/new-agent";
+import { addsAgentsTo, can } from "@keepmind/client/lib/permissions";
+import { AUTO, modelChoices, usableModels } from "@keepmind/client/lib/providers";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import { Image } from "expo-image";
 import { usePreventRemove } from "expo-router";
 import { Fragment, type ReactNode, useEffect, useMemo, useRef, useState } from "react";
@@ -668,7 +668,7 @@ function NewAgentForm({
             </GroupedList>
           </>
         ) : null}
-        {(personal ? [] : ROLE_GROUPS).map((group) => (
+        {ROLE_GROUPS.map((group) => (
           <Fragment key={group.id}>
             <GroupedHeader>{t(`newAgent.roleGroups.${group.id}`)}</GroupedHeader>
             <GroupedList>

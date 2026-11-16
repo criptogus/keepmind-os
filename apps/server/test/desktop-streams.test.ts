@@ -7,9 +7,9 @@ import {
   type RunnerAccess,
   type RunnerInfo,
   STREAM_CLOSE,
-} from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
-import { BROWSER_SCOPE, DESKTOP_SCOPE, grantScopes } from "@agenteschat/engine";
+} from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
+import { BROWSER_SCOPE, DESKTOP_SCOPE, grantScopes } from "@keepmind/engine";
 import { connectUrl } from "../runner/config";
 import { RunnerConnection } from "../runner/connection";
 import type { DesktopSessions } from "../runner/desktop-session";

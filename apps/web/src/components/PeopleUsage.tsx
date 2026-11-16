@@ -6,7 +6,7 @@ import type {
   PersonLimits,
   PersonUsage,
   UsagePlace,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 import {
   keys,
   useApi,
@@ -17,8 +17,8 @@ import {
   useRefuseMoreUsage,
   useRoles,
   useSetPersonLimits,
-} from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
+} from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
 import {
   capitalize,
   formatDecimal,
@@ -27,8 +27,8 @@ import {
   formatShortDate,
   formatUsd,
   relativeTime,
-} from "@agenteschat/client/lib/format";
-import { can } from "@agenteschat/client/lib/permissions";
+} from "@keepmind/client/lib/format";
+import { can } from "@keepmind/client/lib/permissions";
 import {
   chipCounts,
   filterPeople,
@@ -41,9 +41,9 @@ import {
   USAGE_PERIODS,
   type UsagePeriodKind,
   usagePeriod,
-} from "@agenteschat/client/lib/person-usage";
-import { rolePicksInSight, settingsSectionNameKey } from "@agenteschat/client/lib/personal-view";
-import { parseAmount } from "@agenteschat/client/lib/text";
+} from "@keepmind/client/lib/person-usage";
+import { rolePicksInSight, settingsSectionNameKey } from "@keepmind/client/lib/personal-view";
+import { parseAmount } from "@keepmind/client/lib/text";
 import {
   AvatarStack,
   agentGradient,
@@ -71,7 +71,7 @@ import {
   Toolbar,
   UsageDays,
   UsageSwatch,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 
 import { useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";

@@ -1,5 +1,5 @@
-import { channelMembersQuery, channelsQuery, channelThreadsQuery, messagesQuery } from "@agenteschat/client";
-import { isPaidReturn } from "@agenteschat/client/lib/billing";
+import { channelMembersQuery, channelsQuery, channelThreadsQuery, messagesQuery } from "@keepmind/client";
+import { isPaidReturn } from "@keepmind/client/lib/billing";
 import { createFileRoute } from "@tanstack/react-router";
 import { agentPanelSearch, threadSearch } from "@/lib/open-param";
 import { ChannelPage } from "@/pages/ChannelPage";

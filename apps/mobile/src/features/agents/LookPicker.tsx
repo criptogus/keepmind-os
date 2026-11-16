@@ -1,4 +1,4 @@
-import { colorKey, gradientOf, isHexColor } from "@agenteschat/ui/agent/engine";
+import { colorKey, gradientOf, isHexColor } from "@keepmind/ui/agent/engine";
 import { LinearGradient } from "expo-linear-gradient";
 import { type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";

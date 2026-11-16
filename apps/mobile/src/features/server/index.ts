@@ -1,4 +1,4 @@
-import { isTailnet, type ServerProblem } from "@agenteschat/client/lib/server";
+import { isTailnet, type ServerProblem } from "@keepmind/client/lib/server";
 import { signOutOf } from "@/features/account";
 import { signInOneTime } from "@/lib/auth";
 import { newAccountPlace, orgValueName, placeKey, serverUrl, setServer, signedInServers } from "@/lib/server";

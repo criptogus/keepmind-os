@@ -1,6 +1,6 @@
-import { isTerminalSize, STREAM_CLOSE, type StreamRequest } from "@agenteschat/adapters";
-import type { Config } from "@agenteschat/config";
-import type { Database } from "@agenteschat/db";
+import { isTerminalSize, STREAM_CLOSE, type StreamRequest } from "@keepmind/adapters";
+import type { Config } from "@keepmind/config";
+import type { Database } from "@keepmind/db";
 import {
   type RunnerLink,
   SHARED_SEAT,
@@ -8,7 +8,7 @@ import {
   type StreamBroker,
   type StreamInput,
   type StreamSocket,
-} from "@agenteschat/engine";
+} from "@keepmind/engine";
 import type { Auth } from "../auth";
 import { allowedOrigins } from "../routes/app/context";
 import { personUpgrade, UUID } from "./ws";

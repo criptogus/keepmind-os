@@ -1,4 +1,4 @@
-import { type ImportItemResult, keys, type MigrationBundle } from "@agenteschat/client";
+import { type ImportItemResult, keys, type MigrationBundle } from "@keepmind/client";
 import {
   Alert,
   Button,
@@ -11,7 +11,7 @@ import {
   Spinner,
   SwapLabel,
   Textarea,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { type ReactNode, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";

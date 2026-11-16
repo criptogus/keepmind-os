@@ -206,10 +206,10 @@ describe("links to the help pages", () => {
 });
 
 describe("the install page", () => {
-  test("is a self-hosted page, at agentes.chat/docs in English for the CLI and the settings", () => {
+  test("is a self-hosted page, at KeepMind OS/docs in English for the CLI and the settings", () => {
     expect(HELP_PAGES[INSTALL_PAGE]).toBe("selfhost");
-    expect(INSTALL_DOCS_URL).toBe("https://agentes.chat/docs/install-on-a-server");
-    expect(helpDocsUrl(INSTALL_PAGE, "pt-BR")).toBe("https://agentes.chat/pt/docs/install-on-a-server");
+    expect(INSTALL_DOCS_URL).toBe("https://keepmind.io/docs/install-on-a-server");
+    expect(helpDocsUrl(INSTALL_PAGE, "pt-BR")).toBe("https://keepmind.io/pt/docs/install-on-a-server");
   });
 
   test("every self-hosted pointer outside this package says its URL, and none points at the repository's file", () => {
@@ -244,15 +244,15 @@ describe("help pages in every language", () => {
   });
 
   test("an old address goes to its docs page, English where the language has none, the index where none exists", () => {
-    expect(helpDocsUrl("memory", "pt-BR")).toBe("https://agentes.chat/pt/docs/memory");
-    expect(helpDocsUrl("memory", "zh-Hans")).toBe("https://agentes.chat/zh/docs/memory");
-    expect(helpDocsUrl("memory", "ja")).toBe("https://agentes.chat/ja/docs/memory");
-    expect(helpDocsUrl(undefined, "de")).toBe("https://agentes.chat/de/docs");
-    expect(helpDocsUrl("nope", "en")).toBe("https://agentes.chat/docs");
+    expect(helpDocsUrl("memory", "pt-BR")).toBe("https://keepmind.io/pt/docs/memory");
+    expect(helpDocsUrl("memory", "zh-Hans")).toBe("https://keepmind.io/zh/docs/memory");
+    expect(helpDocsUrl("memory", "ja")).toBe("https://keepmind.io/ja/docs/memory");
+    expect(helpDocsUrl(undefined, "de")).toBe("https://keepmind.io/de/docs");
+    expect(helpDocsUrl("nope", "en")).toBe("https://keepmind.io/docs");
     const ja = HELP.ja.memory;
     delete HELP.ja.memory;
     try {
-      expect(helpDocsUrl("memory", "ja")).toBe("https://agentes.chat/docs/memory");
+      expect(helpDocsUrl("memory", "ja")).toBe("https://keepmind.io/docs/memory");
     } finally {
       HELP.ja.memory = ja;
     }

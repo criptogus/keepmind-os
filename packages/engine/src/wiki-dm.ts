@@ -1,5 +1,5 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, type Database, eq, schema, sql } from "@agenteschat/db";
+import type { PubSub } from "@keepmind/adapters";
+import { and, type Database, eq, schema, sql } from "@keepmind/db";
 import { deliverNotice, publishDelivery } from "./delivery";
 import { openPersonAgentDm } from "./dms";
 

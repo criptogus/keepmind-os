@@ -52,6 +52,7 @@ import { Route as OrgOrgIdAgentsNewRouteImport } from './routes/org.$orgId.agent
 import { Route as OrgOrgIdCChannelIdRouteImport } from './routes/org.$orgId.c.$channelId'
 import { Route as OrgOrgIdDashboardsIndexRouteImport } from './routes/org.$orgId.dashboards.index'
 import { Route as OrgOrgIdDashboardsDashboardIdRouteImport } from './routes/org.$orgId.dashboards.$dashboardId'
+import { Route as OrgOrgIdEcosystemAreaRouteImport } from './routes/org.$orgId.ecosystem.$area'
 import { Route as OrgOrgIdIssuesIndexRouteImport } from './routes/org.$orgId.issues.index'
 import { Route as OrgOrgIdIssuesNumberRouteImport } from './routes/org.$orgId.issues.$number'
 import { Route as OrgOrgIdSettingsSectionRouteImport } from './routes/org.$orgId.settings_.$section'
@@ -285,6 +286,11 @@ const OrgOrgIdDashboardsDashboardIdRoute =
     path: '/dashboards/$dashboardId',
     getParentRoute: () => OrgOrgIdRoute,
   } as any)
+const OrgOrgIdEcosystemAreaRoute = OrgOrgIdEcosystemAreaRouteImport.update({
+  id: '/ecosystem/$area',
+  path: '/ecosystem/$area',
+  getParentRoute: () => OrgOrgIdRoute,
+} as any)
 const OrgOrgIdIssuesIndexRoute = OrgOrgIdIssuesIndexRouteImport.update({
   id: '/issues/',
   path: '/issues/',
@@ -417,6 +423,7 @@ export interface FileRoutesByFullPath {
   '/org/$orgId/agents/new': typeof OrgOrgIdAgentsNewRoute
   '/org/$orgId/c/$channelId': typeof OrgOrgIdCChannelIdRoute
   '/org/$orgId/dashboards/$dashboardId': typeof OrgOrgIdDashboardsDashboardIdRoute
+  '/org/$orgId/ecosystem/$area': typeof OrgOrgIdEcosystemAreaRoute
   '/org/$orgId/issues/$number': typeof OrgOrgIdIssuesNumberRoute
   '/org/$orgId/settings/$section': typeof OrgOrgIdSettingsSectionRoute
   '/org/$orgId/threads/$threadId': typeof OrgOrgIdThreadsThreadIdRoute
@@ -477,6 +484,7 @@ export interface FileRoutesByTo {
   '/org/$orgId/agents/new': typeof OrgOrgIdAgentsNewRoute
   '/org/$orgId/c/$channelId': typeof OrgOrgIdCChannelIdRoute
   '/org/$orgId/dashboards/$dashboardId': typeof OrgOrgIdDashboardsDashboardIdRoute
+  '/org/$orgId/ecosystem/$area': typeof OrgOrgIdEcosystemAreaRoute
   '/org/$orgId/issues/$number': typeof OrgOrgIdIssuesNumberRoute
   '/org/$orgId/settings/$section': typeof OrgOrgIdSettingsSectionRoute
   '/org/$orgId/threads/$threadId': typeof OrgOrgIdThreadsThreadIdRoute
@@ -539,6 +547,7 @@ export interface FileRoutesById {
   '/org/$orgId/agents/new': typeof OrgOrgIdAgentsNewRoute
   '/org/$orgId/c/$channelId': typeof OrgOrgIdCChannelIdRoute
   '/org/$orgId/dashboards/$dashboardId': typeof OrgOrgIdDashboardsDashboardIdRoute
+  '/org/$orgId/ecosystem/$area': typeof OrgOrgIdEcosystemAreaRoute
   '/org/$orgId/issues/$number': typeof OrgOrgIdIssuesNumberRoute
   '/org/$orgId/settings_/$section': typeof OrgOrgIdSettingsSectionRoute
   '/org/$orgId/threads/$threadId': typeof OrgOrgIdThreadsThreadIdRoute
@@ -602,6 +611,7 @@ export interface FileRouteTypes {
     | '/org/$orgId/agents/new'
     | '/org/$orgId/c/$channelId'
     | '/org/$orgId/dashboards/$dashboardId'
+    | '/org/$orgId/ecosystem/$area'
     | '/org/$orgId/issues/$number'
     | '/org/$orgId/settings/$section'
     | '/org/$orgId/threads/$threadId'
@@ -662,6 +672,7 @@ export interface FileRouteTypes {
     | '/org/$orgId/agents/new'
     | '/org/$orgId/c/$channelId'
     | '/org/$orgId/dashboards/$dashboardId'
+    | '/org/$orgId/ecosystem/$area'
     | '/org/$orgId/issues/$number'
     | '/org/$orgId/settings/$section'
     | '/org/$orgId/threads/$threadId'
@@ -723,6 +734,7 @@ export interface FileRouteTypes {
     | '/org/$orgId/agents/new'
     | '/org/$orgId/c/$channelId'
     | '/org/$orgId/dashboards/$dashboardId'
+    | '/org/$orgId/ecosystem/$area'
     | '/org/$orgId/issues/$number'
     | '/org/$orgId/settings_/$section'
     | '/org/$orgId/threads/$threadId'
@@ -1071,6 +1083,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgIdDashboardsDashboardIdRouteImport
       parentRoute: typeof OrgOrgIdRoute
     }
+    '/org/$orgId/ecosystem/$area': {
+      id: '/org/$orgId/ecosystem/$area'
+      path: '/ecosystem/$area'
+      fullPath: '/org/$orgId/ecosystem/$area'
+      preLoaderRoute: typeof OrgOrgIdEcosystemAreaRouteImport
+      parentRoute: typeof OrgOrgIdRoute
+    }
     '/org/$orgId/issues/': {
       id: '/org/$orgId/issues/'
       path: '/issues'
@@ -1206,6 +1225,7 @@ interface OrgOrgIdRouteChildren {
   OrgOrgIdAgentsNewRoute: typeof OrgOrgIdAgentsNewRoute
   OrgOrgIdCChannelIdRoute: typeof OrgOrgIdCChannelIdRoute
   OrgOrgIdDashboardsDashboardIdRoute: typeof OrgOrgIdDashboardsDashboardIdRoute
+  OrgOrgIdEcosystemAreaRoute: typeof OrgOrgIdEcosystemAreaRoute
   OrgOrgIdIssuesNumberRoute: typeof OrgOrgIdIssuesNumberRoute
   OrgOrgIdSettingsSectionRoute: typeof OrgOrgIdSettingsSectionRoute
   OrgOrgIdThreadsThreadIdRoute: typeof OrgOrgIdThreadsThreadIdRoute
@@ -1245,6 +1265,7 @@ const OrgOrgIdRouteChildren: OrgOrgIdRouteChildren = {
   OrgOrgIdAgentsNewRoute: OrgOrgIdAgentsNewRoute,
   OrgOrgIdCChannelIdRoute: OrgOrgIdCChannelIdRoute,
   OrgOrgIdDashboardsDashboardIdRoute: OrgOrgIdDashboardsDashboardIdRoute,
+  OrgOrgIdEcosystemAreaRoute: OrgOrgIdEcosystemAreaRoute,
   OrgOrgIdIssuesNumberRoute: OrgOrgIdIssuesNumberRoute,
   OrgOrgIdSettingsSectionRoute: OrgOrgIdSettingsSectionRoute,
   OrgOrgIdThreadsThreadIdRoute: OrgOrgIdThreadsThreadIdRoute,

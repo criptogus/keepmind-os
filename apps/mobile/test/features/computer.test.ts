@@ -1,12 +1,12 @@
 import { describe, expect, test } from "bun:test";
-import type { BrowserHandoff, ComputerSetup } from "@agenteschat/client";
+import type { BrowserHandoff, ComputerSetup } from "@keepmind/client";
 import {
   type AgentComputerFacts,
   type EntryWords,
   entryLine,
   entryState,
   liveSubLine,
-} from "@agenteschat/client/lib/agent-computer";
+} from "@keepmind/client/lib/agent-computer";
 import {
   type SetupView,
   setupEta,
@@ -14,10 +14,10 @@ import {
   setupNoticeTitleKey,
   setupView,
   statusRestatesChip,
-} from "@agenteschat/client/lib/computer";
-import { clockAt } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { resources } from "@agenteschat/i18n";
+} from "@keepmind/client/lib/computer";
+import { clockAt } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { resources } from "@keepmind/i18n";
 import { bannedIn, CLOUD_BANNED } from "../../../../packages/i18n/test/edition-words";
 import { offersKeyNow, pollsPlan } from "../../src/features/ai/logic";
 import { pageGapKey, stepText } from "../../src/features/browser/logic";

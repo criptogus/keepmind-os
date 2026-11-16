@@ -2,7 +2,7 @@ import { afterAll, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { loadConfig } from "@agenteschat/config";
+import { loadConfig } from "@keepmind/config";
 import { en } from "../../../packages/i18n/src/en";
 import {
   computerFiles,
@@ -342,7 +342,7 @@ describe("install.sh", () => {
     const screen = plain(root.out);
     expect(screen).toContain("▀");
     expect(screen).toContain(
-      "┌   agentes.chat  install plan (--plan: nothing runs)\n│\n◇  Linux on x64, as root\n◇  A terminal: the setup asks its questions there\n",
+      "┌   KeepMind OS  install plan (--plan: nothing runs)\n│\n◇  Linux on x64, as root\n◇  A terminal: the setup asks its questions there\n",
     );
     expect(screen).toContain("│\n└  Nothing ran. For the setup's own plan, run its command above with --dry-run.\n");
 
@@ -358,7 +358,7 @@ describe("install.sh", () => {
     // Its plan draws the logo and the frame, then stops where the root run would start.
     const planned = plain((await plan(user, ["--yes"], { tty: true })).out);
     expect(planned).toContain("▀");
-    expect(planned).toContain("┌   agentes.chat  install plan (--plan: nothing runs)\n│\n◇  Linux on x64\n");
+    expect(planned).toContain("┌   KeepMind OS  install plan (--plan: nothing runs)\n│\n◇  Linux on x64\n");
     expect(planned).toEndWith(
       `●  Docker needs root here: running this installer again as root\n│  $ sudo sh ${SCRIPT} --yes\n│\n└  With --plan it stops here. As root, --plan shows the rest.\n`,
     );
@@ -372,10 +372,10 @@ describe("install.sh", () => {
     expect(run.out).toContain("◇  Docker 26.1.5\n◇  Compose 2.26.1\n");
     expect(run.out).not.toContain("$ ");
     expect(run.out).toEndWith(
-      `\n◇  The setup, in ${dir}:\n     ${run.bin}/bun x --bun @agenteschat/setup@0.1.1 --network local\n\n`,
+      `\n◇  The setup, in ${dir}:\n     ${run.bin}/bun x --bun @keepmind/setup@0.1.1 --network local\n\n`,
     );
     // The setup draws in the installer's frame: no logo or badge of its own.
-    expect(run.calls).toContain("bun x --bun @agenteschat/setup@0.1.1 --network local");
+    expect(run.calls).toContain("bun x --bun @keepmind/setup@0.1.1 --network local");
     expect(run.calls).toContain("frame 1 stdin none");
   });
 
@@ -385,7 +385,7 @@ describe("install.sh", () => {
     const run = await plan(machine, ["--dir", dir], { real: true, tty: true });
     expect(run.code).toBe(0);
     expect(plain(run.out)).toContain(
-      `◇  The setup, in ${dir}:\n│    ${run.bin}/bun x --bun @agenteschat/setup@0.1.1\n│\n`,
+      `◇  The setup, in ${dir}:\n│    ${run.bin}/bun x --bun @keepmind/setup@0.1.1\n│\n`,
     );
     expect(run.calls.find((call) => call.startsWith("frame "))).toMatch(/^frame 1 stdin \/dev\/(pts\/\d+|ttys\d+)$/);
   });
@@ -431,9 +431,7 @@ describe("install.sh", () => {
     expect(run.out).toContain(bunZip("linux-x64-baseline"));
     expect(run.out).toContain("$ mv <tmp>/bun-linux-x64-baseline/bun /opt/agentes/.runtime/bun");
     expect(run.out).toContain("$ cd /opt/agentes");
-    expect(run.out).toContain(
-      "$ /opt/agentes/.runtime/bun x --bun @agenteschat/setup@0.1.1 --network local </dev/null",
-    );
+    expect(run.out).toContain("$ /opt/agentes/.runtime/bun x --bun @keepmind/setup@0.1.1 --network local </dev/null");
     expect(run.changes).toEqual([]);
   });
 
@@ -465,7 +463,7 @@ describe("install.sh", () => {
     // --plan runs nothing again, so it starts as any plan does, then says where it stops.
     expect(file.out).toBe(
       [
-        "agentes.chat install plan (--plan: nothing runs)",
+        "KeepMind OS install plan (--plan: nothing runs)",
         "◇  Linux on x64",
         "◇  No terminal: the setup takes its defaults and the options given",
         "●  Docker needs root here: running this installer again as root",
@@ -481,7 +479,7 @@ describe("install.sh", () => {
     const piped = await plan({ ...user, docker: "down" }, [], { piped: text });
     expect(piped.out).toContain("●  Docker needs root here: downloading this installer to run it again as root");
     expect(piped.out).toContain(
-      "$ curl -fsSL --proto =https --retry 3 -o <tmp>/install.sh https://agentes.chat/install",
+      "$ curl -fsSL --proto =https --retry 3 -o <tmp>/install.sh https://keepmind.io/install",
     );
     expect(piped.out).toContain("$ sudo sh <tmp>/install.sh");
     expect(piped.changes).toEqual([]);
@@ -497,7 +495,7 @@ describe("install.sh", () => {
     const why = "Making this machine your agents' computer (--computer yes) needs root";
     expect((await plan(user, ["--computer", "yes", "--network", "local"])).out).toBe(
       [
-        "agentes.chat install plan (--plan: nothing runs)",
+        "KeepMind OS install plan (--plan: nothing runs)",
         "◇  Linux on x64",
         "◇  No terminal: the setup takes its defaults and the options given",
         `●  ${why}: running this installer again as root`,
@@ -532,7 +530,7 @@ describe("install.sh", () => {
     ]) {
       expect(run.code).toBe(0);
       expect(run.out).not.toContain("sudo");
-      expect(run.out).toContain("@agenteschat/setup@0.1.1 --computer ");
+      expect(run.out).toContain("@keepmind/setup@0.1.1 --computer ");
     }
   });
 
@@ -551,7 +549,7 @@ describe("install.sh", () => {
     expect(run.out).toContain("◇  Docker 28.5.1");
     expect(run.out).toContain(`◇  Bun 1.4.4 (${run.bin}/bun)`);
     expect(run.out).toContain(`$ cd ${run.home}/agentes`);
-    expect(run.out).toContain(`$ ${run.bin}/bun x --bun @agenteschat/setup@0.1.1 --network local </dev/null`);
+    expect(run.out).toContain(`$ ${run.bin}/bun x --bun @keepmind/setup@0.1.1 --network local </dev/null`);
     expect(run.out).not.toContain("--native");
     expect(run.out).not.toContain("Compose");
     expect(run.changes).toEqual([]);
@@ -560,9 +558,9 @@ describe("install.sh", () => {
   test("a Mac without Docker, or with it stopped, is told what to install or start; --native isn't there yet", async () => {
     const none = await plan(mac);
     expect(none.code).toBe(1);
-    expect(none.err).toContain("This installer runs agentes.chat on Docker, and this Mac doesn't have it.");
+    expect(none.err).toContain("This installer runs KeepMind OS on Docker, and this Mac doesn't have it.");
     expect(none.err).toContain("Docker Desktop, OrbStack or Colima");
-    expect(none.err).toContain("Run agentes.chat on this Mac");
+    expect(none.err).toContain("Run KeepMind OS on this Mac");
     expect(none.out).not.toContain("Bun");
     expect(none.changes).toEqual([]);
 
@@ -579,7 +577,7 @@ describe("install.sh", () => {
     for (const machine of [mac, linuxRoot]) {
       const native = await plan(machine, ["--native"]);
       expect(native.code).toBe(1);
-      expect(native.err).toContain("can't run agentes.chat without Docker yet (--native)");
+      expect(native.err).toContain("can't run KeepMind OS without Docker yet (--native)");
       expect(native.calls).toEqual([]);
     }
   });
@@ -630,8 +628,8 @@ describe("install.sh", () => {
       await plan({ ...linuxRoot, docker: "26.1.5", compose: "2.26.1" }, ["--email", "skip"], { piped: text }),
     ];
     for (const run of runs) {
-      const line = `${run.out}${run.err}`.split("\n").find((l) => l.includes("@agenteschat/setup@"));
-      const args = line?.split("@agenteschat/setup@0.1.1")[1]?.replace("</dev/null", "").trim().split(" ");
+      const line = `${run.out}${run.err}`.split("\n").find((l) => l.includes("@keepmind/setup@"));
+      const args = line?.split("@keepmind/setup@0.1.1")[1]?.replace("</dev/null", "").trim().split(" ");
       expect(args).toBeDefined();
       expect(parseOptions((args ?? []).filter(Boolean), {})).not.toHaveProperty("error");
     }
@@ -653,7 +651,7 @@ describe("install.sh", () => {
       const run = await plan(machine);
       expect(run.code).toBe(1);
       expect(run.err).toContain(`this is ${machine.os} on ${machine.arch}`);
-      expect(run.err).toContain("https://agentes.chat/docs/install-on-a-server");
+      expect(run.err).toContain("https://keepmind.io/docs/install-on-a-server");
     }
     const musl = await plan({ ...linuxRoot, musl: true });
     expect(musl.code).toBe(1);
@@ -671,7 +669,7 @@ describe("install.sh", () => {
       piped: text,
     });
     expect(piped.code).toBe(0);
-    expect(piped.out).toContain("@agenteschat/setup@0.1.1 --email skip </dev/null");
+    expect(piped.out).toContain("@keepmind/setup@0.1.1 --email skip </dev/null");
   });
 
   test("a local build of the setup, and --json output kept off stdout", async () => {

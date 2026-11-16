@@ -5,15 +5,15 @@ import {
   handoffScreen,
   screenSteps,
   useBrowserHandoffActions,
-} from "@agenteschat/client";
-import { cantShow, cantShowLine, liveSubLine } from "@agenteschat/client/lib/agent-computer";
-import { computerName, READY_FLASH_MS, WORKSPACE_COMPUTER_KIND } from "@agenteschat/client/lib/computer";
-import { clockAt } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { computerKind, isPaused } from "@agenteschat/client/lib/machines";
-import { can } from "@agenteschat/client/lib/permissions";
-import { useSeat } from "@agenteschat/client/lib/seat-context";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client";
+import { cantShow, cantShowLine, liveSubLine } from "@keepmind/client/lib/agent-computer";
+import { computerName, READY_FLASH_MS, WORKSPACE_COMPUTER_KIND } from "@keepmind/client/lib/computer";
+import { clockAt } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { computerKind, isPaused } from "@keepmind/client/lib/machines";
+import { can } from "@keepmind/client/lib/permissions";
+import { useSeat } from "@keepmind/client/lib/seat-context";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import { useNavigation } from "expo-router";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

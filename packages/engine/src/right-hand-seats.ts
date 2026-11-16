@@ -1,5 +1,5 @@
-import type { AgentScope } from "@agenteschat/adapters";
-import { and, type Database, desc, type Executor, eq, isNotNull, isNull, schema, sql } from "@agenteschat/db";
+import type { AgentScope } from "@keepmind/adapters";
+import { and, type Database, desc, type Executor, eq, isNotNull, isNull, schema, sql } from "@keepmind/db";
 import { getAgentCached, workspaceHomeId } from "./agents";
 import { fedByRoutine, runAuthorityById, UUID } from "./authority";
 import { BROWSER_SCOPE, DESKTOP_SCOPE } from "./browser/types";

@@ -1,17 +1,10 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { ApiClient, Artifact } from "@agenteschat/client";
-import {
-  documentPreview,
-  parsePatch,
-  patchCounts,
-  sideBySide,
-  sortRows,
-  toCsv,
-} from "@agenteschat/client/lib/artifacts";
+import type { ApiClient, Artifact } from "@keepmind/client";
+import { documentPreview, parsePatch, patchCounts, sideBySide, sortRows, toCsv } from "@keepmind/client/lib/artifacts";
 import {
   artifactPlace,
   daysLeft,
@@ -19,8 +12,8 @@ import {
   groupArtifacts,
   rangeOf,
   sortArtifacts,
-} from "@agenteschat/client/lib/drive";
-import { PAGE_CSP } from "@agenteschat/client/lib/isolated-page";
+} from "@keepmind/client/lib/drive";
+import { PAGE_CSP } from "@keepmind/client/lib/isolated-page";
 import { act, cleanup, fireEvent, render, within } from "@testing-library/react";
 import { fileSaver } from "@/components/artifacts/ArtifactViewer";
 import { HTML_SANDBOX, HtmlFrame, withShim } from "@/components/artifacts/HtmlFrame";
@@ -1029,7 +1022,7 @@ describe("deleting a file", () => {
   test("a chat card for a deleted file is a quiet 'Arquivo removido'", async () => {
     const { ArtifactCard } = await import("@/components/artifacts/ArtifactCard");
     expect(ArtifactCard).toBeTruthy();
-    const { artifactRefs } = await import("@agenteschat/client/lib/artifacts");
+    const { artifactRefs } = await import("@keepmind/client/lib/artifacts");
     expect(artifactRefs({ artifacts: [{ id: "x", deleted: true, title: "Relatório" }] })).toEqual([
       { id: "x", deleted: true, title: "Relatório" },
     ]);

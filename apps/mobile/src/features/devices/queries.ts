@@ -1,4 +1,4 @@
-import { type ApiClient, keys, useApi, useWifiPairState } from "@agenteschat/client";
+import { type ApiClient, keys, useApi, useWifiPairState } from "@keepmind/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useOrgId } from "../shared/hooks";
 

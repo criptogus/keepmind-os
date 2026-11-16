@@ -1,4 +1,4 @@
-import type { DeletionProofInput } from "@agenteschat/client";
+import type { DeletionProofInput } from "@keepmind/client";
 import { authClient, authedFetch } from "@/lib/auth";
 import { outboxStoreFor } from "@/lib/outbox";
 import { SIGN_OUT_WAIT_MS, unregisterPush, unregisterPushOn } from "@/lib/push";

@@ -1,6 +1,6 @@
 import type { SkyFrame, SkyOptions } from "./engine";
 
-/** Where a workspace lives: on agentes.chat Cloud, or on a server of one's own. */
+/** Where a workspace lives: on KeepMind OS Cloud, or on a server of one's own. */
 export type Hosting = "cloud" | "own";
 
 /** The team drawn over the choice of where a workspace lives: three looks, fixed, any workspace's, not the person's. */

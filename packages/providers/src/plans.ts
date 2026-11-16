@@ -55,7 +55,7 @@ export interface PlanModel {
   images?: false;
   /**
    * Who makes it, on a plan that sells several makers' models (the picker groups them): an API provider's id
-   * (`@agenteschat/providers`: its name and logo), else the maker's name.
+   * (`@keepmind/providers`: its name and logo), else the maker's name.
    */
   maker?: string;
 }

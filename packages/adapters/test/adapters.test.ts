@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { createTestDatabase } from "@agenteschat/db/testing";
 import type { PGlite } from "@electric-sql/pglite";
+import { createTestDatabase } from "@keepmind/db/testing";
 import {
   createMemoryPresence,
   createMemoryPubSub,

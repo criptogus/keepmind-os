@@ -13,7 +13,7 @@ import {
   parseServerFrame,
   type RunnerFrame,
   type RunnerTools,
-} from "@agenteschat/adapters/machine-protocol";
+} from "@keepmind/adapters/machine-protocol";
 import {
   type AgentUids,
   DesktopManager,
@@ -294,7 +294,7 @@ describe("desktop use", () => {
     delete process.env.AGENTES_TEST_SECRET;
     expect(look.snapshot).toContain('- menu "Applications"\n  - menuitem "Terminal Emulator" [ref=');
     expect(look.snapshot).toContain(
-      '- window "agentes.chat · Your team and your agents, in the same conversation - Chromium" [agent browser: use browser_do]',
+      '- window "KeepMind OS · Your team and your agents, in the same conversation - Chromium" [agent browser: use browser_do]',
     );
     expect([look.address, look.title, look.screen]).toEqual([
       "desktop://thunar/main",

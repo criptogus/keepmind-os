@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { ApiError } from "@agenteschat/client";
-import { invitedErrorText } from "@agenteschat/client/lib/errors";
+import { ApiError } from "@keepmind/client";
+import { invitedErrorText } from "@keepmind/client/lib/errors";
 import { joinRequestLine, subtitleOf } from "../../src/features/activity/logic";
 import { afterSignIn, boldParts, signInPurpose, storedInvite, storedInviteOf } from "../../src/features/auth/links";
 import { membersByName, requestChips, roleLine } from "../../src/features/members/logic";

@@ -1,4 +1,4 @@
-import type { PubSub } from "@agenteschat/adapters";
+import type { PubSub } from "@keepmind/adapters";
 import { publishOrgEvent, publishUserEvent } from "../events";
 import type { DashboardRow, WidgetStatus } from "./types";
 

@@ -1,9 +1,9 @@
-import type { Artifact, ArtifactContent, ArtifactKind } from "@agenteschat/client";
-import { ApiError, keys } from "@agenteschat/client";
-import { fileName } from "@agenteschat/client/lib/artifacts";
-import { artifactPlace } from "@agenteschat/client/lib/drive";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { Button, Dialog, DialogFooter, type IconName, Menu } from "@agenteschat/ui";
+import type { Artifact, ArtifactContent, ArtifactKind } from "@keepmind/client";
+import { ApiError, keys } from "@keepmind/client";
+import { fileName } from "@keepmind/client/lib/artifacts";
+import { artifactPlace } from "@keepmind/client/lib/drive";
+import { errorText } from "@keepmind/client/lib/errors";
+import { Button, Dialog, DialogFooter, type IconName, Menu } from "@keepmind/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";

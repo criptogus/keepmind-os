@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import type { MachineTask, Mission } from "@agenteschat/client";
+import type { MachineTask, Mission } from "@keepmind/client";
 import {
   appendOutputLine,
   cellsFromCounts,
@@ -37,8 +37,8 @@ import {
   viaText,
   waitingParts,
   waitingText,
-} from "@agenteschat/client/lib/missions";
-import { bodyTones, type PlanStripCell, planCellPixel, STRIP_CELL } from "@agenteschat/ui";
+} from "@keepmind/client/lib/missions";
+import { bodyTones, type PlanStripCell, planCellPixel, STRIP_CELL } from "@keepmind/ui";
 import type { TFunction } from "i18next";
 import { executorOptions } from "@/components/missions/MissionBits";
 import { createI18n } from "@/i18n";

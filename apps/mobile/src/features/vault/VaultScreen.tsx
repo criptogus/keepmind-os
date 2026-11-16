@@ -1,7 +1,7 @@
-import { useVault, type VaultConnection, type VaultItem, type VaultOverview } from "@agenteschat/client";
-import { joinNames, relativeTime } from "@agenteschat/client/lib/format";
-import { webSettingsUrl } from "@agenteschat/client/lib/server";
-import { vaultNoAgents } from "@agenteschat/client/lib/vault";
+import { useVault, type VaultConnection, type VaultItem, type VaultOverview } from "@keepmind/client";
+import { joinNames, relativeTime } from "@keepmind/client/lib/format";
+import { webSettingsUrl } from "@keepmind/client/lib/server";
+import { vaultNoAgents } from "@keepmind/client/lib/vault";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, StyleSheet, View } from "react-native";

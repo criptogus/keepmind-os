@@ -39,7 +39,7 @@ import {
   SHARED_CODEX_PROTOCOL,
   SHARED_GEMINI_PROTOCOL,
   TOKEN_RECHECK_MS,
-} from "@agenteschat/adapters";
+} from "@keepmind/adapters";
 import {
   and,
   count,
@@ -53,7 +53,7 @@ import {
   or,
   schema,
   sql,
-} from "@agenteschat/db";
+} from "@keepmind/db";
 import {
   GEMINI_ENTERPRISE_PROVIDER,
   isPlanId,
@@ -62,8 +62,8 @@ import {
   planOf,
   SHARED_SIGN_INS,
   sharedSignIn,
-} from "@agenteschat/providers/plans";
-import { PLAN_PAUSE, planCheckedAt, planState, planWindows } from "@agenteschat/ui/plan-state";
+} from "@keepmind/providers/plans";
+import { PLAN_PAUSE, planCheckedAt, planState, planWindows } from "@keepmind/ui/plan-state";
 import { recordAudit } from "./audit";
 import { liveModelLimits } from "./brains/select";
 import { BRAIN_PLAN_NAMES } from "./brains/types";
@@ -109,7 +109,7 @@ const { machineAccounts, agents, machines, rightHandBrains, users } = schema;
  * of it only when they would show something else (`usageMoved`).
  *
  * Key accounts (protocol 20): a coding plan on Claude Code (`provider`, a plan
- * of `@agenteschat/providers/plans`). The key goes sealed from the browser to
+ * of `@keepmind/providers/plans`). The key goes sealed from the browser to
  * the computer and stays there; we keep its last 4 as the runner says them.
  *
  * One sign-in for all agents (protocol 29, ADR 0059 §2): a login the runner
@@ -1295,7 +1295,7 @@ export async function beginAccountLogin(
       : claudeAuthMethodFor(await claudeAuthPolicy(deps.db), orgId, system);
     if (!again && method === "cli_login" && !claudeLoginMethodsOf(said, system).includes("cli_login")) {
       throw new ConflictError(
-        "This computer can't connect Claude this way yet. Update the agentes.chat program on it, or use an API key.",
+        "This computer can't connect Claude this way yet. Update the KeepMind OS program on it, or use an API key.",
         "account.method_unsupported",
         { name: machine.name },
       );

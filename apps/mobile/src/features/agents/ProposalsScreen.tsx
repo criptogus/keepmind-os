@@ -1,5 +1,5 @@
-import { type Proposal, useDecideProposals, useProposals } from "@agenteschat/client";
-import { isOpen, proposalWhy, sortProposals, staleCount } from "@agenteschat/client/lib/proposals";
+import { type Proposal, useDecideProposals, useProposals } from "@keepmind/client";
+import { isOpen, proposalWhy, sortProposals, staleCount } from "@keepmind/client/lib/proposals";
 import { useTranslation } from "react-i18next";
 import { RefreshControl, StyleSheet, View } from "react-native";
 import { Button, EmptyState, Text, useToast } from "@/ui";

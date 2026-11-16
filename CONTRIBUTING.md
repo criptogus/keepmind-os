@@ -69,7 +69,7 @@ app, a package or the Docker files also boots the image with `docker-compose.yml
   concurrently on a partitioned table.
 - **Environment variables** are declared only in `packages/config/src/schema.ts`. Then run
   `bun run docs:env`, which regenerates `.env.example`.
-- **Drizzle operators** come from `@agenteschat/db`, never from `drizzle-orm` directly.
+- **Drizzle operators** come from `@keepmind/db`, never from `drizzle-orm` directly.
 - **The edition boundary:** `apps/` and `packages/` never import `ee` or Cloud code. Cloud-only
   behavior plugs in through `AgentesModule` and adapters
   ([ADR 0002](docs/adr/0002-editions-and-modules.md)).
@@ -91,7 +91,7 @@ app, a package or the Docker files also boots the image with `docker-compose.yml
 
 - agentes.chat is AGPL-3.0-only ([LICENSE](LICENSE)). A package published under MIT says so in
   its own LICENSE, and contributions to it are MIT: today that is the setup CLI, `packages/setup`
-  (`@agenteschat/setup`).
+  (`@keepmind/setup`).
 - Contributions require accepting our [Contributor License Agreement](CLA.md) (CLA). The CLA bot
   asks in a comment on your first pull request, and you accept by commenting with the sentence it
   gives; after that it covers your later contributions too. There is no DCO sign-off. The bot goes

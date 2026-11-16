@@ -1,6 +1,6 @@
-import type { CalItem, RunEntry, RunStatus } from "@agenteschat/client/lib/calendar";
-import { formatTime } from "@agenteschat/client/lib/format";
-import { Chip, cx, type IconName, Popover } from "@agenteschat/ui";
+import type { CalItem, RunEntry, RunStatus } from "@keepmind/client/lib/calendar";
+import { formatTime } from "@keepmind/client/lib/format";
+import { Chip, cx, type IconName, Popover } from "@keepmind/ui";
 import { useTranslation } from "react-i18next";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { useActors } from "@/components/actors";

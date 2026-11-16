@@ -1,8 +1,8 @@
-import type { AgentMailbox, MailAccount, MailPolicy } from "@agenteschat/client";
-import { ApiError, useAgentMail, useMailAccounts, useSetAgentMail } from "@agenteschat/client";
-import { LEVELS, type Level } from "@agenteschat/client/lib/access-levels";
-import { canTalk } from "@agenteschat/client/lib/audience";
-import { forbiddenText, knownErrorText } from "@agenteschat/client/lib/errors";
+import type { AgentMailbox, MailAccount, MailPolicy } from "@keepmind/client";
+import { ApiError, useAgentMail, useMailAccounts, useSetAgentMail } from "@keepmind/client";
+import { LEVELS, type Level } from "@keepmind/client/lib/access-levels";
+import { canTalk } from "@keepmind/client/lib/audience";
+import { forbiddenText, knownErrorText } from "@keepmind/client/lib/errors";
 import {
   choiceOf,
   defaultPolicy,
@@ -12,8 +12,8 @@ import {
   normalizePolicy,
   onlyForOwner,
   toMailLevel,
-} from "@agenteschat/client/lib/mail";
-import { Alert, Button, Card, Chip, InfoHint, Switch } from "@agenteschat/ui";
+} from "@keepmind/client/lib/mail";
+import { Alert, Button, Card, Chip, InfoHint, Switch } from "@keepmind/ui";
 import { Link } from "@tanstack/react-router";
 import { useId, useState } from "react";
 import { useTranslation } from "react-i18next";

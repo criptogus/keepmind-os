@@ -1,4 +1,4 @@
-import { Icon, type IconName } from "@agenteschat/ui";
+import { Icon, type IconName } from "@keepmind/ui";
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useState } from "react";
 
 type Show = (message: string, icon?: IconName) => void;

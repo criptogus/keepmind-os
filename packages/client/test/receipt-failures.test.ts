@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { resources } from "@agenteschat/i18n";
+import { resources } from "@keepmind/i18n";
 import i18next, { type TFunction } from "i18next";
 import type { Message } from "../src/api/types";
 import { failedRunFix, filesTextOnlyOf, runErrorWords, runFailureLine } from "../src/lib/errors";

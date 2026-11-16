@@ -1,9 +1,9 @@
 name: Release setup
 
-# Publishes packages/setup (@agenteschat/setup, the self-host setup) to npm through Trusted Publishing
+# Publishes packages/setup (@keepmind/setup, the self-host setup) to npm through Trusted Publishing
 # (OIDC), only from a `setup-v<version>` tag that matches packages/setup/package.json. No token is stored.
 #
-# npmjs.com, package @agenteschat/setup → Settings → Trusted Publisher → GitHub Actions:
+# npmjs.com, package @keepmind/setup → Settings → Trusted Publisher → GitHub Actions:
 #   Organization or user: agentes-chat
 #   Repository:           agentes-chat
 #   Workflow filename:    release-setup.yml
@@ -39,12 +39,12 @@ jobs:
           node-version: 24
       - run: bun install --frozen-lockfile
       - run: bun test packages/setup
-      - run: bun run --filter '@agenteschat/setup' typecheck
+      - run: bun run --filter '@keepmind/setup' typecheck
       # The bundle as npx runs it (Node) and as install.sh runs it (bun x --bun), in a directory of its
       # own, touching nothing.
       - name: Build, then run the bundle under Node and Bun
         run: |
-          bun run --filter '@agenteschat/setup' build
+          bun run --filter '@keepmind/setup' build
           node packages/setup/dist/index.js --help
           bun packages/setup/dist/index.js --help
           cd "$(mktemp -d)"

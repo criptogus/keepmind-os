@@ -1,4 +1,4 @@
-import type { ControlJob, ControlStatus } from "@agenteschat/adapters/runner-control";
+import type { ControlJob, ControlStatus } from "@keepmind/adapters/runner-control";
 import { browserBadgeOf } from "./browser";
 
 /**

@@ -1,7 +1,7 @@
-import type { Agent, AgentGroup } from "@agenteschat/client";
-import { useAgentGroupAction, useRoles } from "@agenteschat/client";
-import { groupOf, NO_GROUP } from "@agenteschat/client/lib/agent-groups";
-import { errorText } from "@agenteschat/client/lib/errors";
+import type { Agent, AgentGroup } from "@keepmind/client";
+import { useAgentGroupAction, useRoles } from "@keepmind/client";
+import { groupOf, NO_GROUP } from "@keepmind/client/lib/agent-groups";
+import { errorText } from "@keepmind/client/lib/errors";
 import {
   Button,
   Dialog,
@@ -17,7 +17,7 @@ import {
   MenuItem,
   MenuRadioGroup,
   MenuSeparator,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { type DragEvent, type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDirectory } from "@/hooks/useDirectory";

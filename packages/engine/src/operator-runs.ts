@@ -15,7 +15,7 @@ import {
   type SQL,
   schema,
   sql,
-} from "@agenteschat/db";
+} from "@keepmind/db";
 import { z } from "zod";
 import { audienceSql } from "./audience";
 import { decodeCursor, encodeCursor } from "./cursor";

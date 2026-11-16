@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { eq, schema } from "@agenteschat/db";
+import { eq, schema } from "@keepmind/db";
 import { createFileArtifact, getArtifact, openDm, postPersonMessage } from "../src";
 import { imageSize, pictureSize } from "../src/image-size";
 import { type Fixture, setup } from "./fixtures";

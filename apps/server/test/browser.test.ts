@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
-import { BROWSER_VIEW, decodeBrowserFrame, type MachineRequest } from "@agenteschat/adapters";
-import { and, eq, schema } from "@agenteschat/db";
-import { BROWSER_SCOPE, grantScopes, MachineRequestError, RIGHT_HAND } from "@agenteschat/engine";
+import { BROWSER_VIEW, decodeBrowserFrame, type MachineRequest } from "@keepmind/adapters";
+import { and, eq, schema } from "@keepmind/db";
+import { BROWSER_SCOPE, grantScopes, MachineRequestError, RIGHT_HAND } from "@keepmind/engine";
 import {
   createViewerPacer,
   FRAME_RENEW_MS,

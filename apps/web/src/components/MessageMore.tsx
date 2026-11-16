@@ -1,9 +1,9 @@
-import { type Message, usePinMessage } from "@agenteschat/client";
-import { messagePath } from "@agenteschat/client/lib/message-links";
-import { can } from "@agenteschat/client/lib/permissions";
-import { voiceOf } from "@agenteschat/client/lib/voice";
-import { Button, EmojiPickerPopover, Menu } from "@agenteschat/ui";
-import { chartBlocksOf, chartBlockToWidgetSpec } from "@agenteschat/ui/widgets/spec";
+import { type Message, usePinMessage } from "@keepmind/client";
+import { messagePath } from "@keepmind/client/lib/message-links";
+import { can } from "@keepmind/client/lib/permissions";
+import { voiceOf } from "@keepmind/client/lib/voice";
+import { Button, EmojiPickerPopover, Menu } from "@keepmind/ui";
+import { chartBlocksOf, chartBlockToWidgetSpec } from "@keepmind/ui/widgets/spec";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useChannelActions } from "@/components/channel-actions";

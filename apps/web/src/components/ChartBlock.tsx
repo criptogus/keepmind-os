@@ -1,13 +1,5 @@
-import { type ChartSpec, chartShares, chartTable, formatChartValue, parseChart } from "@agenteschat/client/lib/chart";
-import {
-  type AgentColor,
-  Button,
-  Dialog,
-  DialogBody,
-  paintCells,
-  paintLineArea,
-  useElementWidth,
-} from "@agenteschat/ui";
+import { type ChartSpec, chartShares, chartTable, formatChartValue, parseChart } from "@keepmind/client/lib/chart";
+import { type AgentColor, Button, Dialog, DialogBody, paintCells, paintLineArea, useElementWidth } from "@keepmind/ui";
 import {
   barCells,
   CHART_CELL,
@@ -17,8 +9,8 @@ import {
   linePoints,
   ringCells,
   smoothPath,
-} from "@agenteschat/ui/sky/chart";
-import { chartBlockToWidgetSpec } from "@agenteschat/ui/widgets/spec";
+} from "@keepmind/ui/sky/chart";
+import { chartBlockToWidgetSpec } from "@keepmind/ui/widgets/spec";
 import {
   createContext,
   type ReactNode,

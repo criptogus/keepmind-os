@@ -1,6 +1,6 @@
-import { and, asc, eq, gt, inArray, lte, schema } from "@agenteschat/db";
-import { type ModelRequest, systemText, textOf } from "@agenteschat/providers";
-import type { FakeReply } from "@agenteschat/providers/testing";
+import { and, asc, eq, gt, inArray, lte, schema } from "@keepmind/db";
+import { type ModelRequest, systemText, textOf } from "@keepmind/providers";
+import type { FakeReply } from "@keepmind/providers/testing";
 import {
   type Agent,
   addChannelMember,

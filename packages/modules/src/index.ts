@@ -1,11 +1,11 @@
-import type { Adapters } from "@agenteschat/adapters";
-import type { Config } from "@agenteschat/config";
-import type { Database } from "@agenteschat/db";
-import type { ModelProvider } from "@agenteschat/providers";
 import type { OpenAPIHono } from "@hono/zod-openapi";
+import type { Adapters } from "@keepmind/adapters";
+import type { Config } from "@keepmind/config";
+import type { Database } from "@keepmind/db";
+import type { ModelProvider } from "@keepmind/providers";
 
 /**
- * Which build of agentes.chat is running.
+ * Which build of KeepMind OS is running.
  * - `selfhost`: the open-source server, started by `apps/server/src/main.ts`.
  * - `cloud`: our hosted service: this same server, with Cloud-only behavior
  *   switched on by environment variables (ADR 0002 §5).
@@ -40,7 +40,7 @@ export interface AdapterOverrides extends Partial<Adapters> {
  * private may run in this process (ADR 0002 §5, ADR 0180).
  *
  * Rule enforced by `bun run check:boundaries`: nothing under `apps/` or
- * `packages/` may import `@agenteschat/cloud` or `@agenteschat/ee`.
+ * `packages/` may import `@keepmind/cloud` or `@keepmind/ee`.
  */
 export interface AgentesModule {
   /** Stable identifier, e.g. `cloud-billing`. Shown in logs and `/api/health`. */

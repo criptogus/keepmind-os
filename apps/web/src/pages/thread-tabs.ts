@@ -1,4 +1,4 @@
-import type { ThreadTab } from "@agenteschat/client";
+import type { ThreadTab } from "@keepmind/client";
 
 // Apart from the threads page so the route's search check doesn't load the page itself.
 

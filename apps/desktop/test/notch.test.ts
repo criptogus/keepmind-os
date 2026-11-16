@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import type { ControlBrowser, ControlJob, ControlStatus } from "@agenteschat/adapters/runner-control";
+import type { ControlBrowser, ControlJob, ControlStatus } from "@keepmind/adapters/runner-control";
 import {
   BROWSER_BUSY_MS,
   DONE_MIN_MS,

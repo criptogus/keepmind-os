@@ -23,7 +23,7 @@ test("markdown becomes a Word document: headings, inline styles, links, lists, q
     [
       "# Relatório & resumo",
       "",
-      "Texto com **negrito**, *itálico*, `código` e [o site](https://agentes.chat).",
+      "Texto com **negrito**, *itálico*, `código` e [o site](https://keepmind.io).",
       "",
       "- um",
       "- dois",
@@ -64,7 +64,7 @@ test("markdown becomes a Word document: headings, inline styles, links, lists, q
   expect(doc).toContain('<w:i/></w:rPr><w:t xml:space="preserve">itálico</w:t>');
   expect(doc).toContain('w:ascii="Martian Mono"');
   expect(doc).toContain('<w:hyperlink r:id="rLink1">');
-  expect(p["word/_rels/document.xml.rels"]).toContain('Target="https://agentes.chat" TargetMode="External"');
+  expect(p["word/_rels/document.xml.rels"]).toContain('Target="https://keepmind.io" TargetMode="External"');
   expect(doc).toContain('<w:numId w:val="1"/>'); // bullets
   expect(doc).toContain('<w:numId w:val="4"/>'); // the second list (numbered) restarts
   expect(p["word/numbering.xml"]).toContain('<w:numFmt w:val="decimal"/>');

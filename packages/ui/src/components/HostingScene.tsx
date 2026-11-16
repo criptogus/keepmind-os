@@ -86,7 +86,7 @@ function PixelCloud() {
 
 /**
  * The desktop app's "Onde seu workspace vai ficar?" drawn (ADR 0066 §1, amended 2026-11-14): the team under the place
- * picked, day in every one: the Cloud as the agentes.chat agent on a cloud, this computer as its portrait (`computer`),
+ * picked, day in every one: the Cloud as the KeepMind OS agent on a cloud, this computer as its portrait (`computer`),
  * one always on as the server tower. Decorative: the words beside it say the same.
  */
 export function PlaceScene({
@@ -128,7 +128,7 @@ export function PlaceScene({
             <span className="ac-place__brand">
               <Avatar
                 kind="agent"
-                name="agentes.chat"
+                name="keepmind.io"
                 appearance={{ color: "sky", eyes: "round" }}
                 size="xl"
                 framed={false}

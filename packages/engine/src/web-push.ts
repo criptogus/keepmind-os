@@ -1,5 +1,5 @@
-import { generateVapidKeys, type KeyWrapper, type VapidKeys } from "@agenteschat/adapters";
-import { and, type Database, eq, isNull, schema } from "@agenteschat/db";
+import { generateVapidKeys, type KeyWrapper, type VapidKeys } from "@keepmind/adapters";
+import { and, type Database, eq, isNull, schema } from "@keepmind/db";
 import { openSecret, type SealedSecret, SealedValueError, sealSecret } from "./crypto";
 import { isPublicHostName } from "./net-guard";
 
@@ -26,7 +26,7 @@ export const VAPID_RECHECK_MS = 60_000;
 export const VAPID_KEEP_NEW_MS = 10 * 60_000;
 
 /** The contact push services get from a server with no public address or sender of its own. */
-export const VAPID_FALLBACK_SUBJECT = "https://agentes.chat";
+export const VAPID_FALLBACK_SUBJECT = "https://keepmind.io";
 
 export interface VapidConfig {
   PUBLIC_URL: string;

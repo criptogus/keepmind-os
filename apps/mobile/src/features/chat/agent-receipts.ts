@@ -8,9 +8,9 @@ import {
   type SteerPhase,
   type SteerState,
   steerWords,
-} from "@agenteschat/client";
-import { listNames } from "@agenteschat/client/lib/activity";
-import { isEventLine } from "@agenteschat/client/lib/notices";
+} from "@keepmind/client";
+import { listNames } from "@keepmind/client/lib/activity";
+import { isEventLine } from "@keepmind/client/lib/notices";
 import type { TFunction } from "i18next";
 
 /**

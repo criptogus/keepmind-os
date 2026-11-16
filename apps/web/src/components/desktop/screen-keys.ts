@@ -1,4 +1,4 @@
-import { isApple } from "@agenteschat/ui";
+import { isApple } from "@keepmind/ui";
 import type RFB from "@novnc/novnc";
 import { type RefObject, useCallback, useEffect, useRef } from "react";
 import { liveCanvas } from "@/lib/canvas";

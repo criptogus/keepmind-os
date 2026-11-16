@@ -1,4 +1,4 @@
-import { type Executor, schema } from "@agenteschat/db";
+import { type Executor, schema } from "@keepmind/db";
 
 export interface AuditEntry {
   orgId: string;

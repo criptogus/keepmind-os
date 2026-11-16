@@ -1,8 +1,8 @@
-import type { OrgRole, OrgRoles, Person } from "@agenteschat/client";
-import { useChangeRole, usePeople, useReorderRoles, useRoles } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { joinNames } from "@agenteschat/client/lib/format";
-import { can, type RolePermission } from "@agenteschat/client/lib/permissions";
+import type { OrgRole, OrgRoles, Person } from "@keepmind/client";
+import { useChangeRole, usePeople, useReorderRoles, useRoles } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { joinNames } from "@keepmind/client/lib/format";
+import { can, type RolePermission } from "@keepmind/client/lib/permissions";
 import {
   everyoneOf,
   isEveryone,
@@ -18,7 +18,7 @@ import {
   roleName,
   roleTabs,
   sortRoles,
-} from "@agenteschat/client/lib/roles";
+} from "@keepmind/client/lib/roles";
 import {
   Alert,
   Avatar,
@@ -45,7 +45,7 @@ import {
   Tabs,
   Tip,
   Toolbar,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { type KeyboardEvent, type DragEvent as ReactDragEvent, useEffect, useId, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useInviteDialog } from "@/components/invite/InviteDialog";

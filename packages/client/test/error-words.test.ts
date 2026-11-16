@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { en as enStrings, ptBR, resources } from "@agenteschat/i18n";
+import { en as enStrings, ptBR, resources } from "@keepmind/i18n";
 import i18next, { type TFunction } from "i18next";
 import { ApiError, createFileRequester, createRequester, invitationQuery, NetworkError } from "../src/index";
 import {

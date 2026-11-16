@@ -1,3 +1,4 @@
+import { createRoute, type OpenAPIHono, z } from "@hono/zod-openapi";
 import {
   OPERATOR_AGENT_CHANNELS,
   OPERATOR_CHANNEL_KINDS,
@@ -12,8 +13,7 @@ import {
   operatorFindUsers,
   operatorMembers,
   operatorResolve,
-} from "@agenteschat/engine";
-import { createRoute, type OpenAPIHono, z } from "@hono/zod-openapi";
+} from "@keepmind/engine";
 import { apiError, errorResponse } from "../http/errors";
 import { iso, json, OrgParams } from "../routes/app/context";
 import type { OperatorDeps } from "./app";

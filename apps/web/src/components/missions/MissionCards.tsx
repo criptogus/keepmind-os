@@ -9,7 +9,7 @@ import type {
   MissionReportMeta,
   MissionSetupMeta,
   MissionSuggestionMeta,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 import {
   keys,
   useAgentRepos,
@@ -26,11 +26,11 @@ import {
   useSetMissionExecutor,
   useThreadMission,
   useThreadTasks,
-} from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { formatTime } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { folderName } from "@agenteschat/client/lib/machines";
+} from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { formatTime } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { folderName } from "@keepmind/client/lib/machines";
 import {
   executorName,
   findingRefUrl,
@@ -46,7 +46,7 @@ import {
   summaryParts,
   taskNoticeOf,
   viaText,
-} from "@agenteschat/client/lib/missions";
+} from "@keepmind/client/lib/missions";
 import {
   Button,
   Checkbox,
@@ -63,7 +63,7 @@ import {
   Skeleton,
   Switch,
   Textarea,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";

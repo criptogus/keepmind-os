@@ -3,7 +3,7 @@
  * `GET …/agents/{id}/computer` and `PUT …/computer/target`
  * (apps/server/src/routes/app/sandboxes.ts, routes/machines.ts).
  */
-import type { ApiClient, ComputerTarget, SandboxSettings } from "@agenteschat/client";
+import type { ApiClient, ComputerTarget, SandboxSettings } from "@keepmind/client";
 import { clone, type MockContext } from "./context";
 import type { FakeMachines } from "./machines";
 

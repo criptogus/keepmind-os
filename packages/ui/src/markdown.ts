@@ -1,4 +1,4 @@
-import { EVERYONE_WORDS } from "@agenteschat/i18n/everyone";
+import { EVERYONE_WORDS } from "@keepmind/i18n/everyone";
 
 /**
  * The parsing half of a small, safe Markdown renderer for chat messages and

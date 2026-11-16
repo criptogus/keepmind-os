@@ -180,7 +180,7 @@ describe("repeating events", () => {
     f = await setup();
     const question = await postPersonMessage(deps() as never, f.owner.id, f.org.id, f.general.id, { body: "@dev oi" });
     await drainOutbox(f.db, f.handlers);
-    const [run] = await f.db.select().from((await import("@agenteschat/db")).schema.agentRuns);
+    const [run] = await f.db.select().from((await import("@keepmind/db")).schema.agentRuns);
     await addChannelMember(f.db, f.owner.id, f.org.id, f.general.id, { agentId: f.agent.id }).catch(() => undefined);
     const proposal = await proposeCalendarEvent(
       deps(),

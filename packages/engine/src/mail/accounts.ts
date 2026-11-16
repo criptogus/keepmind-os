@@ -8,7 +8,7 @@ import {
   type MailPreset,
   type MailProvider,
   type MailTestError,
-} from "@agenteschat/adapters";
+} from "@keepmind/adapters";
 import {
   and,
   asc,
@@ -23,7 +23,7 @@ import {
   or,
   schema,
   sql,
-} from "@agenteschat/db";
+} from "@keepmind/db";
 import { recordAudit } from "../audit";
 import { caches } from "../cache";
 import { countComposioConnection } from "../connector-usage";

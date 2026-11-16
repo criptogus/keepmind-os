@@ -3,10 +3,10 @@
  * (the server's devices API through the main window's session, `Host.siteFetch`), and the iPhone setup's checklist,
  * from what the runner reports (`iphone.setup`, and the phones in its status). Pure, so the tests read it as is.
  */
-import type { RunnerPhone } from "@agenteschat/adapters/machine-protocol";
-import type { ControlIphoneSetup } from "@agenteschat/adapters/runner-control";
-import type { ComputerDevice, DevicesList } from "@agenteschat/client";
-import { createHttpApi } from "@agenteschat/client/api/http-client";
+import type { RunnerPhone } from "@keepmind/adapters/machine-protocol";
+import type { ControlIphoneSetup } from "@keepmind/adapters/runner-control";
+import type { ComputerDevice, DevicesList } from "@keepmind/client";
+import { createHttpApi } from "@keepmind/client/api/http-client";
 import type { Host } from "../host/types";
 import { homeServer } from "./server";
 import type { Home } from "./store";

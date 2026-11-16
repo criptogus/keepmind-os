@@ -2,7 +2,7 @@ import { afterEach, expect, test } from "bun:test";
 import { mkdirSync, realpathSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { AgentScope } from "@agenteschat/adapters/machine-protocol";
+import type { AgentScope } from "@keepmind/adapters/machine-protocol";
 import { hasBunTerminal } from "../../runner/launch";
 import type { DataSocket } from "../../runner/streams";
 import {

@@ -2,7 +2,7 @@ import { afterAll, afterEach, beforeAll, expect, test } from "bun:test";
 import { execFileSync, spawnSync } from "node:child_process";
 import { chmodSync, existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import type { MachineReplies, MachineRequest } from "@agenteschat/adapters/machine-protocol";
+import type { MachineReplies, MachineRequest } from "@keepmind/adapters/machine-protocol";
 import { credentialHelper } from "../../runner/git";
 import {
   describeRequest,
@@ -23,7 +23,7 @@ import { errorCode, removeDirs, tempDir } from "./helpers";
 const AGENT = { id: "0193aaaa-bbbb-7ccc-8ddd-eeeeffff0000", handle: "dev", name: "Dev" };
 const BASE = "http://proxy.test/api/git/org/conn/";
 const TOKEN = `agtgit1.${"a".repeat(40)}.${"b".repeat(43)}`;
-const AUTHOR = { name: "Dev (agentes)", email: "dev@agents.agentes.chat" };
+const AUTHOR = { name: "Dev (agentes)", email: "contact@zeroagency.ai" };
 
 const dirs: string[] = [];
 let root = "";
@@ -190,7 +190,7 @@ test("git.sync: not cloned and not asked, refused by the remote, outside the fol
   // Only our proxy and our credential: never another URL, a token in the URL, or a GitHub token.
   for (const proxy of [
     { base: "https://github.com/", token: TOKEN },
-    { base: "https://x:y@agentes.chat/api/git/o/c/", token: TOKEN },
+    { base: "https://x:contact@zeroagency.ai/api/git/o/c/", token: TOKEN },
     { base: BASE, token: "ghp_123456789012345678901234567890" },
   ]) {
     expect(await errorCode(() => handleRequest(ctx, { ...sync([]), proxy } as MachineRequest, scope()))).toBe(

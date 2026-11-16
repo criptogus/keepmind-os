@@ -14,12 +14,12 @@
 4. `kek_id` is stored per row; old wrappers stay usable for unwrapping (`legacyKeyWrappers`) during rotation.
 5. Only `key_hint` (last 4 characters) is ever returned by the API. Data keys are zeroed after use.
 
-**The Model Gateway** (`@agenteschat/engine` `createModelGateway`) is the only code that calls a model. For each call it:
+**The Model Gateway** (`@keepmind/engine` `createModelGateway`) is the only code that calls a model. For each call it:
 
 1. loads the agent (org-scoped) and its model from `MODEL_CATALOG`;
 2. **checks the budget before calling**: month-to-date spend of the agent (UTC calendar month, from `usage_records`) must be below `monthly_budget_nano_usd`, else `BudgetExceededError` and no call;
 3. decrypts the agent's credential, or asks the `PlatformCredentials` adapter when the agent has none (core: none → `MissingCredentialError`);
-4. streams through the `ModelProvider` interface (`@agenteschat/providers`);
+4. streams through the `ModelProvider` interface (`@keepmind/providers`);
 5. writes a `usage_records` row with `org_id`, `agent_id`, `run_id`, credential, tokens (input, output, cache read/write) and cost.
 
 **Providers.** `createAnthropicProvider` uses the official SDK's streaming (`client.beta.messages.stream` + `finalMessage()`), a cache breakpoint on the system prompt, and Anthropic's server-side refusal fallback (`fallbacks: "default"`) for models flagged in the catalog (Sonnet 5.5, Opus 5.5). Errors become `ProviderError { retryable }`. Tests use `createFakeProvider`.

@@ -1,5 +1,5 @@
-import { DatabaseError } from "@agenteschat/adapters";
-import { and, type Database, eq, gte, schema, sql } from "@agenteschat/db";
+import { DatabaseError } from "@keepmind/adapters";
+import { and, type Database, eq, gte, schema, sql } from "@keepmind/db";
 import { sha256 } from "../crypto";
 import { cutText } from "../format";
 import type { CallCheck, ToolContext, ToolDefinition, ToolOutput, ToolSource } from "../tools/types";

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import type { ApiClient, AppNotification } from "@agenteschat/client";
+import type { ApiClient, AppNotification } from "@keepmind/client";
 import type { AuthClient } from "../src/auth/client";
 import {
   base64UrlToBytes,

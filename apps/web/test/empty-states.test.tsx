@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { ptBR } from "@agenteschat/i18n/pt-BR";
+import { ptBR } from "@keepmind/i18n/pt-BR";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { STORAGE_KEYS, storage } from "@/lib/storage";
 import { ADA_ID, createFakeApi, type FakeState, ORG_ID, seedState, withRightHand } from "./fake-api";

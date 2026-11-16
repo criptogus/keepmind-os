@@ -1,7 +1,7 @@
 /**
  * Names in agents' database rules (ADR 0039): `schema.table` and `schema.table.column` written as SQL, each part
  * a plain identifier or a quoted one (`dbo.clientes."CPF/CNPJ Emitente"`). Mirrored in
- * `@agenteschat/client/lib/databases` (`apps/server/test/database-identifiers.test.ts` keeps the two the same).
+ * `@keepmind/client/lib/databases` (`apps/server/test/database-identifiers.test.ts` keeps the two the same).
  */
 
 const PLAIN = /^[a-z_][a-z0-9_$]*$/;

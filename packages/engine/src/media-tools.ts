@@ -1,5 +1,5 @@
-import type { GifProvider, PubSub } from "@agenteschat/adapters";
-import { and, desc, type Executor, eq, gt, isNull, or, schema, sql } from "@agenteschat/db";
+import type { GifProvider, PubSub } from "@keepmind/adapters";
+import { and, desc, type Executor, eq, gt, isNull, or, schema, sql } from "@keepmind/db";
 import { channelSkip, MEDIA_GIF_PICK_FROM, MEDIA_GIF_SEARCH_LIMIT, pickGifIndex, withTimeout } from "./agent-media";
 import { getAgentCached } from "./agents";
 import { getChannelCached } from "./context";

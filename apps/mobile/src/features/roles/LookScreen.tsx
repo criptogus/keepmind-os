@@ -1,6 +1,6 @@
-import type { OrgRole } from "@agenteschat/client";
-import { ApiError, useCreateRole, useUpdateRole } from "@agenteschat/client";
-import { isEveryone, newRoleInput, ROLE_TEMPLATES, roleLock, roleName } from "@agenteschat/client/lib/roles";
+import type { OrgRole } from "@keepmind/client";
+import { ApiError, useCreateRole, useUpdateRole } from "@keepmind/client";
+import { isEveryone, newRoleInput, ROLE_TEMPLATES, roleLock, roleName } from "@keepmind/client/lib/roles";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Pressable, StyleSheet, View } from "react-native";

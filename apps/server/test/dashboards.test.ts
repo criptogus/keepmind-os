@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, expect, test } from "bun:test";
-import { orgTopic, userTopic } from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
-import { insertMessage, notify, proposeDashboardAudience } from "@agenteschat/engine";
+import { orgTopic, userTopic } from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
+import { insertMessage, notify, proposeDashboardAudience } from "@keepmind/engine";
 import { type Browser, browser, createTestServer, joinByInvitation, seedOrg, signUp, type TestServer } from "./harness";
 
 /** The boards and widgets routes (ADR 0135): who sees and changes what, and what each route answers. */

@@ -1,5 +1,5 @@
-import { PERMISSION_TOOL, type PubSub } from "@agenteschat/adapters";
-import { and, type Database, type Executor, eq, inArray, isNull, type SQL, schema, sql } from "@agenteschat/db";
+import { PERMISSION_TOOL, type PubSub } from "@keepmind/adapters";
+import { and, type Database, type Executor, eq, inArray, isNull, type SQL, schema, sql } from "@keepmind/db";
 import { linkRunActions, publishMessageActions } from "./agent-actions";
 import { announceAgentStatus, followWork } from "./agent-status";
 import { openApprovalCard, publishApproval, supersedeApprovals } from "./approvals";

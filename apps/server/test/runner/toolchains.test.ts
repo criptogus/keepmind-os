@@ -1,7 +1,7 @@
 import { afterEach, expect, test } from "bun:test";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import type { RunnerToolchains } from "@agenteschat/adapters/machine-protocol";
+import type { RunnerToolchains } from "@keepmind/adapters/machine-protocol";
 import { appleToolchains, cachedToolchains, probeToolchains } from "../../runner/toolchains";
 import { removeDirs, tempDir } from "./helpers";
 

@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
-import { MachineRequestError } from "@agenteschat/engine";
-import type { ModuleContext } from "@agenteschat/modules";
+import { MachineRequestError } from "@keepmind/engine";
+import type { ModuleContext } from "@keepmind/modules";
 import { createApp } from "../src/app";
 import { workerHealth } from "../src/routes/health";
 import { createTestServer } from "./harness";

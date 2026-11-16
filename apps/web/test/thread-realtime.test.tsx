@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, setSystemTime, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { type ActiveRun, type Message, UNREAD_REFRESH_MS } from "@agenteschat/client";
+import { type ActiveRun, type Message, UNREAD_REFRESH_MS } from "@keepmind/client";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { createStreamsStore } from "@/realtime/context";
 import { ADA_ID, createFakeApi, ENG_ID, GENERAL_ID, ORG_ID, seedDm, seedState } from "./fake-api";

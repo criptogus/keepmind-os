@@ -6,7 +6,7 @@ import {
   useChannels,
   useRoles,
   useWidenAudience,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 import {
   type AgentUnavailableEvent,
   audienceNotice,
@@ -17,10 +17,10 @@ import {
   opensOthersPlan,
   unavailableNotice,
   widenQuestion,
-} from "@agenteschat/client/lib/audience";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { type ReachEntry, reachKey, reachOf, reachOpens } from "@agenteschat/client/lib/reach";
+} from "@keepmind/client/lib/audience";
+import { errorText } from "@keepmind/client/lib/errors";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { type ReachEntry, reachKey, reachOf, reachOpens } from "@keepmind/client/lib/reach";
 import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 import { Alert, StyleSheet, View } from "react-native";

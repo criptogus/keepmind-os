@@ -1,9 +1,10 @@
 import { AsyncLocalStorage } from "node:async_hooks";
 import { randomBytes, sign as signWithKey } from "node:crypto";
-import type { HumanAction, HumanCheck, PubSub, RateLimiter } from "@agenteschat/adapters";
-import { jwtClaims, nameIsPassword } from "@agenteschat/client/lib/text";
-import type { Config } from "@agenteschat/config";
-import { and, type Database, eq, ne, schema } from "@agenteschat/db";
+import { expo } from "@better-auth/expo";
+import type { HumanAction, HumanCheck, PubSub, RateLimiter } from "@keepmind/adapters";
+import { jwtClaims, nameIsPassword } from "@keepmind/client/lib/text";
+import type { Config } from "@keepmind/config";
+import { and, type Database, eq, ne, schema } from "@keepmind/db";
 import {
   accountBlock,
   addressHeld,
@@ -26,8 +27,8 @@ import {
   holdsInvitation,
   INVITATION_MAIL_HEADER,
   INVITATION_TOKEN_HEADER,
-  isAgentesCloud,
   isFeedbackRelay,
+  isKeepMindCloud,
   onUserCreated,
   queueEmail,
   recordSession,
@@ -47,8 +48,7 @@ import {
   useEarlyAccess,
   ValidationError,
   type WorkspacePolicy,
-} from "@agenteschat/engine";
-import { expo } from "@better-auth/expo";
+} from "@keepmind/engine";
 import { type BetterAuthPlugin, betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import {
@@ -73,9 +73,9 @@ import { phoneBrowserSignIn, phoneFlowStarted } from "./phone-browser-sign-in";
 
 /**
  * Sign-in for people, built on Better Auth (ADR 0006):
- * Better Auth owns users, sessions, passwords and social sign-in; agentes.chat
+ * Better Auth owns users, sessions, passwords and social sign-in; KeepMind OS
  * owns organizations, memberships, roles and invitations
- * (`@agenteschat/engine` organizations). Agents are not users.
+ * (`@keepmind/engine` organizations). Agents are not users.
  * See docs/adr/0006-auth-and-tenancy.md.
  *
  * Mounted at `/api/auth/*`. The web app is served from the same origin, so
@@ -149,7 +149,7 @@ export function createAuth(deps: {
   };
 
   return betterAuth({
-    appName: "agentes.chat",
+    appName: "KeepMind OS",
     baseURL: config.PUBLIC_URL,
     basePath: "/api/auth",
     // Over HTTP each would tell any session whether a password is right, with none of the limit `deletionProof` keeps:
@@ -485,7 +485,7 @@ export function createAuth(deps: {
       session: {
         create: {
           // A blocked account (ADR 0056 §9) gets no session, whatever the sign-in method. The code also
-          // makes a social sign-in's callback send the person back to the sign-in page. On agentes.chat Cloud the
+          // makes a social sign-in's callback send the person back to the sign-in page. On KeepMind OS Cloud the
           // body adds the block's kind, never its reason.
           before: async (session) => {
             const block = await accountBlock(db, session.userId);
@@ -1047,9 +1047,9 @@ export async function signupOpen(db: Database, config: Config, users: number) {
   return users === 0 ? !policy.ownerByLink : signupOpenToAll(db, policy);
 }
 
-/** Whether making a workspace needs an account early access allowed (ADR 0078 §4): only on agentes.chat Cloud. */
+/** Whether making a workspace needs an account early access allowed (ADR 0078 §4): only on KeepMind OS Cloud. */
 export const workspacePolicy = (config: Config): WorkspacePolicy => ({
-  paidMachines: config.MACHINE_PROVISIONING === "external" && isAgentesCloud(config.PUBLIC_URL),
+  paidMachines: config.MACHINE_PROVISIONING === "external" && isKeepMindCloud(config.PUBLIC_URL),
   allowSignup: config.ALLOW_SIGNUP,
 });
 

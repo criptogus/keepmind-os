@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import type { GiphyKeyCheck } from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
+import type { GiphyKeyCheck } from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
 import { createGifKey, createLocalKeyWrapper, createOrganization, sealSecret } from "../src";
 import { type Fixture, SECRET, setup } from "./fixtures";
 

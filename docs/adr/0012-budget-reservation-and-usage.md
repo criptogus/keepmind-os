@@ -25,7 +25,7 @@ After the call (success or failure) one transaction writes the usage record, del
 
 **Partial usage.** Providers attach `ProviderError.partial` when a stream dies midway: the input-token count from the start-of-stream event if it arrived, output tokens reported so far, and the characters received. The gateway fills gaps: the input count from the provider's count-tokens API, else a local estimate (4 characters/token); output tokens from the provider's count, else estimated from the received characters. The record is flagged `partial = true`, and the reservation settles to that cost.
 
-**Provider neutrality.** The gateway and everything above it use only the neutral types of `@agenteschat/providers` (`ModelRequest`, `ModelResult`, `ContentBlock` with `tool_use` / `tool_result` / `opaque`, JSON-Schema `outputSchema`, an `effort` hint). `provider_credentials.provider` is text validated against `PROVIDERS`, so adding a provider (e.g. OpenAI) is a catalog entry plus an adapter, without a migration.
+**Provider neutrality.** The gateway and everything above it use only the neutral types of `@keepmind/providers` (`ModelRequest`, `ModelResult`, `ContentBlock` with `tool_use` / `tool_result` / `opaque`, JSON-Schema `outputSchema`, an `effort` hint). `provider_credentials.provider` is text validated against `PROVIDERS`, so adding a provider (e.g. OpenAI) is a catalog entry plus an adapter, without a migration.
 
 ## Consequences
 

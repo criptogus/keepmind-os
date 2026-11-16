@@ -1,6 +1,6 @@
-import { joinNames } from "@agenteschat/client/lib/format";
-import { type AiChoice, PLAN_CHOICES, type PlanChoice, planLabel, planMark } from "@agenteschat/client/lib/no-ai";
-import { Icon, ProviderLogo } from "@agenteschat/ui";
+import { joinNames } from "@keepmind/client/lib/format";
+import { type AiChoice, PLAN_CHOICES, type PlanChoice, planLabel, planMark } from "@keepmind/client/lib/no-ai";
+import { Icon, ProviderLogo } from "@keepmind/ui";
 import { type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -18,8 +18,10 @@ export function ConnectChoices({
   dims,
   mayAddKey,
   perAgent,
+  onProvider,
 }: {
   onPick: (choice: AiChoice) => void;
+  onProvider?: (provider: "openrouter" | "custom") => void;
   /** A plan that can't sign in now: its mark dims, and its steps say why. */
   dims: (choice: PlanChoice) => boolean;
   mayAddKey: boolean;
@@ -54,6 +56,27 @@ export function ConnectChoices({
   return (
     <div className="arrival-opts">
       {FIRST.map(plan)}
+      {card(
+        FREE,
+        <ProviderLogo id={planMark(FREE)} size="tile" off={dims(FREE)} />,
+        t("arrival.connect.free"),
+        t("arrival.connect.freeText"),
+        <span className="arrival-opts__tag">{t("arrival.connect.noPlan")}</span>,
+      )}
+      {onProvider &&
+        mayAddKey &&
+        (["openrouter", "custom"] as const).map((provider) => (
+          <button key={provider} type="button" className="ac-option" onClick={() => onProvider(provider)}>
+            <ProviderLogo id={provider} size="tile" />
+            <span className="ac-option__text">
+              <span className="ac-option__title">{provider === "openrouter" ? "OpenRouter" : "Ollama"}</span>
+              <span className="ac-option__desc">
+                {t(provider === "openrouter" ? "keepmind.ai.routerChoice" : "keepmind.ai.localChoice")}
+              </span>
+            </span>
+            <Icon name="chevronRight" className="arrival-opts__end" />
+          </button>
+        ))}
       {others ? (
         OTHERS.map(plan)
       ) : (
@@ -84,13 +107,6 @@ export function ConnectChoices({
           t("connectAi.key.title"),
           t("connectAi.key.sub"),
         )}
-      {card(
-        FREE,
-        <ProviderLogo id={planMark(FREE)} size="tile" off={dims(FREE)} />,
-        t("arrival.connect.free"),
-        t("arrival.connect.freeText"),
-        <span className="arrival-opts__tag">{t("arrival.connect.noPlan")}</span>,
-      )}
     </div>
   );
 }

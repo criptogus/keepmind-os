@@ -47,7 +47,7 @@ export interface McpPreset {
    * Postgres user). Every other tool keeps our usual suggestion.
    */
   readTools?: readonly string[];
-  /** The vendor hasn't approved agentes.chat yet: listed greyed out ("Em breve"), not connectable in one click. */
+  /** The vendor hasn't approved KeepMind OS yet: listed greyed out ("Em breve"), not connectable in one click. */
   soon?: true;
   /**
    * The Cloud offers OAuth only, no API key: the vendor's terms forbid an app asking its users for their token
@@ -98,6 +98,15 @@ export const composioToolkitOf = (serverUrl: string | null | undefined) =>
   COMPOSIO_TOOLKIT_URL.exec(serverUrl ?? "")?.[1]?.toLowerCase() ?? null;
 
 export const MCP_PRESETS: readonly McpPreset[] = [
+  {
+    id: "composio-connect",
+    label: "Composio Connect",
+    description: "Connect apps through your Composio account with browser authorization.",
+    category: "automation",
+    icon: "composio-connect",
+    serverUrl: "https://connect.composio.dev/mcp",
+    auth: ["oauth"],
+  },
   {
     id: "superagentskill",
     label: "SuperAgentSkill",

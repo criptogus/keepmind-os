@@ -11,11 +11,11 @@ import {
   useModelLabel,
   useTeamWeekPrefs,
   useWaitingOnMe,
-} from "@agenteschat/client";
-import { clockAt, formatUsd, joinNames } from "@agenteschat/client/lib/format";
-import { can } from "@agenteschat/client/lib/permissions";
-import { isRightHand } from "@agenteschat/client/lib/right-hand";
-import { teamWeekOn, teamWeekWhen } from "@agenteschat/client/lib/right-hand-prefs";
+} from "@keepmind/client";
+import { clockAt, formatUsd, joinNames } from "@keepmind/client/lib/format";
+import { can } from "@keepmind/client/lib/permissions";
+import { isRightHand } from "@keepmind/client/lib/right-hand";
+import { teamWeekOn, teamWeekWhen } from "@keepmind/client/lib/right-hand-prefs";
 import {
   appliesInBulk,
   skipsAlone,
@@ -30,7 +30,7 @@ import {
   teamWeekRowState,
   teamWeekRowText,
   teamWeekTitleKey,
-} from "@agenteschat/client/lib/team-week";
+} from "@keepmind/client/lib/team-week";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

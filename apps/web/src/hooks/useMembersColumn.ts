@@ -1,4 +1,4 @@
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import { useCallback, useState } from "react";
 import { COMPACT_QUERY, DESKTOP_QUERY, useMediaQuery } from "@/components/NavDrawer";
 import { useOrg } from "@/components/org-context";

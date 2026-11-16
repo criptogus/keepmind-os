@@ -1,5 +1,5 @@
-import { type Routine, useRoutines } from "@agenteschat/client";
-import { routineStateTime, routineStateWords } from "@agenteschat/client/lib/routine-view";
+import { type Routine, useRoutines } from "@keepmind/client";
+import { routineStateTime, routineStateWords } from "@keepmind/client/lib/routine-view";
 import { memo, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Pressable, RefreshControl, StyleSheet, View } from "react-native";

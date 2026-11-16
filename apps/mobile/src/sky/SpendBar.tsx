@@ -1,4 +1,4 @@
-import type { AgentColorName } from "@agenteschat/ui/agent/engine";
+import type { AgentColorName } from "@keepmind/ui/agent/engine";
 import type { StyleProp, ViewStyle } from "react-native";
 import { useTheme } from "@/ui/theme";
 import { Dither } from "./Dither";

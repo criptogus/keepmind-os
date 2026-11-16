@@ -1,5 +1,5 @@
-import type { AgentSection, AgentTab } from "@agenteschat/client/lib/agent-edit";
-import { Button, GroupHeading, type IconName } from "@agenteschat/ui";
+import type { AgentSection, AgentTab } from "@keepmind/client/lib/agent-edit";
+import { Button, GroupHeading, type IconName } from "@keepmind/ui";
 import { useTranslation } from "react-i18next";
 import { AccessTab } from "./AccessTab";
 import { SettingsTab } from "./SettingsTab";

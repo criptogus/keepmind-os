@@ -1,5 +1,5 @@
-import { type AuditRow, useAudit, useAuditRow } from "@agenteschat/client";
-import { auditUnasked } from "@agenteschat/client/lib/approvals-level";
+import { type AuditRow, useAudit, useAuditRow } from "@keepmind/client";
+import { auditUnasked } from "@keepmind/client/lib/approvals-level";
 import {
   AUDIT_HIDDEN,
   AUDIT_SHOWS,
@@ -24,10 +24,10 @@ import {
   auditValueText,
   auditWhere,
   TOOL_CALL,
-} from "@agenteschat/client/lib/audit";
-import { humanize } from "@agenteschat/client/lib/custom-tools";
-import { formatTime, whenAt } from "@agenteschat/client/lib/format";
-import { can } from "@agenteschat/client/lib/permissions";
+} from "@keepmind/client/lib/audit";
+import { humanize } from "@keepmind/client/lib/custom-tools";
+import { formatTime, whenAt } from "@keepmind/client/lib/format";
+import { can } from "@keepmind/client/lib/permissions";
 import type { TFunction } from "i18next";
 import { Fragment, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -64,7 +64,7 @@ const ANY_AGENT = "\u0000any";
  * Configurações › Auditoria on the phone (admins), as the web's: the log by day, a sentence per row (who, what),
  * the line under it (about what, who asked, where) and how it ended; shortcuts on top and an agent to narrow it to.
  * A row pushes its own screen with the reason, the approval or the secret, what was sent (secrets hidden), the
- * technical detail, and the conversation and the request to open. Words in `@agenteschat/client/lib/audit`.
+ * technical detail, and the conversation and the request to open. Words in `@keepmind/client/lib/audit`.
  */
 
 const FACE = 30;

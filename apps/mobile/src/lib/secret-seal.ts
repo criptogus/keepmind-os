@@ -1,19 +1,19 @@
-import type { SecretBox } from "@agenteschat/client";
-import { MAX_SECRET_BYTES } from "@agenteschat/client/lib/secret-box";
+import type { SecretBox } from "@keepmind/client";
+import { MAX_SECRET_BYTES } from "@keepmind/client/lib/secret-box";
 import { gcm } from "@noble/ciphers/aes.js";
 import { p256 } from "@noble/curves/nist.js";
 import { hkdf } from "@noble/hashes/hkdf.js";
 import { sha256 } from "@noble/hashes/sha2.js";
 
 /**
- * The phone's half of ADR 0027, as the web's `sealSecret` (`@agenteschat/client/lib/secret-box`): a secret
+ * The phone's half of ADR 0027, as the web's `sealSecret` (`@keepmind/client/lib/secret-box`): a secret
  * sealed to the key the agent's computer made for this request, so our server only relays a box it can't open.
  * Same algorithm and bytes (ECDH P-256 → HKDF-SHA256 → AES-256-GCM, the request bound in as AAD); React Native
  * has no WebCrypto, so it runs on the audited pure-JS `@noble` libraries. `random`: secure random bytes (the
  * app's is `expo-crypto`, ./secret-box.ts). Pure, so `test/secret-seal.test.ts` opens what it seals with the
  * computer's own code.
  */
-const INFO = new TextEncoder().encode("agentes.chat secret v1");
+const INFO = new TextEncoder().encode("KeepMind OS secret v1");
 
 const b64 = (bytes: Uint8Array) => {
   let s = "";

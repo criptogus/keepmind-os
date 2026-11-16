@@ -1,4 +1,5 @@
-import { SCREEN_KINDS } from "@agenteschat/adapters";
+import { createRoute, z } from "@hono/zod-openapi";
+import { SCREEN_KINDS } from "@keepmind/adapters";
 import {
   askAdmins,
   listNotifications,
@@ -12,8 +13,7 @@ import {
   notificationCounts,
   setNoticePref,
   snoozeNotification,
-} from "@agenteschat/engine";
-import { createRoute, z } from "@hono/zod-openapi";
+} from "@keepmind/engine";
 import { ApprovalOrigin } from "./approvals";
 import { type AppDeps, body, createAppRouter, errors, json, OrgParams, requireSession, security } from "./context";
 
@@ -133,7 +133,7 @@ const Notification = z
         .openapi({ description: "`org_standing` to `agent_hold`: `network` or `operator`, never the hold's reason." }),
       cloud: z.boolean().optional().openapi({
         description:
-          "`org_standing` on agentes.chat Cloud: the apps read `text` as the restriction, with how to contest it.",
+          "`org_standing` on KeepMind OS Cloud: the apps read `text` as the restriction, with how to contest it.",
       }),
       still: z.number().optional().openapi({
         description:

@@ -1,9 +1,9 @@
-import type { Agent } from "@agenteschat/client";
-import { useAgentDetail } from "@agenteschat/client";
-import { audienceSummary } from "@agenteschat/client/lib/audience";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { tellsNameStory } from "@agenteschat/client/lib/right-hand";
-import { type AgentColor, Avatar, Button, Card, CardHeader, Chip, Icon } from "@agenteschat/ui";
+import type { Agent } from "@keepmind/client";
+import { useAgentDetail } from "@keepmind/client";
+import { audienceSummary } from "@keepmind/client/lib/audience";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { tellsNameStory } from "@keepmind/client/lib/right-hand";
+import { type AgentColor, Avatar, Button, Card, CardHeader, Chip, Icon } from "@keepmind/ui";
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";

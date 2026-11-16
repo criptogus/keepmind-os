@@ -1,4 +1,4 @@
-import type { Agent, PinnableBlock, Widget, WidgetFormat, WidgetSchedule, WidgetSize } from "@agenteschat/client";
+import type { Agent, PinnableBlock, Widget, WidgetFormat, WidgetSchedule, WidgetSize } from "@keepmind/client";
 import {
   useAgents,
   useAiStatusSince,
@@ -17,11 +17,11 @@ import {
   widgetStepWords,
   widgetWaiting,
   widgetWaitText,
-} from "@agenteschat/client";
-import { canTalk } from "@agenteschat/client/lib/audience";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { joinNames, relativeTime } from "@agenteschat/client/lib/format";
-import { taskClock } from "@agenteschat/client/lib/task-manager";
+} from "@keepmind/client";
+import { canTalk } from "@keepmind/client/lib/audience";
+import { errorText } from "@keepmind/client/lib/errors";
+import { joinNames, relativeTime } from "@keepmind/client/lib/format";
+import { taskClock } from "@keepmind/client/lib/task-manager";
 import {
   BuildingDither,
   Button,
@@ -41,14 +41,14 @@ import {
   WidgetBody,
   WidgetGlyph,
   widgetTileVars,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import {
   sizeToLayout,
   WIDGET_FORMATS,
   WIDGET_SCHEDULES,
   WIDGET_SIZES,
   type WidgetSpec,
-} from "@agenteschat/ui/widgets/spec";
+} from "@keepmind/ui/widgets/spec";
 import type { TFunction } from "i18next";
 import { type ReactNode, useEffect, useId, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

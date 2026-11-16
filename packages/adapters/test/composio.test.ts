@@ -200,7 +200,7 @@ describe("Composio client", () => {
           : undefined,
     );
     const client = createComposioClient({ apiKey: "ck_secret", fetch });
-    const input = { toolkit: "gmail" as const, userId: "org_1", callbackUrl: "https://agentes.chat/api/mail/callback" };
+    const input = { toolkit: "gmail" as const, userId: "org_1", callbackUrl: "https://keepmind.io/api/mail/callback" };
     expect(await client.createConnectLink(input)).toEqual({
       connectedAccountId: "ca_new",
       redirectUrl: "https://connect.composio.dev/link/lt_1",
@@ -216,7 +216,7 @@ describe("Composio client", () => {
     expect(link?.body).toEqual({
       auth_config_id: "ac_gmail",
       user_id: "org_1",
-      callback_url: "https://agentes.chat/api/mail/callback",
+      callback_url: "https://keepmind.io/api/mail/callback",
     });
   });
 

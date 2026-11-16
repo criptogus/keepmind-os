@@ -159,7 +159,7 @@ function releaseReader<T, K extends string>(
     authorization: `Bearer ${options.token}`,
     accept: "application/vnd.github+json",
     "x-github-api-version": "2022-11-28",
-    "user-agent": "agentes.chat",
+    "user-agent": "keepmind.io",
   });
 
   async function getJson<R>(path: string): Promise<R | null> {
@@ -449,7 +449,7 @@ const NativeLatest = z
 
 /**
  * `GET /api/native/latest` and `GET /api/native/download/{version}/{file}` (ADR 0060 §2): the packages
- * of agentes.chat without Docker, for the installer. Public, no session; 404 without `DESKTOP_RELEASES_TOKEN`.
+ * of KeepMind OS without Docker, for the installer. Public, no session; 404 without `DESKTOP_RELEASES_TOKEN`.
  */
 export function registerNativeRoutes(api: OpenAPIHono, deps: AppDeps, releases: NativeReleases) {
   api.openapi(
@@ -457,7 +457,7 @@ export function registerNativeRoutes(api: OpenAPIHono, deps: AppDeps, releases: 
       method: "get",
       path: "/native/latest",
       tags: ["Native install"],
-      summary: "The newest agentes.chat packages that run without Docker, and their signature",
+      summary: "The newest KeepMind OS packages that run without Docker, and their signature",
       responses: {
         200: json(NativeLatest),
         404: errorResponse("No packages yet (or releases are not configured)"),

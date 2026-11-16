@@ -1,9 +1,9 @@
-import type { WikiFolderAudience, WikiPage } from "@agenteschat/client";
-import { useRoles, useSetWikiFolderAudience, useWikiAction, useWikiFolderAudience } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { can } from "@agenteschat/client/lib/permissions";
-import { isEveryone, sortRoles } from "@agenteschat/client/lib/roles";
-import { wikiAudienceOf } from "@agenteschat/client/lib/who-sees";
+import type { WikiFolderAudience, WikiPage } from "@keepmind/client";
+import { useRoles, useSetWikiFolderAudience, useWikiAction, useWikiFolderAudience } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { can } from "@keepmind/client/lib/permissions";
+import { isEveryone, sortRoles } from "@keepmind/client/lib/roles";
+import { wikiAudienceOf } from "@keepmind/client/lib/who-sees";
 import {
   OPEN_WIKI_ACCESS,
   type WikiAccess,
@@ -14,8 +14,8 @@ import {
   wikiAccessOf,
   wikiBaseLevels,
   wikiRowCap,
-} from "@agenteschat/client/lib/wiki";
-import { AccessDialog, type AccessLevel, type AccessSubject, Avatar, Button, Icon, RoleMark } from "@agenteschat/ui";
+} from "@keepmind/client/lib/wiki";
+import { AccessDialog, type AccessLevel, type AccessSubject, Avatar, Button, Icon, RoleMark } from "@keepmind/ui";
 import { type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AgentAvatar } from "@/components/AgentAvatar";

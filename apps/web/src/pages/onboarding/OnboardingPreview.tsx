@@ -1,6 +1,6 @@
-import type { User } from "@agenteschat/client";
-import { channelsQuery } from "@agenteschat/client";
-import { type AgentAppearance, Avatar, Icon } from "@agenteschat/ui";
+import type { User } from "@keepmind/client";
+import { channelsQuery } from "@keepmind/client";
+import { type AgentAppearance, Avatar, Icon } from "@keepmind/ui";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useApi } from "@/api/context";

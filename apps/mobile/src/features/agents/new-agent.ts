@@ -1,6 +1,6 @@
-import { lowerFirst } from "@agenteschat/client/lib/format";
-import { IMPORT_CARDS, type ImportCard } from "@agenteschat/client/lib/import/flow";
-import { handleProblem, type RoleId } from "@agenteschat/client/lib/new-agent";
+import { lowerFirst } from "@keepmind/client/lib/format";
+import { IMPORT_CARDS, type ImportCard } from "@keepmind/client/lib/import/flow";
+import { handleProblem, type RoleId } from "@keepmind/client/lib/new-agent";
 
 /**
  * "Criar agente" on the phone, the pure part: the web's steps that fit a thumb (where it works, its

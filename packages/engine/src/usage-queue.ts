@@ -1,6 +1,6 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, type Database, desc, eq, gt, gte, inArray, ne, schema, sql } from "@agenteschat/db";
-import { planCheckedAt } from "@agenteschat/ui/plan-state";
+import type { PubSub } from "@keepmind/adapters";
+import { and, type Database, desc, eq, gt, gte, inArray, ne, schema, sql } from "@keepmind/db";
+import { planCheckedAt } from "@keepmind/ui/plan-state";
 import { cancelRun, mayStopRun, runRequester } from "./cancel";
 import { writtenSince } from "./catch-up";
 import { ANSWER_ANYWAY_MS, type ClosedNote } from "./catch-up-triage";

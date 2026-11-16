@@ -1,5 +1,5 @@
-import { overLimitText, tooLongText } from "@agenteschat/client/lib/message-length";
-import type { TextLimit } from "@agenteschat/ui";
+import { overLimitText, tooLongText } from "@keepmind/client/lib/message-length";
+import type { TextLimit } from "@keepmind/ui";
 import type { ParseKeys } from "i18next";
 import { useTranslation } from "react-i18next";
 

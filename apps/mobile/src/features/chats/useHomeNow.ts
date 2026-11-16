@@ -1,4 +1,4 @@
-import { useNotifications } from "@agenteschat/client";
+import { useNotifications } from "@keepmind/client";
 import { useCallback, useEffect, useMemo, useReducer } from "react";
 import type { WorkItem } from "../agents/logic";
 import { useNow, useOrgId } from "../shared/hooks";

@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { VOICE_MAX_MS } from "@agenteschat/client/lib/voice";
+import { VOICE_MAX_MS } from "@keepmind/client/lib/voice";
 import { hidesBody } from "../../src/features/chat/logic";
 import {
   handleAt,

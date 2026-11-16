@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import { channelTopic } from "@agenteschat/adapters";
-import { schema } from "@agenteschat/db";
+import { channelTopic } from "@keepmind/adapters";
+import { schema } from "@keepmind/db";
 import { browser, createTestServer, joinByInvitation, seedOrg, signUp, type TestServer } from "./harness";
 
 /** Long work over HTTP (ADR 0121): the anchor's view in the list, `agent.work` live, and Parar for who may. */

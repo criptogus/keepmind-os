@@ -1,5 +1,5 @@
-import { keys, type Message } from "@agenteschat/client";
-import { upsertMessage } from "@agenteschat/client/lib/timeline";
+import { keys, type Message } from "@keepmind/client";
+import { upsertMessage } from "@keepmind/client/lib/timeline";
 import type { QueryClient } from "@tanstack/react-query";
 import { Directory, File, Paths } from "expo-file-system";
 import { authedFetch } from "@/lib/auth";

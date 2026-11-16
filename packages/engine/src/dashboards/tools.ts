@@ -1,4 +1,4 @@
-import { and, asc, eq, inArray, isNull, schema, sql } from "@agenteschat/db";
+import { and, asc, eq, inArray, isNull, schema, sql } from "@keepmind/db";
 import {
   isWidgetFormat,
   isWidgetSchedule,
@@ -11,7 +11,7 @@ import {
   type WidgetFormat,
   type WidgetSchedule,
   type WidgetSpec,
-} from "@agenteschat/ui/widgets/spec";
+} from "@keepmind/ui/widgets/spec";
 import { getAgent } from "../agents";
 import { canTalkTo, speakerOf } from "../audience";
 import { accountablePerson, runAuthorityById } from "../authority";

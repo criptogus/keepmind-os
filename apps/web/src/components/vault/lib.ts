@@ -5,9 +5,9 @@ import type {
   VaultItemKind,
   VaultMatch,
   VaultScope,
-} from "@agenteschat/client";
-import { VAULT_KEY_NAME } from "@agenteschat/client/lib/vault";
-import type { IconName } from "@agenteschat/ui";
+} from "@keepmind/client";
+import { VAULT_KEY_NAME } from "@keepmind/client/lib/vault";
+import type { IconName } from "@keepmind/ui";
 
 /*
  * The Vault's words and rules as the web reads them (ADR 0144): what a row says, what a search finds, the access a new

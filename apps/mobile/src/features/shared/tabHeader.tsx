@@ -1,5 +1,5 @@
-import { useMe } from "@agenteschat/client";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+import { useMe } from "@keepmind/client";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { Pressable, StyleSheet, View } from "react-native";

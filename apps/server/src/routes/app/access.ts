@@ -1,3 +1,4 @@
+import { createRoute, z } from "@hono/zod-openapi";
 import {
   accessMatrix,
   getAgentAccess,
@@ -9,8 +10,7 @@ import {
   setAgentAccess,
   setAgentMergeRepositories,
   setAgentRepositories,
-} from "@agenteschat/engine";
-import { createRoute, z } from "@hono/zod-openapi";
+} from "@keepmind/engine";
 import { type AppDeps, body, createAppRouter, errors, json, OrgParams, requireSession, security } from "./context";
 
 const tags = ["Agents"];

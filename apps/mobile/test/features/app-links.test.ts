@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { APP_PAGES, appPagePath } from "@agenteschat/client/lib/app-pages";
+import { APP_PAGES, appPagePath } from "@keepmind/client/lib/app-pages";
 import { APP_LINK_PATHS, APP_LINK_WEB_QUERIES } from "../../../server/src/app-links";
 import { APP_LINK_PATTERNS } from "../../app.config";
 import {
@@ -12,7 +12,7 @@ import {
 } from "../../src/features/links/app-links";
 import { rememberLink, takeLink } from "../../src/features/links/pending";
 
-const W = "https://app.agentes.chat";
+const W = "https://keepmind.io";
 const O = "org-1";
 /** The `/link` an address opens, as its parameters. */
 const linkOf = (url: string) => {

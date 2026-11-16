@@ -1,8 +1,8 @@
-import type { MailAccount, MailFolder, Routine, RoutineEmailFilter } from "@agenteschat/client";
-import { useAgentMail, useMailAccounts, useMailFolders } from "@agenteschat/client";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { mailboxReader, triggerChoices } from "@agenteschat/client/lib/routines";
-import { Field, Icon, Input, Select } from "@agenteschat/ui";
+import type { MailAccount, MailFolder, Routine, RoutineEmailFilter } from "@keepmind/client";
+import { useAgentMail, useMailAccounts, useMailFolders } from "@keepmind/client";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { mailboxReader, triggerChoices } from "@keepmind/client/lib/routines";
+import { Field, Icon, Input, Select } from "@keepmind/ui";
 import { Link } from "@tanstack/react-router";
 import type { TFunction } from "i18next";
 import { useEffect } from "react";

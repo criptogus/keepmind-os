@@ -1,6 +1,6 @@
-import { type Message, useChannels, useMe, useMembers, useOverview, useSidebarView } from "@agenteschat/client";
-import { joinNames, namesText, whenAt } from "@agenteschat/client/lib/format";
-import { agentActivitySince, dayPart, isNewDay, welcomeClock } from "@agenteschat/client/lib/welcome";
+import { type Message, useChannels, useMe, useMembers, useOverview, useSidebarView } from "@keepmind/client";
+import { joinNames, namesText, whenAt } from "@keepmind/client/lib/format";
+import { agentActivitySince, dayPart, isNewDay, welcomeClock } from "@keepmind/client/lib/welcome";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";

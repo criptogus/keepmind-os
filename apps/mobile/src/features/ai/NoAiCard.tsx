@@ -1,6 +1,6 @@
-import { type Message, useAiStatus, useApi, useMessages, useThreadMessages } from "@agenteschat/client";
-import type { BillingHold } from "@agenteschat/client/lib/billing";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
+import { type Message, useAiStatus, useApi, useMessages, useThreadMessages } from "@keepmind/client";
+import type { BillingHold } from "@keepmind/client/lib/billing";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
 import {
   aiStateOf,
   keptCardState,
@@ -13,10 +13,10 @@ import {
   planLinePasses,
   planOfKind,
   signInAgainPlan,
-} from "@agenteschat/client/lib/no-ai";
-import { can } from "@agenteschat/client/lib/permissions";
-import { isRightHand } from "@agenteschat/client/lib/right-hand";
-import { modeKey } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client/lib/no-ai";
+import { can } from "@keepmind/client/lib/permissions";
+import { isRightHand } from "@keepmind/client/lib/right-hand";
+import { modeKey } from "@keepmind/client/lib/workspace-mode";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { paysHere } from "@/lib/store";

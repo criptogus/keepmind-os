@@ -1,6 +1,6 @@
-import { useMachines } from "@agenteschat/client";
-import { computerKind } from "@agenteschat/client/lib/machines";
-import { COMPUTER_GRID } from "@agenteschat/ui/computer/portrait";
+import { useMachines } from "@keepmind/client";
+import { computerKind } from "@keepmind/client/lib/machines";
+import { COMPUTER_GRID } from "@keepmind/ui/computer/portrait";
 import { Canvas, createPicture, PaintStyle, Picture, Skia, type SkPaint } from "@shopify/react-native-skia";
 import { memo, useEffect, useMemo, useState } from "react";
 import { View } from "react-native";
@@ -95,7 +95,7 @@ function ComputerPortraitView({ kind, state, size = 48, live = true, label }: Co
 
 /**
  * A computer's portrait, drawn by the shared engine
- * (`@agenteschat/ui/computer/portrait`) on a Skia canvas, the way agents are: a Mac laptop, a Windows
+ * (`@keepmind/ui/computer/portrait`) on a Skia canvas, the way agents are: a Mac laptop, a Windows
  * monitor or a Linux tower, its screen lit, dimmed (paused) or dark (offline). It
  * sits directly on the surface, no tile. Living portraits share the app's clock; with reduced motion,
  * `live={false}` or an off-screen screen they hold a still frame. Below 48 points use `ComputerIcon`.

@@ -9,7 +9,7 @@ export const privacyEn: LegalDocument = {
       id: "overview",
       heading: "1. Overview",
       blocks: [
-        'CODARI GLOBAL, LLC, a Wyoming limited liability company doing business as agentes.chat ("agentes.chat", "we"), operates agentes.chat: a workspace where people and AI agents work together, available on the web, as a Mac app and as a phone app (the "Service"). This policy distinguishes two roles:',
+        'CODARI GLOBAL, LLC, a Wyoming limited liability company doing business as agentes.chat ("keepmind.io", "we"), operates agentes.chat: a workspace where people and AI agents work together, available on the web, as a Mac app and as a phone app (the "Service"). This policy distinguishes two roles:',
         {
           list: [
             "For **account data**, the information people give us to create and use an account, we are the data controller.",

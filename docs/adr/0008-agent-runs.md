@@ -54,7 +54,7 @@ free again.
   one statement) and the addressee check, `ask_agent`, `tell_agent`, `add_agent_to_channel`, `list_routines`, the setup
   tools (`agentsByHandle`), an issue's assignee, calendar participants and reflected lessons about an agent.
   The agent list gives the apps each agent's (`previousHandles`, from `oldHandlesByAgent`), so an old message's "@ada"
-  shows the agent now called Claudio (`agentsByAnyHandle` in `@agenteschat/client`, where an agent's own handle wins).
+  shows the agent now called Claudio (`agentsByAnyHandle` in `@keepmind/client`, where an agent's own handle wins).
 - **What a run reads.** Text that names an old handle (a routine's brief, memory, instructions, the conversation) gets
   a per-turn "# Renamed agents" block with the handle each agent has now, so the run asks and mentions it by that one.
   Its own identity, the channel's members and "# Your team" show the handle it has now: a rename drops the cached

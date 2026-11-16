@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import type { ConnectedApp, PersonalToken } from "@agenteschat/client";
+import type { ConnectedApp, PersonalToken } from "@keepmind/client";
 import {
   aiAppImport,
   appCreatedLine,
@@ -10,10 +10,10 @@ import {
   appsSettingsUrl,
   requestedAccess,
   tokenFacts,
-} from "@agenteschat/client/lib/apps";
-import { openTarget } from "@agenteschat/client/lib/notifications";
-import { appVia } from "@agenteschat/client/lib/via";
-import { markOf } from "@agenteschat/ui/brand/marks";
+} from "@keepmind/client/lib/apps";
+import { openTarget } from "@keepmind/client/lib/notifications";
+import { appVia } from "@keepmind/client/lib/via";
+import { markOf } from "@keepmind/ui/brand/marks";
 import { notificationHref } from "../../src/features/links/logic";
 import { visibleSections } from "../../src/features/settings/logic";
 import { notification, translator } from "./fixtures";
@@ -68,7 +68,7 @@ describe("Apps de IA on the phone (ADR 0119)", () => {
   });
 
   test("Conectar um app opens the web's section; the via tag reads only an app's meta", () => {
-    expect(appsSettingsUrl("https://agentes.chat", "o-1")).toBe("https://agentes.chat/org/o-1/settings/apps");
+    expect(appsSettingsUrl("https://keepmind.io", "o-1")).toBe("https://keepmind.io/org/o-1/settings/apps");
     expect(appVia({ via: { kind: "app", name: " Cursor ", brand: "cursor" } })).toEqual({
       name: "Cursor",
       brand: "cursor",
@@ -105,7 +105,7 @@ describe("Apps de IA on the phone (ADR 0119)", () => {
 
   test("the import's AI app option: the address and the request, or unavailable on a private server or a held workspace", async () => {
     const pt = await translator("pt-BR");
-    const open = { serverUrl: "https://app.agentes.chat/mcp", serverPublic: true };
+    const open = { serverUrl: "https://keepmind.io/mcp", serverPublic: true };
     expect(aiAppImport(pt, undefined, undefined)).toBeNull();
     expect(aiAppImport(pt, { serverUrl: "http://10.0.0.5/mcp", serverPublic: false }, undefined)).toEqual({
       available: false,
@@ -122,7 +122,7 @@ describe("Apps de IA on the phone (ADR 0119)", () => {
     });
     const ready = aiAppImport(pt, open, { state: "active", reason: null });
     expect(ready?.available && ready.prompt).toStartWith(
-      "Use o servidor MCP do KeepMind OS que você acabou de conectar (https://app.agentes.chat/mcp)",
+      "Use o servidor MCP do KeepMind OS que você acabou de conectar (https://keepmind.io/mcp)",
     );
     // The phone shows the request itself, selectable, not only a Copiar button.
     const card = readFileSync(

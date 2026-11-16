@@ -12,7 +12,7 @@ import {
   type SQL,
   schema,
   sql,
-} from "@agenteschat/db";
+} from "@keepmind/db";
 import { z } from "zod";
 import { randomToken, sha256 } from "./crypto";
 import { decodeCursor, encodeCursor } from "./cursor";
@@ -42,7 +42,7 @@ export const EARLY_ACCESS_INVITE_MAX = 200;
 export const WAITLIST_IMPORT_MAX = 5000;
 /** What `randomToken(32)` makes: 256 bits in 43 base64url characters. */
 export const EARLY_ACCESS_TOKEN = /^[A-Za-z0-9_-]{43}$/;
-/** The password sign-up's header with the link's token (mirrored in `@agenteschat/client/lib/guards`). */
+/** The password sign-up's header with the link's token (mirrored in `@keepmind/client/lib/guards`). */
 export const EARLY_ACCESS_HEADER = "x-early-access";
 
 export const EARLY_ACCESS_STATES = ["sent", "expired", "signed_up", "workspace_created", "revoked"] as const;

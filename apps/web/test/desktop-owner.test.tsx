@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { SignInOptions } from "@agenteschat/client";
+import type { SignInOptions } from "@keepmind/client";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import type { ThisMacStatus } from "@/lib/desktop";
 import { createFakeApi, ORG_ID, seedState } from "./fake-api";
@@ -143,7 +143,7 @@ describe("Entrar no servidor que o app roda neste computador", () => {
     (win().__agentesDesktop as Record<string, unknown>).servers = true;
     await renderApp("/login", { api: signedOut() });
     await settle(6);
-    expect(document.querySelector(".auth__place")?.textContent).toContain("Entrando no agentes.chat Cloud");
+    expect(document.querySelector(".auth__place")?.textContent).toContain("Entrando no KeepMind OS Cloud");
   });
 
   test("forgot password on this computer's server: Continue on this Mac, then a new password (ADR 0158)", async () => {

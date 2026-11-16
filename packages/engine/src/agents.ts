@@ -1,4 +1,4 @@
-import type { PubSub } from "@agenteschat/adapters";
+import type { PubSub } from "@keepmind/adapters";
 import {
   and,
   arrayContains,
@@ -12,9 +12,9 @@ import {
   rowsOf,
   schema,
   sql,
-} from "@agenteschat/db";
-import { AUTO_MODEL, endpointModelId, isAutoModel, MODEL_CATALOG, parseCustomModel } from "@agenteschat/providers";
-import { isIdHandle } from "@agenteschat/ui/names";
+} from "@keepmind/db";
+import { AUTO_MODEL, endpointModelId, isAutoModel, MODEL_CATALOG, parseCustomModel } from "@keepmind/providers";
+import { isIdHandle } from "@keepmind/ui/names";
 import type { AgentAppearance } from "./appearance";
 import { dropAgentRules } from "./approval-rules";
 import { answersOthers, audienceOf, canTalkTo, speakerFor } from "./audience";

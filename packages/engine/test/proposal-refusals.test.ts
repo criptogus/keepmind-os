@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { userTopic } from "@agenteschat/adapters";
-import { and, eq, migrationsFolder, schema, sql } from "@agenteschat/db";
+import { userTopic } from "@keepmind/adapters";
+import { and, eq, migrationsFolder, schema, sql } from "@keepmind/db";
 import {
   archiveAgent,
   consolidateItem,

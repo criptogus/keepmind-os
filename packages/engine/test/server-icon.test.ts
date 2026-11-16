@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { createPostgresBlobStore } from "@agenteschat/adapters";
-import { schema } from "@agenteschat/db";
+import { createPostgresBlobStore } from "@keepmind/adapters";
+import { schema } from "@keepmind/db";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import {

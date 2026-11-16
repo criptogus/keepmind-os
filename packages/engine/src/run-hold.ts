@@ -1,4 +1,4 @@
-import { and, type Executor, eq, inArray, schema } from "@agenteschat/db";
+import { and, type Executor, eq, inArray, schema } from "@keepmind/db";
 import { isDeviceWaitId } from "./device-waits";
 import type { StoredTranscript } from "./run-resume";
 import type { AgentRun } from "./runs";

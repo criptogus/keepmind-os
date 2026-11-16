@@ -1,4 +1,4 @@
-import { type StickerLook, type StickerMood, WAVE_SECONDS } from "@agenteschat/ui/agent/stickers";
+import { type StickerLook, type StickerMood, WAVE_SECONDS } from "@keepmind/ui/agent/stickers";
 import type { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 import { AgentAvatar } from "@/agent/AgentAvatar";

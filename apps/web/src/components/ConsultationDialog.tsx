@@ -1,10 +1,10 @@
-import { type Message, useExchangeConversation } from "@agenteschat/client";
-import { consultLineState, consultOriginKey } from "@agenteschat/client/lib/consult-group";
-import { consultSubject } from "@agenteschat/client/lib/consultations";
-import { dayLabel, formatTime } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { buildTimeline } from "@agenteschat/client/lib/timeline";
-import { AvatarStack, Button, DayDivider, Dialog, DialogFooter, Icon, PixelSpinner } from "@agenteschat/ui";
+import { type Message, useExchangeConversation } from "@keepmind/client";
+import { consultLineState, consultOriginKey } from "@keepmind/client/lib/consult-group";
+import { consultSubject } from "@keepmind/client/lib/consultations";
+import { dayLabel, formatTime } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { buildTimeline } from "@keepmind/client/lib/timeline";
+import { AvatarStack, Button, DayDivider, Dialog, DialogFooter, Icon, PixelSpinner } from "@keepmind/ui";
 import { Fragment, type ReactNode, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { MessageBody } from "@/chat/MessageBody";

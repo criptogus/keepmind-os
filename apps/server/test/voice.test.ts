@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import { eq, schema } from "@agenteschat/db";
-import { VOICE_MAX_BYTES } from "@agenteschat/engine";
+import { eq, schema } from "@keepmind/db";
+import { VOICE_MAX_BYTES } from "@keepmind/engine";
 import { type Browser, browser, createTestServer, signUp, type TestServer } from "./harness";
 
 /** Voice messages over HTTP (ADR 0100): sending, playing, expiry, the switch and the owner's provider. */
@@ -155,8 +155,8 @@ test("the provider is only for the installation's owner", async () => {
   expect(JSON.stringify(view)).not.toContain("good-key");
 });
 
-test("on agentes.chat the provider can't be chosen", async () => {
-  const origin = "https://app.agentes.chat";
+test("on KeepMind OS the provider can't be chosen", async () => {
+  const origin = "https://keepmind.io";
   const server = await createTestServer({ env: { ALLOW_SIGNUP: "true", PUBLIC_URL: origin }, speechFetch: groq });
   t = server;
   const owner = browser(server);

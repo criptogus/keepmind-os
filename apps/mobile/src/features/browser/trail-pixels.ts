@@ -1,10 +1,10 @@
-import type { BrowserTrailKind } from "@agenteschat/client";
-import { type AgentColorName, bodyTones, gradientOf, mixHex } from "@agenteschat/ui/agent/engine";
+import type { BrowserTrailKind } from "@keepmind/client";
+import { type AgentColorName, bodyTones, gradientOf, mixHex } from "@keepmind/ui/agent/engine";
 import type { CellRun } from "../../computer/cells";
 
 /**
  * The pixels of the card after an agent's run in its browser or on its desktop, the web's drawings
- * (`RunPixels.tsx` in `@agenteschat/ui`: `BrowserStrip`, `BrowserMark`, `SkyStrip`, `PageSilhouette`) as cell
+ * (`RunPixels.tsx` in `@keepmind/ui`: `BrowserStrip`, `BrowserMark`, `SkyStrip`, `PageSilhouette`) as cell
  * lists a Skia canvas replays (./TrailPixels.tsx). Same grid, tones and Bayer order as the web, so both apps
  * draw the same picture. Pure TypeScript: no React Native, no Skia, so it runs in `bun test`.
  */

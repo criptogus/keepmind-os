@@ -1,7 +1,7 @@
-import { useAgentMergeRepos, useAgentRepos, useGitHubRepos, useSetAgentMergeRepos } from "@agenteschat/client";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { mergeChoices } from "@agenteschat/client/lib/repos";
-import { matchesWords } from "@agenteschat/ui/search";
+import { useAgentMergeRepos, useAgentRepos, useGitHubRepos, useSetAgentMergeRepos } from "@keepmind/client";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { mergeChoices } from "@keepmind/client/lib/repos";
+import { matchesWords } from "@keepmind/ui/search";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { GroupedFooter, GroupedHeader, GroupedList, GroupedRow, SearchField, Sheet, useToast } from "@/ui";

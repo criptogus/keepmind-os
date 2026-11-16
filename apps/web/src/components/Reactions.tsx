@@ -1,6 +1,6 @@
-import type { ReactionCount } from "@agenteschat/client";
-import { useReactions, useToggleReaction } from "@agenteschat/client";
-import { formatInt, joinNames, keepWhole } from "@agenteschat/client/lib/format";
+import type { ReactionCount } from "@keepmind/client";
+import { useReactions, useToggleReaction } from "@keepmind/client";
+import { formatInt, joinNames, keepWhole } from "@keepmind/client/lib/format";
 import {
   Button,
   EMOJI_CATEGORIES,
@@ -10,7 +10,7 @@ import {
   Icon,
   Reaction,
   Reactions,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useDirectory } from "@/hooks/useDirectory";

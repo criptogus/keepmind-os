@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import { createMemoryBlobStore, singleStoreResolver } from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
+import { createMemoryBlobStore, singleStoreResolver } from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
 import { type KeepMindLegacySnapshot, planKeepMindLegacy, stageKeepMindLegacy } from "../src/keepmind-legacy";
 import { type Fixture, setup } from "./fixtures";
 

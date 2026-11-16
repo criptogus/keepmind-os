@@ -3,15 +3,15 @@ import type { HelpDocument } from "./types";
 
 export const helpEn: Record<HelpSlug, HelpDocument> = {
   "run-on-your-computer": {
-    title: "Run agentes.chat on your computer",
+    title: "Run KeepMind OS on your computer",
     summary:
-      "The agentes.chat app can also run agentes.chat itself, on a Mac, a PC or a Linux computer, for you or a small team.",
+      "The KeepMind OS app can also run KeepMind OS itself, on a Mac, a PC or a Linux computer, for you or a small team.",
     sections: [
       {
         id: "download",
         heading: "Download the app",
         blocks: [
-          "[Download the agentes.chat app](/download) for your Mac, PC or Linux computer and open it. Pick **On your own server**, press **Continue on my server**, then **Run agentes.chat on this computer**.",
+          "[Download the KeepMind OS app](/download) for your Mac, PC or Linux computer and open it. Pick **On your own server**, press **Continue on my server**, then **Run KeepMind OS on this computer**.",
         ],
       },
       {
@@ -19,14 +19,14 @@ export const helpEn: Record<HelpSlug, HelpDocument> = {
         heading: "How it runs",
         blocks: [
           "It runs inside the app, with its own database built in, and keeps everything in one folder on this computer, `.agentes` in your home folder. Nothing else to install: no Docker, no database to set up.",
-          "It starts with the app and stops when you quit it. Quitting asks first, because nobody can use agentes.chat until the app opens again. To stop it for a while without quitting, click the agentes.chat icon by the clock and choose **Stop** in the **⋯** menu of its card.",
+          "It starts with the app and stops when you quit it. Quitting asks first, because nobody can use KeepMind OS until the app opens again. To stop it for a while without quitting, click the KeepMind OS icon by the clock and choose **Stop** in the **⋯** menu of its card.",
         ],
       },
       {
         id: "who",
         heading: "Who it's for",
         blocks: [
-          "You or a small team. A Mac mini, a spare PC or a laptop that stays on makes a good home: set it up as in [Keep it on](#keep-on). On a Mac or a PC, the app is the way to run agentes.chat without Docker.",
+          "You or a small team. A Mac mini, a spare PC or a laptop that stays on makes a good home: set it up as in [Keep it on](#keep-on). On a Mac or a PC, the app is the way to run KeepMind OS without Docker.",
           "For a bigger team, see [Which setup to pick](/help/install-on-a-server#choose). Your data can move to a server later.",
         ],
       },
@@ -57,7 +57,7 @@ export const helpEn: Record<HelpSlug, HelpDocument> = {
         id: "another-workspace",
         heading: "Lend it to another workspace too",
         blocks: [
-          "The workspaces of the server you run here use this computer by themselves. To let a workspace somewhere else use it too, such as one on agentes.chat Cloud, press **Add a workspace…** at the bottom of the first card in **Preferences\u00a0›\u00a0General**, or **Add a server…** in **Preferences\u00a0›\u00a0Servers**. Sign in to that workspace and press **Allow** when the app asks.",
+          "The workspaces of the server you run here use this computer by themselves. To let a workspace somewhere else use it too, such as one on KeepMind OS Cloud, press **Add a workspace…** at the bottom of the first card in **Preferences\u00a0›\u00a0General**, or **Add a server…** in **Preferences\u00a0›\u00a0Servers**. Sign in to that workspace and press **Allow** when the app asks.",
           "Each workspace gets its own agents and folders here. **Commands** are on by default for it too. Turn them off in the app's ask before you press **Allow**, or later in **Preferences\u00a0›\u00a0Tools**, where each workspace has its own switch and the app asks before turning one back on.",
         ],
       },
@@ -65,8 +65,8 @@ export const helpEn: Record<HelpSlug, HelpDocument> = {
         id: "reach",
         heading: "From your phone and your team",
         blocks: [
-          "**Reach it from your phone and teammates** puts agentes.chat on Tailscale, a private network for your devices: your phone and the people you invite join it, and nobody else can reach agentes.chat. Tailscale is free: https://tailscale.com/download. With it off, agentes.chat works only on this computer.",
-          "If this computer already shares something else on Tailscale's port 443, agentes.chat takes 8443, and its address ends in `:8443`.",
+          "**Reach it from your phone and teammates** puts KeepMind OS on Tailscale, a private network for your devices: your phone and the people you invite join it, and nobody else can reach KeepMind OS. Tailscale is free: https://tailscale.com/download. With it off, KeepMind OS works only on this computer.",
+          "If this computer already shares something else on Tailscale's port 443, KeepMind OS takes 8443, and its address ends in `:8443`.",
         ],
       },
       {
@@ -88,7 +88,7 @@ export const helpEn: Record<HelpSlug, HelpDocument> = {
         heading: "Backups",
         blocks: [
           "With **Back up every night** on (app 0.8.1 and later), in **Preferences\u00a0›\u00a0Servers**, the app saves the database, the files and `.env` in `.agentes/backups`, in your home folder, every night at 3:00. A computer that was asleep then backs up once it's awake. **Back up now** does the same at once. Each backup stops the server for a moment, and the two newest stay.",
-          "**Copy to** also puts each new backup in a folder you pick, like a USB drive or iCloud Drive, where the two newest stay. They hold your keys: keep them private. **Restore…** takes agentes.chat back to a backup: messages, files and settings. It stops for a minute, and what was there before is kept in the backups folder.",
+          "**Copy to** also puts each new backup in a folder you pick, like a USB drive or iCloud Drive, where the two newest stay. They hold your keys: keep them private. **Restore…** takes KeepMind OS back to a backup: messages, files and settings. It stops for a minute, and what was there before is kept in the backups folder.",
         ],
       },
       {
@@ -110,7 +110,7 @@ export const helpEn: Record<HelpSlug, HelpDocument> = {
           },
           {
             list: [
-              "[Install agentes.chat on a server](/help/install-on-a-server), but don't start it yet. In its `.env`, put the `AGENTES_SECRET` from `~/.agentes/.env`, then start only the database: `docker compose up -d postgres`.",
+              "[Install KeepMind OS on a server](/help/install-on-a-server), but don't start it yet. In its `.env`, put the `AGENTES_SECRET` from `~/.agentes/.env`, then start only the database: `docker compose up -d postgres`.",
               "Load the dump: `docker compose exec -T postgres psql -U agentes -d agentes -v ON_ERROR_STOP=1 < agentes.sql`.",
               "Start it with `docker compose up -d`, copy `~/.agentes/files` into it as the full guide shows, and sign in as before.",
             ],
@@ -134,14 +134,14 @@ export const helpEn: Record<HelpSlug, HelpDocument> = {
         id: "own",
         heading: "Your own computers and phones",
         blocks: [
-          "Agents can also work on computers and phones you bring: a Mac or a PC with the agentes.chat app, a server, an Android phone or an iPhone. See [Computers and phones you bring](/help/computers).",
+          "Agents can also work on computers and phones you bring: a Mac or a PC with the KeepMind OS app, a server, an Android phone or an iPhone. See [Computers and phones you bring](/help/computers).",
         ],
       },
       {
         id: "plans",
         heading: "Your AI plans",
         blocks: [
-          "Your agents can think with your own AI plan, like Claude, ChatGPT, GLM or Kimi, signed in on this computer: no API key needed. The account stays on this computer, and agentes.chat never sees the password or the access.",
+          "Your agents can think with your own AI plan, like Claude, ChatGPT, GLM or Kimi, signed in on this computer: no API key needed. The account stays on this computer, and KeepMind OS never sees the password or the access.",
           "Google's AI Pro and Ultra plans don't work here: Google's terms don't allow them in other products. A Gemini API key does.",
         ],
       },
@@ -160,11 +160,11 @@ export const helpEn: Record<HelpSlug, HelpDocument> = {
   computers: {
     title: "Your computers and phones",
     summary:
-      "Bring a Mac, a PC, a Linux computer, a server or a phone, and your agents work on it. On agentes.chat Cloud and on a server of your own alike.",
+      "Bring a Mac, a PC, a Linux computer, a server or a phone, and your agents work on it. On KeepMind OS Cloud and on a server of your own alike.",
     sections: [
       {
         id: "app",
-        heading: "From the agentes.chat app",
+        heading: "From the KeepMind OS app",
         blocks: [
           "Install the app on the computer, open it and sign in to your workspace. It asks **Let <workspace>'s agents use this Mac?** (this PC on Windows, this computer on Linux). Choose who can use it and press **Allow**. That's all.",
           "Already signed in? Open **Preferences\u00a0›\u00a0General** and press **Allow** on the workspace's row in the first card. Not there? Press **Add a workspace…** at the bottom of that card and sign in.",
@@ -203,14 +203,14 @@ export const helpEn: Record<HelpSlug, HelpDocument> = {
         id: "open",
         heading: "While the app is open",
         blocks: [
-          "Agents work on a computer only while the app runs there and the computer is awake. When the app asks, leave **Keep it ready: open agentes.chat at login** checked. A computer that's off or asleep shows **Offline**, and agents wait for it to come back.",
+          "Agents work on a computer only while the app runs there and the computer is awake. When the app asks, leave **Keep it ready: open KeepMind OS at login** checked. A computer that's off or asleep shows **Offline**, and agents wait for it to come back.",
         ],
       },
       {
         id: "pausing",
         heading: "Pausing and disconnecting",
         blocks: [
-          "On the computer, the agentes.chat icon by the clock pauses the agents of every workspace, or of just one. In **Preferences\u00a0›\u00a0General**, each workspace's switch pauses just that one, and **Leave**, in its **⋯** menu, disconnects it. Nothing new starts while paused, and what was running finishes. Disconnecting keeps the agents' folders on disk.",
+          "On the computer, the KeepMind OS icon by the clock pauses the agents of every workspace, or of just one. In **Preferences\u00a0›\u00a0General**, each workspace's switch pauses just that one, and **Leave**, in its **⋯** menu, disconnects it. Nothing new starts while paused, and what was running finishes. Disconnecting keeps the agents' folders on disk.",
           "From the website, **Remove** on the device's page disconnects it.",
         ],
       },
@@ -218,7 +218,7 @@ export const helpEn: Record<HelpSlug, HelpDocument> = {
         id: "organizations",
         heading: "Several workspaces, one computer",
         blocks: [
-          "Sign in to each workspace in the same app and press **Allow** for each one. Workspaces on agentes.chat Cloud and on your own servers can share a computer (app 0.6.1 and later). Each has its own agents and folders there, and disconnecting one doesn't touch the others.",
+          "Sign in to each workspace in the same app and press **Allow** for each one. Workspaces on KeepMind OS Cloud and on your own servers can share a computer (app 0.6.1 and later). Each has its own agents and folders there, and disconnecting one doesn't touch the others.",
           "A server the app runs on this computer is connected already and needs nothing. To also lend that computer to a workspace somewhere else, see [Lend it to another workspace too](/help/run-on-your-computer#another-workspace).",
           "Using the app on a laptop only as a window onto your workspace? When it asks to let agents use the laptop, **Not now** keeps it a plain window.",
           "A server connected with the terminal line works for one workspace. Connecting it from another workspace moves the server to that one, and the first no longer reaches it. For several workspaces on one computer, use the app.",
@@ -249,10 +249,10 @@ export const helpEn: Record<HelpSlug, HelpDocument> = {
               "your files and sign-ins",
               "other agents' folders, other workspaces' included, and the logins their browsers keep",
               "the token that connects this computer",
-              "on a computer that also runs agentes.chat, its database and keys in `.agentes`",
+              "on a computer that also runs KeepMind OS, its database and keys in `.agentes`",
             ],
           },
-          "agentes.chat refuses commands that name its keys, tokens and sign-ins, but that's a rule, not a wall. **Commands** are on by default. Turn them off in the app's ask before you press **Allow**, or later in **Preferences\u00a0›\u00a0Tools**, where each workspace has its own switch (app 0.8.1 and later) and the app asks before turning one back on. Claude Code and Codex run their own commands in the agent's folder, under their own rules, even with Commands off.",
+          "KeepMind OS refuses commands that name its keys, tokens and sign-ins, but that's a rule, not a wall. **Commands** are on by default. Turn them off in the app's ask before you press **Allow**, or later in **Preferences\u00a0›\u00a0Tools**, where each workspace has its own switch (app 0.8.1 and later) and the app asks before turning one back on. Claude Code and Codex run their own commands in the agent's folder, under their own rules, even with Commands off.",
           "For a real wall, use a Linux server. On Debian 13, installed with `--system`, each agent is a user of its own. On Ubuntu, agents share one user, `agentes`: they see each other's folders, not yours or the server's. Or give the agents a computer of their own.",
         ],
       },
@@ -261,7 +261,7 @@ export const helpEn: Record<HelpSlug, HelpDocument> = {
   import: {
     title: "Bring your agents",
     summary:
-      "Bring agents from another app, or from another agentes.chat workspace, with their instructions, skills, routines and memory.",
+      "Bring agents from another app, or from another KeepMind OS workspace, with their instructions, skills, routines and memory.",
     sections: [
       {
         id: "comes",
@@ -445,7 +445,7 @@ export const helpEn: Record<HelpSlug, HelpDocument> = {
   },
   "who-answers": {
     title: "Who answers a message",
-    summary: "A mention picks the agent. Without one, agentes.chat picks for you, in this order.",
+    summary: "A mention picks the agent. Without one, KeepMind OS picks for you, in this order.",
     sections: [
       {
         id: "order",
@@ -467,7 +467,7 @@ export const helpEn: Record<HelpSlug, HelpDocument> = {
         id: "jev",
         heading: "Jev",
         blocks: [
-          "When agentes.chat hosts your workspace, Jev is included. On a server you run yourself, it uses the owner's TypeSafe key, about US$ 0.0001 a message: [Set up Jev](/help/jev#setup).",
+          "When KeepMind OS hosts your workspace, Jev is included. On a server you run yourself, it uses the owner's TypeSafe key, about US$ 0.0001 a message: [Set up Jev](/help/jev#setup).",
         ],
       },
       {
@@ -524,7 +524,7 @@ export const helpEn: Record<HelpSlug, HelpDocument> = {
               "Open https://console.typesafe.ai and sign in with Google or your email. A new account is made the same way.",
               "Add credit in the console. Jev is prepaid.",
               "Open https://console.typesafe.ai/keys, create a key and copy it right away.",
-              "In agentes.chat, open **Settings\u00a0›\u00a0AI and usage** and paste it under **Jev**. Only the person who set up this server sees it.",
+              "In KeepMind OS, open **Settings\u00a0›\u00a0AI and usage** and paste it under **Jev**. Only the person who set up this server sees it.",
             ],
           },
           "On a server you run with Docker, you can put the key in `.env` as `TYPESAFE_API_KEY` instead. That one wins over the one in Settings.",
@@ -582,14 +582,14 @@ export const helpEn: Record<HelpSlug, HelpDocument> = {
   "apps-de-ia": {
     title: "AI apps",
     summary:
-      "Ask agentes.chat's agents for tasks from Claude, Cursor or another MCP app, without leaving it, and get the answer right there.",
+      "Ask KeepMind OS's agents for tasks from Claude, Cursor or another MCP app, without leaving it, and get the answer right there.",
     sections: [
       {
         id: "what",
         heading: "How it works",
         blocks: [
-          "agentes.chat is an MCP server. You paste its address into your AI app, sign in with your account and pick a workspace. From then on, the app can list agents and channels, send a task to an agent as you, wait for the reply and read recent tasks.",
-          'For example, in the middle of a scene in Unity or Blender, ask Claude: "Ask the marketing agent for a launch blurb". The message shows in agentes.chat as yours, marked **via Claude**, and the agent\'s reply comes back to Claude.',
+          "KeepMind OS is an MCP server. You paste its address into your AI app, sign in with your account and pick a workspace. From then on, the app can list agents and channels, send a task to an agent as you, wait for the reply and read recent tasks.",
+          'For example, in the middle of a scene in Unity or Blender, ask Claude: "Ask the marketing agent for a launch blurb". The message shows in KeepMind OS as yours, marked **via Claude**, and the agent\'s reply comes back to Claude.',
           "The address is in **Settings\u00a0›\u00a0AI apps**. It ends in `/mcp`.",
         ],
       },
@@ -599,14 +599,14 @@ export const helpEn: Record<HelpSlug, HelpDocument> = {
         blocks: [
           {
             list: [
-              "**Claude** (claude.ai, Claude Desktop and phone): in **Customize\u00a0›\u00a0Connectors**, click **+ Add**, then **Add custom connector**, name it agentes.chat, paste the address and click **Continue**. Choose **Sign in now**, click **Add** and authorize. On Team and Enterprise plans, the Claude organization's Owner adds the connector in Organization settings\u00a0›\u00a0Connectors, and each person clicks **Connect** in Customize\u00a0›\u00a0Connectors. Claude's free plan has room for one custom connector.",
+              "**Claude** (claude.ai, Claude Desktop and phone): in **Customize\u00a0›\u00a0Connectors**, click **+ Add**, then **Add custom connector**, name it KeepMind OS, paste the address and click **Continue**. Choose **Sign in now**, click **Add** and authorize. On Team and Enterprise plans, the Claude organization's Owner adds the connector in Organization settings\u00a0›\u00a0Connectors, and each person clicks **Connect** in Customize\u00a0›\u00a0Connectors. Claude's free plan has room for one custom connector.",
               "**Claude Code:** run `claude mcp add --transport http --scope user agentes <address>`, then type `/mcp`, pick agentes and **Authenticate**. For the current folder only, drop `--scope user`.",
               "**Cursor:** **Add to Cursor** in **Settings\u00a0›\u00a0AI apps**, or the address in `~/.cursor/mcp.json`. Cursor asks you to sign in the first time you use it.",
               '**VS Code:** **Add to VS Code**, or the address in `.vscode/mcp.json` with `"type": "http"`.',
               "**Other apps:** ChatGPT, Gemini, Grok, Perplexity, Codex, Zed, JetBrains and more each have their own steps in **Connect an app**, with your address filled in.",
             ],
           },
-          "When you sign in, agentes.chat shows which app asked for access and where it returns to. Continue only if you just started the connection.",
+          "When you sign in, KeepMind OS shows which app asked for access and where it returns to. Continue only if you just started the connection.",
         ],
       },
       {
@@ -623,7 +623,7 @@ export const helpEn: Record<HelpSlug, HelpDocument> = {
               "`list_recent_tasks`: the tasks you sent from apps and what agents are doing now.",
             ],
           },
-          "The app acts as you and sees only what you see. It never approves agents' actions: when an agent stops to ask for approval, the reply says so with a link, and a person decides in agentes.chat. It doesn't change settings, members or permissions either.",
+          "The app acts as you and sees only what you see. It never approves agents' actions: when an agent stops to ask for approval, the reply says so with a link, and a person decides in KeepMind OS. It doesn't change settings, members or permissions either.",
         ],
       },
       {
@@ -659,7 +659,7 @@ export const helpEn: Record<HelpSlug, HelpDocument> = {
         id: "safety",
         heading: "Other people's text",
         blocks: [
-          "Replies carry text written by agents and people in agentes.chat. The app gets that text marked as content, not instructions, but a text may still try to talk the app into something else. Check what your app is about to do before you confirm.",
+          "Replies carry text written by agents and people in KeepMind OS. The app gets that text marked as content, not instructions, but a text may still try to talk the app into something else. Check what your app is about to do before you confirm.",
         ],
       },
       {
@@ -678,8 +678,8 @@ export const helpEn: Record<HelpSlug, HelpDocument> = {
     ],
   },
   "install-on-a-server": {
-    title: "Install agentes.chat on a server",
-    summary: "Run agentes.chat on a server of your own, free, for your whole team. One command sets it up.",
+    title: "Install KeepMind OS on a server",
+    summary: "Run KeepMind OS on a server of your own, free, for your whole team. One command sets it up.",
     sections: [
       {
         id: "choose",
@@ -687,7 +687,7 @@ export const helpEn: Record<HelpSlug, HelpDocument> = {
         blocks: [
           {
             list: [
-              "**agentes.chat Cloud**: for any team, reachable from anywhere. We run it, update it and back it up. Each workspace gets its own computer, where each agent is a user of its own.",
+              "**KeepMind OS Cloud**: for any team, reachable from anywhere. We run it, update it and back it up. Each workspace gets its own computer, where each agent is a user of its own.",
               "**Your computer, with the app**: for you or a small team, reachable while that computer is on. A Mac mini that stays on works well. You update it with one click and back it up by hand. Agents run as you on that computer.",
               "**A server**: for a bigger team, up all the time. You update it with three commands, and it can back up every day by itself. On Debian 13, each agent is a user of its own.",
             ],
@@ -701,7 +701,7 @@ export const helpEn: Record<HelpSlug, HelpDocument> = {
         blocks: [
           {
             list: [
-              "A server or VPS with 64-bit Linux, on x64 or arm64. For a small team, 2 CPUs, 4 GB of memory and 20 GB of disk are a good start. On a Mac or a PC, [the app runs agentes.chat](/help/run-on-your-computer) without Docker.",
+              "A server or VPS with 64-bit Linux, on x64 or arm64. For a small team, 2 CPUs, 4 GB of memory and 20 GB of disk are a good start. On a Mac or a PC, [the app runs KeepMind OS](/help/run-on-your-computer) without Docker.",
               "Docker with Compose. On Linux the installer adds them when they're missing, after asking.",
               "A way in: a free Tailscale account (the default, private, with no domain and no open port), or a domain that points at the server, with ports 80 and 443 open.",
             ],
@@ -714,11 +714,11 @@ export const helpEn: Record<HelpSlug, HelpDocument> = {
         blocks: [
           "On the server, run:",
           {
-            code: "curl -fsSL https://agentes.chat/install | sh",
+            code: "curl -fsSL https://keepmind.io/install | sh",
           },
           "It installs what's missing, then asks a few questions: how people reach it, email, whether this server is also your agents' computer, and whether to send anonymous usage statistics. Press Enter for the suggested answer. It installs into `/opt/agentes` (`~/agentes` for a user who can already use Docker), and the first time it downloads about 2 GB.",
           "It ends with your server's address and a QR code for your phone. Running it again is safe: it keeps your settings and fills in only what's missing.",
-          "With Node.js 18 or newer, `npx @agenteschat/setup` in an empty folder is the same setup. Without Node, it runs from the app's image, in the current folder, and ends with the commands that start the rest:",
+          "With Node.js 18 or newer, `npx @keepmind/setup` in an empty folder is the same setup. Without Node, it runs from the app's image, in the current folder, and ends with the commands that start the rest:",
           {
             code: 'docker run --rm -it --user "$(id -u):$(id -g)" -v "$PWD":/work -w /work ghcr.io/agentes-chat/agentes:latest setup',
           },
@@ -744,14 +744,14 @@ export const helpEn: Record<HelpSlug, HelpDocument> = {
         heading: "Your account",
         blocks: [
           "Open your server's address and sign up: the first account becomes the owner. Sign-up then closes, and people join by invitation, from **Settings\u00a0›\u00a0Members and invitations**.",
-          "On Tailscale, the people you invite need your tailnet too. Invite them first at https://console.tailscale.com/admin/users and then in agentes.chat.",
+          "On Tailscale, the people you invite need your tailnet too. Invite them first at https://console.tailscale.com/admin/users and then in KeepMind OS.",
         ],
       },
       {
         id: "email",
         heading: "Email",
         blocks: [
-          "Without email, agentes.chat writes each email to its log instead of sending it, so an invitation link can still be copied from there. Password resets stay off, and a new email for an account changes at once, with no code or link.",
+          "Without email, KeepMind OS writes each email to its log instead of sending it, so an invitation link can still be copied from there. Password resets stay off, and a new email for an account changes at once, with no code or link.",
           {
             code: "docker compose logs agentes | grep 'email (not sent'",
           },
@@ -765,7 +765,7 @@ export const helpEn: Record<HelpSlug, HelpDocument> = {
           {
             list: [
               "On Tailscale, install the Tailscale app on your phone and sign in to the same tailnet.",
-              "Install the agentes.chat app.",
+              "Install the KeepMind OS app.",
               "Scan the QR code the setup printed, or the one in **Settings\u00a0›\u00a0Your account\u00a0›\u00a0Open on your phone**, which signs you in too.",
             ],
           },
@@ -777,9 +777,9 @@ export const helpEn: Record<HelpSlug, HelpDocument> = {
         blocks: [
           "The setup can make this server your agents' computer too, where they run commands, use a browser and keep their files. It asks, and suggests yes where the server can do it well. On Debian 13 each agent gets a user of its own, with a screen. On Ubuntu, agents share one user, `agentes`. If you said no, run the install again with `--computer yes`:",
           {
-            code: "curl -fsSL https://agentes.chat/install | sh -s -- --computer yes",
+            code: "curl -fsSL https://keepmind.io/install | sh -s -- --computer yes",
           },
-          "More computers, such as a Mac with the agentes.chat app or another server, connect from **Settings\u00a0›\u00a0Devices**, as in [Your computers and phones](/help/computers). On Tailscale, they join your tailnet first.",
+          "More computers, such as a Mac with the KeepMind OS app or another server, connect from **Settings\u00a0›\u00a0Devices**, as in [Your computers and phones](/help/computers). On Tailscale, they join your tailnet first.",
         ],
       },
       {
@@ -805,7 +805,7 @@ export const helpEn: Record<HelpSlug, HelpDocument> = {
         blocks: [
           "In the install folder, run:",
           {
-            code: "curl -fsSLO https://agentes.chat/install/docker-compose.yml\ndocker compose pull\ndocker compose up -d",
+            code: "curl -fsSLO https://keepmind.io/install/docker-compose.yml\ndocker compose pull\ndocker compose up -d",
           },
           "The database updates itself when the new version starts. Keep your settings in `.env` and never edit `docker-compose.yml`, since each upgrade replaces it. Back up before a big jump: a database a newer version updated doesn't open in an older one.",
         ],
@@ -814,7 +814,7 @@ export const helpEn: Record<HelpSlug, HelpDocument> = {
         id: "data",
         heading: "What it sends",
         blocks: [
-          "Once a day the server sends agentes.chat anonymous usage statistics: counts such as people, agents, machine sizes, AI tokens used and how much data the agents' browsers send and receive. Never messages, files, names or sites. `docker compose run --rm agentes telemetry` prints exactly what it would send. The owner turns it off in **Settings\u00a0›\u00a0General**, or with `TELEMETRY=off` in `.env`.",
+          "Once a day the server sends KeepMind OS anonymous usage statistics: counts such as people, agents, machine sizes, AI tokens used and how much data the agents' browsers send and receive. Never messages, files, names or sites. `docker compose run --rm agentes telemetry` prints exactly what it would send. The owner turns it off in **Settings\u00a0›\u00a0General**, or with `TELEMETRY=off` in `.env`.",
           "Error reports go nowhere unless you set `SENTRY_DSN` to a Sentry-compatible server you choose. A report holds the error and where it happened, never messages, emails, IP addresses, cookies or tokens.",
         ],
       },
@@ -822,7 +822,7 @@ export const helpEn: Record<HelpSlug, HelpDocument> = {
         id: "reference",
         heading: "The full guide",
         blocks: [
-          "Every setting, a proxy of your own such as nginx, running without Docker, a runbook for AI agents that install it, and what to do when something fails are in `SELF_HOSTING.md`, in the agentes.chat repository.",
+          "Every setting, a proxy of your own such as nginx, running without Docker, a runbook for AI agents that install it, and what to do when something fails are in `SELF_HOSTING.md`, in the KeepMind OS repository.",
         ],
       },
     ],

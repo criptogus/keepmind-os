@@ -1,9 +1,9 @@
-import type { Agent, AgentAudience } from "@agenteschat/client";
-import type { AccessResource, Level, LevelState } from "@agenteschat/client/lib/access-levels";
-import type { agentGrammar } from "@agenteschat/client/lib/grammar";
-import type { RepoChoice } from "@agenteschat/client/lib/repos";
-import { modeKey } from "@agenteschat/client/lib/workspace-mode";
-import { Button, CardHeader, Icon, type IconName } from "@agenteschat/ui";
+import type { Agent, AgentAudience } from "@keepmind/client";
+import type { AccessResource, Level, LevelState } from "@keepmind/client/lib/access-levels";
+import type { agentGrammar } from "@keepmind/client/lib/grammar";
+import type { RepoChoice } from "@keepmind/client/lib/repos";
+import { modeKey } from "@keepmind/client/lib/workspace-mode";
+import { Button, CardHeader, Icon, type IconName } from "@keepmind/ui";
 import { createContext, type ReactNode, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { useOrg } from "@/components/org-context";

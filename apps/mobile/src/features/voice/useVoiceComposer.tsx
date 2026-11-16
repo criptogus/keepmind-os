@@ -1,6 +1,6 @@
-import { keys, useApi } from "@agenteschat/client";
-import { voiceClock } from "@agenteschat/client/lib/voice";
-import { gradientOf, mixHex } from "@agenteschat/ui/agent/engine";
+import { keys, useApi } from "@keepmind/client";
+import { voiceClock } from "@keepmind/client/lib/voice";
+import { gradientOf, mixHex } from "@keepmind/ui/agent/engine";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";

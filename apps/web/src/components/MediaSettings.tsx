@@ -1,8 +1,8 @@
-import type { Agent, AgentMediaLevel, GifRating, OrgSettings } from "@agenteschat/client";
-import { useAgents, useSettings, useUpdateAgent, useUpdateSettings } from "@agenteschat/client";
-import { shownMediaSettings } from "@agenteschat/client/lib/media";
-import { can } from "@agenteschat/client/lib/permissions";
-import { Card, CardFooter, CardHeader, Segmented, Switch } from "@agenteschat/ui";
+import type { Agent, AgentMediaLevel, GifRating, OrgSettings } from "@keepmind/client";
+import { useAgents, useSettings, useUpdateAgent, useUpdateSettings } from "@keepmind/client";
+import { shownMediaSettings } from "@keepmind/client/lib/media";
+import { can } from "@keepmind/client/lib/permissions";
+import { Card, CardFooter, CardHeader, Segmented, Switch } from "@keepmind/ui";
 import { useTranslation } from "react-i18next";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { GifKeyCard } from "@/components/GifKeyCard";
@@ -103,7 +103,7 @@ export function MediaSettingsSection() {
           />
         </div>
       </Card>
-      {/* The server's own GIPHY key, for its owner on a server that isn't agentes.chat's own (null to anyone else). */}
+      {/* The server's own GIPHY key, for its owner on a server that isn't KeepMind OS's own (null to anyone else). */}
       <GifKeyCard jevMissing={!shown.agentMediaAvailable} />
       <Card aria-labelledby="media-agents">
         <CardHeader id="media-agents" icon="agent" title={t("settings.media.agentsTitle")} />

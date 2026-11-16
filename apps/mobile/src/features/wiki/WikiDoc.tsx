@@ -1,5 +1,5 @@
-import type { WikiPageSummary } from "@agenteschat/client";
-import { resolveWikiLink } from "@agenteschat/client/lib/wiki";
+import type { WikiPageSummary } from "@keepmind/client";
+import { resolveWikiLink } from "@keepmind/client/lib/wiki";
 import { memo, useMemo } from "react";
 import { Pressable, Text as RNText, ScrollView, StyleSheet, View } from "react-native";
 import { Icon, Text } from "@/ui";

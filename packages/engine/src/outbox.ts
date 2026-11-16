@@ -1,5 +1,5 @@
-import { startInFlight } from "@agenteschat/adapters/in-flight";
-import { and, type Database, type Executor, eq, inArray, type SQL, schema, sql } from "@agenteschat/db";
+import { startInFlight } from "@keepmind/adapters/in-flight";
+import { and, type Database, type Executor, eq, inArray, type SQL, schema, sql } from "@keepmind/db";
 import { percentile } from "./format";
 
 const { outbox } = schema;

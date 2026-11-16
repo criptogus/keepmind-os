@@ -1,4 +1,4 @@
-import { useChannels } from "@agenteschat/client";
+import { useChannels } from "@keepmind/client";
 import { useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useOrg } from "@/providers/org";

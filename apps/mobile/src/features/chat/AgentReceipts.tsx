@@ -7,14 +7,14 @@ import {
   useApi,
   useReactions,
   useSteerState,
-} from "@agenteschat/client";
-import { listNames } from "@agenteschat/client/lib/activity";
-import { failedRunFix, filesTextOnlyOf, runFailureLine } from "@agenteschat/client/lib/errors";
-import { sentAtLine } from "@agenteschat/client/lib/format";
-import { mayConnectAi, plansNotYoursOf } from "@agenteschat/client/lib/no-ai";
-import { can } from "@agenteschat/client/lib/permissions";
-import { deciderOf, everyoneLineOf } from "@agenteschat/client/lib/routing";
-import { helpUrl } from "@agenteschat/client/lib/server";
+} from "@keepmind/client";
+import { listNames } from "@keepmind/client/lib/activity";
+import { failedRunFix, filesTextOnlyOf, runFailureLine } from "@keepmind/client/lib/errors";
+import { sentAtLine } from "@keepmind/client/lib/format";
+import { mayConnectAi, plansNotYoursOf } from "@keepmind/client/lib/no-ai";
+import { can } from "@keepmind/client/lib/permissions";
+import { deciderOf, everyoneLineOf } from "@keepmind/client/lib/routing";
+import { helpUrl } from "@keepmind/client/lib/server";
 import { memo, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Pressable, StyleSheet, View } from "react-native";

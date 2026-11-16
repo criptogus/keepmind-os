@@ -1,11 +1,11 @@
 import { afterEach, expect, test } from "bun:test";
-import { MACHINE_PROTOCOL_VERSION, MACHINE_STATS_PROTOCOL } from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
+import { MACHINE_PROTOCOL_VERSION, MACHINE_STATS_PROTOCOL } from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
 import {
   buildTelemetryReport,
   createMachineHub,
   createOrganization,
-  isAgentesCloud,
+  isKeepMindCloud,
   type MachineHub,
   markServerStarted,
   saveHostLoad,
@@ -374,11 +374,11 @@ test("the instance id is made once and kept; the switch and the Cloud decide wha
   expect(telemetrySends(self, true)).toBe(true);
   expect(telemetrySends(self, false)).toBe(false);
   expect(telemetrySends({ ...self, TELEMETRY: "off" }, true)).toBe(false);
-  const cloud = { TELEMETRY: "off" as const, PUBLIC_URL: "https://agentes.chat" };
-  expect(telemetrySends(cloud, false)).toBe(true);
-  expect(isAgentesCloud("https://www.agentes.chat")).toBe(true);
-  expect(isAgentesCloud("https://agentes.chat.example.com")).toBe(false);
-  expect(isAgentesCloud("https://notagentes.chat")).toBe(false);
+  const cloud = { TELEMETRY: "off" as const, PUBLIC_URL: "https://keepmind.io" };
+  expect(telemetrySends(cloud, false)).toBe(false);
+  expect(isKeepMindCloud("https://www.keepmind.io")).toBe(true);
+  expect(isKeepMindCloud("https://keepmind.io.example.com")).toBe(false);
+  expect(isKeepMindCloud("https://notkeepmind.io")).toBe(false);
 });
 
 test("the server's own computer is one machine, however many organizations it serves", async () => {

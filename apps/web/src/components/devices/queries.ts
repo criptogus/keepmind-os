@@ -1,6 +1,6 @@
-import type { ComputerDeviceInput, DeviceAudience, PhoneDeviceInput } from "@agenteschat/client";
-import { keys, useApi, useWifiPairState } from "@agenteschat/client";
-import { LINK_POLL_MS, linkPhase, linkPolls } from "@agenteschat/client/lib/devices";
+import type { ComputerDeviceInput, DeviceAudience, PhoneDeviceInput } from "@keepmind/client";
+import { keys, useApi, useWifiPairState } from "@keepmind/client";
+import { LINK_POLL_MS, linkPhase, linkPolls } from "@keepmind/client/lib/devices";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 

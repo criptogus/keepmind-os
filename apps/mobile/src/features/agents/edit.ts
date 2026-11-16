@@ -1,4 +1,4 @@
-import type { AgentAudience, AgentInput } from "@agenteschat/client";
+import type { AgentAudience, AgentInput } from "@keepmind/client";
 import {
   AGENT_ACCESSORIES,
   AGENT_COLORS,

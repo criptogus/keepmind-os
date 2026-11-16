@@ -1,6 +1,6 @@
-import { type Issue, useIssueColumns, useIssueProjects, useIssues } from "@agenteschat/client";
-import { dueLabel } from "@agenteschat/client/lib/format";
-import { liveProjectFilter, NO_PROJECT, projectFilterRows } from "@agenteschat/client/lib/issue-projects";
+import { type Issue, useIssueColumns, useIssueProjects, useIssues } from "@keepmind/client";
+import { dueLabel } from "@keepmind/client/lib/format";
+import { liveProjectFilter, NO_PROJECT, projectFilterRows } from "@keepmind/client/lib/issue-projects";
 import { useHeaderHeight } from "expo-router/react-navigation";
 import { Fragment, type ReactNode, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

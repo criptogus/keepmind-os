@@ -1,4 +1,4 @@
-import type { ConnectorDef } from "@agenteschat/client";
+import type { ConnectorDef } from "@keepmind/client";
 import {
   keys,
   useAgents,
@@ -9,16 +9,16 @@ import {
   useMembers,
   useSkill,
   useSkills,
-} from "@agenteschat/client";
-import { type Level, saveLevels } from "@agenteschat/client/lib/access-levels";
-import { errorText as failureText } from "@agenteschat/client/lib/errors";
-import { FIELD_LIMITS } from "@agenteschat/client/lib/field-limits";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { useHeldWhile } from "@agenteschat/client/lib/hold";
-import { addsAgentsTo, can } from "@agenteschat/client/lib/permissions";
-import { connectorName, scopeText } from "@agenteschat/client/lib/scopes";
-import { skillsToGive } from "@agenteschat/client/lib/skills";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client";
+import { type Level, saveLevels } from "@keepmind/client/lib/access-levels";
+import { errorText as failureText } from "@keepmind/client/lib/errors";
+import { FIELD_LIMITS } from "@keepmind/client/lib/field-limits";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { useHeldWhile } from "@keepmind/client/lib/hold";
+import { addsAgentsTo, can } from "@keepmind/client/lib/permissions";
+import { connectorName, scopeText } from "@keepmind/client/lib/scopes";
+import { skillsToGive } from "@keepmind/client/lib/skills";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import {
   type AgentAppearance,
   type AgentColor,
@@ -33,14 +33,13 @@ import {
   limitShown,
   OptionList,
   overLimit,
-  PixelSky,
   pixelBurst,
   playAgentReaction,
   prefersReducedMotion,
   randomAppearance,
   setGaze,
   spriteTone,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import {
@@ -63,13 +62,13 @@ import { useTranslation } from "react-i18next";
 import { useApi } from "@/api/context";
 import { useConnectedById } from "@/components/AccessLevels";
 import { AgentAvatar } from "@/components/AgentAvatar";
+import { AgentBackdrop } from "@/components/AgentBackdrop";
 import { LookPicker } from "@/components/AgentFields";
 import { useConnectAi } from "@/components/ConnectAi";
 import { ConnectFlow, type FlowState } from "@/components/ConnectFlow";
 import { ConnectorIcon } from "@/components/ConnectorCatalog";
 import { useMediaQuery } from "@/components/NavDrawer";
 import { useOrg } from "@/components/org-context";
-import { agentCoverOptions, facePool } from "@/components/Sky";
 import { useTextLimit } from "@/hooks/useTextLimit";
 import {
   BLANK_LOOK,
@@ -79,6 +78,7 @@ import {
   PERSONAL_STARTERS,
   type PersonalStarter,
   presetChannels,
+  RESTRICTED_ROLE_IDS,
   ROLE_DEFAULTS,
   ROLE_GROUPS,
   type RoleGroupId,
@@ -191,6 +191,10 @@ function takeResume(orgId: string): NewAgentRequest | null {
 
 /** The level an app comes onto the card at: write for a person's own agent, a team's at its role's (else read). */
 function cardLevelFor(personal: boolean, role: RoleId | null, appId: string): CardLevel | null {
+  if (role && RESTRICTED_ROLE_IDS.includes(role)) {
+    const level = (ROLE_DEFAULTS[role].levels as Record<string, Level>)[appId];
+    return level === "read" || level === "write" ? level : null;
+  }
   if (personal) return "write";
   const level = (ROLE_DEFAULTS[role ?? "custom"].levels as Record<string, Level>)[appId];
   return level === "none" ? null : level === "write" ? "write" : "read";
@@ -298,7 +302,14 @@ const roleOf = (pick: Pick): RoleId | null => (pick === "zero" || isStarter(pick
 const GROUP_ICON: Record<RoleGroupId, "code" | "members" | "layers"> = {
   tech: "code",
   customers: "members",
+  advisory: "layers",
+  inspired: "members",
   operations: "layers",
+};
+const ROLE_SEARCH_ALIASES: Partial<Record<RoleId, string>> = {
+  dev: "desenvolvimento development software programação",
+  finance: "finanças finances financeiro",
+  cybersec: "cybersegurança cybersecurity segurança security",
 };
 /**
  * The skills each starting point opens when needed, as the team templates name them (`teamTemplates.skills.{key}`),
@@ -380,11 +391,16 @@ function NewAgentDialog({
   const qc = useQueryClient();
 
   const picks: Pick[] = useMemo(
-    () => ["zero", ...(personal ? PERSONAL_STARTERS.map((s) => s.id) : ROLE_GROUPS.flatMap((g) => [...g.roles]))],
+    () => [
+      "zero",
+      ...(personal ? PERSONAL_STARTERS.map((s) => s.id) : []),
+      ...ROLE_GROUPS.flatMap((g) => [...g.roles]),
+    ],
     [personal],
   );
   const back = request.resume && picks.includes(request.resume.sel) ? request.resume : null;
   const [sel, setSel] = useState<Pick>(back?.sel ?? picks[1] ?? "zero");
+  const [templateQuery, setTemplateQuery] = useState("");
   const [drafts, setDrafts] = useState<Partial<Record<Pick, Draft>>>(() => {
     // Back from connecting an app: the cards as they were, that app on the one being made.
     if (!back) return {};
@@ -559,6 +575,21 @@ function NewAgentDialog({
     const s = starterOf(pick);
     return s ? s.name : pick === "zero" ? "" : tt(`newAgent.roles.${pick}.agent`);
   };
+  const foldTemplate = (value: string) =>
+    value
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase();
+  const visiblePicks = picks.filter((id) => {
+    if (id === "zero") return true;
+    const starter = starterOf(id);
+    const text = starter
+      ? `${nameOf(id)} ${tt(`teamTemplates.agents.${id}.role`)}`
+      : `${id} ${ROLE_SEARCH_ALIASES[id as RoleId] ?? ""} ${nameOf(id)} ${tt(`newAgent.roles.${id}.name`)} ${tt(`newAgent.roles.${id}.desc`)} ${tt(`newAgent.hello.${id}`)}`;
+    return foldTemplate(templateQuery)
+      .split(/\s+/)
+      .every((word) => foldTemplate(text).includes(word));
+  });
   // How it works: its instructions grow with what's written, up to about eight lines, then scroll.
   // biome-ignore lint/correctness/useExhaustiveDependencies: on each change of the text or of the card
   useLayoutEffect(() => {
@@ -756,11 +787,14 @@ function NewAgentDialog({
     const typing = target.matches("input, textarea");
     if ((e.key === "ArrowDown" || e.key === "ArrowUp") && !typing && list.current?.contains(target)) {
       e.preventDefault();
-      const i = picks.indexOf(sel);
-      const next = picks[Math.max(0, Math.min(picks.length - 1, i + (e.key === "ArrowDown" ? 1 : -1)))] ?? sel;
+      const focused = target.closest<HTMLElement>("[data-pick]")?.dataset.pick as Pick | undefined;
+      const i = visiblePicks.indexOf(focused ?? sel);
+      const next =
+        visiblePicks[Math.max(0, Math.min(visiblePicks.length - 1, i + (e.key === "ArrowDown" ? 1 : -1)))] ?? sel;
       pick(next);
       list.current?.querySelector<HTMLElement>(`[data-pick="${next}"]`)?.focus();
     } else if (e.key === "Enter" && !e.shiftKey && !target.matches("button")) {
+      if (target.getAttribute("type") === "search") return;
       // In its instructions Enter is a new line; ⌘ or Ctrl with it still creates.
       if (target === howInput.current && !e.metaKey && !e.ctrlKey) return;
       e.preventDefault();
@@ -852,79 +886,86 @@ function NewAgentDialog({
         <DialogBody>
           <div className="nac__grid">
             {onList && (
-              <div className="nac__list" role="listbox" aria-label={t("newAgentCard.list")} ref={list}>
-                <ListRow
-                  pick="zero"
-                  on={sel === "zero"}
-                  face={
-                    drafts.zero?.name.trim() || drafts.zero?.what.trim() ? (
-                      <AgentAvatar appearance={drafts.zero.look} name={nameOf("zero")} />
-                    ) : (
-                      <span className="nac__blank">
-                        <Icon name="plus" size={16} />
-                      </span>
-                    )
-                  }
-                  title={drafts.zero?.name.trim() || t("newAgentCard.zero")}
-                  sub={drafts.zero?.what.trim() || t("newAgentCard.zeroSub")}
-                  onPick={choose}
+              <div className="nac__list" ref={list}>
+                <input
+                  type="search"
+                  className="ac-input"
+                  aria-label={t("newAgentCard.searchTemplates")}
+                  placeholder={t("newAgentCard.searchTemplates")}
+                  value={templateQuery}
+                  onChange={(e) => setTemplateQuery(e.target.value)}
                 />
-                {personal ? (
-                  <>
-                    <p className="nac__group">{t("newAgent.roleGroups.personal")}</p>
-                    {PERSONAL_STARTERS.map((s) => (
-                      <ListRow
-                        key={s.id}
-                        pick={s.id}
-                        on={sel === s.id}
-                        face={<AgentAvatar appearance={drafts[s.id]?.look ?? s.look} name={nameOf(s.id)} />}
-                        title={nameOf(s.id)}
-                        sub={tt(`teamTemplates.agents.${s.id}.role`)}
-                        onPick={choose}
-                      />
-                    ))}
-                  </>
-                ) : (
-                  ROLE_GROUPS.map((group) => (
+                <div className="nac__options" role="listbox" aria-label={t("newAgentCard.list")}>
+                  <ListRow
+                    pick="zero"
+                    on={sel === "zero"}
+                    tabStop={!visiblePicks.includes(sel)}
+                    face={
+                      drafts.zero?.name.trim() || drafts.zero?.what.trim() ? (
+                        <AgentAvatar appearance={drafts.zero.look} name={nameOf("zero")} />
+                      ) : (
+                        <span className="nac__blank">
+                          <Icon name="plus" size={16} />
+                        </span>
+                      )
+                    }
+                    title={drafts.zero?.name.trim() || t("newAgentCard.zero")}
+                    sub={drafts.zero?.what.trim() || t("newAgentCard.zeroSub")}
+                    onPick={choose}
+                  />
+                  {personal && (
+                    <>
+                      <p className="nac__group">{t("newAgent.roleGroups.personal")}</p>
+                      {PERSONAL_STARTERS.filter((s) => visiblePicks.includes(s.id)).map((s) => (
+                        <ListRow
+                          key={s.id}
+                          pick={s.id}
+                          on={sel === s.id}
+                          face={<AgentAvatar appearance={drafts[s.id]?.look ?? s.look} name={nameOf(s.id)} />}
+                          title={nameOf(s.id)}
+                          sub={tt(`teamTemplates.agents.${s.id}.role`)}
+                          onPick={choose}
+                        />
+                      ))}
+                    </>
+                  )}
+                  {ROLE_GROUPS.filter((group) => group.roles.some((id) => visiblePicks.includes(id))).map((group) => (
                     <div key={group.id} className="nac__groupbox">
                       <p className="nac__group">
                         <Icon name={GROUP_ICON[group.id]} size={14} />
                         {tt(`newAgent.roleGroups.${group.id}`)}
                       </p>
-                      {group.roles.map((id) => (
-                        <ListRow
-                          key={id}
-                          pick={id}
-                          on={sel === id}
-                          face={
-                            <AgentAvatar
-                              appearance={(drafts[id]?.look ?? ROLE_DEFAULTS[id].look) as Look}
-                              name={nameOf(id)}
-                            />
-                          }
-                          title={nameOf(id)}
-                          sub={tt(`newAgent.roles.${id}.name`)}
-                          onPick={choose}
-                        />
-                      ))}
+                      {group.roles
+                        .filter((id) => visiblePicks.includes(id))
+                        .map((id) => (
+                          <ListRow
+                            key={id}
+                            pick={id}
+                            on={sel === id}
+                            face={
+                              <AgentAvatar
+                                appearance={(drafts[id]?.look ?? ROLE_DEFAULTS[id].look) as Look}
+                                name={nameOf(id)}
+                              />
+                            }
+                            title={nameOf(id)}
+                            sub={tt(`newAgent.roles.${id}.name`)}
+                            onPick={choose}
+                          />
+                        ))}
                     </div>
-                  ))
-                )}
+                  ))}
+                </div>
+                {visiblePicks.length === 1 && <p>{t("newAgentCard.noTemplates")}</p>}
               </div>
             )}
 
             {onCard && (
               <div className="tp-gallery__preview nac__card">
                 <div className="nac__cover" ref={cover} data-look={lookOpen || undefined}>
-                  <PixelSky
-                    className="nac__sky"
-                    options={agentCoverOptions(look.color as AgentColor, {
-                      // It sits on the card's well: its last tone is the well's, in either theme.
-                      surface: "--card-well",
-                      clear: () => [hero.current, bubble.current, cover.current?.querySelector(".nac__acts") ?? null],
-                      pool: facePool(cover, () => [hero.current]),
-                    })}
-                  />
+                  <div className="nac__sky">
+                    <AgentBackdrop />
+                  </div>
                   <span className="nac__hero" ref={hero}>
                     <AgentAvatar
                       appearance={look}
@@ -1308,6 +1349,7 @@ const pointerFace = (e: ReactMouseEvent<HTMLButtonElement>) =>
 function ListRow({
   pick,
   on,
+  tabStop = false,
   face,
   title,
   sub,
@@ -1315,6 +1357,7 @@ function ListRow({
 }: {
   pick: Pick;
   on: boolean;
+  tabStop?: boolean;
   face: ReactNode;
   title: string;
   sub: string;
@@ -1325,7 +1368,7 @@ function ListRow({
       type="button"
       role="option"
       aria-selected={on}
-      tabIndex={on ? 0 : -1}
+      tabIndex={on || tabStop ? 0 : -1}
       data-pick={pick}
       // A face beside two lines: the name's capitals start at its top (`ac-faceline`), never centred on both lines;
       // an accessory drawn above the tile is ink, not layout, so it moves nothing.

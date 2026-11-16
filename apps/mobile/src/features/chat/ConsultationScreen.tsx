@@ -1,8 +1,8 @@
-import { useChannels, useExchangeConversation } from "@agenteschat/client";
-import { consultLineState, consultOriginKey } from "@agenteschat/client/lib/consult-group";
-import { consultSubject } from "@agenteschat/client/lib/consultations";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { groupsWith } from "@agenteschat/client/lib/timeline";
+import { useChannels, useExchangeConversation } from "@keepmind/client";
+import { consultLineState, consultOriginKey } from "@keepmind/client/lib/consult-group";
+import { consultSubject } from "@keepmind/client/lib/consultations";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { groupsWith } from "@keepmind/client/lib/timeline";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, ScrollView, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";

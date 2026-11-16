@@ -1,9 +1,9 @@
 import { afterEach, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { Member } from "@agenteschat/client";
+import type { Member } from "@keepmind/client";
 import { cleanup } from "@testing-library/react";
 import { PollCard } from "@/components/blocks/PollCard";
 import { createFakeApi, ORG_ID, seedState } from "./fake-api";

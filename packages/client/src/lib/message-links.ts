@@ -14,7 +14,7 @@ export {
   messagePath,
   parseFileLink,
   parseMessageLink,
-} from "@agenteschat/tokens/message-links";
+} from "@keepmind/tokens/message-links";
 
 /** The pill's accessible name: "Mensagem de Bia em #general", "…na DM com Ana"; null card: no access. */
 export function messageRefLabel(t: TFunction, card: MessageCard | null | undefined): string {

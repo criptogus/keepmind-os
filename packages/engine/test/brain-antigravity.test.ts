@@ -1,11 +1,11 @@
 import { expect, test } from "bun:test";
-import { ANTIGRAVITY_PROTOCOL, LOCKED_BRAIN_PROTOCOL, SHARED_GEMINI_PROTOCOL } from "@agenteschat/adapters";
+import { ANTIGRAVITY_PROTOCOL, LOCKED_BRAIN_PROTOCOL, SHARED_GEMINI_PROTOCOL } from "@keepmind/adapters";
 import {
   ANTIGRAVITY_MODELS,
   GEMINI_ENTERPRISE_PROVIDER,
   sharedSignIn,
   signInProviderOf,
-} from "@agenteschat/providers/plans";
+} from "@keepmind/providers/plans";
 import { antigravityModels, brainOptions, defaultBrainModel, isBrainKind } from "../src/brain-settings";
 import { AntigravityBrain, type BrainTurnRequest, type ComputerBrainLink } from "../src/brains/codex";
 import { computerBrainUnavailable, NO_AI_CODES, UNAVAILABLE_CODES } from "../src/brains/select";

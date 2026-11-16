@@ -1,4 +1,4 @@
-import { and, type Database, eq, schema, sql } from "@agenteschat/db";
+import { and, type Database, eq, schema, sql } from "@keepmind/db";
 import { ValidationError } from "./errors";
 import { requirePermission } from "./organizations";
 import { isPersonalWorkspace } from "./workspace-mode";

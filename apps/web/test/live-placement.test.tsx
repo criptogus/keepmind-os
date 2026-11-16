@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, setSystemTime, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { ActiveRun, ApiClient, LiveRun } from "@agenteschat/client";
+import type { ActiveRun, ApiClient, LiveRun } from "@keepmind/client";
 import {
   ApiError,
   applyChannelEvent,
@@ -12,8 +12,8 @@ import {
   QUIET_AFTER_MS,
   reconcileRuns,
   steerStore,
-} from "@agenteschat/client";
-import { elapsedParts } from "@agenteschat/client/lib/activity";
+} from "@keepmind/client";
+import { elapsedParts } from "@keepmind/client/lib/activity";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { blockRowByRun, nextSlots, rowShows, SLOT_HOLD_MS, sameSlots, waitingLast } from "@/chat/run-slots";
 import { createStreamsStore, reconcileChannelRuns } from "@/realtime/context";

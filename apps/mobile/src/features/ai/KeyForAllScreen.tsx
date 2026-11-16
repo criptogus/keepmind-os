@@ -1,9 +1,9 @@
-import type { AgentSetup } from "@agenteschat/client";
-import { keys, useAiAccounts, useApi, useSetupPreview } from "@agenteschat/client";
-import { setupOutcome, takers } from "@agenteschat/client/lib/agent-setup";
-import { type KeyModel, keyModelFirst, keyModelGroups } from "@agenteschat/client/lib/brain-picker";
-import { planOf } from "@agenteschat/client/lib/plans";
-import { providerLabel } from "@agenteschat/client/lib/providers";
+import type { AgentSetup } from "@keepmind/client";
+import { keys, useAiAccounts, useApi, useSetupPreview } from "@keepmind/client";
+import { setupOutcome, takers } from "@keepmind/client/lib/agent-setup";
+import { type KeyModel, keyModelFirst, keyModelGroups } from "@keepmind/client/lib/brain-picker";
+import { planOf } from "@keepmind/client/lib/plans";
+import { providerLabel } from "@keepmind/client/lib/providers";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

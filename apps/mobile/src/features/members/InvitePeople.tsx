@@ -11,10 +11,10 @@ import {
   useMakeInviteLink,
   usePeople,
   useWorkspaceLimits,
-} from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { formatShortDate } from "@agenteschat/client/lib/format";
-import { useHeldWhile } from "@agenteschat/client/lib/hold";
+} from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { formatShortDate } from "@keepmind/client/lib/format";
+import { useHeldWhile } from "@keepmind/client/lib/hold";
 import {
   INVITE_LINK_DEFAULTS,
   INVITE_LINK_TTL,
@@ -24,14 +24,14 @@ import {
   plainLink,
   type RefusedPick,
   sameChoices,
-} from "@agenteschat/client/lib/invite-start";
-import { sendsEmail } from "@agenteschat/client/lib/join-requests";
-import { membersFull } from "@agenteschat/client/lib/limits";
-import { overLimitText } from "@agenteschat/client/lib/message-length";
-import { aiStateOf, onlyOwnerReplies } from "@agenteschat/client/lib/no-ai";
-import { can } from "@agenteschat/client/lib/permissions";
-import { playSound } from "@agenteschat/client/lib/sounds";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client/lib/invite-start";
+import { sendsEmail } from "@keepmind/client/lib/join-requests";
+import { membersFull } from "@keepmind/client/lib/limits";
+import { overLimitText } from "@keepmind/client/lib/message-length";
+import { aiStateOf, onlyOwnerReplies } from "@keepmind/client/lib/no-ai";
+import { can } from "@keepmind/client/lib/permissions";
+import { playSound } from "@keepmind/client/lib/sounds";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import { useLocalSearchParams, usePreventRemove } from "expo-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

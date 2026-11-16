@@ -1,8 +1,8 @@
 import { chmodSync, existsSync, mkdirSync, readFileSync, renameSync, statSync, watch, writeFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { SYSTEM_RUNNER_HOME } from "@agenteschat/adapters/command-policy";
-import { parseAccess, type RunnerAccess, type RunnerPause } from "@agenteschat/adapters/machine-protocol";
+import { SYSTEM_RUNNER_HOME } from "@keepmind/adapters/command-policy";
+import { parseAccess, type RunnerAccess, type RunnerPause } from "@keepmind/adapters/machine-protocol";
 import { validateNetworkMark } from "./network-mark";
 
 /**
@@ -18,7 +18,7 @@ export interface ClaudeSharedLogin {
 
 /** What `pair` writes and `start` reads (`~/.agentes-runner/config.json`, mode 600). */
 export interface RunnerConfig {
-  /** Our server, e.g. `https://app.agentes.chat` (no trailing slash). */
+  /** Our server, e.g. `https://keepmind.io` (no trailing slash). */
   server: string;
   machineId: string;
   name: string;
@@ -87,7 +87,7 @@ export interface RunnerConfig {
   previousToken?: string;
 }
 
-export { SYSTEM_RUNNER_HOME } from "@agenteschat/adapters/command-policy";
+export { SYSTEM_RUNNER_HOME } from "@keepmind/adapters/command-policy";
 export const DEFAULT_AGENT_UID_RANGE: [number, number] = [20000, 29999];
 
 /** A uid an agent user may have (1000–59999): never a system account's, and below the ranges systemd hands out itself. */

@@ -1,8 +1,8 @@
-import { useAuthConfig, usePeople, useRoles, useSuggestPerson } from "@agenteschat/client";
-import { errorCode, knownErrorText } from "@agenteschat/client/lib/errors";
-import { namesText } from "@agenteschat/client/lib/format";
-import { JOIN_NOTE_MAX, sendsEmail } from "@agenteschat/client/lib/join-requests";
-import { isEmail } from "@agenteschat/client/lib/text";
+import { useAuthConfig, usePeople, useRoles, useSuggestPerson } from "@keepmind/client";
+import { errorCode, knownErrorText } from "@keepmind/client/lib/errors";
+import { namesText } from "@keepmind/client/lib/format";
+import { JOIN_NOTE_MAX, sendsEmail } from "@keepmind/client/lib/join-requests";
+import { isEmail } from "@keepmind/client/lib/text";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, TextInput, View } from "react-native";

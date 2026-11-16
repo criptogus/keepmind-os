@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { CLOUD_SERVER } from "@agenteschat/client/lib/server";
+import { CLOUD_SERVER } from "@keepmind/client/lib/server";
 import { serverLabel, workspaceGroups } from "@/lib/workspaces";
 
 const OWN = "https://agentes.exemplo.com.br";
@@ -24,7 +24,7 @@ test("this server's workspaces first with their unread counts, then every other 
     ],
   });
   expect(groups.map((g) => [g.name, g.here, g.cloud, g.state])).toEqual([
-    ["agentes.chat", true, true, "ok"],
+    ["keepmind.io", true, true, "ok"],
     ["agentes.exemplo.com.br", false, false, "ok"],
     // Signed out there: listed, with no workspaces, to sign in again.
     ["sem-login.example.com", false, false, "signedOut"],
@@ -46,7 +46,7 @@ test("an older server without counts: its workspaces show with none", () => {
     others: [],
   });
   expect(mine).toMatchObject({ name: "agentes.exemplo.com.br", cloud: false, rows: [{ id: "oficina", unread: 0 }] });
-  expect(serverLabel(CLOUD_SERVER)).toBe("agentes.chat");
+  expect(serverLabel(CLOUD_SERVER)).toBe("keepmind.io");
 });
 
 test("a server not answering keeps its last workspaces, marked; this computer's server says so at any address", () => {

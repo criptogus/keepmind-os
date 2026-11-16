@@ -11,11 +11,11 @@
   height: 100%;
 }
 .km-agent-backdrop__fold {
-  fill: #1d2119;
+  fill: #1c1c1c;
 }
 .km-agent-backdrop__flow {
   fill: none;
-  stroke: #3a4828;
+  stroke: #454545;
   stroke-width: 1;
   transform-origin: center;
   animation: km-agent-current 18s ease-in-out infinite alternate paused;
@@ -23,9 +23,10 @@
 .km-agent-backdrop__accent {
   stroke: #c4ff3d;
   stroke-width: 1.5;
+  stroke-opacity: 1;
   stroke-dasharray: 56 660;
   stroke-dashoffset: -220;
-  opacity: 0.7;
+  opacity: 1;
 }
 .km-agent-backdrop[data-moving] .km-agent-backdrop__flow {
   animation-play-state: running;

@@ -1,6 +1,6 @@
-import type { SecretRequest, VaultScope } from "@agenteschat/client";
-import { modeKey } from "@agenteschat/client/lib/workspace-mode";
-import { Button, Checkbox, Field, Icon, Input, Segmented, Token, TokenList } from "@agenteschat/ui";
+import type { SecretRequest, VaultScope } from "@keepmind/client";
+import { modeKey } from "@keepmind/client/lib/workspace-mode";
+import { Button, Checkbox, Field, Icon, Input, Segmented, Token, TokenList } from "@keepmind/ui";
 import { useId, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AgentAvatar } from "@/components/AgentAvatar";

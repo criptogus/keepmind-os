@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { serverText } from "@agenteschat/i18n";
-import { LOCALE_CODES } from "@agenteschat/i18n/locale";
+import { serverText } from "@keepmind/i18n";
+import { LOCALE_CODES } from "@keepmind/i18n/locale";
 import { QueryClient } from "@tanstack/react-query";
 import type { TFunction } from "i18next";
 import { ApiError } from "../src/api/http";
@@ -411,7 +411,7 @@ describe("live: machine.provisioning, org.standing and org.limits", () => {
       state: "suspended",
       reason: "Pagamento",
     });
-    // agentes.chat Cloud says so, and the apps add how to contest it.
+    // KeepMind OS Cloud says so, and the apps add how to contest it.
     applyWorkspaceEvent(qc, "o1", {
       type: "org.standing",
       orgId: "o1",
@@ -478,8 +478,8 @@ describe("the workspace's standing in words (ADR 0056 §8)", () => {
 
   test("where to ask: the server's address, else who runs it; on the Cloud without an address, nowhere", () => {
     expect(supportLineOf({ supportEmail: "ti@acme.dev", workspaceComputer: false })).toEqual({ email: "ti@acme.dev" });
-    expect(supportLineOf({ supportEmail: "help@agentes.chat", workspaceComputer: true })).toEqual({
-      email: "help@agentes.chat",
+    expect(supportLineOf({ supportEmail: "contact@zeroagency.ai", workspaceComputer: true })).toEqual({
+      email: "contact@zeroagency.ai",
     });
     expect(supportLineOf({ supportEmail: null, workspaceComputer: false })).toBe("ask");
     // A server too old to say whether it is the Cloud is someone's own.
@@ -509,8 +509,8 @@ describe("the workspace's standing in words (ADR 0056 §8)", () => {
     expect(errorText(t, new ApiError(403, "agent.paused", "This agent is paused for now."))).toBe(
       "standing.agentPaused",
     );
-    // On agentes.chat Cloud, the hold's kind and how to contest it; a run's values say "true".
-    const email = '{"email":"legal@agentes.chat"}';
+    // On KeepMind OS Cloud, the hold's kind and how to contest it; a run's values say "true".
+    const email = '{"email":"contact@zeroagency.ai"}';
     expect(restrictionLine(t, "run.agent_paused", { kind: "network", cloud: "true" })).toBe(
       `standing.cloud.agentNetwork ${email}`,
     );

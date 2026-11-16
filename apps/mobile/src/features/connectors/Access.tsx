@@ -1,4 +1,4 @@
-import { keys, useAgentAccess, useApi, useCustomServerAction, useDisconnect, useGitHubApp } from "@agenteschat/client";
+import { keys, useAgentAccess, useApi, useCustomServerAction, useDisconnect, useGitHubApp } from "@keepmind/client";
 import {
   type Level,
   type LevelState,
@@ -6,10 +6,10 @@ import {
   levelOf,
   resourcesOf,
   saveLevels,
-} from "@agenteschat/client/lib/access-levels";
-import type { ConnectedItem } from "@agenteschat/client/lib/connected";
-import { githubDisconnectNote } from "@agenteschat/client/lib/github-app";
-import { can } from "@agenteschat/client/lib/permissions";
+} from "@keepmind/client/lib/access-levels";
+import type { ConnectedItem } from "@keepmind/client/lib/connected";
+import { githubDisconnectNote } from "@keepmind/client/lib/github-app";
+import { can } from "@keepmind/client/lib/permissions";
 import { useQueryClient } from "@tanstack/react-query";
 import { type ReactNode, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -134,7 +134,7 @@ export function DisconnectRow({ item, name, onDone }: { item: ConnectedItem; nam
   const disconnect = useDisconnect(orgId);
   const { disconnect: disconnectServer } = useCustomServerAction(orgId);
   const users = dir.agents.filter((a) => levelIn(access.byAgent.get(a.id), `connector:${item.id}`) !== "none").length;
-  // GitHub and the agentes.chat app: the app alone is uninstalled with it, an account goes and the app stays.
+  // GitHub and the KeepMind OS app: the app alone is uninstalled with it, an account goes and the app stays.
   const installations = useGitHubApp(orgId, item.def?.id === "github").data?.installations ?? [];
   const githubNote = githubDisconnectNote(t, item, installations);
   const run = () => {

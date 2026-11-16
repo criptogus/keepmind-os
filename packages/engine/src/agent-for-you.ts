@@ -1,4 +1,4 @@
-import { and, type Database, desc, eq, isNull, schema, sql } from "@agenteschat/db";
+import { and, type Database, desc, eq, isNull, schema, sql } from "@keepmind/db";
 import { type AgentActionView, actionView } from "./agent-actions";
 import { getAgent } from "./agents";
 import { type ApprovalView, listApprovals } from "./approvals";

@@ -1,5 +1,5 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, asc, type Database, eq, rowsOf, schema, sql } from "@agenteschat/db";
+import type { PubSub } from "@keepmind/adapters";
+import { and, asc, type Database, eq, rowsOf, schema, sql } from "@keepmind/db";
 import { recordAudit } from "./audit";
 import { caches } from "./cache";
 import { managesChannel } from "./channels";

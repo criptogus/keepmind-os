@@ -1,5 +1,5 @@
 {
-  "name": "@agenteschat/server",
+  "name": "@keepmind/server",
   "version": "0.2.0-alpha.1",
   "private": true,
   "type": "module",
@@ -15,23 +15,23 @@
     "build": "bun build src/main.ts --target=bun --outdir=dist --sourcemap=linked"
   },
   "dependencies": {
-    "@agenteschat/adapters": "workspace:*",
-    "@agenteschat/client": "workspace:*",
-    "@agenteschat/config": "workspace:*",
-    "@agenteschat/db": "workspace:*",
-    "@agenteschat/engine": "workspace:*",
-    "@agenteschat/i18n": "workspace:*",
-    "@agenteschat/modules": "workspace:*",
-    "@agenteschat/providers": "workspace:*",
-    "@agenteschat/setup": "workspace:*",
-    "@agenteschat/tokens": "workspace:*",
+    "@keepmind/adapters": "workspace:*",
+    "@keepmind/client": "workspace:*",
+    "@keepmind/config": "workspace:*",
+    "@keepmind/db": "workspace:*",
+    "@keepmind/engine": "workspace:*",
+    "@keepmind/i18n": "workspace:*",
+    "@keepmind/modules": "workspace:*",
+    "@keepmind/providers": "workspace:*",
+    "@keepmind/setup": "workspace:*",
+    "@keepmind/tokens": "workspace:*",
     "@better-auth/expo": "^1.7.7",
     "@hono/zod-openapi": "^1.6.3",
     "@scalar/hono-api-reference": "^0.12.9",
     "better-auth": "^1.7.7",
     "hono": "^4.13.13",
     "zod": "^4.6.5",
-    "@agenteschat/ui": "workspace:*"
+    "@keepmind/ui": "workspace:*"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.8",

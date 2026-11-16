@@ -4,18 +4,18 @@ import {
   useCustomServerAction,
   useCustomServers,
   useRenameConnection,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 import {
   accountUnchecked,
   type ConnectedItem,
   connectedItems,
   itemName,
   reconnectAddsText,
-} from "@agenteschat/client/lib/connected";
-import { knownErrorText } from "@agenteschat/client/lib/errors";
-import { appAccountsText } from "@agenteschat/client/lib/github-app";
-import { can } from "@agenteschat/client/lib/permissions";
-import { connectorBrand } from "@agenteschat/client/lib/scopes";
+} from "@keepmind/client/lib/connected";
+import { knownErrorText } from "@keepmind/client/lib/errors";
+import { appAccountsText } from "@keepmind/client/lib/github-app";
+import { can } from "@keepmind/client/lib/permissions";
+import { connectorBrand } from "@keepmind/client/lib/scopes";
 import { useHeaderHeight } from "expo-router/react-navigation";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -58,7 +58,7 @@ export const openConnection = (id: string) => router.push(`/connectors/${id}`);
  * it (one row per agent, the level as its value, changed in place), what always asks as that group's footer; its
  * tools as one row (what waits on you under it, in amber; a screen of their own); the account (which, Reconectar,
  * another account of an MCP server, each in a sheet); and Desconectar, alone in red, behind the system's
- * confirmation. GitHub also lists its repositories through the agentes.chat app, under who uses it. Connecting a new
+ * confirmation. GitHub also lists its repositories through the KeepMind OS app, under who uses it. Connecting a new
  * service stays in its sheet.
  */
 export function ConnectionScreen({ id }: { id: string }) {

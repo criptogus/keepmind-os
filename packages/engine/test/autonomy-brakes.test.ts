@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, setDefaultTimeout, test } from "bun:test";
-import { channelTopic, orgTopic, PERMISSION_TOOL } from "@agenteschat/adapters";
-import { eq, schema, sql } from "@agenteschat/db";
+import { channelTopic, orgTopic, PERMISSION_TOOL } from "@keepmind/adapters";
+import { eq, schema, sql } from "@keepmind/db";
 import {
   askStillOpen,
   autonomySettings,

@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import { asc, eq, schema, sql } from "@agenteschat/db";
+import { asc, eq, schema, sql } from "@keepmind/db";
 import { drainOutbox, grantScopes, postPersonMessage, type ToolDefinition, type ToolOutput } from "../src";
 import { codedErrorMessage } from "../src/errors";
 import { pgSafeText, textOfBytes } from "../src/format";

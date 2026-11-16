@@ -1,3 +1,4 @@
+import { libraryHelloEn, libraryRolesEn } from "./agent-library";
 import type { Widen } from "./widen";
 
 /**
@@ -7,6 +8,72 @@ import type { Widen } from "./widen";
  * no exclamation marks, buttons start with a verb, "agentes" in lower case.
  */
 export const en = {
+  "zero.manageConnection": "Manage connection",
+  "zero.products": "Zero Agency products",
+  "zero.notFound": "This area does not exist. Open Skills, Second Brain or Cybersecurity from More.",
+  "zero.optional": "Optional · connect when needed",
+  "zero.needsAI": "Connect Kivo’s AI to delegate this preparation.",
+  "zero.configureAI": "Configure AI",
+  "zero.sending": "Sending objective…",
+  "zero.progress": "Kivo carries out the work in chat, reports blockers and asks only for necessary decisions.",
+  "zero.skills.title": "Skills",
+  "zero.skills.intro": "Practical knowledge for your agents. Find, apply and improve your skills.",
+  "zero.skills.help":
+    "Use your skills as usual. Optionally connect SuperAgentSkill to evaluate and improve them. Open a skill and choose Improve with AI to review changes before applying.",
+  "zero.skills.connect": "Connect SuperAgentSkill",
+  "zero.skills.visit": "Explore the catalogue",
+  "zero.brain.title": "Second Brain",
+  "zero.brain.intro": "Memories and decisions that stay useful after the conversation.",
+  "zero.brain.goal": "Choose where your knowledge lives",
+  "zero.brain.help":
+    "Keep workspace memories or prepare a versioned Second Brain in a private GitHub repository. For your own vault, request a KeepMind SB installation.",
+  "zero.brain.context": "Repository name or context (optional)",
+  "zero.brain.placeholder": "keepmind-brain",
+  "zero.brain.boundary":
+    "Nothing is exported automatically. Approve the repository or installation before execution. Personal and team memories retain separate access.",
+  "zero.brain.start": "Prepare in GitHub",
+  "zero.brain.install": "Prepare KeepMind SB installation",
+  "zero.brain.download": "Download schema",
+  "zero.cyber.title": "Cybersecurity",
+  "zero.cyber.intro": "A dedicated team to understand risks and follow corrections with evidence.",
+  "zero.cyber.goal": "Prepare your Cybersec team",
+  "zero.cyber.help":
+    "Kivo checks the Liquid connection and paid plan, prepares agents and proposes scope. Activation remains pending if subscription status cannot be verified.",
+  "zero.cyber.context": "Product or system to protect",
+  "zero.cyber.placeholder": "My application and repositories",
+  "zero.cyber.boundary":
+    "Requires an active paid Liquid Cybersec plan. No plans are purchased here. Creating a team does not start tests: targets, access and credit usage require authorization.",
+  "zero.cyber.start": "Prepare my team",
+  "zero.cyber.connect": "Connect Liquid Cybersec",
+  "zero.cyber.plans": "Explore plans",
+
+  "keepmind.connect.githubSetup":
+    "Connect in your browser without copying tokens. The first time, GitHub creates the KeepMind app in your account. Then you choose repositories and authorize access.",
+  "keepmind.connect.oauthSetup":
+    "{{name}} supports OAuth, but the connection has not been configured yet. Your administrator needs to enable it. An API key is a manual alternative in the meantime.",
+  "keepmind.connect.prepareGitHub": "Set up connection on GitHub",
+  "keepmind.ai.manualKey": "I already have an API key",
+  "keepmind.ai.localTitle": "Connect a local model or another provider",
+  "keepmind.ai.advanced": "Advanced options",
+
+  "keepmind.ai.routerChoice": "Sign in or use a key. Free and paid models.",
+  "keepmind.ai.localChoice": "Use models on your computer, without an API key.",
+  "keepmind.ai.ollama.detect": "Detect Ollama models",
+  "keepmind.ai.ollama.location":
+    "Discovery runs on the computer hosting the KeepMind server. If the server runs elsewhere, enter an address it can reach below.",
+  "keepmind.ai.ollama.empty":
+    "Ollama responded, but no models are installed. Download a model in Ollama and try again.",
+
+  "keepmind.ai.openrouter.login": "Connect with OpenRouter",
+  "keepmind.ai.openrouter.instructions":
+    "Authorize on OpenRouter, then paste the code it displays. Your password stays there.",
+  "keepmind.ai.openrouter.code": "Authorization code",
+  "keepmind.ai.openrouter.finish": "Complete authorization",
+  "keepmind.ai.openrouter.error": "Could not complete authorization. Check the code or start again.",
+  "keepmind.ai.openrouter.cost":
+    "After authorization, test and save the connection. Free models have limits. Paid models use your credits.",
+  "keepmind.ai.reopen": "Open again",
+
   keepmindHome: {
     routineBlockers: "Routines that need attention",
     blockers: "Work is blocked",
@@ -51,7 +118,7 @@ export const en = {
       "Review skill {{name}} (v{{version}}), using SuperAgentSkill if available. Preserve its capabilities and access controls. {{goal}} Prepare a complete proposal for my approval before applying any changes. Explain the changes and show the approval card. Do not publish anything.",
   },
   app: {
-    name: "agentes",
+    name: "KeepMind OS",
     /** The browser tab's title on every screen that doesn't set its own. */
     tabTitle: "KeepMind OS · Your team and your agents, in the same conversation",
   },
@@ -601,7 +668,7 @@ export const en = {
     recommended: "Recommended",
     free: "Free · open source",
     cloud: {
-      name: "agentes.chat Cloud",
+      name: "KeepMind OS Cloud",
       short: "Always on, nothing to install.",
       on: "The agents' computer always on",
       care: "Updates and backups are on us",
@@ -779,7 +846,7 @@ export const en = {
     server: {
       into: "Signing in to <b>{{server}}</b>",
       intoHere: "Signing in to the KeepMind OS <b>on this {{device}}</b>",
-      intoCloud: "Signing in to <b>agentes.chat Cloud</b>",
+      intoCloud: "Signing in to <b>KeepMind OS Cloud</b>",
       /** Change's name for screen readers: the email's Change sits on the same screen. */
       change: "Change server",
     },
@@ -1356,7 +1423,7 @@ export const en = {
         paused: "Connect with MCP is off while this workspace is paused. Bring the agents this way for now.",
       },
       otherName: "Another app",
-      agenteschatName: "agentes.chat",
+      agenteschatName: "KeepMind OS",
       where: {
         openbotrun:
           "Drop openbot-import.json (from Migrator by OpenBot) or openbot-transfer.json (from the instance transfer), or the .zip it came in.",
@@ -5789,7 +5856,7 @@ export const en = {
     noInstructions: "{{name}} has no instructions yet. Say how he should work.",
     noInstructions_female: "{{name}} has no instructions yet. Say how she should work.",
     savedToast: "{{name}}'s changes saved.",
-    builtinName: "agentes",
+    builtinName: "KeepMind",
     builtinNote: "built-in permissions",
     connectHint: "Connect services",
     subtitle: "{{role}} · owned by <b>{{owner}}</b> · {{model}} {{key}}",
@@ -7045,7 +7112,7 @@ export const en = {
         agent: "Ada",
         desc: "Codes, reviews PRs and investigates bugs.",
         instructions:
-          "Investigates first: reads the code and the related tasks and errors before answering, and comes back with what it found and a concrete PR proposal with a test.\nWorks in branches and opens small PRs. For big changes, opens the PR as a draft and explains the plan there.\nNever merges alone: asks a person for review.",
+          "Investigates first: reads the code and the related tasks and errors before answering, and comes back with what it found and a concrete PR proposal with a test.\nWorks in branches and opens small PRs. For big changes, opens the PR as a draft and explains the plan there.\nNever merges alone: asks a person for review.\nReproduce the problem or define acceptance criteria, read repository architecture and instructions. Implement the smallest complete change, validate with relevant tests and explain risks and rollback. Deliver a reviewable change with evidence. Never claim a test or deployment you did not run. Reuse authorized context, memories, skills and tools. Ask only about material gaps, with up to three questions offering choices and free text. Proceed within the mandate, report blockers and verify delivery before completion. Publishing, external contacts, spending and access changes require authorization.",
         tasks: {
           a: "What's the most frequent error right now?",
           b: "Review the latest open PR",
@@ -7101,7 +7168,7 @@ export const en = {
         agent: "Leo",
         desc: "Prepares proposals and follows up with leads.",
         instructions:
-          "Before talking to anyone, researches the company, the history with it and what was already agreed, and comes back with a summary and the next step.\nKeeps the list of leads up to date and reminds the team of what's stalled.\nNever makes up prices, discounts or terms: uses only what's in the price list. Sends a proposal or email to a customer only with approval.",
+          "Before talking to anyone, researches the company, the history with it and what was already agreed, and comes back with a summary and the next step.\nKeeps the list of leads up to date and reminds the team of what's stalled.\nNever makes up prices, discounts or terms: uses only what's in the price list. Sends a proposal or email to a customer only with approval.\nQualify customer fit, pain, buying context and next steps. Prepare discovery, proposals and objection handling. record evidence per opportunity. Deliver a pipeline with next steps, owners and dates. Never invent leads, conversations, revenue or proposal acceptance. Reuse authorized context, memories, skills and tools. Ask only about material gaps, with up to three questions offering choices and free text. Proceed within the mandate, report blockers and verify delivery before completion. Publishing, external contacts, spending and access changes require authorization.",
         tasks: {
           a: "Who has been quiet for over a week?",
           b: "Prepare a proposal for the latest lead",
@@ -7113,7 +7180,7 @@ export const en = {
         agent: "Mila",
         desc: "Plans campaigns, posts and website pages.",
         instructions:
-          "Starts by looking at what was already done, the results and the brand's voice before suggesting something new.\nWrites drafts of campaigns, posts and pages, with one main idea and who it's for.\nNever makes up numbers or testimonials. Publishes on the website or social media only with approval.",
+          "Starts by looking at what was already done, the results and the brand's voice before suggesting something new.\nWrites drafts of campaigns, posts and pages, with one main idea and who it's for.\nNever makes up numbers or testimonials. Publishes on the website or social media only with approval.\nDiagnose audience, offer, positioning and conversion goals. Prepare messaging, channels, calendar and experiments. Use business outcomes rather than vanity metrics alone. Deliver a brief, editable assets, hypotheses, proposed budget and measurement. Do not invent evidence, campaign results or testimonials. Reuse authorized context, memories, skills and tools. Ask only about material gaps, with up to three questions offering choices and free text. Proceed within the mandate, report blockers and verify delivery before completion. Publishing, external contacts, spending and access changes require authorization.",
         tasks: {
           a: "Suggest 3 posts for this week",
           b: "Plan the next campaign",
@@ -7145,7 +7212,7 @@ export const en = {
         agent: "Otto",
         desc: "Keeps track of payments, billing and spending.",
         instructions:
-          "Checks payments, billing and spending at the source before answering and shows amounts with the date and where they came from.\nFlags what's out of the ordinary: failing charges, spending above what's expected, invoices coming due.\nPayments, refunds and any money movement only with approval. Never makes up amounts.",
+          "Checks payments, billing and spending at the source before answering and shows amounts with the date and where they came from.\nFlags what's out of the ordinary: failing charges, spending above what's expected, invoices coming due.\nPayments, refunds and any money movement only with approval. Never makes up amounts.\nReconcile sources and dates before calculating. check currency, period and formulas. Analyze cash, budgets, variances and scenarios with explicit assumptions. Deliver an auditable spreadsheet or report, discrepancies and next steps. Never invent balances, execute payments or present forecasts as guaranteed returns. Reuse authorized context, memories, skills and tools. Ask only about material gaps, with up to three questions offering choices and free text. Proceed within the mandate, report blockers and verify delivery before completion. Publishing, external contacts, spending and access changes require authorization.",
         tasks: { a: "How much came in this month?", b: "Which charges failed?", c: "Summarize last month's spending" },
       },
       people: {
@@ -7185,8 +7252,11 @@ export const en = {
         },
       },
       custom: { name: "From scratch", desc: "You write everything. No access until you grant it.", instructions: "" },
+      ...libraryRolesEn,
     },
     roleGroups: {
+      advisory: "Consulting and foresight",
+      inspired: "Inspired profiles",
       /** A personal workspace's one group: the right hand's personal agents (ADR 0159). */
       personal: "For your day",
       tech: "Product and tech",
@@ -7355,6 +7425,7 @@ export const en = {
     routineNotMade: "The routine wasn't created: {{reason}}",
     /** How each personal starter and ready-made role introduces itself on its card, in its own voice (ADR 0164). */
     hello: {
+      ...libraryHelloEn,
       clara: "I'll look after your calendar and remind you of what matters before it's too late.",
       duda: "I'll keep track of your bills and spending and warn you before anything is due.",
       leo: "I'll plan your workouts and keep you on pace, your way.",
@@ -7453,6 +7524,8 @@ export const en = {
   },
   /** A new agent's dialog (ADR 0164): pick on the left, its card edited in place on the right; its chat's band. */
   newAgentCard: {
+    searchTemplates: "Search by area, profile or inspiration",
+    noTemplates: "No templates found. Try another search or start from scratch.",
     title: "New agent",
     lead: "Pick on the left and adjust on the right. You can change everything later.",
     list: "Starting points",
@@ -12757,6 +12830,7 @@ export const en = {
     },
     how: {
       oneClick: "One click: you authorize on the service's page",
+      oauthSetup: "Browser authorization: initial setup required",
       oauthOrKey: "You authorize on the service's page, or use an API key",
       key: "Needs an API key",
       appPassword: "Needs an app password",
@@ -12994,6 +13068,7 @@ export const en = {
       intercom_eu: "Intercom (EU)",
     },
     descriptions: {
+      composio_connect: "Connect services through your Composio account with browser authorization.",
       superagentskill: "Find, evaluate and improve agent skills.",
       liquid_cybersec: "Investigate security findings and coordinate corrections with approval.",
       github: "Code, PRs, issues and Actions.",
@@ -13084,7 +13159,7 @@ export const en = {
      */
     order: "modifiers-first",
     /**
-     * Which column of the tool catalog (`@agenteschat/client` `lib/tool-labels.ts`) names this language's tools, kept
+     * Which column of the tool catalog (`@keepmind/client` `lib/tool-labels.ts`) names this language's tools, kept
      * in English: "en", "pt-BR", or "none" (then a name is built from the verbs and nouns below).
      */
     catalog: "en",
@@ -15919,7 +15994,7 @@ export const en = {
     },
     /**
      * The license's required attribution (AGPL-3.0 section 7(b), see NOTICE): translate it, but keep
-     * "agentes.chat" and "Codari Global, LLC" and its meaning.
+     * "keepmind.io" and "Codari Global, LLC" and its meaning.
      */
     about: {
       basedOn: "Based on <site>agentes.chat</site> by Codari Global, LLC",
@@ -16037,7 +16112,7 @@ export const en = {
     },
     telemetry: {
       title: "Usage statistics",
-      label: "Send anonymous usage statistics to agentes.chat",
+      label: "Send anonymous usage statistics to KeepMind OS",
       help: "Counts such as people, agents, machine sizes, AI tokens used and how much data the agents' browsers send and receive. Never messages, files, names or sites.",
       envOff: "Turned off in this server's settings (TELEMETRY=off).",
       envOffDesktop: "Turned off in the KeepMind OS app on this server's computer (Preferences\u00a0›\u00a0Servers).",
@@ -16428,7 +16503,7 @@ export const en = {
   },
   gallery: {
     title: "Component gallery",
-    subtitle: "Development only: the @agenteschat/ui components.",
+    subtitle: "Development only: the @keepmind/ui components.",
   },
   format: {
     // i18next's `list` format: Intl.ListFormat in the language ("Ada, Atlas, and Theo", "Ada、Atlas、Theo"). Keep as is.
@@ -17964,7 +18039,7 @@ export const en = {
       /** In place of the invite form. */
       invites: "Invitations open with the KeepMind OS plan.",
     },
-    /** agentes.chat Cloud only: what the restriction is, the Terms section and how to contest it (`restrictionLine`). */
+    /** KeepMind OS Cloud only: what the restriction is, the Terms section and how to contest it (`restrictionLine`). */
     cloud: {
       review:
         "Paused for a safety review, until our team looks at it. Our automated checks flagged activity that may break our Terms (section 5). To contest it, write to {{email}}.",
@@ -18360,7 +18435,7 @@ export const en = {
     control: {
       notice: "Programs on {{name}}'s computer can see the screen and what you type or paste.",
     },
-    /** The ⓘ beside the control line, on agentes.chat Cloud only (ADR 0076). */
+    /** The ⓘ beside the control line, on KeepMind OS Cloud only (ADR 0076). */
     session: {
       check: "Safety checks",
       screening:
@@ -19727,7 +19802,7 @@ export const en = {
     mark: "Beta",
     open: "Send feedback",
     ask: "What was missing, broke or got in your way?",
-    goesCloud: "What you write goes by email to the agentes.chat team.",
+    goesCloud: "What you write goes by email to the KeepMind OS team.",
     goesServer: "What you write goes by email to whoever runs this server.",
     placeholder: "Write it your way",
     /** The last entry of a right-click menu: it opens this form about what was clicked. */
@@ -19762,7 +19837,7 @@ export const en = {
       /** The row's name for screen readers. */
       group: "Report about the app",
       ready: "<b>Report ready</b>: {{summary}}",
-      goesCloud: "Goes in your name to the agentes.chat team",
+      goesCloud: "Goes in your name to the KeepMind OS team",
       goesServer: "Goes in your name to whoever runs this server",
       see: "See the report",
       hide: "Close the report",
@@ -19770,7 +19845,7 @@ export const en = {
       notNow: "Not now",
       /** Under the opened report. */
       answer: "The answer comes to your email.",
-      sentCloud: "<b>Report sent</b> to the agentes.chat team",
+      sentCloud: "<b>Report sent</b> to the KeepMind OS team",
       sentServer: "<b>Report sent</b> to whoever runs this server",
       /** It went with the reply: the person chose Always send. */
       sentAuto: "<b>Report sent without asking</b>: {{summary}}",

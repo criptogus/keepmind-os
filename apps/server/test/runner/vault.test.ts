@@ -11,7 +11,7 @@ import {
   VAULT_PASSWORD_PROTOCOL,
   VAULT_PROTOCOL,
   VAULT_TYPE_REFUSALS,
-} from "@agenteschat/adapters/machine-protocol";
+} from "@keepmind/adapters/machine-protocol";
 import {
   generateSecretKeyPair,
   madePasswordAad,
@@ -20,7 +20,7 @@ import {
   sealSecret,
   secretAad,
   vaultAad,
-} from "@agenteschat/adapters/secret-box";
+} from "@keepmind/adapters/secret-box";
 import { describeRequest, handleRequest, NEW_WORK_OPS, OP_ROUTES, type RequestScope } from "../../runner/handlers";
 import { agentSecrets, dropStoredSiteSecrets, handleSecret, secretValue } from "../../runner/secrets";
 import {

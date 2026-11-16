@@ -1,6 +1,6 @@
-import type { PlanUsage } from "@agenteschat/client";
-import { planWord as planStateWord } from "@agenteschat/client/lib/plan-usage";
-import { planState } from "@agenteschat/ui";
+import type { PlanUsage } from "@keepmind/client";
+import { planWord as planStateWord } from "@keepmind/client/lib/plan-usage";
+import { planState } from "@keepmind/ui";
 import type { TFunction } from "i18next";
 
 // The words of the usage views live in the client, shared with the phone (ADR 0063).
@@ -25,9 +25,9 @@ export {
   usageSourceName,
   usageSourcePart,
   workspaceUsesApi,
-} from "@agenteschat/client/lib/plan-usage";
+} from "@keepmind/client/lib/plan-usage";
 // At the limit, the owner's other accounts that could think instead: shared with the phone.
-export { limitOffers } from "@agenteschat/ui";
+export { limitOffers } from "@keepmind/ui";
 
 /** The plan's state in a few words, for a line that has no room for the meter; null when it is fine. */
 export const planWord = (t: TFunction, locale: string, usage: PlanUsage | null | undefined, now = new Date()) =>

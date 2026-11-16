@@ -15,9 +15,9 @@ import {
   shiftDays,
   uses12h,
   yToMinutes,
-} from "@agenteschat/client/lib/calendar";
-import { toYmd } from "@agenteschat/client/lib/format";
-import { Icon, Skeleton } from "@agenteschat/ui";
+} from "@keepmind/client/lib/calendar";
+import { toYmd } from "@keepmind/client/lib/format";
+import { Icon, Skeleton } from "@keepmind/ui";
 import {
   type CSSProperties,
   type ReactNode,

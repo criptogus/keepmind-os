@@ -1,6 +1,6 @@
-import { type Agent, useUpdateAgent } from "@agenteschat/client";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { readBudget } from "@agenteschat/client/lib/new-agent";
+import { type Agent, useUpdateAgent } from "@keepmind/client";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { readBudget } from "@keepmind/client/lib/new-agent";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, TextInput, View } from "react-native";

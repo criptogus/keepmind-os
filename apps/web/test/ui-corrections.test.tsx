@@ -1,14 +1,14 @@
 import { afterEach, describe, expect, spyOn, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
 import { join } from "node:path";
-import type { Message } from "@agenteschat/client";
-import { markedPieces, markFaced, markInk } from "@agenteschat/client/lib/activity";
-import { mentionsHandle } from "@agenteschat/client/lib/markdown";
-import { apiProviderOf } from "@agenteschat/client/lib/providers";
-import { splitAtNames, wordIndex } from "@agenteschat/client/lib/text";
+import type { Message } from "@keepmind/client";
+import { markedPieces, markFaced, markInk } from "@keepmind/client/lib/activity";
+import { mentionsHandle } from "@keepmind/client/lib/markdown";
+import { apiProviderOf } from "@keepmind/client/lib/providers";
+import { splitAtNames, wordIndex } from "@keepmind/client/lib/text";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import type { ReactElement } from "react";
 import { ActorWho, withAgentFace, withAgentFaces } from "@/components/AgentAvatar";

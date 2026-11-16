@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { and, eq, schema, sql } from "@agenteschat/db";
+import { and, eq, schema, sql } from "@keepmind/db";
 import {
   answerGitHubNotice,
   GITHUB_EVENT_JOB,
@@ -213,7 +213,7 @@ describe("what happens on GitHub wakes the agent it concerns (ADR 0156)", () => 
     expect(
       await deliver("issue_comment", commentOn(12, "Bump deps", { id: 8, login: "renovate[bot]", type: "Bot" })),
     ).toBe(false);
-    const signed = signedBody("Fixed in the last commit.", "Dev, agente de ana no agentes.chat");
+    const signed = signedBody("Fixed in the last commit.", "Dev, agente de ana no KeepMind OS");
     expect(await deliver("issue_comment", commentOn(12, signed))).toBe(false);
     expect(await githubNotices()).toEqual([]);
 

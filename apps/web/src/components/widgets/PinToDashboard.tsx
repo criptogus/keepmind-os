@@ -1,6 +1,6 @@
-import type { WidgetSchedule } from "@agenteschat/client";
-import { useDashboards, useHomeDashboard, usePinWidget } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
+import type { WidgetSchedule } from "@keepmind/client";
+import { useDashboards, useHomeDashboard, usePinWidget } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
 import {
   Alert,
   Button,
@@ -13,8 +13,8 @@ import {
   Select,
   Switch,
   WidgetCard,
-} from "@agenteschat/ui";
-import { chartBlockToWidgetSpec, defaultSize, sizeToLayout } from "@agenteschat/ui/widgets/spec";
+} from "@keepmind/ui";
+import { chartBlockToWidgetSpec, defaultSize, sizeToLayout } from "@keepmind/ui/widgets/spec";
 import { useNavigate } from "@tanstack/react-router";
 import { useId, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";

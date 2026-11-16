@@ -1,7 +1,7 @@
 import { afterEach, expect, setDefaultTimeout, test } from "bun:test";
-import { eq, schema } from "@agenteschat/db";
-import { serverText } from "@agenteschat/i18n";
-import type { ModelRequest } from "@agenteschat/providers";
+import { eq, schema } from "@keepmind/db";
+import { serverText } from "@keepmind/i18n";
+import type { ModelRequest } from "@keepmind/providers";
 import {
   addChannelMember,
   type Brain,

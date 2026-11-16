@@ -5,8 +5,8 @@
  * sign-in in the browser and waits. Accounts belong to one organization's home, so with several
  * organizations a switch picks which one (as Pastas). A runner from before accounts hides the cards.
  */
-import type { AccountKind, RunnerAccountInfo } from "@agenteschat/adapters/machine-protocol";
-import type { ControlStatus } from "@agenteschat/adapters/runner-control";
+import type { AccountKind, RunnerAccountInfo } from "@keepmind/adapters/machine-protocol";
+import type { ControlStatus } from "@keepmind/adapters/runner-control";
 import {
   BRAIN_ICONS,
   Button,
@@ -19,7 +19,7 @@ import {
   PixelSpinner,
   ProviderLogo,
   Segmented,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHost, useStore } from "../../app";

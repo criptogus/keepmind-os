@@ -1,4 +1,4 @@
-/* App styles: fonts, the design system, and page layout. No component visuals here: those live in @agenteschat/ui. */
+/* App styles: fonts, the design system, and page layout. No component visuals here: those live in @keepmind/ui. */
 /* The kit, then the app's base sheets, in one cascade layer. Page sheets (a component's own CSS) stay unlayered, so a
    page rule beats the kit and the base whatever order the build links the chunks in: the production build links the
    shared chunks' CSS before the main sheet, where a tie went to the kit, while dev links the main sheet first. One
@@ -11,7 +11,7 @@
 /* Onest: the design system's own default face (`--font-sans` in its tokens). */
 @import "@fontsource-variable/onest/index.css";
 @import "./fonts.css";
-@import "@agenteschat/ui/styles.css" layer(base);
+@import "@keepmind/ui/styles.css" layer(base);
 @import "./layout.css" layer(base);
 @import "./responsive.css" layer(base);
 @import "./chat/looks.css" layer(base);

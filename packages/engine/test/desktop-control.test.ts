@@ -5,9 +5,9 @@ import {
   type MachineRequest,
   STREAM_CLOSE,
   type StreamRequest,
-} from "@agenteschat/adapters";
-import { and, eq, schema } from "@agenteschat/db";
-import type { ModelRequest } from "@agenteschat/providers";
+} from "@keepmind/adapters";
+import { and, eq, schema } from "@keepmind/db";
+import type { ModelRequest } from "@keepmind/providers";
 import {
   authorizeStream,
   BROWSER_SCOPE,
@@ -770,7 +770,7 @@ describe("the agent asks for help on its desktop", () => {
     ).toEqual({
       title: "Dev precisa de você no computador",
       // "a computer" alone would read as the agent's own: a laptop, where the screen is helped.
-      body: "Abra o agentes.chat num notebook para ajudar.",
+      body: "Abra o KeepMind OS num notebook para ajudar.",
     });
   });
 

@@ -8,8 +8,8 @@ import type {
   MachineAccount,
   MachineAccountKind,
   PlanUsage,
-} from "@agenteschat/client";
-import { autonomyWords, type NewAgentStart } from "@agenteschat/client/lib/agent-setup";
+} from "@keepmind/client";
+import { autonomyWords, type NewAgentStart } from "@keepmind/client/lib/agent-setup";
 import {
   type AccountChoice,
   accountAbout,
@@ -19,9 +19,9 @@ import {
   lendable,
   ownSignInLower,
   signInOf,
-} from "@agenteschat/client/lib/ai-accounts";
-import { thinksWith } from "@agenteschat/client/lib/brain";
-import { type Advanced, advancedDefaults, advancedParts } from "@agenteschat/client/lib/brain-advanced";
+} from "@keepmind/client/lib/ai-accounts";
+import { thinksWith } from "@keepmind/client/lib/brain";
+import { type Advanced, advancedDefaults, advancedParts } from "@keepmind/client/lib/brain-advanced";
 import {
   type BrainPick,
   brainPickInput,
@@ -29,8 +29,8 @@ import {
   modelInput,
   modelRows,
   needsOwnSignIn,
-} from "@agenteschat/client/lib/brain-picker";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
+} from "@keepmind/client/lib/brain-picker";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
 import {
   aiChoiceOf,
   gateRechecks,
@@ -38,11 +38,11 @@ import {
   type PlanGate,
   planOfAccount,
   planOfKind,
-} from "@agenteschat/client/lib/no-ai";
-import { planWord } from "@agenteschat/client/lib/plan-usage";
-import { brainPlan } from "@agenteschat/client/lib/plans";
-import { AUTO, isAuto, keyLine } from "@agenteschat/client/lib/providers";
-import { planState } from "@agenteschat/ui/plan-state";
+} from "@keepmind/client/lib/no-ai";
+import { planWord } from "@keepmind/client/lib/plan-usage";
+import { brainPlan } from "@keepmind/client/lib/plans";
+import { AUTO, isAuto, keyLine } from "@keepmind/client/lib/providers";
+import { planState } from "@keepmind/ui/plan-state";
 import type { TFunction } from "i18next";
 
 /*

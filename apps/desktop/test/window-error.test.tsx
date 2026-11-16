@@ -1,11 +1,11 @@
 import { expect, spyOn, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { ErrorBoundary } from "@agenteschat/client/lib/error-boundary";
+import { ErrorBoundary } from "@keepmind/client/lib/error-boundary";
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { I18nextProvider } from "react-i18next";

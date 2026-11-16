@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { generateKeyPairSync, verify } from "node:crypto";
-import { eq, schema } from "@agenteschat/db";
+import { eq, schema } from "@keepmind/db";
 import { appleClientSecret } from "../src/auth";
 import type { SocketData } from "../src/realtime/ws";
 import {

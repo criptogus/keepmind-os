@@ -1,5 +1,5 @@
-import type { Message, ComputerQueue as Queue, QueueWhere } from "@agenteschat/client";
-import { receiptView, useAiAccounts, useChannels, useDms, useMachineQueue, useMachines } from "@agenteschat/client";
+import type { Message, ComputerQueue as Queue, QueueWhere } from "@keepmind/client";
+import { receiptView, useAiAccounts, useChannels, useDms, useMachineQueue, useMachines } from "@keepmind/client";
 import {
   type ConversationWait,
   conversationWaits,
@@ -26,10 +26,10 @@ import {
   queueView,
   queueWhereText,
   waitingFor,
-} from "@agenteschat/client/lib/computer-queue";
-import { spillDeviceText } from "@agenteschat/client/lib/devices";
-import { devicePlanName } from "@agenteschat/client/lib/no-ai";
-import { badgeCount } from "@agenteschat/client/lib/unread";
+} from "@keepmind/client/lib/computer-queue";
+import { spillDeviceText } from "@keepmind/client/lib/devices";
+import { devicePlanName } from "@keepmind/client/lib/no-ai";
+import { badgeCount } from "@keepmind/client/lib/unread";
 import {
   Button,
   Chip,
@@ -41,7 +41,7 @@ import {
   Message as MessageRow,
   Switch,
   useNow,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useNavigate } from "@tanstack/react-router";
 import { type CSSProperties, type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";

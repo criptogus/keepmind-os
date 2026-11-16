@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import { eq, schema } from "@agenteschat/db";
+import { eq, schema } from "@keepmind/db";
 import { adminIds, approverIds, notifyComposioLimit } from "../src";
 import { maySql, memberKeysSql, memberRankSql } from "../src/permissions";
 import { addMember, type Fixture, setup } from "./fixtures";

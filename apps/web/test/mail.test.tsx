@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { ApiError, type MailAccount, type RoutineInput } from "@agenteschat/client";
-import { defaultPolicy } from "@agenteschat/client/lib/mail";
+import { ApiError, type MailAccount, type RoutineInput } from "@keepmind/client";
+import { defaultPolicy } from "@keepmind/client/lib/mail";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { setNavigateAway } from "@/lib/navigate";
 import { openConnected, pick, service } from "./catalog";

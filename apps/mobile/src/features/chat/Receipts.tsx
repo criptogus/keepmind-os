@@ -1,5 +1,5 @@
-import { type AgentAction, type Message, useApi } from "@agenteschat/client";
-import { actionCardOf } from "@agenteschat/client/lib/action-cards";
+import { type AgentAction, type Message, useApi } from "@keepmind/client";
+import { actionCardOf } from "@keepmind/client/lib/action-cards";
 import {
   hookToCopy,
   type ReceiptRow,
@@ -7,9 +7,9 @@ import {
   receiptPieces,
   receiptRows,
   receiptUnder,
-} from "@agenteschat/client/lib/actions";
-import { handedTasksOf } from "@agenteschat/client/lib/issues";
-import { can } from "@agenteschat/client/lib/permissions";
+} from "@keepmind/client/lib/actions";
+import { handedTasksOf } from "@keepmind/client/lib/issues";
+import { can } from "@keepmind/client/lib/permissions";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { type GestureResponderEvent, Pressable, StyleSheet, View } from "react-native";

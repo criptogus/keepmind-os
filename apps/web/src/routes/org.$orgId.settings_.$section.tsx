@@ -1,4 +1,4 @@
-import { isRightHand } from "@agenteschat/client/lib/right-hand";
+import { isRightHand } from "@keepmind/client/lib/right-hand";
 import { createFileRoute, Navigate, redirect } from "@tanstack/react-router";
 import { Main } from "@/components/Main";
 import { useOrg } from "@/components/org-context";

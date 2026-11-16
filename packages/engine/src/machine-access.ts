@@ -9,8 +9,8 @@ import {
   type RunnerInfo,
   type RunnerToolchains,
   type RunnerTools,
-} from "@agenteschat/adapters";
-import { and, type Database, eq, isNull, schema, sql } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { and, type Database, eq, isNull, schema, sql } from "@keepmind/db";
 import { getAgentCached } from "./agents";
 import { recordAudit } from "./audit";
 import { createAgentRuns, eligibleChannelAgents } from "./dispatch";

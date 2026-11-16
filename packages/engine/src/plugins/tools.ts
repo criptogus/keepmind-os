@@ -1,4 +1,4 @@
-import { and, eq, isNull, schema, sql } from "@agenteschat/db";
+import { and, eq, isNull, schema, sql } from "@keepmind/db";
 import { z } from "zod";
 import { recordAudit } from "../audit";
 import { looksLikeSecret } from "../context/items";

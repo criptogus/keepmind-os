@@ -1,4 +1,4 @@
-import { elapsedClock, type LiveRun, type TypingWho, usesBrowser } from "@agenteschat/client";
+import { elapsedClock, type LiveRun, type TypingWho, usesBrowser } from "@keepmind/client";
 import {
   type ActivityEntry,
   activitySentence,
@@ -14,8 +14,8 @@ import {
   listNames,
   peopleGroups,
   someoneTypes,
-} from "@agenteschat/client/lib/activity";
-import { barStep } from "@agenteschat/client/lib/work";
+} from "@keepmind/client/lib/activity";
+import { barStep } from "@keepmind/client/lib/work";
 import { type ReactNode, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {

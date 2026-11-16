@@ -13,7 +13,7 @@ import {
   pushRemote,
   type RepoFacts,
   simpleCommands,
-} from "@agenteschat/adapters/command-policy";
+} from "@keepmind/adapters/command-policy";
 import { HARDENED_GIT_ARGS } from "./git-guard";
 
 /**

@@ -1,4 +1,4 @@
-import { type Agent, keys } from "@agenteschat/client";
+import { type Agent, keys } from "@keepmind/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
@@ -48,7 +48,7 @@ export function Entering({ org }: { org: string | null }) {
       style={[StyleSheet.absoluteFill, { backgroundColor: c.bg }]}
       accessibilityLiveRegion="polite"
     >
-      {/* This workspace's own sky (its server's: day on agentes.chat, dusk on a team's own), low on the screen: the
+      {/* This workspace's own sky (its server's: day on KeepMind OS, dusk on a team's own), low on the screen: the
           horizon the team stands on. It sits on the screen's bottom edge, so it comes in from nothing over its top
           half instead of starting on a hard line, and stays whole down to the edge. */}
       <WorkspaceSky fadeTop={0.55} fade={2} style={styles.sky} />

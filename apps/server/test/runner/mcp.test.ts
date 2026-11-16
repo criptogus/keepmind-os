@@ -12,7 +12,7 @@ import {
   parseRunnerFrame,
   parseServerFrame,
   type RunnerFrame,
-} from "@agenteschat/adapters/machine-protocol";
+} from "@keepmind/adapters/machine-protocol";
 import {
   ALWAYS_LOADED,
   claudeMcpConfig,

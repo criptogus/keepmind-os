@@ -1,10 +1,10 @@
-import type { Message } from "@agenteschat/client";
-import { useApi, useSettings } from "@agenteschat/client";
-import { mayContinueStretch, type StretchCard, stretchCardText } from "@agenteschat/client/lib/action-cards";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { clockAt } from "@agenteschat/client/lib/format";
-import { can } from "@agenteschat/client/lib/permissions";
-import { EventPillAction } from "@agenteschat/ui";
+import type { Message } from "@keepmind/client";
+import { useApi, useSettings } from "@keepmind/client";
+import { mayContinueStretch, type StretchCard, stretchCardText } from "@keepmind/client/lib/action-cards";
+import { errorText } from "@keepmind/client/lib/errors";
+import { clockAt } from "@keepmind/client/lib/format";
+import { can } from "@keepmind/client/lib/permissions";
+import { EventPillAction } from "@keepmind/ui";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { usd } from "@/components/AgentFields";

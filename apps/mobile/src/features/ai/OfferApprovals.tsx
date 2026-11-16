@@ -1,8 +1,8 @@
-import { useApprovals, useDecideApprovals } from "@agenteschat/client";
-import type { ApprovalsCard } from "@agenteschat/client/lib/action-cards";
-import { digestCounts, digestGroups, digestRows } from "@agenteschat/client/lib/approval-card";
-import { approvalDetail, digestLine } from "@agenteschat/client/lib/approval-words";
-import { errorText } from "@agenteschat/client/lib/errors";
+import { useApprovals, useDecideApprovals } from "@keepmind/client";
+import type { ApprovalsCard } from "@keepmind/client/lib/action-cards";
+import { digestCounts, digestGroups, digestRows } from "@keepmind/client/lib/approval-card";
+import { approvalDetail, digestLine } from "@keepmind/client/lib/approval-words";
+import { errorText } from "@keepmind/client/lib/errors";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Pressable, StyleSheet, View } from "react-native";

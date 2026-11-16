@@ -1,4 +1,4 @@
-import { initialsOf } from "@agenteschat/tokens/names";
+import { initialsOf } from "@keepmind/tokens/names";
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useState } from "react";
 import { Image, Text as RNText, StyleSheet } from "react-native";

@@ -17,8 +17,8 @@
  * Needs `TYPESAFE_API_KEY` (Jev, as in production) or, with `--step llm`, `ANTHROPIC_API_KEY` for the small
  * model (`EVAL_LLM_MODEL`, default claude-haiku-5-5).
  */
-import { eq, schema } from "@agenteschat/db";
-import { createAnthropicProvider, type ModelRequest } from "@agenteschat/providers";
+import { eq, schema } from "@keepmind/db";
+import { createAnthropicProvider, type ModelRequest } from "@keepmind/providers";
 import {
   addChannelMember,
   createAgent,

@@ -1,4 +1,5 @@
-import { connectorOAuthApps } from "@agenteschat/config";
+import { createRoute, z } from "@hono/zod-openapi";
+import { connectorOAuthApps } from "@keepmind/config";
 import {
   appendSourceToWiki,
   createPageFromSource,
@@ -38,8 +39,7 @@ import {
   type WikiDeps,
   wikiGraph,
   wikiTree,
-} from "@agenteschat/engine";
-import { createRoute, z } from "@hono/zod-openapi";
+} from "@keepmind/engine";
 import { errorResponse } from "../../http/errors";
 import { githubAppOf } from "../github-app";
 import {

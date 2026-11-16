@@ -1,6 +1,6 @@
-import type { DesktopRelease } from "@agenteschat/client";
-import { type Platform, platformOf } from "@agenteschat/client/lib/machines";
-import { Button, Icon } from "@agenteschat/ui";
+import type { DesktopRelease } from "@keepmind/client";
+import { type Platform, platformOf } from "@keepmind/client/lib/machines";
+import { Button, Icon } from "@keepmind/ui";
 import { type CSSProperties, useLayoutEffect, useRef, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { type DesktopDownload, DownloadButtons, useBuildName, useDesktopDownloads } from "@/components/devices/parts";
@@ -52,7 +52,7 @@ export function appImageCommand(url: string): string {
 }
 
 /** What `xattr` clears on a Mac when the button never shows: the mark every browser download carries. */
-export const QUARANTINE_FIX = "xattr -dr com.apple.quarantine /Applications/agentes.chat.app";
+export const QUARANTINE_FIX = 'xattr -dr com.apple.quarantine "/Applications/KeepMind OS Teams.app"';
 /** System Settings › Privacy & Security, scrolled to Security (a Mac's browser asks before it opens it). */
 const MAC_SECURITY = "x-apple.systempreferences:com.apple.preference.security?Security";
 

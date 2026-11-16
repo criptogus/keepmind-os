@@ -1,5 +1,5 @@
-import type { PeopleUsage } from "@agenteschat/client";
-import { capitalize, formatMonth, formatUsd } from "@agenteschat/client/lib/format";
+import type { PeopleUsage } from "@keepmind/client";
+import { capitalize, formatMonth, formatUsd } from "@keepmind/client/lib/format";
 import type { TFunction } from "i18next";
 
 /**

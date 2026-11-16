@@ -1,5 +1,5 @@
 import { randomBytes } from "node:crypto";
-import { docsUrl } from "@agenteschat/i18n/docs";
+import { docsUrl } from "@keepmind/i18n/docs";
 import { isPublicHostName, publicHostAddress, type ResolveHost, resolveHostDns } from "../net-guard";
 
 /**

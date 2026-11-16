@@ -1,5 +1,5 @@
-import { keys, useAddChannelMember, useRoster } from "@agenteschat/client";
-import { everyoneSuggestion } from "@agenteschat/client/lib/everyone";
+import { keys, useAddChannelMember, useRoster } from "@keepmind/client";
+import { everyoneSuggestion } from "@keepmind/client/lib/everyone";
 import { useQueryClient } from "@tanstack/react-query";
 import { Fragment, useMemo } from "react";
 import { useTranslation } from "react-i18next";

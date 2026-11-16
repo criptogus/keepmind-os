@@ -1,5 +1,5 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, type Database, eq, inArray, isNull, schema } from "@agenteschat/db";
+import type { PubSub } from "@keepmind/adapters";
+import { and, type Database, eq, inArray, isNull, schema } from "@keepmind/db";
 import { proposeSettings, type SettingsProposalCard } from "./context/proposals";
 import { openPersonAgentDm } from "./dms";
 import { NotFoundError, ValidationError } from "./errors";

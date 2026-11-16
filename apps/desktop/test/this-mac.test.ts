@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import type { ControlEvent, ControlStatus } from "@agenteschat/adapters/runner-control";
+import type { ControlEvent, ControlStatus } from "@keepmind/adapters/runner-control";
 import { filesFolder } from "../src/control/local-server";
 import { DesktopStore, type Home } from "../src/control/store";
 import { answerThisMac, connect, type PrefsTab, toolsHere, whenHostHomeReady } from "../src/control/this-mac";
@@ -110,7 +110,7 @@ test("status: only the asking server's organizations, and whether agents may wor
     agentsHere: true,
     local: false,
   });
-  expect(await answerThisMac(deps, { kind: "status", origin: "https://app.agentes.chat", agentsHere: false })).toEqual({
+  expect(await answerThisMac(deps, { kind: "status", origin: "https://keepmind.io", agentsHere: false })).toEqual({
     orgs: [],
     agentsHere: false,
     local: false,

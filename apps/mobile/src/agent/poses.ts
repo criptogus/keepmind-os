@@ -1,4 +1,4 @@
-import { type Expression, idlePose, type Pose, sleepPose } from "@agenteschat/ui/agent/engine";
+import { type Expression, idlePose, type Pose, sleepPose } from "@keepmind/ui/agent/engine";
 
 /**
  * How an agent looks in each state: pure, so tests can check it.

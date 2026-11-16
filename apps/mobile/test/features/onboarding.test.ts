@@ -1,9 +1,9 @@
 import { expect, test } from "bun:test";
 import { readdirSync, readFileSync } from "node:fs";
-import { ApiError } from "@agenteschat/client";
-import { knownErrorText } from "@agenteschat/client/lib/errors";
-import { planHoldPhoneLine } from "@agenteschat/client/lib/no-ai";
-import { railState } from "@agenteschat/client/lib/onboarding";
+import { ApiError } from "@keepmind/client";
+import { knownErrorText } from "@keepmind/client/lib/errors";
+import { planHoldPhoneLine } from "@keepmind/client/lib/no-ai";
+import { railState } from "@keepmind/client/lib/onboarding";
 import { isInviteToken } from "../../src/features/auth/links";
 import { PURPOSES, stepFailedText, workspaceAnswer, zoneCity, zoneLabel } from "../../src/features/onboarding/logic";
 import { translator } from "./fixtures";
@@ -63,7 +63,7 @@ test("a step that failed says why the server refused it, else that it didn't sav
   const refused = (params?: Record<string, unknown>) =>
     new ApiError(403, "org.create_refused", "You can't create a workspace right now", params);
   expect(stepFailedText(pt, refused({ cloud: true }))).toBe(
-    "Você não pode criar um workspace enquanto a sua conta ou um dos seus workspaces estiver com restrição. Para contestar, escreva para legal@agentes.chat.",
+    "Você não pode criar um workspace enquanto a sua conta ou um dos seus workspaces estiver com restrição. Para contestar, escreva para contact@zeroagency.ai.",
   );
   expect(stepFailedText(pt, refused())).toBe("Você não pode criar um workspace agora.");
   const inviteOnly = new ApiError(403, "org.create_invite_only", "New workspaces need an invitation for now");
@@ -86,7 +86,7 @@ test("the phone's steps are the web's, read from the workspace's data (ADR 0162)
     picked: null,
     funnel: null,
   };
-  // agentes.chat Cloud, before the workspace exists: its billing service is there, so the plan step will come.
+  // KeepMind OS Cloud, before the workspace exists: its billing service is there, so the plan step will come.
   expect(railState({ ...base, orgId: null, billingUrl: "https://billing.example.com" }).steps).toEqual([
     "name",
     "business",

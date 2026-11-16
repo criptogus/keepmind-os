@@ -1,5 +1,5 @@
 // The subpath, not the package: the freeze watch's thread loads this file and nothing else of the adapters.
-import { type ErrorReporter, type ErrorTags, noErrorReports } from "@agenteschat/adapters/error-reports";
+import { type ErrorReporter, type ErrorTags, noErrorReports } from "@keepmind/adapters/error-reports";
 
 type Level = "debug" | "info" | "warn" | "error";
 const order: Record<Level, number> = { debug: 10, info: 20, warn: 30, error: 40 };

@@ -1,4 +1,4 @@
-import type { AgentAudience, AgentSetupStep } from "@agenteschat/client";
+import type { AgentAudience, AgentSetupStep } from "@keepmind/client";
 
 /**
  * A new agent's checklist steps as the person sees them (ADR 0159): alone in a personal workspace (`solo`), "Who talks

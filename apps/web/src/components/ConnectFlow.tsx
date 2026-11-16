@@ -1,4 +1,4 @@
-import type { ConnectOutcome, ConnectorDef, CustomConnectStart, CustomServer } from "@agenteschat/client";
+import type { ConnectOutcome, ConnectorDef, CustomConnectStart, CustomServer } from "@keepmind/client";
 import {
   keys,
   useAgents,
@@ -11,8 +11,9 @@ import {
   useGithubAccess,
   useInstallGitHubApp,
   useRenameConnection,
+  useStartGitHubAppManifest,
   useStartOAuth,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 import {
   catalogToolClass,
   LEVELS,
@@ -21,8 +22,8 @@ import {
   levelIn,
   saveLevels,
   sharedLevel,
-} from "@agenteschat/client/lib/access-levels";
-import { composioConnectText } from "@agenteschat/client/lib/composio";
+} from "@keepmind/client/lib/access-levels";
+import { composioConnectText } from "@keepmind/client/lib/composio";
 import {
   accountUnchecked,
   asksCount,
@@ -33,18 +34,12 @@ import {
   itemName,
   orgAccessChange,
   outcomeText,
-} from "@agenteschat/client/lib/connected";
-import { humanize, isHttpsUrl, sameServer } from "@agenteschat/client/lib/custom-tools";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { useHeldWhile } from "@agenteschat/client/lib/hold";
-import { connectorBrand, connectorDescription, connectorName } from "@agenteschat/client/lib/scopes";
-import {
-  partsOf,
-  type ReviewTool,
-  reviewDecisions,
-  reviewToolsOf,
-  toolName,
-} from "@agenteschat/client/lib/tool-review";
+} from "@keepmind/client/lib/connected";
+import { humanize, isHttpsUrl, sameServer } from "@keepmind/client/lib/custom-tools";
+import { errorText } from "@keepmind/client/lib/errors";
+import { useHeldWhile } from "@keepmind/client/lib/hold";
+import { connectorBrand, connectorDescription, connectorName } from "@keepmind/client/lib/scopes";
+import { partsOf, type ReviewTool, reviewDecisions, reviewToolsOf, toolName } from "@keepmind/client/lib/tool-review";
 import {
   Alert,
   Button,
@@ -60,7 +55,7 @@ import {
   OptionList,
   Segmented,
   Skeleton,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { TFunction } from "i18next";
 import { type ReactNode, useEffect, useState } from "react";
@@ -88,7 +83,7 @@ export type FlowState =
   /**
    * Step 1: a catalog entry, or `null` for any MCP server by address. `add`: another account of `item`'s server
    * (an MCP server takes several); `reconnect`: a new sign-in for `item`, whose name, tools and agents stay. `url`: the
-   * address already typed in (an agent's card). `account`: GitHub's sign-in alone, without the agentes.chat app first.
+   * address already typed in (an agent's card). `account`: GitHub's sign-in alone, without the KeepMind OS app first.
    */
   | {
       step: 0;
@@ -219,7 +214,7 @@ export function ConnectFlow({
 /**
  * Step 1: OAuth ("Continuar no Linear"), or an API key. A service through Composio signs in on Composio's page
  * ("Continuar na Composio"): no key field of ours. A new account goes on to its confirmation; a new sign-in for an account,
- * or the same account again, ends here with a toast saying which. GitHub, where the server has the agentes.chat app
+ * or the same account again, ends here with a toast saying which. GitHub, where the server has the KeepMind OS app
  * (ADR 0156), offers the app first (installed on GitHub's page, which comes back to Conectores) and an account second.
  */
 function ConnectStep({
@@ -253,6 +248,7 @@ function ConnectStep({
   const oauth = useStartOAuth(org.id);
   const githubApp = useGitHubApp(org.id);
   const installApp = useInstallGitHubApp(org.id);
+  const prepareGitHub = useStartGitHubAppManifest();
   const [how, setHow] = useState<"app" | "account">("app");
   const [url, setUrl] = useState(initialUrl ?? "");
   const [label, setLabel] = useState("");
@@ -280,7 +276,11 @@ function ConnectStep({
   const appOffered =
     def?.id === "github" && !viaComposio && !mode && !accountOnly && githubApp.data?.installable === true;
   const viaApp = appOffered && how === "app";
-  const busy = connect.isPending || withKey.isPending || oauth.isPending || installApp.isPending;
+  const missingOAuth = !viaComposio && !byAddress && !!listed?.auth.includes("oauth") && !canOAuth && !viaApp;
+  const canPrepareGitHub = missingOAuth && def?.id === "github" && githubApp.data?.setup?.canCreate === true;
+  const oauthFirst = canOAuth || canPrepareGitHub;
+  const busy =
+    connect.isPending || withKey.isPending || oauth.isPending || installApp.isPending || prepareGitHub.isPending;
   const sent = busy || withKey.isSuccess || connect.data?.status === "connected";
   // As the server does: a server by address takes another account, a catalog connector a new sign-in.
   const accounts = useHeldWhile(
@@ -453,7 +453,15 @@ function ConnectStep({
               ]}
             />
           )}
-          {!viaApp && canOAuth && canKey && (
+          {missingOAuth && (
+            <p className="muted cflow__text" role="status">
+              {t(canPrepareGitHub ? "keepmind.connect.githubSetup" : "keepmind.connect.oauthSetup", {
+                name: def?.label,
+              })}
+            </p>
+          )}
+          {prepareGitHub.isError && <Alert tone="danger">{errorText(t, prepareGitHub.error)}</Alert>}
+          {!viaApp && oauthFirst && canKey && (
             <details
               className="cflow__more"
               open={keyOpen}
@@ -463,7 +471,7 @@ function ConnectStep({
               {keyForm}
             </details>
           )}
-          {!viaApp && !canOAuth && canKey && keyForm}
+          {!viaApp && !oauthFirst && canKey && keyForm}
         </DialogBody>
       </Locked>
       <DialogFooter
@@ -485,7 +493,16 @@ function ConnectStep({
           <Button variant="primary" disabled={busy} loading={installApp.isPending} onClick={startApp}>
             {t("githubApp.install")}
           </Button>
-        ) : canKey && (keyOpen || !canOAuth) ? (
+        ) : canPrepareGitHub && !keyOpen ? (
+          <Button
+            variant="primary"
+            disabled={busy}
+            loading={prepareGitHub.isPending}
+            onClick={() => prepareGitHub.mutate(back, { onSuccess: (url) => navigateAway(url) })}
+          >
+            {t("keepmind.connect.prepareGitHub")}
+          </Button>
+        ) : canKey && (keyOpen || !oauthFirst) ? (
           <Button
             variant="primary"
             disabled={busy}

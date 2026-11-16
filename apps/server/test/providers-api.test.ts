@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import { enableOpenRouterModels, ProviderError, setOpenRouterModels } from "@agenteschat/providers";
+import { enableOpenRouterModels, ProviderError, setOpenRouterModels } from "@keepmind/providers";
 import fixture from "../../../packages/providers/test/fixtures/openrouter-models.json";
 import { browser, createTestServer, seedOrg, signUp, type TestServer } from "./harness";
 

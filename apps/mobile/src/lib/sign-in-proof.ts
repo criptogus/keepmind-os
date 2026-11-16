@@ -1,4 +1,4 @@
-import { base64url } from "@agenteschat/client/lib/base64url";
+import { base64url } from "@keepmind/client/lib/base64url";
 import { sha256 } from "@noble/hashes/sha2.js";
 
 /**

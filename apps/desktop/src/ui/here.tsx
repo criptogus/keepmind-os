@@ -3,7 +3,7 @@
  * Tailscale by what Tailscale is doing on this computer, why reach didn't turn on, and "Copy details";
  * and a server's tile by where it runs.
  */
-import { Button, Icon, type IconName, PixelSpinner, Switch } from "@agenteschat/ui";
+import { Button, Icon, type IconName, PixelSpinner, Switch } from "@keepmind/ui";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { useHost } from "../app";

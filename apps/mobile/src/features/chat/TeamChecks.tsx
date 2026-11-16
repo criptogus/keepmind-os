@@ -1,5 +1,5 @@
-import type { Message, TeamCheck } from "@agenteschat/client";
-import { targetKind, teamChecksOf } from "@agenteschat/client/lib/team-checks";
+import type { Message, TeamCheck } from "@keepmind/client";
+import { targetKind, teamChecksOf } from "@keepmind/client/lib/team-checks";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
 import { ACT_LINE, type IconName, LineIcon, ROW_CARD_INSET, RowAction, Text, useTheme } from "@/ui";

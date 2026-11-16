@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import type { ModelRequest } from "@agenteschat/providers";
+import type { ModelRequest } from "@keepmind/providers";
 import { drainOutbox, postPersonMessage } from "../src";
 import { CAPABILITIES_LIMIT, COMPUTER_TOOLS_NOTE } from "../src/capabilities";
 import { HOW_YOU_WORK } from "../src/context";

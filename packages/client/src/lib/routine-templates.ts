@@ -17,7 +17,7 @@ export const ROUTINE_TEMPLATE_AREAS = [
 export type RoutineTemplateArea = (typeof ROUTINE_TEMPLATE_AREAS)[number];
 
 /**
- * A template's schedule: part of `@agenteschat/ui`'s `RecurrenceRule`, written out because the shared client stays free
+ * A template's schedule: part of `@keepmind/ui`'s `RecurrenceRule`, written out because the shared client stays free
  * of the web's package (`no-dom.test.ts`). What `templateRule` returns is a whole `RecurrenceRule`.
  */
 type Day = "MO" | "TU" | "WE" | "TH" | "FR" | "SA" | "SU";

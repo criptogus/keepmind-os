@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import { eq, schema } from "@agenteschat/db";
-import { costlyGate } from "@agenteschat/engine";
+import { eq, schema } from "@keepmind/db";
+import { costlyGate } from "@keepmind/engine";
 import { browser, createTestServer, joinByInvitation, seedOrg, signUp, type TestServer } from "./harness";
 
 /** Autonomy brakes over the API (ADR 0131): an agent's `brakes`, and a proposal card decided by its person. */

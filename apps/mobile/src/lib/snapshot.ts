@@ -1,4 +1,4 @@
-import type { SnapshotStorage } from "@agenteschat/client";
+import type { SnapshotStorage } from "@keepmind/client";
 import { File, Paths } from "expo-file-system";
 import { perServer } from "./server";
 

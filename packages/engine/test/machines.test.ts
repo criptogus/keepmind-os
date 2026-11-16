@@ -7,9 +7,9 @@ import {
   type ServerFrame,
   sealSecret,
   secretAad,
-} from "@agenteschat/adapters";
-import { and, eq, isNull, schema } from "@agenteschat/db";
-import { systemText } from "@agenteschat/providers";
+} from "@keepmind/adapters";
+import { and, eq, isNull, schema } from "@keepmind/db";
+import { systemText } from "@keepmind/providers";
 import {
   authenticateMachine,
   cancelRun,
@@ -64,7 +64,7 @@ afterEach(async () => {
   await current?.close();
 });
 
-const deps = () => ({ db: f.db, pubsub: f.pubsub, publicUrl: "https://agentes.chat" });
+const deps = () => ({ db: f.db, pubsub: f.pubsub, publicUrl: "https://keepmind.io" });
 
 function pair(actorId = f.owner.id, name = "Build box", exec = true) {
   return pairMachine(deps(), actorId, f.org.id, { name, ...RUNNER, exec });
@@ -1118,7 +1118,7 @@ describe("tools on a connected machine", () => {
         id: f.agent.id,
         handle: "dev",
         name: "Dev",
-        ...(r.op === "exec" ? { coAuthors: ["Co-authored-by: Dev <noreply@agentes.chat>"] } : {}),
+        ...(r.op === "exec" ? { coAuthors: ["Co-authored-by: Dev <contact@zeroagency.ai>"] } : {}),
       });
     }
     // A person asked to turn it off: the next command goes without it.
@@ -1192,7 +1192,7 @@ describe("tools on a connected machine", () => {
     const out = await call(ctx, "run_code", { language: "bash", code: "ls" });
     expect(out).toMatchObject({ isError: true });
     expect(out.content).toContain(
-      "Commands are turned off on the computer Ana's Mac: you can only read, write, list and upload files there. Tell the people: whoever connected Ana's Mac turns commands on with the button under your reply, or in the agentes.chat app there (Preferences › Tools, Commands).",
+      "Commands are turned off on the computer Ana's Mac: you can only read, write, list and upload files there. Tell the people: whoever connected Ana's Mac turns commands on with the button under your reply, or in the KeepMind OS app there (Preferences › Tools, Commands).",
     );
     expect(out.content).not.toContain("--no-exec");
     // The reply carries the switch: the chat shows its one click under the agent's words.

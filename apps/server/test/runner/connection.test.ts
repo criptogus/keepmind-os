@@ -8,7 +8,7 @@ import {
   type MachineRequest,
   type RunnerInfo,
   type ServerFrame,
-} from "@agenteschat/adapters/machine-protocol";
+} from "@keepmind/adapters/machine-protocol";
 import { connectUrl } from "../../runner/config";
 import {
   backoffDelay,
@@ -88,7 +88,7 @@ function setup(over: Partial<ConnectionOptions> = {}) {
 const sock = (sockets: FakeSocket[], i: number) => sockets[i] as FakeSocket;
 
 test("the connect URL comes from the server URL", () => {
-  expect(connectUrl("https://agentes.chat")).toBe("wss://agentes.chat/api/machines/connect");
+  expect(connectUrl("https://keepmind.io")).toBe("wss://keepmind.io/api/machines/connect");
   expect(connectUrl("http://localhost:3000")).toBe("ws://localhost:3000/api/machines/connect");
 });
 

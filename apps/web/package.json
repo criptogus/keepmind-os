@@ -1,5 +1,5 @@
 {
-  "name": "@agenteschat/web",
+  "name": "@keepmind/web",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -24,10 +24,10 @@
     "vite": "^8.3.0"
   },
   "dependencies": {
-    "@agenteschat/adapters": "workspace:*",
-    "@agenteschat/client": "workspace:*",
-    "@agenteschat/i18n": "workspace:*",
-    "@agenteschat/ui": "workspace:*",
+    "@keepmind/adapters": "workspace:*",
+    "@keepmind/client": "workspace:*",
+    "@keepmind/i18n": "workspace:*",
+    "@keepmind/ui": "workspace:*",
     "@fontsource-variable/jetbrains-mono": "^5.3.0",
     "@fontsource-variable/martian-mono": "^5.3.0",
     "@fontsource-variable/onest": "^5.3.1",

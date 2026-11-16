@@ -1,7 +1,7 @@
 import { afterEach, expect, test } from "bun:test";
-import { ConfigError, testConfig } from "@agenteschat/config";
-import { eq, schema } from "@agenteschat/db";
-import { authenticateMachine, retireHostTokens } from "@agenteschat/engine";
+import { ConfigError, testConfig } from "@keepmind/config";
+import { eq, schema } from "@keepmind/db";
+import { authenticateMachine, retireHostTokens } from "@keepmind/engine";
 import { type Browser, browser, createTestServer, joinByInvitation, seedOrg, signUp, type TestServer } from "./harness";
 
 const TOKEN = "host-computer-token-".padEnd(48, "h");

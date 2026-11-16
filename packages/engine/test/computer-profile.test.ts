@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { eq, schema } from "@agenteschat/db";
+import { eq, schema } from "@keepmind/db";
 import { createAgentRuns, insertMessage, runAuthority, runPermissionPrompt } from "../src";
 import { type BrainTurnRequest, CodexBrain, type ComputerBrainLink } from "../src/brains/codex";
 import type { BrainEvent, BrainTurn } from "../src/brains/types";

@@ -1,7 +1,7 @@
-//! agentes.chat for macOS, Windows and Linux: the main window on the server open now (agentes.chat or a
+//! KeepMind OS for macOS, Windows and Linux: the main window on the server open now (KeepMind OS or a
 //! server of the person's own, `servers`), the welcome window that finds one, and, only while agents work on
 //! this computer for a server of the person's own, the runners it spawns (one per organization), the menu bar
-//! popover and Preferences' tabs for this computer. On every system it can also run agentes.chat itself, as
+//! popover and Preferences' tabs for this computer. On every system it can also run KeepMind OS itself, as
 //! its child (`local_server`, with this computer as its agents' computer, `host_sync`). Rust stays thin:
 //! windows, the tray, the server list, links, the children, single instance, start at login, notifications,
 //! native dialogs and self-update. Everything else lives in the runner and the server (TypeScript) and in the
@@ -73,13 +73,13 @@ fn is_sign_in_url(url: &str) -> bool {
 
 /// The app's own builds ("Download version …" in Updates), whichever server it opens.
 fn is_app_download(url: &str) -> bool {
-    url.starts_with("https://app.agentes.chat/api/desktop/download/")
+    url.starts_with("https://keepmind.io/api/desktop/download/")
 }
 
 /// The help pages on the docs site ("Which one to choose?", "How folders work"), whichever server it opens:
-/// `https://agentes.chat/docs/<page>`, or under a language folder (`/pt/docs/<page>`).
+/// `https://keepmind.io/docs/<page>`, or under a language folder (`/pt/docs/<page>`).
 fn is_help_page(url: &str) -> bool {
-    let Some(path) = url.strip_prefix("https://agentes.chat/") else {
+    let Some(path) = url.strip_prefix("https://keepmind.io/") else {
         return false;
     };
     let path = match path.split_once('/') {
@@ -126,7 +126,7 @@ fn make_window(app: &AppHandle, name: &str) -> Result<tauri::WebviewWindow, Stri
         .map_err(|e| e.to_string())?;
     // On Windows and Linux a new window starts with the bundle's icon: the person's pick (ADR 0179).
     app_icon::show(app);
-    // Named in the app's language (the Dock's list, the Window menu): never a second "agentes.chat".
+    // Named in the app's language (the Dock's list, the Window menu): never a second "keepmind.io".
     let key = match name {
         "welcome" => Some("windowWelcome"),
         "prefs" => Some("windowPrefs"),
@@ -550,7 +550,7 @@ async fn notch_place(app: AppHandle, width: f64, height: f64) -> Result<Option<n
     notch::place(&app, width, height)
 }
 
-/// The app was "agentes" before it became "agentes.chat", and the login item is named after the app: the old
+/// The app was "agentes" before it became "keepmind.io", and the login item is named after the app: the old
 /// one goes and, if it was on, the new one takes its place.
 fn migrate_login_item(app: &AppHandle) {
     #[cfg(target_os = "macos")]
@@ -686,7 +686,7 @@ pub fn run() {
             WindowEvent::Focused(false) if window.label() == main_window::LABEL => {
                 main_window::keep_lights(window.app_handle());
             }
-            // Closing it while agentes.chat is being set up only hides it: the setup goes on (Cancel stops it).
+            // Closing it while KeepMind OS is being set up only hides it: the setup goes on (Cancel stops it).
             WindowEvent::CloseRequested { api, .. }
                 if window.label() == "welcome" && local_server::setting_up(window.app_handle()) =>
             {
@@ -790,7 +790,7 @@ pub fn run() {
     });
     let app = builder
         .build(tauri::generate_context!())
-        .expect("error while building agentes.chat");
+        .expect("error while building KeepMind OS");
 
     app.run(|app, event| match event {
         RunEvent::ExitRequested { api, .. } => {
@@ -820,16 +820,16 @@ mod tests {
     #[test]
     fn what_opens_in_the_browser() {
         assert!(is_sign_in_url("https://claude.ai/oauth/authorize?client_id=x"));
-        assert!(is_app_download("https://app.agentes.chat/api/desktop/download/0.6.0/agentes_0.6.0_universal.dmg"));
-        assert!(!is_app_download("https://app.agentes.chat.evil.com/api/desktop/download/x"));
+        assert!(is_app_download("https://keepmind.io/api/desktop/download/0.6.0/agentes_0.6.0_universal.dmg"));
+        assert!(!is_app_download("https://keepmind.io.evil.com/api/desktop/download/x"));
         assert!(!is_sign_in_url("https://claude.ai.evil.com/oauth/authorize?"));
-        assert!(is_help_page("https://agentes.chat/docs/run-on-your-computer#who"));
-        assert!(is_help_page("https://agentes.chat/pt/docs/computers#folders"));
-        assert!(!is_help_page("https://agentes.chat.evil.com/docs/x"));
-        assert!(!is_help_page("https://agentes.chat@evil.com/docs/x"));
-        assert!(!is_help_page("https://agentes.chat/docsx"));
-        assert!(!is_help_page("https://agentes.chat/pricing"));
-        assert!(!is_help_page("https://agentes.chat/a/b/docs/x"));
+        assert!(is_help_page("https://keepmind.io/docs/run-on-your-computer#who"));
+        assert!(is_help_page("https://keepmind.io/pt/docs/computers#folders"));
+        assert!(!is_help_page("https://keepmind.io.evil.com/docs/x"));
+        assert!(!is_help_page("https://keepmind.io@evil.com/docs/x"));
+        assert!(!is_help_page("https://keepmind.io/docsx"));
+        assert!(!is_help_page("https://keepmind.io/pricing"));
+        assert!(!is_help_page("https://keepmind.io/a/b/docs/x"));
     }
 
     #[cfg(unix)]

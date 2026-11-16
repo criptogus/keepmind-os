@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, spyOn, test } from "bun:test";
-import { and, eq, schema } from "@agenteschat/db";
+import { and, eq, schema } from "@keepmind/db";
 import { mailAccountAad, purgeWorkspace, retireMillionSendMailboxes, sealSecret } from "../src";
 import { type MailFixture, mailSetup } from "./mail-fixtures";
 

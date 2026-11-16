@@ -1,9 +1,9 @@
 import { afterEach, beforeEach, describe, expect, type Mock, spyOn, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { ApiError } from "@agenteschat/client";
+import { ApiError } from "@keepmind/client";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { LEAVE_MS } from "@/pages/AuthorizePage";
 import { createFakeApi, type FakeState, fakeAppsOf, ORG_ID, seedState } from "./fake-api";

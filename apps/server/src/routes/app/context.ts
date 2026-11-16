@@ -1,6 +1,7 @@
-import type { Adapters } from "@agenteschat/adapters";
-import { type Config, connectorOAuthApps } from "@agenteschat/config";
-import type { Database } from "@agenteschat/db";
+import { OpenAPIHono, z } from "@hono/zod-openapi";
+import type { Adapters } from "@keepmind/adapters";
+import { type Config, connectorOAuthApps } from "@keepmind/config";
+import type { Database } from "@keepmind/db";
 import {
   type AiStatusDeps,
   type ConnectorTriggerDeps,
@@ -16,8 +17,7 @@ import {
   type RoutineHookDeps,
   requireAgentDetails,
   withComposio,
-} from "@agenteschat/engine";
-import { OpenAPIHono, z } from "@hono/zod-openapi";
+} from "@keepmind/engine";
 import { createMiddleware } from "hono/factory";
 import { type Auth, type SessionUser, sessionUser, signInPageUrl } from "../../auth";
 import { apiError, errorResponse, validationHook } from "../../http/errors";

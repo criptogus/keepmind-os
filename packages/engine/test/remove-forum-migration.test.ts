@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import { eq, rowsOf, schema, sql } from "@agenteschat/db";
-import { runMigration } from "@agenteschat/db/testing";
+import { eq, rowsOf, schema, sql } from "@keepmind/db";
+import { runMigration } from "@keepmind/db/testing";
 import { insertMessage } from "../src";
 import { type Fixture, setup } from "./fixtures";
 

@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
-import { schema } from "@agenteschat/db";
+import { schema } from "@keepmind/db";
 import { createWebToolSource, insertMessage, recordRead, type ToolContext } from "../src";
 import { type Fixture, setup } from "./fixtures";
 

@@ -1,5 +1,5 @@
-import { isRightHand } from "@agenteschat/client/lib/right-hand";
-import { modeKey } from "@agenteschat/client/lib/workspace-mode";
+import { isRightHand } from "@keepmind/client/lib/right-hand";
+import { modeKey } from "@keepmind/client/lib/workspace-mode";
 import { useTranslation } from "react-i18next";
 import { useOrg } from "@/providers/org";
 import { LIST_AVATAR, ListRow } from "@/ui";

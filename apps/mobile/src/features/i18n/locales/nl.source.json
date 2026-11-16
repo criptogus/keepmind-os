@@ -2709,7 +2709,7 @@
     "value": "Activity keeps everything. This applies to this workspace, on all your devices."
   },
   "me.version": {
-    "value": "agentes.chat · version {{version}}"
+    "value": "KeepMind OS · version {{version}}"
   },
   "me.edit": {
     "value": "Edit"
@@ -2769,7 +2769,7 @@
     "value": "Create a new workspace"
   },
   "me.addWorkspaceCreateSub": {
-    "value": "On agentes.chat"
+    "value": "On KeepMind OS"
   },
   "me.addWorkspaceTeam": {
     "value": "Join your team's server"
@@ -2781,7 +2781,7 @@
     "value": "Team server"
   },
   "me.teamServerLead": {
-    "value": "Your team's agentes.chat address, the same one shown in the browser."
+    "value": "Your team's KeepMind OS address, the same one shown in the browser."
   },
   "me.teamServerFoot": {
     "value": "You don't leave any workspace: your team's server joins your list, with your account there."
@@ -4641,10 +4641,10 @@
     "value": "Install the app on it"
   },
   "devices.connect.appNote": {
-    "value": "On a Mac or a PC you use, the agentes.chat desktop app connects it too."
+    "value": "On a Mac or a PC you use, the KeepMind OS desktop app connects it too."
   },
   "devices.connect.appStep1": {
-    "value": "Get the agentes.chat app on it"
+    "value": "Get the KeepMind OS app on it"
   },
   "devices.connect.appStep2": {
     "value": "Open it and sign in as yourself"
@@ -4707,7 +4707,7 @@
     "value": "This phone works through a computer of yours. Connect one first."
   },
   "devices.android.hostOffline": {
-    "value": "{{host}} is offline. Turn it on and open agentes.chat there."
+    "value": "{{host}} is offline. Turn it on and open KeepMind OS there."
   },
   "devices.android.step1": {
     "value": "Turn on Developer options"
@@ -4776,13 +4776,13 @@
     "value": "From Wireless debugging › Pair device with QR code. Don't use the camera: it reads the code as a Wi-Fi network and takes the phone off your Wi-Fi."
   },
   "devices.android.wifi2Hint": {
-    "value": "In agentes.chat on a computer, open Connect a device › Android phone › Over Wi-Fi and pick {{host}}."
+    "value": "In KeepMind OS on a computer, open Connect a device › Android phone › Over Wi-Fi and pick {{host}}."
   },
   "devices.android.codeHead": {
     "value": "Pair with a pairing code"
   },
   "devices.android.codeNote": {
-    "value": "From Wireless debugging › Pair device with pairing code. Open Settings and agentes.chat side by side so the code stays on screen."
+    "value": "From Wireless debugging › Pair device with pairing code. Open Settings and KeepMind OS side by side so the code stays on screen."
   },
   "devices.android.wifiNote": {
     "value": "Wi-Fi can drop after a restart. A cable is more reliable."
@@ -4926,7 +4926,7 @@
     "value": "Turned it on and it restarted? The alert with Turn On shows once this iPhone is unlocked."
   },
   "devices.iphone.devMode.outdated": {
-    "value": "The agentes.chat app on {{host}} is out of date. Update it on that Mac."
+    "value": "The KeepMind OS app on {{host}} is out of date. Update it on that Mac."
   },
   "devices.notice.kind": {
     "value": "Devices"
@@ -5179,7 +5179,7 @@
     "value": "Connect a service"
   },
   "connectors.githubApp.useApp": {
-    "value": "Use the agentes.chat app"
+    "value": "Use the KeepMind OS app"
   },
   "connectors.githubApp.useAccount": {
     "value": "Use a GitHub account"
@@ -5380,7 +5380,7 @@
     "value": "What's the new workspace for?"
   },
   "onb.anotherLead": {
-    "value": "On agentes.chat. You stay in {{org}} and can switch any time."
+    "value": "On KeepMind OS. You stay in {{org}} and can switch any time."
   },
   "onb.suggested": {
     "value": "From your {{domain}} e-mail, I suggested {{org}}."
@@ -5392,7 +5392,7 @@
     "value": "Go to the workspace"
   },
   "onb.shareMessage": {
-    "value": "Join {{org}} on agentes.chat: {{url}}"
+    "value": "Join {{org}} on KeepMind OS: {{url}}"
   },
   "onb.failed": {
     "value": "Couldn't save. Try again."

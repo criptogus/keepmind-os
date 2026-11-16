@@ -1,6 +1,6 @@
-import type { Agent, Message } from "@agenteschat/client";
-import { useOverview } from "@agenteschat/client";
-import { joinNames, whenAt } from "@agenteschat/client/lib/format";
+import type { Agent, Message } from "@keepmind/client";
+import { useOverview } from "@keepmind/client";
+import { joinNames, whenAt } from "@keepmind/client/lib/format";
 import {
   type AgentColor,
   agentGradient,
@@ -28,7 +28,7 @@ import {
   starAt,
   workspaceInk,
   workspaceTones,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AgentAvatar } from "@/components/AgentAvatar";
@@ -599,7 +599,7 @@ const WORKSPACE_SKY_PX = 4;
 /**
  * The workspace's sky behind its header (the sidebar's top) and, in the Mac app, the title bar above it as one
  * sky: the Cloud's is day with pixel clouds drifting by, a server of one's own the same sky at dusk with a few
- * stars (`@agenteschat/ui` sky/workspace). Both parts read one field over their joint height and the same clouds
+ * stars (`@keepmind/ui` sky/workspace). Both parts read one field over their joint height and the same clouds
  * and stars (from the clock), so they meet without a seam.
  */
 export function WorkspaceSky({ part, rail = false }: { part: "bar" | "side"; rail?: boolean }) {

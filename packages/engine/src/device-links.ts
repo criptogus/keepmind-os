@@ -1,5 +1,5 @@
 import { randomInt } from "node:crypto";
-import { and, type Database, eq, gt, isNull, schema } from "@agenteschat/db";
+import { and, type Database, eq, gt, isNull, schema } from "@keepmind/db";
 import { recordAudit } from "./audit";
 import {
   cleanDeviceAudience,

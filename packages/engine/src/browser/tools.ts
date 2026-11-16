@@ -27,8 +27,8 @@ import {
   VAULT_TYPE_REFUSALS,
   vaultAad,
   vaultRuleLabel,
-} from "@agenteschat/adapters";
-import { and, type Database, desc, eq, isNull, schema, sql } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { and, type Database, desc, eq, isNull, schema, sql } from "@keepmind/db";
 import { getAgentCached } from "../agents";
 import { ToolOffError } from "../errors";
 import type { Judge } from "../judge";

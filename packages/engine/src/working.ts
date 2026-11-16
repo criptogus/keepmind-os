@@ -1,4 +1,4 @@
-import { type Database, rowsOf, schema, sql } from "@agenteschat/db";
+import { type Database, rowsOf, schema, sql } from "@keepmind/db";
 import { anchorsSql } from "./agent-work";
 import { replyExcerpt } from "./messages";
 import { requirePermission } from "./organizations";

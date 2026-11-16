@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import type { ErrorReporter } from "@agenteschat/adapters";
-import { and, eq, schema, sql } from "@agenteschat/db";
-import { type EmbeddingProvider, ProviderError } from "@agenteschat/providers";
-import { createFakeEmbeddings } from "@agenteschat/providers/testing";
+import type { ErrorReporter } from "@keepmind/adapters";
+import { and, eq, schema, sql } from "@keepmind/db";
+import { type EmbeddingProvider, ProviderError } from "@keepmind/providers";
+import { createFakeEmbeddings } from "@keepmind/providers/testing";
 import {
   drainOutbox,
   EMBED_FAILURES_REPORTED,

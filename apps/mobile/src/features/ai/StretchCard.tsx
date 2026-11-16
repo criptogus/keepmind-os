@@ -1,7 +1,7 @@
-import { type Message, useApi } from "@agenteschat/client";
-import { mayContinueStretch, stretchCardOf, stretchCardText } from "@agenteschat/client/lib/action-cards";
-import { clockAt } from "@agenteschat/client/lib/format";
-import { can } from "@agenteschat/client/lib/permissions";
+import { type Message, useApi } from "@keepmind/client";
+import { mayContinueStretch, stretchCardOf, stretchCardText } from "@keepmind/client/lib/action-cards";
+import { clockAt } from "@keepmind/client/lib/format";
+import { can } from "@keepmind/client/lib/permissions";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";

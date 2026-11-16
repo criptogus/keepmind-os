@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { channelQuery, trackInput } from "@agenteschat/ui";
+import { channelQuery, trackInput } from "@keepmind/ui";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { createFakeApi, ENG_ID, GENERAL_ID, ORG_ID, seedState } from "./fake-api";
 import { renderApp, screen, settle } from "./render";

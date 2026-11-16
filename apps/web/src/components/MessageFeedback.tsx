@@ -1,8 +1,8 @@
-import type { ReactionCount } from "@agenteschat/client";
-import { useCorrectMessage } from "@agenteschat/client";
-import { formatInt } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { Button, Dialog, DialogBody, DialogFooter, Field, Locked, Textarea } from "@agenteschat/ui";
+import type { ReactionCount } from "@keepmind/client";
+import { useCorrectMessage } from "@keepmind/client";
+import { formatInt } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { Button, Dialog, DialogBody, DialogFooter, Field, Locked, Textarea } from "@keepmind/ui";
 import { type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useToast } from "@/lib/toast";

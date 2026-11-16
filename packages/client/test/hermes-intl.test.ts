@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, expect, test } from "bun:test";
-import { resources } from "@agenteschat/i18n";
-import { LOCALES } from "@agenteschat/i18n/locale";
+import { resources } from "@keepmind/i18n";
+import { LOCALES } from "@keepmind/i18n/locale";
 import i18next, { type TFunction } from "i18next";
 import { delegateUndoLine } from "../src/lib/approval-words";
 import { nthText } from "../src/lib/computer-queue";

@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, expect, test } from "bun:test";
-import { schema } from "@agenteschat/db";
-import { enqueueWaitlistContacts, joinWaitlist, WAITLIST_MAX_SENDS } from "@agenteschat/engine";
+import { schema } from "@keepmind/db";
+import { enqueueWaitlistContacts, joinWaitlist, WAITLIST_MAX_SENDS } from "@keepmind/engine";
 import { browser, createTestServer, ORIGIN, type TestServer } from "./harness";
 
 /** The landing page's own site. */
@@ -50,7 +50,7 @@ test("joining emails a confirmation link (through the outbox, in their language)
   expect(t.email.sent).toEqual([]); // never inline in the request
   await t.drain();
   expect(t.email.sent.map((m) => [m.to, m.subject])).toEqual([
-    [["ana@acme.com"], "Confirm your spot on the agentes.chat waiting list"],
+    [["ana@acme.com"], "Confirm your spot on the KeepMind OS waiting list"],
   ]);
   expect(t.email.sent[0]?.html).toContain('lang="en"');
   expect(t.email.sent[0]?.text).toContain(`${LANDING}/?confirm=`);
@@ -128,7 +128,7 @@ test("no locale means English, and the email is in English", async () => {
   const [row] = await t.db.select().from(schema.waitlistEntries);
   expect(row?.locale).toBe("en");
   await t.drain();
-  expect(t.email.sent[0]?.subject).toBe("Confirm your spot on the agentes.chat waiting list");
+  expect(t.email.sent[0]?.subject).toBe("Confirm your spot on the KeepMind OS waiting list");
   expect(t.email.sent[0]?.html).toContain('lang="en"');
 });
 

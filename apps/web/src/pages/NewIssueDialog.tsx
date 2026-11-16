@@ -1,11 +1,11 @@
-import type { Issue, IssueColumn, IssuePriority } from "@agenteschat/client";
-import { useIssueAction, useIssueProjects, useStartAgentOnTask } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { FIELD_LIMITS } from "@agenteschat/client/lib/field-limits";
-import { MAX_UPLOAD_MB } from "@agenteschat/client/lib/files";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { NO_PROJECT, pickableProjects } from "@agenteschat/client/lib/issue-projects";
-import { type AudienceChoice, EVERYONE } from "@agenteschat/client/lib/who-sees";
+import type { Issue, IssueColumn, IssuePriority } from "@keepmind/client";
+import { useIssueAction, useIssueProjects, useStartAgentOnTask } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { FIELD_LIMITS } from "@keepmind/client/lib/field-limits";
+import { MAX_UPLOAD_MB } from "@keepmind/client/lib/files";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { NO_PROJECT, pickableProjects } from "@keepmind/client/lib/issue-projects";
+import { type AudienceChoice, EVERYONE } from "@keepmind/client/lib/who-sees";
 import {
   Button,
   ColorDot,
@@ -28,7 +28,7 @@ import {
   Spinner,
   Switch,
   useAutoGrow,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { type ClipboardEvent, type KeyboardEvent, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActorAvatar } from "@/components/AgentAvatar";

@@ -1,4 +1,4 @@
-import { rightHandOf } from "@agenteschat/client/lib/right-hand";
+import { rightHandOf } from "@keepmind/client/lib/right-hand";
 import { useOrg } from "@/components/org-context";
 import { useDirectory } from "@/hooks/useDirectory";
 import { lookOf } from "@/lib/look";

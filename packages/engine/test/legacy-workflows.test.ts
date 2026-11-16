@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import { eq, schema } from "@agenteschat/db";
+import { eq, schema } from "@keepmind/db";
 import { executeRun } from "../src/executor";
 import { admitLegacyRun } from "../src/legacy-run-policy";
 import { advanceLegacyWorkflow, startLegacyWorkflow } from "../src/legacy-workflows";

@@ -1,7 +1,7 @@
-import type { OrgRole, Person } from "@agenteschat/client";
-import { ApiError, useApi, usePeople, useRoles, useSetMemberRoles } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { everyoneOf, roleName } from "@agenteschat/client/lib/roles";
+import type { OrgRole, Person } from "@keepmind/client";
+import { ApiError, useApi, usePeople, useRoles, useSetMemberRoles } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { everyoneOf, roleName } from "@keepmind/client/lib/roles";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Alert, StyleSheet, View } from "react-native";

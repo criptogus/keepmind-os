@@ -11,8 +11,8 @@ import {
   encodeBrowserFrame,
   type RunnerFrame,
   STREAM_CLOSE,
-} from "@agenteschat/adapters";
-import { and, eq, inArray, schema } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { and, eq, inArray, schema } from "@keepmind/db";
 import { getAgentCached } from "../agents";
 import { ForbiddenError, NotFoundError, ValidationError } from "../errors";
 import { type MachineHub, MachineRequestError } from "../machine-hub";

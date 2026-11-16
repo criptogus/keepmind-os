@@ -8,7 +8,7 @@ import {
   SITE_SECRET_TTL_MS,
   VAULT_EXEC_KEYS,
   type VaultTypeRefusal,
-} from "@agenteschat/adapters/machine-protocol";
+} from "@keepmind/adapters/machine-protocol";
 import {
   generateSecretKeyPair,
   isReservedSecretName,
@@ -21,8 +21,8 @@ import {
   sealSecret,
   type VaultUse,
   vaultAad,
-} from "@agenteschat/adapters/secret-box";
-import { parseVaultRule, type VaultOriginRule } from "@agenteschat/adapters/vault/site";
+} from "@keepmind/adapters/secret-box";
+import { parseVaultRule, type VaultOriginRule } from "@keepmind/adapters/vault/site";
 import { RunnerError } from "./errors";
 
 /**

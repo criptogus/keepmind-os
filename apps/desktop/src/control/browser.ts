@@ -1,4 +1,4 @@
-import type { ControlBrowser, ControlStatus } from "@agenteschat/adapters/runner-control";
+import type { ControlBrowser, ControlStatus } from "@keepmind/adapters/runner-control";
 
 /** Preference: a macOS notification when an agent asks for help in its browser (off by default). */
 export const BROWSER_NOTIFY_PREF = "notifyBrowser";

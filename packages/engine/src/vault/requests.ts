@@ -6,7 +6,7 @@
  * A site's password becomes a login for that site, a variable a key with its name. A file and a one-time code are
  * never kept. Saving the same login (same scope, website and username) or the same key name again replaces its value.
  */
-import { and, eq, schema } from "@agenteschat/db";
+import { and, eq, schema } from "@keepmind/db";
 import { recordAudit } from "../audit";
 import { UUID } from "../authority";
 import { ConflictError, NotFoundError, ValidationError } from "../errors";

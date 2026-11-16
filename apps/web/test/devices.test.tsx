@@ -1,15 +1,10 @@
 import { afterEach, describe, expect, setSystemTime, test } from "bun:test";
-import { domWindow, setupDom } from "@agenteschat/ui/testing/dom";
+import { domWindow, setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { ComputerDevice, PhoneDevice } from "@agenteschat/client";
-import {
-  ANDROID_SLOW_MS,
-  ANDROID_USB_DRIVERS,
-  IPHONE_RESTART_MS,
-  SETUP_STALL_MS,
-} from "@agenteschat/client/lib/devices";
+import type { ComputerDevice, PhoneDevice } from "@keepmind/client";
+import { ANDROID_SLOW_MS, ANDROID_USB_DRIVERS, IPHONE_RESTART_MS, SETUP_STALL_MS } from "@keepmind/client/lib/devices";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { createFakeApi, ENG_ID, fakeDevicesOf, fakeMachinesOf } from "./fake-api";
 import { notification } from "./fakes/notifications";
@@ -186,11 +181,11 @@ describe("Connect a device", () => {
     expect(chooser.textContent).toContain("Android phone");
     await click(within(chooser).getByRole("button", { name: /A server or VPS/ }));
     const dialog = screen().getByRole("dialog", { name: "Connect a server" });
-    expect(dialog.querySelector("code")?.textContent).toBe("curl -fsSL https://app.agentes.chat/i/7KQ2-M9X1 | sh");
+    expect(dialog.querySelector("code")?.textContent).toBe("curl -fsSL https://keepmind.io/i/7KQ2-M9X1 | sh");
     expect(dialog.textContent).toContain("Works once, for 10 minutes");
     expect(dialog.textContent).toContain("Waiting for the server…");
     await click(within(dialog).getByRole("radio", { name: "Windows" }));
-    expect(dialog.querySelector("code")?.textContent).toBe("irm https://app.agentes.chat/i/7KQ2-M9X1/ps | iex");
+    expect(dialog.querySelector("code")?.textContent).toBe("irm https://keepmind.io/i/7KQ2-M9X1/ps | iex");
     devices.setLink({ status: "asking", request: acmeDevices().requests[0] });
     await refetch(services);
     const asking = screen().getByRole("dialog", { name: "ci-runner wants to join Acme" });
@@ -219,14 +214,14 @@ describe("Connect a device", () => {
   });
 
   test("this computer, from a browser: the app opens a link to this server, asks to join, the maker lets it in", async () => {
-    servedAt("https://app.agentes.chat/");
+    servedAt("https://keepmind.io/");
     const { state, devices, services } = await open(`/org/${ORG_ID}/settings/devices`);
     await click(screen().getByRole("button", { name: "Connect a device" }));
     await click(screen().getByRole("button", { name: /This computer/ }));
     const dialog = screen().getByRole("dialog", { name: "This computer" });
     expect(calls(state, "devices.createLink")[0]?.args).toEqual([ORG_ID, "computer"]);
     const app = within(dialog).getByRole("link", { name: "Open the KeepMind OS app" });
-    expect(app.getAttribute("href")).toBe("agenteschat://pair?server=https%3A%2F%2Fapp.agentes.chat&link=7KQ2-M9X1");
+    expect(app.getAttribute("href")).toBe("agenteschat://pair?server=https%3A%2F%2Fkeepmind.io&link=7KQ2-M9X1");
     expect(dialog.textContent).toContain("Waiting for the app on this computer…");
     expect(within(dialog).getByRole("heading", { name: "Don't have the app?" })).toBeTruthy();
     expect(dialog.textContent).toContain("After installing, press Open the KeepMind OS app again.");
@@ -243,15 +238,13 @@ describe("Connect a device", () => {
   });
 
   test("this computer without the app: one line for its terminal, or a server's", async () => {
-    servedAt("https://app.agentes.chat/");
+    servedAt("https://keepmind.io/");
     await open(`/org/${ORG_ID}/settings/devices`);
     await click(screen().getByRole("button", { name: "Connect a device" }));
     await click(screen().getByRole("button", { name: /This computer/ }));
     await click(screen().getByRole("button", { name: "Or paste one line in its terminal" }));
     const line = screen().getByRole("dialog", { name: "Connect a computer" });
-    expect(line.querySelector("code")?.textContent).toMatch(
-      /^curl -fsSL https:\/\/app\.agentes\.chat\/i\/7KQ2-M9X\d \| sh$/,
-    );
+    expect(line.querySelector("code")?.textContent).toMatch(/^curl -fsSL https:\/\/keepmind\.io\/i\/7KQ2-M9X\d \| sh$/);
     await click(within(line).getByRole("button", { name: "Back" }));
     await click(screen().getByRole("button", { name: /This computer/ }));
     await click(screen().getByRole("button", { name: "A server? Use a terminal line" }));

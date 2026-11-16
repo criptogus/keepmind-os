@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { NetworkError, type SignInOptions } from "@agenteschat/client";
+import { NetworkError, type SignInOptions } from "@keepmind/client";
 import { act, cleanup, fireEvent, render, within } from "@testing-library/react";
 import { KeyPanel } from "../src/components/ai/ConnectAiSteps";
 import { createFakeApi, GENERAL_ID, ORG_ID, seedState } from "./fake-api";

@@ -1,5 +1,5 @@
-import { and, asc, type Database, type Executor, eq, schema } from "@agenteschat/db";
-import { serverText } from "@agenteschat/i18n";
+import { and, asc, type Database, type Executor, eq, schema } from "@keepmind/db";
+import { serverText } from "@keepmind/i18n";
 import { getAgentCached } from "../agents";
 import { accountablePerson, runAuthorityById } from "../authority";
 import { emailLocale } from "../email";
@@ -10,22 +10,22 @@ const { accounts, organizationMembers, organizationSettings, users } = schema;
 
 /**
  * What an agent writes on GitHub says whose agent it is (ADR 0156): every body ends with one line naming the agent and
- * the person it works for ("Theo, agente de Ana no agentes.chat", in the workspace owner's language), and commits
+ * the person it works for ("Theo, agente de Ana no KeepMind OS", in the workspace owner's language), and commits
  * credit that person (`Co-authored-by`) when they linked GitHub to sign in, never with their email. Every commit also
  * ends with the agent's own line (`agentCoAuthor`), unless a person asked an agent to turn it off for the workspace.
  */
 
-/** The agents' address in their own line: GitHub shows the account that verified it, agentes.chat's. */
-export const AGENT_CO_AUTHOR_EMAIL = "noreply@agentes.chat";
+/** The agents' address in their own line: GitHub shows the account that verified it, KeepMind OS's. */
+export const AGENT_CO_AUTHOR_EMAIL = "contact@zeroagency.ai";
 
 /** Where the line starts in a body, so an edit can replace it. */
-export const SIGNATURE_MARK = "<!-- agentes.chat -->";
+export const SIGNATURE_MARK = "<!-- KeepMind OS -->";
 
 /**
  * A line of ours left in a body the agent sends again (an edit): the mark on a line of its own, then the line. One
  * quoted from another comment (`> `) is the agent's text, and so is everything around it.
  */
-const OWN_LINE = /[\r\n]*^[ \t]*<!-- agentes\.chat -->[ \t]*\r?\n<sub>[^<\r\n]*<\/sub>[ \t]*$/gm;
+const OWN_LINE = /[\r\n]*^[ \t]*<!-- (?:KeepMind OS|agentes\.chat) -->[ \t]*\r?\n<sub>[^<\r\n]*<\/sub>[ \t]*$/gm;
 
 /** A name as GitHub shows it: one line, no markup, no @mention, no link. */
 const escapeLine = (s: string) => s.replace(/\s+/g, " ").replace(/[&<>@#*_`~|\\[\]]/g, (c) => `&#${c.charCodeAt(0)};`);
@@ -41,7 +41,7 @@ export function signedBody(body: string, line: string) {
 
 /** One of our agents wrote this body (its line ends it): through an account's connection it isn't the app's bot. */
 export const signedByAgent = (body: string) =>
-  /(?:^|\n)[ \t]*<!-- agentes\.chat -->[ \t]*\r?\n<sub>[^<\r\n]*<\/sub>$/.test(body.trimEnd());
+  /(?:^|\n)[ \t]*<!-- (?:KeepMind OS|agentes\.chat) -->[ \t]*\r?\n<sub>[^<\r\n]*<\/sub>$/.test(body.trimEnd());
 
 /**
  * `message` with each trailer on a last line of its own, inside its trailer block when it ends with one; each once,
@@ -65,7 +65,7 @@ const trailerName = (name: string) =>
   // biome-ignore lint/suspicious/noControlCharactersInRegex: control characters would break the trailer
   name.replace(/[\u0000-\u001f\u007f-\u009f\u2028\u2029<>]/g, "").trim();
 
-/** `Co-authored-by: Nick <noreply@agentes.chat>`: the agent's own line on its commits (its handle when its name is empty). */
+/** `Co-authored-by: Nick <contact@zeroagency.ai>`: the agent's own line on its commits (its handle when its name is empty). */
 export const agentCoAuthor = (agent: { name: string; handle: string }) =>
   `Co-authored-by: ${trailerName(agent.name) || agent.handle} <${AGENT_CO_AUTHOR_EMAIL}>`;
 
@@ -123,7 +123,7 @@ async function githubLogin(http: GitHubHttp, id: string, token?: string | null) 
     .fetch(`${http.apiUrl}/user/${id}`, {
       headers: {
         accept: "application/vnd.github+json",
-        "user-agent": "agentes.chat",
+        "user-agent": "keepmind.io",
         ...(token ? { authorization: `Bearer ${token}` } : {}),
       },
     })

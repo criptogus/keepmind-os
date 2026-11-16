@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import { asc, schema } from "@agenteschat/db";
+import { asc, schema } from "@keepmind/db";
 import {
   compactSchema,
   createToolGateway,

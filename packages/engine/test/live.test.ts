@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { channelTopic, createMemoryPubSub, type RealtimeEvent } from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
+import { channelTopic, createMemoryPubSub, type RealtimeEvent } from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
 import {
   addChannelMember,
   consolidateItem,

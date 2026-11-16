@@ -3,7 +3,7 @@
  * list (grouped by stage, with the org's custom columns inside fixed stages, by
  * assignee or by priority; cards drag between and inside groups, issue-drag.ts),
  * and the details (the shared details dialog, or the task's own page). Pixel
- * pieces: CriteriaPixels and WorkSweep from @agenteschat/ui (their holders are
+ * pieces: CriteriaPixels and WorkSweep from @keepmind/ui (their holders are
  * `position: relative`).
  */
 .issues {

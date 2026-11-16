@@ -1,7 +1,7 @@
-import type { Agent, AgentAccess } from "@agenteschat/client";
-import { levelOf, resourcesOf } from "@agenteschat/client/lib/access-levels";
-import { type ConnectedItem, itemName } from "@agenteschat/client/lib/connected";
-import { Chip, Dialog, DialogSearchList, Icon } from "@agenteschat/ui";
+import type { Agent, AgentAccess } from "@keepmind/client";
+import { levelOf, resourcesOf } from "@keepmind/client/lib/access-levels";
+import { type ConnectedItem, itemName } from "@keepmind/client/lib/connected";
+import { Chip, Dialog, DialogSearchList, Icon } from "@keepmind/ui";
 import type { TFunction } from "i18next";
 import { type KeyboardEvent, type ReactNode, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";

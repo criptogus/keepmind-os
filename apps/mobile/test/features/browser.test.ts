@@ -8,7 +8,7 @@ import {
   handoffIsMine,
   heldTakeoversHere,
   machineProfiles,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 import { sortWaiting, waitingCardOf } from "../../src/features/activity/logic";
 import {
   browserGranted,

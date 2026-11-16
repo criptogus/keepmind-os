@@ -1,5 +1,5 @@
-import type { KeyWrapper, RelayCredentials } from "@agenteschat/adapters";
-import { type Database, eq, schema } from "@agenteschat/db";
+import type { KeyWrapper, RelayCredentials } from "@keepmind/adapters";
+import { type Database, eq, schema } from "@keepmind/db";
 import { openSecret, type SealedSecret, SealedValueError, sealSecret } from "./crypto";
 
 const { instancePush } = schema;

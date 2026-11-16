@@ -1,5 +1,5 @@
-import { isReservedSecretName, type PubSub } from "@agenteschat/adapters";
-import { and, eq, gt, isNull, ne, or, schema, sql } from "@agenteschat/db";
+import { isReservedSecretName, type PubSub } from "@keepmind/adapters";
+import { and, eq, gt, isNull, ne, or, schema, sql } from "@keepmind/db";
 import { recordAudit } from "./audit";
 import { isAbsoluteMachinePath, pathInOwnFolder } from "./machine-access";
 import { type ComputerHandle, requireComputerManager } from "./sandbox";

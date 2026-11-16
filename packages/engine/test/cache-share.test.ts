@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import { createMemoryPubSub, listenResumedTopic } from "@agenteschat/adapters";
+import { createMemoryPubSub, listenResumedTopic } from "@keepmind/adapters";
 import { CACHE_TOPIC, caches, enableCaches, shareCacheInvalidations } from "../src";
 
 afterEach(() => enableCaches(false));

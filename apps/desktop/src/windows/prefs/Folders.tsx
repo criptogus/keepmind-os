@@ -1,5 +1,5 @@
-import { ALL_AGENTS, type RunnerFolderGrant } from "@agenteschat/adapters/machine-protocol";
-import { Button, Checkbox, Dialog, DialogFooter, Icon, Popover, Segmented } from "@agenteschat/ui";
+import { ALL_AGENTS, type RunnerFolderGrant } from "@keepmind/adapters/machine-protocol";
+import { Button, Checkbox, Dialog, DialogFooter, Icon, Popover, Segmented } from "@keepmind/ui";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHost, useSnapshot, useStore } from "../../app";

@@ -6,7 +6,7 @@ import {
   SEARCH_OPS,
   type SearchChip,
   type SearchDirectory,
-} from "@agenteschat/client/lib/search-filters";
+} from "@keepmind/client/lib/search-filters";
 import { conversationScope, hitHref, hitTarget, idleIn, typeSearch } from "../../src/features/search/logic";
 
 const geral = { id: "c1", name: "geral" };

@@ -1,12 +1,12 @@
-import { type AgentScope, DESKTOP_TEXT_PROTOCOL } from "@agenteschat/adapters";
-import type { Database } from "@agenteschat/db";
+import { type AgentScope, DESKTOP_TEXT_PROTOCOL } from "@keepmind/adapters";
+import type { Database } from "@keepmind/db";
 import { getAgentCached } from "./agents";
 import { type MachineCaller, MachineRequestError } from "./machine-hub";
 import { recordOperatorEvent } from "./operator-events";
 import type { Stream } from "./streams";
 
 /**
- * Screening of people in control of an agent's screen on agentes.chat Cloud (ADR 0076), made only with
+ * Screening of people in control of an agent's screen on KeepMind OS Cloud (ADR 0076), made only with
  * `SESSION_SCREENING`. While a control stream is open, the computer reads the screen's text every
  * `SESSION_SCREEN_MS` (`desktop.text`: tesseract there, never an image). The text stays in this process's memory,
  * in segments of at most `SESSION_SEGMENT_MS`, each dropped `SESSION_KEEP_MS` after it ends, read or not; nothing

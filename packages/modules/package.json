@@ -1,5 +1,5 @@
 {
-  "name": "@agenteschat/modules",
+  "name": "@keepmind/modules",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -12,10 +12,10 @@
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@agenteschat/adapters": "workspace:*",
-    "@agenteschat/config": "workspace:*",
-    "@agenteschat/db": "workspace:*",
-    "@agenteschat/providers": "workspace:*",
+    "@keepmind/adapters": "workspace:*",
+    "@keepmind/config": "workspace:*",
+    "@keepmind/db": "workspace:*",
+    "@keepmind/providers": "workspace:*",
     "@hono/zod-openapi": "^1.6.3"
   },
   "devDependencies": {},

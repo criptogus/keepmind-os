@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, setSystemTime, spyOn, test } from "bun:test";
-import { domWindow, setupDom } from "@agenteschat/ui/testing/dom";
+import { domWindow, setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { ComputerSetup, Machine } from "@agenteschat/client";
-import { en, ptBR } from "@agenteschat/i18n";
+import type { ComputerSetup, Machine } from "@keepmind/client";
+import { en, ptBR } from "@keepmind/i18n";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { ADA_ID, createFakeApi, ENG_ID, fakeMachinesOf, ORG_ID, seedState } from "./fake-api";
 import { hintOf, shownText } from "./hint";
@@ -400,7 +400,7 @@ describe("Configurações → Computadores: the workspace's own computer", () =>
     expect(document.body.textContent).not.toContain("plano de IA");
     const about = screen().getByRole("link", { name: "Sobre este computador" });
     const url = new URL(about.getAttribute("href") ?? "");
-    expect(url.href).toBe("https://agentes.chat/pt/docs/workspace-computer");
+    expect(url.href).toBe("https://keepmind.io/pt/docs/workspace-computer");
     expect(about.className).toBe("ac-link ac-link--muted");
     expect(about.getAttribute("rel")).toBe("noopener noreferrer");
     const links = [...document.querySelectorAll("main a, .settings__body a")];

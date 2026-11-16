@@ -16,12 +16,12 @@ import {
 } from "../src/sky/workspace";
 
 describe("which sky a server gets", () => {
-  test("agentes.chat and its subdomains are the Cloud's day", () => {
-    for (const host of ["agentes.chat", "app.agentes.chat", "AGENTES.CHAT", "agentes.chat:443"])
+  test("KeepMind OS and its subdomains are the Cloud's day", () => {
+    for (const host of ["keepmind.io", "app.keepmind.io", "KEEPMIND.IO", "keepmind.io:443"])
       expect(skyHourOf(host)).toBe("day");
   });
   test("any other host is one's own: dusk", () => {
-    for (const host of ["macbook.tail1234.ts.net", "chat.acme.com", "localhost:5173", "notagentes.chat", ""])
+    for (const host of ["macbook.tail1234.ts.net", "chat.acme.com", "localhost:5173", "notkeepmind.io", ""])
       expect(skyHourOf(host)).toBe("dusk");
   });
 });

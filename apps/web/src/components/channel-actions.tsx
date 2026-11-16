@@ -1,5 +1,5 @@
-import type { Agent, Message as MessageType } from "@agenteschat/client";
-import { Menu, MenuItem } from "@agenteschat/ui";
+import type { Agent, Message as MessageType } from "@keepmind/client";
+import { Menu, MenuItem } from "@keepmind/ui";
 import { createContext, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { AgentAvatar } from "@/components/AgentAvatar";

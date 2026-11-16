@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { createMemoryPubSub, createPostgresPubSub, orgTopic } from "@agenteschat/adapters";
-import { type Database, eq, schema } from "@agenteschat/db";
-import { createTestDatabase } from "@agenteschat/db/testing";
+import { createMemoryPubSub, createPostgresPubSub, orgTopic } from "@keepmind/adapters";
+import { type Database, eq, schema } from "@keepmind/db";
+import { createTestDatabase } from "@keepmind/db/testing";
 import {
   type AgentGroupView,
   archiveAgent,

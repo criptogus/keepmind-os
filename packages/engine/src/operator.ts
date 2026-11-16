@@ -1,4 +1,4 @@
-import { and, asc, type Database, desc, eq, gt, or, schema, sql } from "@agenteschat/db";
+import { and, asc, type Database, desc, eq, gt, or, schema, sql } from "@keepmind/db";
 import { z } from "zod";
 import { decodeCursor, encodeCursor } from "./cursor";
 import { getOrgLimits, orgMeters } from "./limits";

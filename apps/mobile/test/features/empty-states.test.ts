@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { titleOfSlug } from "@agenteschat/client/lib/wiki";
+import { titleOfSlug } from "@keepmind/client/lib/wiki";
 import { featureKeysEn } from "../../src/features/i18n/keys.en";
 import { featureKeysPtBR } from "../../src/features/i18n/keys.pt-BR";
 import { createItems, mayCreate } from "../../src/features/new/logic";

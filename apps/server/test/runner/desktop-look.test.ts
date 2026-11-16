@@ -3,7 +3,7 @@ import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { DESKTOP_SIZE } from "@agenteschat/adapters/machine-protocol";
+import { DESKTOP_SIZE } from "@keepmind/adapters/machine-protocol";
 import {
   BROWSER_WM_CLASS,
   desktopName,
@@ -545,7 +545,7 @@ test("the keeper: its source, its settings and its autostart entry, so it starts
     [
       "[Desktop Entry]",
       "Type=Application",
-      "Name=agentes.chat",
+      "Name=KeepMind OS",
       "Comment=Lists the windows open on this desktop, to open them again after its computer restarted or moved",
       `Exec=python3 -I ${home}/.local/share/agentes/keeper.py ${home}/.local/share/agentes/keeper.json`,
       "NoDisplay=true",
@@ -604,8 +604,8 @@ test("files that change come with a new LOOK_VERSION: desktops that have the loo
   }
   // Changed the look on purpose? Bump LOOK_VERSION and put the new hash here.
   expect({ version: LOOK_VERSION, files: hash.digest("hex").slice(0, 16) }).toEqual({
-    version: 7,
-    files: "dd23e758f11b0aa7",
+    version: 8,
+    files: "a99d4f2349938de3",
   });
 });
 

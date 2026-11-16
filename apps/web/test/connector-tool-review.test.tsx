@@ -1,11 +1,11 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { CustomServer, CustomTool } from "@agenteschat/client";
-import type { AccessResource } from "@agenteschat/client/lib/access-levels";
-import type { ConnectedItem } from "@agenteschat/client/lib/connected";
+import type { CustomServer, CustomTool } from "@keepmind/client";
+import type { AccessResource } from "@keepmind/client/lib/access-levels";
+import type { ConnectedItem } from "@keepmind/client/lib/connected";
 import {
   matchTool,
   partsOf,
@@ -13,7 +13,7 @@ import {
   reviewToolsOf,
   subjectLabel,
   toolName,
-} from "@agenteschat/client/lib/tool-review";
+} from "@keepmind/client/lib/tool-review";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import type { TFunction } from "i18next";
 import { useState } from "react";

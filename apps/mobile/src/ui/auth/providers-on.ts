@@ -1,4 +1,4 @@
-import type { SignInProvider } from "@agenteschat/client";
+import type { SignInProvider } from "@keepmind/client";
 
 const ORDER: SignInProvider[] = ["apple", "google", "github"];
 

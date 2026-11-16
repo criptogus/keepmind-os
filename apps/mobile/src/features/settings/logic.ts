@@ -11,15 +11,15 @@ import type {
   Skill,
   StorageConfig,
   StoragePlatform,
-} from "@agenteschat/client";
-import { type AccessResource, resourcesOf } from "@agenteschat/client/lib/access-levels";
-import { type NoComputer, noComputerChoice, type SetupView, setupPending } from "@agenteschat/client/lib/computer";
-import { clockAt, formatInt, formatPercent, relativeTime } from "@agenteschat/client/lib/format";
-import { folderName, hostDescKey, isPaused } from "@agenteschat/client/lib/machines";
-import { can } from "@agenteschat/client/lib/permissions";
-import { type ModeSwitchLine, personalSettingsHost, personalSettingsNav } from "@agenteschat/client/lib/personal-view";
-import { zoneDisplayName } from "@agenteschat/client/lib/routines";
-import { skillWaitingChip } from "@agenteschat/client/lib/skills";
+} from "@keepmind/client";
+import { type AccessResource, resourcesOf } from "@keepmind/client/lib/access-levels";
+import { type NoComputer, noComputerChoice, type SetupView, setupPending } from "@keepmind/client/lib/computer";
+import { clockAt, formatInt, formatPercent, relativeTime } from "@keepmind/client/lib/format";
+import { folderName, hostDescKey, isPaused } from "@keepmind/client/lib/machines";
+import { can } from "@keepmind/client/lib/permissions";
+import { type ModeSwitchLine, personalSettingsHost, personalSettingsNav } from "@keepmind/client/lib/personal-view";
+import { zoneDisplayName } from "@keepmind/client/lib/routines";
+import { skillWaitingChip } from "@keepmind/client/lib/skills";
 import type { TFunction } from "i18next";
 import type { IconName } from "@/ui";
 

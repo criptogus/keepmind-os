@@ -1,7 +1,7 @@
 import { afterEach, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
-import { keys, type Message, openConversation } from "@agenteschat/client";
-import { LiveQueryClient } from "@agenteschat/client/lib/live-query-client";
+import { keys, type Message, openConversation } from "@keepmind/client";
+import { LiveQueryClient } from "@keepmind/client/lib/live-query-client";
 import { focusManager, QueryObserver } from "@tanstack/react-query";
 import { message } from "./fixtures";
 

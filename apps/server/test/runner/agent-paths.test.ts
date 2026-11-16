@@ -1,9 +1,9 @@
 import { afterEach, expect, test } from "bun:test";
 import { chmodSync, existsSync, mkdirSync, symlinkSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import type { MachineRequest, RunnerAccess } from "@agenteschat/adapters/machine-protocol";
-import { sealSecret, secretAad } from "@agenteschat/adapters/secret-box";
-import { readZip } from "@agenteschat/engine";
+import type { MachineRequest, RunnerAccess } from "@keepmind/adapters/machine-protocol";
+import { sealSecret, secretAad } from "@keepmind/adapters/secret-box";
+import { readZip } from "@keepmind/engine";
 import { RunnerError } from "../../runner/errors";
 import { type HandlerContext, handleRequest, OP_ROUTES, type RequestScope } from "../../runner/handlers";
 import { agentFolderName, resolveForAgent } from "../../runner/paths";

@@ -1,8 +1,8 @@
-import type { Agent, Channel, OrgRole } from "@agenteschat/client";
-import { channelMembersQuery, useApi, useChannelCategories, useChannels, useRoles } from "@agenteschat/client";
-import { EVERYONE_AUDIENCE, listsAgent } from "@agenteschat/client/lib/audience";
-import { joinNames } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
+import type { Agent, Channel, OrgRole } from "@keepmind/client";
+import { channelMembersQuery, useApi, useChannelCategories, useChannels, useRoles } from "@keepmind/client";
+import { EVERYONE_AUDIENCE, listsAgent } from "@keepmind/client/lib/audience";
+import { joinNames } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
 import {
   changedLists,
   type InviteAgentCase,
@@ -15,12 +15,12 @@ import {
   inviteReach,
   inviteRefusalText,
   inviteStart,
-} from "@agenteschat/client/lib/invite-start";
-import { can } from "@agenteschat/client/lib/permissions";
-import { personalHelperRole } from "@agenteschat/client/lib/personal-view";
-import { isRightHand } from "@agenteschat/client/lib/right-hand";
-import { everyoneOf, isEveryone, sortRoles } from "@agenteschat/client/lib/roles";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client/lib/invite-start";
+import { can } from "@keepmind/client/lib/permissions";
+import { personalHelperRole } from "@keepmind/client/lib/personal-view";
+import { isRightHand } from "@keepmind/client/lib/right-hand";
+import { everyoneOf, isEveryone, sortRoles } from "@keepmind/client/lib/roles";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import {
   ChipField,
   type ChipFieldOption,
@@ -32,7 +32,7 @@ import {
   MenuHeading,
   RoleMark,
   Select,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useQueries } from "@tanstack/react-query";
 import { type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";

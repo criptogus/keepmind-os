@@ -6,8 +6,8 @@ import {
   type WebPushKeys,
   type WebPushResult,
   type WebPushSender,
-} from "@agenteschat/adapters";
-import { and, asc, type Database, eq, gt, inArray, isNull, lte, notInArray, or, schema } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { and, asc, type Database, eq, gt, inArray, isNull, lte, notInArray, or, schema } from "@keepmind/db";
 import { mediaOf } from "./media";
 import { voiceOf } from "./message-preview";
 import { type NoticePrefs, noticeOn, readNoticePrefs } from "./notice-prefs";
@@ -89,7 +89,7 @@ export {
   APNS_PUSH_TOKEN,
   apnsAppIdValid,
   FCM_PUSH_TOKEN,
-} from "@agenteschat/adapters";
+} from "@keepmind/adapters";
 
 type NotificationRow = typeof notifications.$inferSelect;
 

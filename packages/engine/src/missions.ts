@@ -4,7 +4,7 @@ import {
   type PubSub,
   TASK_OUTPUT_PROTOCOL,
   TASKS_PROTOCOL,
-} from "@agenteschat/adapters";
+} from "@keepmind/adapters";
 import {
   and,
   asc,
@@ -18,7 +18,7 @@ import {
   rowsOf,
   schema,
   sql,
-} from "@agenteschat/db";
+} from "@keepmind/db";
 import { getAgentCached } from "./agents";
 import type { ArtifactDeps } from "./artifacts";
 import { audienceSql } from "./audience";

@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { LOCALE_CODES } from "@agenteschat/i18n/locale";
+import { LOCALE_CODES } from "@keepmind/i18n/locale";
 import { PUSH } from "../src/push/messages";
 import { strings as ru } from "../src/push/messages/ru";
 import { PUSH_BODY_MAX, PUSH_TITLE_MAX, pushStrings, renderPush } from "../src/push-messages";

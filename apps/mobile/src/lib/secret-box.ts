@@ -1,4 +1,4 @@
-import type { SecretBox } from "@agenteschat/client";
+import type { SecretBox } from "@keepmind/client";
 import { getRandomBytes } from "expo-crypto";
 import { sealSecretWith } from "./secret-seal";
 

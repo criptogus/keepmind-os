@@ -1,9 +1,9 @@
-import type { Agent } from "@agenteschat/client";
-import { keys, useApplyTeamTemplate, useRoutines, useTeamTemplates } from "@agenteschat/client";
-import type { PlanOffer } from "@agenteschat/client/lib/billing";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { firstJob } from "@agenteschat/client/lib/onboarding";
-import { isRightHand } from "@agenteschat/client/lib/right-hand";
+import type { Agent } from "@keepmind/client";
+import { keys, useApplyTeamTemplate, useRoutines, useTeamTemplates } from "@keepmind/client";
+import type { PlanOffer } from "@keepmind/client/lib/billing";
+import { errorText } from "@keepmind/client/lib/errors";
+import { firstJob } from "@keepmind/client/lib/onboarding";
+import { isRightHand } from "@keepmind/client/lib/right-hand";
 import {
   aboutContext,
   aboutOf,
@@ -11,7 +11,7 @@ import {
   type BusinessType,
   teamFailureText,
   templateFor,
-} from "@agenteschat/client/lib/team-plan";
+} from "@keepmind/client/lib/team-plan";
 import {
   Button,
   Chip,
@@ -24,7 +24,7 @@ import {
   Skeleton,
   Spinner,
   Textarea,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
@@ -266,7 +266,7 @@ export function TeamStep({
 }
 
 /**
- * Step 4, "Turn the team on" (agentes.chat Cloud, a workspace waiting for its first plan): the team asleep until it,
+ * Step 4, "Turn the team on" (KeepMind OS Cloud, a workspace waiting for its first plan): the team asleep until it,
  * what each one does (its first routine, else its role; the right hand, what it is to the person), the plan the
  * billing service recommends with its price when it says one, what comes after it (`next`: connecting an AI, ADR
  * 0162), and the way in without it, where the right hand's card keeps the plan. Back from paying (`confirming`), the

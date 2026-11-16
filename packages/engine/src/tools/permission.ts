@@ -1,4 +1,4 @@
-import { and, eq, isNull, schema, sql } from "@agenteschat/db";
+import { and, eq, isNull, schema, sql } from "@keepmind/db";
 import { grantBrowserProfile, onSingleModeMachine } from "../browser/profiles";
 import {
   ALL_TOOLS,

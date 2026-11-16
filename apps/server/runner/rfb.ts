@@ -1,6 +1,6 @@
 import { createCipheriv } from "node:crypto";
 import net from "node:net";
-import { type AgentScope, type DesktopMode, STREAM_CLOSE, STREAM_LIMITS } from "@agenteschat/adapters/machine-protocol";
+import { type AgentScope, type DesktopMode, STREAM_CLOSE, STREAM_LIMITS } from "@keepmind/adapters/machine-protocol";
 import type { DesktopSessions } from "./desktop-session";
 import { errnoCode, RunnerError } from "./errors";
 import type { DataSocket } from "./streams";

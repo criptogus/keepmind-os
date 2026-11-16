@@ -2,7 +2,7 @@ import { afterEach, expect, test } from "bun:test";
 import { browser, createTestServer, seedOrg, signUp, type TestServer } from "./harness";
 
 let t: TestServer;
-/** agentes.chat's side in the relay tests: the server that is the inbox. */
+/** KeepMind OS's side in the relay tests: the server that is the inbox. */
 let inbox: TestServer | undefined;
 afterEach(async () => {
   const current = t;
@@ -16,7 +16,7 @@ afterEach(async () => {
 const ID = "7b0c2c0e-5a51-4a3f-9d0e-0d6f6a4f1a01";
 
 test("feedback: no address and the relay off, no form and no route", async () => {
-  t = await createTestServer();
+  t = await createTestServer({ env: { FEEDBACK_EMAIL: "off" } });
   const ana = browser(t);
   expect(await (await ana("/api/app/auth-config")).json()).toMatchObject({ feedback: false, feedbackRelay: false });
   await signUp(ana, "ana@example.com");
@@ -27,7 +27,7 @@ test("feedback: one email to the server's address, through the outbox, answered 
   t = await createTestServer({ env: { FEEDBACK_EMAIL: "feedback@example.com" } });
   const ana = browser(t);
   expect(await (await ana("/api/app/auth-config")).json()).toMatchObject({ feedback: true, feedbackRelay: false });
-  // Only agentes.chat's own servers take other servers' feedback.
+  // Only KeepMind OS's own servers take other servers' feedback.
   expect((await browser(t)("/api/feedback/inbox", { json: {}, origin: null })).status).toBe(404);
   expect((await browser(t)("/api/app/feedback", { json: { id: ID, text: "hi" } })).status).toBe(401);
   await signUp(ana, "ana@example.com");
@@ -183,11 +183,11 @@ test("feedback files: the hour's limit and the size are answered before the file
   expect((await upload(ana, PNG, "real.png")).status).toBe(429);
 });
 
-const INBOX_URL = "https://app.agentes.chat/api/feedback/inbox";
+const INBOX_URL = "https://keepmind.io/api/feedback/inbox";
 /** A server with no address of its own, whose network reaches only the inbox: `inbox`'s own app. */
 async function relaying(down = false) {
   inbox = await createTestServer({
-    env: { FEEDBACK_EMAIL: "team@example.com", PUBLIC_URL: "https://app.agentes.chat" },
+    env: { FEEDBACK_EMAIL: "team@example.com", PUBLIC_URL: "https://keepmind.io" },
   });
   const posted: string[] = [];
   const there = inbox;
@@ -197,11 +197,11 @@ async function relaying(down = false) {
     if (down) return new Response("busy", { status: 503 });
     return there.app.request(new URL(String(url)).pathname, init);
   }) as typeof fetch;
-  t = await createTestServer({ env: { FEEDBACK_RELAY: "true" }, http });
+  t = await createTestServer({ env: { FEEDBACK_RELAY: "true", FEEDBACK_EMAIL: "off" }, http });
   return posted;
 }
 
-test("feedback relay: with no address it goes to the agentes.chat team's inbox, pictures in the email", async () => {
+test("feedback relay: with no address it goes to the KeepMind OS team's inbox, pictures in the email", async () => {
   const posted = await relaying();
   const ana = browser(t);
   expect(await (await ana("/api/app/auth-config")).json()).toMatchObject({ feedback: true, feedbackRelay: true });
@@ -265,7 +265,7 @@ test("feedback relay: the inbox takes only a feedback, pictures by their bytes, 
 
 test("feedback relay: the inbox can be turned off", async () => {
   t = await createTestServer({
-    env: { FEEDBACK_EMAIL: "team@example.com", PUBLIC_URL: "https://app.agentes.chat", FEEDBACK_INBOX: "false" },
+    env: { FEEDBACK_EMAIL: "team@example.com", PUBLIC_URL: "https://keepmind.io", FEEDBACK_INBOX: "false" },
   });
   const feedback = { name: "Ana", email: "ana@example.com", text: "Hello", version: "1.0.0" };
   const res = await t.app.request("/api/feedback/inbox", {

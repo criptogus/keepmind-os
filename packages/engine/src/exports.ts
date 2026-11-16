@@ -1,4 +1,4 @@
-import { and, arrayContained, asc, type Database, desc, eq, inArray, isNull, ne, or, schema } from "@agenteschat/db";
+import { and, arrayContained, asc, type Database, desc, eq, inArray, isNull, ne, or, schema } from "@keepmind/db";
 import { type BundleRoutine, type BundleRule, IMPORT_LIMITS, type MigrationBundle, NOTE_KINDS } from "./imports";
 import { requirePermission } from "./organizations";
 import type { RoutineTarget } from "./routines";

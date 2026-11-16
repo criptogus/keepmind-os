@@ -5,11 +5,11 @@ import {
   useRoutineRuns,
   useRoutines,
   useRuleDescribe,
-} from "@agenteschat/client";
-import { ownActionName, routineVaultKey, splitOwnActions } from "@agenteschat/client/lib/approval-words";
-import { formatTokensShort, formatUsd, whenAt } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { can } from "@agenteschat/client/lib/permissions";
+} from "@keepmind/client";
+import { ownActionName, routineVaultKey, splitOwnActions } from "@keepmind/client/lib/approval-words";
+import { formatTokensShort, formatUsd, whenAt } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { can } from "@keepmind/client/lib/permissions";
 import {
   busyOnComputer,
   eventWebhook,
@@ -26,7 +26,7 @@ import {
   stopWordsKey,
   usageParts,
   whereItRuns,
-} from "@agenteschat/client/lib/routine-view";
+} from "@keepmind/client/lib/routine-view";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Pressable, RefreshControl, ScrollView, StyleSheet, View } from "react-native";

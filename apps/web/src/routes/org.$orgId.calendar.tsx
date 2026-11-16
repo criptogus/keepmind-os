@@ -1,4 +1,4 @@
-import { dateOnly, toYmd } from "@agenteschat/client/lib/format";
+import { dateOnly, toYmd } from "@keepmind/client/lib/format";
 import { createFileRoute } from "@tanstack/react-router";
 import { openSearch } from "@/lib/open-param";
 import { CalendarPage } from "@/pages/CalendarPage";

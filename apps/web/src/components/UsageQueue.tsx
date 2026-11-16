@@ -1,8 +1,8 @@
-import type { UsageQueue, UsageQueueClosedRow } from "@agenteschat/client";
-import { useCancelUsageQueue, useUsageQueue } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { relativeTime } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
+import type { UsageQueue, UsageQueueClosedRow } from "@keepmind/client";
+import { useCancelUsageQueue, useUsageQueue } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { relativeTime } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
 import {
   usageQueueMeta,
   usageQueueResuming,
@@ -14,8 +14,8 @@ import {
   usageQueueWhere,
   usageQueueWho,
   usageWaitingText,
-} from "@agenteschat/client/lib/usage-queue";
-import { Button, Chip, Dialog, DialogBody, DialogFooter, InfoHint, Segmented, useNow } from "@agenteschat/ui";
+} from "@keepmind/client/lib/usage-queue";
+import { Button, Chip, Dialog, DialogBody, DialogFooter, InfoHint, Segmented, useNow } from "@keepmind/ui";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

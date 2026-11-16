@@ -7,11 +7,11 @@ import type {
   OrgRoles,
   Person,
   RowHolders,
-} from "@agenteschat/client";
-import { audienceAdmits, audienceOf, audiencePatch, modeOf } from "@agenteschat/client/lib/audience";
-import { accessInput, accessOf } from "@agenteschat/client/lib/channel-access";
-import { namesText } from "@agenteschat/client/lib/format";
-import { can } from "@agenteschat/client/lib/permissions";
+} from "@keepmind/client";
+import { audienceAdmits, audienceOf, audiencePatch, modeOf } from "@keepmind/client/lib/audience";
+import { accessInput, accessOf } from "@keepmind/client/lib/channel-access";
+import { namesText } from "@keepmind/client/lib/format";
+import { can } from "@keepmind/client/lib/permissions";
 import {
   areaRows,
   COMPUTER_KEYS,
@@ -26,8 +26,8 @@ import {
   rowState,
   sortRoles,
   withRow,
-} from "@agenteschat/client/lib/roles";
-import { matchesWords } from "@agenteschat/ui/search";
+} from "@keepmind/client/lib/roles";
+import { matchesWords } from "@keepmind/ui/search";
 import type { TFunction } from "i18next";
 
 /*

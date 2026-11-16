@@ -1,5 +1,5 @@
-import type { DesktopMode, DesktopViewState } from "@agenteschat/client";
-import { DESKTOP_CLOSE, desktopCloseState, desktopRetryMs, desktopSocketUrl } from "@agenteschat/client";
+import type { DesktopMode, DesktopViewState } from "@keepmind/client";
+import { DESKTOP_CLOSE, desktopCloseState, desktopRetryMs, desktopSocketUrl } from "@keepmind/client";
 import type RFB from "@novnc/novnc";
 import type { RfbChannel } from "@novnc/novnc";
 import { type DesktopChannel, DesktopLink } from "../components/desktop/link";

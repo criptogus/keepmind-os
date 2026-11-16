@@ -35,8 +35,8 @@ import {
   type ToolNotice,
   type TurnContext,
   type WireBrainEvent,
-} from "@agenteschat/adapters/machine-protocol";
-import { errorLineOf } from "@agenteschat/adapters/redact";
+} from "@keepmind/adapters/machine-protocol";
+import { errorLineOf } from "@keepmind/adapters/redact";
 import {
   claudeCodeModel,
   PLAN_FORBIDDEN_TEXT,
@@ -44,7 +44,7 @@ import {
   type PlanId,
   planForTurn,
   planOf,
-} from "@agenteschat/providers/plans";
+} from "@keepmind/providers/plans";
 import {
   ACCOUNT_MISSING_MESSAGE,
   ACCOUNT_SIGNED_OUT,

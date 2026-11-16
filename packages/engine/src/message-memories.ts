@@ -1,5 +1,5 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, arrayOverlaps, type Database, eq, inArray, isNotNull, isNull, ne, schema } from "@agenteschat/db";
+import type { PubSub } from "@keepmind/adapters";
+import { and, arrayOverlaps, type Database, eq, inArray, isNotNull, isNull, ne, schema } from "@keepmind/db";
 import { publishChannelEvent } from "./events";
 
 const { contextItems, messages } = schema;

@@ -1,4 +1,4 @@
-import type { BrainScope, Credential, Edition, MachineAccount, MachineAccountKind } from "@agenteschat/client";
+import type { BrainScope, Credential, Edition, MachineAccount, MachineAccountKind } from "@keepmind/client";
 import {
   keys,
   useAgentBrain,
@@ -8,7 +8,7 @@ import {
   useComputerSetup,
   useMachines,
   useModels,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 import {
   type AccountChoice,
   accountAbout,
@@ -18,9 +18,9 @@ import {
   ownSignInLower,
   planWordOf,
   signInPlan,
-} from "@agenteschat/client/lib/ai-accounts";
-import { answersOthers, audienceOf } from "@agenteschat/client/lib/audience";
-import type { BillingHold } from "@agenteschat/client/lib/billing";
+} from "@keepmind/client/lib/ai-accounts";
+import { answersOthers, audienceOf } from "@keepmind/client/lib/audience";
+import type { BillingHold } from "@keepmind/client/lib/billing";
 import {
   computerEdition,
   computerName,
@@ -28,12 +28,12 @@ import {
   managedNamed,
   setupView,
   statusRestatesChip,
-} from "@agenteschat/client/lib/computer";
-import { CUSTOM_PROVIDER } from "@agenteschat/client/lib/endpoints";
-import { errorText, holdText, keyRefusal } from "@agenteschat/client/lib/errors";
-import { NAMES_SHOWN, namesText } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { brainTool, installableCli } from "@agenteschat/client/lib/machines";
+} from "@keepmind/client/lib/computer";
+import { CUSTOM_PROVIDER } from "@keepmind/client/lib/endpoints";
+import { errorText, holdText, keyRefusal } from "@keepmind/client/lib/errors";
+import { NAMES_SHOWN, namesText } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { brainTool, installableCli } from "@keepmind/client/lib/machines";
 import {
   type AiChoice,
   ALL_AGENTS,
@@ -58,8 +58,8 @@ import {
   planPickText,
   planTitle,
   signsInOnce,
-} from "@agenteschat/client/lib/no-ai";
-import { can } from "@agenteschat/client/lib/permissions";
+} from "@keepmind/client/lib/no-ai";
+import { can } from "@keepmind/client/lib/permissions";
 import {
   geminiPersonal,
   isPlanId,
@@ -67,7 +67,7 @@ import {
   planReplies,
   providerFitsChoice,
   signInProviderOf,
-} from "@agenteschat/client/lib/plans";
+} from "@keepmind/client/lib/plans";
 import {
   keyLine,
   keyLooksValid,
@@ -77,9 +77,9 @@ import {
   type ProviderId,
   providerLabel,
   providerOf,
-} from "@agenteschat/client/lib/providers";
-import { agentOnKey, rightHandOnKey, thinksWithLine } from "@agenteschat/client/lib/right-hand";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client/lib/providers";
+import { agentOnKey, rightHandOnKey, thinksWithLine } from "@keepmind/client/lib/right-hand";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import {
   type AgentAppearance,
   AvatarStack,
@@ -96,8 +96,8 @@ import {
   Select,
   SettingNote,
   Spinner,
-} from "@agenteschat/ui";
-import { matchesWords } from "@agenteschat/ui/search";
+} from "@keepmind/ui";
+import { matchesWords } from "@keepmind/ui/search";
 import { useQueryClient } from "@tanstack/react-query";
 import type { TFunction } from "i18next";
 import { Fragment, type ReactNode, useCallback, useEffect, useId, useRef, useState } from "react";
@@ -115,6 +115,7 @@ import { useToast } from "@/lib/toast";
 import { AddAccount, OpenPage, Step, StepTitle } from "./AddAccountFlow";
 import { CliMissing } from "./CliMissing";
 import { EndpointForm } from "./EndpointForm";
+import { OpenRouterLogin } from "./OpenRouterLogin";
 import { PlanReplies, usePlanRepliesShown } from "./PlanReplies";
 
 /*
@@ -1592,7 +1593,7 @@ export function usePlanHold() {
 }
 
 /**
- * A plan a workspace with no agentes.chat plan in force can't use, in place of its steps: why, and the way to that
+ * A plan a workspace with no KeepMind OS plan in force can't use, in place of its steps: why, and the way to that
  * plan for whoever pays (anyone else reads who can). A hold stops the Model Gateway for keys too, so no key is offered
  * as a way around it.
  */
@@ -1788,6 +1789,7 @@ function GateWait({
 
 /** The API key being added: its maker and the key. */
 export interface KeyDraft {
+  preset?: "ollama";
   /** `custom`: a workspace's own endpoint (ADR 0146), which has a form of its own (`endpoint`). */
   provider: ProviderId | typeof CUSTOM_PROVIDER;
   apiKey: string;
@@ -1828,6 +1830,7 @@ export function KeyPanel({
   const { t } = useTranslation();
   const fieldId = useId();
   const [touched, setTouched] = useState(false);
+  const [manualKey, setManualKey] = useState(false);
   const { provider, apiKey } = draft;
   const keyOf = provider === CUSTOM_PROVIDER ? null : provider;
   const maker = keyOf ? providerOf(keyOf) : undefined;
@@ -1860,56 +1863,68 @@ export function KeyPanel({
         </>
       ) : keyOf && maker && site ? (
         <>
-          <Step
-            n={1}
-            side={
-              <OpenPage href={site.href} primary={!apiKey}>
-                {t("aiAccounts.add.openKeys", { site: site.host })}
-              </OpenPage>
-            }
-          >
-            <StepTitle
-              title={t("connectAi.key.create", { provider: providerLabel(keyOf) })}
-              hint={hint && t(hint, { provider: maker.label })}
-            />
-          </Step>
-          <Step n={2}>
-            <label htmlFor={fieldId}>
-              <b>{t("connectAi.key.paste")}</b>
-            </label>
-            <span className="agp-addacct__paste">
-              <Locked when={Boolean(saving)}>
-                <Input
-                  id={fieldId}
-                  type="password"
-                  autoComplete="off"
-                  spellCheck={false}
-                  placeholder={maker.placeholder}
-                  value={apiKey}
-                  invalid={wrong}
-                  onChange={(e) => onDraft({ provider, apiKey: e.target.value })}
-                  onBlur={() => setTouched(true)}
-                  onKeyDown={(e) => {
-                    if (e.key !== "Enter" || !onSave) return;
-                    e.preventDefault();
-                    setTouched(true);
-                    if (valid) onSave();
-                  }}
+          {provider === "openrouter" && !apiKey && (
+            <OpenRouterLogin onKey={(key) => onDraft({ provider, apiKey: key })} />
+          )}
+          {provider === "openrouter" && !apiKey && (
+            <Button variant="ghost" size="sm" onClick={() => setManualKey(!manualKey)}>
+              {t("keepmind.ai.manualKey")}
+            </Button>
+          )}
+          {(provider !== "openrouter" || apiKey || manualKey) && (
+            <>
+              <Step
+                n={1}
+                side={
+                  <OpenPage href={site.href} primary={!apiKey}>
+                    {t("aiAccounts.add.openKeys", { site: site.host })}
+                  </OpenPage>
+                }
+              >
+                <StepTitle
+                  title={t("connectAi.key.create", { provider: providerLabel(keyOf) })}
+                  hint={hint && t(hint, { provider: maker.label })}
                 />
-              </Locked>
-              {onSave && apiKey.trim() && (
-                <Button variant="primary" loading={saving} disabled={!valid} onClick={onSave}>
-                  {t("settings.saveKey")}
-                </Button>
-              )}
-            </span>
-            {wrong && (
-              <div className="ac-field__error" role="alert">
-                <KeyMismatch provider={keyOf} apiKey={apiKey} onPick={pick} />
-              </div>
-            )}
-            {refused && <KeyRefused refusal={refused} />}
-          </Step>
+              </Step>
+              <Step n={2}>
+                <label htmlFor={fieldId}>
+                  <b>{t("connectAi.key.paste")}</b>
+                </label>
+                <span className="agp-addacct__paste">
+                  <Locked when={Boolean(saving)}>
+                    <Input
+                      id={fieldId}
+                      type="password"
+                      autoComplete="off"
+                      spellCheck={false}
+                      placeholder={maker.placeholder}
+                      value={apiKey}
+                      invalid={wrong}
+                      onChange={(e) => onDraft({ provider, apiKey: e.target.value })}
+                      onBlur={() => setTouched(true)}
+                      onKeyDown={(e) => {
+                        if (e.key !== "Enter" || !onSave) return;
+                        e.preventDefault();
+                        setTouched(true);
+                        if (valid) onSave();
+                      }}
+                    />
+                  </Locked>
+                  {onSave && apiKey.trim() && (
+                    <Button variant="primary" loading={saving} disabled={!valid} onClick={onSave}>
+                      {t("settings.saveKey")}
+                    </Button>
+                  )}
+                </span>
+                {wrong && (
+                  <div className="ac-field__error" role="alert">
+                    <KeyMismatch provider={keyOf} apiKey={apiKey} onPick={pick} />
+                  </div>
+                )}
+                {refused && <KeyRefused refusal={refused} />}
+              </Step>
+            </>
+          )}
           <SettingNote icon="agent">{forLine ?? t("connectAi.key.forAll")}</SettingNote>
         </>
       ) : null}

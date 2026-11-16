@@ -1,4 +1,4 @@
-import { and, desc, type Executor, eq, inArray, isNull, schema } from "@agenteschat/db";
+import { and, desc, type Executor, eq, inArray, isNull, schema } from "@keepmind/db";
 import { cutText } from "../format";
 import type { Judge, JudgeQuestion } from "../judge";
 import { type ContextItem, type ContextKind, evidenceWeight, type NewContextItem, normalizeSubject } from "./items";

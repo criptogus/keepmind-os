@@ -4,9 +4,9 @@
  * the keys into words).
  */
 
-import { isFeminineName } from "@agenteschat/client/lib/grammar";
-import { plainLine } from "@agenteschat/client/lib/markdown";
-import { type AgentColorName, isHexColor } from "@agenteschat/ui/agent/engine";
+import { isFeminineName } from "@keepmind/client/lib/grammar";
+import { plainLine } from "@keepmind/client/lib/markdown";
+import { type AgentColorName, isHexColor } from "@keepmind/ui/agent/engine";
 
 /** The preset colors; a custom "#rrggbb" ("Personalizar") is a color too. */
 export const AGENT_COLORS = ["sky", "indigo", "violet", "rose", "amber", "green", "teal", "graphite"] as const;
@@ -115,7 +115,7 @@ export function greetingKey(now = new Date()): "morning" | "afternoon" | "evenin
   return "evening";
 }
 
-export { firstName } from "@agenteschat/client/lib/format";
+export { firstName } from "@keepmind/client/lib/format";
 
 /** Ids that are safe to put in a route. */
 export const isSafeId = (id: unknown): id is string => typeof id === "string" && /^[A-Za-z0-9_-]{1,80}$/.test(id);

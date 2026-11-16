@@ -3,7 +3,7 @@
 - Status: Accepted
 - Date: 2026-11-03
 - Extends: ADR 0053 (routines and unattended work: a widget is redone by a routine of its own), 0085 (roles and permissions: who sees a board), 0108 (Home: "My Home" is its board), 0113 (live blocks: what is pinned is a chart, not a live block), 0125 (an audience by role, the same model), 0071 (notifications: alerts and requests wait on the person)
-- Code: `packages/db/src/schema/dashboards.ts` (`dashboards`, `dashboard_widgets`, `dashboard_widget_updates`), migration `0199_dashboards.sql`; `packages/ui/src/widgets/spec.ts` (`@agenteschat/ui/widgets/spec`: `WidgetSpec`, `validateWidgetSpec`, `chartBlockToWidgetSpec`, schedules, sizes, caps); `packages/engine/src/dashboards/*` (`access.ts`, `service.ts`, `pin.ts`, `cost.ts`, `suggestions.ts`, `refresh.ts`, `proposals.ts`, `tools.ts`, `events.ts`, `types.ts`), `routines.ts` and `routine-ledger.ts` (the `widget` target), `tools/run-policy.ts` (a widget's refresh run), `notifications.ts` (`widget_alert`, `widget_failed`, `dashboard_proposal`); server `routes/app/dashboards.ts`, `dashboard-schemas.ts`; client `packages/client/src/dashboards/*`; web `packages/ui/src/widgets/*`, `pages/HomePage.tsx` (the mural), `pages/DashboardsPage.tsx`, `pages/DashboardPage.tsx`, `components/dashboards/*`; phone `app/(app)/dashboards.tsx` (pushed from `src/features/chats/DashboardsEntry.tsx` on the home), `src/features/dashboards/*`
+- Code: `packages/db/src/schema/dashboards.ts` (`dashboards`, `dashboard_widgets`, `dashboard_widget_updates`), migration `0199_dashboards.sql`; `packages/ui/src/widgets/spec.ts` (`@keepmind/ui/widgets/spec`: `WidgetSpec`, `validateWidgetSpec`, `chartBlockToWidgetSpec`, schedules, sizes, caps); `packages/engine/src/dashboards/*` (`access.ts`, `service.ts`, `pin.ts`, `cost.ts`, `suggestions.ts`, `refresh.ts`, `proposals.ts`, `tools.ts`, `events.ts`, `types.ts`), `routines.ts` and `routine-ledger.ts` (the `widget` target), `tools/run-policy.ts` (a widget's refresh run), `notifications.ts` (`widget_alert`, `widget_failed`, `dashboard_proposal`); server `routes/app/dashboards.ts`, `dashboard-schemas.ts`; client `packages/client/src/dashboards/*`; web `packages/ui/src/widgets/*`, `pages/HomePage.tsx` (the mural), `pages/DashboardsPage.tsx`, `pages/DashboardPage.tsx`, `components/dashboards/*`; phone `app/(app)/dashboards.tsx` (pushed from `src/features/chats/DashboardsEntry.tsx` on the home), `src/features/dashboards/*`
 
 ## Context
 
@@ -23,7 +23,7 @@ people than asked.
 1. **A widget is a block, the agent that looks after it and a routine that redoes it in place.** Its data is a
    `WidgetSpec` of one of six kinds: `kpi` (one number with its move, a note and a small trend), `goal` (progress to a
    goal), `bars`, `line`, `list` (rows with a word each, `ok` or `warn`) and `text` (a few sentences). The spec is data
-   only, checked by one function every package shares (`validateWidgetSpec` in `@agenteschat/ui/widgets/spec`): the
+   only, checked by one function every package shares (`validateWidgetSpec` in `@keepmind/ui/widgets/spec`): the
    kind's fields, text trimmed and clipped at a word's end, numbers finite, one value per label, at most 24 points,
    8 rows, 6 sentences; a `note` is one short sentence of at most 140 characters (§17).
    The person asks for a kind or `auto` (the agent picks). A chat chart reads as a widget (`chartBlockToWidgetSpec`:

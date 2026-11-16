@@ -1,7 +1,7 @@
-import { holdEvents, type PubSub } from "@agenteschat/adapters";
-import { and, type Database, eq, inArray, isNull, schema, sql } from "@agenteschat/db";
-import { serverText } from "@agenteschat/i18n";
-import type { AppLocale } from "@agenteschat/i18n/locale";
+import { holdEvents, type PubSub } from "@keepmind/adapters";
+import { and, type Database, eq, inArray, isNull, schema, sql } from "@keepmind/db";
+import { serverText } from "@keepmind/i18n";
+import type { AppLocale } from "@keepmind/i18n/locale";
 import {
   agentsLike,
   agentsLikeText,

@@ -1,4 +1,4 @@
-import { useMission, useMissionDecisions, useMissionReviews, useThreadInfo, useThreadTasks } from "@agenteschat/client";
+import { useMission, useMissionDecisions, useMissionReviews, useThreadInfo, useThreadTasks } from "@keepmind/client";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, ScrollView, StyleSheet, View } from "react-native";
 import Animated, { FadeIn, FadeOut, LayoutAnimationConfig, LinearTransition } from "react-native-reanimated";

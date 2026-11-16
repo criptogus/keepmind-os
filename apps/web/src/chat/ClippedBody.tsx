@@ -1,4 +1,4 @@
-import { LONG_MESSAGE } from "@agenteschat/client/lib/message-length";
+import { LONG_MESSAGE } from "@keepmind/client/lib/message-length";
 import { type ReactNode, useLayoutEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useChannelActions } from "@/components/channel-actions";

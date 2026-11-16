@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import type { AppNotification, NotificationPage } from "@agenteschat/client";
+import type { AppNotification, NotificationPage } from "@keepmind/client";
 import {
   dayGroupOf,
   groupByDay,
@@ -19,7 +19,7 @@ import {
   upsertInPages,
   waitingCardOf,
   widgetNoticeOf,
-} from "@agenteschat/client/lib/notifications";
+} from "@keepmind/client/lib/notifications";
 import { notification } from "./fakes/notifications";
 
 const NOW = new Date(2026, 9, 16, 15, 30); // Friday 15:30, local time

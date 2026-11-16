@@ -1,5 +1,5 @@
-import { type ChartSpec, chartShares, chartTable, formatChartValue } from "@agenteschat/client/lib/chart";
-import type { AgentColorName } from "@agenteschat/ui/agent/engine";
+import { type ChartSpec, chartShares, chartTable, formatChartValue } from "@keepmind/client/lib/chart";
+import type { AgentColorName } from "@keepmind/ui/agent/engine";
 import {
   areaCells,
   barCells,
@@ -13,7 +13,7 @@ import {
   lineTops,
   ringCells,
   smoothPath,
-} from "@agenteschat/ui/sky/chart";
+} from "@keepmind/ui/sky/chart";
 import { Canvas, Circle, Group, Path, Skia } from "@shopify/react-native-skia";
 import { memo, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -38,7 +38,7 @@ const EASE = Easing.out(Easing.cubic);
 /**
  * A chart in a message: clean shapes (rounded bars, a smooth
  * line, a round ring) with a fine dither inside in the agent's tones, drawn on Skia from the same cells as
- * the web (`@agenteschat/ui/sky/chart`). Tap a bar, a point or a slice for its value; "Tabela" flips the card
+ * the web (`@keepmind/ui/sky/chart`). Tap a bar, a point or a slice for its value; "Tabela" flips the card
  * to the same data as a table; full screen is a native form sheet with the chart big and its table under it.
  */
 export const ChartCard = memo(function ChartCard({

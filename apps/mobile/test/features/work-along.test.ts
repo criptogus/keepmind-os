@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { markedPieces, markInk } from "@agenteschat/client/lib/activity";
-import type { WorkItem } from "@agenteschat/client/lib/working";
+import { markedPieces, markInk } from "@keepmind/client/lib/activity";
+import type { WorkItem } from "@keepmind/client/lib/working";
 import {
   ALONG_STRIP,
   alongHref,

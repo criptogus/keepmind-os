@@ -1,6 +1,6 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, type Database, desc, type Executor, eq, isNull, notInArray, schema, sql } from "@agenteschat/db";
-import { WIDGET_HISTORY_KEPT } from "@agenteschat/ui/widgets/spec";
+import type { PubSub } from "@keepmind/adapters";
+import { and, type Database, desc, type Executor, eq, isNull, notInArray, schema, sql } from "@keepmind/db";
+import { WIDGET_HISTORY_KEPT } from "@keepmind/ui/widgets/spec";
 import { notifyWidgetFailed, resolveWidgetNotices } from "../notification-producers";
 import { getMembership } from "../organizations";
 import type { RoutineRunEndStatus } from "../routine-ledger";

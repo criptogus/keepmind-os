@@ -1,6 +1,6 @@
-import { invitationQuery, keys, useApi } from "@agenteschat/client";
-import { ANSWER_POLL_MS } from "@agenteschat/client/lib/join-requests";
-import { modeKey } from "@agenteschat/client/lib/workspace-mode";
+import { invitationQuery, keys, useApi } from "@keepmind/client";
+import { ANSWER_POLL_MS } from "@keepmind/client/lib/join-requests";
+import { modeKey } from "@keepmind/client/lib/workspace-mode";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useIsFocused } from "expo-router";
 import { useEffect, useRef, useState } from "react";

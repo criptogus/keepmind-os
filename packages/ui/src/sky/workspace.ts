@@ -1,6 +1,6 @@
 /**
  * The workspace's own sky: behind its header in the sidebar (and the Mac app's title bar above it) and behind
- * Conversas' title on the phone. The Cloud's (agentes.chat) is the day sky, with pixel clouds drifting by; a server
+ * Conversas' title on the phone. The Cloud's (KeepMind OS) is the day sky, with pixel clouds drifting by; a server
  * of one's own is the same sky at dusk, lilac with a few slow stars. Light tones: it is always on screen.
  *
  * DOM-free: the web draws it on its canvas sky (apps/web Sky.tsx `WorkspaceSky`), the phone app mirrors these
@@ -11,10 +11,10 @@ import { bayerAt, mix, parseColor } from "./math";
 
 export type SkyHour = "day" | "dusk";
 
-/** agentes.chat and its subdomains are the Cloud (as the server's `isAgentesCloud`); any other host is one's own. */
+/** KeepMind OS and its subdomains are the Cloud (as the server's `isKeepMindCloud`); any other host is one's own. */
 export function skyHourOf(host: string): SkyHour {
   const name = host.toLowerCase().replace(/:\d+$/, "");
-  return name === "agentes.chat" || name.endsWith(".agentes.chat") ? "day" : "dusk";
+  return name === "keepmind.io" || name.endsWith(".keepmind.io") ? "day" : "dusk";
 }
 
 /** The hour's light end, three steps each: pale on a light surface, deeper on a dark one. */

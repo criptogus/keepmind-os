@@ -1,8 +1,8 @@
-import type { EmailSender } from "@agenteschat/adapters";
-import { type Database, type Executor, eq, schema } from "@agenteschat/db";
+import type { EmailSender } from "@keepmind/adapters";
+import { type Database, type Executor, eq, schema } from "@keepmind/db";
 import { rethrowEmailError } from "./email";
 import { enqueue } from "./outbox";
-import { isAgentesCloud } from "./telemetry";
+import { isKeepMindCloud } from "./telemetry";
 
 const { users } = schema;
 
@@ -11,11 +11,11 @@ export const ACCOUNT_CONTACT_JOB = "account.contact";
 let enabled = false;
 
 /**
- * On only on agentes.chat Cloud with a provider that keeps contacts: a self-hosted server never sends anything about
+ * On only on KeepMind OS Cloud with a provider that keeps contacts: a self-hosted server never sends anything about
  * its accounts, and queues no job.
  */
 export function enableAccountContacts(publicUrl: string, email: Pick<EmailSender, "saveContact">) {
-  enabled = isAgentesCloud(publicUrl) && Boolean(email.saveContact);
+  enabled = isKeepMindCloud(publicUrl) && Boolean(email.saveContact);
 }
 
 /**

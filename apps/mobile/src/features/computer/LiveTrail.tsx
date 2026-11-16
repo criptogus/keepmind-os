@@ -5,10 +5,10 @@ import {
   browserTrailPages,
   type ScreenKind,
   type ScreenStep,
-} from "@agenteschat/client";
-import { lowerFirst } from "@agenteschat/client/lib/format";
-import { formatDuration } from "@agenteschat/client/lib/work";
-import type { AgentColorName } from "@agenteschat/ui/agent/engine";
+} from "@keepmind/client";
+import { lowerFirst } from "@keepmind/client/lib/format";
+import { formatDuration } from "@keepmind/client/lib/work";
+import type { AgentColorName } from "@keepmind/ui/agent/engine";
 import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";

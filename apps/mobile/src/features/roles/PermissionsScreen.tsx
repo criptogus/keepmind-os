@@ -1,6 +1,6 @@
-import { ApiError, useSetRowHolders, useUpdateRole } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { COMPUTERS_ROW, isEveryone, levelOn, peopleWith, roleLock, roleName } from "@agenteschat/client/lib/roles";
+import { ApiError, useSetRowHolders, useUpdateRole } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { COMPUTERS_ROW, isEveryone, levelOn, peopleWith, roleLock, roleName } from "@keepmind/client/lib/roles";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";

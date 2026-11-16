@@ -1,15 +1,10 @@
-import {
-  type AgentComputerFacts,
-  type EntryState,
-  entryButton,
-  surfaceOf,
-} from "@agenteschat/client/lib/agent-computer";
-import { type EtaView, etaLine, type SetupView, setupNoticeStatusKey } from "@agenteschat/client/lib/computer";
-import { endSentence } from "@agenteschat/client/lib/text";
+import { type AgentComputerFacts, type EntryState, entryButton, surfaceOf } from "@keepmind/client/lib/agent-computer";
+import { type EtaView, etaLine, type SetupView, setupNoticeStatusKey } from "@keepmind/client/lib/computer";
+import { endSentence } from "@keepmind/client/lib/text";
 import type { TFunction } from "i18next";
 
 /*
- * The agent's computer on the phone: the web's entry, states and words (`@agenteschat/client/lib/agent-computer`,
+ * The agent's computer on the phone: the web's entry, states and words (`@keepmind/client/lib/agent-computer`,
  * ADR 0065), with what only the phone decides. Pure, so it is unit-tested.
  */
 

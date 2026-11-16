@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, setSystemTime, test } from "bun:test";
-import type { Agent, AgentBrain, AgentBrainInput, AiComputer, MachineAccount } from "@agenteschat/client";
-import { CODING_PLANS, learnPlanModels } from "@agenteschat/client/lib/plans";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import type { Agent, AgentBrain, AgentBrainInput, AiComputer, MachineAccount } from "@keepmind/client";
+import { CODING_PLANS, learnPlanModels } from "@keepmind/client/lib/plans";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
@@ -286,7 +286,7 @@ describe("Quem pensa: a coding plan's models", () => {
       ["DeepSeek V4 Pro", "Precisa da região Global no OpenCode."],
       ["DeepSeek V4.1 Flash", "Econômico", "Precisa da região Global no OpenCode."],
     ]);
-    // A model that trains on what it's sent: its provider does, never agentes.chat.
+    // A model that trains on what it's sent: its provider does, never KeepMind OS.
     expect(
       brainRows(d)
         .find((r) => r.title === "Iceman Contributor Free")

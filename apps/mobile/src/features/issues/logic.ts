@@ -1,7 +1,7 @@
-import type { Issue, IssueColumn, IssueConversationRef, IssueStatus, IssueWork } from "@agenteschat/client";
-import { toYmd } from "@agenteschat/client/lib/format";
-import { BOARD, isOpen, STATUSES } from "@agenteschat/client/lib/issues";
-import { foldSteps, stepPhrase } from "@agenteschat/client/lib/work";
+import type { Issue, IssueColumn, IssueConversationRef, IssueStatus, IssueWork } from "@keepmind/client";
+import { toYmd } from "@keepmind/client/lib/format";
+import { BOARD, isOpen, STATUSES } from "@keepmind/client/lib/issues";
+import { foldSteps, stepPhrase } from "@keepmind/client/lib/work";
 import type { TFunction } from "i18next";
 import { chatHref } from "../links/logic";
 

@@ -1,7 +1,7 @@
-import { WORKSPACE_COMPUTER_KIND } from "@agenteschat/client/lib/computer";
-import { planMark, SCENE_PLANS } from "@agenteschat/client/lib/no-ai";
-import { rightHandOf, sceneTeam } from "@agenteschat/client/lib/right-hand";
-import { TEAM_NIGHT } from "@agenteschat/ui/sky/math";
+import { WORKSPACE_COMPUTER_KIND } from "@keepmind/client/lib/computer";
+import { planMark, SCENE_PLANS } from "@keepmind/client/lib/no-ai";
+import { rightHandOf, sceneTeam } from "@keepmind/client/lib/right-hand";
+import { TEAM_NIGHT } from "@keepmind/ui/sky/math";
 import { StyleSheet, View } from "react-native";
 import { ComputerPortrait } from "@/computer/ComputerPortrait";
 import { Dither } from "@/sky/Dither";

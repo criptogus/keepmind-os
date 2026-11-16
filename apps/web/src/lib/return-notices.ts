@@ -1,12 +1,12 @@
-import { oauthReturnText } from "@agenteschat/client/lib/errors";
-import { appNameOf } from "@agenteschat/client/lib/tool-labels";
+import { oauthReturnText } from "@keepmind/client/lib/errors";
+import { appNameOf } from "@keepmind/client/lib/tool-labels";
 import type { TFunction } from "i18next";
 import type { ToastStore } from "./toast";
 
 /** The server's callbacks say why a provider's return didn't connect in these parameters (a code, never words). */
 const OAUTH_ERRORS = ["connector_error", "github_app_error"];
 
-/** What GitHub's return did (`?github_app=`): the agentes.chat app installed, or the server's own app made. */
+/** What GitHub's return did (`?github_app=`): the KeepMind OS app installed, or the server's own app made. */
 const GITHUB_APP_DONE = { installed: "githubApp.installed", created: "githubApp.server.created" } as const;
 
 /**

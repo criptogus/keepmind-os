@@ -1,9 +1,9 @@
-import type { ComputerBrain, MachineOutage, MachineOutages, OutageTarget } from "@agenteschat/client";
-import { useMachineOutages, useMachines, useMoveAgents } from "@agenteschat/client";
-import { awayText } from "@agenteschat/client/lib/computer-queue";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { joinNames, timeAgo } from "@agenteschat/client/lib/format";
-import { computerKind } from "@agenteschat/client/lib/machines";
+import type { ComputerBrain, MachineOutage, MachineOutages, OutageTarget } from "@keepmind/client";
+import { useMachineOutages, useMachines, useMoveAgents } from "@keepmind/client";
+import { awayText } from "@keepmind/client/lib/computer-queue";
+import { errorText } from "@keepmind/client/lib/errors";
+import { joinNames, timeAgo } from "@keepmind/client/lib/format";
+import { computerKind } from "@keepmind/client/lib/machines";
 import {
   type BrainUnavailable,
   brainName,
@@ -13,8 +13,8 @@ import {
   targetBlock,
   targetsFor,
   waitingText,
-} from "@agenteschat/client/lib/outages";
-import { can } from "@agenteschat/client/lib/permissions";
+} from "@keepmind/client/lib/outages";
+import { can } from "@keepmind/client/lib/permissions";
 import {
   Button,
   Checkbox,
@@ -30,7 +30,7 @@ import {
   type OptionListItem,
   ProviderLogo,
   useNow,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { Link } from "@tanstack/react-router";
 import type { TFunction } from "i18next";
 import { useEffect, useId, useMemo, useRef, useState } from "react";

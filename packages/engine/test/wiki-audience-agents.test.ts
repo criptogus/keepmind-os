@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { schema } from "@agenteschat/db";
+import { schema } from "@keepmind/db";
 import {
   createAgent,
   createRole,

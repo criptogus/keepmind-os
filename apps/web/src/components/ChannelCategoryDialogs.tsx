@@ -7,9 +7,9 @@ import {
   useCreateChannelCategory,
   usePlaceChannel,
   useRenameChannelCategory,
-} from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { useHeldWhile } from "@agenteschat/client/lib/hold";
+} from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { useHeldWhile } from "@keepmind/client/lib/hold";
 import {
   Button,
   Checkbox,
@@ -23,7 +23,7 @@ import {
   Locked,
   OptionList,
   Select,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useToast } from "@/lib/toast";

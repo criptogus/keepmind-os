@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join, relative } from "node:path";
-import { en, ptBR } from "@agenteschat/i18n";
-import { legalDocuments } from "@agenteschat/i18n/legal";
+import { en, ptBR } from "@keepmind/i18n";
+import { legalDocuments } from "@keepmind/i18n/legal";
 import { leaves } from "../../../packages/i18n/test/leaves";
 import { filesNamingMakers, MAKER_WORDS, sourceFiles, withoutComments } from "../../../packages/i18n/test/maker-words";
 
@@ -12,7 +12,7 @@ const ROOTS = [join(import.meta.dir, "..", "src"), join(REPO, "packages", "ui", 
 const SKIP_FILES = ["GalleryPage.tsx"];
 /** Brand names, keys, symbols and code that stay as they are. */
 const ALLOWED = [
-  /^(KeepMind|OS|KeepMind OS|agentes|chat|agentes\.chat|GitHub|MCP|Drive|Sentry|Linear|Slack|Claude Code|Codex|US\$|UTC)$/,
+  /^(KeepMind|OS|KeepMind OS|Powered by ZeroAgency\.ai|SuperAgentSkill|agentes|chat|agentes\.chat|GitHub|MCP|Drive|Sentry|Linear|Slack|Claude Code|Codex|US\$|UTC)$/,
   /^[A-Z]$/,
   /^@\w+$/,
   /^https?:/,

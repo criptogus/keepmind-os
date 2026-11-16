@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { and, eq, schema } from "@agenteschat/db";
-import { ARTIFACT_LIMITS, setOrgLimits, zip } from "@agenteschat/engine";
+import { and, eq, schema } from "@keepmind/db";
+import { ARTIFACT_LIMITS, setOrgLimits, zip } from "@keepmind/engine";
 import {
   type Browser,
   browser,

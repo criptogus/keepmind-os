@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { type Database, eq, schema, sql } from "@agenteschat/db";
-import { createTestDatabase } from "@agenteschat/db/testing";
+import { type Database, eq, schema, sql } from "@keepmind/db";
+import { createTestDatabase } from "@keepmind/db/testing";
 import { agentView, confirmSetupStep, createAgent, createOrganization, NotFoundError, newSetup, setupOf } from "../src";
 import { addMember, addUser } from "./fixtures";
 

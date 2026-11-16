@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { countQueries, eq, schema, sql } from "@agenteschat/db";
+import { countQueries, eq, schema, sql } from "@keepmind/db";
 import {
   addChannelMember,
   addRunStep,

@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, expect, test } from "bun:test";
-import { orgTopic } from "@agenteschat/adapters";
-import { testConfig } from "@agenteschat/config";
-import { desc, eq, schema, sql } from "@agenteschat/db";
+import { orgTopic } from "@keepmind/adapters";
+import { testConfig } from "@keepmind/config";
+import { desc, eq, schema, sql } from "@keepmind/db";
 import {
   countComposio,
   countToolCall,
@@ -9,7 +9,7 @@ import {
   purgeWorkspace,
   setRestrictionNotices,
   wantMachine,
-} from "@agenteschat/engine";
+} from "@keepmind/engine";
 import { createLogger } from "../src/logger";
 import { createOperatorApp, type OperatorDeps, serveOperatorApi } from "../src/operator/app";
 import { type Browser, browser, createTestServer, deletionCode, seedOrg, signUp, type TestServer } from "./harness";
@@ -540,8 +540,8 @@ test("user block: signed out at once, refused everywhere, no sign-in; unblocked,
   expect(await body(await op(`/users/${biaId}`))).toMatchObject({ blockedAt: null, blockedReason: null });
 });
 
-test("on agentes.chat Cloud a blocked sign-in says the block's kind, never its reason", async () => {
-  setRestrictionNotices("https://agentes.chat");
+test("on KeepMind OS Cloud a blocked sign-in says the block's kind, never its reason", async () => {
+  setRestrictionNotices("https://keepmind.io");
   try {
     const cid = browser(t);
     await signUp(cid, "cid@acme.test");

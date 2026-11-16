@@ -1,4 +1,4 @@
-import type { Agent, Memory } from "@agenteschat/client";
+import type { Agent, Memory } from "@keepmind/client";
 
 /** How many rows each list under the sky shows. */
 export const LIST_COUNT = 5;

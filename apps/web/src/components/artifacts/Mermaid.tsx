@@ -1,4 +1,4 @@
-import { Button } from "@agenteschat/ui";
+import { Button } from "@keepmind/ui";
 import { type CSSProperties, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CodeBlock } from "@/components/CodeBlock";

@@ -1,4 +1,4 @@
-import { normalizeAppearance } from "@agenteschat/tokens/look";
+import { normalizeAppearance } from "@keepmind/tokens/look";
 import type { ApiRule, BundleNote, BundleTodo } from "../../api/types";
 import {
   cleanUrl,
@@ -49,11 +49,11 @@ const LEFT_OUT_KINDS = new Set<string>([
  * Viktor…): paste it there and bring back the file it writes, or the JSON it
  * replies with.
  */
-export const EXPORT_PROMPT = `Please export everything I set up with you, so I can move it to agentes.chat (a workspace where people and AI agents work together).
+export const EXPORT_PROMPT = `Please export everything I set up with you, so I can move it to KeepMind OS (a workspace where people and AI agents work together).
 
 Export all of my agents in this one file, not only the one I'm talking to now: every agent, bot or assistant in my account or workspace, each with its own instructions, skills and scheduled tasks. List them all first and read each one's setup with the tools you have, then write the file.
 
-Write one JSON file named agentes-chat-export.json and give it to me to download. If you can't make files, reply with the JSON in a single \`\`\`json code block and nothing else.
+Write one JSON file named keepmind-os-export.json and give it to me to download. If you can't make files, reply with the JSON in a single \`\`\`json code block and nothing else.
 
 Use exactly this shape:
 

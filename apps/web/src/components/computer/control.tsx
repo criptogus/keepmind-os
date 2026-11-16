@@ -1,5 +1,5 @@
-import { MAX_MESSAGE_LENGTH } from "@agenteschat/client/lib/message-length";
-import { Button, isApple, Locked, onScreenKeyboard, overLimit, Textarea } from "@agenteschat/ui";
+import { MAX_MESSAGE_LENGTH } from "@keepmind/client/lib/message-length";
+import { Button, isApple, Locked, onScreenKeyboard, overLimit, Textarea } from "@keepmind/ui";
 import { type PointerEvent, type ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useTextLimit } from "@/hooks/useTextLimit";

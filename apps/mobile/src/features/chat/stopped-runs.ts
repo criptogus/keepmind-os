@@ -1,6 +1,6 @@
-import type { Message } from "@agenteschat/client";
-import { isMediaAfterReply } from "@agenteschat/client/lib/media";
-import { type StoppedNotice, stoppedNoticeOf } from "@agenteschat/client/lib/notices";
+import type { Message } from "@keepmind/client";
+import { isMediaAfterReply } from "@keepmind/client/lib/media";
+import { type StoppedNotice, stoppedNoticeOf } from "@keepmind/client/lib/notices";
 import { createContext, useContext } from "react";
 import { stoppedOf } from "./turn";
 

@@ -1,5 +1,5 @@
-import type { AiAccounts as AiAccountsView } from "@agenteschat/client";
-import { keys, useAiAccounts, useAiStatus, useApi, useMachines } from "@agenteschat/client";
+import type { AiAccounts as AiAccountsView } from "@keepmind/client";
+import { keys, useAiAccounts, useAiStatus, useApi, useMachines } from "@keepmind/client";
 import {
   agentsToGive,
   endsOnClaude,
@@ -8,13 +8,13 @@ import {
   offersSignInAgain,
   type PlanAccount,
   unusedCopies,
-} from "@agenteschat/client/lib/ai-accounts";
-import { computerNameOf } from "@agenteschat/client/lib/computer";
-import { joinNames } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { agentAi, aiStateOf } from "@agenteschat/client/lib/no-ai";
-import { isPlanId, planOf, signInProviderOf } from "@agenteschat/client/lib/plans";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client/lib/ai-accounts";
+import { computerNameOf } from "@keepmind/client/lib/computer";
+import { joinNames } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { agentAi, aiStateOf } from "@keepmind/client/lib/no-ai";
+import { isPlanId, planOf, signInProviderOf } from "@keepmind/client/lib/plans";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import {
   Button,
   Dialog,
@@ -26,7 +26,7 @@ import {
   Menu,
   MenuItem,
   SettingNote,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

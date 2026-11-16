@@ -3,8 +3,8 @@ import { createECDH } from "node:crypto";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { createFakeWebPushSender, generateVapidKeys } from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
+import { createFakeWebPushSender, generateVapidKeys } from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
 import { createApp } from "../src/app";
 import { browser, createTestServer, joinByInvitation, seedOrg, signUp, type TestServer } from "./harness";
 

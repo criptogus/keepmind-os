@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { type ComputerSetup, NetworkError } from "@agenteschat/client";
+import { type ComputerSetup, NetworkError } from "@keepmind/client";
 import { cleanup } from "@testing-library/react";
 import { ADA_ID, ATLAS_ID, createFakeApi, fakeBrowserOf, fakeMachinesOf, ORG_ID, seedState } from "./fake-api";
 import { renderApp, screen, settle } from "./render";
@@ -121,7 +121,7 @@ describe("Configurações → Computadores on self-host", () => {
     expect(body()).not.toMatch(/na nuvem|computador na nuvem|in the cloud/i);
     // What it all means is one help page, linked once at the end.
     const how = screen().getByRole("link", { name: "Como os dispositivos funcionam" });
-    expect(new URL(how.getAttribute("href") ?? "").href).toBe("https://agentes.chat/pt/docs/computers");
+    expect(new URL(how.getAttribute("href") ?? "").href).toBe("https://keepmind.io/pt/docs/computers");
     expect(how.className).toBe("ac-link ac-link--muted");
     expect([...document.querySelectorAll(".settings__body a")].at(-1)).toBe(how);
   });
@@ -132,7 +132,7 @@ describe("Configurações → Computadores on self-host", () => {
     // The install page's steps, on the public docs: the repository's own guide isn't public.
     expect(missing.textContent).toContain("Este servidor também pode ser o computador dos agentes: veja como.");
     const link = [...missing.querySelectorAll("a")].find((a) => a.textContent === "veja como");
-    expect(link?.getAttribute("href")).toBe("https://agentes.chat/pt/docs/install-on-a-server#computers");
+    expect(link?.getAttribute("href")).toBe("https://keepmind.io/pt/docs/install-on-a-server#computers");
     expect(link?.getAttribute("target")).toBe("_blank");
     cleanup();
     // Open sign-up: the server refuses a computer of its own, so nothing to suggest.

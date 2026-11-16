@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { ApiError } from "@agenteschat/client";
+import { ApiError } from "@keepmind/client";
 import { cleanup } from "@testing-library/react";
 import { createI18n } from "@/i18n";
 import { showReturnNotices } from "@/lib/return-notices";

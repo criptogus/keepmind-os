@@ -1,4 +1,4 @@
-import type { MailAdapters, PubSub } from "@agenteschat/adapters";
+import type { MailAdapters, PubSub } from "@keepmind/adapters";
 import {
   and,
   type Database,
@@ -15,7 +15,7 @@ import {
   rowsOf,
   schema,
   sql,
-} from "@agenteschat/db";
+} from "@keepmind/db";
 import { getAgent } from "./agents";
 import { type AiStatusDeps, rightHandWorkAi } from "./ai-status";
 import { decidesAgentApprovals, MAX_OWN_ACTIONS, OWN_ACTION_NAME } from "./approval-rules";

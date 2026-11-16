@@ -7,8 +7,8 @@ import {
   type GitSyncRepo,
   MACHINE_PROTOCOL_VERSION,
   type ServerFrame,
-} from "@agenteschat/adapters";
-import { and, eq, schema } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { and, eq, schema } from "@keepmind/db";
 import {
   addChannelMember,
   type ConnectorDeps,
@@ -380,7 +380,7 @@ describe("git on a connected machine through the proxy (ADR 0024 addendum)", () 
     // Where it starts goes in the turn's prompt, with the agent's own line on its commits (ADR 0156): the system text
     // stays the same whichever checkout a turn is about.
     expect(named?.start).toBe(
-      `You start in ${FOLDER}/repos/acme/web.\nCommits you make this turn: end each commit message with the line Co-authored-by: Dev <noreply@agentes.chat>`,
+      `You start in ${FOLDER}/repos/acme/web.\nCommits you make this turn: end each commit message with the line Co-authored-by: Dev <contact@zeroagency.ai>`,
     );
     expect(named?.prompt).not.toContain("beta/old");
     // Nothing named: the agent's first repository.
@@ -784,7 +784,7 @@ describe("agents' commits and the GitHub App (ADR 0156)", () => {
       .insert(schema.githubAppInstallations)
       .values({ orgId: f.org.id, installationId: 9, accountLogin: "acme", accountType: "Organization" });
     expect((await setupNow())?.author).toEqual({
-      name: "Dev (agentes.chat)",
+      name: "Dev (KeepMind OS)",
       email: "77+agentes-machine-test[bot]@users.noreply.github.com",
     });
 
@@ -797,7 +797,7 @@ describe("agents' commits and the GitHub App (ADR 0156)", () => {
       session: { machineId: w.paired.machineId, cwd: "" },
     };
     w.answers.fn = () => [];
-    const dev = "Co-authored-by: Dev <noreply@agentes.chat>";
+    const dev = "Co-authored-by: Dev <contact@zeroagency.ai>";
     const own = `Commits you make this turn: end each commit message with the line ${dev}`;
     // The agent's own line turned off and no GitHub linked: nothing to say.
     await setAgentCoAuthor(f.db, f.org.id, false);

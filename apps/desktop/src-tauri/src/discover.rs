@@ -1,4 +1,4 @@
-//! "Found" on Connect: where an agentes.chat server may be. This computer first (a server installed from the
+//! "Found" on Connect: where an KeepMind OS server may be. This computer first (a server installed from the
 //! terminal writes `~/.agentes/server.json`; the usual ports otherwise), then the person's Tailscale network
 //! when its command-line tool answers: the setup's default name, `agentes.<the tailnet>`, and online devices
 //! whose name starts with "agentes". Only addresses: the welcome window asks each one whether it is a server.
@@ -198,7 +198,7 @@ mod tests {
                 let (mut s, _) = listener.accept().unwrap();
                 let mut buf = [0u8; 2048];
                 let _ = s.read(&mut buf).unwrap();
-                let body = r#"{"name":"agentes.chat","url":"https://agentes.tail1234.ts.net"}"#;
+                let body = r#"{"name":"keepmind.io","url":"https://agentes.tail1234.ts.net"}"#;
                 let reply = format!("HTTP/1.1 200 OK\r\nContent-Length: {}\r\n\r\n{body}", body.len());
                 s.write_all(reply.as_bytes()).unwrap();
             }

@@ -3,7 +3,7 @@
  * shared by the tools, the handoff and the live view. The runner drives
  * `agent-browser`; agents only ever see the `browser_*` tools below.
  */
-import type { BrowserFrameMetadata } from "@agenteschat/adapters";
+import type { BrowserFrameMetadata } from "@keepmind/adapters";
 
 /** The scope of the browser tools: on by default, and not covered by "all tools". */
 export const BROWSER_SCOPE = "browser:use";

@@ -1,7 +1,7 @@
 import { afterEach, expect, test } from "bun:test";
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { DELETE_BRANCHES_POINTER } from "@agenteschat/adapters/command-policy";
+import { DELETE_BRANCHES_POINTER } from "@keepmind/adapters/command-policy";
 import { OutputBuffer, runCommand } from "../../runner/exec";
 import { handleRequest } from "../../runner/handlers";
 import { errorCode, gitRepo, hasGit, removeDirs, tempDir } from "./helpers";

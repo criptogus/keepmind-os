@@ -1,6 +1,6 @@
-; The Windows installer of agentes.chat: Tauri's NSIS template (tauri-cli v2.12.3, tauri-bundler 2.10.3;
+; The Windows installer of KeepMind OS: Tauri's NSIS template (tauri-cli v2.12.3, tauri-bundler 2.10.3;
 ; Apache-2.0 OR MIT, Copyright (c) 2017 - Present Tauri Apps Contributors) with our changes, each marked
-; "agentes.chat:". A short flow: Welcome (Install) -> Installing -> Done, no folder to choose, an upgrade
+; "KeepMind OS:". A short flow: Welcome (Install) -> Installing -> Done, no folder to choose, an upgrade
 ; installs over the older version without asking, and our own words and pictures (scripts/installer-art.ts).
 ; The update (`/P /UPDATE`) still shows only the progress, as Tauri's. On a Tauri upgrade, compare with its
 ; template and carry the changes over.
@@ -85,9 +85,9 @@ Var WixMode
 Var OldMainBinaryName
 
 Name "${PRODUCTNAME}"
-; agentes.chat: the installing page shows a line and the bar, never the list of files.
+; KeepMind OS: the installing page shows a line and the bar, never the list of files.
 ShowInstDetails nevershow
-; agentes.chat: nothing at the bottom of the window.
+; KeepMind OS: nothing at the bottom of the window.
 BrandingText " "
 OutFile "${OUTFILE}"
 
@@ -158,11 +158,11 @@ VIAddVersionKey "ProductVersion" "${VERSION}"
 ; Installer header image
 !if "${HEADERIMAGE}" != ""
   !define MUI_HEADERIMAGE_BITMAP "${HEADERIMAGE}"
-  ; agentes.chat: the picture sits right of the page's title.
+  ; KeepMind OS: the picture sits right of the page's title.
   !define MUI_HEADERIMAGE_RIGHT
 !endif
 
-; agentes.chat: the finish page's side is the welcome's with the agent smiling, next to it (side-done.bmp).
+; KeepMind OS: the finish page's side is the welcome's with the agent smiling, next to it (side-done.bmp).
 !if "${SIDEBARIMAGE}" != ""
   !searchreplace SIDEBARDONEIMAGE "${SIDEBARIMAGE}" "side.bmp" "side-done.bmp"
 !endif
@@ -184,7 +184,7 @@ VIAddVersionKey "ProductVersion" "${VERSION}"
 
 ; Installer pages, must be ordered as they appear
 ; 1. Welcome Page
-; agentes.chat: our words, and "Install" on the button.
+; KeepMind OS: our words, and "Install" on the button.
 !define MUI_WELCOMEPAGE_TITLE "$(welcomeTitle)"
 !define MUI_WELCOMEPAGE_TEXT "$(welcomeText)"
 !define MUI_PAGE_CUSTOMFUNCTION_SHOW WelcomeShow
@@ -290,7 +290,7 @@ Function PageReinstall
   ; of this function because we need to populate some variables
   ; related to current installed version if detected and whether
   ; we are downgrading or not.
-  ; agentes.chat: an upgrade goes on without asking, over the older version (the page's second choice).
+  ; KeepMind OS: an upgrade goes on without asking, over the older version (the page's second choice).
   ${If} $PassiveMode = 1
   ${OrIf} $R0 = 1
     Call PageLeaveReinstall
@@ -422,7 +422,7 @@ Function PageLeaveReinstall
 FunctionEnd
 
 ; 5. Choose install directory page
-; agentes.chat: never shown; it installs in the person's own app folder.
+; KeepMind OS: never shown; it installs in the person's own app folder.
 !define MUI_PAGE_CUSTOMFUNCTION_PRE Skip
 !insertmacro MUI_PAGE_DIRECTORY
 
@@ -437,7 +437,7 @@ Var AppStartMenuFolder
 !insertmacro MUI_PAGE_STARTMENU Application $AppStartMenuFolder
 
 ; 7. Installation page
-; agentes.chat: "Installing" or, from the app's update, "Updating"; it moves on to the finish page by itself.
+; KeepMind OS: "Installing" or, from the app's update, "Updating"; it moves on to the finish page by itself.
 !define MUI_PAGE_CUSTOMFUNCTION_SHOW InstFilesShow
 !insertmacro MUI_PAGE_INSTFILES
 Function InstFilesShow
@@ -450,7 +450,7 @@ FunctionEnd
 
 ; 8. Finish page
 ;
-; agentes.chat: the installing page moves on by itself (it shows no details to read), our words.
+; KeepMind OS: the installing page moves on by itself (it shows no details to read), our words.
 !define MUI_FINISHPAGE_TITLE "$(finishTitle)"
 !define MUI_FINISHPAGE_TEXT "$(finishText)"
 !define MUI_FINISHPAGE_RUN_TEXT "$(runApp)"
@@ -529,7 +529,7 @@ FunctionEnd
   !include "{{this}}"
 {{/each}}
 
-; agentes.chat: our words.
+; KeepMind OS: our words.
 LangString welcomeTitle ${LANG_ENGLISH} "Install ${PRODUCTNAME}"
 LangString welcomeText ${LANG_ENGLISH} "Your team and your AI agents, together, on this computer too.$\r$\n$\r$\nIt takes less than a minute and needs no administrator."
 LangString installButton ${LANG_ENGLISH} "Install"
@@ -675,7 +675,7 @@ LangString finishText ${LANG_RUSSIAN} "${PRODUCTNAME} установлен. Он
 LangString runApp ${LANG_RUSSIAN} "Открыть ${PRODUCTNAME}"
 
 Function .onInit
-  ; agentes.chat: the finish page's picture, next to MUI's own.
+  ; KeepMind OS: the finish page's picture, next to MUI's own.
   !ifdef SIDEBARDONEIMAGE
     InitPluginsDir
     File "/oname=$PLUGINSDIR\side-done.bmp" "${SIDEBARDONEIMAGE}"
@@ -856,7 +856,7 @@ Section Install
 
   !insertmacro CheckIfAppIsRunning "$INSTDIR\${MAINBINARYNAME}.exe" "${PRODUCTNAME}"
 
-  ; agentes.chat: one line while the files are copied, not each file's name.
+  ; KeepMind OS: one line while the files are copied, not each file's name.
   SetDetailsPrint textonly
   DetailPrint "$(copyingFiles)"
   SetDetailsPrint none

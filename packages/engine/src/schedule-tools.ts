@@ -1,4 +1,4 @@
-import { and, eq, inArray, isNull, or, schema, sql } from "@agenteschat/db";
+import { and, eq, inArray, isNull, or, schema, sql } from "@keepmind/db";
 import { type AgentActionParams, recordAgentActions } from "./agent-actions";
 import { routineRow, routineSnapshot } from "./agent-undo";
 import { agentsByHandle, currentHandles, getAgentCached } from "./agents";

@@ -1,15 +1,15 @@
-import { keys, type OrgRole, useChannels, useRoles } from "@agenteschat/client";
+import { keys, type OrgRole, useChannels, useRoles } from "@keepmind/client";
 import {
   accessInput,
   accessValid,
   type ChannelAccess,
   type ChannelAccessMode,
-} from "@agenteschat/client/lib/channel-access";
-import { useHeldWhile } from "@agenteschat/client/lib/hold";
-import { can } from "@agenteschat/client/lib/permissions";
-import { rolePicksInSight } from "@agenteschat/client/lib/personal-view";
-import { isEveryone, sortRoles } from "@agenteschat/client/lib/roles";
-import { isPersonal, modeKey } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client/lib/channel-access";
+import { useHeldWhile } from "@keepmind/client/lib/hold";
+import { can } from "@keepmind/client/lib/permissions";
+import { rolePicksInSight } from "@keepmind/client/lib/personal-view";
+import { isEveryone, sortRoles } from "@keepmind/client/lib/roles";
+import { isPersonal, modeKey } from "@keepmind/client/lib/workspace-mode";
 import {
   Button,
   Dialog,
@@ -22,7 +22,7 @@ import {
   Select,
   Token,
   TokenList,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";

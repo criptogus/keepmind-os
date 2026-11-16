@@ -1,7 +1,7 @@
-import type { Routine } from "@agenteschat/client";
-import { useAgentDetail, useAgentSkills, useRoutines, useUsage } from "@agenteschat/client";
-import { audienceSummary, modeOf } from "@agenteschat/client/lib/audience";
-import { formatMonth, formatPercent, formatUsd, whenAt } from "@agenteschat/client/lib/format";
+import type { Routine } from "@keepmind/client";
+import { useAgentDetail, useAgentSkills, useRoutines, useUsage } from "@keepmind/client";
+import { audienceSummary, modeOf } from "@keepmind/client/lib/audience";
+import { formatMonth, formatPercent, formatUsd, whenAt } from "@keepmind/client/lib/format";
 import {
   Avatar,
   Button,
@@ -14,7 +14,7 @@ import {
   Meter,
   PlanMeter,
   Switch,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { Link } from "@tanstack/react-router";
 import { type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";

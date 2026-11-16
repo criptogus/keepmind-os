@@ -11,7 +11,7 @@ import {
   writeFileSync,
 } from "node:fs";
 import path from "node:path";
-import type { MachineRequest } from "@agenteschat/adapters/machine-protocol";
+import type { MachineRequest } from "@keepmind/adapters/machine-protocol";
 import { handleRequest, type RequestScope } from "../../runner/handlers";
 import type { FetchLike } from "../../runner/push";
 import { errorCode, removeDirs, tempDir } from "./helpers";

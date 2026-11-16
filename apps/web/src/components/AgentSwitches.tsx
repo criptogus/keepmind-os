@@ -1,4 +1,4 @@
-import { Icon, Switch } from "@agenteschat/ui";
+import { Icon, Switch } from "@keepmind/ui";
 import { useId } from "react";
 import { useTranslation } from "react-i18next";
 import { useDirectory } from "@/hooks/useDirectory";

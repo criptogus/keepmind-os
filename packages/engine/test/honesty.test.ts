@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import { schema } from "@agenteschat/db";
-import { type ModelRequest, textOf } from "@agenteschat/providers";
+import { schema } from "@keepmind/db";
+import { type ModelRequest, textOf } from "@keepmind/providers";
 import { drainOutbox, postPersonMessage } from "../src";
 import { decideTurnEnd, UNBACKED_NUDGE } from "../src/continuation";
 import { type Fixture, setup } from "./fixtures";

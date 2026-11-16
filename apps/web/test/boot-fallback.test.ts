@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
@@ -37,7 +37,7 @@ function boot(
   const globals = {
     window: win,
     document: doc,
-    location: { href: "https://app.agentes.chat/org/acme", reload: () => void reloads++ },
+    location: { href: "https://keepmind.io/org/acme", reload: () => void reloads++ },
     navigator: { languages: env.languages ?? ["pt-BR"], language: env.languages?.[0] ?? "pt-BR" },
     localStorage: { getItem: (key: string) => (key === "agentes.locale" ? (env.locale ?? null) : null) },
     sessionStorage: {

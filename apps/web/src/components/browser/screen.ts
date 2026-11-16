@@ -1,5 +1,5 @@
-import type { ScreenKind } from "@agenteschat/client";
-import type { IconName } from "@agenteschat/ui";
+import type { ScreenKind } from "@keepmind/client";
+import type { IconName } from "@keepmind/ui";
 import type { TFunction } from "i18next";
 
 /**

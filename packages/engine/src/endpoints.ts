@@ -1,5 +1,5 @@
-import { OutboundAddressError } from "@agenteschat/adapters";
-import { and, type Database, type Executor, eq, isNull, schema } from "@agenteschat/db";
+import { OutboundAddressError } from "@keepmind/adapters";
+import { and, type Database, type Executor, eq, isNull, schema } from "@keepmind/db";
 import {
   customModelId,
   ENDPOINT_STYLES,
@@ -9,14 +9,14 @@ import {
   parseCustomModel,
   setCustomModels,
   type ToolSpec,
-} from "@agenteschat/providers";
+} from "@keepmind/providers";
 import { recordAudit } from "./audit";
 import { caches } from "./cache";
 import { NotFoundError, ValidationError } from "./errors";
 import type { ModelGateway } from "./gateway";
 import { assertPublicHttpsUrl, publicHttpsFetch, type ResolveHost } from "./net-guard";
 import { requirePermission } from "./organizations";
-import { isAgentesCloud } from "./telemetry";
+import { isKeepMindCloud } from "./telemetry";
 import { redactCredentials } from "./tool-detail";
 
 /**
@@ -51,7 +51,7 @@ export const allowsPrivateEndpoints = (config: {
   MODEL_ENDPOINTS_PRIVATE?: boolean;
   PUBLIC_URL: string;
   ALLOW_SIGNUP?: boolean;
-}) => config.MODEL_ENDPOINTS_PRIVATE ?? (!isAgentesCloud(config.PUBLIC_URL) && !config.ALLOW_SIGNUP);
+}) => config.MODEL_ENDPOINTS_PRIVATE ?? (!isKeepMindCloud(config.PUBLIC_URL) && !config.ALLOW_SIGNUP);
 
 /** The fetch endpoint calls go through: private addresses allowed or not, every request checked at connect time. */
 export const endpointFetch = (net: EndpointNet): typeof fetch =>

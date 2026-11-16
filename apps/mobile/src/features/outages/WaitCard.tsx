@@ -1,6 +1,6 @@
-import { type Message, useMachines } from "@agenteschat/client";
-import { awayText } from "@agenteschat/client/lib/computer-queue";
-import { brainUnavailableOf, waitCardState, waitsForComputer } from "@agenteschat/client/lib/machine-outages";
+import { type Message, useMachines } from "@keepmind/client";
+import { awayText } from "@keepmind/client/lib/computer-queue";
+import { brainUnavailableOf, waitCardState, waitsForComputer } from "@keepmind/client/lib/machine-outages";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";

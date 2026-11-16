@@ -1,11 +1,11 @@
-import type { Agent, Memory, MemoryKind } from "@agenteschat/client";
-import { useMemory, useMemoryAction, useProposals } from "@agenteschat/client";
-import { FIELD_LIMITS } from "@agenteschat/client/lib/field-limits";
-import { daysBetween, relativeTime } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { memoryLine } from "@agenteschat/client/lib/proposals";
-import { isRightHand } from "@agenteschat/client/lib/right-hand";
-import { modeKey } from "@agenteschat/client/lib/workspace-mode";
+import type { Agent, Memory, MemoryKind } from "@keepmind/client";
+import { useMemory, useMemoryAction, useProposals } from "@keepmind/client";
+import { FIELD_LIMITS } from "@keepmind/client/lib/field-limits";
+import { daysBetween, relativeTime } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { memoryLine } from "@keepmind/client/lib/proposals";
+import { isRightHand } from "@keepmind/client/lib/right-hand";
+import { modeKey } from "@keepmind/client/lib/workspace-mode";
 import {
   Button,
   Chip,
@@ -23,7 +23,7 @@ import {
   Tabs,
   Textarea,
   Toolbar,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { Link } from "@tanstack/react-router";
 import type { TFunction } from "i18next";
 import { useEffect, useRef, useState } from "react";

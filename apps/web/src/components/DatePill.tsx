@@ -1,4 +1,4 @@
-import { dayLabel } from "@agenteschat/client/lib/format";
+import { dayLabel } from "@keepmind/client/lib/format";
 import { type Ref, type RefObject, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DATE_PILL_IDLE_MS, dayAtTop } from "@/lib/date-pill";

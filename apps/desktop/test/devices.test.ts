@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import type { RunnerPhone } from "@agenteschat/adapters/machine-protocol";
-import type { ControlIphoneSetup } from "@agenteschat/adapters/runner-control";
+import type { RunnerPhone } from "@keepmind/adapters/machine-protocol";
+import type { ControlIphoneSetup } from "@keepmind/adapters/runner-control";
 import {
   androidStepsUrl,
   deviceServer,
@@ -133,11 +133,11 @@ describe("the iPhone setup's checklist", () => {
 
 describe("this computer on its server", () => {
   test("the QR and the Android steps open this computer's own steps", () => {
-    expect(iphoneStepsUrl("https://app.agentes.chat", "o1", "m-1")).toBe(
-      "https://app.agentes.chat/org/o1/settings/devices/iphone-setup?computer=m-1",
+    expect(iphoneStepsUrl("https://keepmind.io", "o1", "m-1")).toBe(
+      "https://keepmind.io/org/o1/settings/devices/iphone-setup?computer=m-1",
     );
-    expect(androidStepsUrl("https://app.agentes.chat", "o1", "m-1")).toBe(
-      "https://app.agentes.chat/org/o1/settings/devices/android-setup?computer=m-1",
+    expect(androidStepsUrl("https://keepmind.io", "o1", "m-1")).toBe(
+      "https://keepmind.io/org/o1/settings/devices/android-setup?computer=m-1",
     );
   });
 

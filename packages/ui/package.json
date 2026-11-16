@@ -1,5 +1,5 @@
 {
-  "name": "@agenteschat/ui",
+  "name": "@keepmind/ui",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -62,8 +62,8 @@
   },
   "license": "AGPL-3.0-only",
   "dependencies": {
-    "@agenteschat/i18n": "workspace:*",
-    "@agenteschat/tokens": "workspace:*",
+    "@keepmind/i18n": "workspace:*",
+    "@keepmind/tokens": "workspace:*",
     "radix-ui": "^1.8.1",
     "uqr": "0.1.3"
   },

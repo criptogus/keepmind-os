@@ -1,7 +1,7 @@
-import { invitationStateQuery, keys, useApi, useAuthConfig, useMe } from "@agenteschat/client";
-import { knownErrorText } from "@agenteschat/client/lib/errors";
-import { formatShortDate } from "@agenteschat/client/lib/format";
-import { sendsEmail } from "@agenteschat/client/lib/join-requests";
+import { invitationStateQuery, keys, useApi, useAuthConfig, useMe } from "@keepmind/client";
+import { knownErrorText } from "@keepmind/client/lib/errors";
+import { formatShortDate } from "@keepmind/client/lib/format";
+import { sendsEmail } from "@keepmind/client/lib/join-requests";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

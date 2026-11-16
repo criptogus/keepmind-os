@@ -18,7 +18,7 @@ import {
   STREAM_LIMITS,
   type StreamControl,
   type WifiIphone,
-} from "@agenteschat/adapters/machine-protocol";
+} from "@keepmind/adapters/machine-protocol";
 import {
   ANDROID_APP,
   adbStateOf,

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import type { ControlStatus } from "@agenteschat/adapters/runner-control";
+import type { ControlStatus } from "@keepmind/adapters/runner-control";
 import { ControlClient, ControlError, type ControlMessage } from "../src/control/client";
 
 /** Manual timers: `fire()` runs every pending timeout. */

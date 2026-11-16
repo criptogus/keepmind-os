@@ -1,4 +1,4 @@
-import type { AgentColorName } from "@agenteschat/ui/agent/engine";
+import type { AgentColorName } from "@keepmind/ui/agent/engine";
 import { View } from "react-native";
 import { useReducedMotion, useTheme } from "@/ui/theme";
 import { useFrameTime } from "./live";

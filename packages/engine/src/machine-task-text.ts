@@ -1,5 +1,5 @@
-import { serverText } from "@agenteschat/i18n";
-import type { AppLocale } from "@agenteschat/i18n/locale";
+import { serverText } from "@keepmind/i18n";
+import type { AppLocale } from "@keepmind/i18n/locale";
 
 /** `3 min`, `1 h 05 min`, `40 s`. */
 export function formatDuration(seconds: number) {

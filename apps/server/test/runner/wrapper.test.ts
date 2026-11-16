@@ -1,7 +1,7 @@
 import { afterEach, expect, test } from "bun:test";
 import { existsSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import type { RunnerFrame } from "@agenteschat/adapters/machine-protocol";
+import type { RunnerFrame } from "@keepmind/adapters/machine-protocol";
 import { agentWorkspace } from "../../runner/paths";
 import { executorCommand, type SettledTask, TaskManager } from "../../runner/tasks";
 import { removeDirs, tempDir, waitFor } from "./helpers";

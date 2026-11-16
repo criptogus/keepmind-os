@@ -1,5 +1,5 @@
-import { meQuery } from "@agenteschat/client";
-import { landingFor } from "@agenteschat/client/lib/guards";
+import { meQuery } from "@keepmind/client";
+import { landingFor } from "@keepmind/client/lib/guards";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { showWorkspace } from "@/lib/start";
 import { STORAGE_KEYS, storage } from "@/lib/storage";

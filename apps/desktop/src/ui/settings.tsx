@@ -1,4 +1,4 @@
-import { InfoHint } from "@agenteschat/ui";
+import { InfoHint } from "@keepmind/ui";
 import type { TFunction } from "i18next";
 import type { ReactNode } from "react";
 

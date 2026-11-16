@@ -1,5 +1,5 @@
-import type { Agent } from "@agenteschat/client";
-import { can, makesAgents } from "@agenteschat/client/lib/permissions";
+import type { Agent } from "@keepmind/client";
+import { can, makesAgents } from "@keepmind/client/lib/permissions";
 import type { ConversationRow } from "../chats/logic";
 import { matches } from "../search/logic";
 

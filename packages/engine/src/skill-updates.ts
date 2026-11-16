@@ -1,4 +1,4 @@
-import { and, type Database, eq, isNotNull, isNull, schema, sql } from "@agenteschat/db";
+import { and, type Database, eq, isNotNull, isNull, schema, sql } from "@keepmind/db";
 import { recordAudit } from "./audit";
 import { sha256 } from "./crypto";
 import { ForbiddenError, NotFoundError, ValidationError } from "./errors";

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
@@ -14,8 +14,8 @@ setupDom();
  * without aborting.
  */
 
-import { toYmd } from "@agenteschat/client/lib/format";
-import { DatePicker, Field, TimeSelect } from "@agenteschat/ui";
+import { toYmd } from "@keepmind/client/lib/format";
+import { DatePicker, Field, TimeSelect } from "@keepmind/ui";
 import { act, cleanup, fireEvent, render, within } from "@testing-library/react";
 import { useState } from "react";
 import { mondayOf } from "@/pages/CalendarPage";
@@ -219,7 +219,7 @@ describe("RecurrencePicker (interaction)", () => {
   test.skipIf(!process.env.RUN_NEW_EVENT)(
     "tabs, weekday chips and the end: the rule and the sentence follow",
     async () => {
-      const { RecurrencePicker } = await import("@agenteschat/ui");
+      const { RecurrencePicker } = await import("@keepmind/ui");
       const { createI18n } = await import("@/i18n");
       const { recurrenceLabels, ruleSentence } = await import("@/lib/recurrence");
       const i18n = createI18n("pt-BR");

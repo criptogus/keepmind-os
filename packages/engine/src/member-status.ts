@@ -1,5 +1,5 @@
-import type { Presence, PubSub } from "@agenteschat/adapters";
-import { and, type Database, eq, schema } from "@agenteschat/db";
+import type { Presence, PubSub } from "@keepmind/adapters";
+import { and, type Database, eq, schema } from "@keepmind/db";
 import { ValidationError } from "./errors";
 import { publishOrgEvent } from "./events";
 import { rerouteApprovals } from "./notification-producers";

@@ -1,4 +1,4 @@
-import { and, type Executor, eq, gte, inArray, schema, sql } from "@agenteschat/db";
+import { and, type Executor, eq, gte, inArray, schema, sql } from "@keepmind/db";
 import { caches, cachesEnabled } from "./cache";
 import { getMembership } from "./organizations";
 import { type RoutineBrief, routineBriefOf } from "./routine-brief";

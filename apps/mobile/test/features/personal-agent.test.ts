@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { SCENE_FACES, SCENE_LINES } from "@agenteschat/client/lib/purpose-scene";
+import { SCENE_FACES, SCENE_LINES } from "@keepmind/client/lib/purpose-scene";
 
 // A personal workspace's onboarding drawings and agent screens on the phone (ADR 0159 §2, §3): the web's, the same data.
 const ROOT = join(import.meta.dir, "..", "..");
@@ -13,7 +13,7 @@ describe("the first question's drawings", () => {
     expect(flow).toContain("<PurposeScene kind={mode} chosen={on} width={cardWidth} you={{ name: youName, photo }} />");
     expect(flow).toContain("const photo = usePersonPhoto(me.data?.user.image);");
     const scene = read("src/features/onboarding/PurposeScene.tsx");
-    expect(scene).toContain('from "@agenteschat/client/lib/purpose-scene"');
+    expect(scene).toContain('from "@keepmind/client/lib/purpose-scene"');
     expect(scene).toContain("<PersonAvatar name={you.name} size={size} photo={you.photo} />");
     expect(scene).toContain('mode={chosen ? "idle" : "sleep"}');
     // You amid six agents, each joined to you; a chart of five lines under you.
@@ -47,9 +47,9 @@ describe("a personal workspace's agent", () => {
     expect(profile).toContain("onPress={() => openAgentMore(id)}");
   });
 
-  test("creating one by hand starts from the right hand's personal agents, not a company's roles", () => {
+  test("creating one offers personal starters and the shared template library", () => {
     const create = read("src/features/agents/NewAgentScreen.tsx");
-    expect(create).toContain("{(personal ? [] : ROLE_GROUPS).map((group) => (");
+    expect(create).toContain("{ROLE_GROUPS.map((group) => (");
     expect(create).toContain("{PERSONAL_STARTERS.map((s) => (");
     expect(create).toContain("onPress={() => pickStarter(s)}");
   });

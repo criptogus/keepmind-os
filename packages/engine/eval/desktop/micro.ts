@@ -15,7 +15,7 @@ import { randomUUID } from "node:crypto";
 import { readFileSync, rmSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { BrowserCaptureMark, DesktopLookReply } from "@agenteschat/adapters";
+import type { BrowserCaptureMark, DesktopLookReply } from "@keepmind/adapters";
 import { observationOf } from "../../src/desktop/surface";
 import {
   checkCondition,

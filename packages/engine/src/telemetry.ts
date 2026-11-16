@@ -1,13 +1,13 @@
-import type { BrowserTraffic, MachineLoad, MachineSize } from "@agenteschat/adapters";
-import { type CombinedTraffic, combineLoads, combineTraffic, type LoadSample } from "@agenteschat/adapters/host-stats";
-import { type Database, eq, rowsOf, schema, sql } from "@agenteschat/db";
-import { catalogModelOf } from "@agenteschat/providers";
+import type { BrowserTraffic, MachineLoad, MachineSize } from "@keepmind/adapters";
+import { type CombinedTraffic, combineLoads, combineTraffic, type LoadSample } from "@keepmind/adapters/host-stats";
+import { type Database, eq, rowsOf, schema, sql } from "@keepmind/db";
+import { catalogModelOf } from "@keepmind/providers";
 import { WEB_USAGE_PROVIDER } from "./web-tools";
 
 const { instanceTelemetry } = schema;
 
 /**
- * The usage report (ADR 0060 §5): counts and sizes about this installation, sent once a day to agentes.chat.
+ * The usage report (ADR 0060 §5): counts and sizes about this installation, sent once a day to KeepMind OS.
  * Never content: no messages, files, names, emails, hostnames, paths, prompts, IPs, or ids of
  * organizations, people or computers. The only id is the random `instance` made at first start.
  */
@@ -62,19 +62,19 @@ const DAY_MS = 24 * 3600_000;
 const ARCHES = new Set(["x64", "arm64", "arm", "ia32", "ppc64", "s390x", "riscv64", "loong64"]);
 /** Ids, not text: anything else is reported as `other`. */
 const PROVIDER_ID = /^[a-z0-9][a-z0-9._-]{0,39}$/;
-/** Both lists capped, so a report stays well under the 32 KB telemetry.agentes.chat takes. */
+/** Both lists capped, so a report stays well under the 32 KB keepmind.io takes. */
 const MAX_MODELS = 50;
 const MAX_COMPUTERS = 50;
 
-/** agentes.chat's own servers: their report always goes out, and nobody there has the switch. */
-export function isAgentesCloud(publicUrl: string) {
+/** KeepMind OS hosting, used to label the report's edition. */
+export function isKeepMindCloud(publicUrl: string) {
   const host = new URL(publicUrl).hostname;
-  return host === "agentes.chat" || host.endsWith(".agentes.chat");
+  return host === "keepmind.io" || host.endsWith(".keepmind.io");
 }
 
-/** Whether the report goes out: always on agentes.chat's own servers; elsewhere unless `TELEMETRY=off` or the switch is off. */
+/** Reports require both operator opt-in and the installation's enabled switch. */
 export function telemetrySends(config: { TELEMETRY: "on" | "off"; PUBLIC_URL: string }, enabled: boolean) {
-  return isAgentesCloud(config.PUBLIC_URL) || (config.TELEMETRY === "on" && enabled);
+  return config.TELEMETRY === "on" && enabled;
 }
 
 /** The installation's row, made on first use with its random id. */

@@ -2,7 +2,7 @@
  * Aprovações: the agents waiting on you, one card per
  * request (exact action, why, risk chips, a pixel fuse to the deadline), the
  * history, and a request's details (the centered DetailsDialog). Pixel pieces: ExpiryFuse, WorkSweep and
- * CriteriaPixels from @agenteschat/ui (their holders are `position: relative`).
+ * CriteriaPixels from @keepmind/ui (their holders are `position: relative`).
  */
 .ap {
   display: grid;

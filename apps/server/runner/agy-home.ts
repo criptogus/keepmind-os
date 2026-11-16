@@ -1,6 +1,6 @@
 import { mkdirSync, readdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { isObject } from "@agenteschat/adapters/machine-protocol";
+import { isObject } from "@keepmind/adapters/machine-protocol";
 import { readSmallJson } from "./json-file";
 import { CODEX_MCP_SERVER } from "./mcp";
 
@@ -208,7 +208,7 @@ export const agyChatAgent = (): string =>
   [
     "---",
     `name: ${AGY_CHAT_AGENT}`,
-    "description: Answers the team in agentes.chat through the agentes tools only.",
+    "description: Answers the team in KeepMind OS through the agentes tools only.",
     "tools: []",
     "mainAgent: true",
     "subagent: false",

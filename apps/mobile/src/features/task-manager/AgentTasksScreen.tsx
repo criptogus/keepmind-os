@@ -1,5 +1,5 @@
-import type { ManagedTask } from "@agenteschat/client";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
+import type { ManagedTask } from "@keepmind/client";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
 import {
   agentCardLine,
   helpersOf,
@@ -7,7 +7,7 @@ import {
   taskPlace,
   taskTime,
   taskTitle,
-} from "@agenteschat/client/lib/task-manager";
+} from "@keepmind/client/lib/task-manager";
 import { useTranslation } from "react-i18next";
 import { Alert, Pressable, RefreshControl, StyleSheet, View } from "react-native";
 import Animated, { FadeIn, FadeOut, LayoutAnimationConfig, LinearTransition } from "react-native-reanimated";

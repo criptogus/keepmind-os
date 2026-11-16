@@ -1,3 +1,4 @@
+import { z } from "@hono/zod-openapi";
 import {
   WIDGET_FORMATS,
   WIDGET_KINDS,
@@ -5,8 +6,7 @@ import {
   WIDGET_SCHEDULES,
   WIDGET_SIZES,
   WIDGET_STATUSES,
-} from "@agenteschat/ui/widgets/spec";
-import { z } from "@hono/zod-openapi";
+} from "@keepmind/ui/widgets/spec";
 
 /**
  * Request and response bodies of the boards and widgets routes (ADR 0135), mirroring the engine's views
@@ -76,7 +76,7 @@ export const WidgetSpec = z
     }),
     z.object({ kind: z.literal("text"), items: z.array(z.string()).max(WIDGET_LIMITS.items) }),
   ])
-  .openapi("WidgetSpec", { description: "What a widget draws (`@agenteschat/ui/widgets/spec`)." });
+  .openapi("WidgetSpec", { description: "What a widget draws (`@keepmind/ui/widgets/spec`)." });
 
 export const HomeTile = z
   .object({ key: z.enum(["waiting", "working"]), position: z.number(), w: Span, h: Span })

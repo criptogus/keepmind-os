@@ -1,4 +1,4 @@
-import { useMe } from "@agenteschat/client";
+import { useMe } from "@keepmind/client";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { Pressable, StyleSheet, View } from "react-native";

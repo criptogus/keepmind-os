@@ -1,4 +1,4 @@
-import type { Agent } from "@agenteschat/client";
+import type { Agent } from "@keepmind/client";
 import {
   ApiError,
   keys,
@@ -8,26 +8,20 @@ import {
   useAiStatus,
   useAuthConfig,
   type WorkspaceMode,
-} from "@agenteschat/client";
-import { billingHoldOf } from "@agenteschat/client/lib/billing";
-import { accountOutOfReach } from "@agenteschat/client/lib/deletion";
-import { errorCode, errorText } from "@agenteschat/client/lib/errors";
-import { firstName, joinNames } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { settingUp } from "@agenteschat/client/lib/guards";
-import { sendsEmail } from "@agenteschat/client/lib/join-requests";
-import { type AiChoice, planLabel, teamThinks } from "@agenteschat/client/lib/no-ai";
-import {
-  landingOf,
-  type OnboardingStepId,
-  type RailStep,
-  railState,
-  stepIndex,
-} from "@agenteschat/client/lib/onboarding";
-import { finishOnboarding, isRightHand, RIGHT_HAND_DEFAULT } from "@agenteschat/client/lib/right-hand";
-import { browserTimezone, timezoneName } from "@agenteschat/client/lib/routines";
-import { aboutOf, type BusinessType } from "@agenteschat/client/lib/team-plan";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client";
+import { billingHoldOf } from "@keepmind/client/lib/billing";
+import { accountOutOfReach } from "@keepmind/client/lib/deletion";
+import { errorCode, errorText } from "@keepmind/client/lib/errors";
+import { firstName, joinNames } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { settingUp } from "@keepmind/client/lib/guards";
+import { sendsEmail } from "@keepmind/client/lib/join-requests";
+import { type AiChoice, planLabel, teamThinks } from "@keepmind/client/lib/no-ai";
+import { landingOf, type OnboardingStepId, type RailStep, railState, stepIndex } from "@keepmind/client/lib/onboarding";
+import { finishOnboarding, isRightHand, RIGHT_HAND_DEFAULT } from "@keepmind/client/lib/right-hand";
+import { browserTimezone, timezoneName } from "@keepmind/client/lib/routines";
+import { aboutOf, type BusinessType } from "@keepmind/client/lib/team-plan";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import {
   AgentSticker,
   Avatar,
@@ -41,7 +35,7 @@ import {
   Menu,
   MenuItem,
   setGaze,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { type ReactNode, useCallback, useEffect, useRef, useState } from "react";
@@ -357,7 +351,7 @@ export function OnboardingPage() {
     markPlan.mutate(orgId);
   });
 
-  // On agentes.chat Cloud, while sign-up is by invitation, only accounts early access allowed make workspaces (ADR 0078).
+  // On KeepMind OS Cloud, while sign-up is by invitation, only accounts early access allowed make workspaces (ADR 0078).
   const inviteOnly = me.data?.user.canCreateWorkspace === false && orgId === null;
   const emails = sendsEmail(authConfig);
   const email = me.data?.user.email ?? "";
@@ -1092,7 +1086,7 @@ export function OnboardingPage() {
   );
 }
 
-/** The two answers to "What will you use agentes.chat for?" (ADR 0159), in this order. */
+/** The two answers to "What will you use KeepMind OS for?" (ADR 0159), in this order. */
 
 /**
  * The AI step and its stage inside the workspace's context and Connect an AI (ADR 0160), which the onboarding has

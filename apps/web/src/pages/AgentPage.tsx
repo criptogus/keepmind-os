@@ -1,4 +1,4 @@
-import type { Agent, AgentAudience, AgentDetail, AgentInput, AgentSkill } from "@agenteschat/client";
+import type { Agent, AgentAudience, AgentDetail, AgentInput, AgentSkill } from "@keepmind/client";
 import {
   keys,
   useAgentAccess,
@@ -12,21 +12,21 @@ import {
   useRuns,
   useSettings,
   useUpdateAgent,
-} from "@agenteschat/client";
-import { type Level, levelsOf, resourcesOf } from "@agenteschat/client/lib/access-levels";
-import { groupOf, NO_GROUP } from "@agenteschat/client/lib/agent-groups";
-import { audienceOf, audiencePatch, seesDetails } from "@agenteschat/client/lib/audience";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { FIELD_LIMITS } from "@agenteschat/client/lib/field-limits";
-import { joinNames } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { overLimitText, tooLongToSend } from "@agenteschat/client/lib/message-length";
-import { can } from "@agenteschat/client/lib/permissions";
-import { pendingOnAgent } from "@agenteschat/client/lib/proposals";
-import { isAuto } from "@agenteschat/client/lib/providers";
-import { type RepoChoice, repoChoiceOf, repoListOf, reposText } from "@agenteschat/client/lib/repos";
-import { isRightHand, tellsNameStory } from "@agenteschat/client/lib/right-hand";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client";
+import { type Level, levelsOf, resourcesOf } from "@keepmind/client/lib/access-levels";
+import { groupOf, NO_GROUP } from "@keepmind/client/lib/agent-groups";
+import { audienceOf, audiencePatch, seesDetails } from "@keepmind/client/lib/audience";
+import { errorText } from "@keepmind/client/lib/errors";
+import { FIELD_LIMITS } from "@keepmind/client/lib/field-limits";
+import { joinNames } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { overLimitText, tooLongToSend } from "@keepmind/client/lib/message-length";
+import { can } from "@keepmind/client/lib/permissions";
+import { pendingOnAgent } from "@keepmind/client/lib/proposals";
+import { isAuto } from "@keepmind/client/lib/providers";
+import { type RepoChoice, repoChoiceOf, repoListOf, reposText } from "@keepmind/client/lib/repos";
+import { isRightHand, tellsNameStory } from "@keepmind/client/lib/right-hand";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import {
   Button,
   colorKey,
@@ -42,7 +42,7 @@ import {
   PageHeader,
   TabPanel,
   Tabs,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useBlocker, useNavigate } from "@tanstack/react-router";
 import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";

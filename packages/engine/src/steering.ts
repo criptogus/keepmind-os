@@ -1,5 +1,5 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { type Database, eq, inArray, schema } from "@agenteschat/db";
+import type { PubSub } from "@keepmind/adapters";
+import { type Database, eq, inArray, schema } from "@keepmind/db";
 import { getAgentCached } from "./agents";
 import { runBrainOf } from "./brains/select";
 import { cancelRun, interruptRun } from "./cancel";

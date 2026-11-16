@@ -1,4 +1,4 @@
-import { type ComposioClient, composioFile, FileTooLargeError } from "@agenteschat/adapters";
+import { type ComposioClient, composioFile, FileTooLargeError } from "@keepmind/adapters";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import type { FetchLike, Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
@@ -92,7 +92,7 @@ const NO_OUTPUT_VALIDATION: jsonSchemaValidator = {
 
 /** Wraps an official MCP SDK client over any transport. */
 export async function mcpSessionOver(transport: Transport): Promise<McpSession> {
-  const client = new Client({ name: "agentes.chat", version: "1" }, { jsonSchemaValidator: NO_OUTPUT_VALIDATION });
+  const client = new Client({ name: "keepmind.io", version: "1" }, { jsonSchemaValidator: NO_OUTPUT_VALIDATION });
   await client.connect(transport);
   return {
     async listTools() {

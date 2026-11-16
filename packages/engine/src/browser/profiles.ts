@@ -1,5 +1,5 @@
-import { ACCESS_ALLOW_PROTOCOL, type AgentScope, BROWSER_PROFILE_PROTOCOL, type PubSub } from "@agenteschat/adapters";
-import { and, asc, type Database, type Executor, eq, inArray, isNull, notInArray, schema, sql } from "@agenteschat/db";
+import { ACCESS_ALLOW_PROTOCOL, type AgentScope, BROWSER_PROFILE_PROTOCOL, type PubSub } from "@keepmind/adapters";
+import { and, asc, type Database, type Executor, eq, inArray, isNull, notInArray, schema, sql } from "@keepmind/db";
 import { recordAudit } from "../audit";
 import { ConflictError, ForbiddenError, NotFoundError, ValidationError } from "../errors";
 import { type MachineCaller, MachineRequestError } from "../machine-hub";

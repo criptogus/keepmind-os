@@ -1,5 +1,5 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, type Database, type Executor, eq, isNull, schema } from "@agenteschat/db";
+import type { PubSub } from "@keepmind/adapters";
+import { and, type Database, type Executor, eq, isNull, schema } from "@keepmind/db";
 import { recordAudit } from "./audit";
 import { invalidateOrg } from "./cache";
 import { NotFoundError, ValidationError } from "./errors";

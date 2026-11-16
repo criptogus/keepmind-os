@@ -4,10 +4,10 @@ import {
   type ComputerState,
   drawComputer,
   type PortraitKind,
-} from "@agenteschat/ui/computer/portrait";
+} from "@keepmind/ui/computer/portrait";
 
 /**
- * A computer portrait (the shared engine, `@agenteschat/ui/computer/portrait`) recorded as pixel cells so
+ * A computer portrait (the shared engine, `@keepmind/ui/computer/portrait`) recorded as pixel cells so
  * a Skia canvas can replay it (./ComputerPortrait.tsx). Pure TypeScript: no React Native, no Skia, so it
  * runs in `bun test`.
  *

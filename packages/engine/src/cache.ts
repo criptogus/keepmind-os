@@ -1,4 +1,4 @@
-import { listenResumedTopic, type PubSub } from "@agenteschat/adapters";
+import { listenResumedTopic, type PubSub } from "@keepmind/adapters";
 
 /**
  * Per-process caches for data read on every run but rarely changed (agent

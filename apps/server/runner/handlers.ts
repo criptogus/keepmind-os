@@ -1,7 +1,7 @@
 import type { Dirent } from "node:fs";
 import { lstat, mkdir, readdir, readFile, realpath, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { ASK_AGAIN, inBrowserProfile } from "@agenteschat/adapters/command-policy";
+import { ASK_AGAIN, inBrowserProfile } from "@keepmind/adapters/command-policy";
 import {
   type AgentScope,
   browserSetupOf,
@@ -18,8 +18,8 @@ import {
   type RunnerPause,
   type RunnerTools,
   STEER_LIMITS,
-} from "@agenteschat/adapters/machine-protocol";
-import { redactSecrets } from "@agenteschat/adapters/secret-box";
+} from "@keepmind/adapters/machine-protocol";
+import { redactSecrets } from "@keepmind/adapters/secret-box";
 import { realFoldersFor } from "./access";
 import type { AccountBrains } from "./account-brains";
 import type { AccountFolders, AccountGrant, AccountManager } from "./accounts";
@@ -397,7 +397,7 @@ function requireTool(ctx: HandlerContext, tool: keyof RunnerTools) {
     );
   }
   // The apps match "<Tool> is turned off" (`browserOffMessage`) to offer the one-click switch: keep those words.
-  const how = "its owner can turn it on from agentes.chat";
+  const how = "its owner can turn it on from KeepMind OS";
   if (tool === "commands") throw new RunnerError("exec_disabled", `Commands are turned off on this computer (${how})`);
   throw new RunnerError("not_allowed", `${TOOL_LABEL[tool]} is turned off on this computer (${how})`);
 }

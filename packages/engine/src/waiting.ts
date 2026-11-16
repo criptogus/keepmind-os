@@ -1,4 +1,4 @@
-import { and, asc, type Executor, eq, schema, sql } from "@agenteschat/db";
+import { and, asc, type Executor, eq, schema, sql } from "@keepmind/db";
 import { readableChannelIds } from "./channels";
 import { cutText } from "./format";
 import {

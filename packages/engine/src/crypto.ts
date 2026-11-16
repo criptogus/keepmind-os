@@ -7,7 +7,7 @@ import {
   randomBytes,
   timingSafeEqual,
 } from "node:crypto";
-import type { KeyWrapper } from "@agenteschat/adapters";
+import type { KeyWrapper } from "@keepmind/adapters";
 
 /**
  * Purposes for keys derived from AGENTES_SECRET (docs/adr/0004-configuration.md).

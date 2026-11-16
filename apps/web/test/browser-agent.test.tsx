@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { AgentBrowserSettings, BrowserHandoff } from "@agenteschat/client";
-import { isBlankPage, openRefusalKey } from "@agenteschat/client/lib/sites";
+import type { AgentBrowserSettings, BrowserHandoff } from "@keepmind/client";
+import { isBlankPage, openRefusalKey } from "@keepmind/client/lib/sites";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { agentSearch } from "@/lib/agent-edit";
 import { STORAGE_KEYS } from "@/lib/storage";

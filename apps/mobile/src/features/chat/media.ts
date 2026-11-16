@@ -1,6 +1,6 @@
-import type { Message } from "@agenteschat/client";
-import { MEDIA_AFTER_KEY, messageMediaOf } from "@agenteschat/client/lib/media";
-import { masonryColumns } from "@agenteschat/ui/media-grid";
+import type { Message } from "@keepmind/client";
+import { MEDIA_AFTER_KEY, messageMediaOf } from "@keepmind/client/lib/media";
+import { masonryColumns } from "@keepmind/ui/media-grid";
 
 /**
  * GIFs and stickers in chat (ADR 0091), the phone's pure rules: how big a GIF shows, when the sticker or GIF an agent

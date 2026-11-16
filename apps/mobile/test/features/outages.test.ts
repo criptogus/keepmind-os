@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import type { Agent } from "@agenteschat/client";
-import { type OutageTargetLike, targetOptions, waitingComputerByAgent } from "@agenteschat/client/lib/machine-outages";
+import type { Agent } from "@keepmind/client";
+import { type OutageTargetLike, targetOptions, waitingComputerByAgent } from "@keepmind/client/lib/machine-outages";
 import { teamLines, type WorkItem } from "../../src/features/agents/logic";
 import { agentRowState } from "../../src/features/chats/now";
 import {

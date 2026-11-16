@@ -3,7 +3,7 @@
  * word) whatever is trimmed from its prompt. `test/turns-eval.test.ts` runs them on the fake provider (CI);
  * `eval/turns-real.ts` replays them against a real model to compare behavior before and after a prompt change.
  */
-import type { FakeReply } from "@agenteschat/providers/testing";
+import type { FakeReply } from "@keepmind/providers/testing";
 import {
   ASK_APPROVALS_TOGETHER,
   ASK_CHOICES_LINE,

@@ -1,23 +1,11 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { EmailError, type EmailSender, type PubSub } from "@agenteschat/adapters";
-import {
-  and,
-  asc,
-  type Database,
-  type Executor,
-  eq,
-  inArray,
-  isNotNull,
-  isNull,
-  lt,
-  schema,
-  sql,
-} from "@agenteschat/db";
-import { formatMoneyUsd } from "@agenteschat/i18n/format";
-import { appLocale, localeInfo } from "@agenteschat/i18n/locale";
-import { deepMerge } from "@agenteschat/i18n/tree";
-import { nanoUsdToUsd } from "@agenteschat/providers";
+import { EmailError, type EmailSender, type PubSub } from "@keepmind/adapters";
+import { and, asc, type Database, type Executor, eq, inArray, isNotNull, isNull, lt, schema, sql } from "@keepmind/db";
+import { formatMoneyUsd } from "@keepmind/i18n/format";
+import { appLocale, localeInfo } from "@keepmind/i18n/locale";
+import { deepMerge } from "@keepmind/i18n/tree";
+import { nanoUsdToUsd } from "@keepmind/providers";
 import { z } from "zod";
 import { notifiedIds } from "./approvals";
 import { isComputerBrain, planName } from "./brains/types";
@@ -42,7 +30,7 @@ import { adminIds } from "./gateway";
 import { publicHostAddress, type ResolveHost, resolveHostDns } from "./net-guard";
 import { enqueue, PermanentJobError } from "./outbox";
 import { billingHold } from "./standing";
-import { isAgentesCloud } from "./telemetry";
+import { isKeepMindCloud } from "./telemetry";
 import { budgetPercent } from "./usage";
 import { isPersonalWorkspace } from "./workspace-mode";
 
@@ -54,9 +42,9 @@ const { users, organizations, organizationInvitations, agents, approvals, channe
  * The sender's name when `EMAIL_FROM` is unset: the name on the logo and in the subjects. The self-host setup
  * writes the same into a new server's `.env` (`senderAt` in packages/setup/src/lib.ts).
  */
-const SENDER_NAME = "agentes.chat";
+const SENDER_NAME = "KeepMind OS";
 
-/** The sender when `EMAIL_FROM` is unset, at this server's host (`loadConfig` sets the Cloud's: ping@agentes.chat). */
+/** The sender when `EMAIL_FROM` is unset, at this server's host (`loadConfig` sets the Cloud's: contact@zeroagency.ai). */
 export const defaultEmailFrom = (publicUrl: string) => `${SENDER_NAME} <ping@${new URL(publicUrl).hostname}>`;
 
 /** A stored or chosen language as an email locale: any registry language ("pt-PT" reads pt-BR), else English. */
@@ -456,7 +444,7 @@ const inMode = <G extends { personal: object }>(group: G, personal: boolean | un
 
 /**
  * One email's content: our words in the subject, preheader, headline and buttons; what people typed or
- * agents wrote only in the body, made inert. `sender`: the self-hosted server's host, or null on agentes.chat.
+ * agents wrote only in the body, made inert. `sender`: the self-hosted server's host, or null on KeepMind OS.
  */
 function docOf(t: EmailTemplate, sender: string | null): EmailDoc {
   const lang = emailLocale(t.locale);
@@ -1035,7 +1023,7 @@ export function renderEmail(
   t: EmailTemplate,
   art: EmailArt = emailArtAt(t.url && URL.canParse(t.url) ? new URL(t.url).origin : ""),
 ) {
-  const sender = URL.canParse(art.home) && !isAgentesCloud(art.home) ? new URL(art.home).host : null;
+  const sender = URL.canParse(art.home) && !isKeepMindCloud(art.home) ? new URL(art.home).host : null;
   const doc = docOf(t, sender);
   return { subject: doc.subject, preheader: doc.preheader, ...renderDoc(doc, art) };
 }

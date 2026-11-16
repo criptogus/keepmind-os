@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import type { SpeechEngine } from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
+import type { SpeechEngine } from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
 import {
   createAnthropicProvider,
   createCustomProvider,
@@ -11,7 +11,7 @@ import {
   type ModelMessage,
   type ModelProvider,
   type ToolImage,
-} from "@agenteschat/providers";
+} from "@keepmind/providers";
 import {
   type ArtifactActor,
   createFileArtifact,

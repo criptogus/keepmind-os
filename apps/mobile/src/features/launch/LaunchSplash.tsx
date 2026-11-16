@@ -1,4 +1,4 @@
-import { drawAgent, spriteGrid } from "@agenteschat/ui/agent/engine";
+import { drawAgent, spriteGrid } from "@keepmind/ui/agent/engine";
 import {
   Canvas,
   createPicture,
@@ -224,7 +224,7 @@ export function LaunchSplash({
       onLayout={onLayout}
       // One element for screen readers, except while it waits on the person: then its buttons are reachable.
       accessible={!asking}
-      accessibilityLabel={lineText ? `agentes.chat. ${lineText}` : "agentes.chat"}
+      accessibilityLabel={lineText ? `agentes.chat. ${lineText}` : "keepmind.io"}
       accessibilityLiveRegion="polite"
     >
       {reduced ? null : <LaunchSky width={width} height={height} level={level} floor={floor} tones={tones} />}

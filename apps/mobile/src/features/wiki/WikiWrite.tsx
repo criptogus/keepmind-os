@@ -1,7 +1,7 @@
-import { ApiError, keys, useApi, useWikiAction, useWikiPage, useWikiTree, type WikiPage } from "@agenteschat/client";
-import { type AudienceChoice, EVERYONE } from "@agenteschat/client/lib/who-sees";
-import { prefixLines, wikiQuery, wrapSelection } from "@agenteschat/client/lib/wiki";
-import { diffLines } from "@agenteschat/ui/diff";
+import { ApiError, keys, useApi, useWikiAction, useWikiPage, useWikiTree, type WikiPage } from "@keepmind/client";
+import { type AudienceChoice, EVERYONE } from "@keepmind/client/lib/who-sees";
+import { prefixLines, wikiQuery, wrapSelection } from "@keepmind/client/lib/wiki";
+import { diffLines } from "@keepmind/ui/diff";
 import { useQueryClient } from "@tanstack/react-query";
 import { usePreventRemove } from "expo-router";
 import { useMemo, useRef, useState } from "react";

@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { VaultSourceError } from "@agenteschat/adapters";
-import { and, eq, schema } from "@agenteschat/db";
+import { VaultSourceError } from "@keepmind/adapters";
+import { and, eq, schema } from "@keepmind/db";
 import {
   connectVaultSource,
   createJobHandlers,

@@ -1,7 +1,7 @@
-import type { Issue } from "@agenteschat/client";
-import { useIssueAction } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { can } from "@agenteschat/client/lib/permissions";
+import type { Issue } from "@keepmind/client";
+import { useIssueAction } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { can } from "@keepmind/client/lib/permissions";
 import {
   type AudienceChoice,
   type AudienceKind,
@@ -9,8 +9,8 @@ import {
   audienceOfKind,
   pickedOf,
   whoSeesLabel,
-} from "@agenteschat/client/lib/who-sees";
-import { modeKey } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client/lib/who-sees";
+import { modeKey } from "@keepmind/client/lib/workspace-mode";
 import {
   Avatar,
   Button,
@@ -22,7 +22,7 @@ import {
   Input,
   Locked,
   OptionCard,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { type ReactNode, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useOrg } from "@/components/org-context";

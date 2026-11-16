@@ -1,4 +1,4 @@
-import type { Mission, MissionControl, ThreadInfo } from "@agenteschat/client";
+import type { Mission, MissionControl, ThreadInfo } from "@keepmind/client";
 import {
   cacheMission,
   useMachines,
@@ -8,8 +8,8 @@ import {
   useMissionPlan,
   useRequestJoin,
   useThreadTasks,
-} from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
+} from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
 import {
   formatSpan,
   isOpenMission,
@@ -18,9 +18,9 @@ import {
   missionTasks,
   planCells,
   planCellTitles,
-} from "@agenteschat/client/lib/missions";
-import { modeKey } from "@agenteschat/client/lib/workspace-mode";
-import { AvatarStack, Button, Icon, Menu, MenuItem, MenuSeparator } from "@agenteschat/ui";
+} from "@keepmind/client/lib/missions";
+import { modeKey } from "@keepmind/client/lib/workspace-mode";
+import { AvatarStack, Button, Icon, Menu, MenuItem, MenuSeparator } from "@keepmind/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";

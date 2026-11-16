@@ -1,4 +1,4 @@
-import { cx, useScrollSides } from "@agenteschat/ui";
+import { cx, useScrollSides } from "@keepmind/ui";
 import { type ReactNode, useRef } from "react";
 
 /**

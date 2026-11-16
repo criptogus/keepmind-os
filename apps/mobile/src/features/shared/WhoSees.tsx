@@ -1,5 +1,5 @@
-import { useIssue, useIssueAction, useWikiAction, useWikiPage } from "@agenteschat/client";
-import { can } from "@agenteschat/client/lib/permissions";
+import { useIssue, useIssueAction, useWikiAction, useWikiPage } from "@keepmind/client";
+import { can } from "@keepmind/client/lib/permissions";
 import {
   type AudienceChoice,
   type AudienceKind,
@@ -8,7 +8,7 @@ import {
   pickedOf,
   whoSeesLabel,
   wikiAudienceOf,
-} from "@agenteschat/client/lib/who-sees";
+} from "@keepmind/client/lib/who-sees";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, StyleSheet, View } from "react-native";

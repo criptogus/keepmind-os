@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import { and, eq, inArray, schema } from "@agenteschat/db";
+import { and, eq, inArray, schema } from "@keepmind/db";
 import {
   COMMAND_RULE_TOOL,
   COMPOSIO_EXECUTOR,

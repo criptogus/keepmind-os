@@ -21,15 +21,15 @@ import type {
   WidgetStep,
   WidgetSuggestions,
   WidgetUpdate,
-} from "@agenteschat/client";
-import { ApiError } from "@agenteschat/client";
+} from "@keepmind/client";
+import { ApiError } from "@keepmind/client";
 import {
   chartBlockToWidgetSpec,
   type ExampleWords,
   exampleWidgetSpec,
   sizeToLayout,
   type WidgetSpec,
-} from "@agenteschat/ui/widgets/spec";
+} from "@keepmind/ui/widgets/spec";
 import { clone, mockId } from "./context";
 
 export interface FakeDashboards {

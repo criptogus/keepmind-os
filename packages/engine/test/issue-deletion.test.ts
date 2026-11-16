@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { orgTopic, userTopic } from "@agenteschat/adapters";
-import { and, eq, schema } from "@agenteschat/db";
+import { orgTopic, userTopic } from "@keepmind/adapters";
+import { and, eq, schema } from "@keepmind/db";
 import {
   askAgentToImplement,
   createIssue,

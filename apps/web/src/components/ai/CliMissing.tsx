@@ -1,15 +1,15 @@
-import type { InstallableCli, Machine, MachineAccountKind } from "@agenteschat/client";
-import { useCheckMachineClis, useCliInstall } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { firstName } from "@agenteschat/client/lib/format";
+import type { InstallableCli, Machine, MachineAccountKind } from "@keepmind/client";
+import { useCheckMachineClis, useCliInstall } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { firstName } from "@keepmind/client/lib/format";
 import {
   CLI_GIT_MISSING,
   cliInstallFailure,
   cliOneClick,
   GIT_FOR_WINDOWS_URL,
   installableCli,
-} from "@agenteschat/client/lib/machines";
-import { Button, HintLine, Icon, SettingNote, Spinner } from "@agenteschat/ui";
+} from "@keepmind/client/lib/machines";
+import { Button, HintLine, Icon, SettingNote, Spinner } from "@keepmind/ui";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useToast } from "@/lib/toast";

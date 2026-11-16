@@ -1,7 +1,7 @@
-import { type DashboardSummary, dashboardGroups, useDashboards } from "@agenteschat/client";
-import { mayAsk } from "@agenteschat/client/lib/audience";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { rightHandOf } from "@agenteschat/client/lib/right-hand";
+import { type DashboardSummary, dashboardGroups, useDashboards } from "@keepmind/client";
+import { mayAsk } from "@keepmind/client/lib/audience";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { rightHandOf } from "@keepmind/client/lib/right-hand";
 import { useTranslation } from "react-i18next";
 import { RefreshControl, StyleSheet, View } from "react-native";
 import { useOrg } from "@/providers/org";

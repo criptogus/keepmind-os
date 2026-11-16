@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { agentsByAnyHandle } from "@agenteschat/client/lib/directory";
-import type { ImportCard } from "@agenteschat/client/lib/import/flow";
+import { agentsByAnyHandle } from "@keepmind/client/lib/directory";
+import type { ImportCard } from "@keepmind/client/lib/import/flow";
 import {
   handleAfterRename,
   handleProblemText,
@@ -11,7 +11,7 @@ import {
   ROLE_DEFAULTS,
   ROLE_IDS,
   takenHandles,
-} from "@agenteschat/client/lib/new-agent";
+} from "@keepmind/client/lib/new-agent";
 import {
   type AgentDraft,
   agentChanges,

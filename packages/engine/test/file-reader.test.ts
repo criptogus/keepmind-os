@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { deflateSync } from "node:zlib";
-import { PDF_MEDIA_TYPE } from "@agenteschat/providers";
+import { PDF_MEDIA_TYPE } from "@keepmind/providers";
 import { docxText, markdownToDocx, markdownToPdf, pdfPages, pptxText, readForModel, xlsxText, zip } from "../src";
 import { decodeXmlEntities } from "../src/format";
 import { PNG, pptxFixture, xlsxFixture } from "./file-fixtures";

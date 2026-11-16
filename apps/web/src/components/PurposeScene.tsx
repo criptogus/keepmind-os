@@ -5,14 +5,14 @@ import {
   SCENE_H,
   SCENE_LINES,
   SCENE_W,
-} from "@agenteschat/client/lib/purpose-scene";
-import { type AgentAppearance, Avatar, cx, horizonCrest, horizonTones, mix, PixelSky } from "@agenteschat/ui";
+} from "@keepmind/client/lib/purpose-scene";
+import { type AgentAppearance, Avatar, cx, horizonCrest, horizonTones, mix, PixelSky } from "@keepmind/ui";
 import type { CSSProperties } from "react";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { type PurposeLife, sceneAgentKey, WAKE_STEP_MS } from "@/components/purpose-life";
 
 /**
- * The scene of an answer to "what will you use agentes.chat for?" (ADR 0159), the onboarding's brand moment, drawn
+ * The scene of an answer to "what will you use KeepMind OS for?" (ADR 0159), the onboarding's brand moment, drawn
  * with the app's own faces and the org chart's lines, over the cards' horizon (`CardHorizon`). For me: the person
  * signing up in the middle (their photo, or their initials as everywhere), their agents around them, each joined to
  * them. For a team: an org chart, them on top, people and agents under them. The other answer rests (its agents doze,

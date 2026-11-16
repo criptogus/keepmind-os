@@ -1,5 +1,5 @@
-import type { DesktopViewState } from "@agenteschat/client";
-import { useSeat } from "@agenteschat/client/lib/seat-context";
+import type { DesktopViewState } from "@keepmind/client";
+import { useSeat } from "@keepmind/client/lib/seat-context";
 import { type Ref, useImperativeHandle, useRef } from "react";
 import { StyleSheet } from "react-native";
 import { WebView } from "react-native-webview";

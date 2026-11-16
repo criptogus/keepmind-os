@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { Message } from "@agenteschat/client";
-import { ISSUES_VIEW_DEFAULT } from "@agenteschat/client/lib/issues-view";
+import type { Message } from "@keepmind/client";
+import { ISSUES_VIEW_DEFAULT } from "@keepmind/client/lib/issues-view";
 import { act, cleanup, fireEvent } from "@testing-library/react";
 import { builtCss, declarations, topLevel } from "./built-css";
 import { createFakeApi, ORG_ID, seedState } from "./fake-api";

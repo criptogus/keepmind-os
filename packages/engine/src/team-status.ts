@@ -1,4 +1,4 @@
-import { and, type Database, eq, inArray, isNull, rowsOf, schema, sql } from "@agenteschat/db";
+import { and, type Database, eq, inArray, isNull, rowsOf, schema, sql } from "@keepmind/db";
 import { lineInEnglish, loadAgentStatuses } from "./agent-status";
 import { readerOfRun } from "./agents-dm-reads";
 import { listApprovals } from "./approvals";

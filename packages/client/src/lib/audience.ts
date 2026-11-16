@@ -1,4 +1,4 @@
-import { planOf } from "@agenteschat/providers/plans";
+import { planOf } from "@keepmind/providers/plans";
 import type { TFunction } from "i18next";
 import type {
   Agent,

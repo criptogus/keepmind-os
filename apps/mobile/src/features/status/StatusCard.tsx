@@ -1,4 +1,4 @@
-import { type LIMIT_ICON, statusEndNote } from "@agenteschat/client/lib/presence";
+import { type LIMIT_ICON, statusEndNote } from "@keepmind/client/lib/presence";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
 import { Icon, Text, useTheme } from "@/ui";

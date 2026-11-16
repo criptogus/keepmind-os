@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { MODEL_CATALOG, PROVIDER_IDS } from "@agenteschat/providers";
+import { MODEL_CATALOG, PROVIDER_IDS } from "@keepmind/providers";
 import type { TFunction } from "i18next";
 import {
   apiModelName,

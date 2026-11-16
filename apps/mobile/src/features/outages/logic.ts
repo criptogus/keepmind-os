@@ -1,4 +1,4 @@
-import { joinNames } from "@agenteschat/client/lib/format";
+import { joinNames } from "@keepmind/client/lib/format";
 import {
   agentWaitingPhrase,
   type ComputerBrain,
@@ -11,15 +11,15 @@ import {
   outageNotice,
   type TargetOption,
   type WaitCardState,
-} from "@agenteschat/client/lib/machine-outages";
-import { computerKind } from "@agenteschat/client/lib/machines";
+} from "@keepmind/client/lib/machine-outages";
+import { computerKind } from "@keepmind/client/lib/machines";
 import type { TFunction } from "i18next";
 
 /**
  * "Computador desconectado" on the phone: the words of the notice under
  * the greeting, the agents' rows, the "Trocar o computador" sheet, its toast and the chat's waiting card.
  * Pure: the screens turn these into views; the counts and the targets come from
- * `@agenteschat/client/lib/machine-outages`.
+ * `@keepmind/client/lib/machine-outages`.
  */
 
 // ── The API (mobile-local until the shared client has it; see queries.ts) ──

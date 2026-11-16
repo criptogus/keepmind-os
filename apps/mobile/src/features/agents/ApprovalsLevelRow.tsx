@@ -1,6 +1,6 @@
-import { type Agent, useUpdateAgent } from "@agenteschat/client";
-import { APPROVALS_LEVELS, shownApprovalsLevel } from "@agenteschat/client/lib/approvals-level";
-import { can } from "@agenteschat/client/lib/permissions";
+import { type Agent, useUpdateAgent } from "@keepmind/client";
+import { APPROVALS_LEVELS, shownApprovalsLevel } from "@keepmind/client/lib/approvals-level";
+import { can } from "@keepmind/client/lib/permissions";
 import { useTranslation } from "react-i18next";
 import { useOrg } from "@/providers/org";
 import { GroupedList, GroupedRow } from "@/ui";

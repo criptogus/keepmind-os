@@ -1,5 +1,5 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, type Database, eq, inArray, isNull, schema, sql } from "@agenteschat/db";
+import type { PubSub } from "@keepmind/adapters";
+import { and, type Database, eq, inArray, isNull, schema, sql } from "@keepmind/db";
 import { type AgentWork, agentWorkFor, bareWork } from "./agent-work";
 import { publishOrgEvent } from "./events";
 import { type PendingReturn, pendingReturns } from "./follow-through";

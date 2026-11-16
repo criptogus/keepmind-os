@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { COMPUTER_KINDS, COMPUTER_STATES } from "@agenteschat/ui/computer/portrait";
+import { COMPUTER_KINDS, COMPUTER_STATES } from "@keepmind/ui/computer/portrait";
 import { CellRecorder, cellsToSvg, portraitFrame } from "../src/computer/cells";
 
 describe("computer portraits on the phone (cells for Skia)", () => {

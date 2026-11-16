@@ -1,5 +1,5 @@
-import { usePrefetchRecent, useSendWaiting } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
+import { usePrefetchRecent, useSendWaiting } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
 import { type ErrorBoundaryProps, Stack } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
@@ -181,7 +181,7 @@ function AppStack() {
       <Stack.Screen name="me/workspaces" options={{ ...pushed, ...scrollUnder }} />
       {/* The same list as a sheet, from a long press on the workspace's mark in the bar (ADR 0154). */}
       <Stack.Screen name="workspaces-sheet" options={workspacesSheet} />
-      {/* Another workspace (ADR 0154): on a server of one's own a new one there first, then agentes.chat or the team's
+      {/* Another workspace (ADR 0154): on a server of one's own a new one there first, then KeepMind OS or the team's
           own server; a short sheet fitted to its rows. */}
       <Stack.Screen name="me/add-workspace" options={pushSheet} />
       {/* On the sign-in's ruler: its own sky and back circle, no bar. */}

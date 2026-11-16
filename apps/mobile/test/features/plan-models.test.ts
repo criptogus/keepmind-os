@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { planModelUsage } from "@agenteschat/client/lib/plan-usage";
+import { planModelUsage } from "@keepmind/client/lib/plan-usage";
 import { translator } from "./fixtures";
 
 const source = (file: string) => Bun.file(new URL(`../../src/features/${file}`, import.meta.url).pathname).text();

@@ -1,6 +1,6 @@
-import { holdEvents, type PubSub } from "@agenteschat/adapters";
-import { and, asc, type Database, desc, eq, gt, inArray, isNotNull, isNull, schema, sql } from "@agenteschat/db";
-import { isKnownProvider, PROVIDERS } from "@agenteschat/providers";
+import { holdEvents, type PubSub } from "@keepmind/adapters";
+import { and, asc, type Database, desc, eq, gt, inArray, isNotNull, isNull, schema, sql } from "@keepmind/db";
+import { isKnownProvider, PROVIDERS } from "@keepmind/providers";
 import {
   type ActionRecord,
   type AgentActionTarget,

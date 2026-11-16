@@ -1,4 +1,4 @@
-import { and, type Executor, eq, schema } from "@agenteschat/db";
+import { and, type Executor, eq, schema } from "@keepmind/db";
 import { fedByRoutine, type RunAuthority } from "../authority";
 import { directoryRole } from "./directory";
 import type { JsonSchema } from "./json-schema";

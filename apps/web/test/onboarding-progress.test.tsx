@@ -1,5 +1,5 @@
 import { describe, expect, spyOn, test } from "bun:test";
-import { canvasPage, setupDom } from "@agenteschat/ui/testing";
+import { canvasPage, setupDom } from "@keepmind/ui/testing";
 
 setupDom();
 

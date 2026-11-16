@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 import { join } from "node:path";
-import { REMOVED_COMPUTER_MESSAGE } from "@agenteschat/engine";
+import { REMOVED_COMPUTER_MESSAGE } from "@keepmind/engine";
 import { MARKS, unplainServerWords } from "../../../packages/i18n/test/plain-marks";
 import { missingLibrariesText } from "../runner/browser";
 import { PAUSED } from "../runner/handlers";

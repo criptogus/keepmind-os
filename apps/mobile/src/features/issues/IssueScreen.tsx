@@ -13,12 +13,12 @@ import {
   useIssueAction,
   useIssueColumns,
   useTaskUnread,
-} from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { capitalize, dueLabel, relativeTime } from "@agenteschat/client/lib/format";
-import { githubLinkLabel, isGithubLink } from "@agenteschat/client/lib/github-link";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { webUrl } from "@agenteschat/client/lib/guards";
+} from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { capitalize, dueLabel, relativeTime } from "@keepmind/client/lib/format";
+import { githubLinkLabel, isGithubLink } from "@keepmind/client/lib/github-link";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { webUrl } from "@keepmind/client/lib/guards";
 import {
   canDeleteIssue,
   conversationLine,
@@ -26,9 +26,9 @@ import {
   isOpen,
   PRIORITIES,
   STATUSES,
-} from "@agenteschat/client/lib/issues";
-import { aiStateOf } from "@agenteschat/client/lib/no-ai";
-import { shownSteps } from "@agenteschat/client/lib/work";
+} from "@keepmind/client/lib/issues";
+import { aiStateOf } from "@keepmind/client/lib/no-ai";
+import { shownSteps } from "@keepmind/client/lib/work";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { type ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

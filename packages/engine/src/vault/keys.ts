@@ -4,7 +4,7 @@
  * in the scope is left as it is unless the person asked to replace it, and then only its value changes: its access
  * and its note stay. Values are sealed before the transaction and appear in no audit row, use, event or error.
  */
-import { and, eq, isNull, schema } from "@agenteschat/db";
+import { and, eq, isNull, schema } from "@keepmind/db";
 import { recordAudit } from "../audit";
 import { ConflictError, ValidationError } from "../errors";
 import { publishVaultChanged } from "../events";

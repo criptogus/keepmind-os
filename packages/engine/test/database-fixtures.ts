@@ -1,5 +1,5 @@
-import { createFakeDatabaseDriver, type DatabaseError, type DatabaseTarget } from "@agenteschat/adapters";
 import { PGlite } from "@electric-sql/pglite";
+import { createFakeDatabaseDriver, type DatabaseError, type DatabaseTarget } from "@keepmind/adapters";
 import {
   createDatabaseConnection,
   createDatabaseToolSource,

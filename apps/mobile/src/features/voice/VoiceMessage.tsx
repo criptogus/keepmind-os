@@ -1,5 +1,5 @@
-import type { Message } from "@agenteschat/client";
-import { voiceAudioGone, voiceAudioUrl, voiceClock, voiceExpired, voiceOf } from "@agenteschat/client/lib/voice";
+import type { Message } from "@keepmind/client";
+import { voiceAudioGone, voiceAudioUrl, voiceClock, voiceExpired, voiceOf } from "@keepmind/client/lib/voice";
 import { Skia } from "@shopify/react-native-skia";
 import { memo, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { useTranslation } from "react-i18next";

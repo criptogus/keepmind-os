@@ -1,6 +1,6 @@
-import { useNotificationCount } from "@agenteschat/client";
-import { workspaceLabel, workspaceNotes } from "@agenteschat/client/lib/deletion";
-import { MenuAt, MenuHeading, MenuItem, MenuReactions, MenuSeparator } from "@agenteschat/ui";
+import { useNotificationCount } from "@keepmind/client";
+import { workspaceLabel, workspaceNotes } from "@keepmind/client/lib/deletion";
+import { MenuAt, MenuHeading, MenuItem, MenuReactions, MenuSeparator } from "@keepmind/ui";
 import { useRouter } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";

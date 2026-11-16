@@ -1,10 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import {
-  everyoneSuggestion,
-  isEveryoneMention,
-  mentionsReader,
-  offersEveryone,
-} from "@agenteschat/client/lib/everyone";
+import { everyoneSuggestion, isEveryoneMention, mentionsReader, offersEveryone } from "@keepmind/client/lib/everyone";
 import { parseBlocks } from "../../src/features/chat/logic";
 import { insertMention, mentionQuery } from "../../src/features/chat/mentions";
 

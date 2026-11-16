@@ -1,4 +1,4 @@
-import type { PubSub } from "@agenteschat/adapters";
+import type { PubSub } from "@keepmind/adapters";
 import {
   and,
   type Database,
@@ -12,7 +12,7 @@ import {
   type SQL,
   schema,
   sql,
-} from "@agenteschat/db";
+} from "@keepmind/db";
 import { outageIn, waitSinceIn, workStateOf } from "./agent-work";
 import { decidableBySql } from "./approvals";
 import { recordAudit } from "./audit";

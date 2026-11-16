@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { receiptFiles } from "@agenteschat/client/lib/actions";
-import { joinNames } from "@agenteschat/client/lib/format";
+import { receiptFiles } from "@keepmind/client/lib/actions";
+import { joinNames } from "@keepmind/client/lib/format";
 import { parseInline } from "../../src/features/chat/logic";
 import { translator } from "./fixtures";
 

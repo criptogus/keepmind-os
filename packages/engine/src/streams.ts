@@ -10,8 +10,8 @@ import {
   STREAM_LIMITS,
   type StreamHello,
   type StreamRequest,
-} from "@agenteschat/adapters";
-import type { Database } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import type { Database } from "@keepmind/db";
 import { type MachineHub, MachineRequestError } from "./machine-hub";
 import { authenticateMachine, MachineOfflineError, MachinePausedError } from "./machines";
 import { AgentHeldError, OrgPausedError } from "./standing";

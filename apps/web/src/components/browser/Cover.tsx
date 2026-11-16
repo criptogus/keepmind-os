@@ -1,4 +1,4 @@
-import { cx, Icon, type IconName, PixelSpinner } from "@agenteschat/ui";
+import { cx, Icon, type IconName, PixelSpinner } from "@keepmind/ui";
 import { type ReactNode, useRef } from "react";
 import { ComputerSky, type colorOf } from "../Sky";
 import "./browser.css";

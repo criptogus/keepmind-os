@@ -1,5 +1,5 @@
-import type { GifProvider, PubSub } from "@agenteschat/adapters";
-import { and, type Database, desc, type Executor, eq, gt, inArray, isNull, or, schema, sql } from "@agenteschat/db";
+import type { GifProvider, PubSub } from "@keepmind/adapters";
+import { and, type Database, desc, type Executor, eq, gt, inArray, isNull, or, schema, sql } from "@keepmind/db";
 import { getChannelCached } from "./context";
 import { isAgentOnlyDm } from "./dms";
 import { publishMessageCreated } from "./events";

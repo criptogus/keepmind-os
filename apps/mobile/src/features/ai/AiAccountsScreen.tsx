@@ -1,4 +1,4 @@
-import type { AiAccounts as AiAccountsView, Credential } from "@agenteschat/client";
+import type { AiAccounts as AiAccountsView, Credential } from "@keepmind/client";
 import {
   keys,
   useAiAccounts,
@@ -9,7 +9,7 @@ import {
   usePlatformKey,
   useSettings,
   useUpdateSettings,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 import {
   accountTitle,
   agentsToGive,
@@ -21,17 +21,17 @@ import {
   ownSignIns,
   ownSignInTitle,
   signInOf,
-} from "@agenteschat/client/lib/ai-accounts";
-import { computerNameOf } from "@agenteschat/client/lib/computer";
-import { errorText, keyRefusal } from "@agenteschat/client/lib/errors";
-import { joinNames, relativeTime } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { agentAi, aiStateOf } from "@agenteschat/client/lib/no-ai";
-import { can } from "@agenteschat/client/lib/permissions";
-import { settingsSectionNameKey, settingsSectionTextKey } from "@agenteschat/client/lib/personal-view";
-import { planOf, signInProviderOf } from "@agenteschat/client/lib/plans";
-import { keyName, keyNamedAfterProvider, keySource } from "@agenteschat/client/lib/providers";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client/lib/ai-accounts";
+import { computerNameOf } from "@keepmind/client/lib/computer";
+import { errorText, keyRefusal } from "@keepmind/client/lib/errors";
+import { joinNames, relativeTime } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { agentAi, aiStateOf } from "@keepmind/client/lib/no-ai";
+import { can } from "@keepmind/client/lib/permissions";
+import { settingsSectionNameKey, settingsSectionTextKey } from "@keepmind/client/lib/personal-view";
+import { planOf, signInProviderOf } from "@keepmind/client/lib/plans";
+import { keyName, keyNamedAfterProvider, keySource } from "@keepmind/client/lib/providers";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";

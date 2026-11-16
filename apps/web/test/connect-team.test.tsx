@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import type { Agent, AiComputer, MachineAccount } from "@agenteschat/client";
-import { keys } from "@agenteschat/client";
-import { LOGIN_PER_AGENT } from "@agenteschat/client/lib/plans";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import type { Agent, AiComputer, MachineAccount } from "@keepmind/client";
+import { keys } from "@keepmind/client";
+import { LOGIN_PER_AGENT } from "@keepmind/client/lib/plans";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
@@ -307,7 +307,7 @@ describe("the end: who woke, why the others stayed, what they think with", () =>
 });
 
 describe("one login per agent, one instruction at a time", () => {
-  test("ChatGPT's turn: the hidden sign-in step takes no number, so the code is step 2", async () => {
+  test("ChatGPT's turn: only the code is numbered; optional account settings are help", async () => {
     const was = LOGIN_PER_AGENT.codex;
     (LOGIN_PER_AGENT as { codex: boolean }).codex = true;
     try {
@@ -315,7 +315,7 @@ describe("one login per agent, one instruction at a time", () => {
       await pickPlan(dialog, "ChatGPT");
       const panel = within(dialog).getByRole("region", { name: "Seu plano do ChatGPT" });
       await signIn(dialog, "Entrar no ChatGPT");
-      expect([...panel.querySelectorAll(".agp-addacct__step > i")].map((i) => i.textContent)).toEqual(["1", "2"]);
+      expect([...panel.querySelectorAll(".agp-addacct__step > i")].map((i) => i.textContent)).toEqual(["1"]);
     } finally {
       (LOGIN_PER_AGENT as { codex: boolean }).codex = was;
     }

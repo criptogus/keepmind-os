@@ -1,4 +1,4 @@
-import { isolatedPage, PAGE_SANDBOX } from "@agenteschat/client/lib/isolated-page";
+import { isolatedPage, PAGE_SANDBOX } from "@keepmind/client/lib/isolated-page";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 

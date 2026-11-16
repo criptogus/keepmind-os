@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { waitingCardOf } from "@agenteschat/client/lib/notifications";
-import { personAmount, usageLimitLine } from "@agenteschat/client/lib/person-usage";
+import { waitingCardOf } from "@keepmind/client/lib/notifications";
+import { personAmount, usageLimitLine } from "@keepmind/client/lib/person-usage";
 import { notificationHref } from "../../src/features/links/logic";
 import { peopleMonthLine } from "../../src/features/usage/logic";
 import { notification, translator } from "./fixtures";

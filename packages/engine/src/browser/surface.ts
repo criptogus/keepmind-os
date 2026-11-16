@@ -1,4 +1,4 @@
-import type { BrowserBatchCommand } from "@agenteschat/adapters";
+import type { BrowserBatchCommand } from "@keepmind/adapters";
 import {
   type ActTarget,
   observeSnapshot,

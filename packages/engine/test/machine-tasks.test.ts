@@ -6,8 +6,8 @@ import {
   type ServerFrame,
   TASK_ACCOUNTS_PROTOCOL,
   type TaskExecutor,
-} from "@agenteschat/adapters";
-import { and, eq, schema } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { and, eq, schema } from "@keepmind/db";
 import {
   createAgent,
   createMachineHub,
@@ -49,7 +49,7 @@ const RUNNER = {
   protocol: MACHINE_PROTOCOL_VERSION,
   workspace: "/Users/w/agentes",
 };
-const deps = () => ({ db: f.db, pubsub: f.pubsub, publicUrl: "https://agentes.chat" });
+const deps = () => ({ db: f.db, pubsub: f.pubsub, publicUrl: "https://keepmind.io" });
 
 type Request = Extract<ServerFrame, { type: "request" }>;
 type TaskStartRequest = Extract<Request, { op: "task.start" }>;

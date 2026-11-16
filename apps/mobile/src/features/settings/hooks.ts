@@ -7,11 +7,11 @@ import {
   useConnections,
   useCustomServers,
   useMembers,
-} from "@agenteschat/client";
-import { type AccessResource, type Level, saveLevels } from "@agenteschat/client/lib/access-levels";
-import { type ConnectedItem, connectedItems, itemName } from "@agenteschat/client/lib/connected";
-import { isSolo, othersHere } from "@agenteschat/client/lib/personal-view";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client";
+import { type AccessResource, type Level, saveLevels } from "@keepmind/client/lib/access-levels";
+import { type ConnectedItem, connectedItems, itemName } from "@keepmind/client/lib/connected";
+import { isSolo, othersHere } from "@keepmind/client/lib/personal-view";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import type { TFunction } from "i18next";
 import { useEffect, useMemo, useState } from "react";

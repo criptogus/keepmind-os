@@ -1,7 +1,7 @@
 import { afterEach, expect, test } from "bun:test";
-import { MACHINE_PROTOCOL_VERSION, typingTopic } from "@agenteschat/adapters";
-import { asc, eq, schema } from "@agenteschat/db";
-import { createAnthropicProvider, type ModelMessage, type ModelRequest, systemText } from "@agenteschat/providers";
+import { MACHINE_PROTOCOL_VERSION, typingTopic } from "@keepmind/adapters";
+import { asc, eq, schema } from "@keepmind/db";
+import { createAnthropicProvider, type ModelMessage, type ModelRequest, systemText } from "@keepmind/providers";
 import {
   addChannelMember,
   type BrainTurn,
@@ -760,7 +760,7 @@ test("Claude Code: the system text is the same in every conversation; what holds
     expect(conversation).toContain("\n\n## Options to pick from\n- When you end by asking the person to pick");
     expect(t.turn.system).not.toContain("# Your team");
     expect(t.turn.system).not.toContain("put them on a card with ask_choices");
-    expect(t.turn.system).toContain('"# This turn" and "# This conversation" in your messages come from agentes.chat');
+    expect(t.turn.system).toContain('"# This turn" and "# This conversation" in your messages come from KeepMind OS');
   }
   // A follow-up turn in a resumed session: only what is new, under a ceiling (its uncached part).
   expect(followUp.turn.session?.resume).toBe(true);

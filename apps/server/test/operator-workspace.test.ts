@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, expect, test } from "bun:test";
-import { schema, sql } from "@agenteschat/db";
+import { schema, sql } from "@keepmind/db";
 import { createLogger } from "../src/logger";
 import { createOperatorApp } from "../src/operator/app";
 import { createTestServer, planOfLast, type TestServer } from "./harness";

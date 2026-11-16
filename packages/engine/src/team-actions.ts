@@ -1,4 +1,4 @@
-import { simpleCommands } from "@agenteschat/adapters";
+import { simpleCommands } from "@keepmind/adapters";
 import {
   and,
   arrayOverlaps,
@@ -12,7 +12,7 @@ import {
   ne,
   or,
   schema,
-} from "@agenteschat/db";
+} from "@keepmind/db";
 import { caches } from "./cache";
 import { agentSearchChannels, enqueueIndex, registerDocumentBuilder, registerReindexSource } from "./search";
 import { maskCredentials } from "./tool-detail";

@@ -12,14 +12,14 @@
 import { writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { crc32, deflateSync } from "node:zlib";
-import { type Ctx2D, drawAccessory, drawAgent } from "@agenteschat/ui/agent/engine";
+import { type Ctx2D, drawAccessory, drawAgent } from "@keepmind/ui/agent/engine";
 import {
   COMPUTER_ART,
   COMPUTER_GRID,
   COMPUTER_ROWS,
   type ComputerCtx,
   drawComputer,
-} from "@agenteschat/ui/computer/portrait";
+} from "@keepmind/ui/computer/portrait";
 import { COMPUTER, ONBOARDING_CREW, WHOLE, wholeFile } from "../src/email/layout";
 
 /** A box in canvas pixels, its corners' radii [top-left, top-right, bottom-right, bottom-left]. */

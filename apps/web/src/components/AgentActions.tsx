@@ -1,6 +1,6 @@
-import type { AgentAction, Message } from "@agenteschat/client";
-import { ApiError, useApi } from "@agenteschat/client";
-import { actionCardOf } from "@agenteschat/client/lib/action-cards";
+import type { AgentAction, Message } from "@keepmind/client";
+import { ApiError, useApi } from "@keepmind/client";
+import { actionCardOf } from "@keepmind/client/lib/action-cards";
 import {
   actionErrorKey,
   hookToCopy,
@@ -10,12 +10,12 @@ import {
   receiptRows,
   receiptTip,
   receiptUnder,
-} from "@agenteschat/client/lib/actions";
-import { relativeTime, toYmd } from "@agenteschat/client/lib/format";
-import { handedTasksOf } from "@agenteschat/client/lib/issues";
-import { can } from "@agenteschat/client/lib/permissions";
-import { isRightHand } from "@agenteschat/client/lib/right-hand";
-import { cx, HOVERLESS, Icon, type IconName, Popover, useMatchMedia } from "@agenteschat/ui";
+} from "@keepmind/client/lib/actions";
+import { relativeTime, toYmd } from "@keepmind/client/lib/format";
+import { handedTasksOf } from "@keepmind/client/lib/issues";
+import { can } from "@keepmind/client/lib/permissions";
+import { isRightHand } from "@keepmind/client/lib/right-hand";
+import { cx, HOVERLESS, Icon, type IconName, Popover, useMatchMedia } from "@keepmind/ui";
 import { Link } from "@tanstack/react-router";
 import type { TFunction } from "i18next";
 import { type KeyboardEvent, type ReactNode, useState } from "react";

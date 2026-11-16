@@ -2,7 +2,7 @@
 
 - Status: Proposed
 - Date: 2026-10-26
-- Code: `packages/ui/src/sfx/synth.ts` (`@agenteschat/ui/sfx`), `packages/client/src/lib/sounds.ts`, `apps/web/src/lib/sounds.ts`, `apps/mobile/src/lib/sounds.ts`
+- Code: `packages/ui/src/sfx/synth.ts` (`@keepmind/ui/sfx`), `packages/client/src/lib/sounds.ts`, `apps/web/src/lib/sounds.ts`, `apps/mobile/src/lib/sounds.ts`
 
 ## Context
 

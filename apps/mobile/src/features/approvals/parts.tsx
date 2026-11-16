@@ -5,21 +5,21 @@ import {
   useCatalog,
   useCustomServers,
   useDecideApproval,
-} from "@agenteschat/client";
-import { aheadPhase } from "@agenteschat/client/lib/approval-kind";
-import { approvalOriginShort, approvalOriginWords } from "@agenteschat/client/lib/approval-origin";
-import { approvalEffects } from "@agenteschat/client/lib/approval-review";
+} from "@keepmind/client";
+import { aheadPhase } from "@keepmind/client/lib/approval-kind";
+import { approvalOriginShort, approvalOriginWords } from "@keepmind/client/lib/approval-origin";
+import { approvalEffects } from "@keepmind/client/lib/approval-review";
 import {
   alwaysRoutineName,
   approvalDoing,
   approvalLetter,
   approvalLetterTo,
   approvalTitle,
-} from "@agenteschat/client/lib/approval-words";
-import { fromServer, itemName } from "@agenteschat/client/lib/connected";
-import { nextLabel } from "@agenteschat/client/lib/format";
-import { connectorName } from "@agenteschat/client/lib/scopes";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client/lib/approval-words";
+import { fromServer, itemName } from "@keepmind/client/lib/connected";
+import { nextLabel } from "@keepmind/client/lib/format";
+import { connectorName } from "@keepmind/client/lib/scopes";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import type { TFunction } from "i18next";
 import { type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";

@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { ApiClient, ImportInput, ImportItemResult, TeamTemplate } from "@agenteschat/client";
-import { keys } from "@agenteschat/client";
+import type { ApiClient, ImportInput, ImportItemResult, TeamTemplate } from "@keepmind/client";
+import { keys } from "@keepmind/client";
 import { act, cleanup, fireEvent } from "@testing-library/react";
 import { WATCH_POLL_MS } from "@/components/ImportFlow";
 import { createFakeApi, type FakeState, GENERAL_ID, ORG_ID, seedState, withRightHand } from "./fake-api";
@@ -287,7 +287,7 @@ describe("bringing the team from an app that answers in its chat", () => {
     }
   });
 
-  test("on agentes.chat Cloud, before its first plan, an app that takes MCP brings its file and says why MCP waits", async () => {
+  test("on KeepMind OS Cloud, before its first plan, an app that takes MCP brings its file and says why MCP waits", async () => {
     // A workspace on a hold refuses an app's sign-in: MCP couldn't bring anyone yet.
     await open(settingUp({ cloud: true }));
     await click(answer("Hermes Agent"), 4);
@@ -310,7 +310,7 @@ describe("bringing the team from an app that answers in its chat", () => {
     expect(document.querySelector(".onb__say")?.textContent).toBe("Solte aqui o que o app exportou. O resto é comigo.");
   });
 
-  test("on agentes.chat Cloud the team brought goes on to the plan", async () => {
+  test("on KeepMind OS Cloud the team brought goes on to the plan", async () => {
     const state = settingUp({ cloud: true });
     await open(state);
     await throughTheAnswer(fenced(grokReply()));

@@ -1,4 +1,4 @@
-import type { FormerAgent } from "@agenteschat/client";
+import type { FormerAgent } from "@keepmind/client";
 import {
   useAgentGroups,
   useAiStatus,
@@ -6,12 +6,12 @@ import {
   useFormerAgents,
   useTeam,
   useUnarchiveAgent,
-} from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { can, makesAgents } from "@agenteschat/client/lib/permissions";
-import { isRightHand } from "@agenteschat/client/lib/right-hand";
-import { Button, Card, EmptyState, Icon, PageHeader, Segmented } from "@agenteschat/ui";
+} from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { can, makesAgents } from "@keepmind/client/lib/permissions";
+import { isRightHand } from "@keepmind/client/lib/right-hand";
+import { Button, Card, EmptyState, Icon, PageHeader, Segmented } from "@keepmind/ui";
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

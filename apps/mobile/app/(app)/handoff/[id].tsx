@@ -1,4 +1,4 @@
-import { useNotifications } from "@agenteschat/client";
+import { useNotifications } from "@keepmind/client";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";

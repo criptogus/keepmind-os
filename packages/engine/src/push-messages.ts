@@ -9,7 +9,7 @@
  * approved from the notification.
  */
 
-import { type AppLocale, appLocale } from "@agenteschat/i18n/locale";
+import { type AppLocale, appLocale } from "@keepmind/i18n/locale";
 import { pushStrings } from "./push/messages";
 
 export type PushLocale = AppLocale;

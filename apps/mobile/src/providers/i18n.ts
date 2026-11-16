@@ -1,6 +1,6 @@
-import type { LocaleState } from "@agenteschat/client/lib/locale-sync";
-import { type AppLocale, isAppLocale, LOCALE_CODES } from "@agenteschat/i18n/locale";
-import { fillPluralGaps, type LocaleStrings } from "@agenteschat/i18n/plurals";
+import type { LocaleState } from "@keepmind/client/lib/locale-sync";
+import { type AppLocale, isAppLocale, LOCALE_CODES } from "@keepmind/i18n/locale";
+import { fillPluralGaps, type LocaleStrings } from "@keepmind/i18n/plurals";
 import { getLocales } from "expo-localization";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
@@ -13,20 +13,20 @@ import { readValueSync, writeValue } from "@/lib/storage";
  * first `require`, so the phone starts with English and its own language parsed.
  */
 const SHARED: Record<AppLocale, () => LocaleStrings> = {
-  en: () => require("@agenteschat/i18n/en").en,
-  "pt-BR": () => require("@agenteschat/i18n/pt-BR").ptBR,
-  es: () => require("@agenteschat/i18n/locales/es.json"),
-  fr: () => require("@agenteschat/i18n/locales/fr.json"),
-  de: () => require("@agenteschat/i18n/locales/de.json"),
-  it: () => require("@agenteschat/i18n/locales/it.json"),
-  nl: () => require("@agenteschat/i18n/locales/nl.json"),
-  ja: () => require("@agenteschat/i18n/locales/ja.json"),
-  ko: () => require("@agenteschat/i18n/locales/ko.json"),
-  "zh-Hans": () => require("@agenteschat/i18n/locales/zh-Hans.json"),
-  id: () => require("@agenteschat/i18n/locales/id.json"),
-  tr: () => require("@agenteschat/i18n/locales/tr.json"),
-  pl: () => require("@agenteschat/i18n/locales/pl.json"),
-  ru: () => require("@agenteschat/i18n/locales/ru.json"),
+  en: () => require("@keepmind/i18n/en").en,
+  "pt-BR": () => require("@keepmind/i18n/pt-BR").ptBR,
+  es: () => require("@keepmind/i18n/locales/es.json"),
+  fr: () => require("@keepmind/i18n/locales/fr.json"),
+  de: () => require("@keepmind/i18n/locales/de.json"),
+  it: () => require("@keepmind/i18n/locales/it.json"),
+  nl: () => require("@keepmind/i18n/locales/nl.json"),
+  ja: () => require("@keepmind/i18n/locales/ja.json"),
+  ko: () => require("@keepmind/i18n/locales/ko.json"),
+  "zh-Hans": () => require("@keepmind/i18n/locales/zh-Hans.json"),
+  id: () => require("@keepmind/i18n/locales/id.json"),
+  tr: () => require("@keepmind/i18n/locales/tr.json"),
+  pl: () => require("@keepmind/i18n/locales/pl.json"),
+  ru: () => require("@keepmind/i18n/locales/ru.json"),
 };
 
 const bundle = (code: AppLocale) =>

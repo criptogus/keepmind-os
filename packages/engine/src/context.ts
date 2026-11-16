@@ -1,4 +1,4 @@
-import { grantedTo, SHARED_COMPUTER_PROTOCOL, sharedFolderOf } from "@agenteschat/adapters";
+import { grantedTo, SHARED_COMPUTER_PROTOCOL, sharedFolderOf } from "@keepmind/adapters";
 import {
   and,
   asc,
@@ -13,9 +13,9 @@ import {
   rowsOf,
   schema,
   sql,
-} from "@agenteschat/db";
-import { isAppLocale, localeInfo } from "@agenteschat/i18n/locale";
-import type { ModelMessage, SystemBlock } from "@agenteschat/providers";
+} from "@keepmind/db";
+import { isAppLocale, localeInfo } from "@keepmind/i18n/locale";
+import type { ModelMessage, SystemBlock } from "@keepmind/providers";
 import { agentStyleLine, agentStyleOf, isAgentStyle } from "./agent-style";
 import type { Agent } from "./agents";
 import { readerOf, readerOfMessage } from "./agents-dm-reads";
@@ -1082,8 +1082,8 @@ export async function buildRunContext(
     {
       text: [
         personal
-          ? `You work in "${org.name}" on agentes.chat, a personal workspace: one person, and maybe their family, with the AI agents that help them with their life and work. The app shows its channels to them as group conversations.`
-          : `You work in "${org.name}" on agentes.chat, a workspace where people and AI agents work together.`,
+          ? `You work in "${org.name}" on KeepMind OS, a personal workspace: one person, and maybe their family, with the AI agents that help them with their life and work. The app shows its channels to them as group conversations.`
+          : `You work in "${org.name}" on KeepMind OS, a workspace where people and AI agents work together.`,
         org.context.trim() ? `# About ${personal ? "the person" : "the organization"}\n${org.context.trim()}` : "",
         teamMemory,
         options.workspaceComputer ? workspaceComputerText(options.workspaceComputer) : "",
@@ -1411,7 +1411,7 @@ function routineAsks(level: ApprovalsLevel, place: string): string {
   }
   const what =
     level === "always"
-      ? "You are set to always ask: every change asks a person first, inside agentes.chat too (an issue, a file, a post, a command)"
+      ? "You are set to always ask: every change asks a person first, inside KeepMind OS too (an issue, a file, a post, a command)"
       : "A send, a delete, a payment, an invite or another change in a connected app that its tool marks as asking asks a person first";
   return `${what}: an approval card in ${place}, with your reason.${level === "always" ? "" : " Merge, deploy and rollback always do."} When its instructions ask you to fix or resolve things and the fix is such a change, hand off your report first (saying what you're asking for), then call that tool with your reason: your run waits for the person's decision, so anything after it waits too.`;
 }
@@ -1531,7 +1531,7 @@ async function routineContext(
   const block = [
     `# This is a routine run\nYour routine «${name}» started this run: background work that nobody watches. Nobody waits for a reply here and nothing you write here is posted; your message reaches people only through hand_off, which posts it in ${place}.`,
     `Its instructions, set up by ${creator ?? "its creator"}:\n${(row?.prompt ?? trigger.body).trim()}`,
-    `What it may do: what you can do in any other run. Besides reading, you may change things inside agentes.chat that people can undo (issues, memory, wiki, Drive files) and work on your own branches (agentes/${agent.handle}/…) and their pull requests. ${routineAsks(agent.approvalsLevel, place)} You may also reach other agents and post where ${who} can: tell_agent leaves an agent a note (it wakes and works on it), ask_agent asks one something (the answer reaches you, or ${place} once this run ended), post_message posts in a channel ${who} can post in (an @mention there wakes that agent), and send_dm writes only to ${who}; only agents ${who} can talk to are reached. An @mention in your hand_off message also wakes an agent of ${place} to work on it, as asked by ${who} (one outside it hears nothing: use tell_agent): mention an agent there only when it should act, and not one you already handed it to with tell_agent. The web is yours to read (search, open pages, your browser) like anywhere else.`,
+    `What it may do: what you can do in any other run. Besides reading, you may change things inside KeepMind OS that people can undo (issues, memory, wiki, Drive files) and work on your own branches (agentes/${agent.handle}/…) and their pull requests. ${routineAsks(agent.approvalsLevel, place)} You may also reach other agents and post where ${who} can: tell_agent leaves an agent a note (it wakes and works on it), ask_agent asks one something (the answer reaches you, or ${place} once this run ended), post_message posts in a channel ${who} can post in (an @mention there wakes that agent), and send_dm writes only to ${who}; only agents ${who} can talk to are reached. An @mention in your hand_off message also wakes an agent of ${place} to work on it, as asked by ${who} (one outside it hears nothing: use tell_agent): mention an agent there only when it should act, and not one you already handed it to with tell_agent. The web is yours to read (search, open pages, your browser) like anywhere else.`,
     listed("approved")
       ? `Approved ahead for this run: a person already approved these exact actions for this time. Do each now with run_approved_action and its id: it goes out without asking. Don't do them any other way, then report how it went.\n${listed("approved")}`
       : "",
@@ -2165,7 +2165,7 @@ export function devicesText(devices: {
       devices.computers.some((c) => c.os === "windows") ? " Commands on Windows run in cmd.exe." : ""
     }`,
     devices.computers.some((c) => c.os === "darwin")
-      ? 'A screenshot of a person\'s Mac, when commands are on there: run `screencapture -x screen.png` in your folder there (run_code with `computer`), then upload_file it with the same `computer`. If it is refused or comes out blank, ask the person to allow Screen Recording in the agentes.chat app there (Preferences › General › Permissions). A file there refused with "Operation not permitted" or "Permission denied" needs Full Disk Access, turned on in the same place. Never suggest terminal flags, restarting programs or saving a file for you to read.'
+      ? 'A screenshot of a person\'s Mac, when commands are on there: run `screencapture -x screen.png` in your folder there (run_code with `computer`), then upload_file it with the same `computer`. If it is refused or comes out blank, ask the person to allow Screen Recording in the KeepMind OS app there (Preferences › General › Permissions). A file there refused with "Operation not permitted" or "Permission denied" needs Full Disk Access, turned on in the same place. Never suggest terminal flags, restarting programs or saving a file for you to read.'
       : "",
   ]
     .filter(Boolean)
@@ -2330,13 +2330,13 @@ export function taskNotice(m: Pick<Message, "body" | "meta">, current = false, p
 
 /**
  * A person's message sent from an AI app (ADR 0119, `meta.via`): the agent learns the person reads the reply there,
- * maybe not in agentes.chat. "" for anything else.
+ * maybe not in KeepMind OS. "" for anything else.
  */
 function viaLine(m: Message, who: string): string {
   const via = m.authorType === "person" ? (m.meta?.via as { kind?: unknown; name?: unknown } | undefined) : undefined;
   if (via?.kind !== "app" || typeof via.name !== "string") return "";
   const app = via.name.replace(/[\p{Cc}\p{Cf}]/gu, "").slice(0, 64);
-  return `\n(sent by ${who} through ${app}, an app connected to agentes.chat; the reply is read there)`;
+  return `\n(sent by ${who} through ${app}, an app connected to KeepMind OS; the reply is read there)`;
 }
 
 /** `meta.actionNotes` (undo/redo of the agent's changes) as one bracketed line each; "" when none. */

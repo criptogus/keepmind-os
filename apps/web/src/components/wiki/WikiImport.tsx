@@ -1,8 +1,8 @@
-import { keys, useCatalog, useWikiTree, type WikiImportNote, type WikiImportSource } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { joinNames } from "@agenteschat/client/lib/format";
-import { can } from "@agenteschat/client/lib/permissions";
-import { hiddenRepoOf, hiddenRepoText } from "@agenteschat/client/lib/skills";
+import { keys, useCatalog, useWikiTree, type WikiImportNote, type WikiImportSource } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { joinNames } from "@keepmind/client/lib/format";
+import { can } from "@keepmind/client/lib/permissions";
+import { hiddenRepoOf, hiddenRepoText } from "@keepmind/client/lib/skills";
 import {
   Alert,
   Button,
@@ -16,7 +16,7 @@ import {
   Input,
   OptionCard,
   Segmented,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import type { TFunction } from "i18next";

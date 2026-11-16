@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
-import { type SetupRowFacts, setupRow, setupSteps } from "@agenteschat/client/lib/setup-checklist";
+import { type SetupRowFacts, setupRow, setupSteps } from "@keepmind/client/lib/setup-checklist";
 import { setupStepsInSight } from "../../src/features/agents/setup/steps";
 import { agent, translator } from "./fixtures";
 

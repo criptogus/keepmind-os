@@ -1,5 +1,5 @@
-import { useIdRef } from "@agenteschat/client";
-import { Icon } from "@agenteschat/ui";
+import { useIdRef } from "@keepmind/client";
+import { Icon } from "@keepmind/ui";
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { FilePill } from "@/chat/FileRef";

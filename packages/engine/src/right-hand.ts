@@ -1,8 +1,8 @@
-import { LOCKED_BRAIN_PROTOCOL } from "@agenteschat/adapters";
-import { and, type Database, type Executor, eq, inArray, isNull, type SQL, schema, sql } from "@agenteschat/db";
-import { serverText } from "@agenteschat/i18n";
-import { appLocale } from "@agenteschat/i18n/locale";
-import { AUTO_MODEL } from "@agenteschat/providers";
+import { LOCKED_BRAIN_PROTOCOL } from "@keepmind/adapters";
+import { and, type Database, type Executor, eq, inArray, isNull, type SQL, schema, sql } from "@keepmind/db";
+import { serverText } from "@keepmind/i18n";
+import { appLocale } from "@keepmind/i18n/locale";
+import { AUTO_MODEL } from "@keepmind/providers";
 import type { Agent } from "./agents";
 import { recordAudit } from "./audit";
 import { accountablePerson, fedByRoutine, personOfMessage, runAuthorityById } from "./authority";

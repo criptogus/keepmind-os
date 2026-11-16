@@ -4,8 +4,8 @@
  * doesn't exist, and what they see but don't manage is `ForbiddenError`. Values are sealed before any write
  * (`seal.ts`) and never come back to a person: no answer carries one, and changing one means typing a new one (§2).
  */
-import { isReservedSecretName, MAX_SECRET_BYTES, SECRET_NAME, vaultOrigin } from "@agenteschat/adapters";
-import { and, count, type Database, type Executor, eq, isNull, schema } from "@agenteschat/db";
+import { isReservedSecretName, MAX_SECRET_BYTES, SECRET_NAME, vaultOrigin } from "@keepmind/adapters";
+import { and, count, type Database, type Executor, eq, isNull, schema } from "@keepmind/db";
 import { recordAudit } from "../audit";
 import { UUID } from "../authority";
 import { ConflictError, ForbiddenError, NotFoundError, ValidationError } from "../errors";

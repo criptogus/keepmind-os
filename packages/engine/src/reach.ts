@@ -1,5 +1,5 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, type Database, desc, eq, gt, inArray, isNull, schema, sql } from "@agenteschat/db";
+import type { PubSub } from "@keepmind/adapters";
+import { and, type Database, desc, eq, gt, inArray, isNull, schema, sql } from "@keepmind/db";
 import { type AiStatusDeps, agentAiState } from "./ai-status";
 import { canTalkTo, speakerFor, viaAgent } from "./audience";
 import { fedByRoutine, personOfMessage, routinePostRun, runAuthorityById } from "./authority";

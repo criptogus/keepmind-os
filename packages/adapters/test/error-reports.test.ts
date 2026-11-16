@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { sql } from "@agenteschat/db";
-import { createTestDatabase } from "@agenteschat/db/testing";
+import { sql } from "@keepmind/db";
+import { createTestDatabase } from "@keepmind/db/testing";
 import type { Event } from "@sentry/core";
 import { createErrorReporter, noErrorReports } from "../src/error-reports";
 import { scrubBreadcrumb, scrubEvent, scrubText, urlPattern } from "../src/error-scrub";

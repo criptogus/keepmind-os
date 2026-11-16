@@ -1,5 +1,5 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { type Executor, eq, schema } from "@agenteschat/db";
+import type { PubSub } from "@keepmind/adapters";
+import { type Executor, eq, schema } from "@keepmind/db";
 import { caches } from "./cache";
 import { publishOrgEvent } from "./events";
 

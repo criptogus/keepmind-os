@@ -12,7 +12,7 @@ import {
 } from "node:fs";
 import os from "node:os";
 import { join } from "node:path";
-import { FOLDER_FILE, PG_MAJOR, PGLITE_VERSION } from "@agenteschat/db";
+import { FOLDER_FILE, PG_MAJOR, PGLITE_VERSION } from "@keepmind/db";
 import { launchdPlistText, systemdUnitText } from "../runner/service";
 import { serviceDefinition } from "../src/native";
 
@@ -202,7 +202,7 @@ test("the data survives a restart, and a lock whose process is gone is taken ove
 }, 120_000);
 
 test("a taken port exits 5, and a database of another Postgres major exits 4", async () => {
-  const other = Bun.serve({ hostname: "127.0.0.1", port, fetch: () => new Response("not agentes.chat") });
+  const other = Bun.serve({ hostname: "127.0.0.1", port, fetch: () => new Response("not KeepMind OS") });
   try {
     const taken = start();
     expect(await taken.child.exited).toBe(5);

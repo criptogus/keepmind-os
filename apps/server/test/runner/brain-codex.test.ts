@@ -2,7 +2,7 @@ import { afterEach, expect, test } from "bun:test";
 import { spawn } from "node:child_process";
 import { chmodSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { type MachineRequest, parseBrainEvent } from "@agenteschat/adapters";
+import { type MachineRequest, parseBrainEvent } from "@keepmind/adapters";
 import {
   CODEX_CHAT_CONFIG,
   CODEX_CHAT_OFF,
@@ -251,9 +251,9 @@ test("MCP bridge overrides: stdio by run with the token through env_vars, or HTT
     `${key}.tool_timeout_sec=300`,
     `${key}.required=true`,
   ]);
-  const http = codexBridgeOverrides({ runId: RUN, url: "https://agentes.chat/mcp/run" });
+  const http = codexBridgeOverrides({ runId: RUN, url: "https://keepmind.io/mcp/run" });
   expect(http.slice(0, 2)).toEqual([
-    `${key}.url="https://agentes.chat/mcp/run"`,
+    `${key}.url="https://keepmind.io/mcp/run"`,
     `${key}.bearer_token_env_var="AGENTES_MCP_TOKEN"`,
   ]);
   expect(http).toContain(`${key}.default_tools_approval_mode="approve"`);

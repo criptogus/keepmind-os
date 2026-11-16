@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { DesktopRelease } from "@agenteschat/client";
+import type { DesktopRelease } from "@keepmind/client";
 import { cleanup, render } from "@testing-library/react";
 import { I18nextProvider } from "react-i18next";
 import { appImageCommand, InstallSteps } from "@/components/install/guide";

@@ -1,7 +1,7 @@
-import type { ManagedTask } from "@agenteschat/client";
-import { SHORT_NAME } from "@agenteschat/client/lib/agora";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import type { WorkItem } from "@agenteschat/client/lib/working";
+import type { ManagedTask } from "@keepmind/client";
+import { SHORT_NAME } from "@keepmind/client/lib/agora";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import type { WorkItem } from "@keepmind/client/lib/working";
 import type { TFunction } from "i18next";
 import { needsHeaderBlur } from "@/lib/nav";
 import { type AppHref, chatHref } from "../links/logic";

@@ -1,4 +1,4 @@
-import { clockHour } from "@agenteschat/client/lib/format";
+import { clockHour } from "@keepmind/client/lib/format";
 import type { TFunction } from "i18next";
 
 /** "agora", "2 min", "3 h" since a time. */

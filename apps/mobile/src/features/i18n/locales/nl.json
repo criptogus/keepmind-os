@@ -1108,7 +1108,7 @@
     "notificationsOnHint": "Ze komen ook binnen in de browser en de desktop-app, als ze daar aan staan.",
     "notificationsOffHint": "Zet ze aan om hier meldingen te krijgen. De soorten hieronder gelden voor al je apparaten.",
     "notificationsKindsHint": "Activiteit bewaart alles. Dit geldt voor deze werkruimte, op al je apparaten.",
-    "version": "agentes.chat · versie {{version}}",
+    "version": "KeepMind OS · versie {{version}}",
     "edit": "Bewerken",
     "status": "Status",
     "workspace": "Werkruimte",
@@ -1128,11 +1128,11 @@
     "workspacesUnreachable": "Nu geen antwoord",
     "addWorkspace": "Workspace toevoegen",
     "addWorkspaceCreate": "Een nieuwe workspace maken",
-    "addWorkspaceCreateSub": "Op agentes.chat",
+    "addWorkspaceCreateSub": "Op KeepMind OS",
     "addWorkspaceTeam": "Naar de server van je team",
     "addWorkspaceTeamSub": "Met het adres of de QR-code die op de computer staat",
     "teamServer": "Server van het team",
-    "teamServerLead": "Het agentes.chat-adres van je team, hetzelfde als in de browser.",
+    "teamServerLead": "Het KeepMind OS-adres van je team, hetzelfde als in de browser.",
     "teamServerFoot": "Je verlaat geen enkele workspace: de server van je team komt in je lijst, met je account daar.",
     "workspacesHoldHint": "Ingedrukt houden om van werkruimte te wisselen",
     "workspacesSheetFoot": "Je blijft bij allemaal ingelogd. De meldingen van elk komen hier binnen.",
@@ -1890,8 +1890,8 @@
       "serverText": "Eén regel om in de terminal te plakken",
       "computer": "Een andere computer",
       "computerText": "Installeer de app erop",
-      "appNote": "Op een Mac of pc die je gebruikt, koppelt de desktop-app van agentes.chat hem ook.",
-      "appStep1": "Zet de agentes.chat-app erop",
+      "appNote": "Op een Mac of pc die je gebruikt, koppelt de desktop-app van KeepMind OS hem ook.",
+      "appStep1": "Zet de KeepMind OS-app erop",
       "appStep2": "Open hem en log in met je eigen account",
       "appStep3": "Klik op Toestaan als hij vraagt of de agents van {{org}} hem mogen gebruiken",
       "appShows": "Hij verschijnt hier vanzelf, alleen voor jou tot je hem deelt.",
@@ -1914,7 +1914,7 @@
       "connecting": "Verbinden met {{host}}",
       "computer": "Computer",
       "noHost": "Deze telefoon werkt via een computer van je. Koppel er eerst een.",
-      "hostOffline": "{{host}} is offline. Zet hem aan en open daar agentes.chat.",
+      "hostOffline": "{{host}} is offline. Zet hem aan en open daar KeepMind OS.",
       "step1": "Zet Ontwikkelaarsopties aan",
       "step1Text": "Tik 7 keer op Buildnummer en voer dan je pincode in. Op een Samsung: Software-informatie › Buildnummer.",
       "openAbout": "Over de telefoon openen",
@@ -1939,9 +1939,9 @@
       "wifi1Text": "Vink Altijd toestaan op dit netwerk aan en tik op Toestaan.",
       "wifi2": "Scan de code op een computer",
       "wifi2Text": "Via Draadloze foutopsporing › Apparaat koppelen met QR-code. Gebruik de camera niet: die leest de code als een wifinetwerk en haalt de telefoon van je wifi.",
-      "wifi2Hint": "Open in agentes.chat op een computer Apparaat koppelen › Android-telefoon › Via wifi en kies {{host}}.",
+      "wifi2Hint": "Open in KeepMind OS op een computer Apparaat koppelen › Android-telefoon › Via wifi en kies {{host}}.",
       "codeHead": "Koppelen met een koppelingscode",
-      "codeNote": "Via Draadloze foutopsporing › Apparaat koppelen met koppelingscode. Open Instellingen en agentes.chat naast elkaar, zodat de code in beeld blijft.",
+      "codeNote": "Via Draadloze foutopsporing › Apparaat koppelen met koppelingscode. Open Instellingen en KeepMind OS naast elkaar, zodat de code in beeld blijft.",
       "wifiNote": "Wifi kan wegvallen na een herstart. Een kabel is betrouwbaarder.",
       "done": "{{name}} is gekoppeld",
       "openFailed": "Deze telefoon opende dat scherm niet. Zoek het in Instellingen."
@@ -1998,7 +1998,7 @@
         "openXcode": "Xcode openen",
         "opened": "Xcode is geopend op {{host}}. Kijk opnieuw in Instellingen en sluit Xcode daar daarna.",
         "unlock": "Aangezet en herstart? De melding met Zet aan verschijnt zodra deze iPhone ontgrendeld is.",
-        "outdated": "De agentes.chat-app op {{host}} is verouderd. Werk hem bij op die Mac."
+        "outdated": "De KeepMind OS-app op {{host}} is verouderd. Werk hem bij op die Mac."
       }
     },
     "notice": {
@@ -2093,7 +2093,7 @@
     "usedBy_other": "{{names}} gebruiken het",
     "fromAgent": "Een dienst koppelen",
     "githubApp": {
-      "useApp": "De agentes.chat-app gebruiken",
+      "useApp": "De KeepMind OS-app gebruiken",
       "useAccount": "Een GitHub-account gebruiken",
       "createInBrowser": "Maken in de browser"
     },
@@ -2187,11 +2187,11 @@
     "zoneTitle": "Tijdzone",
     "anotherTitle": "Hoe heet de nieuwe werkruimte?",
     "anotherPurpose": "Waarvoor is de nieuwe werkruimte?",
-    "anotherLead": "Op agentes.chat. Je blijft in {{org}} en kunt altijd wisselen.",
+    "anotherLead": "Op KeepMind OS. Je blijft in {{org}} en kunt altijd wisselen.",
     "suggested": "Op basis van je e-mail bij {{domain}} stelde ik {{org}} voor.",
     "create": "Aanmaken",
     "enter": "Naar de werkruimte",
-    "shareMessage": "Kom bij {{org}} op agentes.chat: {{url}}",
+    "shareMessage": "Kom bij {{org}} op KeepMind OS: {{url}}",
     "failed": "Opslaan lukte niet. Probeer het opnieuw."
   },
   "ai": {

@@ -7,10 +7,10 @@ import {
   createMemoryPubSub,
   createMemoryRateLimiter,
   noPlatformCredentials,
-} from "@agenteschat/adapters";
-import { testConfig } from "@agenteschat/config";
-import type { Database } from "@agenteschat/db";
-import { createFakeProvider } from "@agenteschat/providers/testing";
+} from "@keepmind/adapters";
+import { testConfig } from "@keepmind/config";
+import type { Database } from "@keepmind/db";
+import { createFakeProvider } from "@keepmind/providers/testing";
 import { type AgentesModule, resolveAdapters } from "../src";
 
 const defaults: Adapters = {
@@ -70,7 +70,7 @@ test("no modules: defaults unchanged", async () => {
 });
 
 test("vault sources merge by kind; null turns them off (ADR 0144)", async () => {
-  const s = (kind: string) => ({ kind }) as unknown as import("@agenteschat/adapters").VaultSource;
+  const s = (kind: string) => ({ kind }) as unknown as import("@keepmind/adapters").VaultSource;
   const base = { ...defaults, vaultSources: { a: s("a"), b: s("b") } };
   const r = await resolveAdapters(
     [{ name: "m", adapters: () => ({ vaultSources: { b: s("b2"), c: s("c") } }) }],

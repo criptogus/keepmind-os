@@ -1,5 +1,5 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, type Database, eq, gte, inArray, schema, sql } from "@agenteschat/db";
+import type { PubSub } from "@keepmind/adapters";
+import { and, type Database, eq, gte, inArray, schema, sql } from "@keepmind/db";
 import { recordAudit } from "./audit";
 import { runBrainOf } from "./brains/select";
 import { canceledBy, mayStopRun, runRequester } from "./cancel";

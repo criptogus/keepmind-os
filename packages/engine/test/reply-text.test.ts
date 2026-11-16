@@ -15,7 +15,7 @@ describe("a computer brain's answer with a squashed echo", () => {
     for (const text of [
       "Deploy ok, nada mudou.",
       "Pneumoultramicroscopicossilicovulcanoconiótico é uma palavra longa.",
-      "https://agentes.chat/c/general https://agentes.chat/c/general",
+      "https://keepmind.io/c/general https://keepmind.io/c/general",
     ])
       expect(dropSquashedEcho(text)).toBe(text);
   });

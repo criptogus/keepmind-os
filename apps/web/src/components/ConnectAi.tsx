@@ -1,4 +1,4 @@
-import type { ConnectIntent, Credential, MachineAccount } from "@agenteschat/client";
+import type { ConnectIntent, Credential, MachineAccount } from "@keepmind/client";
 import {
   keys,
   useAddCredential,
@@ -8,13 +8,13 @@ import {
   useCredentials,
   useMachines,
   useModels,
-} from "@agenteschat/client";
-import { accountTitle, listsExisting } from "@agenteschat/client/lib/ai-accounts";
-import { CUSTOM_PROVIDER } from "@agenteschat/client/lib/endpoints";
-import { errorCode, errorText, keyRefusal } from "@agenteschat/client/lib/errors";
-import { namesText, rosterText } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { stepPermissions } from "@agenteschat/client/lib/home";
+} from "@keepmind/client";
+import { accountTitle, listsExisting } from "@keepmind/client/lib/ai-accounts";
+import { CUSTOM_PROVIDER } from "@keepmind/client/lib/endpoints";
+import { errorCode, errorText, keyRefusal } from "@keepmind/client/lib/errors";
+import { namesText, rosterText } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { stepPermissions } from "@keepmind/client/lib/home";
 import {
   type AgentAi,
   type AiChoice,
@@ -39,10 +39,10 @@ import {
   planTitle,
   signsInOnce,
   signsInPerAgent,
-} from "@agenteschat/client/lib/no-ai";
-import { can, makesAgents } from "@agenteschat/client/lib/permissions";
-import { isPlanId, planOf } from "@agenteschat/client/lib/plans";
-import { keyThinks, providerGuess, providerLabel } from "@agenteschat/client/lib/providers";
+} from "@keepmind/client/lib/no-ai";
+import { can, makesAgents } from "@keepmind/client/lib/permissions";
+import { isPlanId, planOf } from "@keepmind/client/lib/plans";
+import { keyThinks, providerGuess, providerLabel } from "@keepmind/client/lib/providers";
 import {
   isRightHand,
   rightHandOf,
@@ -52,8 +52,8 @@ import {
   sceneTeam,
   settleSavedKey,
   thinksWithLine,
-} from "@agenteschat/client/lib/right-hand";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client/lib/right-hand";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import {
   AvatarStack,
   Button,
@@ -66,7 +66,7 @@ import {
   ProviderLogo,
   SettingNote,
   Spinner,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import type { TFunction } from "i18next";
@@ -287,8 +287,14 @@ export function ConnectAiProvider({
 const PAIR_START: ConnectStart = { step: "choose" };
 
 /** A chosen plan's steps, named as its maker sells it; the key's, as the picker names it. */
-const stepTitle = (t: TFunction, choice: AiChoice) =>
-  choice === "key" ? t("connectAi.title.api_key") : planTitle(t, choice);
+const stepTitle = (t: TFunction, choice: AiChoice, provider?: string) =>
+  choice === "key"
+    ? provider === "openrouter"
+      ? t("keepmind.ai.openrouter.login")
+      : provider === "custom"
+        ? t("keepmind.ai.localTitle")
+        : t("connectAi.title.api_key")
+    : planTitle(t, choice);
 
 /** A footer's note: its icon on the words' first line, the footer's buttons outside it, centred with the line. */
 const footNote = (icon: IconName, text: string) => (
@@ -820,7 +826,7 @@ function ConnectAiDialog({
     <ProviderKeySelect
       value={draft.provider}
       disabled={add.isPending}
-      onChange={(provider) => setDraft((d) => ({ ...d, provider }))}
+      onChange={(provider) => setDraft((d) => ({ ...d, provider, preset: undefined }))}
     />
   );
   const panel =
@@ -837,6 +843,7 @@ function ConnectAiDialog({
         onSave={saveKey}
         endpoint={
           <EndpointForm
+            initialPreset={draft.preset}
             orgId={org.id}
             onDone={async (key) => {
               await settleKey(key);
@@ -1016,7 +1023,7 @@ function ConnectAiDialog({
               ? t(personal ? "connectAi.team.wokeAllPersonal" : "connectAi.team.wokeAll")
               : t("connectAi.team.woke", { count: woke.length })
           : chosen
-            ? stepTitle(t, choice)
+            ? stepTitle(t, choice, draft.provider)
             : listing
               ? t("connectAi.chat.allTitle")
               : adding && rows.length > 0
@@ -1267,7 +1274,16 @@ function ConnectAiDialog({
                 )}
               </>
             ) : (
-              <ConnectChoices mayAddKey={mayAddKey} dims={dims} perAgent={perAgent} onPick={(next) => pick(next)} />
+              <ConnectChoices
+                onProvider={(provider) => {
+                  setDraft({ provider, apiKey: "", ...(provider === "custom" ? { preset: "ollama" as const } : {}) });
+                  pick("key");
+                }}
+                mayAddKey={mayAddKey}
+                dims={dims}
+                perAgent={perAgent}
+                onPick={(next) => pick(next)}
+              />
             )}
           </div>
         )}
@@ -1314,7 +1330,7 @@ function ConnectAiDialog({
     };
     const listing = picking && allOpen;
     const title = chosen
-      ? stepTitle(t, choice)
+      ? stepTitle(t, choice, draft.provider)
       : listing
         ? t("connectAi.chat.allTitle")
         : adding && rows.length > 0
@@ -1476,7 +1492,15 @@ function ConnectAiDialog({
                 )}
               </>
             ) : (
-              <ConnectChoices mayAddKey={mayAddKey} dims={dims} onPick={(next) => pick(next)} />
+              <ConnectChoices
+                onProvider={(provider) => {
+                  setDraft({ provider, apiKey: "", ...(provider === "custom" ? { preset: "ollama" as const } : {}) });
+                  pick("key");
+                }}
+                mayAddKey={mayAddKey}
+                dims={dims}
+                onPick={(next) => pick(next)}
+              />
             )}
           </div>
         )}
@@ -1497,7 +1521,7 @@ function ConnectAiDialog({
       <Dialog
         open
         onOpenChange={(o) => !o && onClose()}
-        title={chosen ? stepTitle(t, choice) : t("arrival.connect.title")}
+        title={chosen ? stepTitle(t, choice, draft.provider) : t("arrival.connect.title")}
         closeLabel={t("common.close")}
         width={820}
         bare
@@ -1551,7 +1575,7 @@ function ConnectAiDialog({
             )}
             <div className="ac-actline">
               <span className="ac-dialog__title" aria-hidden="true">
-                {chosen ? stepTitle(t, choice) : t("arrival.connect.title")}
+                {chosen ? stepTitle(t, choice, draft.provider) : t("arrival.connect.title")}
               </span>
             </div>
             <span className="ac-dialog__close ac-acts">
@@ -1577,6 +1601,13 @@ function ConnectAiDialog({
               </div>
             ) : (
               <ConnectChoices
+                onProvider={(provider) => {
+                  setDraft({ provider, apiKey: "", ...(provider === "custom" ? { preset: "ollama" as const } : {}) });
+                  setPicked("key");
+                  setLogin(null);
+                  setChosen(true);
+                  setHeldReader(undefined);
+                }}
                 mayAddKey={mayAddKey}
                 dims={(c) => (agents.length > 0 || bare) && gateDims(gateOf(c))}
                 onPick={(next) => {

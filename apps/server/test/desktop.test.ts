@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import { MACHINE_PROTOCOL_VERSION, type ServerFrame } from "@agenteschat/adapters";
+import { MACHINE_PROTOCOL_VERSION, type ServerFrame } from "@keepmind/adapters";
 import { parseReleaseBody, parseSha256 } from "../src/routes/desktop";
 import { browser, createTestServer, pairComputer, seedOrg, signUp, type TestServer } from "./harness";
 
@@ -238,7 +238,7 @@ test("download links are on PUBLIC_URL, whatever address the request came in on"
     ],
   });
   t = await createTestServer({
-    env: { DESKTOP_RELEASES_TOKEN: "ghp_test", PUBLIC_URL: "https://app.agentes.chat" },
+    env: { DESKTOP_RELEASES_TOKEN: "ghp_test", PUBLIC_URL: "https://keepmind.io" },
     desktopFetch: fakeGithub([signed]).fetch,
   });
   const links = async (site: string) => {
@@ -247,11 +247,11 @@ test("download links are on PUBLIC_URL, whatever address the request came in on"
     return [((await latest.json()) as { url: string }).url, ((await update.json()) as { url: string }).url];
   };
   const onPublicUrl = [
-    "https://app.agentes.chat/api/desktop/download/0.6.0/agentes_0.6.0_universal.dmg",
-    "https://app.agentes.chat/api/desktop/download/0.6.0/agentes_0.6.0_universal.app.tar.gz",
+    "https://keepmind.io/api/desktop/download/0.6.0/agentes_0.6.0_universal.dmg",
+    "https://keepmind.io/api/desktop/download/0.6.0/agentes_0.6.0_universal.app.tar.gz",
   ];
-  expect(await links("https://agentes.chat")).toEqual(onPublicUrl);
-  expect(await links("https://app.agentes.chat")).toEqual(onPublicUrl);
+  expect(await links("https://keepmind.io")).toEqual(onPublicUrl);
+  expect(await links("https://keepmind.io")).toEqual(onPublicUrl);
 });
 
 test("download streams an asset of a desktop-v* release, as an attachment; nothing else", async () => {

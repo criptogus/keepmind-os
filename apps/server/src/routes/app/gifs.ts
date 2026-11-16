@@ -1,6 +1,6 @@
-import { GIF_ID_PATTERN, GIF_PAGE_MAX, GIF_SIZES, type GifSize } from "@agenteschat/adapters";
-import { GIF_CATEGORIES, GIF_CATEGORY_IDS, mediaSettings, requirePermission } from "@agenteschat/engine";
 import { createRoute, z } from "@hono/zod-openapi";
+import { GIF_ID_PATTERN, GIF_PAGE_MAX, GIF_SIZES, type GifSize } from "@keepmind/adapters";
+import { GIF_CATEGORIES, GIF_CATEGORY_IDS, mediaSettings, requirePermission } from "@keepmind/engine";
 import { apiError, errorResponse } from "../../http/errors";
 import { imageFile } from "../../http/image-file";
 import { type AppDeps, createAppRouter, errors, json, OrgParams, requireSession, security } from "./context";

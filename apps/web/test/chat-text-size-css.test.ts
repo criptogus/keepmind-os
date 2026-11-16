@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { CHAT_TEXT_SIZES, DEFAULT_TEXT_SIZE } from "@agenteschat/client/lib/chat-look";
+import { CHAT_TEXT_SIZES, DEFAULT_TEXT_SIZE } from "@keepmind/client/lib/chat-look";
 import { builtCss, declarations, rules } from "./built-css";
 
 const css = await builtCss();

@@ -1,5 +1,5 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, type Database, desc, type Executor, eq, inArray, isNull, ne, schema, sql } from "@agenteschat/db";
+import type { PubSub } from "@keepmind/adapters";
+import { and, type Database, desc, type Executor, eq, inArray, isNull, ne, schema, sql } from "@keepmind/db";
 import type { Agent } from "./agents";
 import { audienceError, canTalkTo, speakerOf } from "./audience";
 import { caches } from "./cache";

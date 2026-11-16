@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
-import type { PubSub } from "@agenteschat/adapters";
-import { and, type Database, type Executor, eq, inArray, isNull, schema, sql } from "@agenteschat/db";
+import type { PubSub } from "@keepmind/adapters";
+import { and, type Database, type Executor, eq, inArray, isNull, schema, sql } from "@keepmind/db";
 import type { SteerMessage, SteerReply } from "./brains/types";
 import { attachedLine, taskNotice } from "./context";
 import { publishChannelEvent } from "./events";

@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import type { PlanUsage } from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
+import type { PlanUsage } from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
 import {
   agentPlanUsage,
   createAgent,

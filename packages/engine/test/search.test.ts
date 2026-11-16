@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { createPostgresSearchResolver } from "@agenteschat/adapters";
-import { schema } from "@agenteschat/db";
+import { createPostgresSearchResolver } from "@keepmind/adapters";
+import { schema } from "@keepmind/db";
 import {
   agentVisibleChannels,
   archiveThread,

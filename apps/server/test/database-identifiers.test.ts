@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { identPath, parseIdentPath, tableRuleNames } from "@agenteschat/engine";
+import { identPath, parseIdentPath, tableRuleNames } from "@keepmind/engine";
 import * as app from "../../../packages/client/src/lib/databases";
 
 const SAMPLES = [

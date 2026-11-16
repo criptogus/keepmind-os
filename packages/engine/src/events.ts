@@ -1,6 +1,6 @@
-import { channelTopic, chatActivityTopic, orgTopic, type PubSub, typingTopic, userTopic } from "@agenteschat/adapters";
-import { modelProvider } from "@agenteschat/providers";
-import { plainLines } from "@agenteschat/ui/markdown";
+import { channelTopic, chatActivityTopic, orgTopic, type PubSub, typingTopic, userTopic } from "@keepmind/adapters";
+import { modelProvider } from "@keepmind/providers";
+import { plainLines } from "@keepmind/ui/markdown";
 import type { AgentActionView } from "./agent-actions";
 import type { ConnectIntent } from "./ai-intent";
 import type { ApprovalView } from "./approvals";

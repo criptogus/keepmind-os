@@ -1,7 +1,7 @@
 /*
  * Page layout of the app's screens, as classes.
  * Only structure and spacing: colors, shapes and type come from tokens and
- * the @agenteschat/ui components.
+ * the @keepmind/ui components.
  */
 html,
 body,
@@ -865,6 +865,18 @@ html:not([data-pointer]) .sidebar__item:focus-visible {
 }
 .sidebar[data-rail="true"] .sidebar__item:is([data-status="active"], [data-unread="true"]) .sidebar__channel-abbr {
   color: var(--ink);
+}
+.sidebar__powered {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+  text-decoration: none;
+}
+.sidebar__powered:hover {
+  color: var(--ink);
+  text-decoration: underline;
 }
 .sidebar__foot {
   margin-top: auto;
@@ -9490,9 +9502,10 @@ html:not([data-pointer]) .newag__addrow:focus-visible {
 }
 /* A choice card's head: one name and its short line, centred on the tile beside it (not a chat row's face line). */
 .newag__role-head {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
-  gap: 12px;
+  gap: var(--space-2) 12px;
   /* Clear of the check in the card's corner. */
   padding-right: 28px;
 }
@@ -9505,11 +9518,10 @@ html:not([data-pointer]) .newag__addrow:focus-visible {
   height: 44px;
 }
 .newag__role-name {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
+  display: contents;
 }
 .newag__role-name b {
+  padding-top: 2px;
   font-family: var(--font-display);
   font-weight: var(--font-display-weight, 300);
   font-size: 26px;
@@ -9517,6 +9529,7 @@ html:not([data-pointer]) .newag__addrow:focus-visible {
   letter-spacing: -0.02em;
 }
 .newag__role-name span {
+  grid-column: 1 / -1;
   color: var(--faint);
   font-size: 12.5px;
 }
@@ -9555,9 +9568,11 @@ html:not([data-pointer]) .newag__addrow:focus-visible {
   box-shadow: var(--chosen-shadow);
 }
 .newag__role--blank .newag__role-name b {
+  padding-top: 2px;
   font-size: 22px;
 }
 .newag__role--blank .newag__role-name span {
+  grid-column: 1 / -1;
   color: var(--muted);
   font-size: 13.5px;
   text-wrap: pretty;

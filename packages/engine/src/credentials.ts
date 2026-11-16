@@ -1,5 +1,5 @@
-import type { KeyWrapper } from "@agenteschat/adapters";
-import { and, asc, type Database, type Executor, eq, isNull, schema, sql } from "@agenteschat/db";
+import type { KeyWrapper } from "@keepmind/adapters";
+import { and, asc, type Database, type Executor, eq, isNull, schema, sql } from "@keepmind/db";
 import {
   checkOpenRouterKey,
   customModelOf,
@@ -17,7 +17,7 @@ import {
   PROVIDERS,
   type ProviderId,
   parseCustomModel,
-} from "@agenteschat/providers";
+} from "@keepmind/providers";
 import { recordAudit } from "./audit";
 import { caches } from "./cache";
 import { openSecret, sealSecret } from "./crypto";
@@ -174,7 +174,7 @@ function passedCheck(providerId: string, result: KeyCheck | undefined) {
 /** A key is no way around a billing hold: it would only sit there reading as ready. */
 async function assertKeysOpen(db: Database, orgId: string) {
   if (await billingHold(db, orgId)) {
-    throw new ForbiddenError("API keys open with the workspace's agentes.chat plan", "credentials.plan_hold");
+    throw new ForbiddenError("API keys open with the workspace's KeepMind OS plan", "credentials.plan_hold");
   }
 }
 

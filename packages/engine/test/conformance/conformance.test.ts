@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, setDefaultTimeout, test } from "bun:test";
-import { schema } from "@agenteschat/db";
+import { schema } from "@keepmind/db";
 import { agentRuns, BRAINS, createHarness, type Harness } from "./harness";
 import { SCENARIOS } from "./scenarios";
 

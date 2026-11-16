@@ -30,8 +30,8 @@ const FORBIDDEN: [RegExp, string][] = [
   [/\bimport\.meta\.env\b/, "import.meta.env (Vite)"],
   [/\b(HTMLElement|HTMLCanvasElement|HTMLInputElement|FileList|MutationObserver|IntersectionObserver)\b/, "DOM type"],
   [/from\s+["']react-dom(\/[^"']*)?["']/, "react-dom"],
-  // `@agenteschat/ui/markdown` and `/agent-talk` are plain TypeScript the engine reads too (held below).
-  [/from\s+["']@agenteschat\/ui(?!\/(?:markdown|agent-talk)["'])(\/[^"']*)?["']/, "@agenteschat/ui"],
+  // `@keepmind/ui/markdown` and `/agent-talk` are plain TypeScript the engine reads too (held below).
+  [/from\s+["']@agenteschat\/ui(?!\/(?:markdown|agent-talk)["'])(\/[^"']*)?["']/, "@keepmind/ui"],
   [/from\s+["']@tanstack\/react-router["']/, "@tanstack/react-router (web routing)"],
   [/from\s+["']react-i18next["']/, "react-i18next (each app sets up i18n)"],
   [/from\s+["']@\//, "the web app's @/ alias"],
@@ -40,8 +40,8 @@ const FORBIDDEN: [RegExp, string][] = [
 /** Comments may talk about the browser; code may not use it. */
 const code = (source: string) => source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:"'`])\/\/[^\n]*/g, "$1");
 
-describe("@agenteschat/client stays platform-neutral", () => {
-  test("no DOM, browser storage, react-dom or @agenteschat/ui in src", () => {
+describe("@keepmind/client stays platform-neutral", () => {
+  test("no DOM, browser storage, react-dom or @keepmind/ui in src", () => {
     const offenders: string[] = [];
     for (const f of files(SRC)) {
       if (PAGE_TEXT.has(relative(SRC, f))) continue;
@@ -55,10 +55,10 @@ describe("@agenteschat/client stays platform-neutral", () => {
   });
 
   test.each([
-    ["markdown.ts", ["@agenteschat/i18n/everyone"]],
+    ["markdown.ts", ["@keepmind/i18n/everyone"]],
     ["agent-talk.ts", ["./markdown", "./widgets/spec"]],
     ["widgets/spec.ts", []],
-  ])("@agenteschat/ui's %s, shared with it, holds to the same rules", (file, imports) => {
+  ])("@keepmind/ui's %s, shared with it, holds to the same rules", (file, imports) => {
     const source = code(readFileSync(join(SRC, "..", "..", "ui", "src", file), "utf8"));
     expect(FORBIDDEN.filter(([re]) => re.test(source)).map(([, what]) => what)).toEqual([]);
     expect([...source.matchAll(/from\s+["']([^"']+)["']/g)].map((m) => m[1])).toEqual(imports);

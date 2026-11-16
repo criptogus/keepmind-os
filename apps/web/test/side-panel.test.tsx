@@ -1,9 +1,9 @@
 import { afterEach, expect, spyOn, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { Message } from "@agenteschat/client";
+import type { Message } from "@keepmind/client";
 import { act, cleanup, fireEvent, waitFor, within } from "@testing-library/react";
 import { DESKTOP_QUERY } from "@/components/NavDrawer";
 import { ADA_ID, createFakeApi, ENG_ID, ORG_ID, seedState } from "./fake-api";

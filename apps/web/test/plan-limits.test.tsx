@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
 import { join } from "node:path";
-import type { AiAccounts, AiComputer, PlanUsage } from "@agenteschat/client";
+import type { AiAccounts, AiComputer, PlanUsage } from "@keepmind/client";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { declarations, topLevel } from "./built-css";
 import { ADA_ID, ATLAS_ID, createFakeApi, fakeMachinesOf, ORG_ID, seedState } from "./fake-api";

@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { resources } from "@agenteschat/i18n";
-import { LOCALES } from "@agenteschat/i18n/locale";
+import { resources } from "@keepmind/i18n";
+import { LOCALES } from "@keepmind/i18n/locale";
 import i18next, { type TFunction } from "i18next";
 import type { Message } from "../src/index";
 import { latestText, previewBody } from "../src/lib/message-body";

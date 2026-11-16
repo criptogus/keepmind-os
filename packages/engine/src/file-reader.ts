@@ -1,5 +1,5 @@
 import { inflateSync } from "node:zlib";
-import { PDF_MEDIA_TYPE, type ToolImage } from "@agenteschat/providers";
+import { PDF_MEDIA_TYPE, type ToolImage } from "@keepmind/providers";
 import { MODEL_IMAGE_BYTES, sniffModelImage } from "./avatars";
 import { decodeXmlEntities, formatBytes, tableToCsv, textOfBytes } from "./format";
 import { inflateZipEntry, listZip, type ZipListing } from "./zip";

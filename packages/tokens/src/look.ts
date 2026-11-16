@@ -1,4 +1,4 @@
-/** An agent's look, the allow-list the server keeps too: plain values every platform and `@agenteschat/client` share. */
+/** An agent's look, the allow-list the server keeps too: plain values every platform and `@keepmind/client` share. */
 
 /** The agent symbol's preset colors (sky is the default identity); a custom "#rrggbb" is allowed too. */
 export const AGENT_COLORS = ["sky", "indigo", "violet", "rose", "amber", "green", "teal", "graphite"] as const;
@@ -10,7 +10,7 @@ const HEX_COLOR = /^#[0-9a-f]{6}$/i;
 export const AGENT_EYES = ["round", "dots", "wide", "happy", "sleepy"] as const;
 export type AgentEyes = (typeof AGENT_EYES)[number];
 
-/** Pixel accessories drawn by the agent engine (`ACCESSORIES` in `@agenteschat/ui`'s agent engine; same list, "none" first). */
+/** Pixel accessories drawn by the agent engine (`ACCESSORIES` in `@keepmind/ui`'s agent engine; same list, "none" first). */
 export const AGENT_ACCESSORIES = [
   "none",
   "hat",

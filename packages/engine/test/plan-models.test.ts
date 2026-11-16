@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import { CODING_PLANS, learnPlanModels, planOf } from "@agenteschat/providers/plans";
+import { CODING_PLANS, learnPlanModels, planOf } from "@keepmind/providers/plans";
 import { refreshPlanModels } from "../src/plan-models";
 
 const table = CODING_PLANS.opencode.claudeCode.models;

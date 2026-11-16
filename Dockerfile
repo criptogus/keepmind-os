@@ -6,7 +6,7 @@ WORKDIR /app
 RUN install -d -o bun -g bun /data/files
 COPY . .
 RUN bun install --frozen-lockfile \
- && bun run --filter '@agenteschat/web' build \
+ && bun run --filter '@keepmind/web' build \
  && bun build apps/server/runner/main.ts --target=node --banner '#!/usr/bin/env node' --outfile apps/web/dist/runner/agentes-runner.mjs
 # The root filesystem can be read-only: the server writes only to /tmp and FILES_DIR, and the
 # base image already turns off Bun's transpiler cache (BUN_RUNTIME_TRANSPILER_CACHE_PATH=0).

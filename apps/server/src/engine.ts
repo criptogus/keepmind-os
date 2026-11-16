@@ -5,9 +5,9 @@ import {
   type S3Fetch,
   type SpeechFetch,
   STREAM_CLOSE,
-} from "@agenteschat/adapters";
-import { type Config, connectorOAuthApps, githubAppConfig, mcpCallerIdentity } from "@agenteschat/config";
-import type { Database } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { type Config, connectorOAuthApps, githubAppConfig, mcpCallerIdentity } from "@keepmind/config";
+import type { Database } from "@keepmind/db";
 import {
   AntigravityBrain,
   APP_FAULT_HINT,
@@ -96,7 +96,7 @@ import {
   GrokBrain,
   getAgentCached,
   hubBrainLink,
-  isAgentesCloud,
+  isKeepMindCloud,
   isRightHand,
   type JobDeps,
   type Judge,
@@ -134,8 +134,8 @@ import {
   warmAgentBrowser,
   withComposio,
   withJudgeFallback,
-} from "@agenteschat/engine";
-import { createOpenAIEmbeddings, createVoyageEmbeddings, type ModelProvider } from "@agenteschat/providers";
+} from "@keepmind/engine";
+import { createOpenAIEmbeddings, createVoyageEmbeddings, type ModelProvider } from "@keepmind/providers";
 import { type AppleTokenRevoker, appleTokenRevoker } from "./auth";
 import { hookConfig } from "./routes/app/context";
 import { version } from "./version";
@@ -594,7 +594,7 @@ export function buildEngine(o: EngineOptions) {
       }
     },
   });
-  // agentes.chat Cloud reads the screen's text while a person is in control (ADR 0076); a self-hosted server never.
+  // KeepMind OS Cloud reads the screen's text while a person is in control (ADR 0076); a self-hosted server never.
   const sessions = config.SESSION_SCREENING ? createSessionScreening({ db, hub: machineHub, log: o.log }) : null;
   // Agents' desktops and terminals (ADR 0058): each person's stream paired with the runner's data socket for it,
   // its access checked again while open; control changing hands closes the views it hides. Where sessions are
@@ -724,7 +724,7 @@ export function buildEngine(o: EngineOptions) {
     db,
     keyWrapper: adapters.keyWrapper,
     keyWrappers,
-    envOnly: isAgentesCloud(config.PUBLIC_URL),
+    envOnly: isKeepMindCloud(config.PUBLIC_URL),
     fetch: o.speechFetch,
     envEngines: envSpeechEngines(
       config.SPEECH_ENGINES,
@@ -755,7 +755,7 @@ export function buildEngine(o: EngineOptions) {
     judge: context.judge,
     retentionDays: config.VOICE_RETENTION_DAYS,
     // Fair use is for what we pay for: a self-hosted server has no limit.
-    limits: isAgentesCloud(config.PUBLIC_URL)
+    limits: isKeepMindCloud(config.PUBLIC_URL)
       ? {
           personMinutesPerDay: config.VOICE_LIMIT_PERSON_MINUTES_PER_DAY,
           orgMinutesPerMember: config.VOICE_LIMIT_ORG_MINUTES_PER_MEMBER,

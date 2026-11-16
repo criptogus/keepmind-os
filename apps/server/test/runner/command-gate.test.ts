@@ -1,7 +1,7 @@
 import { afterEach, expect, test } from "bun:test";
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { ASK_AGAIN, DELETE_BRANCHES_POINTER } from "@agenteschat/adapters/command-policy";
+import { ASK_AGAIN, DELETE_BRANCHES_POINTER } from "@keepmind/adapters/command-policy";
 import {
   allowedMerge,
   commandApproval,

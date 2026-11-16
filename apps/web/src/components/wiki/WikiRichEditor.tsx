@@ -1,5 +1,5 @@
-import type { WikiPageSummary } from "@agenteschat/client";
-import { Button, Icon, type IconName, Kbd, Menu, MenuItem, modKey, useLocked } from "@agenteschat/ui";
+import type { WikiPageSummary } from "@keepmind/client";
+import { Button, Icon, type IconName, Kbd, Menu, MenuItem, modKey, useLocked } from "@keepmind/ui";
 import {
   type ClipboardEvent,
   forwardRef,

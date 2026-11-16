@@ -20,8 +20,8 @@ import {
   type MachineRequest,
   parseBrainEvent,
   parseRunnerFrame,
-} from "@agenteschat/adapters/machine-protocol";
-import { sealSecret } from "@agenteschat/adapters/secret-box";
+} from "@keepmind/adapters/machine-protocol";
+import { sealSecret } from "@keepmind/adapters/secret-box";
 import {
   AccountManager,
   type AccountManagerOptions,

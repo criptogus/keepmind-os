@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import { type RealtimeEvent, userTopic } from "@agenteschat/adapters";
-import { grantScopes, type ToolSource } from "@agenteschat/engine";
+import { type RealtimeEvent, userTopic } from "@keepmind/adapters";
+import { grantScopes, type ToolSource } from "@keepmind/engine";
 import { browser, createTestServer, seedOrg, signUp, type TestServer } from "./harness";
 
 let t: TestServer;

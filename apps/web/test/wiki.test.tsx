@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { ApiError, type WikiGraph } from "@agenteschat/client";
+import { ApiError, type WikiGraph } from "@keepmind/client";
 import {
   outlineOf,
   prefixLines,
@@ -14,9 +14,9 @@ import {
   wikiSlug,
   wikiTree,
   wrapSelection,
-} from "@agenteschat/client/lib/wiki";
-import { readZip } from "@agenteschat/client/lib/zip";
-import { HOVER_CLOSE_MS, trackInput } from "@agenteschat/ui";
+} from "@keepmind/client/lib/wiki";
+import { readZip } from "@keepmind/client/lib/zip";
+import { HOVER_CLOSE_MS, trackInput } from "@keepmind/ui";
 import { act, cleanup, fireEvent, render, within } from "@testing-library/react";
 import { setMermaidRenderer } from "@/components/artifacts/Mermaid";
 import { graphWidth, layoutGraph, neighborsOf } from "@/components/WikiGraph";
@@ -863,7 +863,7 @@ describe("the wiki's header", () => {
       "O que a empresa sabe, em páginas ligadas. Como a wiki funciona",
     );
     const how = within(head).getByRole("link", { name: "Como a wiki funciona" });
-    expect(how.getAttribute("href")).toBe("https://agentes.chat/pt/docs/wiki");
+    expect(how.getAttribute("href")).toBe("https://keepmind.io/pt/docs/wiki");
     expect(how.getAttribute("target")).toBe("_blank");
     expect(how.getAttribute("rel")).toBe("noopener noreferrer");
     expect(how.className).toBe("ac-link ac-link--muted");

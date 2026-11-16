@@ -1,7 +1,8 @@
-import { SPEECH_PROVIDERS } from "@agenteschat/adapters";
+import { createRoute, z } from "@hono/zod-openapi";
+import { SPEECH_PROVIDERS } from "@keepmind/adapters";
 import {
   acceptVoiceClip,
-  isAgentesCloud,
+  isKeepMindCloud,
   NotFoundError,
   pinnedOwner,
   requirePermission,
@@ -12,8 +13,7 @@ import {
   voiceAllowed,
   voiceClipAudio,
   voiceOn,
-} from "@agenteschat/engine";
-import { createRoute, z } from "@hono/zod-openapi";
+} from "@keepmind/engine";
 import type { Context } from "hono";
 import { bodyLimit } from "hono/body-limit";
 import { rangedResponse } from "../../http/byte-range";
@@ -211,9 +211,9 @@ const SaveKey = z.object({
   model: z.string().trim().max(100).optional().openapi({ description: "`local`: the model it loads." }),
 });
 
-const notFound = "404 for everyone but the installation's pinned owner (ADR 0073), and on agentes.chat itself.";
+const notFound = "404 for everyone but the installation's pinned owner (ADR 0073), and on KeepMind OS itself.";
 
-/** Who turns voice into text on this server (ADR 0100): only its pinned owner, and never on agentes.chat's servers. */
+/** Who turns voice into text on this server (ADR 0100): only its pinned owner, and never on KeepMind OS's servers. */
 export function speechKeyRoutes(deps: AppDeps) {
   const { db, config } = deps;
   const app = createAppRouter(deps);
@@ -221,7 +221,7 @@ export function speechKeyRoutes(deps: AppDeps) {
 
   const ownerOnly = async (userId: string): Promise<SpeechSettings> => {
     const speech = deps.extras?.speech;
-    if (!speech || isAgentesCloud(config.PUBLIC_URL) || (await pinnedOwner(db)) !== userId) throw new NotFoundError();
+    if (!speech || isKeepMindCloud(config.PUBLIC_URL) || (await pinnedOwner(db)) !== userId) throw new NotFoundError();
     return speech;
   };
   const allowed = async (userId: string) =>

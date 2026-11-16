@@ -1,4 +1,4 @@
-import { Dialog, DialogBody } from "@agenteschat/ui";
+import { Dialog, DialogBody } from "@keepmind/ui";
 import { useTranslation } from "react-i18next";
 import { ImportFlow, useImportFlow } from "@/components/ImportFlow";
 

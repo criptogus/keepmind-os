@@ -1,6 +1,6 @@
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "bun:test";
-import { MACHINE_PROTOCOL_VERSION } from "@agenteschat/adapters";
-import { and, eq, schema } from "@agenteschat/db";
+import { MACHINE_PROTOCOL_VERSION } from "@keepmind/adapters";
+import { and, eq, schema } from "@keepmind/db";
 import {
   AUTONOMY_REPORT_JOB,
   type AutonomyRow,
@@ -533,7 +533,7 @@ describe("one workspace's day", () => {
 
   test("the daily job emails names and counts to the operators, each in their language, never what anyone wrote", async () => {
     const now = new Date("2026-10-31T05:00:00Z");
-    const ops = { to: ["ops@example.com", f.owner.email], publicUrl: "https://agentes.chat" };
+    const ops = { to: ["ops@example.com", f.owner.email], publicUrl: "https://keepmind.io" };
     await enqueueAutonomyReport(f.db, ops, new Date("2026-10-31T00:20:00Z"));
     await enqueueAutonomyReport(f.db, ops, now);
     const jobs = await f.db.select().from(schema.outbox).where(eq(schema.outbox.kind, AUTONOMY_REPORT_JOB));

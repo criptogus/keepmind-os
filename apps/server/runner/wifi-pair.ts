@@ -5,7 +5,7 @@ import {
   type PhonePairFailure,
   type PhonePairing,
   pairAddress,
-} from "@agenteschat/adapters/machine-protocol";
+} from "@keepmind/adapters/machine-protocol";
 import { type AndroidFacts, FACTS_SHELL, parseAdbDevices, parseAndroidFacts } from "./adb";
 import { RunnerError } from "./errors";
 import type { ToolOptions, ToolResult } from "./phones";

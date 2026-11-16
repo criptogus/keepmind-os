@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import { asc, type Database, eq, rowsOf, schema, sql } from "@agenteschat/db";
-import { createTestDatabase } from "@agenteschat/db/testing";
+import { asc, type Database, eq, rowsOf, schema, sql } from "@keepmind/db";
+import { createTestDatabase } from "@keepmind/db/testing";
 import {
   ACCOUNT_FAILURE_EVERY_MS,
   adoptRestoredOperatorEvents,

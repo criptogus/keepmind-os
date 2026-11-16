@@ -1,4 +1,4 @@
-import { and, type Executor, eq, schema } from "@agenteschat/db";
+import { and, type Executor, eq, schema } from "@keepmind/db";
 import { type RoutineBrief, routineBriefOf } from "./routine-brief";
 import type { AgentRun } from "./runs";
 

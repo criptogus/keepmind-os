@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { like, schema } from "@agenteschat/db";
+import { like, schema } from "@keepmind/db";
 import { browser, createTestServer, ORIGIN, signUp, type TestServer } from "./harness";
 
 /**
@@ -144,10 +144,10 @@ describe("GET /api/instance", () => {
     });
   });
 
-  test("agentes.chat's own servers say they are the Cloud", async () => {
-    t = await createTestServer({ env: { PUBLIC_URL: "https://app.agentes.chat" } });
+  test("KeepMind OS's own servers say they are the Cloud", async () => {
+    t = await createTestServer({ env: { PUBLIC_URL: "https://keepmind.io" } });
     expect(await (await t.app.request("/api/instance")).json()).toMatchObject({
-      url: "https://app.agentes.chat",
+      url: "https://keepmind.io",
       cloud: true,
     });
     expect(await (await browser(t)("/api/app/auth-config")).json()).toMatchObject({ cloud: true });

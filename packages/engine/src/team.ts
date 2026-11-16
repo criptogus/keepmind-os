@@ -1,4 +1,4 @@
-import { and, asc, type Database, desc, eq, gte, inArray, isNotNull, isNull, schema, sql } from "@agenteschat/db";
+import { and, asc, type Database, desc, eq, gte, inArray, isNotNull, isNull, schema, sql } from "@keepmind/db";
 import { type AgentStatusView, lineInEnglish, loadAgentStatuses } from "./agent-status";
 import { currentHandles } from "./agents";
 import { type AiStatusDeps, agentAiStates } from "./ai-status";

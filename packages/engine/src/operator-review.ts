@@ -1,5 +1,5 @@
-import { redactCommon } from "@agenteschat/adapters";
-import { and, asc, type Database, eq, inArray, schema, sql } from "@agenteschat/db";
+import { redactCommon } from "@keepmind/adapters";
+import { and, asc, type Database, eq, inArray, schema, sql } from "@keepmind/db";
 import { getMessage, type Message } from "./messages";
 import { recordContentViewed } from "./operator-events";
 import { runErrorDetail } from "./runs";

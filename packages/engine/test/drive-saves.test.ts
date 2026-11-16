@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { createHash } from "node:crypto";
-import { and, eq, schema } from "@agenteschat/db";
-import { systemText } from "@agenteschat/providers";
+import { and, eq, schema } from "@keepmind/db";
+import { systemText } from "@keepmind/providers";
 import {
   addChannelMember,
   bridgeToolsFor,

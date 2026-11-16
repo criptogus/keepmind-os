@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, setDefaultTimeout, test } from "bun:test";
-import { and, asc, eq, inArray, schema, sql } from "@agenteschat/db";
-import { type ModelRequest, systemText } from "@agenteschat/providers";
+import { and, asc, eq, inArray, schema, sql } from "@keepmind/db";
+import { type ModelRequest, systemText } from "@keepmind/providers";
 import {
   answerNow,
   continueStretch,
