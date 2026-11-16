@@ -17,7 +17,7 @@ import {
 
 describe("which sky a server gets", () => {
   test("KeepMind OS and its subdomains are the Cloud's day", () => {
-    for (const host of ["keepmind.io", "keepmind.io", "AGENTES.CHAT", "agentes.chat:443"])
+    for (const host of ["keepmind.io", "app.keepmind.io", "KEEPMIND.IO", "keepmind.io:443"])
       expect(skyHourOf(host)).toBe("day");
   });
   test("any other host is one's own: dusk", () => {

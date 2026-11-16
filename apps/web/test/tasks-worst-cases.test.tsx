@@ -207,7 +207,7 @@ describe("Tarefas at their worst", () => {
       "amanhã",
       "3/12",
       "PR #10942",
-      "agentes-chat#4521",
+      "keepmind-os#4521",
       "128412",
     ]);
     expect(all.querySelector(".issue-card__state")?.textContent).toBe("Pede aprovação");

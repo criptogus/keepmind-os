@@ -917,7 +917,7 @@ function AddAccountFlow({
         <div className="ai-panel__row">
           <details>
             <summary>{t("connectAi.chatgptCode.title")}</summary>
-            <Step n={1} side={<OpenPage href={CHATGPT_SECURITY}>{t("connectAi.chatgptCode.open")}</OpenPage>}>
+            <Step side={<OpenPage href={CHATGPT_SECURITY}>{t("connectAi.chatgptCode.open")}</OpenPage>}>
               <b>{t("connectAi.chatgptCode.title")}</b>
               <span>{t("connectAi.chatgptCode.text")}</span>
             </Step>
