@@ -2464,6 +2464,11 @@ export const en = {
     workingNow: "Working now",
     /** The Team page's way into the right hand's interview: opens its DM and sends the starter. */
     askKivo: "Tell {{name}} what you need",
+    /** The live strip over the views: the same rows the Agora popover reads. */
+    now: {
+      title: "Now",
+      empty: "No one is working right now.",
+    },
     available: "Available",
     archived: "Archived",
     restore: "Restore",

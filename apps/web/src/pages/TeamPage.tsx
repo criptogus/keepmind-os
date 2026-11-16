@@ -22,6 +22,7 @@ import { useOrg } from "@/components/org-context";
 import { TeamChart } from "@/components/team/TeamChart";
 import { TeamList } from "@/components/team/TeamList";
 import { TeamMap } from "@/components/team/TeamMap";
+import { TeamNow } from "@/components/team/TeamNow";
 import { TeamSectors } from "@/components/team/TeamSectors";
 import { TeamUsage } from "@/components/team/TeamUsage";
 import { useDirectory } from "@/hooks/useDirectory";
@@ -125,6 +126,7 @@ export function TeamPage() {
           options={VIEWS.map((v) => ({ value: v, label: t(`team.view.${v}`) }))}
         />
       </PageHeader>
+      {data && agents.length > 0 && <TeamNow />}
       {view !== "usage" &&
         (team.isLoading || (data && agents.length > 0 && !lookupFailed && lookups.some((q) => q.isPending))) && (
           <LoadingCards count={2} />
