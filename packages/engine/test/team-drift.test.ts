@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { and, eq, schema } from "@keepmind/db";
-import { RIGHT_HAND, rightHandPrompt, teamDrift } from "../src";
+import { createChannel, RIGHT_HAND, rightHandPrompt, teamDrift } from "../src";
 import { type Fixture, setup } from "./fixtures";
 
 let f: Fixture;
@@ -105,6 +105,32 @@ describe("teamDrift", () => {
     expect(lines).toHaveLength(1);
     expect(lines[0]).toContain("#velho");
     expect(lines[0]).toContain("no messages in two weeks");
+  });
+
+  test("a channel past the checked slice that is active isn't drift", async () => {
+    f = await setup({ rightHand: true });
+    const old = new Date(Date.now() - 20 * DAY);
+    // 20 fresh channels fill the checked slice without being silence candidates; the 21st is real,
+    // old, and has a message from today — its activity must be seen, or it reads as silent.
+    const fresh = Array.from({ length: 20 }, (_, i) => ({
+      id: crypto.randomUUID(),
+      name: `fresco-${i}`,
+      createdAt: new Date(),
+    }));
+    const room = await createChannel(f.db, f.owner.id, f.org.id, { name: "movimento" });
+    await f.db.update(schema.channels).set({ createdAt: old }).where(eq(schema.channels.id, room.id));
+    await f.db.insert(schema.messages).values({
+      orgId: f.org.id,
+      channelId: room.id,
+      authorType: "person",
+      authorUserId: f.owner.id,
+      body: "oi",
+    });
+    const lines = await drift(f, seenOf(f), [
+      ...fresh,
+      { id: room.id, name: room.name, createdAt: old },
+    ]);
+    expect(lines).toEqual([]);
   });
 
   test("a new channel isn't drift for being quiet", async () => {

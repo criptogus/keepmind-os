@@ -87,12 +87,13 @@ async function firstDrift(
       await db.execute(sql`select r.agent_id, count(*) as c from agent_runs r
         where r.org_id = ${orgId}::uuid and r.agent_id = any(${idArray}::uuid[])
           and r.status = 'failed' and r.created_at >= ${dayAgo}::timestamptz
-        group by r.agent_id having count(*) >= 3`),
+        group by r.agent_id having count(*) >= 3 order by r.agent_id`),
     ),
     // Agents with an active routine: candidates for the idle check below.
     rowsOf<{ agent_id: string }>(
       await db.execute(sql`select distinct rt.agent_id from routines rt
-        where rt.org_id = ${orgId}::uuid and rt.active and rt.agent_id = any(${idArray}::uuid[])`),
+        where rt.org_id = ${orgId}::uuid and rt.active and rt.deleted_at is null
+          and rt.agent_id = any(${idArray}::uuid[])`),
     ),
     // Agents that ran in the last week: an idle check only makes sense against these.
     rowsOf<{ agent_id: string }>(
@@ -131,8 +132,11 @@ async function firstDrift(
   if (idle.length)
     return `${handle(idle[0]!.id)} has routines but hasn't run in over a week: offer to check they still fit or pause them (propose_settings_change).`;
 
+  // Only the checked slice is eligible: activity was only queried for it, so a channel past it would
+  // read as silent no matter how busy it is.
   const active = new Set(activeChannels.map((c) => c.channel_id));
   const silent = channels
+    .slice(0, CHANNELS_CHECKED)
     .filter(
       (c) =>
         c.createdAt != null &&
