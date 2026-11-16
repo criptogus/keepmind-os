@@ -1423,7 +1423,7 @@ export const en = {
         paused: "Connect with MCP is off while this workspace is paused. Bring the agents this way for now.",
       },
       otherName: "Another app",
-      agenteschatName: "keepmind.io",
+      agenteschatName: "KeepMind OS",
       where: {
         openbotrun:
           "Drop openbot-import.json (from Migrator by OpenBot) or openbot-transfer.json (from the instance transfer), or the .zip it came in.",

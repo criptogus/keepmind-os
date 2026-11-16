@@ -329,7 +329,7 @@ describe("Rotinas: each routine's state, with its one-tap fix", () => {
     await runsTab(panel);
     const words = panel.querySelector(".routine-runs__words") as HTMLElement;
     expect(words.querySelector("strong")?.textContent).toBe("Verificado:");
-    expect(words.querySelector("code")?.textContent).toBe("keepmind.io");
+    expect(words.querySelector("code")?.textContent).toBe("KeepMind OS");
     expect(words.textContent).not.toContain("**");
     expect(words.querySelector("[data-folded]")).toBeTruthy();
     await click(within(words).getByRole("button", { name: "Ver mais" }));

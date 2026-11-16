@@ -80,7 +80,7 @@ export const SOURCE_NAME: Record<ImportSource, string> = {
   openclaw: "OpenClaw",
   paperclip: "Paperclip",
   openbot: "OpenBot",
-  agenteschat: "keepmind.io",
+  agenteschat: "KeepMind OS",
 };
 const ARCHIVES = ".zip,.tar.gz,.tgz,.tar,application/zip,application/gzip,application/x-tar";
 /** What the file picker offers for each source. */

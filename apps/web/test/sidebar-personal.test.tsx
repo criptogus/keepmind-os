@@ -117,6 +117,9 @@ describe("a personal workspace's sidebar", () => {
       .map((l) => l.querySelector(".ac-menu__label")?.firstChild?.textContent);
     expect(names).toEqual([
       "Início",
+      "Skills",
+      "Second Brain",
+      "Cybersegurança",
       "Esperando você",
       "Aprovações",
       "Propostas de melhoria",
@@ -163,7 +166,11 @@ describe("a personal workspace's sidebar", () => {
       expect(option.classList.contains("ac-faceline")).toBe(true);
       expect(option.querySelector(".tp-gallery__text > b.ac-captop")).toBeTruthy();
     }
-    expect(within(dialog).getByRole("option", { name: /Clara/ }).getAttribute("aria-selected")).toBe("true");
+    expect(
+      within(dialog)
+        .getByRole("option", { name: /^Clara/, selected: true })
+        .getAttribute("aria-selected"),
+    ).toBe("true");
     expect((within(dialog).getByRole("textbox", { name: "Nome" }) as HTMLInputElement).value).toBe("Clara");
     expect(dialog.textContent).toContain("Oi, eu sou a");
     // "Vai usar" holds only what is connected here (GitHub), at write; her starter's apps wait for the chat.

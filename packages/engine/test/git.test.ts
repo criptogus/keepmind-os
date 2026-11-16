@@ -928,9 +928,9 @@ describe("branches that aren't the agent's own", () => {
 });
 
 describe("the computer", () => {
-  test("agents commit as handle@agents.<our host>: contact@zeroagency.ai on KeepMind OS", () => {
+  test("agents commit as handle@agents.<our host>: theo@agents.keepmind.io on KeepMind OS", () => {
     expect(agentCommitEmail("https://keepmind.io", "theo")).toBe("theo@agents.keepmind.io");
-    expect(agentCommitEmail("https://keepmind.io/api/git/o/c/", "theo")).toBe("contact@zeroagency.ai");
+    expect(agentCommitEmail("https://keepmind.io/api/git/o/c/", "theo")).toBe("theo@agents.keepmind.io");
     expect(agentCommitEmail("http://localhost:3000", "theo")).toBe("theo@agents.localhost");
   });
 

@@ -304,8 +304,25 @@ describe("grammar", () => {
   test("the app's starter agents get their names' own pronoun and article", () => {
     const english = createI18n("en");
     const te = english.t.bind(english) as TFunction;
-    const feminine = ["Ada", "Iris", "Nina", "Mila", "Dora", "Clara", "Eva"];
-    const masculine = ["Atlas", "Theo", "Leo", "Bento", "Otto", "Hugo"];
+    const feminine = ["Ada", "Iris", "Nina", "Mila", "Dora", "Clara", "Eva", "Sentinela", "Prisma", "Forma", "Faísca"];
+    const masculine = [
+      "Atlas",
+      "Theo",
+      "Leo",
+      "Bento",
+      "Otto",
+      "Hugo",
+      "Nexo",
+      "Norte",
+      "Radar",
+      "Íon",
+      "Valor",
+      "Pulso",
+      "Ponte",
+      "Horizonte",
+      "Elo",
+      "Essencial",
+    ];
     for (const dict of [ptBR, en]) {
       const roles = Object.values(dict.newAgent.roles as Record<string, { agent?: string }>);
       expect(roles.flatMap((r) => (r.agent ? [r.agent] : [])).toSorted()).toEqual(

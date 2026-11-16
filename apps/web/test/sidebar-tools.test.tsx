@@ -126,6 +126,9 @@ describe("the tools on top", () => {
     expect(listed()).toEqual(["Aprovações", "Threads", "Tarefas", "Drive", "Equipe"]);
     const more = await openMore();
     expect(inMore(more)).toEqual([
+      "Skills",
+      "Second Brain",
+      "Cybersegurança",
       "Esperando você",
       "Propostas de melhoria",
       "Wiki",
@@ -149,6 +152,9 @@ describe("the tools on top", () => {
     await go(noneWaiting());
     expect(listed()).toEqual(["Threads", "Tarefas", "Drive", "Equipe"]);
     expect(inMore(await openMore())).toEqual([
+      "Skills",
+      "Second Brain",
+      "Cybersegurança",
       "Esperando você",
       "Aprovações",
       "Propostas de melhoria",
@@ -275,6 +281,9 @@ describe("the tools on top", () => {
     await go(seedState({ sidebarItems: { drive: "more", routines: "always", approvals: "more" } }));
     expect(listed()).toEqual(["Threads", "Tarefas", "Rotinas", "Equipe"]);
     expect(inMore(await openMore())).toEqual([
+      "Skills",
+      "Second Brain",
+      "Cybersegurança",
       "Esperando você",
       "Aprovações",
       "Propostas de melhoria",

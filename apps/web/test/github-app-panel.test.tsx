@@ -259,7 +259,7 @@ describe("Conectar GitHub: the KeepMind OS app first", () => {
       true,
     );
     expect(within(flow).queryByRole("button", { name: "Configurar conexão no GitHub" })).toBeNull();
-    expect(flow.textContent).toContain("ainda não foi configurado neste servidor");
+    expect(flow.textContent).toContain("a conexão ainda não foi configurada");
   });
 
   test("a server without the app: GitHub's sign-in as before", async () => {

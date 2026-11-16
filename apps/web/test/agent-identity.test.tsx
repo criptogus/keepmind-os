@@ -103,6 +103,20 @@ describe("the agent's identity as a card", () => {
       "Pessoas",
       "Pesquisa",
       "Assistente",
+      "Cybersec",
+      "Consultoria",
+      "Estratégia",
+      "Tendências",
+      "Inspirado em Elon Musk",
+      "Inspirado em Bill Gates",
+      "Inspirado em Warren Buffett",
+      "Inspirado em Jack Welch",
+      "Inspirado em Steve Jobs",
+      "Inspirado em Jack Ma",
+      "Inspirado em Guy Kawasaki",
+      "Inspirado em Jeff Bezos",
+      "Inspirado em Satya Nadella",
+      "Inspirado em Peter Drucker",
     ]);
     expect(options()[0]?.getAttribute("aria-selected")).toBe("true");
     expect(roleField().getAttribute("aria-activedescendant")).toBe(options()[0]?.id ?? "");

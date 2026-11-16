@@ -1346,7 +1346,7 @@ export const ptBR = {
           "Conectar com MCP fica desligado enquanto este workspace está pausado. Por enquanto, traga os agentes por aqui.",
       },
       otherName: "Outro app",
-      agenteschatName: "keepmind.io",
+      agenteschatName: "KeepMind OS",
       where: {
         openbotrun:
           "Solte o openbot-import.json (do Migrator by OpenBot) ou o openbot-transfer.json (da transferência da instância), ou o .zip em que ele veio.",

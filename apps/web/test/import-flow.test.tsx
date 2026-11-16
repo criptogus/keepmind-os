@@ -174,7 +174,7 @@ describe("Configurações → Importar e exportar", () => {
     await click(within(card).getByRole("button", { name: "Baixar o arquivo" }));
     expect(saved).toHaveLength(1);
     expect(saved[0]?.[0]).toBe(`/api/app/organizations/${ORG_ID}/export`);
-    expect(saved[0]?.[1]).toMatch(/^agentes-chat-\d{4}-\d{2}-\d{2}\.json$/);
+    expect(saved[0]?.[1]).toMatch(/^keepmind-os-\d{4}-\d{2}-\d{2}\.json$/);
   });
 
   test("members don't see it", async () => {
@@ -206,7 +206,7 @@ describe("Configurações → Importar e exportar", () => {
         ["Hermes Agent", "/brands/hermes.svg"],
         ["OpenClaw", "/brands/openclaw.svg"],
         ["Paperclip", "/brands/paperclip.svg"],
-        ["keepmind.io", "/favicon.svg"],
+        ["KeepMind OS", "/favicon.svg"],
         // It names many apps: no one maker's logo fits.
         ["Outro app", null],
       ]);
@@ -222,7 +222,7 @@ describe("Configurações → Importar e exportar", () => {
         ["Hermes Agent", "/brands/hermes-dark.svg"],
         ["OpenClaw", "/brands/openclaw.svg"],
         ["Paperclip", "/brands/paperclip-dark.svg"],
-        ["keepmind.io", "/favicon.svg"],
+        ["KeepMind OS", "/favicon.svg"],
         ["Outro app", null],
       ]);
     } finally {
@@ -371,7 +371,7 @@ describe("Configurações → Importar e exportar", () => {
     ]);
 
     // Paperclip and our own export take no MCP server: their tip alone.
-    for (const name of [/^Paperclip$/, /^agentes\.chat$/]) {
+    for (const name of [/^Paperclip$/, /^KeepMind OS$/]) {
       await click(button(name), 2);
       expect(screen().queryByRole("radiogroup", { name: "Como trazer" })).toBeNull();
       expect(document.querySelector(".imp-tip")).toBeTruthy();
@@ -552,7 +552,7 @@ describe("Configurações → Importar e exportar", () => {
     const state = seedState();
     state.me?.organizations.push({ id: "org-north", name: "Estúdio Norte", role: "owner", showActivity: true });
     await go(state);
-    await click(button(/^agentes\.chat$/), 1);
+    await click(button(/^KeepMind OS$/), 1);
     const tip = document.querySelector(".imp-tip") as HTMLElement;
     expect(tip.textContent).toBe("Baixe o arquivo do outro workspace e solte o .json aqui.Baixar de Estúdio Norte");
     const link = within(tip).getByRole("link", { name: "Baixar de Estúdio Norte" });
@@ -571,7 +571,7 @@ describe("Configurações → Importar e exportar", () => {
     await click(button(/^OpenBot\.run$/), 1);
     await click(radio("Por arquivo"), 1);
     expect(text()).toContain("Solte o openbot-import.json");
-    await click(button(/^agentes\.chat$/), 1);
+    await click(button(/^KeepMind OS$/), 1);
     expect(text()).toContain("Configurações → Importar e exportar → Baixar o arquivo");
 
     await pick("Pasta para importar", folder("paperclip-company"));
