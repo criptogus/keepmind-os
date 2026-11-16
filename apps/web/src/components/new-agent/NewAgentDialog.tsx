@@ -33,7 +33,6 @@ import {
   limitShown,
   OptionList,
   overLimit,
-  PixelSky,
   pixelBurst,
   playAgentReaction,
   prefersReducedMotion,
@@ -63,13 +62,13 @@ import { useTranslation } from "react-i18next";
 import { useApi } from "@/api/context";
 import { useConnectedById } from "@/components/AccessLevels";
 import { AgentAvatar } from "@/components/AgentAvatar";
+import { AgentBackdrop } from "@/components/AgentBackdrop";
 import { LookPicker } from "@/components/AgentFields";
 import { useConnectAi } from "@/components/ConnectAi";
 import { ConnectFlow, type FlowState } from "@/components/ConnectFlow";
 import { ConnectorIcon } from "@/components/ConnectorCatalog";
 import { useMediaQuery } from "@/components/NavDrawer";
 import { useOrg } from "@/components/org-context";
-import { agentCoverOptions, facePool } from "@/components/Sky";
 import { useTextLimit } from "@/hooks/useTextLimit";
 import {
   BLANK_LOOK,
@@ -916,15 +915,9 @@ function NewAgentDialog({
             {onCard && (
               <div className="tp-gallery__preview nac__card">
                 <div className="nac__cover" ref={cover} data-look={lookOpen || undefined}>
-                  <PixelSky
-                    className="nac__sky"
-                    options={agentCoverOptions(look.color as AgentColor, {
-                      // It sits on the card's well: its last tone is the well's, in either theme.
-                      surface: "--card-well",
-                      clear: () => [hero.current, bubble.current, cover.current?.querySelector(".nac__acts") ?? null],
-                      pool: facePool(cover, () => [hero.current]),
-                    })}
-                  />
+                  <div className="nac__sky">
+                    <AgentBackdrop />
+                  </div>
                   <span className="nac__hero" ref={hero}>
                     <AgentAvatar
                       appearance={look}

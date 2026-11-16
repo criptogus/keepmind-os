@@ -2,20 +2,12 @@ import type { Agent } from "@agenteschat/client";
 import { useCatalog } from "@agenteschat/client";
 import { agentGrammar } from "@agenteschat/client/lib/grammar";
 import { connectorName } from "@agenteschat/client/lib/scopes";
-import {
-  type AgentColor,
-  gradientOf,
-  Icon,
-  PixelSky,
-  ProviderLogo,
-  playAgentReaction,
-  prefersReducedMotion,
-} from "@agenteschat/ui";
+import { Icon, ProviderLogo, playAgentReaction, prefersReducedMotion } from "@agenteschat/ui";
 import { type CSSProperties, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { AgentAvatar } from "@/components/AgentAvatar";
+import { AgentBackdrop } from "@/components/AgentBackdrop";
 import { ConnectorIcon } from "@/components/ConnectorCatalog";
-import { agentCoverOptions, facePool } from "@/components/Sky";
 import { useAgentThinks } from "@/hooks/useAgentThinks";
 import { useScrollEdges } from "@/lib/scroll-edges";
 import "./new-agent-card.css";
@@ -57,7 +49,6 @@ export function SetupBand({
   const host = useRef<HTMLDivElement>(null);
   const face = useRef<HTMLSpanElement>(null);
   const path = useRef<HTMLSpanElement>(null);
-  const color = (agent.appearance?.color ?? "sky") as AgentColor;
   // Night until it can think; a dawn when it starts to while the band is in sight (never one on first load).
   const seen = useRef<boolean | null>(null);
   const dawnAt = useRef<number | null>(null);
@@ -80,12 +71,6 @@ export function SetupBand({
   useEffect(() => {
     for (const id of fresh.current) lit.current.add(id);
   });
-  const night = () => {
-    if (thinks && dawnAt.current === null) return 0;
-    if (!thinks) return 1;
-    if (prefersReducedMotion()) return 0;
-    return Math.max(0, 1 - (performance.now() - (dawnAt.current ?? 0)) / DAWN_MS);
-  };
   // On a phone too narrow for every slot, the path scrolls sideways and fades where more is past its edge.
   useScrollEdges(path, [apps.length, needsAi], "x");
   const def = (id: string) => (catalog.data?.connectors ?? []).find((d) => d.id === id) ?? null;
@@ -112,19 +97,11 @@ export function SetupBand({
       ref={host}
       // Not `data-day`: that marks the conversation's day dividers, which its floating date reads as a date.
       data-lit={thinks || undefined}
-      style={{ "--trail": thinks ? gradientOf(color)[1] : "#fff" } as CSSProperties}
+      style={{ "--trail": thinks ? "var(--action)" : "#fff" } as CSSProperties}
       role="img"
       aria-label={thinks ? t("newAgentCard.band.label", agentGrammar(agent.name)) : t("newAgentCard.band.asleep")}
     >
-      <PixelSky
-        options={agentCoverOptions(color, {
-          night,
-          // The top of the chat's setup card, whose face is the raised surface.
-          surface: "--surface-raised",
-          clear: () => [face.current, ...Array.from(host.current?.querySelectorAll(".nac-band__slot") ?? [])],
-          pool: facePool(host, () => [face.current]),
-        })}
-      />
+      <AgentBackdrop />
       <span className="nac-band__stars" aria-hidden="true">
         {STARS.map((s) => (
           <i

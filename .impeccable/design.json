@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-15T12:05:33.289202+00:00",
+  "generatedAt": "2026-11-15T23:59:51.361553+00:00",
   "title": "Design System: KeepMind OS",
   "extensions": {
     "colorMeta": {
@@ -545,18 +545,18 @@
         ]
       },
       "dark-agent-soft": {
-        "role": "primary",
-        "displayName": "Dark Agent Soft",
-        "canonical": "#26330e",
+        "role": "neutral",
+        "displayName": "Dark Agent Graphite",
+        "canonical": "#242424",
         "tonalRamp": [
-          "oklch(15% 0.06052 126.20)",
-          "oklch(26% 0.06052 126.20)",
-          "oklch(38% 0.06052 126.20)",
-          "oklch(49% 0.06052 126.20)",
-          "oklch(61% 0.06052 126.20)",
-          "oklch(72% 0.06052 126.20)",
-          "oklch(84% 0.06052 126.20)",
-          "oklch(95% 0.06052 126.20)"
+          "oklch(15% 0 0)",
+          "oklch(26% 0 0)",
+          "oklch(38% 0 0)",
+          "oklch(49% 0 0)",
+          "oklch(61% 0 0)",
+          "oklch(72% 0 0)",
+          "oklch(84% 0 0)",
+          "oklch(95% 0 0)"
         ]
       },
       "dark-action": {
@@ -935,6 +935,13 @@
       "description": "Exact source fallback geometry and color, normalized to a 100px canvas. The production renderer uses the local atlas and live eyes; this snippet previews only its loading/error silhouette.",
       "html": "<svg class=\"ds-companion-fallback\" viewBox=\"0 0 100 100\" role=\"img\" aria-label=\"Companion loading silhouette\"><rect x=\"14\" y=\"10\" width=\"72\" height=\"80\" rx=\"30\" /></svg>",
       "css": ".ds-companion-fallback{width:100px;height:100px}.ds-companion-fallback rect{fill:#333630}"
+    },
+    {
+      "name": "Composer Send",
+      "kind": "button",
+      "description": "Enabled sends use crisp lime and on-action text; disabled sends remain opaque neutral without a shadow. Matches the compact send control.",
+      "html": "<button class=\"ds-composer-send\" disabled aria-label=\"Send message\">\u2191</button>",
+      "css": ".ds-composer-send{width:32px;height:32px;border:0;border-radius:10px;background:var(--action,#c4ff3d);color:var(--on-action,#111111);font:600 14px var(--font-sans,sans-serif);cursor:pointer;opacity:1}.ds-composer-send:hover:not(:disabled){filter:brightness(1.08)}.ds-composer-send:focus-visible{outline:2px solid var(--focus-color,#82827d);outline-offset:1px}.ds-composer-send:active:not(:disabled){transform:scale(.96)}.ds-composer-send:disabled{background:var(--raised-2,#242423);color:var(--faint,#8f8f89);opacity:1;box-shadow:none;cursor:default}"
     }
   ],
   "narrative": {
@@ -954,6 +961,11 @@
         "section": "colors"
       },
       {
+        "name": "The Graphite and Lime Rule",
+        "body": "Keep large dark surfaces neutral graphite. Use crisp lime for enabled actions, fine agent edges and the backdrop accent; disabled composer actions stay opaque neutral rather than fading lime into moss.",
+        "section": "colors"
+      },
+      {
         "name": "The Work-State Rule",
         "body": "Preserve readable state, expression, accessible naming and user appearance when using companion artwork; the family never replaces status text, evidence or permission controls.",
         "section": "components"
@@ -966,10 +978,12 @@
       "Do retain custom hex eye colors only at 3:1 contrast or higher against the companion face; otherwise render the default lime without changing saved appearance.",
       "Do preserve capabilities, evidence, approvals and permission boundaries when simplifying a surface.",
       "Do use the final CSS cascade and mirrored tokens when adding screens.",
-      "Do retain required upstream attribution in About."
+      "Do retain required upstream attribution in About.",
+      "Do keep dark agent surfaces graphite and reserve crisp lime for action and restrained emphasis."
     ],
     "donts": [
       "Do not use lime as light-theme body text.",
+      "Do not fade disabled lime controls into moss-colored surfaces.",
       "Do not recolor errors, warnings or provider brands as generic brand accents.",
       "Do not turn documentation or static inspection into a claim of usability validation.",
       "Do not infer deployed or native-packaged status from this design record."

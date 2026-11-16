@@ -719,7 +719,7 @@
     transform 0.4s var(--spring);
 }
 .nac-band[data-lit] .nac-band__slot:not([data-done]) {
-  background: color-mix(in srgb, #fff 55%, transparent);
+  background: #242424;
   box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--trail) 40%, transparent);
   color: var(--trail);
 }
