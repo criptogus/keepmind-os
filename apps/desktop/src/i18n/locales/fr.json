@@ -234,7 +234,7 @@
     "approveStop": "Ne plus attendre",
     "openTailscale": "Ouvrir Tailscale",
     "getTailscale": "Obtenir Tailscale",
-    "usage": "Envoyer des statistiques d'utilisation anonymes à agentes.chat",
+    "usage": "Envoyer des statistiques d'utilisation anonymes à KeepMind OS",
     "usageText": "Des comptages comme le nombre de personnes, d'agents, la taille des machines, les jetons d'IA utilisés et le volume de données envoyées et reçues par les navigateurs des agents. Jamais de messages, fichiers, noms ou sites.",
     "start": "Commencer",
     "setting": "Tout se prépare",

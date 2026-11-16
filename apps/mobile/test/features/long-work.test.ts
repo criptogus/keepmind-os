@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import type { AgentStatusLine, WorkView } from "@agenteschat/client";
+import type { AgentStatusLine, WorkView } from "@keepmind/client";
 import {
   autoUpdateText,
   blockedText,
@@ -8,9 +8,9 @@ import {
   workLine,
   workStatusText,
   workWaitsOnPerson,
-} from "@agenteschat/client/lib/long-work";
-import { serverBody } from "@agenteschat/client/lib/message-body";
-import { workingNow } from "@agenteschat/client/lib/working";
+} from "@keepmind/client/lib/long-work";
+import { serverBody } from "@keepmind/client/lib/message-body";
+import { workingNow } from "@keepmind/client/lib/working";
 import { translator } from "./fixtures";
 
 const NOW = new Date("2026-11-02T15:00:00.000Z");

@@ -43,45 +43,45 @@ import {
   useThreadMessages,
   useThreadMission,
   useWaitingOnMe,
-} from "@agenteschat/client";
-import { activityVerb, consultDetails, lineStep, listNames } from "@agenteschat/client/lib/activity";
-import { handoffAsk } from "@agenteschat/client/lib/agent-work";
-import { canTalk } from "@agenteschat/client/lib/audience";
-import { runPosition, screenAboveEnd } from "@agenteschat/client/lib/chat";
-import { CHAT_RHYTHM, firstUnreadId, opensAtLastRead, unreadThreadRootId } from "@agenteschat/client/lib/chat-look";
-import { type ConversationWait, conversationWaits } from "@agenteschat/client/lib/computer-queue";
+} from "@keepmind/client";
+import { activityVerb, consultDetails, lineStep, listNames } from "@keepmind/client/lib/activity";
+import { handoffAsk } from "@keepmind/client/lib/agent-work";
+import { canTalk } from "@keepmind/client/lib/audience";
+import { runPosition, screenAboveEnd } from "@keepmind/client/lib/chat";
+import { CHAT_RHYTHM, firstUnreadId, opensAtLastRead, unreadThreadRootId } from "@keepmind/client/lib/chat-look";
+import { type ConversationWait, conversationWaits } from "@keepmind/client/lib/computer-queue";
 import {
   asExchanges,
   consultBlocksNearEnd,
   consultNoticeFolds,
   consultsForLine,
-} from "@agenteschat/client/lib/consult-group";
-import { errorText, sendNeedsEdit } from "@agenteschat/client/lib/errors";
-import { mentionsReader, offersEveryone } from "@agenteschat/client/lib/everyone";
-import { capitalize } from "@agenteschat/client/lib/format";
-import { issueTakenOf, issueWorkOf, taskConversationOf } from "@agenteschat/client/lib/issues";
-import { workIsOver } from "@agenteschat/client/lib/long-work";
-import { supersededBrainNotices } from "@agenteschat/client/lib/machine-outages";
+} from "@keepmind/client/lib/consult-group";
+import { errorText, sendNeedsEdit } from "@keepmind/client/lib/errors";
+import { mentionsReader, offersEveryone } from "@keepmind/client/lib/everyone";
+import { capitalize } from "@keepmind/client/lib/format";
+import { issueTakenOf, issueWorkOf, taskConversationOf } from "@keepmind/client/lib/issues";
+import { workIsOver } from "@keepmind/client/lib/long-work";
+import { supersededBrainNotices } from "@keepmind/client/lib/machine-outages";
 import {
   isMediaAfterReply,
   isMediaAlone,
   mediaTabsOf,
   messageMediaOf,
   textOrMedia,
-} from "@agenteschat/client/lib/media";
-import { isEventLine } from "@agenteschat/client/lib/notices";
-import { can } from "@agenteschat/client/lib/permissions";
-import { pinsIn } from "@agenteschat/client/lib/pins";
-import { localMeta } from "@agenteschat/client/lib/reply";
-import { retryAnswer } from "@agenteschat/client/lib/retry-answer";
-import { isRightHand, rightHandSeenKey } from "@agenteschat/client/lib/right-hand";
-import { ConversationSeat } from "@agenteschat/client/lib/seat-context";
-import { seenMessageId } from "@agenteschat/client/lib/seen";
-import { lastPostedId } from "@agenteschat/client/lib/timeline";
-import { voiceOf } from "@agenteschat/client/lib/voice";
-import { waitingAway, waitingNotification } from "@agenteschat/client/lib/waiting";
-import { makingImage, stopsMovedOn } from "@agenteschat/client/lib/work";
-import { isIdHandle } from "@agenteschat/ui/names";
+} from "@keepmind/client/lib/media";
+import { isEventLine } from "@keepmind/client/lib/notices";
+import { can } from "@keepmind/client/lib/permissions";
+import { pinsIn } from "@keepmind/client/lib/pins";
+import { localMeta } from "@keepmind/client/lib/reply";
+import { retryAnswer } from "@keepmind/client/lib/retry-answer";
+import { isRightHand, rightHandSeenKey } from "@keepmind/client/lib/right-hand";
+import { ConversationSeat } from "@keepmind/client/lib/seat-context";
+import { seenMessageId } from "@keepmind/client/lib/seen";
+import { lastPostedId } from "@keepmind/client/lib/timeline";
+import { voiceOf } from "@keepmind/client/lib/voice";
+import { waitingAway, waitingNotification } from "@keepmind/client/lib/waiting";
+import { makingImage, stopsMovedOn } from "@keepmind/client/lib/work";
+import { isIdHandle } from "@keepmind/ui/names";
 import { KeyboardAwareLegendList, useKeyboardChatComposerInset } from "@legendapp/list/keyboard";
 import type { LegendListRef, OnViewableItemsChanged } from "@legendapp/list/react-native";
 import { useQueryClient } from "@tanstack/react-query";

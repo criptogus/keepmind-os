@@ -250,7 +250,7 @@ export const PLAN_RECHECK_MS = 5 * 60_000;
 export const TOKEN_RECHECK_MS = 10 * 60_000;
 /**
  * From this protocol on: coding plans as key accounts on Claude Code (ADR
- * 0059). `begin` with `provider` (a plan of `@agenteschat/providers/plans`)
+ * 0059). `begin` with `provider` (a plan of `@keepmind/providers/plans`)
  * starts no CLI: the runner makes the folder and a key the browser seals the
  * plan's key to, and `code` hands it over (kept in the folder,
  * `provider.json`, mode 600). Turns in that folder think through the
@@ -341,7 +341,7 @@ export interface BrowserTraffic {
  * From this protocol on (ADR 0076): `desktop.text`, the text on an agent's
  * screen, read on the computer (tesseract, as the agent's own user) from a
  * capture like `desktop.capture`'s, for screening a person in control on
- * agentes.chat Cloud. The image never leaves the computer. A screen whose
+ * KeepMind OS Cloud. The image never leaves the computer. A screen whose
  * capture didn't change since the last read answers `same`. Served where
  * desktop use is (`desktop_unavailable` without tesseract). The server never
  * sends it to an older runner.
@@ -1430,7 +1430,7 @@ export const CHROME_FAILURES = {
   missingChromium:
     "Google Chrome isn't installed on this computer, and Google makes none for Linux on ARM: install Chromium on it (sudo apt install chromium on Debian, sudo snap install chromium on Ubuntu), then try again.",
   missingServer:
-    "Google Chrome isn't installed on this computer. Its admin should run the agentes.chat installer on it again.",
+    "Google Chrome isn't installed on this computer. Its admin should run the KeepMind OS installer on it again.",
   start: "Google Chrome didn't start on this computer.",
   profile: "The agent's browser profile on this computer didn't open. Try again in a minute.",
   outdated:
@@ -1779,7 +1779,7 @@ export interface MissionWorktreeEnsured {
 export interface GitSyncRequest {
   /** Our proxy for the org's GitHub connection (`…/api/git/{orgId}/{connectionId}/`) and this agent's credential there. */
   proxy: { base: string; token: string };
-  /** The commit author set in each checkout ("Theo (agentes)", "theo@agents.agentes.chat"). */
+  /** The commit author set in each checkout ("Theo (agentes)", "contact@zeroagency.ai"). */
   author: { name: string; email: string };
   /**
    * `clone: false`: update it only when it is already there. `dir` is relative to the agent's folder. `github`
@@ -3910,7 +3910,7 @@ export interface MissionMcpTool {
 }
 
 const RULES_START =
-  "You work on an agentes.chat mission. Read the files in .agentes/ first (mission.md, decisions.md, notes.md). Use the agentes tools: keep the plan with update_plan, report milestones with report, ask decisions only with ask_decision, and ask for a review with request_review when you have something to show. Write plan items, reports, decisions and reviews in the language the people use in the thread (the language of the mission goal), short and plain.";
+  "You work on an KeepMind OS mission. Read the files in .agentes/ first (mission.md, decisions.md, notes.md). Use the agentes tools: keep the plan with update_plan, report milestones with report, ask decisions only with ask_decision, and ask for a review with request_review when you have something to show. Write plan items, reports, decisions and reviews in the language the people use in the thread (the language of the mission goal), short and plain.";
 const RULES_END =
   "Plan items are short outcomes in the people's language; never put tool names (request_review, upload_artifact and the like) in them. When every plan item is done, call complete_mission with what you delivered and what the person should check; don't keep working. Write what you learn and the next steps in .agentes/notes.md. When a tool tells you to stop and wait, end your turn.";
 

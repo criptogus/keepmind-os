@@ -1,7 +1,7 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, type Database, type Executor, eq, isNull, schema } from "@agenteschat/db";
-import { serverText } from "@agenteschat/i18n";
-import type { AppLocale } from "@agenteschat/i18n/locale";
+import type { PubSub } from "@keepmind/adapters";
+import { and, type Database, type Executor, eq, isNull, schema } from "@keepmind/db";
+import { serverText } from "@keepmind/i18n";
+import type { AppLocale } from "@keepmind/i18n/locale";
 import type { Agent } from "./agents";
 import { canTalkTo, speakerFor } from "./audience";
 import { openPersonAgentDm } from "./dms";

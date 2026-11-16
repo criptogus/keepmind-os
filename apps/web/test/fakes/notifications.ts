@@ -10,8 +10,8 @@ import type {
   NoticePrefs,
   NotificationCounts,
   NotificationFilter,
-} from "@agenteschat/client";
-import { compareNotifications, matchesFilter, NOTIFICATION_FILTERS } from "@agenteschat/client/lib/notifications";
+} from "@keepmind/client";
+import { compareNotifications, matchesFilter, NOTIFICATION_FILTERS } from "@keepmind/client/lib/notifications";
 import { MockNotFoundError } from "./context";
 
 export interface FakeInbox {

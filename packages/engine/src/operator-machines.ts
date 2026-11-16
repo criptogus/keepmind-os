@@ -1,4 +1,4 @@
-import { and, asc, type Database, desc, eq, inArray, isNull, type SQL, schema, sql } from "@agenteschat/db";
+import { and, asc, type Database, desc, eq, inArray, isNull, type SQL, schema, sql } from "@keepmind/db";
 import { provisioningStatus } from "./machine-provisioning";
 import { machineActivity } from "./machine-wake";
 import { inStandby, machineOnline } from "./machines";

@@ -1,6 +1,6 @@
-import type { Agent } from "@agenteschat/client";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { Button, Dialog, DialogBody, DialogFooter, Icon, type IconName } from "@agenteschat/ui";
+import type { Agent } from "@keepmind/client";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { Button, Dialog, DialogBody, DialogFooter, Icon, type IconName } from "@keepmind/ui";
 import { type ReactNode, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { type HaveItem, HaveList, HaveRow } from "@/components/arrival/ConnectHave";

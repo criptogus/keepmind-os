@@ -1,4 +1,4 @@
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import { Redirect, useLocalSearchParams } from "expo-router";
 import { ConversationListScreen } from "@/features/chats/ConversationListScreen";
 import { categoryOfListKind, isListKind } from "@/features/chats/logic";

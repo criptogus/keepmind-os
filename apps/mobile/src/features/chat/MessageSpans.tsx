@@ -1,6 +1,6 @@
-import { everyoneWord, isEveryoneWord } from "@agenteschat/client/lib/everyone";
-import { linkPill } from "@agenteschat/client/lib/link-pills";
-import { parseFileLink, parseMessageLink } from "@agenteschat/client/lib/message-links";
+import { everyoneWord, isEveryoneWord } from "@keepmind/client/lib/everyone";
+import { linkPill } from "@keepmind/client/lib/link-pills";
+import { parseFileLink, parseMessageLink } from "@keepmind/client/lib/message-links";
 import { LinearGradient } from "expo-linear-gradient";
 import { type ComponentRef, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

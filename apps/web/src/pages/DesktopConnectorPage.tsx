@@ -1,6 +1,6 @@
-import { ApiError, useCompleteOAuth } from "@agenteschat/client";
-import { errorCode, oauthReturnText } from "@agenteschat/client/lib/errors";
-import { safeRedirect } from "@agenteschat/client/lib/guards";
+import { ApiError, useCompleteOAuth } from "@keepmind/client";
+import { errorCode, oauthReturnText } from "@keepmind/client/lib/errors";
+import { safeRedirect } from "@keepmind/client/lib/guards";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
@@ -74,7 +74,7 @@ export function DesktopConnectorPage({
     <AuthShell>
       <div className="auth__form">
         <header className="auth__ask">
-          <AgentAvatar name="agentes.chat" size="lg" state="writing" />
+          <AgentAvatar name="keepmind.io" size="lg" state="writing" />
           <div className="auth__bubble" aria-live="polite">
             <h1 className="auth__title">{t("auth.desktop.connecting")}</h1>
           </div>

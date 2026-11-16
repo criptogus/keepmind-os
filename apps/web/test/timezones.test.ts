@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { zoneDisplayName } from "@agenteschat/client/lib/routines";
-import { filterZones, offsetLabel, parseOffsetQuery, zoneOption, zoneOptions } from "@agenteschat/ui";
+import { zoneDisplayName } from "@keepmind/client/lib/routines";
+import { filterZones, offsetLabel, parseOffsetQuery, zoneOption, zoneOptions } from "@keepmind/ui";
 
 const at = new Date("2026-10-15T12:00:00Z");
 /** The selector's names in Portuguese. */

@@ -1,5 +1,5 @@
-import { DEFAULT_APP_ICON } from "@agenteschat/client/lib/app-icons";
-import { exampleSenders } from "@agenteschat/client/lib/push-offer";
+import { DEFAULT_APP_ICON } from "@keepmind/client/lib/app-icons";
+import { exampleSenders } from "@keepmind/client/lib/push-offer";
 import { Image } from "expo-image";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -20,7 +20,7 @@ const EXAMPLES = [
 ] as const;
 
 /**
- * Our notifications sheet, before the system's prompt (Conversas opens it: `@agenteschat/client/lib/push-offer`): three
+ * Our notifications sheet, before the system's prompt (Conversas opens it: `@keepmind/client/lib/push-offer`): three
  * notifications as they will arrive, from the workspace's own agents (a request to approve, work done, being
  * called), what they are for, "Ativar avisos" (the system's prompt) and "Agora não".
  */

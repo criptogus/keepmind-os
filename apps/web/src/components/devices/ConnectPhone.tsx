@@ -7,7 +7,7 @@ import {
   useWifiIphones,
   useXcodeFix,
   type XcodeFix,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 import {
   ANDROID_SLOW_MS,
   ANDROID_TICKABLE,
@@ -44,10 +44,10 @@ import {
   type XcodeFixStage,
   xcodeBlockedOf,
   xcodeFixStage,
-} from "@agenteschat/client/lib/devices";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { computerKind } from "@agenteschat/client/lib/machines";
-import { DOWNLOAD_URL } from "@agenteschat/i18n/docs";
+} from "@keepmind/client/lib/devices";
+import { errorText } from "@keepmind/client/lib/errors";
+import { computerKind } from "@keepmind/client/lib/machines";
+import { DOWNLOAD_URL } from "@keepmind/i18n/docs";
 import {
   Button,
   Card,
@@ -65,7 +65,7 @@ import {
   Select,
   SettingsPath,
   useNow,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CommandBlock } from "@/components/machine-bits";

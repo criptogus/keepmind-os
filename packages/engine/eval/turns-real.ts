@@ -12,8 +12,8 @@
  */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { eq, schema } from "@agenteschat/db";
-import { createAnthropicProvider, type ModelResult } from "@agenteschat/providers";
+import { eq, schema } from "@keepmind/db";
+import { createAnthropicProvider, type ModelResult } from "@keepmind/providers";
 import { drainOutbox, postPersonMessage } from "../src";
 import { placeOf, TURNS, turnsWorld } from "./turns";
 

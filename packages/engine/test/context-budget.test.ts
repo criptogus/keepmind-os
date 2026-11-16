@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { asc, eq, schema } from "@agenteschat/db";
+import { asc, eq, schema } from "@keepmind/db";
 import {
   type ContentBlock,
   contextLimitsFor,
@@ -9,7 +9,7 @@ import {
   type ModelMessage,
   type ModelRequest,
   promptChars,
-} from "@agenteschat/providers";
+} from "@keepmind/providers";
 import {
   createFakeJudge,
   createJobHandlers,

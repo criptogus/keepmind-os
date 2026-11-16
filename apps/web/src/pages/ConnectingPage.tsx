@@ -1,5 +1,5 @@
-import type { MachineAccountKind } from "@agenteschat/client";
-import { Button } from "@agenteschat/ui";
+import type { MachineAccountKind } from "@keepmind/client";
+import { Button } from "@keepmind/ui";
 import { useTranslation } from "react-i18next";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { AuthShell } from "@/components/AuthLayout";
@@ -14,7 +14,7 @@ export function ConnectingPage({ kind }: { kind?: MachineAccountKind }) {
     <AuthShell>
       <div className="auth__form">
         <header className="auth__ask">
-          <AgentAvatar name="agentes.chat" size="lg" state="writing" />
+          <AgentAvatar name="keepmind.io" size="lg" state="writing" />
           <div className="auth__bubble" aria-live="polite">
             <h1 className="auth__title">
               {kind ? t("connectAi.popup.title", { name: t(`aiAccounts.connect.${kind}`) }) : t("connectAi.popup.any")}

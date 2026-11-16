@@ -1,8 +1,8 @@
-import type { ComputerDevice, DeviceStatus, PhoneDevice } from "@agenteschat/client";
-import { useDesktopLatest } from "@agenteschat/client";
-import { type AudienceIcon, audienceWords, portraitOf, statusLook, statusPill } from "@agenteschat/client/lib/devices";
-import { downloadHref } from "@agenteschat/client/lib/machines";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+import type { ComputerDevice, DeviceStatus, PhoneDevice } from "@keepmind/client";
+import { useDesktopLatest } from "@keepmind/client";
+import { type AudienceIcon, audienceWords, portraitOf, statusLook, statusPill } from "@keepmind/client/lib/devices";
+import { downloadHref } from "@keepmind/client/lib/machines";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import {
   Avatar,
   Button,
@@ -13,7 +13,7 @@ import {
   MenuItem,
   PixelSpinner,
   ProviderLogo,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { AgentAvatar } from "@/components/AgentAvatar";

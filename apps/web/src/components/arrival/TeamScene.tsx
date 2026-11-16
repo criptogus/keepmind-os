@@ -1,8 +1,8 @@
-import type { Agent } from "@agenteschat/client";
-import { WORKSPACE_COMPUTER_KIND } from "@agenteschat/client/lib/computer";
-import { planMark, SCENE_PLANS } from "@agenteschat/client/lib/no-ai";
-import { rightHandOf, sceneTeam } from "@agenteschat/client/lib/right-hand";
-import { ComputerPortrait, cx, DAWN_MS, type Expression, ProviderLogo, teamSky, useDawn } from "@agenteschat/ui";
+import type { Agent } from "@keepmind/client";
+import { WORKSPACE_COMPUTER_KIND } from "@keepmind/client/lib/computer";
+import { planMark, SCENE_PLANS } from "@keepmind/client/lib/no-ai";
+import { rightHandOf, sceneTeam } from "@keepmind/client/lib/right-hand";
+import { ComputerPortrait, cx, DAWN_MS, type Expression, ProviderLogo, teamSky, useDawn } from "@keepmind/ui";
 import type { CSSProperties, ReactNode } from "react";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { AgentBackdrop } from "@/components/AgentBackdrop";

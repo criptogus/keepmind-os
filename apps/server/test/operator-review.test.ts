@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, expect, test } from "bun:test";
-import { DESKTOP_TEXT_PROTOCOL } from "@agenteschat/adapters";
-import { schema } from "@agenteschat/db";
+import { DESKTOP_TEXT_PROTOCOL } from "@keepmind/adapters";
+import { schema } from "@keepmind/db";
 import {
   createSessionScreening,
   enableOperatorEvents,
@@ -9,7 +9,7 @@ import {
   SESSION_KEEP_MS,
   type Stream,
   type ToolSource,
-} from "@agenteschat/engine";
+} from "@keepmind/engine";
 import { createLogger } from "../src/logger";
 import { createOperatorApp } from "../src/operator/app";
 import { type Browser, browser, createTestServer, ORIGIN, seedOrg, signUp, type TestServer } from "./harness";

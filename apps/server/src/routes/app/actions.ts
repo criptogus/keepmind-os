@@ -6,7 +6,7 @@ import {
   redoAgentAction,
   undoAgentAction,
   undoMessageActions,
-} from "@agenteschat/engine";
+} from "@keepmind/engine";
 import { createRoute, z } from "@hono/zod-openapi";
 import { type AppDeps, body, createAppRouter, errors, json, OrgParams, requireSession, security } from "./context";
 import { AgentAction } from "./schemas";

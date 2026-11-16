@@ -1,7 +1,7 @@
-import type { Dashboard, DashboardProposalDecision } from "@agenteschat/client";
-import { useDecideDashboardProposal } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { Button, useDarkTheme, widgetTileVars } from "@agenteschat/ui";
+import type { Dashboard, DashboardProposalDecision } from "@keepmind/client";
+import { useDecideDashboardProposal } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { Button, useDarkTheme, widgetTileVars } from "@keepmind/ui";
 import { useTranslation } from "react-i18next";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { useOrg } from "@/components/org-context";

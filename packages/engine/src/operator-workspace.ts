@@ -12,7 +12,7 @@ import {
   type SQL,
   schema,
   sql,
-} from "@agenteschat/db";
+} from "@keepmind/db";
 import { connectorKeyOf } from "./connector-usage";
 import { CUSTOM_PREFIX } from "./connectors/custom";
 import { decodeCursor, encodeCursor } from "./cursor";

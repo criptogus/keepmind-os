@@ -43,9 +43,9 @@ import type {
   MachineOutages,
   MoveAgentsResult,
   SecretBox,
-} from "@agenteschat/client";
-import { ApiError } from "@agenteschat/client";
-import { isPlanId, planOf } from "@agenteschat/client/lib/plans";
+} from "@keepmind/client";
+import { ApiError } from "@keepmind/client";
+import { isPlanId, planOf } from "@keepmind/client/lib/plans";
 import { clone, type MockContext, MockNotFoundError } from "./context";
 
 export interface FakeMachines {

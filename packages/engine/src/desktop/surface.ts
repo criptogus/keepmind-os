@@ -1,5 +1,5 @@
 import { setTimeout as sleep } from "node:timers/promises";
-import type { DesktopAction, DesktopLookReply, DesktopRegion, MachineReplies } from "@agenteschat/adapters";
+import type { DesktopAction, DesktopLookReply, DesktopRegion, MachineReplies } from "@keepmind/adapters";
 import {
   normalizeWords,
   observeSnapshot,

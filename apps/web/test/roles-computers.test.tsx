@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { OrgRole } from "@agenteschat/client";
+import type { OrgRole } from "@keepmind/client";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { createFakeApi, ORG_ID, seedRoles, seedState } from "./fake-api";
 import { endExit, exitsLast, renderApp, screen, settle } from "./render";

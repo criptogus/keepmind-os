@@ -1,4 +1,4 @@
-import { and, asc, desc, type Executor, eq, inArray, isNull, type SQL, schema, sql } from "@agenteschat/db";
+import { and, asc, desc, type Executor, eq, inArray, isNull, type SQL, schema, sql } from "@keepmind/db";
 import type { ReleasedAsks } from "./catch-up-triage";
 import { ago } from "./context";
 import { andList, cutText, possessive } from "./format";

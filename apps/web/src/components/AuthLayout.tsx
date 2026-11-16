@@ -1,4 +1,4 @@
-import { Logo } from "@agenteschat/ui";
+import { Logo } from "@keepmind/ui";
 import type { ReactNode } from "react";
 import { LanguageSelect } from "./LanguageSelect";
 import "./auth.css";

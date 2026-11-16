@@ -1,7 +1,7 @@
 import { afterEach, expect, test } from "bun:test";
-import type { PlanUsage } from "@agenteschat/adapters";
-import { eq, schema, sql } from "@agenteschat/db";
-import { catalogModelOf } from "@agenteschat/providers";
+import type { PlanUsage } from "@keepmind/adapters";
+import { eq, schema, sql } from "@keepmind/db";
+import { catalogModelOf } from "@keepmind/providers";
 import { agentPlanUsage, createAgent, orgPlanUsage, recordPlanUsage, sourceKeyOf } from "../src";
 import { addMember, type Fixture, setup } from "./fixtures";
 import { pairMachine } from "./machine-fixtures";

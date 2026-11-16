@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { createFakeEmailSender } from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
+import { createFakeEmailSender } from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
 import {
   ACCOUNT_CONTACT_JOB,
   deleteAccount,
@@ -15,7 +15,7 @@ import {
 } from "../src";
 import { addMember, addUser, type Fixture, setup } from "./fixtures";
 
-const CLOUD = "https://app.agentes.chat";
+const CLOUD = "https://keepmind.io";
 const SELF_HOSTED = "https://chat.example.com";
 const contacts = createFakeEmailSender();
 

@@ -14,7 +14,7 @@ export const legalIt: Partial<Record<LegalKind, LegalDocument>> = {
         id: "agreement",
         heading: "1. Accordo",
         blocks: [
-          'I presenti Termini di utilizzo (i "Termini") costituiscono un accordo vincolante tra CODARI GLOBAL, LLC, società a responsabilità limitata (limited liability company) costituita nello Stato del Wyoming che opera con il nome agentes.chat ("agentes.chat", "noi"), e la persona fisica o l\'ente che crea un account o un workspace ("tu"). Creando un account, entrando in un workspace o utilizzando in altro modo agentes.chat sul web, tramite l\'app per Mac o l\'app per telefono (il "Servizio"), accetti i presenti Termini e la nostra Informativa sulla privacy. Se utilizzi il Servizio per conto di una società o di un altro ente, dichiari di avere il potere di vincolarlo.',
+          'I presenti Termini di utilizzo (i "Termini") costituiscono un accordo vincolante tra CODARI GLOBAL, LLC, società a responsabilità limitata (limited liability company) costituita nello Stato del Wyoming che opera con il nome agentes.chat ("keepmind.io", "noi"), e la persona fisica o l\'ente che crea un account o un workspace ("tu"). Creando un account, entrando in un workspace o utilizzando in altro modo agentes.chat sul web, tramite l\'app per Mac o l\'app per telefono (il "Servizio"), accetti i presenti Termini e la nostra Informativa sulla privacy. Se utilizzi il Servizio per conto di una società o di un altro ente, dichiari di avere il potere di vincolarlo.',
           "Per utilizzare il Servizio devi avere almeno 18 anni ed essere in grado di concludere un contratto.",
         ],
       },
@@ -181,7 +181,7 @@ export const legalIt: Partial<Record<LegalKind, LegalDocument>> = {
         id: "overview",
         heading: "1. Panoramica",
         blocks: [
-          'CODARI GLOBAL, LLC, società a responsabilità limitata (limited liability company) costituita nello Stato del Wyoming che opera con il nome agentes.chat ("agentes.chat", "noi"), gestisce agentes.chat: un workspace in cui persone e agenti di IA lavorano insieme, disponibile sul web, come app per Mac e come app per telefono (il "Servizio"). La presente informativa distingue due ruoli:',
+          'CODARI GLOBAL, LLC, società a responsabilità limitata (limited liability company) costituita nello Stato del Wyoming che opera con il nome agentes.chat ("keepmind.io", "noi"), gestisce agentes.chat: un workspace in cui persone e agenti di IA lavorano insieme, disponibile sul web, come app per Mac e come app per telefono (il "Servizio"). La presente informativa distingue due ruoli:',
           {
             list: [
               "Per i **dati dell'account**, ossia le informazioni che le persone ci forniscono per creare e utilizzare un account, siamo il titolare del trattamento.",

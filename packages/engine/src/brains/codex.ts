@@ -15,7 +15,7 @@ import {
   type PubSub,
   parseBrainEvent,
   STEER_PROTOCOL,
-} from "@agenteschat/adapters";
+} from "@keepmind/adapters";
 import type { CodeSetup } from "../git/machine";
 import type { MachineCaller } from "../machine-hub";
 import { MachineDroppedError, MachineOfflineError, MachinePausedError, pausedMessage } from "../machines";

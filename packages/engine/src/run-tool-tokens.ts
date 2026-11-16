@@ -1,6 +1,6 @@
 import { randomBytes } from "node:crypto";
-import { isRunToolToken, RUN_TOOL_TOKEN_PREFIX } from "@agenteschat/adapters";
-import { and, type Executor, eq, isNull, schema, sql } from "@agenteschat/db";
+import { isRunToolToken, RUN_TOOL_TOKEN_PREFIX } from "@keepmind/adapters";
+import { and, type Executor, eq, isNull, schema, sql } from "@keepmind/db";
 import { sha256 } from "./crypto";
 
 const { runToolTokens, agentRuns, machineTasks } = schema;

@@ -1,4 +1,4 @@
-import type { InvitationWithStatus, InviteLink, JoinRequest } from "@agenteschat/client";
+import type { InvitationWithStatus, InviteLink, JoinRequest } from "@keepmind/client";
 import {
   useAllInvitations,
   useApproveJoinRequest,
@@ -13,13 +13,13 @@ import {
   useRoles,
   useTurnOffInviteLink,
   useWorkspaceLimits,
-} from "@agenteschat/client";
-import { errorCode } from "@agenteschat/client/lib/errors";
-import { formatShortDate, joinNames, relativeTime, timeLeft } from "@agenteschat/client/lib/format";
-import { approvalCargos, linkNeedsAttention } from "@agenteschat/client/lib/invite-start";
-import { approvalNews, JOIN_REASON_MAX, sendsEmail } from "@agenteschat/client/lib/join-requests";
-import { membersFull } from "@agenteschat/client/lib/limits";
-import { sortRoles } from "@agenteschat/client/lib/roles";
+} from "@keepmind/client";
+import { errorCode } from "@keepmind/client/lib/errors";
+import { formatShortDate, joinNames, relativeTime, timeLeft } from "@keepmind/client/lib/format";
+import { approvalCargos, linkNeedsAttention } from "@keepmind/client/lib/invite-start";
+import { approvalNews, JOIN_REASON_MAX, sendsEmail } from "@keepmind/client/lib/join-requests";
+import { membersFull } from "@keepmind/client/lib/limits";
+import { sortRoles } from "@keepmind/client/lib/roles";
 import {
   Alert,
   Avatar,
@@ -44,7 +44,7 @@ import {
   SwapLabel,
   Textarea,
   Toolbar,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useSearch } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

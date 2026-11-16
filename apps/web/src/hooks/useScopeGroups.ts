@@ -1,5 +1,5 @@
-import { useCatalog, useConnections, useCustomServers } from "@agenteschat/client";
-import { type ScopeGroup, scopeGroups } from "@agenteschat/client/lib/scopes";
+import { useCatalog, useConnections, useCustomServers } from "@keepmind/client";
+import { type ScopeGroup, scopeGroups } from "@keepmind/client/lib/scopes";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 

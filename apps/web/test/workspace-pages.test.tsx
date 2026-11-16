@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
@@ -16,9 +16,9 @@ const go = async (path: string, state = seedState()) => {
 };
 const click = (el: Element) => act(async () => fireEvent.click(el));
 const type = (el: Element, value: string) => act(async () => fireEvent.change(el, { target: { value } }));
-/** A help line's link: to the page on agentes.chat in Portuguese, in a new tab with no referrer. */
+/** A help line's link: to the page on KeepMind OS in Portuguese, in a new tab with no referrer. */
 const expectHelpLink = (link: HTMLElement, page: string) => {
-  expect(link.getAttribute("href")).toBe(`https://agentes.chat/pt/docs/${page}`);
+  expect(link.getAttribute("href")).toBe(`https://keepmind.io/pt/docs/${page}`);
   expect(link.getAttribute("target")).toBe("_blank");
   expect(link.getAttribute("rel")).toBe("noopener noreferrer");
   expect(link.className).toBe("ac-link ac-link--muted");

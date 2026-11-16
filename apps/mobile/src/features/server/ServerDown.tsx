@@ -4,7 +4,7 @@ import {
   type ServerCheck,
   type ServerProblem,
   serverHost,
-} from "@agenteschat/client/lib/server";
+} from "@keepmind/client/lib/server";
 import { useNetworkState } from "expo-network";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";

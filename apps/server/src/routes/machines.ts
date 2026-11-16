@@ -1,5 +1,5 @@
 import { isIP } from "node:net";
-import { CLI_INSTALL_CAUSES, CLI_INSTALL_STATES, INSTALLABLE_CLIS, limitIp } from "@agenteschat/adapters";
+import { CLI_INSTALL_CAUSES, CLI_INSTALL_STATES, INSTALLABLE_CLIS, limitIp } from "@keepmind/adapters";
 import {
   ARTIFACT_LIMITS,
   allowMachineTool,
@@ -39,7 +39,7 @@ import {
   syncHostComputer,
   UUID,
   ValidationError,
-} from "@agenteschat/engine";
+} from "@keepmind/engine";
 import { createRoute, type OpenAPIHono, z } from "@hono/zod-openapi";
 import { installScript } from "../../runner/install-script";
 import { requestIp, requestLimitIp } from "../http/client-ip";

@@ -1,4 +1,4 @@
-import type { BrowserHandoff, Machine, ScopeGrant } from "@agenteschat/client";
+import type { BrowserHandoff, Machine, ScopeGrant } from "@keepmind/client";
 import {
   agentStateOfRun,
   BROWSER_TOOL_SCOPE,
@@ -7,10 +7,10 @@ import {
   useApi,
   useBrowserHandoffMutations,
   usesBrowser,
-} from "@agenteschat/client";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { canReduceAccess, commandInReason, machineReasonText } from "@agenteschat/client/lib/machines";
-import { Button, Card, CardHeader, Chip, Icon } from "@agenteschat/ui";
+} from "@keepmind/client";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { canReduceAccess, commandInReason, machineReasonText } from "@keepmind/client/lib/machines";
+import { Button, Card, CardHeader, Chip, Icon } from "@keepmind/ui";
 import { useQueries } from "@tanstack/react-query";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

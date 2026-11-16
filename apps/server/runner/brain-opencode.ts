@@ -3,10 +3,10 @@ import type { EventEmitter } from "node:events";
 import { existsSync, mkdirSync, readdirSync, rmSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { CommandProfile } from "@agenteschat/adapters/command-policy";
-import type { AgentScope, BrainSteerReply } from "@agenteschat/adapters/machine-protocol";
-import { isAccountId } from "@agenteschat/adapters/machine-protocol";
-import { redactSecrets } from "@agenteschat/adapters/secret-box";
+import type { CommandProfile } from "@keepmind/adapters/command-policy";
+import type { AgentScope, BrainSteerReply } from "@keepmind/adapters/machine-protocol";
+import { isAccountId } from "@keepmind/adapters/machine-protocol";
+import { redactSecrets } from "@keepmind/adapters/secret-box";
 import { ACCOUNT_MISSING_MESSAGE, accountEnv, opencodeKeyOf, withoutSignIns } from "./accounts";
 import { ACP_METHOD_NOT_FOUND, ACP_PROTOCOL_VERSION, AcpConnection, AcpError } from "./acp";
 import {

@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import type { Agent, AiComputer, MachineAccount } from "@agenteschat/client";
-import { keys } from "@agenteschat/client";
-import { LOGIN_PER_AGENT } from "@agenteschat/client/lib/plans";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import type { Agent, AiComputer, MachineAccount } from "@keepmind/client";
+import { keys } from "@keepmind/client";
+import { LOGIN_PER_AGENT } from "@keepmind/client/lib/plans";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 

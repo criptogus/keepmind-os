@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import type { ActiveRun, ChannelEvent, Message } from "@agenteschat/client";
+import type { ActiveRun, ChannelEvent, Message } from "@keepmind/client";
 import {
   applyChannelEvent,
   applyReceiptEvent,
@@ -18,7 +18,7 @@ import {
   TYPING_TTL_MS,
   typingIn,
   typingThrottle,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 import { createStreamsStore } from "@/realtime/context";
 
 const base = { channelId: "c1", threadId: "m1", runId: "r1", agentId: "ada" };
@@ -584,7 +584,7 @@ describe("receipts", () => {
 
 describe("server confirmation and the safety timeout", () => {
   test("message.routed is authoritative: a guessed 'picked' falls back to 'seen' and the provisional row goes", async () => {
-    const { guessReceipt } = await import("@agenteschat/client");
+    const { guessReceipt } = await import("@keepmind/client");
     let r = guessReceipt({}, "m1", ["theo"]);
     expect(receiptView(r.m1).status?.kind).toBe("picked");
     expect(r.m1?.confirmed).toBe(false);

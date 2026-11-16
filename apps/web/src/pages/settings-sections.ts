@@ -1,10 +1,10 @@
-import type { AuthConfig, OrgSummary } from "@agenteschat/client";
-import { selfHosted, showsAbout } from "@agenteschat/client/lib/about";
-import { can } from "@agenteschat/client/lib/permissions";
-import { personalSettingsShort } from "@agenteschat/client/lib/personal-view";
-import { settingsEntry, teamSettings } from "@agenteschat/client/lib/settings-nav";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
-import type { IconName } from "@agenteschat/ui";
+import type { AuthConfig, OrgSummary } from "@keepmind/client";
+import { selfHosted, showsAbout } from "@keepmind/client/lib/about";
+import { can } from "@keepmind/client/lib/permissions";
+import { personalSettingsShort } from "@keepmind/client/lib/personal-view";
+import { settingsEntry, teamSettings } from "@keepmind/client/lib/settings-nav";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
+import type { IconName } from "@keepmind/ui";
 
 // Apart from the settings page so the shell (⌘K, the sidebar) and the settings routes' guards can read
 // the sections without loading the page itself.
@@ -57,7 +57,7 @@ export const SETTINGS_SECTIONS: {
   { id: "general", icon: "settings", allowed: (o) => can(o, "configure") },
   // GIFs and stickers in chat (ADR 0091): who configures the workspace.
   { id: "media", icon: "sticker", allowed: (o) => can(o, "configure") },
-  // Voice messages (ADR 0100): who configures the workspace, on a self-hosted server only. agentes.chat Cloud runs its
+  // Voice messages (ADR 0100): who configures the workspace, on a self-hosted server only. KeepMind OS Cloud runs its
   // own speech engine, so the section has nothing to offer there (product decision).
   { id: "voice", icon: "mic", allowed: (o, server) => selfHosted(server) && can(o, "configure") },
   { id: "members", icon: "members", allowed: () => true },
@@ -84,7 +84,7 @@ export const SETTINGS_SECTIONS: {
   // What agents did and people changed: only for who may see it (it shows everyone's work).
   { id: "audit", icon: "shield", allowed: (o) => can(o, "view_audit") },
   // AGPL-3.0's legal notices and the license's required attribution: for everyone on a self-hosted server, never
-  // hidden there; none on agentes.chat Cloud (`showsAbout`).
+  // hidden there; none on KeepMind OS Cloud (`showsAbout`).
   { id: "about", icon: "info", allowed: (_o, server) => showsAbout(server) },
 ];
 

@@ -1,5 +1,5 @@
-import type { ApprovalEmail } from "@agenteschat/client";
-import { Icon } from "@agenteschat/ui";
+import type { ApprovalEmail } from "@keepmind/client";
+import { Icon } from "@keepmind/ui";
 import { useRef, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { useReveal } from "@/hooks/useReveal";

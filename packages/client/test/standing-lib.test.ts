@@ -15,7 +15,7 @@ const REVIEW_FOR = (category: string) =>
   `standing.cloud.reviewFor {"email":"${LEGAL_EMAIL}","what":"standing.cloud.reviewWhat.${category}"}`;
 const cloud = { cloud: true };
 
-describe("a restriction's line on agentes.chat Cloud, by its kind, never its stored reason", () => {
+describe("a restriction's line on KeepMind OS Cloud, by its kind, never its stored reason", () => {
   test("the automatic review hold, an operator's shown reason, a silent one", () => {
     expect(restrictionLine(t, "org.paused", { reason: "review", ...cloud })).toBe(`standing.cloud.review ${EMAIL}`);
     expect(restrictionLine(t, "run.org_paused", { reason: "review", cloud: "true" })).toBe(
@@ -115,7 +115,7 @@ describe("a restriction's notice in the inbox reads as the restriction itself", 
     expect(workspaceHeadline(notice({ statusTo: "hold" }))).toBe("standing.notification.hold");
   });
 
-  test("the workspace on agentes.chat Cloud: the review line, an operator's reason with how to contest it", () => {
+  test("the workspace on KeepMind OS Cloud: the review line, an operator's reason with how to contest it", () => {
     expect(line({ statusTo: "hold", text: "review", cloud: true })).toBe(`standing.cloud.review ${EMAIL}`);
     expect(line({ statusTo: "hold", text: "review.illegal_content", cloud: true })).toBe(REVIEW_FOR("illegal_content"));
     expect(line({ statusTo: "hold", text: "Terms 5: phishing", cloud: true })).toBe(

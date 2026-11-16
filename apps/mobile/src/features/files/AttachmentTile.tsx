@@ -1,6 +1,6 @@
-import type { ArtifactContent, ArtifactDetail } from "@agenteschat/client";
-import { documentStart, parseDelimited, patchCounts } from "@agenteschat/client/lib/artifacts";
-import { formatBytes } from "@agenteschat/client/lib/files";
+import type { ArtifactContent, ArtifactDetail } from "@keepmind/client";
+import { documentStart, parseDelimited, patchCounts } from "@keepmind/client/lib/artifacts";
+import { formatBytes } from "@keepmind/client/lib/files";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import type { TFunction } from "i18next";

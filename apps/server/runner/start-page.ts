@@ -9,9 +9,9 @@ import {
   writeFileSync,
 } from "node:fs";
 import path from "node:path";
-import { START_FILE } from "@agenteschat/adapters/browser-start";
-import type { AgentScope, MachineEgress } from "@agenteschat/adapters/machine-protocol";
-import { countryFlagUrl } from "@agenteschat/ui/brand/flags";
+import { START_FILE } from "@keepmind/adapters/browser-start";
+import type { AgentScope, MachineEgress } from "@keepmind/adapters/machine-protocol";
+import { countryFlagUrl } from "@keepmind/ui/brand/flags";
 import { type AgentUser, agentGid } from "./agent-users";
 import MARK from "./assets/desktop-mark.png.b64" with { type: "text" };
 import DOTO from "./assets/start/doto.woff2.b64" with { type: "text" };

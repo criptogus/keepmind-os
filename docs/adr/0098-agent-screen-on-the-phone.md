@@ -18,7 +18,7 @@ Nothing on the server needs to change for a first version:
 - `/api/desktop` is a person's socket, and `personUpgrade` takes either our own Origin or the phone app's session.
 - `GET …/desktop` gives the state, `canControl` and the open handoff. Starting on the first viewer means there is no "start the screen" step.
 - Control is a handoff on the `desktop` screen (ADR 0058 §5): `…/desktop/takeover`, the request routes, the note on hand back, the rule on who may (`drivesComputer`), the audit.
-- A socket changes mode in place (ADR 0058 §17), and `@agenteschat/client` already has the close codes, states, retries and `desktopMode`.
+- A socket changes mode in place (ADR 0058 §17), and `@keepmind/client` already has the close codes, states, retries and `desktopMode`.
 - `CONTROL_GRACE_MS` gives a person who drops 2 minutes to come back.
 - The web's `DesktopLink` hands noVNC a channel of its own, so noVNC doesn't care what carries its bytes.
 - The phone has the entry (`AgentComputerButton`, beside Conversar on the agent's profile), the full-screen view (`/computer/<agentId>`), the request card, the push that opens it, the live steps of the run, and the keyboard on the screen (key by key, with `TypeBar` for a password and the system's autofill).

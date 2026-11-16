@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, expect, test } from "bun:test";
-import { channelTopic } from "@agenteschat/adapters";
-import { createIssueToolSource, insertMessage, linkRunActions } from "@agenteschat/engine";
+import { channelTopic } from "@keepmind/adapters";
+import { createIssueToolSource, insertMessage, linkRunActions } from "@keepmind/engine";
 import { browser, createTestServer, seedOrg, signUp, type TestServer } from "./harness";
 
 let t: TestServer;

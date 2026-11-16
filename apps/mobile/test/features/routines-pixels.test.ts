@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { AGENT_GRADIENTS } from "@agenteschat/ui/agent/engine";
+import { AGENT_GRADIENTS } from "@keepmind/ui/agent/engine";
 import {
   LANE_BASE,
   laneCells,

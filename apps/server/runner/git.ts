@@ -11,7 +11,7 @@ import {
   type GitSyncRequest,
   isGitRepoName,
   type MachineReplies,
-} from "@agenteschat/adapters/machine-protocol";
+} from "@keepmind/adapters/machine-protocol";
 import { RunnerError } from "./errors";
 import { killTree } from "./exec";
 import { CONFIG_LIST_ARGS, HARDENED_GIT_ARGS, unsafeConfigMessage, unsafeRepoConfig } from "./git-guard";

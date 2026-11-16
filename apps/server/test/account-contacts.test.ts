@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import { enableAccountContacts } from "@agenteschat/engine";
+import { enableAccountContacts } from "@keepmind/engine";
 import { browser, createTestServer, ORIGIN, signUp, type TestServer } from "./harness";
 
 let t: TestServer;
@@ -18,9 +18,9 @@ test("self-hosted: a sign-up and a language change leave no contact", async () =
   expect(t.email.contacts).toEqual([]);
 });
 
-test("on agentes.chat Cloud: a sign-up becomes a contact with its creation date; a language change syncs it again", async () => {
+test("on KeepMind OS Cloud: a sign-up becomes a contact with its creation date; a language change syncs it again", async () => {
   t = await createTestServer();
-  enableAccountContacts("https://app.agentes.chat", t.email);
+  enableAccountContacts("https://keepmind.io", t.email);
   const ana = browser(t);
   await signUp(ana, "ana@example.com");
   await t.drain();

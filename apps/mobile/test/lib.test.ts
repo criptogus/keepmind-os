@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { ApiError } from "@agenteschat/client";
+import { ApiError } from "@keepmind/client";
 import { readDeleteResponse } from "../src/features/account/result";
 import { preflightMissing } from "../src/features/me/logic";
 import {
@@ -198,9 +198,9 @@ test("the WebSocket carries the cookie and the app header", () => {
     close() {}
   }
   const factory = createSocketFactory(() => "better-auth.session_token=abc", FakeSocket);
-  factory("wss://agentes.chat/api/ws?orgId=o1");
+  factory("wss://keepmind-os/api/ws?orgId=o1");
   expect(made[0]).toEqual({
-    url: "wss://agentes.chat/api/ws?orgId=o1",
+    url: "wss://keepmind-os/api/ws?orgId=o1",
     protocols: undefined,
     options: { headers: { "X-Agentes-Client": "mobile", Cookie: "better-auth.session_token=abc" } },
   });
@@ -291,14 +291,14 @@ test("every icon of the design is there", () => {
 });
 
 describe("person photo", () => {
-  const base = "https://app.agentes.chat";
+  const base = "https://keepmind.io";
   const headers = { "X-Agentes-Client": "mobile", Cookie: "s=1" };
   test("a photo uploaded here loads from the API with the session", () => {
     expect(photoSource("/api/app/avatars/u1/a.png", base, headers)).toEqual({
-      uri: "https://app.agentes.chat/api/app/avatars/u1/a.png",
+      uri: "https://keepmind.io/api/app/avatars/u1/a.png",
       headers,
     });
-    expect(photoSource("https://app.agentes.chat/api/app/avatars/u1/a.png", base, headers)?.headers).toEqual(headers);
+    expect(photoSource("https://keepmind.io/api/app/avatars/u1/a.png", base, headers)?.headers).toEqual(headers);
   });
   test("a provider's photo loads without our cookie", () => {
     expect(photoSource("https://lh3.googleusercontent.com/a/x", base, headers)).toEqual({
@@ -314,7 +314,7 @@ describe("person photo", () => {
 });
 
 describe("choosing a server", () => {
-  const cloud = "https://app.agentes.chat";
+  const cloud = "https://keepmind.io";
   const box = "https://box.tail1234.ts.net";
 
   test("the one chosen, else the build's; nothing kept for the build's own", () => {

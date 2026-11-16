@@ -1,8 +1,8 @@
-import type { CatchUpClosed, Message } from "@agenteschat/client";
-import { keys, useApi, useUsageQueue } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { clockAt } from "@agenteschat/client/lib/format";
-import { can } from "@agenteschat/client/lib/permissions";
+import type { CatchUpClosed, Message } from "@keepmind/client";
+import { keys, useApi, useUsageQueue } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { clockAt } from "@keepmind/client/lib/format";
+import { can } from "@keepmind/client/lib/permissions";
 import {
   answerAnywayOpen,
   mayAnswerAnyway,
@@ -13,8 +13,8 @@ import {
   usageCheckedText,
   usagePauseText,
   usageWaitFix,
-} from "@agenteschat/client/lib/usage-pause";
-import { EventPillAction, Icon, Locked, useNow } from "@agenteschat/ui";
+} from "@keepmind/client/lib/usage-pause";
+import { EventPillAction, Icon, Locked, useNow } from "@keepmind/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { type ButtonHTMLAttributes, useState } from "react";

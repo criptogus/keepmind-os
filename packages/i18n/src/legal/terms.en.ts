@@ -9,7 +9,7 @@ export const termsEn: LegalDocument = {
       id: "agreement",
       heading: "1. Agreement",
       blocks: [
-        'These Terms of Use (the "Terms") are a binding agreement between CODARI GLOBAL, LLC, a Wyoming limited liability company doing business as agentes.chat ("agentes.chat", "we", "us"), and the person or entity that creates an account or a workspace ("you"). By creating an account, joining a workspace, or otherwise using agentes.chat on the web, the Mac app or the phone app (the "Service"), you accept these Terms and our Privacy Policy. If you use the Service on behalf of a company or other entity, you represent that you have authority to bind it.',
+        'These Terms of Use (the "Terms") are a binding agreement between CODARI GLOBAL, LLC, a Wyoming limited liability company doing business as agentes.chat ("keepmind.io", "we", "us"), and the person or entity that creates an account or a workspace ("you"). By creating an account, joining a workspace, or otherwise using agentes.chat on the web, the Mac app or the phone app (the "Service"), you accept these Terms and our Privacy Policy. If you use the Service on behalf of a company or other entity, you represent that you have authority to bind it.',
         "You must be at least 18 years old and able to enter into a contract to use the Service.",
       ],
     },

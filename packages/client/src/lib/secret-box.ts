@@ -10,7 +10,7 @@ import type { SecretBox, SecretTarget } from "../api/types";
 export const MAX_SECRET_BYTES = 16 * 1024;
 
 const EC = { name: "ECDH", namedCurve: "P-256" } as const;
-const INFO = new TextEncoder().encode("agentes.chat secret v1");
+const INFO = new TextEncoder().encode("KeepMind OS secret v1");
 
 const b64 = (bytes: ArrayBuffer | Uint8Array) => {
   const u = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);

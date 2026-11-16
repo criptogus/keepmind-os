@@ -17,8 +17,8 @@
  * production cheap model). `--judge jev` grades the hand-off intent on Jev as
  * in production (`TYPESAFE_API_KEY`).
  */
-import { eq, schema } from "@agenteschat/db";
-import { createAnthropicProvider, type ModelRequest, systemText } from "@agenteschat/providers";
+import { eq, schema } from "@keepmind/db";
+import { createAnthropicProvider, type ModelRequest, systemText } from "@keepmind/providers";
 import { addRunStep, createTalker, drainOutbox, grantScopes, postPersonMessage, stopChecksSettled } from "../src";
 import { createJevJudge, createLlmJudge, type Judge } from "../src/judge";
 import { handoffReplyIntent } from "../src/waits";

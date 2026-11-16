@@ -1,5 +1,5 @@
-import type { Actor, Message, ThreadInfo, ThreadStartMeta } from "@agenteschat/client";
-import { runsInChannel, useChannelThreads } from "@agenteschat/client";
+import type { Actor, Message, ThreadInfo, ThreadStartMeta } from "@keepmind/client";
+import { runsInChannel, useChannelThreads } from "@keepmind/client";
 import {
   returnClock,
   type ThreadWorkState,
@@ -8,10 +8,10 @@ import {
   threadWorkWord,
   WORK_TICK_MS,
   workTime,
-} from "@agenteschat/client/lib/agent-work";
-import { formatTime, relativeTime } from "@agenteschat/client/lib/format";
-import { threadMessageCount, threadTitle } from "@agenteschat/client/lib/threads";
-import { AvatarStack, Button, CountBadge, Icon, Popover } from "@agenteschat/ui";
+} from "@keepmind/client/lib/agent-work";
+import { formatTime, relativeTime } from "@keepmind/client/lib/format";
+import { threadMessageCount, threadTitle } from "@keepmind/client/lib/threads";
+import { AvatarStack, Button, CountBadge, Icon, Popover } from "@keepmind/ui";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { createContext, type ReactNode, useContext, useState } from "react";
 import { useTranslation } from "react-i18next";

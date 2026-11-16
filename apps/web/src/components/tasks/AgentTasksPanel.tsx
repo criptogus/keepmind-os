@@ -1,5 +1,5 @@
-import type { EndedTask, ManagedTask } from "@agenteschat/client";
-import { TASK_MANAGER_POLL_MS, useTaskSteps } from "@agenteschat/client";
+import type { EndedTask, ManagedTask } from "@keepmind/client";
+import { TASK_MANAGER_POLL_MS, useTaskSteps } from "@keepmind/client";
 import {
   agentCardLine,
   agentSummary,
@@ -10,9 +10,9 @@ import {
   taskTitle,
   taskWaitWords,
   waitsOnPerson,
-} from "@agenteschat/client/lib/task-manager";
-import { formatDuration } from "@agenteschat/client/lib/work";
-import { Button, EmptyState, Icon, PixelStop } from "@agenteschat/ui";
+} from "@keepmind/client/lib/task-manager";
+import { formatDuration } from "@keepmind/client/lib/work";
+import { Button, EmptyState, Icon, PixelStop } from "@keepmind/ui";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

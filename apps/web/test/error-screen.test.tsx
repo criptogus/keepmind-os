@@ -1,12 +1,12 @@
 import { afterEach, describe, expect, spyOn, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { ApiError, NetworkError } from "@agenteschat/client";
-import { ErrorBoundary } from "@agenteschat/client/lib/error-boundary";
+import { ApiError, NetworkError } from "@keepmind/client";
+import { ErrorBoundary } from "@keepmind/client/lib/error-boundary";
 import { act, cleanup, fireEvent, render, waitFor } from "@testing-library/react";
 import { useState } from "react";
 import { I18nextProvider } from "react-i18next";

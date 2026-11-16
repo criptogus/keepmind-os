@@ -1,7 +1,7 @@
-import { keys, type Me } from "@agenteschat/client";
-import { errorCode, errorText, REAUTH_SIGN_IN } from "@agenteschat/client/lib/errors";
-import { passwordState } from "@agenteschat/client/lib/text";
-import { Alert, Button, Dialog, DialogBody, DialogFooter, Field, Input, Locked } from "@agenteschat/ui";
+import { keys, type Me } from "@keepmind/client";
+import { errorCode, errorText, REAUTH_SIGN_IN } from "@keepmind/client/lib/errors";
+import { passwordState } from "@keepmind/client/lib/text";
+import { Alert, Button, Dialog, DialogBody, DialogFooter, Field, Input, Locked } from "@keepmind/ui";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -12,7 +12,7 @@ import { PasswordHelp } from "@/pages/AuthPage";
 
 /**
  * "Adicionar uma senha" (Configurações › Sua conta): for an account that signs in another way (Google or Apple, or
- * the agentes.chat app on the computer that runs this server), so it also signs in with its email from
+ * the KeepMind OS app on the computer that runs this server), so it also signs in with its email from
  * any browser. A password proves it's the person, so it needs a sign-in in the last 10 minutes: an older
  * session signs in again first. On an account that has one, "Create a new password" in its place (ADR 0158: the
  * server's owner after Forgot password › Continue on this Mac): every other session ends.

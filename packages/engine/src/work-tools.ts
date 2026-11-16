@@ -1,5 +1,5 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, eq, schema } from "@agenteschat/db";
+import type { PubSub } from "@keepmind/adapters";
+import { and, eq, schema } from "@keepmind/db";
 import { runAuthority } from "./authority";
 import { cancelRun } from "./cancel";
 import { andList } from "./format";

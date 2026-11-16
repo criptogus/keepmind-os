@@ -2,8 +2,8 @@
  * The freeze watch's thread (`startFreezeWatch`): it reads only the shared memory the main thread writes, so it goes on
  * while that thread is stuck, and reports for it.
  */
-import { createErrorReporter } from "@agenteschat/adapters/error-reports";
-import { readInFlight } from "@agenteschat/adapters/in-flight";
+import { createErrorReporter } from "@keepmind/adapters/error-reports";
+import { readInFlight } from "@keepmind/adapters/in-flight";
 import type { FreezeWatchStart } from "./freeze-watch";
 import { createLogger } from "./logger";
 

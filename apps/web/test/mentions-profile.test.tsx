@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { HOVER_CLOSE_MS, mentionQuery } from "@agenteschat/ui";
+import { HOVER_CLOSE_MS, mentionQuery } from "@keepmind/ui";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import {
   ADA_ID,

@@ -1,4 +1,4 @@
-import { and, type Database, eq, isNotNull, isNull, schema, sql } from "@agenteschat/db";
+import { and, type Database, eq, isNotNull, isNull, schema, sql } from "@keepmind/db";
 import { caches } from "./cache";
 import { NotFoundError } from "./errors";
 import { can, requirePermission } from "./organizations";

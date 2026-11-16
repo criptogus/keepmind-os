@@ -1,5 +1,5 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
-import type { KeyWrapper, PubSub, RateLimiter } from "@agenteschat/adapters";
+import type { KeyWrapper, PubSub, RateLimiter } from "@keepmind/adapters";
 import {
   and,
   type Database,
@@ -13,7 +13,7 @@ import {
   rowsOf,
   schema,
   sql,
-} from "@agenteschat/db";
+} from "@keepmind/db";
 import { recordAudit } from "./audit";
 import { connectorCallPasses, connectorTriggerAllowed, sourceOf } from "./connector-triggers";
 import { openSecret, randomToken, routineHookToken, sealSecret, sha256 } from "./crypto";
@@ -305,7 +305,7 @@ export async function sendRoutineHookTest(deps: RoutineHookDeps, routine: Routin
     throw new TooManyError("Too many calls to this routine. Try again in a minute.", "routine.webhook_rate_limited");
   }
   const body = new TextEncoder().encode(JSON.stringify(SAMPLE));
-  const headers = new Headers({ "content-type": "application/json", "user-agent": "agentes.chat" });
+  const headers = new Headers({ "content-type": "application/json", "user-agent": "keepmind.io" });
   const answer = await accept(deps, hook, { headers, body, test: true });
   return { runId: answer.runId, hook: await routineHookView(deps, routine) };
 }

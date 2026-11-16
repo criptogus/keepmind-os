@@ -1,8 +1,8 @@
-import { type Message, useApi } from "@agenteschat/client";
-import { type ConsultNoticeFold, pairItemOf } from "@agenteschat/client/lib/consult-group";
-import { agentsByAnyHandle } from "@agenteschat/client/lib/directory";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { consultationOfNotice, noticeOf, stoppedNoticeOf } from "@agenteschat/client/lib/notices";
+import { type Message, useApi } from "@keepmind/client";
+import { type ConsultNoticeFold, pairItemOf } from "@keepmind/client/lib/consult-group";
+import { agentsByAnyHandle } from "@keepmind/client/lib/directory";
+import { errorText } from "@keepmind/client/lib/errors";
+import { consultationOfNotice, noticeOf, stoppedNoticeOf } from "@keepmind/client/lib/notices";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";

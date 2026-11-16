@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { LearnedSkill, PlanUsage, Run } from "@agenteschat/client";
+import type { LearnedSkill, PlanUsage, Run } from "@keepmind/client";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import {
   agentSearch,
@@ -806,7 +806,7 @@ describe("agent page: memory and proposals", () => {
   test("one column, and under its cards one link to how memory works", async () => {
     await go("?tab=memory");
     const link = screen().getByRole("link", { name: "Como a memória funciona" });
-    expect(link.getAttribute("href")).toBe("https://agentes.chat/pt/docs/memory");
+    expect(link.getAttribute("href")).toBe("https://keepmind.io/pt/docs/memory");
     expect(link.getAttribute("rel")).toBe("noopener noreferrer");
     expect(link.closest(".agp-cols")?.querySelectorAll(".agp-col")).toHaveLength(1);
     expect(link.closest(".page__note")?.textContent).toBe("Como a memória funciona");

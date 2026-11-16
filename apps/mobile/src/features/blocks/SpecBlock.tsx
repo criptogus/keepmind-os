@@ -1,7 +1,7 @@
-import { type BlockChange, useBlockReply, useBlockValues } from "@agenteschat/client";
-import type { ChartSpec } from "@agenteschat/client/lib/chart";
-import { clockHour } from "@agenteschat/client/lib/format";
-import type { AgentColorName } from "@agenteschat/ui/agent/engine";
+import { type BlockChange, useBlockReply, useBlockValues } from "@keepmind/client";
+import type { ChartSpec } from "@keepmind/client/lib/chart";
+import { clockHour } from "@keepmind/client/lib/format";
+import type { AgentColorName } from "@keepmind/ui/agent/engine";
 import {
   type BlockViewPart,
   type BlockWords,
@@ -9,7 +9,7 @@ import {
   inputValue,
   parseBlockSpec,
   viewBlock,
-} from "@agenteschat/ui/blocks/spec";
+} from "@keepmind/ui/blocks/spec";
 import { randomUUID } from "expo-crypto";
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -50,7 +50,7 @@ type Values = ReturnType<typeof useBlockValues>;
 /**
  * A live block drawn by the app itself (ADR 0113): the parts the agent described, with the app's own controls, over
  * the state everyone in the conversation shares. Nothing the agent wrote runs on the phone: its words reach the screen
- * only as text, and its formulas are read by our interpreter (`@agenteschat/ui/blocks/spec`). So it needs no web view,
+ * only as text, and its formulas are read by our interpreter (`@keepmind/ui/blocks/spec`). So it needs no web view,
  * draws at once with the message, and any number of them can be on screen.
  */
 export function SpecBlock({

@@ -1,6 +1,6 @@
-import { authErrorText } from "@agenteschat/client/lib/errors";
-import { passwordState } from "@agenteschat/client/lib/text";
-import { Button, Icon, Input, Locked } from "@agenteschat/ui";
+import { authErrorText } from "@keepmind/client/lib/errors";
+import { passwordState } from "@keepmind/client/lib/text";
+import { Button, Icon, Input, Locked } from "@keepmind/ui";
 import { Link } from "@tanstack/react-router";
 import { type FormEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -45,7 +45,7 @@ export function ResetPasswordPage({ token }: { token?: string }) {
     <AuthShell>
       <form className="auth__form" onSubmit={submit} noValidate>
         <header className="auth__ask">
-          <AgentAvatar name="agentes.chat" size="lg" state={pending ? "writing" : undefined} expression={expression} />
+          <AgentAvatar name="keepmind.io" size="lg" state={pending ? "writing" : undefined} expression={expression} />
           <div className="auth__bubble" key={`${expired}-${done}`} aria-live="polite">
             <h1 className="auth__title">{title}</h1>
             {lead && <p className="auth__lead">{lead}</p>}

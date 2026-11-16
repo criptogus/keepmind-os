@@ -1,9 +1,9 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import type { Artifact, Issue, IssueColumn } from "@agenteschat/client";
-import { githubLinkLabel, isGithubLink } from "@agenteschat/client/lib/github-link";
-import { conversationLine } from "@agenteschat/client/lib/issues";
+import type { Artifact, Issue, IssueColumn } from "@keepmind/client";
+import { githubLinkLabel, isGithubLink } from "@keepmind/client/lib/github-link";
+import { conversationLine } from "@keepmind/client/lib/issues";
 import { cardPreview, cardShape, driveSections, gridRows, kindKey, matchesType } from "../../src/features/drive/logic";
 import {
   columnChoices,

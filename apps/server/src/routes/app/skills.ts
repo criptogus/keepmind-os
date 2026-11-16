@@ -1,4 +1,4 @@
-import { connectorOAuthApps } from "@agenteschat/config";
+import { connectorOAuthApps } from "@keepmind/config";
 import {
   agentMadeSkills,
   agentSkillList,
@@ -28,8 +28,8 @@ import {
   updateSkill,
   updateSkillFromSource,
   ValidationError,
-} from "@agenteschat/engine";
-import { SKILL_ZIP_BASE64_CHARS } from "@agenteschat/tokens/skills";
+} from "@keepmind/engine";
+import { SKILL_ZIP_BASE64_CHARS } from "@keepmind/tokens/skills";
 import { createRoute, z } from "@hono/zod-openapi";
 import { apiError, errorResponse } from "../../http/errors";
 import { githubAppOf } from "../github-app";

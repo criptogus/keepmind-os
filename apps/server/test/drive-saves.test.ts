@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import { driveSections, PRIVATE_SECTION } from "@agenteschat/client/lib/drive";
-import { grantScopes } from "@agenteschat/engine";
+import { driveSections, PRIVATE_SECTION } from "@keepmind/client/lib/drive";
+import { grantScopes } from "@keepmind/engine";
 import { browser, createTestServer, seedOrg, signUp, type TestServer } from "./harness";
 
 /** A routine's file as a person gets it: its model's real tool calls, then the Drive API and the page's sections. */

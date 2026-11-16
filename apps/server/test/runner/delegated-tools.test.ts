@@ -12,8 +12,8 @@ import {
 } from "node:fs";
 import path from "node:path";
 import { PassThrough } from "node:stream";
-import { ASK_AFTER_TASK, PLAN_MESSAGE } from "@agenteschat/adapters/command-policy";
-import { PERMISSION_TOOL } from "@agenteschat/adapters/machine-protocol";
+import { ASK_AFTER_TASK, PLAN_MESSAGE } from "@keepmind/adapters/command-policy";
+import { PERMISSION_TOOL } from "@keepmind/adapters/machine-protocol";
 import {
   BASH_MAX_TIMEOUT_MS,
   DELEGATED_RESULT_TOKENS,
@@ -198,7 +198,7 @@ test("commands get the agent's secrets, and no result shows them", async () => {
 
 test("commands get what root's turn named for its agent (its commits' lines), the session's latest", async () => {
   const asked: unknown[] = [];
-  const line = "Co-authored-by: Ada <noreply@agentes.chat>";
+  const line = "Co-authored-by: Ada <contact@zeroagency.ai>";
   const { call, state, tools, scope } = setup(
     { agent: { ...AGENT, coAuthors: [line] } },
     {

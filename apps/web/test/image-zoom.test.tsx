@@ -1,5 +1,5 @@
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "bun:test";
-import { domWindow, setupDom } from "@agenteschat/ui/testing/dom";
+import { domWindow, setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 

@@ -5,8 +5,8 @@ import {
   MACHINE_PROTOCOL_VERSION,
   PERMISSION_TIMEOUT_MESSAGE,
   type ServerFrame,
-} from "@agenteschat/adapters";
-import { and, eq, schema, sql } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { and, eq, schema, sql } from "@keepmind/db";
 import {
   addChannelMember,
   afterMissionRunEnded,
@@ -82,7 +82,7 @@ const RUNNER = {
   protocol: MACHINE_PROTOCOL_VERSION,
   workspace: "/Users/w/agentes",
 };
-const deps = () => ({ db: f.db, pubsub: f.pubsub, publicUrl: "https://agentes.chat" });
+const deps = () => ({ db: f.db, pubsub: f.pubsub, publicUrl: "https://keepmind.io" });
 const md = () => f.missionDeps;
 
 type Request = Extract<ServerFrame, { type: "request" }>;

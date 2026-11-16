@@ -1,13 +1,13 @@
 import {
-  isAgentesCloud,
+  isKeepMindCloud,
   type JevKey,
   type JevKeyView,
   jevMonth,
   NotFoundError,
   pinnedOwner,
   ValidationError,
-} from "@agenteschat/engine";
-import { nanoUsdToUsd } from "@agenteschat/providers";
+} from "@keepmind/engine";
+import { nanoUsdToUsd } from "@keepmind/providers";
 import { createRoute, z } from "@hono/zod-openapi";
 import { apiError, errorResponse } from "../../http/errors";
 import { type AppDeps, body, createAppRouter, errors, json, requireSession, security } from "./context";
@@ -40,10 +40,10 @@ const ApiKey = z.object({
 /** Limits checking keys through this server, so it can't test keys in bulk. */
 const WRITES = { limit: 10, windowMs: 60_000 };
 
-const notFound = "404 for everyone but the installation's pinned owner (ADR 0073), and on agentes.chat itself.";
+const notFound = "404 for everyone but the installation's pinned owner (ADR 0073), and on KeepMind OS itself.";
 const tooMany = { 429: errorResponse("Too many tries (`rate_limited`)") };
 
-/** The installation's Jev key (ADR 0073): only its pinned owner, and never on agentes.chat's own servers. */
+/** The installation's Jev key (ADR 0073): only its pinned owner, and never on KeepMind OS's own servers. */
 export function jevRoutes(deps: AppDeps) {
   const { db, config } = deps;
   const app = createAppRouter(deps);
@@ -52,7 +52,7 @@ export function jevRoutes(deps: AppDeps) {
 
   const ownerOnly = async (userId: string): Promise<JevKey> => {
     const jev = deps.extras?.jevKey;
-    if (!jev || isAgentesCloud(config.PUBLIC_URL) || (await pinnedOwner(db)) !== userId) throw new NotFoundError();
+    if (!jev || isKeepMindCloud(config.PUBLIC_URL) || (await pinnedOwner(db)) !== userId) throw new NotFoundError();
     return jev;
   };
   const allowed = async (userId: string) => (await deps.adapters.rateLimiter.consume(`jev:${userId}`, WRITES)).allowed;

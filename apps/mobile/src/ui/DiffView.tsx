@@ -1,4 +1,4 @@
-import { type DiffKind, type DiffLine, diffBlocks } from "@agenteschat/ui/diff";
+import { type DiffKind, type DiffLine, diffBlocks } from "@keepmind/ui/diff";
 import type { ReactNode } from "react";
 import { Text as RNText, StyleSheet, View } from "react-native";
 import { withAlpha } from "./palette";

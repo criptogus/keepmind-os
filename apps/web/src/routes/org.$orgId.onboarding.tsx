@@ -1,4 +1,4 @@
-import { isPaidReturn } from "@agenteschat/client/lib/billing";
+import { isPaidReturn } from "@keepmind/client/lib/billing";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
 /**

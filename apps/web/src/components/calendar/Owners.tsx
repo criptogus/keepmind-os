@@ -1,6 +1,6 @@
-import type { Actor } from "@agenteschat/client";
-import type { CalItem } from "@agenteschat/client/lib/calendar";
-import { Checkbox } from "@agenteschat/ui";
+import type { Actor } from "@keepmind/client";
+import type { CalItem } from "@keepmind/client/lib/calendar";
+import { Checkbox } from "@keepmind/ui";
 import { useTranslation } from "react-i18next";
 import { ActorWho } from "@/components/AgentAvatar";
 import { actorKey, useActors } from "@/components/actors";

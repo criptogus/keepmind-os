@@ -1,7 +1,7 @@
-import { instanceQuery, useApi } from "@agenteschat/client";
-import { LICENSE_URL, PUBLIC_SOURCE_URL } from "@agenteschat/client/lib/about";
-import { shownAddress } from "@agenteschat/client/lib/sites";
-import { DOCS_SITE } from "@agenteschat/i18n/docs";
+import { instanceQuery, useApi } from "@keepmind/client";
+import { LICENSE_URL, PUBLIC_SOURCE_URL } from "@keepmind/client/lib/about";
+import { shownAddress } from "@keepmind/client/lib/sites";
+import { DOCS_SITE } from "@keepmind/i18n/docs";
 import { useQuery } from "@tanstack/react-query";
 import { Trans, useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
@@ -14,7 +14,7 @@ const link = (href: string) => (
 );
 
 /**
- * Sobre o agentes.chat, pushed from Você: AGPL-3.0's Appropriate Legal Notices and the attribution the license's
+ * Sobre o KeepMind OS, pushed from Você: AGPL-3.0's Appropriate Legal Notices and the attribution the license's
  * section 7(b) term in NOTICE requires. Shown on every self-hosted server, with no setting that hides it (`showsAbout`).
  */
 export function AboutPage() {

@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
-import { and, eq, isNull, schema } from "@agenteschat/db";
+import { and, eq, isNull, schema } from "@keepmind/db";
 import {
   CURSOR_CALLBACK,
   pinnedLookup,
@@ -8,7 +8,7 @@ import {
   restoreAccount,
   scheduleAccountDeletion,
   sha256,
-} from "@agenteschat/engine";
+} from "@keepmind/engine";
 import { authorize, callTool, connectApp, LOOPBACK, mcp, pkce, registerClient, requestIdOf, token } from "./ai-apps";
 import { browser, createTestServer, joinByInvitation, ORIGIN, seedOrg, signUp, type TestServer } from "./harness";
 
@@ -67,8 +67,8 @@ describe("discovery", () => {
         authorization_servers: [ORIGIN],
         scopes_supported: ["read", "write", "manage"],
         bearer_methods_supported: ["header"],
-        resource_name: "agentes.chat",
-        resource_documentation: "https://agentes.chat/docs/apps-de-ia",
+        resource_name: "keepmind.io",
+        resource_documentation: "https://keepmind.io/docs/apps-de-ia",
       });
     }
     const as = await (await t.app.request("/.well-known/oauth-authorization-server")).json();

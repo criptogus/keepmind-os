@@ -1,4 +1,4 @@
-import type { Seat } from "@agenteschat/client/lib/seat";
+import type { Seat } from "@keepmind/client/lib/seat";
 import { createContext, useContext } from "react";
 
 /**

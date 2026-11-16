@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { createHash } from "node:crypto";
-import type { MachineReplies, MachineRequest } from "@agenteschat/adapters";
-import { and, eq, schema } from "@agenteschat/db";
-import type { ModelRequest } from "@agenteschat/providers";
+import type { MachineReplies, MachineRequest } from "@keepmind/adapters";
+import { and, eq, schema } from "@keepmind/db";
+import type { ModelRequest } from "@keepmind/providers";
 import {
   afterDeviceAccessDecided,
   createDeviceToolSource,
@@ -288,7 +288,7 @@ describe("computer on someone else's device", () => {
     const mac = await call(ctx, "computer_status", { computer: "Sam's MacBook" });
     // Codex was never found there: nothing to turn on.
     expect(mac.content).toContain(
-      "\n  Off there: shell commands, Claude Code. Only the person at it can turn them on, in the agentes.chat app there (Preferences › Tools).\n",
+      "\n  Off there: shell commands, Claude Code. Only the person at it can turn them on, in the KeepMind OS app there (Preferences › Tools).\n",
     );
     await f.db.update(schema.machines).set({ os: "linux" }).where(machine);
     expect((await call(ctx, "computer_status", {})).content).toContain(

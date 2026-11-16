@@ -18,7 +18,7 @@ import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createInterface } from "node:readline";
-import { createAnthropicProvider } from "@agenteschat/providers";
+import { createAnthropicProvider } from "@keepmind/providers";
 import { createWebToolSource, HOW_YOU_WORK, type ToolContext, turnMeans } from "../src";
 import { fakeWebFetch, type WebFixture } from "./behavior-fakes";
 import { type BehaviorCase, runCase } from "./behavior-run";

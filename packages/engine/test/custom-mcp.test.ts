@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { createHash } from "node:crypto";
-import { countQueries, eq, schema, sql } from "@agenteschat/db";
-import { runMigration } from "@agenteschat/db/testing";
+import { countQueries, eq, schema, sql } from "@keepmind/db";
+import { runMigration } from "@keepmind/db/testing";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
@@ -558,7 +558,7 @@ describe("custom MCP servers", () => {
     const input = { serverUrl, apiKey: "fake_intercom_key", label: "Intercom" };
     const cloud = depsOf(f, {
       connect: mcp.connect,
-      publicUrl: "https://agentes.chat",
+      publicUrl: "https://keepmind.io",
       resolveHost: async () => ["93.184.216.34"],
     });
     await expect(connectCustomServer(cloud, f.owner.id, f.org.id, input)).rejects.toMatchObject({

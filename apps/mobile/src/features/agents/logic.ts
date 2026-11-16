@@ -12,15 +12,15 @@ import type {
   Memory,
   OrgSummary,
   PreviewMeta,
-} from "@agenteschat/client";
-import { asksAt, levelOf, resourcesOf } from "@agenteschat/client/lib/access-levels";
-import { agentSections } from "@agenteschat/client/lib/agent-groups";
-import { planLabel, planOfAccount } from "@agenteschat/client/lib/no-ai";
-import { can } from "@agenteschat/client/lib/permissions";
-import { isOutOfOffice } from "@agenteschat/client/lib/presence";
-import { isAuto, providerLabel } from "@agenteschat/client/lib/providers";
-import { splitPinned } from "@agenteschat/client/lib/sidebar-view";
-import { type WorkItem, workByAgent } from "@agenteschat/client/lib/working";
+} from "@keepmind/client";
+import { asksAt, levelOf, resourcesOf } from "@keepmind/client/lib/access-levels";
+import { agentSections } from "@keepmind/client/lib/agent-groups";
+import { planLabel, planOfAccount } from "@keepmind/client/lib/no-ai";
+import { can } from "@keepmind/client/lib/permissions";
+import { isOutOfOffice } from "@keepmind/client/lib/presence";
+import { isAuto, providerLabel } from "@keepmind/client/lib/providers";
+import { splitPinned } from "@keepmind/client/lib/sidebar-view";
+import { type WorkItem, workByAgent } from "@keepmind/client/lib/working";
 import type { TFunction } from "i18next";
 import { daysAgo, previewOf } from "../shared/logic";
 
@@ -29,7 +29,7 @@ import { daysAgo, previewOf } from "../shared/logic";
  * Início, and what an agent's profile shows about its month.
  */
 
-export { type WorkItem, workByAgent, workingNow } from "@agenteschat/client/lib/working";
+export { type WorkItem, workByAgent, workingNow } from "@keepmind/client/lib/working";
 
 /** Agents with something in progress. */
 export const busyAgents = (work: WorkItem[]) => new Set(work.map((w) => w.agentId));

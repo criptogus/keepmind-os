@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import { type RealtimeEvent, userTopic } from "@agenteschat/adapters";
+import { type RealtimeEvent, userTopic } from "@keepmind/adapters";
 import { listNotifications, notifyRunFailed, RUN_FAILED_GROUP_MS, resolveRunFailed } from "../src";
 import { type Fixture, setup } from "./fixtures";
 

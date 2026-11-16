@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, setSystemTime, test } from "bun:test";
-import { MACHINE_PROTOCOL_VERSION } from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
-import type { ModelRequest } from "@agenteschat/providers";
+import { MACHINE_PROTOCOL_VERSION } from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
+import type { ModelRequest } from "@keepmind/providers";
 import {
   addChannelMember,
   type Brain,
@@ -64,7 +64,7 @@ const statusOf = (machineId: string): MachineStatus => ({
 });
 
 async function computerAgent(fx: Fixture) {
-  const deps = { db: fx.db, pubsub: fx.pubsub, publicUrl: "https://agentes.chat" };
+  const deps = { db: fx.db, pubsub: fx.pubsub, publicUrl: "https://keepmind.io" };
   const paired = await pairMachine(deps, fx.owner.id, fx.org.id, { name: "MacBook", ...RUNNER, exec: true });
   await fx.db
     .update(schema.agents)

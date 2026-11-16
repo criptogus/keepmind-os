@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { resources } from "@agenteschat/i18n";
+import { resources } from "@keepmind/i18n";
 import i18next, { type TFunction } from "i18next";
 import type { AgentStatus, AgentWork, PendingReturn, RunConsultation } from "../src/api/types";
 import {

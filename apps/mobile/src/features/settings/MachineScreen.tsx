@@ -1,4 +1,4 @@
-import type { Machine, ScopeGrant } from "@agenteschat/client";
+import type { Machine, ScopeGrant } from "@keepmind/client";
 import {
   BROWSER_TOOL_SCOPE,
   isOpenHandoff,
@@ -16,11 +16,11 @@ import {
   useMachinePause,
   useMachines,
   useReduceMachineAccess,
-} from "@agenteschat/client";
-import { computerName, setupView } from "@agenteschat/client/lib/computer";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { firstName, formatTime, joinNames } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
+} from "@keepmind/client";
+import { computerName, setupView } from "@keepmind/client/lib/computer";
+import { errorText } from "@keepmind/client/lib/errors";
+import { firstName, formatTime, joinNames } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
 import {
   allowedFolders,
   allowsInApp,
@@ -45,12 +45,12 @@ import {
   sharedFolderOf,
   toolOnCommand,
   toolOneClick,
-} from "@agenteschat/client/lib/machines";
-import { can } from "@agenteschat/client/lib/permissions";
-import { SHARED_SEAT, screenId } from "@agenteschat/client/lib/seat";
-import { helpUrl } from "@agenteschat/client/lib/server";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
-import { countryFlagSvg } from "@agenteschat/ui/brand/flags";
+} from "@keepmind/client/lib/machines";
+import { can } from "@keepmind/client/lib/permissions";
+import { SHARED_SEAT, screenId } from "@keepmind/client/lib/seat";
+import { helpUrl } from "@keepmind/client/lib/server";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
+import { countryFlagSvg } from "@keepmind/ui/brand/flags";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

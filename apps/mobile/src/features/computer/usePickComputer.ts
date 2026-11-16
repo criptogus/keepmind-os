@@ -1,8 +1,8 @@
-import { useComputerSetup, useMachines, useSetComputerTarget } from "@agenteschat/client";
-import { setupView } from "@agenteschat/client/lib/computer";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { machineTitle } from "@agenteschat/client/lib/machines";
-import { can } from "@agenteschat/client/lib/permissions";
+import { useComputerSetup, useMachines, useSetComputerTarget } from "@keepmind/client";
+import { setupView } from "@keepmind/client/lib/computer";
+import { errorText } from "@keepmind/client/lib/errors";
+import { machineTitle } from "@keepmind/client/lib/machines";
+import { can } from "@keepmind/client/lib/permissions";
 import { useTranslation } from "react-i18next";
 import { useOrg } from "@/providers/org";
 import { useToast } from "@/ui";

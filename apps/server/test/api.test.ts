@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
-import { eq, schema } from "@agenteschat/db";
+import { eq, schema } from "@keepmind/db";
 import { z } from "@hono/zod-openapi";
 import { issueParams } from "../src/http/errors";
 import { browser, createTestServer, seedOrg, signUp, type TestServer } from "./harness";

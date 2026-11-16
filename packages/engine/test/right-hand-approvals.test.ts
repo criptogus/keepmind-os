@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { and, eq, schema } from "@agenteschat/db";
-import type { ModelRequest } from "@agenteschat/providers";
+import { and, eq, schema } from "@keepmind/db";
+import type { ModelRequest } from "@keepmind/providers";
 import {
   type AgentProposalCard,
   agentProposalOf,

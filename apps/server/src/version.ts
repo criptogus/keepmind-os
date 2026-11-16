@@ -1,4 +1,4 @@
-import type { Config } from "@agenteschat/config";
+import type { Config } from "@keepmind/config";
 import pkg from "../package.json" with { type: "json" };
 
 /** Server version, taken from apps/server/package.json. */

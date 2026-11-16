@@ -1,9 +1,9 @@
 /** Offline only: creates a NEW private directory. Never reads server env, starts workers or connects providers. */
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
-import { createDiskBlobStore, createMemoryPubSub, singleStoreResolver } from "@agenteschat/adapters";
-import { createDatabase, eq, schema } from "@agenteschat/db";
-import { createOrganization } from "@agenteschat/engine";
+import { createDiskBlobStore, createMemoryPubSub, singleStoreResolver } from "@keepmind/adapters";
+import { createDatabase, eq, schema } from "@keepmind/db";
+import { createOrganization } from "@keepmind/engine";
 import { type KeepMindLegacySnapshot, stageKeepMindLegacy } from "../../../packages/engine/src/keepmind-legacy";
 
 import { simulateLegacyWorkflow } from "../../../packages/engine/src/keepmind-legacy-mapping";

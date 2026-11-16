@@ -1,8 +1,8 @@
 import { expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
-import { teamWeekWhen } from "@agenteschat/client/lib/right-hand-prefs";
-import { teamWeekCardOf, teamWeekRowText } from "@agenteschat/client/lib/team-week";
-import { resources } from "@agenteschat/i18n";
+import { teamWeekWhen } from "@keepmind/client/lib/right-hand-prefs";
+import { teamWeekCardOf, teamWeekRowText } from "@keepmind/client/lib/team-week";
+import { resources } from "@keepmind/i18n";
 import i18next, { type TFunction } from "i18next";
 
 /** Lodi's weekly card on the phone (ADR 0137 §9), as on the web: the same card, stacked, and its schedule in Settings. */

@@ -1,5 +1,5 @@
-import { useWikiAction, useWikiTree } from "@agenteschat/client";
-import { Button, Dialog, DialogBody, DialogFooter, Icon, Locked, SearchField } from "@agenteschat/ui";
+import { useWikiAction, useWikiTree } from "@keepmind/client";
+import { Button, Dialog, DialogBody, DialogFooter, Icon, Locked, SearchField } from "@keepmind/ui";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useOrg } from "@/components/org-context";

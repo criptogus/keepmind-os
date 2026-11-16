@@ -10,7 +10,7 @@ import {
   setMemberRoles,
   setRowHolders,
   updateRole,
-} from "@agenteschat/engine";
+} from "@keepmind/engine";
 import { createRoute, z } from "@hono/zod-openapi";
 import {
   type AppDeps,

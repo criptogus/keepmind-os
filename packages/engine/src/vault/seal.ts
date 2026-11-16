@@ -10,7 +10,7 @@ import {
   type VaultSource,
   VaultSourceError,
   type VaultSources,
-} from "@agenteschat/adapters";
+} from "@keepmind/adapters";
 import { openSecret, sealSecret } from "../crypto";
 import type { ConnectionRow, ItemRow } from "./access";
 import { CONTACT_FIELDS, type VaultContactFields, type VaultDeps } from "./service";

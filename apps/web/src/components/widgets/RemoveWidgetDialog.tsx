@@ -1,7 +1,7 @@
-import type { Dashboard, Widget } from "@agenteschat/client";
-import { useRemoveWidget } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { Button, Dialog, DialogFooter } from "@agenteschat/ui";
+import type { Dashboard, Widget } from "@keepmind/client";
+import { useRemoveWidget } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { Button, Dialog, DialogFooter } from "@keepmind/ui";
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useToast } from "@/lib/toast";

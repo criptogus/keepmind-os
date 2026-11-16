@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import type { DeviceAudience, DeviceStatus, PhoneDevice } from "@agenteschat/client";
+import type { DeviceAudience, DeviceStatus, PhoneDevice } from "@keepmind/client";
 import { placeOf, subtitleOf } from "../../src/features/activity/logic";
 import {
   androidStage,

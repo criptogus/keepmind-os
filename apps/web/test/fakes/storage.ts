@@ -22,7 +22,7 @@ import type {
   StorageStep,
   StorageTestResult,
   StorageUsage,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 import { clone } from "./context";
 
 const STEPS: StorageStep[] = ["write", "read", "list", "delete"];

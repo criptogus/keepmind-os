@@ -1,1 +1,1 @@
-export * from "@agenteschat/ui/markdown";
+export * from "@keepmind/ui/markdown";

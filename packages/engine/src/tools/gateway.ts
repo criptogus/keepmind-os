@@ -6,9 +6,9 @@ import {
   type MergeDone,
   PERMISSION_TOOL,
   type PubSub,
-} from "@agenteschat/adapters";
-import { startInFlight } from "@agenteschat/adapters/in-flight";
-import { and, desc, eq, inArray, isNotNull, isNull, or, schema, sql } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { startInFlight } from "@keepmind/adapters/in-flight";
+import { and, desc, eq, inArray, isNotNull, isNull, or, schema, sql } from "@keepmind/db";
 import { auditsCall, callSubject, callTitle, recordToolCall, type ToolCallSubject } from "../agent-audit";
 import { getAgentCached } from "../agents";
 import {

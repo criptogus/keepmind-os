@@ -14,7 +14,7 @@ export const legalTr: Partial<Record<LegalKind, LegalDocument>> = {
         id: "agreement",
         heading: "1. Sözleşme",
         blocks: [
-          'İşbu Kullanım Koşulları ("Koşullar"), agentes.chat ticari adıyla faaliyet gösteren Wyoming eyaleti limited şirketi CODARI GLOBAL, LLC ("agentes.chat", "biz") ile bir hesap veya çalışma alanı oluşturan gerçek ya da tüzel kişi ("siz") arasında bağlayıcı bir sözleşmedir. Bir hesap oluşturarak, bir çalışma alanına katılarak veya agentes.chat\'i web üzerinde, Mac uygulamasında ya da telefon uygulamasında ("Hizmet") başka herhangi bir şekilde kullanarak işbu Koşulları ve Gizlilik Politikamızı kabul etmiş olursunuz. Hizmeti bir şirket veya başka bir kuruluş adına kullanıyorsanız, o kuruluşu bağlamaya yetkili olduğunuzu beyan etmiş olursunuz.',
+          'İşbu Kullanım Koşulları ("Koşullar"), agentes.chat ticari adıyla faaliyet gösteren Wyoming eyaleti limited şirketi CODARI GLOBAL, LLC ("keepmind.io", "biz") ile bir hesap veya çalışma alanı oluşturan gerçek ya da tüzel kişi ("siz") arasında bağlayıcı bir sözleşmedir. Bir hesap oluşturarak, bir çalışma alanına katılarak veya agentes.chat\'i web üzerinde, Mac uygulamasında ya da telefon uygulamasında ("Hizmet") başka herhangi bir şekilde kullanarak işbu Koşulları ve Gizlilik Politikamızı kabul etmiş olursunuz. Hizmeti bir şirket veya başka bir kuruluş adına kullanıyorsanız, o kuruluşu bağlamaya yetkili olduğunuzu beyan etmiş olursunuz.',
           "Hizmeti kullanabilmek için en az 18 yaşında olmanız ve sözleşme yapma ehliyetine sahip olmanız gerekir.",
         ],
       },
@@ -181,7 +181,7 @@ export const legalTr: Partial<Record<LegalKind, LegalDocument>> = {
         id: "overview",
         heading: "1. Genel bakış",
         blocks: [
-          'agentes.chat ticari adıyla faaliyet gösteren Wyoming eyaleti limited şirketi CODARI GLOBAL, LLC ("agentes.chat", "biz"), insanların ve yapay zekâ ajanlarının birlikte çalıştığı, web üzerinde, Mac uygulaması olarak ve telefon uygulaması olarak sunulan bir çalışma alanı olan agentes.chat\'i ("Hizmet") işletir. Bu politika iki rolü birbirinden ayırır:',
+          'agentes.chat ticari adıyla faaliyet gösteren Wyoming eyaleti limited şirketi CODARI GLOBAL, LLC ("keepmind.io", "biz"), insanların ve yapay zekâ ajanlarının birlikte çalıştığı, web üzerinde, Mac uygulaması olarak ve telefon uygulaması olarak sunulan bir çalışma alanı olan agentes.chat\'i ("Hizmet") işletir. Bu politika iki rolü birbirinden ayırır:',
           {
             list: [
               "Kişilerin bir hesap oluşturmak ve kullanmak için bize verdiği bilgiler olan **hesap verileri** bakımından veri sorumlusu biziz.",

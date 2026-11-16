@@ -4,16 +4,16 @@
  * a time; `showWindow` switches it (the dev bar does too) and keeps the fake state.
  *
  * Scenarios (`?scenario=`): `first` (a Mac, nothing chosen yet), `windows` and `linux` (the same there),
- * `cloud` (agentes.chat, nothing on this computer), `selfhost` (the default: a server on Tailscale with two
- * organizations whose agents work here), `link` (a claim link waiting) and `here` (agentes.chat runs on this
+ * `cloud` (KeepMind OS, nothing on this computer), `selfhost` (the default: a server on Tailscale with two
+ * organizations whose agents work here), `link` (a claim link waiting) and `here` (KeepMind OS runs on this
  * computer, its organization's agents too); `?link=` makes any scenario start with that link waiting. A pair link
  * (`agenteschat://pair?server=…&link=ABCDEFGH`) joins Estúdio Norte once its maker lets it in, `HGFEDCBA`'s maker
  * says no, and any other code expired.
  * `?mac=ready`: Screen Recording and Full Disk Access allowed already (with Local Network asked, Prepare this Mac
  * is skipped).
- * Servers answer by host: agentes.tail1234.ts.net, agentes.chat and http://127.0.0.1:4310 are servers;
+ * Servers answer by host: agentes.tail1234.ts.net, KeepMind OS and http://127.0.0.1:4310 are servers;
  * noowner.tail1234.ts.net waits for its owner; old.example.com is too old; chat.example.com doesn't answer;
- * anything else isn't agentes.chat. `?found=0` makes discovery find nothing.
+ * anything else isn't KeepMind OS. `?found=0` makes discovery find nothing.
  * The server here: `?phase=` (starting, updating, stopped, failing), `?reach=1`, `?back=<version>` (an update
  * went back), `?run=0` (it stopped running here, its data kept), `?usage=0` (usage statistics off),
  * `?tailscale=` (on, off, missing), `?installed=terminal` (one from the terminal; `&claim=1` waits for its owner,
@@ -21,7 +21,7 @@
  * (setting up stops there). Cancel ends a setup at once, held or not (it rejects with "cancelled", as the app's
  * does). An update downloads in about 1.5 s with its progress, and Cancel drops it.
  */
-import { CLOUD_SERVER, isLoopback, readInstance, type ServerCheck } from "@agenteschat/client/lib/server";
+import { CLOUD_SERVER, isLoopback, readInstance, type ServerCheck } from "@keepmind/client/lib/server";
 import type { Candidate } from "../control/first-run";
 import {
   type LocalPhase,
@@ -109,7 +109,7 @@ const FAKE_NOTCH = { width: 186, height: 32 };
 const CLAIM_LINK = `agenteschat://connect?server=${encodeURIComponent(FAKE_SERVER)}&claim=b3duZXItY2xhaW0tYWJjZGVmZ2hpamtsbW5vcHFy`;
 
 const instance = (url: string, over: Record<string, unknown> = {}) => ({
-  name: "agentes.chat",
+  name: "keepmind.io",
   version: "1.4.0",
   api: 1,
   minApi: 1,
@@ -608,7 +608,7 @@ export function createFakeHost(
     openSystemSettings: async (page) => {
       console.info("[fake] open System Settings:", page);
     },
-    localDiagnostics: async () => `agentes.chat app ${version} (macos aarch64)\nserver here: ${local.phase}`,
+    localDiagnostics: async () => `KeepMind OS app ${version} (macos aarch64)\nserver here: ${local.phase}`,
     syncLocalHomes: async () => {},
     onLocalReach: (cb) => {
       reachListeners.add(cb);

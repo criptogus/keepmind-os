@@ -5,7 +5,7 @@ import {
   SHARED_SEAT,
   stopAgentHold,
   TooManyError,
-} from "@agenteschat/engine";
+} from "@keepmind/engine";
 import { createRoute, z } from "@hono/zod-openapi";
 import { BrowserHandoff, SEAT_NOTE, SeatQuery } from "./browser";
 import { type AppDeps, createAppRouter, errors, json, OrgParams, requireSession, security } from "./context";

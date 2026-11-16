@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, spyOn, test } from "bun:test";
-import { eq, schema, sql } from "@agenteschat/db";
-import type { ModelRequest } from "@agenteschat/providers";
+import { eq, schema, sql } from "@keepmind/db";
+import type { ModelRequest } from "@keepmind/providers";
 import { drainOutbox, executeRun, getMessage, listMessages, openDm, postPersonMessage, type ToolSource } from "../src";
 import { waitForBurst } from "../src/burst";
 import { type Fixture, setup } from "./fixtures";

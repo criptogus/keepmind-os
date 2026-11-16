@@ -2,7 +2,7 @@ import { afterEach, expect, test } from "bun:test";
 import { readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { isStartPage, START_FILE } from "@agenteschat/adapters/browser-start";
+import { isStartPage, START_FILE } from "@keepmind/adapters/browser-start";
 import { chromeLaunchArgs, domainAllowed, isWebPage } from "../../runner/browser";
 import { START_WORDS } from "../../runner/page-words";
 import { prepareStartPage, startPageHtml, unsafeStartFolder } from "../../runner/start-page";
@@ -39,7 +39,7 @@ test("the start page is one self-contained file: no network, no other file, the 
   expect(html).toContain('<meta name="google" content="notranslate">');
   expect(html).toContain('aria-hidden="true"');
   expect(html).not.toMatch(/<a\b|<button\b/);
-  // The desktop's band right below the window shows the agentes.chat logo: the page carries no second one, and
+  // The desktop's band right below the window shows the KeepMind OS logo: the page carries no second one, and
   // fades into that band's tone (desktop-look.ts's backdrop, 0.81 0.90 1.00).
   expect(html).not.toContain("agentes<b>.chat");
   expect(html).not.toContain("wallpaper.png");

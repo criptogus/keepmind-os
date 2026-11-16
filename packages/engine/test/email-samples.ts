@@ -1,7 +1,7 @@
 import type { EmailTemplate } from "../src";
 
 /** One email per kind and variant, as their jobs carry them: the tests render each one, and so does the preview. */
-const APP = "https://agentes.chat";
+const APP = "https://keepmind.io";
 const ORG = "6f1d2c9a-58c1-4f7e-9d3b-2a7c1e0b9f44";
 const VERIFY = `${APP}/api/auth/verify-email?token=eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFuYUBzb3V6YWJha2VyeS5jb20ifQ.k3J9&callbackURL=%2F%3Femail_confirmed%3D1`;
 /** The onboarding's own looks, drawn whole in the emails. */
@@ -276,7 +276,7 @@ export const EMAIL_SAMPLES: Record<string, EmailTemplate> = {
     code: "482913",
     email: "ana@souzabakery.com",
     orgName: "Souza Bakery",
-    support: "help@agentes.chat",
+    support: "contact@zeroagency.ai",
     url: APP,
   },
   /** Before deleting an account; the server has no support address. */
@@ -295,7 +295,7 @@ export const EMAIL_SAMPLES: Record<string, EmailTemplate> = {
     code: "482913",
     email: "ana@souzabakery.com",
     newEmail: "ana.souza@example.com",
-    support: "help@agentes.chat",
+    support: "contact@zeroagency.ai",
     url: APP,
   },
   /** The same, on a server with no support address. */
@@ -402,7 +402,7 @@ export const EMAIL_SAMPLES: Record<string, EmailTemplate> = {
     orgNames: ["Souza Bakery"],
     dueAt: "2026-11-06T18:42:00.000Z",
     timeZone: "America/New_York",
-    support: "help@agentes.chat",
+    support: "contact@zeroagency.ai",
     url: APP,
   },
   "account_deleting.pt-BR": {
@@ -423,7 +423,7 @@ export const EMAIL_SAMPLES: Record<string, EmailTemplate> = {
     orgNames: ["Souza Bakery", "Ana's drafts"],
     dueAt: "2026-11-06T18:42:00.000Z",
     timeZone: "America/New_York",
-    support: "help@agentes.chat",
+    support: "contact@zeroagency.ai",
     url: APP,
   },
   /** One workspace closed with it; the server has no support address. */
@@ -445,7 +445,7 @@ export const EMAIL_SAMPLES: Record<string, EmailTemplate> = {
     orgNames: [],
     dueAt: null,
     timeZone: "UTC",
-    support: "help@agentes.chat",
+    support: "contact@zeroagency.ai",
     url: APP,
   },
   "autonomy_report.en": {

@@ -1,5 +1,5 @@
-import type { ErrorReporter, PubSub } from "@agenteschat/adapters";
-import { type Database, ensureMessagePartitions, schema } from "@agenteschat/db";
+import type { ErrorReporter, PubSub } from "@keepmind/adapters";
+import { type Database, ensureMessagePartitions, schema } from "@keepmind/db";
 import {
   type ArtifactDeps,
   type BrowserLive,
@@ -63,7 +63,7 @@ import {
   sweepWidgetDrafts,
   type VoiceDeps,
   wakeSnoozedNotifications,
-} from "@agenteschat/engine";
+} from "@keepmind/engine";
 import { isExpectedError } from "./http/errors";
 import type { Logger } from "./logger";
 

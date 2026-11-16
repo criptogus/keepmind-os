@@ -228,7 +228,7 @@
     "approveStop": "停止等待",
     "openTailscale": "打开 Tailscale",
     "getTailscale": "获取 Tailscale",
-    "usage": "向 agentes.chat 发送匿名使用统计",
+    "usage": "向 KeepMind OS 发送匿名使用统计",
     "usageText": "统计数量，例如成员数、智能体数、机器规格、已用的 AI 词元，以及智能体的浏览器收发了多少数据。绝不包括消息、文件、名称或网站。",
     "start": "开始",
     "setting": "正在准备一切",

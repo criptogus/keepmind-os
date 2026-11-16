@@ -17,7 +17,7 @@ import {
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import type { Readable, Writable } from "node:stream";
-import { AGENT_WORKER_HOMES } from "@agenteschat/adapters/command-policy";
+import { AGENT_WORKER_HOMES } from "@keepmind/adapters/command-policy";
 import {
   type AccountKind,
   type AgentScope,
@@ -39,7 +39,7 @@ import {
   type ServerFrame,
   type ToolNotice,
   type TurnContext,
-} from "@agenteschat/adapters/machine-protocol";
+} from "@keepmind/adapters/machine-protocol";
 import type { AccountGrant } from "./accounts";
 import { type AgentUser, keepContainers, readAgentUsers, rootlessContainers, systemLauncher } from "./agent-users";
 import { type BindPolicyOptions, ensureBrowserBindPolicy } from "./browser-bind-policy";
@@ -786,7 +786,7 @@ export class Supervisor {
       if (!w.ready) continue;
       this.send(w, { type: "worker.close" });
       w.ready = false;
-      this.endSession(w, "The computer lost its connection to agentes.chat");
+      this.endSession(w, "The computer lost its connection to KeepMind OS");
     }
   }
 

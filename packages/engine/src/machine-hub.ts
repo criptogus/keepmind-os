@@ -32,9 +32,9 @@ import {
   type ServerFrame,
   TASKS_PROTOCOL,
   type Unsubscribe,
-} from "@agenteschat/adapters";
-import { and, type Database, eq, inArray, lt, schema } from "@agenteschat/db";
-import type { ToolImage } from "@agenteschat/providers";
+} from "@keepmind/adapters";
+import { and, type Database, eq, inArray, lt, schema } from "@keepmind/db";
+import type { ToolImage } from "@keepmind/providers";
 import { getAgentCached } from "./agents";
 import { UUID } from "./authority";
 import { type MachinePhoneRow, publishDevicesChanged, syncMachinePhones } from "./devices";
@@ -452,7 +452,7 @@ type McpOutcome =
 
 /** What an agent reads where its computer's app is too old to hand it a picture or a PDF the tool returned. */
 export const MCP_IMAGES_TOO_OLD =
-  "[The picture or PDF this tool returned can't reach you: the agentes.chat app on this computer is too old to pass it on. Tell the person exactly that: updating the app on that computer lets it through.]";
+  "[The picture or PDF this tool returned can't reach you: the KeepMind OS app on this computer is too old to pass it on. Tell the person exactly that: updating the app on that computer lets it through.]";
 const MCP_IMAGES_TOO_BIG =
   "[The pictures or PDF this tool returned are too big together to pass to this computer at once. Open them one at a time.]";
 

@@ -1,4 +1,4 @@
-import { type ComposioExecution, MAIL_PRESETS } from "@agenteschat/adapters";
+import { type ComposioExecution, MAIL_PRESETS } from "@keepmind/adapters";
 import {
   and,
   type Database,
@@ -16,7 +16,7 @@ import {
   type SQL,
   schema,
   sql,
-} from "@agenteschat/db";
+} from "@keepmind/db";
 import { CONNECTOR_CATALOG } from "./connectors/catalog";
 import { GITHUB_APP_AUTH } from "./connectors/connections";
 import { CUSTOM_PREFIX } from "./connectors/custom";

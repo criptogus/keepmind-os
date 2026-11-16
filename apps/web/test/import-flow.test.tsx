@@ -1,12 +1,12 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { domWindow, setupDom } from "@agenteschat/ui/testing/dom";
+import { domWindow, setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { basename, join, relative } from "node:path";
-import type { ApiClient, ImportFileInput, ImportInput, ImportItemResult, ImportPlan } from "@agenteschat/client";
-import { ApiError } from "@agenteschat/client";
+import type { ApiClient, ImportFileInput, ImportInput, ImportItemResult, ImportPlan } from "@keepmind/client";
+import { ApiError } from "@keepmind/client";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { fileSaver } from "@/components/artifacts/fileSaver";
 import { ImportFlow, useImportFlow } from "@/components/ImportFlow";
@@ -168,7 +168,7 @@ describe("Configurações → Importar e exportar", () => {
     // Whoever shares the file needs to know what never goes in it: one line. The full list is on the help page.
     expect(card.querySelector(".imp-note")?.textContent).toBe("Nunca leva chaves, senhas, logins nem conversas.");
     const whatsIn = within(card).getByRole("link", { name: "O que vai no arquivo" });
-    expect(whatsIn.getAttribute("href")).toBe("https://agentes.chat/pt/docs/import#export");
+    expect(whatsIn.getAttribute("href")).toBe("https://keepmind.io/pt/docs/import#export");
     expect(whatsIn.className).toBe("ac-link ac-link--muted");
     expect([whatsIn.getAttribute("target"), whatsIn.getAttribute("rel")]).toEqual(["_blank", "noopener noreferrer"]);
     await click(within(card).getByRole("button", { name: "Baixar o arquivo" }));
@@ -206,7 +206,7 @@ describe("Configurações → Importar e exportar", () => {
         ["Hermes Agent", "/brands/hermes.svg"],
         ["OpenClaw", "/brands/openclaw.svg"],
         ["Paperclip", "/brands/paperclip.svg"],
-        ["agentes.chat", "/favicon.svg"],
+        ["keepmind.io", "/favicon.svg"],
         // It names many apps: no one maker's logo fits.
         ["Outro app", null],
       ]);
@@ -222,7 +222,7 @@ describe("Configurações → Importar e exportar", () => {
         ["Hermes Agent", "/brands/hermes-dark.svg"],
         ["OpenClaw", "/brands/openclaw.svg"],
         ["Paperclip", "/brands/paperclip-dark.svg"],
-        ["agentes.chat", "/favicon.svg"],
+        ["keepmind.io", "/favicon.svg"],
         ["Outro app", null],
       ]);
     } finally {
@@ -366,7 +366,7 @@ describe("Configurações → Importar e exportar", () => {
     expect(text()).toContain("Cole o endereço no app. Ele abre esta página para você entrar.");
     const help = screen().getByRole("link", { name: "Como conectar, app por app" });
     expect([help.getAttribute("href"), help.getAttribute("target")]).toEqual([
-      "https://agentes.chat/pt/docs/apps-de-ia#connect",
+      "https://keepmind.io/pt/docs/apps-de-ia#connect",
       "_blank",
     ]);
 
@@ -815,7 +815,7 @@ describe("Configurações → Importar e exportar", () => {
     // Where each app puts its file is on the help page, one link under the request.
     expect(other.querySelector("dl")).toBeNull();
     const where = within(other).getByRole("link", { name: "Onde cada app entrega" });
-    expect(where.getAttribute("href")).toBe("https://agentes.chat/pt/docs/import#other-apps");
+    expect(where.getAttribute("href")).toBe("https://keepmind.io/pt/docs/import#other-apps");
     expect(where.className).toBe("ac-link ac-link--muted");
 
     await click(within(other).getByRole("button", { name: "Copiar o pedido" }), 2);

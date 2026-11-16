@@ -10,7 +10,7 @@ import { catalogLabel, toolKey } from "./tool-labels";
  * their language; the technical name only on hover or when a search matches it.
  * Levels in plain words: Só consulta · Muda coisas · Pede sua aprovação · Desligada.
  */
-/** A tool's level, as `@agenteschat/ui`'s `ToolPixels` draws it (same union as its `ToolLevelKind`). */
+/** A tool's level, as `@keepmind/ui`'s `ToolPixels` draws it (same union as its `ToolLevelKind`). */
 export type ToolLevelKind = "read" | "write" | "approval" | "off";
 
 export const REVIEW_LEVELS: ToolLevelKind[] = ["read", "write", "approval", "off"];

@@ -1,7 +1,7 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "agentes.chat operator API",
+    "title": "KeepMind OS operator API",
     "version": "test",
     "description": "Workspace and account lookups, what a run did and why a message started one or none, what a workspace connected, recorded, asked and scheduled, what a person was notified of and reaches, the messages no run answered, the job queue, the emails queued to an address and what model calls spent, workspace standing, billing holds and limits (ADR 0079), the events feed and review blocks, the workspaces' computers from an external provisioner, who may sign up (the waiting list and early-access invitations, ADR 0078), how new Claude sign-ins for all agents are made (ADR 0150), and how connectors are used (ADR 0103), for the people who run this instance (ADR 0056)."
   },
@@ -6650,7 +6650,7 @@
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 64,
-                    "description": "Shown to the workspace with the notice `shown`, its owners' notice included. On agentes.chat Cloud, `review` reads as the automatic review hold's line, `review.<category>` as that line naming what was flagged (`phishing_impersonation`, `account_takeover`, `fraud` or `illegal_content`, any other category reading as plain `review`), `ended` (a plan that ended) as it is, and any other reason is followed by how to contest it, so name the Terms section it rests on."
+                    "description": "Shown to the workspace with the notice `shown`, its owners' notice included. On KeepMind OS Cloud, `review` reads as the automatic review hold's line, `review.<category>` as that line naming what was flagged (`phishing_impersonation`, `account_takeover`, `fraud` or `illegal_content`, any other category reading as plain `review`), `ended` (a plan that ended) as it is, and any other reason is followed by how to contest it, so name the Terms section it rests on."
                   },
                   "note": {
                     "type": "string",
@@ -6713,7 +6713,7 @@
       "put": {
         "tags": ["Operator"],
         "summary": "Hold one agent, or let it go",
-        "description": "Held, the agent starts nothing (no run, model call, computer work, routine or bridge call) and is never picked to answer; the rest of the workspace works. What it is doing stops at its next model, computer or bridge call. The workspace reads only that the agent is paused, never the reason. On agentes.chat Cloud it reads the hold's kind with how to contest it (`network` for a reason starting with `network.`, else `operator`), and the agent's responsible person and the workspace's owners and admins get a notice, replaced when it is held again for another kind and closed when the agent is let go. At once in this process, within 5 seconds in the others.",
+        "description": "Held, the agent starts nothing (no run, model call, computer work, routine or bridge call) and is never picked to answer; the rest of the workspace works. What it is doing stops at its next model, computer or bridge call. The workspace reads only that the agent is paused, never the reason. On KeepMind OS Cloud it reads the hold's kind with how to contest it (`network` for a reason starting with `network.`, else `operator`), and the agent's responsible person and the workspace's owners and admins get a notice, replaced when it is held again for another kind and closed when the agent is let go. At once in this process, within 5 seconds in the others.",
         "parameters": [
           {
             "schema": {
@@ -6884,7 +6884,7 @@
       "put": {
         "tags": ["Operator"],
         "summary": "Block an account, or let it back",
-        "description": "Blocked: its sessions and phones are signed out now, it can't sign in again, every workspace refuses it on its next request (no waiting for a session cookie to expire) and its open connections close. Unblocking lets it sign in again; it keeps its workspaces. On agentes.chat Cloud the refused sign-in reads the block's kind, never its reason: `abuse` for `abuse.resignup`, `legal` for `legal_hold`, else `other`.",
+        "description": "Blocked: its sessions and phones are signed out now, it can't sign in again, every workspace refuses it on its next request (no waiting for a session cookie to expire) and its open connections close. Unblocking lets it sign in again; it keeps its workspaces. On KeepMind OS Cloud the refused sign-in reads the block's kind, never its reason: `abuse` for `abuse.resignup`, `legal` for `legal_hold`, else `other`.",
         "parameters": [
           {
             "schema": {
@@ -7918,7 +7918,7 @@
       "put": {
         "tags": ["Operator"],
         "summary": "Open sign-up to everyone, or back to invitation only",
-        "description": "Takes effect at once, with no restart. Setting the current mode changes nothing. On agentes.chat Cloud, while it is `invite`, only the accounts early access allowed make workspaces, as many as they like; `open` lets every account make workspaces, each with its own computer. Refused (409 `signup.host_computer`) to open while this server is its agents' computer (`HOST_COMPUTER_TOKEN`).",
+        "description": "Takes effect at once, with no restart. Setting the current mode changes nothing. On KeepMind OS Cloud, while it is `invite`, only the accounts early access allowed make workspaces, as many as they like; `open` lets every account make workspaces, each with its own computer. Refused (409 `signup.host_computer`) to open while this server is its agents' computer (`HOST_COMPUTER_TOKEN`).",
         "requestBody": {
           "required": true,
           "content": {

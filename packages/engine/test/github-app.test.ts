@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { createHmac, generateKeyPairSync } from "node:crypto";
-import { and, type Database, eq, isNull, schema } from "@agenteschat/db";
-import { createTestDatabase } from "@agenteschat/db/testing";
+import { and, type Database, eq, isNull, schema } from "@keepmind/db";
+import { createTestDatabase } from "@keepmind/db/testing";
 import {
   appRepoToken,
   appTokenForRepo,

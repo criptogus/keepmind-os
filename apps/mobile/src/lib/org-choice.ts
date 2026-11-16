@@ -1,7 +1,7 @@
-import type { OrgSummary } from "@agenteschat/client";
-import { otherWorkspaces } from "@agenteschat/client/lib/deletion";
-import { settingUp } from "@agenteschat/client/lib/guards";
-import type { ServerProblem } from "@agenteschat/client/lib/server";
+import type { OrgSummary } from "@keepmind/client";
+import { otherWorkspaces } from "@keepmind/client/lib/deletion";
+import { settingUp } from "@keepmind/client/lib/guards";
+import type { ServerProblem } from "@keepmind/client/lib/server";
 
 /**
  * The workspaces the app opens (pure): not one this person is still setting up, which only the first run opens (it
@@ -32,7 +32,7 @@ export const firstRunMounted = (wasMounted: boolean, firstRun: boolean, onInvite
 
 /**
  * The chosen organization when it is suspended (ADR 0056 §8): why, when the workspace is told, whether it is on
- * agentes.chat Cloud (how to contest it), and the person's other organizations to go to; null while it isn't (pure).
+ * KeepMind OS Cloud (how to contest it), and the person's other organizations to go to; null while it isn't (pure).
  */
 export function suspendedOf<
   O extends { id: string; standing?: { state: string; reason: string | null; cloud?: boolean } },

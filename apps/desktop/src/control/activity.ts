@@ -4,7 +4,7 @@
  * merges them by time and keeps the newest `limit`; each home's cursor moves to the last entry of
  * it that was shown, so what wasn't shown comes again on the next page.
  */
-import type { ActivityEntry, ActivitySaid } from "@agenteschat/adapters/runner-control";
+import type { ActivityEntry, ActivitySaid } from "@keepmind/adapters/runner-control";
 import type { TFunction } from "i18next";
 
 export interface HomeEntry extends ActivityEntry {

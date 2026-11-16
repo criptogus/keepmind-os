@@ -1,9 +1,9 @@
-import type { ThreadAction, ThreadInfo } from "@agenteschat/client";
-import { keys, useThreadMutation } from "@agenteschat/client";
-import { type ThreadWorkState, threadWorkState, threadWorkWord } from "@agenteschat/client/lib/agent-work";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { type ThreadStatus, threadStatus, threadTitle } from "@agenteschat/client/lib/threads";
-import { Button, Chip, Dialog, DialogFooter, type IconName } from "@agenteschat/ui";
+import type { ThreadAction, ThreadInfo } from "@keepmind/client";
+import { keys, useThreadMutation } from "@keepmind/client";
+import { type ThreadWorkState, threadWorkState, threadWorkWord } from "@keepmind/client/lib/agent-work";
+import { errorText } from "@keepmind/client/lib/errors";
+import { type ThreadStatus, threadStatus, threadTitle } from "@keepmind/client/lib/threads";
+import { Button, Chip, Dialog, DialogFooter, type IconName } from "@keepmind/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
 import { useState } from "react";

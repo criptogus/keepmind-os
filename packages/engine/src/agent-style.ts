@@ -1,4 +1,4 @@
-import { and, type Executor, eq, schema } from "@agenteschat/db";
+import { and, type Executor, eq, schema } from "@keepmind/db";
 import { personBehindCall } from "./requester";
 import type { ToolDefinition, ToolSource } from "./tools/types";
 

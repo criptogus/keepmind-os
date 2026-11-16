@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
-import { type BlobStore, readCapped } from "@agenteschat/adapters";
-import { and, type Database, eq, isNull, schema } from "@agenteschat/db";
+import { type BlobStore, readCapped } from "@keepmind/adapters";
+import { and, type Database, eq, isNull, schema } from "@keepmind/db";
 import { sniffImage, stripImageMetadata } from "../avatars";
 import { caches } from "../cache";
 import { NotFoundError } from "../errors";

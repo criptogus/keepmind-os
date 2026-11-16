@@ -1,4 +1,4 @@
-import { speedFits } from "@agenteschat/providers/plans";
+import { speedFits } from "@keepmind/providers/plans";
 import type { TFunction } from "i18next";
 import type { AgentBrain, BrainKind, BrainSpeed } from "../api/types";
 import { type ContextLimit, contextSize } from "./context-limits";

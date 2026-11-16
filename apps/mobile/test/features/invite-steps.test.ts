@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { ApiError } from "@agenteschat/client";
+import { ApiError } from "@keepmind/client";
 import {
   ASK_STEPS,
   type Asked,
@@ -25,7 +25,7 @@ const ASKED: Asked = {
   name: "Rafael Costa",
   email: "rafael@acme.com",
   org: "Acme",
-  server: "https://app.agentes.chat",
+  server: "https://keepmind.io",
 };
 
 describe("asking through a link", () => {

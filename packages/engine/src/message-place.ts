@@ -1,4 +1,4 @@
-import { type SQL, type schema, sql } from "@agenteschat/db";
+import { type SQL, type schema, sql } from "@keepmind/db";
 
 /**
  * How far before its post a message's `created_at` can be: the lead a brain wrote right before its question card, and

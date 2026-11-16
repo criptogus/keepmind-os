@@ -53,7 +53,7 @@ function mac(mode = "ok", over: Partial<XcodeFixOptions> = {}) {
     env: { PATH: "/usr/bin:/bin", FAKE_MODE: mode },
     apps,
     bin: (name) => path.join(bin, name),
-    prompt: "agentes.chat wants to put Xcode in use to connect iPhones.",
+    prompt: "KeepMind OS wants to put Xcode in use to connect iPhones.",
     ...over,
   });
   fixers.push(fixer);
@@ -67,7 +67,7 @@ test("select: the password window, then Xcode in use, its license and first laun
   await waitFor(() => fixer.state()?.state === "done");
   expect(fixer.state()).toEqual({ kind: "select", state: "done", step: 3 });
   expect(calls()).toEqual([
-    "prompt agentes.chat wants to put Xcode in use to connect iPhones.",
+    "prompt KeepMind OS wants to put Xcode in use to connect iPhones.",
     `xcode-select -s ${path.join(apps, "Xcode.app", "Contents", "Developer")}`,
     "xcodebuild -license accept",
     "xcodebuild -runFirstLaunch",
@@ -128,10 +128,10 @@ test("which Xcode, and the password window's line in the Mac's language", () => 
   expect(findXcodeApp(apps)).toBe(path.join(apps, "Xcode_27.2.app"));
   mkdirSync(path.join(apps, "Xcode.app"));
   expect(findXcodeApp(apps)).toBe(path.join(apps, "Xcode.app"));
-  expect(xcodeFixPrompt("pt-BR")).toBe("O agentes.chat quer colocar o Xcode em uso para conectar iPhones.");
-  expect(xcodeFixPrompt("en-US")).toBe("agentes.chat wants to put Xcode in use to connect iPhones.");
+  expect(xcodeFixPrompt("pt-BR")).toBe("O KeepMind OS quer colocar o Xcode em uso para conectar iPhones.");
+  expect(xcodeFixPrompt("en-US")).toBe("KeepMind OS wants to put Xcode in use to connect iPhones.");
   // The Mac's locale by its base language: any of the app's 14, English for the rest.
-  expect(xcodeFixPrompt("de-DE")).toBe("agentes.chat möchte Xcode verwenden, um iPhones zu verbinden.");
-  expect(xcodeFixPrompt("zh-Hans-CN")).toBe("agentes.chat 想要使用 Xcode 来连接 iPhone。");
-  expect(xcodeFixPrompt("sv-SE")).toBe("agentes.chat wants to put Xcode in use to connect iPhones.");
+  expect(xcodeFixPrompt("de-DE")).toBe("KeepMind OS möchte Xcode verwenden, um iPhones zu verbinden.");
+  expect(xcodeFixPrompt("zh-Hans-CN")).toBe("KeepMind OS 想要使用 Xcode 来连接 iPhone。");
+  expect(xcodeFixPrompt("sv-SE")).toBe("KeepMind OS wants to put Xcode in use to connect iPhones.");
 });

@@ -1,5 +1,5 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, asc, type Database, type Executor, eq, inArray, isNull, schema } from "@agenteschat/db";
+import type { PubSub } from "@keepmind/adapters";
+import { and, asc, type Database, type Executor, eq, inArray, isNull, schema } from "@keepmind/db";
 import { publishChannelEvent } from "./events";
 import { personBehindCall } from "./requester";
 import type { ToolContext } from "./tools/types";
@@ -21,7 +21,7 @@ export const UNDO_WINDOW_MS = 5 * 60_000;
  * (renamed, closed). Merge, deploy, rollback, anything that leaves the organization
  * and deletes that can't be restored keep asking (approvals). A merge in a repository the agent merges in without
  * asking only has its receipt (`final`: nothing undoes it). The API's enum is this list. The apps keep their own
- * copy (`@agenteschat/client`'s `AGENT_ACTION_KINDS`), and a test keeps the two the same.
+ * copy (`@keepmind/client`'s `AGENT_ACTION_KINDS`), and a test keeps the two the same.
  */
 export const AGENT_ACTION_KINDS = [
   "issue.created",

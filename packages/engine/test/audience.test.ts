@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { BRAIN_PROTOCOL, createFakeEmailSender, userTopic } from "@agenteschat/adapters";
-import { eq, rowsOf, schema, sql } from "@agenteschat/db";
+import { BRAIN_PROTOCOL, createFakeEmailSender, userTopic } from "@keepmind/adapters";
+import { eq, rowsOf, schema, sql } from "@keepmind/db";
 import {
   acceptInvitation,
   addChannelMember,

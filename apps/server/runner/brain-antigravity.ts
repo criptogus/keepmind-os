@@ -3,9 +3,9 @@ import type { EventEmitter } from "node:events";
 import { mkdirSync, rmSync } from "node:fs";
 import path from "node:path";
 import { createInterface } from "node:readline";
-import type { CommandProfile } from "@agenteschat/adapters/command-policy";
-import type { AgentScope, BrainEffort } from "@agenteschat/adapters/machine-protocol";
-import { isAccountId } from "@agenteschat/adapters/machine-protocol";
+import type { CommandProfile } from "@keepmind/adapters/command-policy";
+import type { AgentScope, BrainEffort } from "@keepmind/adapters/machine-protocol";
+import { isAccountId } from "@keepmind/adapters/machine-protocol";
 import {
   ACCOUNT_MISSING_MESSAGE,
   ACCOUNT_SIGNED_OUT,

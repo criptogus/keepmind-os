@@ -1,4 +1,4 @@
-import type { WidgetDetail, WidgetSchedule, WidgetUpdate } from "@agenteschat/client";
+import type { WidgetDetail, WidgetSchedule, WidgetUpdate } from "@keepmind/client";
 import {
   useAskWidgetChange,
   useBuildOnceAi,
@@ -6,10 +6,10 @@ import {
   useUpdateWidget,
   useWidget,
   widgetCardStatus,
-} from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { upcomingAt, whenAt } from "@agenteschat/client/lib/format";
-import { plainInline } from "@agenteschat/client/lib/markdown";
+} from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { upcomingAt, whenAt } from "@keepmind/client/lib/format";
+import { plainInline } from "@keepmind/client/lib/markdown";
 import {
   Button,
   Composer,
@@ -22,8 +22,8 @@ import {
   Spinner,
   Switch,
   WidgetCard,
-} from "@agenteschat/ui";
-import { WIDGET_SCHEDULES } from "@agenteschat/ui/widgets/spec";
+} from "@keepmind/ui";
+import { WIDGET_SCHEDULES } from "@keepmind/ui/widgets/spec";
 import type { TFunction } from "i18next";
 import { type ReactNode, useId, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

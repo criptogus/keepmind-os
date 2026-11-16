@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import type { Agent, InviteLink, JoinRequest, OrgRole } from "@agenteschat/client";
-import { changedLists, linkFull, linkNeedsAttention, plainLink } from "@agenteschat/client/lib/invite-start";
+import type { Agent, InviteLink, JoinRequest, OrgRole } from "@keepmind/client";
+import { changedLists, linkFull, linkNeedsAttention, plainLink } from "@keepmind/client/lib/invite-start";
 import { arrivalOf } from "../../src/features/chat/logic";
 import { EMPTY_INVITE, type InviteDraft } from "../../src/features/members/draft";
 import {

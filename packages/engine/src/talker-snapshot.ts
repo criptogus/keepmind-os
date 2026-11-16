@@ -1,4 +1,4 @@
-import { and, type Database, desc, eq, inArray, isNull, schema, sql } from "@agenteschat/db";
+import { and, type Database, desc, eq, inArray, isNull, schema, sql } from "@keepmind/db";
 import type { Agent } from "./agents";
 import { runBrainOf } from "./brains/select";
 import type { Message } from "./messages";

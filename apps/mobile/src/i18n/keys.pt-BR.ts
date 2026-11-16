@@ -1,8 +1,8 @@
-import type { LocaleStrings } from "@agenteschat/i18n/plurals";
+import type { LocaleStrings } from "@keepmind/i18n/plurals";
 
 /**
  * The app's own strings (pt-BR; English, `keys.en.ts`, is the source), under `mobile.*`.
- * They live here until they move into `@agenteschat/i18n` (packages/i18n); `./index.ts` merges them
+ * They live here until they move into `@keepmind/i18n` (packages/i18n); `./index.ts` merges them
  * into the shared resources at runtime. `keys.en.ts` must have exactly the same shape (typed below).
  */
 export const mobilePtBR = {
@@ -42,7 +42,7 @@ export const mobilePtBR = {
       line: "Servidor: {{host}} ·",
       change: "Trocar",
       /** The question is the title; the keyboard's return key ("ir") is the action. */
-      title: "Onde fica o seu agentes.chat?",
+      title: "Onde fica o seu KeepMind OS?",
       subtitle: "O endereço que o time abre no navegador.",
       label: "Endereço do servidor",
       placeholder: "agentes.suaequipe.ts.net",
@@ -56,7 +56,7 @@ export const mobilePtBR = {
       footServer: "Outro servidor",
       footLanguage: "Idioma",
       /** A linha quieta do login: onde ele vai (o Cloud ou um servidor), e o jeito de trocar. */
-      footCloud: "Entrando no agentes.chat Cloud",
+      footCloud: "Entrando no KeepMind OS Cloud",
       footOn: "Entrando em {{host}}",
       footSwitch: "Trocar",
       now: "Agora em {{host}}",
@@ -65,7 +65,7 @@ export const mobilePtBR = {
       unreachableTailscale:
         "Não conseguimos falar com {{host}}. Ele está no Tailscale: abra o app do Tailscale, conecte e tente de novo. Já está conectado? O computador do servidor pode estar dormindo ou com o app fechado.",
       certificate: "O certificado de {{host}} não é válido. Fale com quem cuida do servidor.",
-      notAgentes: "{{host}} não é um servidor agentes.chat. Confira o endereço.",
+      notAgentes: "{{host}} não é um servidor KeepMind OS. Confira o endereço.",
       serverTooOld: "{{host}} precisa de uma atualização para funcionar com este app.",
       appTooOld: "Atualize o app agentes para usar {{host}}.",
       down: {
@@ -87,7 +87,7 @@ export const mobilePtBR = {
       confirm: "Conectar",
       notNow: "Agora não",
       checking: "Conferindo o servidor…",
-      notALink: "Este link não é de um servidor agentes.chat.",
+      notALink: "Este link não é de um servidor KeepMind OS.",
       tokenFailed: "O código expirou ou já foi usado. Entre com seu e-mail, ou mostre um código novo no computador.",
       signInSlow:
         "Entrar está demorando mais que o normal. Entre com seu e-mail, ou mostre um código novo no computador.",
@@ -96,7 +96,7 @@ export const mobilePtBR = {
       hint: "Aponte para o QR code do computador",
       /** Embaixo da câmera: o endereço, para quem não tem código para escanear. */
       typeAddress: "Digitar o endereço",
-      notOurs: "Esse QR code não é de um servidor agentes.chat.",
+      notOurs: "Esse QR code não é de um servidor KeepMind OS.",
       cameraTitle: "Usar a câmera",
       cameraText: "Ela só serve para ler o QR code.",
       allow: "Permitir câmera",

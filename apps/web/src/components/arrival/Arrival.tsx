@@ -1,5 +1,5 @@
-import { useAiStatus } from "@agenteschat/client";
-import { teamThinks } from "@agenteschat/client/lib/no-ai";
+import { useAiStatus } from "@keepmind/client";
+import { teamThinks } from "@keepmind/client/lib/no-ai";
 import { useEffect, useState } from "react";
 import { useConnectAi, useMayConnectAi } from "@/components/ConnectAi";
 import { useOrg } from "@/components/org-context";

@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import type { DirectMessage, Message } from "@agenteschat/client";
-import { isMediaAlone, mediaTabsOf, shownMediaSettings } from "@agenteschat/client/lib/media";
-import { previewBody } from "@agenteschat/client/lib/message-body";
-import { STICKER_MOODS } from "@agenteschat/ui/agent/stickers";
+import type { DirectMessage, Message } from "@keepmind/client";
+import { isMediaAlone, mediaTabsOf, shownMediaSettings } from "@keepmind/client/lib/media";
+import { previewBody } from "@keepmind/client/lib/message-body";
+import { STICKER_MOODS } from "@keepmind/ui/agent/stickers";
 import { createFrameClock } from "../../src/agent/clock";
 import { stickerFrame } from "../../src/agent/sticker";
 import { createStickerStage } from "../../src/agent/sticker-stage";

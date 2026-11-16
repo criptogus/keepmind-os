@@ -7,7 +7,7 @@ import {
   type RunnerTerminalInfo,
   STREAM_CLOSE,
   STREAM_LIMITS,
-} from "@agenteschat/adapters/machine-protocol";
+} from "@keepmind/adapters/machine-protocol";
 import type { Launcher } from "./agent-users";
 import { type DesktopSystem, NOT_AS_ROOT, runnerEnv } from "./desktop-session";
 import { RunnerError } from "./errors";

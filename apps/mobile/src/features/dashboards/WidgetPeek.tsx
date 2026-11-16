@@ -1,4 +1,4 @@
-import { useBuildOnceAi, useRefreshWidget, useRemoveWidget, type Widget, widgetNeedsAi } from "@agenteschat/client";
+import { useBuildOnceAi, useRefreshWidget, useRemoveWidget, type Widget, widgetNeedsAi } from "@keepmind/client";
 import { Link } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { Alert, Platform, StyleSheet, useWindowDimensions, View } from "react-native";

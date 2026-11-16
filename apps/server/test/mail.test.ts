@@ -6,8 +6,8 @@ import {
   createFakeMailTester,
   FAKE_COMPOSIO_SIGNATURE,
   type MailAdapters,
-} from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
 import { browser, createTestServer, joinByInvitation, seedOrg, signUp, type TestServer } from "./harness";
 
 let t: TestServer;

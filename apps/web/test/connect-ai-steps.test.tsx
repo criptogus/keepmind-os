@@ -8,13 +8,13 @@ import type {
   ComputerSetup,
   Machine,
   MachineAccount,
-} from "@agenteschat/client";
-import { ApiError, applyMachineEvent, keys } from "@agenteschat/client";
-import { LOGIN_RECONNECT_MS } from "@agenteschat/client/lib/machines";
-import { LOGIN_PER_AGENT } from "@agenteschat/client/lib/plans";
-import { en } from "@agenteschat/i18n";
-import { icons } from "@agenteschat/ui";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+} from "@keepmind/client";
+import { ApiError, applyMachineEvent, keys } from "@keepmind/client";
+import { LOGIN_RECONNECT_MS } from "@keepmind/client/lib/machines";
+import { LOGIN_PER_AGENT } from "@keepmind/client/lib/plans";
+import { en } from "@keepmind/i18n";
+import { icons } from "@keepmind/ui";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 

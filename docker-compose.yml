@@ -1,5 +1,5 @@
 # agentes.chat: the app and Postgres with pgvector. To set it up, in an empty directory:
-#   npx @agenteschat/setup
+#   npx @keepmind/setup
 # By hand, and everything else: SELF_HOSTING.md.
 #
 # How people reach it, by COMPOSE_PROFILES in .env:

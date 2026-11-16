@@ -1,7 +1,7 @@
 /**
  * Wraps and unwraps data keys for envelope encryption of provider credentials
  * (docs/adr/0007-provider-credentials.md). Core: a key derived from
- * AGENTES_SECRET (`local:v1`, in `@agenteschat/engine`). Cloud: a KMS module.
+ * AGENTES_SECRET (`local:v1`, in `@keepmind/engine`). Cloud: a KMS module.
  * `aad` binds the wrapped key to its owner (org and credential ids).
  */
 export interface KeyWrapper {

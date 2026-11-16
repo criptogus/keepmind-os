@@ -5,8 +5,8 @@ import { copyFileSync, existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import path from "node:path";
 import { createInterface } from "node:readline";
-import type { CommandProfile, CommandScope } from "@agenteschat/adapters/command-policy";
-import { type BrainSteerReply, type BrainSteerRequest, isBrainEffort } from "@agenteschat/adapters/machine-protocol";
+import type { CommandProfile, CommandScope } from "@keepmind/adapters/command-policy";
+import { type BrainSteerReply, type BrainSteerRequest, isBrainEffort } from "@keepmind/adapters/machine-protocol";
 import { accountEnv, withoutContainers, yieldRoute } from "./accounts";
 import {
   CODEX_NO_NETWORK,
@@ -992,7 +992,7 @@ export class CodexAppServers implements CodexAppRunner {
       await client.request(
         "initialize",
         {
-          clientInfo: { name: "agentes_runner", title: "agentes.chat runner", version: "1" },
+          clientInfo: { name: "agentes_runner", title: "KeepMind OS runner", version: "1" },
           capabilities: {
             experimentalApi: false,
             requestAttestation: false,
@@ -1416,7 +1416,7 @@ export class CodexAppServers implements CodexAppRunner {
     return (tool: string, args: Record<string, unknown>): Promise<IpcReply> =>
       socketPath
         ? ipcCall(socketPath, { taskId: live.id, token, tool, args })
-        : Promise.resolve({ ok: false, error: "This computer can't ask agentes.chat (no local endpoint)." });
+        : Promise.resolve({ ok: false, error: "This computer can't ask KeepMind OS (no local endpoint)." });
   }
 
   private armIdle(live: AppLive) {

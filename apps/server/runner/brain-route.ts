@@ -10,7 +10,7 @@ import {
   isAccountKind,
   ROUTE_LIMITS,
   ROUTE_TIMEOUT_MS,
-} from "@agenteschat/adapters/machine-protocol";
+} from "@keepmind/adapters/machine-protocol";
 import {
   type AccountFolders,
   type AccountGrant,

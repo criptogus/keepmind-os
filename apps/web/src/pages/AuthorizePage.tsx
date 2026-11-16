@@ -1,17 +1,17 @@
-import type { AppAccess, AppConsent } from "@agenteschat/client";
-import { useAppConsent, useDecideAppConsent } from "@agenteschat/client";
+import type { AppAccess, AppConsent } from "@keepmind/client";
+import { useAppConsent, useDecideAppConsent } from "@keepmind/client";
 import {
   appName,
   type ConsentError,
   consentErrorOf,
   defaultWorkspace,
   requestedAccess,
-} from "@agenteschat/client/lib/apps";
-import { workspaceLabel, workspaceNotes } from "@agenteschat/client/lib/deletion";
-import { signInPath } from "@agenteschat/client/lib/guards";
-import { visibleText } from "@agenteschat/client/lib/text";
-import { isAppLocale } from "@agenteschat/i18n/locale";
-import { Alert, Button, Card, EmptyState, Field, Icon, Locked, OptionList, Select } from "@agenteschat/ui";
+} from "@keepmind/client/lib/apps";
+import { workspaceLabel, workspaceNotes } from "@keepmind/client/lib/deletion";
+import { signInPath } from "@keepmind/client/lib/guards";
+import { visibleText } from "@keepmind/client/lib/text";
+import { isAppLocale } from "@keepmind/i18n/locale";
+import { Alert, Button, Card, EmptyState, Field, Icon, Locked, OptionList, Select } from "@keepmind/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import type { TFunction } from "i18next";
@@ -81,7 +81,7 @@ function ConsentErrorCard({ t, error, onRetry }: { t: TFunction; error: PageErro
           error === "indisponivel" && onRetry ? (
             <Button onClick={onRetry}>{t("common.retry")}</Button>
           ) : (
-            // A stale link or a refused app: a way into agentes.chat itself.
+            // A stale link or a refused app: a way into KeepMind OS itself.
             <Link to="/" className="ac-link small">
               {t("apps.consent.goHome")}
             </Link>

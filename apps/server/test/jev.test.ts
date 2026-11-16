@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import { eq, schema } from "@agenteschat/db";
-import { monthStartUtc } from "@agenteschat/engine";
+import { eq, schema } from "@keepmind/db";
+import { monthStartUtc } from "@keepmind/engine";
 import {
   type Browser,
   browser,
@@ -55,8 +55,8 @@ test("only the installation's first account reaches it: signed out 401, anyone e
   expect(await res.json()).toEqual({ source: null, hint: null, state: "off", month: { decisions: 0, costUsd: 0 } });
 });
 
-test("on agentes.chat itself nobody has it", async () => {
-  const origin = "https://app.agentes.chat";
+test("on KeepMind OS itself nobody has it", async () => {
+  const origin = "https://keepmind.io";
   t = await createTestServer({ env: { ALLOW_SIGNUP: "true", PUBLIC_URL: origin } });
   const first = browser(t);
   const signedUp = await first("/api/auth/sign-up/email", {

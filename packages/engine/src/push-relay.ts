@@ -1,5 +1,5 @@
-import type { PushMessage, PushResult, PushSender, RateLimiter } from "@agenteschat/adapters";
-import { type Database, eq, schema, sql } from "@agenteschat/db";
+import type { PushMessage, PushResult, PushSender, RateLimiter } from "@keepmind/adapters";
+import { type Database, eq, schema, sql } from "@keepmind/db";
 import { randomToken, safeEqual, sha256 } from "./crypto";
 import { ValidationError } from "./errors";
 import { APNS_CATEGORY, APNS_PUSH_TOKEN, apnsAppIdValid, FCM_PUSH_TOKEN } from "./push";

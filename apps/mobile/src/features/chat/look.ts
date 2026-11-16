@@ -5,9 +5,9 @@ import {
   chatLookOf,
   facesShown,
   textSizeOf,
-} from "@agenteschat/client/lib/chat-look";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
-import type { AgentColorName } from "@agenteschat/ui/agent/engine";
+} from "@keepmind/client/lib/chat-look";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
+import type { AgentColorName } from "@keepmind/ui/agent/engine";
 import { createContext, useContext, useMemo } from "react";
 import { StyleSheet } from "react-native";
 import { useOrg } from "@/providers/org";

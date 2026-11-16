@@ -1,18 +1,18 @@
-import type { InlinePart } from "@agenteschat/adapters";
-import type { AppLocale } from "@agenteschat/i18n/locale";
-import { dark, light, type ThemeColors } from "@agenteschat/tokens";
+import type { InlinePart } from "@keepmind/adapters";
+import type { AppLocale } from "@keepmind/i18n/locale";
+import { dark, light, type ThemeColors } from "@keepmind/tokens";
 import {
   type AccessoryName,
   AGENT_GRADIENTS,
   type AgentColorName,
   type EyeStyle,
   nearestPreset,
-} from "@agenteschat/ui/agent/engine";
-import { COMPUTER_ART, COMPUTER_ROWS } from "@agenteschat/ui/computer/portrait";
-import { initialsOf } from "@agenteschat/ui/names";
-import { mix, opaque } from "@agenteschat/ui/sky/math";
+} from "@keepmind/ui/agent/engine";
+import { COMPUTER_ART, COMPUTER_ROWS } from "@keepmind/ui/computer/portrait";
+import { initialsOf } from "@keepmind/ui/names";
+import { mix, opaque } from "@keepmind/ui/sky/math";
 
-/** The recipient's language: every language of the app (`@agenteschat/i18n/locale`). */
+/** The recipient's language: every language of the app (`@keepmind/i18n/locale`). */
 export type EmailLocale = AppLocale;
 
 /**
@@ -123,7 +123,7 @@ export const EMAIL_PICTURES = [
   ...ONBOARDING_CREW.map(wholeFile),
 ];
 const FONT = "source-sans-3-latin.woff2";
-const LOGO = { width: 173, height: 36, alt: "agentes.chat" } as const;
+const LOGO = { width: 173, height: 36, alt: "KeepMind OS" } as const;
 const SKY = { width: 552, height: 27 } as const;
 /** An agent's face for its colour: a custom "#rrggbb" is the closest preset's, an unknown one is sky, as the app draws it. */
 const faceOf = (color: string) => `agent-${nearestPreset(color)}.png`;
@@ -276,7 +276,7 @@ const PB = `font-family:${SANS};mso-line-height-rule:at-least`;
 const LIFT =
   "inset 0 1px 0 rgba(255,255,255,.18),inset 0 -1px 0 rgba(0,0,0,.3),0 1px 2px rgba(0,0,0,.18),0 6px 14px -6px rgba(0,0,0,.45)";
 
-const cidOf = (file: string) => `${file.replace(/\.png$/, "")}@agentes.chat`;
+const cidOf = (file: string) => `${file.replace(/\.png$/, "")}@KeepMind OS`;
 
 /** The pictures one email shows: linked, or attached (only those its HTML names). */
 function pictures(art: EmailArt) {
@@ -453,8 +453,8 @@ export function renderDoc(doc: EmailDoc, art: EmailArt): { html: string; text: s
   const fonts = art.base;
   const lang = doc.lang;
   const body = doc.blocks.map((b, i) => block(b, src, i === doc.blocks.length - 1)).join("\n");
-  const logo = (file: string, cls: string, display: string, color: string) =>
-    `<img class="${cls}" src="${esc(src(file))}" width="${LOGO.width}" height="${LOGO.height}" alt="${LOGO.alt}" style="display:${display};border:0;outline:none;width:${LOGO.width}px;height:${LOGO.height}px;font-family:${SANS};font-size:20px;font-weight:600;line-height:${LOGO.height}px;color:${color}">`;
+  const logo = (_file: string, cls: string, display: string, color: string) =>
+    `<span class="${cls}" style="display:${display};font-family:${SANS};font-size:24px;font-weight:700;line-height:36px;color:${color}">KeepMind OS</span>`;
   const page = `<!doctype html>
 <html lang="${lang}" dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>

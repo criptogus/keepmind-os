@@ -1,7 +1,7 @@
-import { type BrainSpeed, isBrainSpeed } from "@agenteschat/adapters";
-import { and, type Database, eq, inArray, isNull, schema, sql } from "@agenteschat/db";
-import { type ContextLimit, isAutoModel, isContextLimit } from "@agenteschat/providers";
-import { type CodingPlan, PLAN_ALIASES, planOf } from "@agenteschat/providers/plans";
+import { type BrainSpeed, isBrainSpeed } from "@keepmind/adapters";
+import { and, type Database, eq, inArray, isNull, schema, sql } from "@keepmind/db";
+import { type ContextLimit, isAutoModel, isContextLimit } from "@keepmind/providers";
+import { type CodingPlan, PLAN_ALIASES, planOf } from "@keepmind/providers/plans";
 import {
   type Agent,
   type AgentInput,

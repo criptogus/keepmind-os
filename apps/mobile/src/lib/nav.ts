@@ -1,4 +1,4 @@
-import { light } from "@agenteschat/tokens";
+import { light } from "@keepmind/tokens";
 
 /**
  * Pure helpers for the native navigation (tab bar, headers, sheets). No React Native imports, so the
@@ -21,7 +21,7 @@ export function needsHeaderBlur(os: string, version: string | number): boolean {
   return Number.isFinite(major) && major < 26;
 }
 
-export { contrastRatio } from "@agenteschat/ui/sky/math";
+export { contrastRatio } from "@keepmind/ui/sky/math";
 
 /**
  * The unread badge of the tab bar: a classic red with white text in both themes. iOS always draws badge

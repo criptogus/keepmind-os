@@ -1,11 +1,11 @@
-import { useCatalog, useConnections, useCustomServers } from "@agenteschat/client";
-import { connectedItems } from "@agenteschat/client/lib/connected";
+import { useCatalog, useConnections, useCustomServers } from "@keepmind/client";
+import { connectedItems } from "@keepmind/client/lib/connected";
 import {
   noAppWorks,
   type RoutineTemplateArea,
   type RoutineTemplateOption,
   routineTemplateOptions,
-} from "@agenteschat/client/lib/routine-templates";
+} from "@keepmind/client/lib/routine-templates";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";

@@ -1,4 +1,4 @@
-import { and, type Executor, eq, inArray, isNull, schema } from "@agenteschat/db";
+import { and, type Executor, eq, inArray, isNull, schema } from "@keepmind/db";
 
 const { issues, artifacts } = schema;
 

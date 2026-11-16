@@ -7,8 +7,8 @@ import {
   type RunnerAccountInfo,
   type ServerFrame,
   sealSecret,
-} from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
 import { browser, createTestServer, joinByInvitation, pairComputer, seedOrg, signUp, type TestServer } from "./harness";
 
 let t: TestServer;

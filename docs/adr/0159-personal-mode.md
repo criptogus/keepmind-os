@@ -62,7 +62,7 @@ same shape.
   and its built-in areas, databases, rules and skills. Every tab and section keeps its address: one that points into
   Advanced opens it there.
 - **On the phone:** the same, from the same shared numbers and helpers: the first question's two cards side by side
-  with the same drawings (`@agenteschat/client/lib/purpose-scene`); an agent's brakes, who it reports to, its rules
+  with the same drawings (`@keepmind/client/lib/purpose-scene`); an agent's brakes, who it reports to, its rules
   for good, its repositories and deleting it on an Advanced screen of its own, a row away from its edit screen and its
   access; creating one starts from the same personal agents.
 - **Creating an agent by hand:** four steps (role, identity, instructions, review). Its apps, where and who, and its AI

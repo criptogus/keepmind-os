@@ -1,6 +1,6 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
-import type { KeyWrapper } from "@agenteschat/adapters";
-import { and, type Database, desc, eq, isNull, schema } from "@agenteschat/db";
+import type { KeyWrapper } from "@keepmind/adapters";
+import { and, type Database, desc, eq, isNull, schema } from "@keepmind/db";
 import { recordAudit } from "./audit";
 import { activeConnections, type ConnectorDeps } from "./connectors/connections";
 import { openSecret, randomToken, sealSecret } from "./crypto";
@@ -255,7 +255,7 @@ export async function addGitHubRepoHook(
           authorization: `Bearer ${token}`,
           accept: "application/vnd.github+json",
           "content-type": "application/json",
-          "user-agent": "agentes.chat",
+          "user-agent": "keepmind.io",
         },
         ...(init.body ? { body: JSON.stringify(init.body) } : {}),
       });

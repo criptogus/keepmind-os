@@ -9,15 +9,15 @@ import {
   useLeaveChannel,
   useMuteChannel,
   useRoster,
-} from "@agenteschat/client";
-import { WORK_TICK_MS, workLine, workLineText } from "@agenteschat/client/lib/agent-work";
-import { listsAgent, opensDetails } from "@agenteschat/client/lib/audience";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { useHeldWhile } from "@agenteschat/client/lib/hold";
-import { can, leavesChannel, makesAgents, managesChannel, setsAutoReply } from "@agenteschat/client/lib/permissions";
-import { joinsChannels } from "@agenteschat/client/lib/right-hand";
-import { picksForMe, replyAloneKey } from "@agenteschat/client/lib/routing";
+} from "@keepmind/client";
+import { WORK_TICK_MS, workLine, workLineText } from "@keepmind/client/lib/agent-work";
+import { listsAgent, opensDetails } from "@keepmind/client/lib/audience";
+import { errorText } from "@keepmind/client/lib/errors";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { useHeldWhile } from "@keepmind/client/lib/hold";
+import { can, leavesChannel, makesAgents, managesChannel, setsAutoReply } from "@keepmind/client/lib/permissions";
+import { joinsChannels } from "@keepmind/client/lib/right-hand";
+import { picksForMe, replyAloneKey } from "@keepmind/client/lib/routing";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { TFunction } from "i18next";
 import { useState } from "react";

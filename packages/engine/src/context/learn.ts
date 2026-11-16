@@ -1,4 +1,4 @@
-import type { ErrorTags } from "@agenteschat/adapters";
+import type { ErrorTags } from "@keepmind/adapters";
 import {
   and,
   type Database,
@@ -12,8 +12,8 @@ import {
   or,
   schema,
   sql,
-} from "@agenteschat/db";
-import { modelInfo } from "@agenteschat/providers";
+} from "@keepmind/db";
+import { modelInfo } from "@keepmind/providers";
 import { recordAgentActions } from "../agent-actions";
 import { steeredByOthers } from "../authority";
 import { callLine, type LearnSignal, type RunCall, runCalls } from "../continuation";

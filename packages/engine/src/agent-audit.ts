@@ -1,4 +1,4 @@
-import { and, type Database, desc, type Executor, eq, inArray, lt, ne, or, schema, sql } from "@agenteschat/db";
+import { and, type Database, desc, type Executor, eq, inArray, lt, ne, or, schema, sql } from "@keepmind/db";
 import { recordAudit } from "./audit";
 import type { RunAuthority } from "./authority";
 import { readableChannelIds } from "./channels";

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { ACCOUNTS_PROTOCOL, BRAIN_PROTOCOL } from "@agenteschat/adapters";
+import { ACCOUNTS_PROTOCOL, BRAIN_PROTOCOL } from "@keepmind/adapters";
 import { accountUnavailable, claudeCodeAvailability } from "../src/brains/claude-code";
 import type { MachineStatus } from "../src/machine-hub";
 import { RunnerOutdatedError } from "../src/machine-tasks";

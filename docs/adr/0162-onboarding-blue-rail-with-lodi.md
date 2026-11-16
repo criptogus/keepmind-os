@@ -209,7 +209,7 @@ on where it opens.
   the workspace, on a screen of its own right before the team step (a team's after "O que vocês fazem", still that
   step on the rail; a personal workspace's after "Para mim"): "E você, cuida de quê?", the business step's chips one at
   a time, Continuar once one is picked, "Pular esta etapa" under it. It is stored per account in `users.work_area`
-  (an id of `WORK_AREAS`, `@agenteschat/client/lib/work-area`, or `skipped`; migration 0250) through
+  (an id of `WORK_AREAS`, `@keepmind/client/lib/work-area`, or `skipped`; migration 0250) through
   `PUT /me/work-area`, never waited for, and the operator API's account reads it (which kinds of people stay).
 
 ## Amended 2026-11-12: the person's own step, "Sobre você"

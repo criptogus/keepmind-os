@@ -1,4 +1,4 @@
-"NSMicrophoneUsageDescription" = "agentes.chat utilise le microphone pour enregistrer des messages vocaux.";
+"NSMicrophoneUsageDescription" = "KeepMind OS utilise le microphone pour enregistrer des messages vocaux.";
 "NSDesktopFolderUsageDescription" = "Permet aux agents qui travaillent sur ce Mac d'ouvrir des fichiers de votre Bureau.";
 "NSDocumentsFolderUsageDescription" = "Permet aux agents qui travaillent sur ce Mac d'ouvrir des fichiers de votre dossier Documents.";
 "NSDownloadsFolderUsageDescription" = "Permet aux agents qui travaillent sur ce Mac d'ouvrir des fichiers de votre dossier Téléchargements.";

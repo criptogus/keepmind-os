@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import path from "node:path";
-import { AGENT_COLORS } from "@agenteschat/ui";
-import { gradientOf } from "@agenteschat/ui/agent/engine";
-import { contrastRatio, mix } from "@agenteschat/ui/sky/math";
+import { AGENT_COLORS } from "@keepmind/ui";
+import { gradientOf } from "@keepmind/ui/agent/engine";
+import { contrastRatio, mix } from "@keepmind/ui/sky/math";
 import { atRule, declarations, rules, topLevel } from "./built-css";
 
 const ROOT = path.join(import.meta.dir, "../../..");

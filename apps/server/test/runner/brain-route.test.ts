@@ -6,7 +6,7 @@ import {
   MACHINE_OPS,
   MACHINE_PROTOCOL_VERSION,
   ROUTE_PROTOCOL,
-} from "@agenteschat/adapters/machine-protocol";
+} from "@keepmind/adapters/machine-protocol";
 import { BrainManager } from "../../runner/brain";
 import {
   CODEX_ROUTE_OFF,

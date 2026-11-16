@@ -1,5 +1,5 @@
 import { createInterface } from "node:readline";
-import { MACHINE_PROTOCOL_VERSION } from "@agenteschat/adapters/machine-protocol";
+import { MACHINE_PROTOCOL_VERSION } from "@keepmind/adapters/machine-protocol";
 import {
   CONTROL_MAX_LINE,
   CONTROL_PROTOCOL_VERSION,
@@ -7,7 +7,7 @@ import {
   type ControlIn,
   type ControlOut,
   parseControlIn,
-} from "@agenteschat/adapters/runner-control";
+} from "@keepmind/adapters/runner-control";
 import { ControlError } from "./access";
 import { type DaemonOptions, RunnerDaemon } from "./daemon";
 import { RUNNER_VERSION, RunnerError } from "./errors";

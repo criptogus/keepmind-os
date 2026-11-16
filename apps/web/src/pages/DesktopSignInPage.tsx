@@ -1,6 +1,6 @@
-import { type SignInProvider, useAuthConfig } from "@agenteschat/client";
-import { signInRefusalText } from "@agenteschat/client/lib/errors";
-import { Button } from "@agenteschat/ui";
+import { type SignInProvider, useAuthConfig } from "@keepmind/client";
+import { signInRefusalText } from "@keepmind/client/lib/errors";
+import { Button } from "@keepmind/ui";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/auth/context";
@@ -91,7 +91,7 @@ export function DesktopSignInPage({
       <div className="auth__form">
         <header className="auth__ask">
           <AgentAvatar
-            name="agentes.chat"
+            name="KeepMind OS"
             size="lg"
             state={state === "opening" || working ? "writing" : undefined}
             expression={state === "done" ? "happy" : undefined}

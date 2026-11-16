@@ -5,7 +5,7 @@ import {
   operatorClaudeAuth,
   operatorOrgClaudeAuth,
   setClaudeAuthPolicy,
-} from "@agenteschat/engine";
+} from "@keepmind/engine";
 import { createRoute, type OpenAPIHono, z } from "@hono/zod-openapi";
 import { apiError, errorResponse } from "../http/errors";
 import { body, iso, json, OrgParams } from "../routes/app/context";

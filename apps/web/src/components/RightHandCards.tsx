@@ -5,7 +5,7 @@ import type {
   Message,
   Proposal,
   WorkspaceActionCard,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 import {
   CardVia,
   keys,
@@ -25,7 +25,7 @@ import {
   useRoles,
   useSendDm,
   useSetMemberRoles,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 import {
   actionCardApplyKey,
   actionCardDestroys,
@@ -44,13 +44,13 @@ import {
   type OpenPageCard,
   rolesAfter,
   type SettingsProposalCard,
-} from "@agenteschat/client/lib/action-cards";
-import { APP_PAGES, appPagePath } from "@agenteschat/client/lib/app-pages";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { formatTime } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { can } from "@agenteschat/client/lib/permissions";
-import { settingsSectionNameKey } from "@agenteschat/client/lib/personal-view";
+} from "@keepmind/client/lib/action-cards";
+import { APP_PAGES, appPagePath } from "@keepmind/client/lib/app-pages";
+import { errorText } from "@keepmind/client/lib/errors";
+import { formatTime } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { can } from "@keepmind/client/lib/permissions";
+import { settingsSectionNameKey } from "@keepmind/client/lib/personal-view";
 import {
   cardDecidedBy,
   cardOutcome,
@@ -63,8 +63,8 @@ import {
   rowStatus,
   sentToText,
   settingLineText,
-} from "@agenteschat/client/lib/proposals";
-import { Button, EventPillAction, Icon, Switch } from "@agenteschat/ui";
+} from "@keepmind/client/lib/proposals";
+import { Button, EventPillAction, Icon, Switch } from "@keepmind/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";

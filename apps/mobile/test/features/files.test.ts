@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import type { ArtifactDetail } from "@agenteschat/client";
-import { pictureRatio } from "@agenteschat/client/lib/files";
+import type { ArtifactDetail } from "@keepmind/client";
+import { pictureRatio } from "@keepmind/client/lib/files";
 import {
   decodeFileList,
   driveWebUrl,
@@ -146,32 +146,32 @@ describe("shared copies", () => {
   });
 
   test("download links: signed links as they are, ours with the session", () => {
-    expect(resolveDownloadUrl("https://app.agentes.chat", "https://bucket.s3/x?sig=1")).toEqual({
+    expect(resolveDownloadUrl("https://keepmind.io", "https://bucket.s3/x?sig=1")).toEqual({
       uri: "https://bucket.s3/x?sig=1",
       needsSession: false,
     });
-    expect(resolveDownloadUrl("https://app.agentes.chat", "https://app.agentes.chat.attacker.test/file")).toEqual({
-      uri: "https://app.agentes.chat.attacker.test/file",
+    expect(resolveDownloadUrl("https://keepmind.io", "https://keepmind.io.attacker.test/file")).toEqual({
+      uri: "https://keepmind.io.attacker.test/file",
       needsSession: false,
     });
-    expect(resolveDownloadUrl("https://app.agentes.chat", "https://app.agentes.chat/file")).toEqual({
-      uri: "https://app.agentes.chat/file",
+    expect(resolveDownloadUrl("https://keepmind.io", "https://keepmind.io/file")).toEqual({
+      uri: "https://keepmind.io/file",
       needsSession: true,
     });
     expect(
-      resolveDownloadUrl("https://app.agentes.chat/", "/api/app/organizations/o/artifacts/a/file?version=2"),
+      resolveDownloadUrl("https://keepmind.io/", "/api/app/organizations/o/artifacts/a/file?version=2"),
     ).toEqual({
-      uri: "https://app.agentes.chat/api/app/organizations/o/artifacts/a/file?version=2",
+      uri: "https://keepmind.io/api/app/organizations/o/artifacts/a/file?version=2",
       needsSession: true,
     });
   });
 
   test("the web Drive at the file", () => {
-    expect(driveWebUrl("https://app.agentes.chat/", "org1", "a1")).toBe(
-      "https://app.agentes.chat/org/org1/drive?artifact=a1",
+    expect(driveWebUrl("https://keepmind.io/", "org1", "a1")).toBe(
+      "https://keepmind.io/org/org1/drive?artifact=a1",
     );
-    expect(driveWebUrl("https://app.agentes.chat", "org1", "a1", 3)).toBe(
-      "https://app.agentes.chat/org/org1/drive?artifact=a1&v=3",
+    expect(driveWebUrl("https://keepmind.io", "org1", "a1", 3)).toBe(
+      "https://keepmind.io/org/org1/drive?artifact=a1&v=3",
     );
   });
 });

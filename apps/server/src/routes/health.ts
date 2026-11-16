@@ -1,4 +1,4 @@
-import type { Edition } from "@agenteschat/modules";
+import type { Edition } from "@keepmind/modules";
 import { createRoute, type OpenAPIHono, z } from "@hono/zod-openapi";
 
 const HealthResponse = z

@@ -14,7 +14,7 @@
  */
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { createAnthropicProvider } from "@agenteschat/providers";
+import { createAnthropicProvider } from "@keepmind/providers";
 import type { ContextItem, NewContextItem } from "../src/context/items";
 import { similarity } from "../src/context/items";
 import { decide, judgeRelations, type Plan, RELATIONS, type Relation } from "../src/context/judgments";

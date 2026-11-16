@@ -1,7 +1,7 @@
 import { randomBytes } from "node:crypto";
-import { escapeHtml } from "@agenteschat/client/lib/text";
-import { connectorOAuthApps, githubAppConfig } from "@agenteschat/config";
-import { eq, schema } from "@agenteschat/db";
+import { escapeHtml } from "@keepmind/client/lib/text";
+import { connectorOAuthApps, githubAppConfig } from "@keepmind/config";
+import { eq, schema } from "@keepmind/db";
 import {
   answerGitHubNotice,
   appOAuthRedirect,
@@ -16,7 +16,7 @@ import {
   githubAppManifest,
   githubOrgAccess,
   handleGitHubAppWebhook,
-  isAgentesCloud,
+  isKeepMindCloud,
   isAppReturn,
   isDesktopReturn,
   issueManifestState,
@@ -34,8 +34,8 @@ import {
   requirePermission,
   startGitHubAppInstall,
   validGitHubAppSignature,
-} from "@agenteschat/engine";
-import { serverText } from "@agenteschat/i18n";
+} from "@keepmind/engine";
+import { serverText } from "@keepmind/i18n";
 import { createRoute, type OpenAPIHono, z } from "@hono/zod-openapi";
 import { sessionUser } from "../auth";
 import { apiError, errorResponse, isExpectedError } from "../http/errors";
@@ -130,7 +130,7 @@ export function githubAppInstallDeps(deps: AppDeps): GitHubAppInstallDeps {
 /** Limits starting the manifest flow, like the installation's other keys. */
 const MANIFEST_STARTS = { limit: 10, windowMs: 60_000 };
 
-const ownerOnly = "404 for everyone but the server's pinned owner (ADR 0073), and on agentes.chat itself.";
+const ownerOnly = "404 for everyone but the server's pinned owner (ADR 0073), and on KeepMind OS itself.";
 
 /**
  * Our public GitHub App (ADR 0033, 0156): organizations install it from the app, which binds the installation to them;
@@ -152,9 +152,9 @@ export function githubAppRoutes(deps: AppDeps) {
   const base = deps.config.PUBLIC_URL.replace(/\/$/, "");
   const settings = deps.extras?.githubApp;
 
-  /** The holder for the server's owner, off agentes.chat; null for anyone else. */
+  /** The holder for the server's owner, off KeepMind OS; null for anyone else. */
   const ownerSettings = async (userId: string): Promise<GitHubAppSettings | null> =>
-    settings && !isAgentesCloud(deps.config.PUBLIC_URL) && (await pinnedOwner(deps.db)) === userId ? settings : null;
+    settings && !isKeepMindCloud(deps.config.PUBLIC_URL) && (await pinnedOwner(deps.db)) === userId ? settings : null;
   const setupOf = async (holder: GitHubAppSettings) => {
     const view = await holder.view();
     const app = view.state === "ok" ? holder.current() : null;
@@ -169,7 +169,7 @@ export function githubAppRoutes(deps: AppDeps) {
       tags,
       security,
       summary: "The GitHub App: whether it can be installed here, this organization's installations, the server's app",
-      description: `Installations are checked with GitHub first, at most once a minute per organization: one uninstalled there is gone here. \`setup\`: the server's own app, for its pinned owner only (null for anyone else, and on agentes.chat). \`ownerCreates\`: the server has no app and its owner can make one in Settings, so the admins can be told who to ask (false on agentes.chat).`,
+      description: `Installations are checked with GitHub first, at most once a minute per organization: one uninstalled there is gone here. \`setup\`: the server's own app, for its pinned owner only (null for anyone else, and on KeepMind OS). \`ownerCreates\`: the server has no app and its owner can make one in Settings, so the admins can be told who to ask (false on KeepMind OS).`,
       request: { params: OrgParams },
       responses: {
         200: json(
@@ -193,7 +193,7 @@ export function githubAppRoutes(deps: AppDeps) {
       const rows = await listGitHubAppInstallations(deps.db, userId, orgId);
       const holder = await ownerSettings(userId);
       const ownerCreates =
-        settings !== undefined && !isAgentesCloud(deps.config.PUBLIC_URL) && (await settings.view()).source === null;
+        settings !== undefined && !isKeepMindCloud(deps.config.PUBLIC_URL) && (await settings.view()).source === null;
       return c.json(
         {
           installable: githubAppInstallable(install.app),

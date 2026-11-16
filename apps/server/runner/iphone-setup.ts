@@ -2,7 +2,7 @@ import { type ChildProcess, spawn } from "node:child_process";
 import type { EventEmitter } from "node:events";
 import os from "node:os";
 import path from "node:path";
-import type { ControlIphoneSetup } from "@agenteschat/adapters/runner-control";
+import type { ControlIphoneSetup } from "@keepmind/adapters/runner-control";
 import { killTree } from "./exec";
 import { extraToolDirs, runTool, which } from "./phones";
 import { xcodeBlocked } from "./toolchains";

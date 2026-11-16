@@ -1,4 +1,4 @@
-import { safeRedirect } from "@agenteschat/client/lib/guards";
+import { safeRedirect } from "@keepmind/client/lib/guards";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
 /**

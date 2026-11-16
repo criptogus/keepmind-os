@@ -7,10 +7,10 @@ import type {
   MemberPresence,
   MemberStatus,
   Person,
-} from "@agenteschat/client";
-import { agentStateIn, agentWorkingIn, keys, useApi } from "@agenteschat/client";
-import { agentWork } from "@agenteschat/client/lib/agent-work";
-import { type AgentFace, agentPresenceShown, agentStatusText } from "@agenteschat/client/lib/presence";
+} from "@keepmind/client";
+import { agentStateIn, agentWorkingIn, keys, useApi } from "@keepmind/client";
+import { agentWork } from "@keepmind/client/lib/agent-work";
+import { type AgentFace, agentPresenceShown, agentStatusText } from "@keepmind/client/lib/presence";
 import { useQuery } from "@tanstack/react-query";
 import type { TFunction } from "i18next";
 import { useCallback, useMemo } from "react";

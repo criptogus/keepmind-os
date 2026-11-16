@@ -1,14 +1,14 @@
-import type { SearchHit } from "@agenteschat/client";
-import { useChannelCategories, useChannels } from "@agenteschat/client";
-import { clockAt } from "@agenteschat/client/lib/format";
-import { hitText } from "@agenteschat/client/lib/media";
+import type { SearchHit } from "@keepmind/client";
+import { useChannelCategories, useChannels } from "@keepmind/client";
+import { clockAt } from "@keepmind/client/lib/format";
+import { hitText } from "@keepmind/client/lib/media";
 import {
   groupHitsByPlace,
   markTerms,
   SEARCH_SORTS,
   searchChipLabel,
   searchTerms,
-} from "@agenteschat/client/lib/search-filters";
+} from "@keepmind/client/lib/search-filters";
 import {
   Button,
   CountChip,
@@ -19,7 +19,7 @@ import {
   Message,
   MessageText,
   Select,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";

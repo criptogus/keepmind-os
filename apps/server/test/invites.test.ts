@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import { createMemoryRateLimiter, orgTopic } from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
+import { createMemoryRateLimiter, orgTopic } from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
 import { type Browser, browser, createTestServer, joinByInvitation, seedOrg, signUp, type TestServer } from "./harness";
 
 let t: TestServer;
@@ -105,7 +105,7 @@ test("a link only asks: the same link every time, no sign-up from it, and an app
   expect(wait.error.params.retryIn).toBeGreaterThan(50);
   await t.drain();
   const code = lastCode();
-  expect(mailTo("ana@example.com").map((m) => m.subject)).toEqual([`${code} é seu código do agentes.chat`]);
+  expect(mailTo("ana@example.com").map((m) => m.subject)).toEqual([`${code} é seu código do KeepMind OS`]);
   // Sent, its job's row is gone: the code and the address aren't kept.
   const jobs = await t.db.select().from(schema.outbox).where(eq(schema.outbox.kind, "email.send"));
   expect(jobs.filter((j) => (j.payload.template as { kind?: string }).kind === "join_code")).toEqual([]);
@@ -575,7 +575,7 @@ test("sign-up from the invitation's email: no 'confirm your email'; from a copie
   expect((await signUpWith("bia@example.com", { token: ana, mail })).status).toBe(200);
   expect((await signUpWith("caio@example.com")).status).toBe(200);
   await t.drain();
-  const confirmations = t.email.sent.filter((m) => m.subject === "Confirme seu e-mail no agentes.chat");
+  const confirmations = t.email.sent.filter((m) => m.subject === "Confirme seu e-mail no KeepMind OS");
   expect(confirmations.map((m) => m.to[0]).sort()).toEqual(["bia@example.com", "caio@example.com", "dani@example.com"]);
 
   // Accepting confirms only from the email: Dani, with the copied link, still has her own message to open.

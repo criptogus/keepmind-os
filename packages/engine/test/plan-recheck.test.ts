@@ -6,9 +6,9 @@ import {
   PLAN_RECHECK_PROTOCOL,
   type PlanUsage,
   TOKEN_RECHECK_MS,
-} from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
-import { planCheckedAt } from "@agenteschat/ui/plan-state";
+} from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
+import { planCheckedAt } from "@keepmind/ui/plan-state";
 import { recheckStuckPlans } from "../src/machine-accounts";
 import type { MachineCaller, MachineStatus } from "../src/machine-hub";
 import { type Fixture, setup } from "./fixtures";

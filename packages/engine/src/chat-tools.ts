@@ -1,5 +1,5 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, count, desc, eq, isNull, or, schema, sql } from "@agenteschat/db";
+import type { PubSub } from "@keepmind/adapters";
+import { and, count, desc, eq, isNull, or, schema, sql } from "@keepmind/db";
 import { type ArtifactDeps, shareArtifact } from "./artifacts";
 import { recordAudit } from "./audit";
 import { answersAgentsOnly } from "./consultations";

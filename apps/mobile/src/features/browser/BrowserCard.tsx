@@ -19,10 +19,10 @@ import {
   useBrowserStuck,
   useDesktopPicture,
   useMachines,
-} from "@agenteschat/client";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { browserNoAnswerMessage, browserOffMessage, profileRefusalLine } from "@agenteschat/client/lib/machines";
-import { isBlankPage } from "@agenteschat/client/lib/sites";
+} from "@keepmind/client";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { browserNoAnswerMessage, browserOffMessage, profileRefusalLine } from "@keepmind/client/lib/machines";
+import { isBlankPage } from "@keepmind/client/lib/sites";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {

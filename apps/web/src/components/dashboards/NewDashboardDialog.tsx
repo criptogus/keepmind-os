@@ -1,6 +1,6 @@
-import { editorsInput, useCreateDashboard } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { Button, Dialog, DialogBody, DialogFooter, Field, Input, Locked } from "@agenteschat/ui";
+import { editorsInput, useCreateDashboard } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { Button, Dialog, DialogBody, DialogFooter, Field, Input, Locked } from "@keepmind/ui";
 import { useNavigate } from "@tanstack/react-router";
 import { type RefObject, useId, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

@@ -1,5 +1,5 @@
-import type { KeyWrapper } from "@agenteschat/adapters";
-import { and, type Database, type Executor, eq, gte, schema, sql } from "@agenteschat/db";
+import type { KeyWrapper } from "@keepmind/adapters";
+import { and, type Database, type Executor, eq, gte, schema, sql } from "@keepmind/db";
 import { type AuditEntry, auditEveryOrg } from "./audit";
 import { openSecret, sealSecret } from "./crypto";
 import { ConflictError, ValidationError } from "./errors";

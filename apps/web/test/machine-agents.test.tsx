@@ -1,10 +1,10 @@
 import { afterEach, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { Machine } from "@agenteschat/client";
-import { SHARED_SEAT } from "@agenteschat/client/lib/seat";
+import type { Machine } from "@keepmind/client";
+import { SHARED_SEAT } from "@keepmind/client/lib/seat";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { OpenComputerContext } from "@/components/computer/open";
 import { MachineAgents } from "@/components/Machines";

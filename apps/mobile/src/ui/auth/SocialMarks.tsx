@@ -1,4 +1,4 @@
-import type { SignInProvider } from "@agenteschat/client";
+import type { SignInProvider } from "@keepmind/client";
 import Svg, { Path } from "react-native-svg";
 
 /** The sign-in providers' marks, the web's (`SocialButtons.tsx`): Google in its colors, GitHub and Apple in the text's. */

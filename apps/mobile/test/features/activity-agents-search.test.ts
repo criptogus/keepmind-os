@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import type { AgentAccess, AppNotification, WorkingRun } from "@agenteschat/client";
-import { resources } from "@agenteschat/i18n";
+import type { AgentAccess, AppNotification, WorkingRun } from "@keepmind/client";
+import { resources } from "@keepmind/i18n";
 import i18next from "i18next";
 import {
   activitySections,

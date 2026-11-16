@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
-import { AGENT_GRADIENTS, mixHex } from "@agenteschat/ui/agent/engine";
-import { FORMING_LOOP_S, formingField } from "@agenteschat/ui/sky/forming";
-import { phoneField } from "@agenteschat/ui/sky/workspace";
+import { AGENT_GRADIENTS, mixHex } from "@keepmind/ui/agent/engine";
+import { FORMING_LOOP_S, formingField } from "@keepmind/ui/sky/forming";
+import { phoneField } from "@keepmind/ui/sky/workspace";
 import {
   BAYER,
   barField,

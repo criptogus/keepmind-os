@@ -1,4 +1,4 @@
-import { MAIL_PRESETS, type PubSub } from "@agenteschat/adapters";
+import { MAIL_PRESETS, type PubSub } from "@keepmind/adapters";
 import {
   and,
   asc,
@@ -16,7 +16,7 @@ import {
   type SQL,
   schema,
   sql,
-} from "@agenteschat/db";
+} from "@keepmind/db";
 import { type ActiveCover, activeCoversFrom, activeCoversTo } from "./approval-covers";
 import { resumeHeldRuns, wakeLine } from "./approval-order";
 import { addApprovalRules, addRoutineOwnActions, type RememberedKind, rememberedKindOf } from "./approval-rules";

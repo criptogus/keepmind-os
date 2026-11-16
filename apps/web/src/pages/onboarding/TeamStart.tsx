@@ -1,5 +1,5 @@
-import { joinNames } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
+import { joinNames } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
 import {
   type AgentAppearance,
   Button,
@@ -9,7 +9,7 @@ import {
   RadioCard,
   RadioGroup,
   Skeleton,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { AgentAvatar } from "@/components/AgentAvatar";

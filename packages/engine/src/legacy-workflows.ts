@@ -1,4 +1,4 @@
-import { and, type Database, eq, schema } from "@agenteschat/db";
+import { and, type Database, eq, schema } from "@keepmind/db";
 import { abortLocalRun } from "./cancel";
 import { sha256 } from "./crypto";
 import { conditionHolds } from "./keepmind-legacy-mapping";

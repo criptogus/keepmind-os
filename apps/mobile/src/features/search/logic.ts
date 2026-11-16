@@ -1,4 +1,4 @@
-import type { Agent, Channel, DirectMessage, SearchHit, SearchKind } from "@agenteschat/client";
+import type { Agent, Channel, DirectMessage, SearchHit, SearchKind } from "@keepmind/client";
 import {
   DM_SEARCH_OPS,
   dedupe,
@@ -10,7 +10,7 @@ import {
   type SearchOp,
   type SearchPlace,
   type SearchWords,
-} from "@agenteschat/client/lib/search-filters";
+} from "@keepmind/client/lib/search-filters";
 import { type AppHref, chatHref } from "../links/logic";
 
 /**

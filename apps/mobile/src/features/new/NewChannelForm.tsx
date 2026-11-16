@@ -1,5 +1,5 @@
-import { keys, useApi } from "@agenteschat/client";
-import { isPersonal, modeKey } from "@agenteschat/client/lib/workspace-mode";
+import { keys, useApi } from "@keepmind/client";
+import { isPersonal, modeKey } from "@keepmind/client/lib/workspace-mode";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

@@ -1,6 +1,6 @@
-import type { ControlAgent, ControlStatus } from "@agenteschat/adapters/runner-control";
-import { helpUrl } from "@agenteschat/client/lib/server";
-import type { HelpSlug } from "@agenteschat/i18n/help";
+import type { ControlAgent, ControlStatus } from "@keepmind/adapters/runner-control";
+import { helpUrl } from "@keepmind/client/lib/server";
+import type { HelpSlug } from "@keepmind/i18n/help";
 import {
   type AgentState,
   Avatar,
@@ -14,7 +14,7 @@ import {
   type IconName,
   LogoMark,
   normalizeAppearance,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { type ReactNode, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHost } from "../app";
@@ -71,7 +71,7 @@ export function CommandCopy({ command, inline = false }: { command: string; inli
 }
 
 /**
- * A help page on agentes.chat, in the app's language, as a help line's link: the browser opens it with only the
+ * A help page on KeepMind OS, in the app's language, as a help line's link: the browser opens it with only the
  * page, the language and the section, so the site never learns which server this app opens.
  */
 export function HelpLink({ slug, section, children }: { slug: HelpSlug; section?: string; children: ReactNode }) {

@@ -1,9 +1,9 @@
-import type { Mission } from "@agenteschat/client";
-import { useChannels, useMissionList } from "@agenteschat/client";
-import { formatShortDate, relativeTime } from "@agenteschat/client/lib/format";
-import { isOpenMission, missionCells, missionCellTitles, waitingText } from "@agenteschat/client/lib/missions";
-import { can } from "@agenteschat/client/lib/permissions";
-import { Button, EmptyState, GroupHeading, Icon, Menu } from "@agenteschat/ui";
+import type { Mission } from "@keepmind/client";
+import { useChannels, useMissionList } from "@keepmind/client";
+import { formatShortDate, relativeTime } from "@keepmind/client/lib/format";
+import { isOpenMission, missionCells, missionCellTitles, waitingText } from "@keepmind/client/lib/missions";
+import { can } from "@keepmind/client/lib/permissions";
+import { Button, EmptyState, GroupHeading, Icon, Menu } from "@keepmind/ui";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

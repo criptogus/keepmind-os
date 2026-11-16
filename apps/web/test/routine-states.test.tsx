@@ -1,13 +1,13 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { ApiClient, Routine, RoutineRun } from "@agenteschat/client";
-import { ApiError } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { clockAt } from "@agenteschat/client/lib/format";
-import { RUN_CODES, runOutcome } from "@agenteschat/client/lib/routine-view";
+import type { ApiClient, Routine, RoutineRun } from "@keepmind/client";
+import { ApiError } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { clockAt } from "@keepmind/client/lib/format";
+import { RUN_CODES, runOutcome } from "@keepmind/client/lib/routine-view";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import type { TFunction } from "i18next";
 import { createI18n } from "@/i18n";
@@ -320,7 +320,7 @@ describe("Rotinas: each routine's state, with its one-tap fix", () => {
   });
 
   test("a run's record reads as Markdown, folded when long, and Ver mais opens it in place for good", async () => {
-    const record = `Contou o que achou\n\n- **Verificado:** PRs abertos em \`agentes.chat\`\n- ${"Nada novo. ".repeat(40)}`;
+    const record = `Contou o que achou\n\n- **Verificado:** PRs abertos em \`KeepMind OS\`\n- ${"Nada novo. ".repeat(40)}`;
     Object.defineProperty(HTMLElement.prototype, "scrollHeight", { configurable: true, value: 400 });
     await open([routine({ id: "rt-md", name: "Revisar PRs" })], {
       "rt-md": [routineRun({ at: ago(5), status: "silent", summary: record })],
@@ -329,7 +329,7 @@ describe("Rotinas: each routine's state, with its one-tap fix", () => {
     await runsTab(panel);
     const words = panel.querySelector(".routine-runs__words") as HTMLElement;
     expect(words.querySelector("strong")?.textContent).toBe("Verificado:");
-    expect(words.querySelector("code")?.textContent).toBe("agentes.chat");
+    expect(words.querySelector("code")?.textContent).toBe("keepmind.io");
     expect(words.textContent).not.toContain("**");
     expect(words.querySelector("[data-folded]")).toBeTruthy();
     await click(within(words).getByRole("button", { name: "Ver mais" }));

@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
-import { orgTopic, type RealtimeEvent, userTopic } from "@agenteschat/adapters";
-import { and, eq, schema, sql } from "@agenteschat/db";
-import { DASHBOARDS_MAX, WIDGET_SCHEDULED_MAX, WIDGETS_PER_DASHBOARD_MAX } from "@agenteschat/ui/widgets/spec";
+import { orgTopic, type RealtimeEvent, userTopic } from "@keepmind/adapters";
+import { and, eq, schema, sql } from "@keepmind/db";
+import { DASHBOARDS_MAX, WIDGET_SCHEDULED_MAX, WIDGETS_PER_DASHBOARD_MAX } from "@keepmind/ui/widgets/spec";
 import {
   assertScheduledRoom,
   createDashboard,

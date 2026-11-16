@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { CHAT_RHYTHM, CHAT_STYLES } from "@agenteschat/client/lib/chat-look";
+import { CHAT_RHYTHM, CHAT_STYLES } from "@keepmind/client/lib/chat-look";
 import { rowFrame } from "../../src/features/chat/logic";
 
 const read = (rel: string) => Bun.file(new URL(`../../src/features/${rel}`, import.meta.url).pathname).text();

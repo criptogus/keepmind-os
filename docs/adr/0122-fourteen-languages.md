@@ -4,7 +4,7 @@
 - Date: 2026-11-02
 - Amends: 0035 (pt-BR was the source and the default; pushes in the device's language)
 - Code: `packages/i18n/src/locale.ts` (registry), `load.ts`, `plurals.ts`, `format.ts`, `tree.ts`, `locales/*.json`,
-  `glossary.json`, `test/check-locale.ts` (`@agenteschat/i18n/testing`), `test/identical.json`;
+  `glossary.json`, `test/check-locale.ts` (`@keepmind/i18n/testing`), `test/identical.json`;
   `packages/client/src/lib/grammar.ts`, `locale-sync.ts`; `apps/web/src/i18n/index.ts`,
   `components/LanguageSelect.tsx`; `apps/mobile/src/providers/i18n.ts`, `src/i18n/merge.ts`,
   `src/features/i18n/locales.ts`; `apps/desktop/src/i18n/index.ts`; `packages/engine/src/email/words/*`,
@@ -66,7 +66,7 @@ AGPL and self-hostable) waits for human translators.
    fonts in the email stack. Jobs queued without a language render in English. A refusal code the app has no line for shows the server's words in English and a plain line by kind of
    refusal in every other language (`untranslatedText`); a guard test keeps new person-facing codes in `KNOWN`. A run's turn names the person's app language (for a file's
    title or a form's labels); replies still follow the language the person writes in.
-7. **Formatting.** `@agenteschat/i18n/format`: `plural`, `formatList`, `formatMoneyUsd`, `formatDate`, `formatTime`,
+7. **Formatting.** `@keepmind/i18n/format`: `plural`, `formatList`, `formatMoneyUsd`, `formatDate`, `formatTime`,
    `relativeTime`, `dayMonthOrder`. Lists of names go through `joinNames(names, t)`, i18next's `list` format in
    `format.list` (Intl.ListFormat: "Ada, Atlas, and Theo", "Ada、Atlas、Theo"); "and N more" is the list's last item.
    A typed day follows `dayMonthOrder`. No case change on `t()` itself (a lowercase form is its own key); a fragment's

@@ -1,7 +1,7 @@
-import { ApiError, type PageTarget } from "@agenteschat/client";
-import type { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { isBlankPage, openRefusalKey, shownAddress } from "@agenteschat/client/lib/sites";
-import { Button, Icon, Locked } from "@agenteschat/ui";
+import { ApiError, type PageTarget } from "@keepmind/client";
+import type { agentGrammar } from "@keepmind/client/lib/grammar";
+import { isBlankPage, openRefusalKey, shownAddress } from "@keepmind/client/lib/sites";
+import { Button, Icon, Locked } from "@keepmind/ui";
 import { type ReactNode, useEffect, useId, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { useTranslation } from "react-i18next";

@@ -18,7 +18,7 @@ test("a secret request's text names who asked; one posted before that reads with
 });
 
 test("a computer brain cut mid-turn says what it already did in the person's words, never the tools' names", async () => {
-  const { resources } = await import("@agenteschat/i18n");
+  const { resources } = await import("@keepmind/i18n");
   const i18next = (await import("i18next")).default;
   const lang = (lng: string) => {
     const instance = i18next.createInstance();

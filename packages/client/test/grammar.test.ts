@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { resources } from "@agenteschat/i18n";
+import { resources } from "@keepmind/i18n";
 import i18next from "i18next";
 import { agentGrammar } from "../src/lib/grammar";
 

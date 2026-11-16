@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { eq, schema } from "@agenteschat/db";
-import { en, ptBR } from "@agenteschat/i18n";
+import { eq, schema } from "@keepmind/db";
+import { en, ptBR } from "@keepmind/i18n";
 import {
   accessMatrix,
   BUILTIN_TOOL_INFO,

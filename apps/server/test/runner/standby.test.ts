@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import { MACHINE_PROTOCOL_VERSION, type ServerFrame } from "@agenteschat/adapters/machine-protocol";
+import { MACHINE_PROTOCOL_VERSION, type ServerFrame } from "@keepmind/adapters/machine-protocol";
 import { type Dial, RunnerConnection, type Socket, type SocketHandlers } from "../../runner/connection";
 import { bootId } from "../../runner/lock";
 import { ackStandby, askStandby, readStandby, standbyAcked, standbyOn } from "../../runner/standby";

@@ -4,8 +4,8 @@ import {
   type VaultAccess,
   type VaultItemKind,
   type VaultScope,
-} from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
+} from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { GroupedFooter, GroupedHeader, GroupedList, GroupedRow, useToast } from "@/ui";

@@ -5,7 +5,7 @@ import {
   formatJson,
   highlightCode,
   isJsonLang,
-} from "@agenteschat/client/lib/code";
+} from "@keepmind/client/lib/code";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Text as RNText, ScrollView, StyleSheet, View } from "react-native";
@@ -39,7 +39,7 @@ function openFull(lang: string, text: string) {
  * Fenced code in a message: the language on top, copy (the icon turns
  * into a check and "Copiado") and full screen, a native form sheet: the system
  * shrinks and dims the conversation behind it and closes it with a drag. Long code shows its first lines
- * and "Ver as N linhas". Colors from the shared highlighter (`@agenteschat/client/lib/code`). JSON reads formatted
+ * and "Ver as N linhas". Colors from the shared highlighter (`@keepmind/client/lib/code`). JSON reads formatted
  * (`formatJson`) and wrapped, the text as written one press away ("Original"), as on the web; copy takes what shows.
  */
 export const CodeCard = memo(function CodeCard({ lang, text }: { lang: string; text: string }) {

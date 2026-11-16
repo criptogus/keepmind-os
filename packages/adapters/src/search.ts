@@ -1,4 +1,4 @@
-import { and, asc, type Database, desc, eq, gte, inArray, lt, rowsOf, schema, sql } from "@agenteschat/db";
+import { and, asc, type Database, desc, eq, gte, inArray, lt, rowsOf, schema, sql } from "@keepmind/db";
 import { contentWords } from "./stopwords";
 
 export type SearchKind = "message" | "context_item" | "issue" | "file" | "wiki" | "action";

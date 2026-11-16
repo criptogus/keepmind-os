@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { canDeleteIssue } from "@agenteschat/client/lib/issues";
+import { canDeleteIssue } from "@keepmind/client/lib/issues";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { createFakeApi, ORG_ID, seedState } from "./fake-api";
 import { renderApp, screen, settle } from "./render";

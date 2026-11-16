@@ -1,4 +1,4 @@
-import { and, eq, inArray, isNull, or, schema } from "@agenteschat/db";
+import { and, eq, inArray, isNull, or, schema } from "@keepmind/db";
 import type { AgentDeletionDeps } from "./agent-deletion";
 import { recordAudit } from "./audit";
 import { stopRun } from "./cancel";

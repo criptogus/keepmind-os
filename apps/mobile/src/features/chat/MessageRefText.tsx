@@ -1,5 +1,5 @@
-import { useMessageCard } from "@agenteschat/client";
-import { type MessageLink, messageRefLabel } from "@agenteschat/client/lib/message-links";
+import { useMessageCard } from "@keepmind/client";
+import { type MessageLink, messageRefLabel } from "@keepmind/client/lib/message-links";
 import type { Href } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { Text as RNText, StyleSheet } from "react-native";

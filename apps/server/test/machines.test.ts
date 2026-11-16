@@ -2,7 +2,7 @@ import { afterEach, expect, test } from "bun:test";
 import { createHash } from "node:crypto";
 import { readdirSync, readFileSync, realpathSync } from "node:fs";
 import path from "node:path";
-import { createDiskBlobStore } from "@agenteschat/adapters";
+import { createDiskBlobStore } from "@keepmind/adapters";
 import {
   ACCESS_ALLOW_PROTOCOL,
   CLI_GIT_MISSING,
@@ -11,11 +11,11 @@ import {
   type MachineRequest,
   type RunnerPause,
   type ServerFrame,
-} from "@agenteschat/adapters/machine-protocol";
-import { testConfig } from "@agenteschat/config";
-import { eq, schema } from "@agenteschat/db";
-import { ARTIFACT_LIMITS, createUpload, issueManagedMachine, setProvisioning } from "@agenteschat/engine";
-import { type ModelRequest, systemText } from "@agenteschat/providers";
+} from "@keepmind/adapters/machine-protocol";
+import { testConfig } from "@keepmind/config";
+import { eq, schema } from "@keepmind/db";
+import { ARTIFACT_LIMITS, createUpload, issueManagedMachine, setProvisioning } from "@keepmind/engine";
+import { type ModelRequest, systemText } from "@keepmind/providers";
 import { handleRequest } from "../runner/handlers";
 import { applyBootSwitches } from "../src/start";
 import {

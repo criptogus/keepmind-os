@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { existsSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { createFakeEmailSender, EmailError } from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
+import { createFakeEmailSender, EmailError } from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
 import {
   createJobHandlers,
   defaultEmailFrom,
@@ -281,8 +281,8 @@ describe("the look", () => {
   test("the join code: first in the subject, large in a well, alone on its line, and no button", () => {
     const sample = EMAIL_SAMPLES["join_code.en"] as Extract<EmailTemplate, { kind: "join_code" }>;
     for (const [locale, subject, body] of [
-      ["en", "482913 is your agentes.chat code", "Type this code on the page to ask to join"],
-      ["pt-BR", "482913 é seu código do agentes.chat", "Digite este código na página para pedir para entrar na"],
+      ["en", "482913 is your KeepMind OS code", "Type this code on the page to ask to join"],
+      ["pt-BR", "482913 é seu código do KeepMind OS", "Digite este código na página para pedir para entrar na"],
     ] as const) {
       const e = renderEmail({ ...sample, locale, orgName: "Acme evil.com" }, art);
       expect(e.subject).toBe(subject);
@@ -296,41 +296,41 @@ describe("the look", () => {
     }
   });
 
-  test("without EMAIL_FROM, the sender is agentes.chat at this server's host", () => {
-    expect(defaultEmailFrom("https://agentes.chat")).toBe("agentes.chat <ping@agentes.chat>");
-    expect(defaultEmailFrom("https://chat.acme.com:8443/")).toBe("agentes.chat <ping@chat.acme.com>");
+  test("without EMAIL_FROM, the sender is KeepMind OS at this server's host", () => {
+    expect(defaultEmailFrom("https://keepmind.io")).toBe("KeepMind OS <contact@zeroagency.ai>");
+    expect(defaultEmailFrom("https://chat.acme.com:8443/")).toBe("KeepMind OS <ping@chat.acme.com>");
   });
 
-  test("the footer says who sent it: agentes.chat, or a self-hosted server by its host", () => {
-    expect(renderEmail(verify, emailArtAt("https://agentes.chat")).text).toContain("\nSent by agentes.chat.\n");
+  test("the footer says who sent it: KeepMind OS, or a self-hosted server by its host", () => {
+    expect(renderEmail(verify, emailArtAt("https://keepmind.io")).text).toContain("\nSent by KeepMind OS.\n");
     expect(renderEmail(verify, emailArtAt("https://chat.acme.com/")).text).toContain(
-      "\nSent by the agentes.chat server at chat.acme.com.\n",
+      "\nSent by the KeepMind OS server at chat.acme.com.\n",
     );
     expect(renderEmail({ ...verify, locale: "pt-BR" }, emailArtAt("https://chat.acme.com")).text).toContain(
-      "Enviado pelo servidor do agentes.chat em chat.acme.com.",
+      "Enviado pelo servidor do KeepMind OS em chat.acme.com.",
     );
   });
 
   test("on a narrow screen the host moves to the next line whole, with the word before it, never split at a hyphen", () => {
     const box = emailArtAt("https://161-97-103-35.sslip.io");
     expect(renderEmail(verify, box).html).toContain(
-      'Sent by the agentes.chat server <span style="display:inline-block">at 161-97-103-35.sslip.io.</span></p>',
+      'Sent by the KeepMind OS server <span style="display:inline-block">at 161-97-103-35.sslip.io.</span></p>',
     );
     expect(renderEmail({ ...verify, locale: "pt-BR" }, box).html).toContain(
-      'Enviado pelo servidor do agentes.chat <span style="display:inline-block">em 161-97-103-35.sslip.io.</span></p>',
+      'Enviado pelo servidor do KeepMind OS <span style="display:inline-block">em 161-97-103-35.sslip.io.</span></p>',
     );
-    expect(renderEmail(verify, box).text).toContain("\nSent by the agentes.chat server at 161-97-103-35.sslip.io.\n");
+    expect(renderEmail(verify, box).text).toContain("\nSent by the KeepMind OS server at 161-97-103-35.sslip.io.\n");
     // Too long to share a 320 px line with the word before it, which would split it again or leave the word alone on
     // a line: it moves down alone.
     for (const host of ["ec2-203-0-113-25.compute-1.amazonaws.com", "agentes.consultoriaempresarialpaulista.com.br"]) {
       const far = emailArtAt(`https://${host}`);
       expect(renderEmail(verify, far).html).toContain(
-        `Sent by the agentes.chat server at <span style="display:inline-block">${host}.</span></p>`,
+        `Sent by the KeepMind OS server at <span style="display:inline-block">${host}.</span></p>`,
       );
       expect(renderEmail({ ...verify, locale: "pt-BR" }, far).html).toContain(
-        `Enviado pelo servidor do agentes.chat em <span style="display:inline-block">${host}.</span></p>`,
+        `Enviado pelo servidor do KeepMind OS em <span style="display:inline-block">${host}.</span></p>`,
       );
-      expect(renderEmail(verify, far).text).toContain(`\nSent by the agentes.chat server at ${host}.\n`);
+      expect(renderEmail(verify, far).text).toContain(`\nSent by the KeepMind OS server at ${host}.\n`);
     }
   });
 
@@ -355,7 +355,7 @@ describe("the look", () => {
     const html = (id: string) => renderEmail(EMAIL_SAMPLES[id] as EmailTemplate, art).html;
     expect(html("verify_email.pt-BR")).toContain(`pode ignorar ${nobr}este e-mail.</span></p>`);
     expect(html("join_request.pt-BR")).toContain(`e pediu ${nobr}para entrar.</span></p>`);
-    expect(html("join_code.en")).toContain(`Souza Bakery ${nobr}on agentes.chat.</span></p>`);
+    expect(html("join_code.en")).toContain(`Souza Bakery ${nobr}on KeepMind OS.</span></p>`);
     // A name in bold moves down with its period, still bold.
     expect(html("join_code.en")).toContain(
       `to ask to join ${nobr}<b class="ink" style="font-weight:600;color:#151514">Souza Bakery</b>.</span></p>`,
@@ -585,8 +585,8 @@ describe("where the pictures come from", () => {
     const lia = { color: "rose", eyes: "dots", accessory: "flower" };
     const teal = { color: "teal", eyes: "round", accessory: "none" };
     const { html, inline } = renderEmail({ ...ready, crew: [lia, lia, teal, { color: "rose" }] }, attached);
-    expect(html).toContain('src="cid:computer@agentes.chat"');
-    expect(html).toContain('src="cid:agent-rose-dots-flower@agentes.chat"');
+    expect(html).toContain('src="cid:contact@zeroagency.ai"');
+    expect(html).toContain('src="cid:contact@zeroagency.ai"');
     expect(inline.map((p) => p.filename)).toEqual([
       "logo-ink-tile.png",
       "logo-bone.png",
@@ -651,14 +651,14 @@ describe("where the pictures come from", () => {
       },
       attached,
     );
-    expect(html).toContain('src="cid:logo-ink-tile@agentes.chat"');
+    expect(html).toContain('src="cid:contact@zeroagency.ai"');
     expect(inline.map((p) => p.filename)).toEqual([
       "logo-ink-tile.png",
       "logo-bone.png",
       "sky-band.png",
       "agent-rose.png",
     ]);
-    expect(inline[0]).toMatchObject({ cid: "logo-ink-tile@agentes.chat", contentType: "image/png" });
+    expect(inline[0]).toMatchObject({ cid: "contact@zeroagency.ai", contentType: "image/png" });
     expect([...(inline[0]?.content ?? []).slice(1, 4)].map((c) => String.fromCharCode(c)).join("")).toBe("PNG");
   });
 
@@ -695,7 +695,7 @@ describe("where the pictures come from", () => {
 describe("jobs queued before this look", () => {
   test("old payloads, with no language or new fields, still render (in English, every language's fallback)", () => {
     const e = renderEmail({ kind: "verify_email", url: "u" });
-    expect(e.subject).toBe("Confirm your email for agentes.chat");
+    expect(e.subject).toBe("Confirm your email for KeepMind OS");
     expect(e.html).toContain('<html lang="en"');
     const old: EmailTemplate[] = [
       { kind: "invitation", orgName: "Acme", inviterName: "", url: "https://x/invite/t", role: "member" },
@@ -754,9 +754,9 @@ describe("outbox delivery", () => {
     const attached: EmailArt = await emailArtFor("http://localhost:3000", WEB_DIR, "attach");
     await sendQueuedEmail(sender, { key: "k", to: ["a@b.c"], template: EMAIL_SAMPLES["verify_email.en"] }, attached);
     expect(sender.sent[0]?.inline?.map((p) => p.cid)).toEqual([
-      "logo-ink-tile@agentes.chat",
-      "logo-bone@agentes.chat",
-      "sky-band@agentes.chat",
+      "contact@zeroagency.ai",
+      "contact@zeroagency.ai",
+      "contact@zeroagency.ai",
     ]);
     await sendQueuedEmail(sender, { key: "k2", to: ["a@b.c"], template: EMAIL_SAMPLES["verify_email.en"] }, art);
     expect(sender.sent[1]).not.toHaveProperty("inline");

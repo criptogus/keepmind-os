@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import type { AgentAccess, AgentForYouItem, AgentStatusLine, Memory, OrgSummary, PlanUsage } from "@agenteschat/client";
-import { listsAgent, mailLossText, widenQuestion } from "@agenteschat/client/lib/audience";
-import { planMeterText } from "@agenteschat/client/lib/plan-usage";
-import { planLine } from "@agenteschat/ui/plan-state";
+import type { AgentAccess, AgentForYouItem, AgentStatusLine, Memory, OrgSummary, PlanUsage } from "@keepmind/client";
+import { listsAgent, mailLossText, widenQuestion } from "@keepmind/client/lib/audience";
+import { planMeterText } from "@keepmind/client/lib/plan-usage";
+import { planLine } from "@keepmind/ui/plan-state";
 import {
   byPlaybook,
   canEditMemories,

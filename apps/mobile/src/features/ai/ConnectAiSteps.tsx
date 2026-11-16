@@ -1,4 +1,4 @@
-import type { BrainScope, Credential, Edition, Machine, MachineAccount, MachineAccountKind } from "@agenteschat/client";
+import type { BrainScope, Credential, Edition, Machine, MachineAccount, MachineAccountKind } from "@keepmind/client";
 import {
   keys,
   useAgentBrain,
@@ -11,7 +11,7 @@ import {
   useCredentials,
   useMachines,
   useModels,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 import {
   accountTitle,
   type ExistingAi,
@@ -19,12 +19,12 @@ import {
   listsExisting,
   planWordOf,
   signInPlan,
-} from "@agenteschat/client/lib/ai-accounts";
-import { computerEdition, computerName, managedNamed, setupView } from "@agenteschat/client/lib/computer";
-import { CUSTOM_PROVIDER } from "@agenteschat/client/lib/endpoints";
-import { errorText, holdText, keyRefusal } from "@agenteschat/client/lib/errors";
-import { firstName, joinNames } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
+} from "@keepmind/client/lib/ai-accounts";
+import { computerEdition, computerName, managedNamed, setupView } from "@keepmind/client/lib/computer";
+import { CUSTOM_PROVIDER } from "@keepmind/client/lib/endpoints";
+import { errorText, holdText, keyRefusal } from "@keepmind/client/lib/errors";
+import { firstName, joinNames } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
 import {
   brainTool,
   CLI_GIT_MISSING,
@@ -32,7 +32,7 @@ import {
   cliOneClick,
   GIT_FOR_WINDOWS_URL,
   installableCli,
-} from "@agenteschat/client/lib/machines";
+} from "@keepmind/client/lib/machines";
 import {
   type AiChoice,
   behindComputer,
@@ -56,9 +56,9 @@ import {
   planOfAccount,
   planPickText,
   planTitle,
-} from "@agenteschat/client/lib/no-ai";
-import { can } from "@agenteschat/client/lib/permissions";
-import { geminiPersonal, isPlanId, planOf, providerFitsChoice, signInProviderOf } from "@agenteschat/client/lib/plans";
+} from "@keepmind/client/lib/no-ai";
+import { can } from "@keepmind/client/lib/permissions";
+import { geminiPersonal, isPlanId, planOf, providerFitsChoice, signInProviderOf } from "@keepmind/client/lib/plans";
 import {
   keyLooksValid,
   keyName,
@@ -68,9 +68,9 @@ import {
   providerLabel,
   providerOf,
   providersForKey,
-} from "@agenteschat/client/lib/providers";
-import { agentOnKey, rightHandOnKey, savedKeyLine, thinksWithLine } from "@agenteschat/client/lib/right-hand";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client/lib/providers";
+import { agentOnKey, rightHandOnKey, savedKeyLine, thinksWithLine } from "@keepmind/client/lib/right-hand";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import { useQueryClient } from "@tanstack/react-query";
 import { type ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

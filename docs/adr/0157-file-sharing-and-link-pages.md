@@ -86,7 +86,7 @@ acesso for who can't open it.
 A request a person's browser navigates to (`Sec-Fetch-Mode: navigate` with a document destination, or no fetch
 metadata and an `Accept` that prefers HTML) under `/api/` that the API answers with an error gets an HTML page in place
 of the JSON (`errorPages`, after every API route), with the same status: the logo, the sign-in pages' sky, the kit's
-type and colors (`@agenteschat/tokens`), light and dark, in the person's saved language, else the landing's cookie,
+type and colors (`@keepmind/tokens`), light and dark, in the person's saved language, else the landing's cookie,
 else the browser's. The JSON's code says the cause, and each cause has one way out:
 
 - not signed in (401): sign in, and the sign-in page comes back to the same link;

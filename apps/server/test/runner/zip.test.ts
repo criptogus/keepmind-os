@@ -2,7 +2,7 @@ import { afterEach, expect, test } from "bun:test";
 import { randomBytes } from "node:crypto";
 import { mkdirSync, symlinkSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { readZip } from "@agenteschat/engine";
+import { readZip } from "@keepmind/engine";
 import { crc32, dosDateTime, ZipWriter, zipFolder } from "../../runner/zip";
 import { errorCode, removeDirs, tempDir } from "./helpers";
 

@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "agentes",
+    "name": "KeepMind OS",
     "tabTitle": "KeepMind OS · 팀과 에이전트가 같은 대화에서"
   },
   "common": {
@@ -517,7 +517,7 @@
     "recommended": "추천",
     "free": "무료 · 오픈 소스",
     "cloud": {
-      "name": "agentes.chat Cloud",
+      "name": "KeepMind OS Cloud",
       "short": "항상 켜져 있고, 설치할 것이 없어요.",
       "on": "에이전트의 컴퓨터가 항상 켜져 있어요",
       "care": "업데이트와 백업은 저희가 맡아요",
@@ -689,7 +689,7 @@
     "server": {
       "into": "<b>{{server}}</b>에 로그인",
       "intoHere": "이 {{device}}의 <b>KeepMind OS</b>에 로그인",
-      "intoCloud": "<b>agentes.chat Cloud</b>에 로그인 중",
+      "intoCloud": "<b>KeepMind OS Cloud</b>에 로그인 중",
       "change": "서버 변경"
     },
     "forgotHere": {
@@ -1163,7 +1163,7 @@
         "paused": "이 워크스페이스가 일시 중지된 동안에는 MCP로 연결이 꺼져 있어요. 지금은 이 방법으로 에이전트를 가져오세요."
       },
       "otherName": "다른 앱",
-      "agenteschatName": "agentes.chat",
+      "agenteschatName": "keepmind.io",
       "where": {
         "openbotrun": "openbot-import.json(OpenBot의 Migrator에서 만든 파일)이나 openbot-transfer.json(인스턴스 이전에서 만든 파일), 또는 이 파일이 담긴 .zip을 끌어다 놓으세요.",
         "openmausbot": "OpenMausBot에서 팀을 오른쪽 클릭 → 팀 공유… → 파일 저장.",
@@ -11839,7 +11839,8 @@
       "key": "API 키가 필요해요",
       "appPassword": "앱 비밀번호가 필요해요",
       "addressPassword": "데이터베이스 주소와 비밀번호가 필요해요",
-      "composio": "Composio를 통해: Composio 페이지에서 로그인해요"
+      "composio": "Composio를 통해: Composio 페이지에서 로그인해요",
+      "oauthSetup": "Browser authorization: initial setup required"
     },
     "can": {
       "github": {
@@ -12324,7 +12325,8 @@
       "reddit": "Reddit 게시물, 댓글, 커뮤니티.",
       "whatsapp": "WhatsApp Business 메시지와 템플릿.",
       "superagentskill": "에이전트 스킬을 찾고 평가하고 개선합니다.",
-      "liquid_cybersec": "보안 문제를 조사하고 승인을 받아 수정을 조정합니다."
+      "liquid_cybersec": "보안 문제를 조사하고 승인을 받아 수정을 조정합니다.",
+      "composio_connect": "Connect services through your Composio account with browser authorization."
     }
   },
   "toolNames": {
@@ -15151,7 +15153,7 @@
     },
     "telemetry": {
       "title": "사용 통계",
-      "label": "agentes.chat에 익명 사용 통계 보내기",
+      "label": "KeepMind OS에 익명 사용 통계 보내기",
       "help": "사람 수, 에이전트 수, 머신 크기, 사용한 AI 토큰, 에이전트 브라우저가 주고받은 데이터 양 같은 수치예요. 메시지, 파일, 이름, 사이트는 절대 보내지 않아요.",
       "envOff": "이 서버의 설정에서 꺼져 있어요(TELEMETRY=off).",
       "envOffDesktop": "이 서버 컴퓨터의 KeepMind OS 앱에서 꺼져 있어요(환경설정 › 서버).",
@@ -15557,7 +15559,7 @@
   },
   "gallery": {
     "title": "컴포넌트 갤러리",
-    "subtitle": "개발 전용: @agenteschat/ui 컴포넌트예요."
+    "subtitle": "개발 전용: @keepmind/ui 컴포넌트예요."
   },
   "format": {
     "list": "{{names, list}}",
@@ -18566,7 +18568,7 @@
     "mark": "Beta",
     "open": "피드백 보내기",
     "ask": "무엇이 부족했거나, 고장 났거나, 불편했나요?",
-    "goesCloud": "작성한 내용은 이메일로 agentes.chat 팀에 전달돼요.",
+    "goesCloud": "작성한 내용은 이메일로 KeepMind OS 팀에 전달돼요.",
     "goesServer": "작성한 내용은 이메일로 이 서버를 운영하는 사람에게 전달돼요.",
     "placeholder": "편하게 적어 주세요",
     "report": "여기서 문제 신고",
@@ -18592,14 +18594,14 @@
     "offer": {
       "group": "앱에 대한 보고",
       "ready": "<b>보고 준비 완료</b>: {{summary}}",
-      "goesCloud": "내 이름으로 agentes.chat 팀에 전달돼요",
+      "goesCloud": "내 이름으로 KeepMind OS 팀에 전달돼요",
       "goesServer": "내 이름으로 이 서버를 운영하는 사람에게 전달돼요",
       "see": "보고 보기",
       "hide": "보고 닫기",
       "send": "보내기",
       "notNow": "나중에 하기",
       "answer": "답변은 내 이메일로 와요.",
-      "sentCloud": "agentes.chat 팀에 <b>보고를 보냈어요</b>",
+      "sentCloud": "KeepMind OS 팀에 <b>보고를 보냈어요</b>",
       "sentServer": "이 서버를 운영하는 사람에게 <b>보고를 보냈어요</b>",
       "sentAuto": "<b>묻지 않고 보고를 보냈어요</b>: {{summary}}",
       "view": "보기",
@@ -18648,5 +18650,56 @@
     "ready": "불러온 정보에 대기 중인 항목이 없습니다. 다음 목표를 위임할 수 있습니다.",
     "unknown": "업데이트를 사용할 수 없음",
     "waiting": "결정할 사항과 대기 중인 항목"
-  }
+  },
+  "zero.products": "Zero Agency products",
+  "zero.notFound": "This area does not exist. Open Skills, Second Brain or Cybersecurity from More.",
+  "zero.optional": "Optional · connect when needed",
+  "zero.needsAI": "Connect Kivo’s AI to delegate this preparation.",
+  "zero.configureAI": "Configure AI",
+  "zero.sending": "Sending objective…",
+  "zero.progress": "Kivo carries out the work in chat, reports blockers and asks only for necessary decisions.",
+  "zero.skills.title": "Skills",
+  "zero.skills.intro": "Practical knowledge for your agents. Find, apply and improve your skills.",
+  "zero.skills.help": "Use your skills as usual. Optionally connect SuperAgentSkill to evaluate and improve them. Open a skill and choose Improve with AI to review changes before applying.",
+  "zero.skills.connect": "Connect SuperAgentSkill",
+  "zero.skills.visit": "Explore the catalogue",
+  "zero.brain.title": "Second Brain",
+  "zero.brain.intro": "Memories and decisions that stay useful after the conversation.",
+  "zero.brain.goal": "Choose where your knowledge lives",
+  "zero.brain.help": "Keep workspace memories or prepare a versioned Second Brain in a private GitHub repository. For your own vault, request a KeepMind SB installation.",
+  "zero.brain.context": "Repository name or context (optional)",
+  "zero.brain.placeholder": "keepmind-brain",
+  "zero.brain.boundary": "Nothing is exported automatically. Approve the repository or installation before execution. Personal and team memories retain separate access.",
+  "zero.brain.start": "Prepare in GitHub",
+  "zero.brain.install": "Prepare KeepMind SB installation",
+  "zero.brain.download": "Download schema",
+  "zero.cyber.title": "Cybersecurity",
+  "zero.cyber.intro": "A dedicated team to understand risks and follow corrections with evidence.",
+  "zero.cyber.goal": "Prepare your Cybersec team",
+  "zero.cyber.help": "Kivo checks the Liquid connection and paid plan, prepares agents and proposes scope. Activation remains pending if subscription status cannot be verified.",
+  "zero.cyber.context": "Product or system to protect",
+  "zero.cyber.placeholder": "My application and repositories",
+  "zero.cyber.boundary": "Requires an active paid Liquid Cybersec plan. No plans are purchased here. Creating a team does not start tests: targets, access and credit usage require authorization.",
+  "zero.cyber.start": "Prepare my team",
+  "zero.cyber.connect": "Connect Liquid Cybersec",
+  "zero.cyber.plans": "Explore plans",
+  "keepmind.connect.githubSetup": "Connect in your browser without copying tokens. The first time, GitHub creates the KeepMind app in your account; then you choose repositories and authorize access.",
+  "keepmind.connect.oauthSetup": "{{name}} supports OAuth, but it is not configured on this server yet. The server owner needs to enable it. An API key is a manual alternative in the meantime.",
+  "keepmind.connect.prepareGitHub": "Set up connection on GitHub",
+  "keepmind.ai.manualKey": "I already have an API key",
+  "keepmind.ai.localTitle": "Connect a local model or another provider",
+  "keepmind.ai.advanced": "Advanced options",
+  "keepmind.ai.routerChoice": "Sign in or use a key. Free and paid models.",
+  "keepmind.ai.localChoice": "Use models on your computer, without an API key.",
+  "keepmind.ai.ollama.detect": "Detect Ollama models",
+  "keepmind.ai.ollama.location": "Discovery runs on the computer hosting the KeepMind server. If the server runs elsewhere, enter an address it can reach below.",
+  "keepmind.ai.ollama.empty": "Ollama responded, but no models are installed. Download a model in Ollama and try again.",
+  "keepmind.ai.openrouter.login": "Connect with OpenRouter",
+  "keepmind.ai.openrouter.instructions": "Authorize on OpenRouter, then paste the code it displays. Your password stays there.",
+  "keepmind.ai.openrouter.code": "Authorization code",
+  "keepmind.ai.openrouter.finish": "Complete authorization",
+  "keepmind.ai.openrouter.error": "Could not complete authorization. Check the code or start again.",
+  "keepmind.ai.openrouter.cost": "After authorization, test and save the connection. Free models have limits; paid models use your credits.",
+  "keepmind.ai.reopen": "Open again",
+  "zero.manageConnection": "Manage connection"
 }

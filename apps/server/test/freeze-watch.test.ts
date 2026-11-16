@@ -12,7 +12,7 @@ const DEADLINE_MS = 20_000;
 
 const CHILD = `
 const { startFreezeWatch } = await import(${JSON.stringify(join(SERVER, "src/freeze-watch.ts"))});
-const { startInFlight } = await import("@agenteschat/adapters/in-flight");
+const { startInFlight } = await import("@keepmind/adapters/in-flight");
 startFreezeWatch({ logLevel: "info", freezeMs: 2000 });
 startInFlight("job agent.run", "run-1");
 const done = startInFlight("tool browser_do", "run-1");

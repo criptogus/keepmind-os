@@ -1,5 +1,5 @@
-import type { MailAdapters } from "@agenteschat/adapters";
-import { and, type Database, type Executor, eq, inArray, isNull, schema } from "@agenteschat/db";
+import type { MailAdapters } from "@keepmind/adapters";
+import { and, type Database, type Executor, eq, inArray, isNull, schema } from "@keepmind/db";
 import { ValidationError } from "../errors";
 import { isRightHandId } from "../right-hand";
 import { hasScope } from "../tools/scopes";

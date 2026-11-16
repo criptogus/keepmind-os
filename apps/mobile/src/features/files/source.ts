@@ -1,4 +1,4 @@
-import { type ApiClient, type ArtifactDetail, keys, useApi } from "@agenteschat/client";
+import { type ApiClient, type ArtifactDetail, keys, useApi } from "@keepmind/client";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { Directory, File, Paths } from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";

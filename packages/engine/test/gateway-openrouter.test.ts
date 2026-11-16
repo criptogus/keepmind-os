@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import { noPlatformCredentials } from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
+import { noPlatformCredentials } from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
 import {
   costNanoUsd,
   enableOpenRouterModels,
@@ -9,7 +9,7 @@ import {
   parseOpenRouterModels,
   promptChars,
   setOpenRouterModels,
-} from "@agenteschat/providers";
+} from "@keepmind/providers";
 import fixture from "../../providers/test/fixtures/openrouter-models.json";
 import {
   agentBudgetState,

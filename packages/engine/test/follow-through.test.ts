@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { orgTopic } from "@agenteschat/adapters";
-import { and, eq, schema, sql } from "@agenteschat/db";
-import { type ModelRequest, systemText, textOf } from "@agenteschat/providers";
-import type { FakeReply } from "@agenteschat/providers/testing";
+import { orgTopic } from "@keepmind/adapters";
+import { and, eq, schema, sql } from "@keepmind/db";
+import { type ModelRequest, systemText, textOf } from "@keepmind/providers";
+import type { FakeReply } from "@keepmind/providers/testing";
 import {
   agentStatuses,
   askAgentToImplement,

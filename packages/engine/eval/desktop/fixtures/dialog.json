@@ -1,5 +1,5 @@
 {
-  "snapshot": "- toolbar \"Panel\"\n  - button \"Applications\" [ref=e1]\n  - button \"agentes.chat · Your team and your agents, in the same conversation - Chromium\" [window, ref=e2]\n  - button \"agent - Thunar\" [window, ref=e3]\n  - button \"Terminal - agent@desktop: ~\" [window, ref=e4]\n  - button \"2026-10-24\" [ref=e5]\n- toolbar \"Panel\"\n  - button \"Show Desktop\" [ref=e6]\n  - button \"Terminal Emulator\" [ref=e7]\n  - button \"File Manager\" [ref=e8]\n  - button \"Web Browser\" [ref=e9]\n  - button [ref=e10]\n  - button \"Directory Menu\" [ref=e11]\n- alertdialog \"Text Editor\" [active, ref=e12]\n  - text \"Save changes to “notas.txt” before closing?\"\n  - text \"If you don't save, your changes will be lost.\"\n  - button \"Close without Saving\" [focused, default, ref=e13]\n  - button \"Cancel\" [ref=e14]\n  - button \"Save\" [ref=e15]\n- window \"agent - Thunar\" [ref=e16]\n- window \"agentes.chat · Your team and your agents, in the same conversation - Chromium\" [agent browser: use browser_do]\n- window \"Terminal - agent@desktop: ~\" [ref=e17]",
+  "snapshot": "- toolbar \"Panel\"\n  - button \"Applications\" [ref=e1]\n  - button \"KeepMind OS · Your team and your agents, in the same conversation - Chromium\" [window, ref=e2]\n  - button \"agent - Thunar\" [window, ref=e3]\n  - button \"Terminal - agent@desktop: ~\" [window, ref=e4]\n  - button \"2026-10-24\" [ref=e5]\n- toolbar \"Panel\"\n  - button \"Show Desktop\" [ref=e6]\n  - button \"Terminal Emulator\" [ref=e7]\n  - button \"File Manager\" [ref=e8]\n  - button \"Web Browser\" [ref=e9]\n  - button [ref=e10]\n  - button \"Directory Menu\" [ref=e11]\n- alertdialog \"Text Editor\" [active, ref=e12]\n  - text \"Save changes to “notas.txt” before closing?\"\n  - text \"If you don't save, your changes will be lost.\"\n  - button \"Close without Saving\" [focused, default, ref=e13]\n  - button \"Cancel\" [ref=e14]\n  - button \"Save\" [ref=e15]\n- window \"agent - Thunar\" [ref=e16]\n- window \"KeepMind OS · Your team and your agents, in the same conversation - Chromium\" [agent browser: use browser_do]\n- window \"Terminal - agent@desktop: ~\" [ref=e17]",
   "refs": {
     "e1": {
       "role": "button",
@@ -7,7 +7,7 @@
     },
     "e2": {
       "role": "button",
-      "name": "agentes.chat · Your team and your agents, in the same conversation - Chromium"
+      "name": "KeepMind OS · Your team and your agents, in the same conversation - Chromium"
     },
     "e3": {
       "role": "button",
@@ -93,7 +93,7 @@
       "ref": "e2",
       "number": 2,
       "role": "button",
-      "name": "agentes.chat · Your team and your agents, in the same conversation - Chromium",
+      "name": "KeepMind OS · Your team and your agents, in the same conversation - Chromium",
       "box": {
         "x": 104,
         "y": 0,

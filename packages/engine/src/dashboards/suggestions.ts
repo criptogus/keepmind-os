@@ -1,5 +1,5 @@
-import { and, type Database, eq, isNull, schema, sql } from "@agenteschat/db";
-import { isWidgetKind, WIDGET_KINDS } from "@agenteschat/ui/widgets/spec";
+import { and, type Database, eq, isNull, schema, sql } from "@keepmind/db";
+import { isWidgetKind, WIDGET_KINDS } from "@keepmind/ui/widgets/spec";
 import { cachesEnabled, TtlCache } from "../cache";
 import { resolveSummaryModel } from "../context/summaries";
 import { requireActiveMembership } from "../organizations";

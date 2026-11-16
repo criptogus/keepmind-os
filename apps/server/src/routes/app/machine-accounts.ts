@@ -1,4 +1,4 @@
-import { ACCOUNT_LOGIN_FAILURES } from "@agenteschat/adapters";
+import { ACCOUNT_LOGIN_FAILURES } from "@keepmind/adapters";
 import {
   accountLoginStatus,
   beginAccountLogin,
@@ -13,7 +13,7 @@ import {
   setAccountServes,
   takeBackPlan,
   ValidationError,
-} from "@agenteschat/engine";
+} from "@keepmind/engine";
 import { createRoute, z } from "@hono/zod-openapi";
 import { apiError, errorResponse } from "../../http/errors";
 import {

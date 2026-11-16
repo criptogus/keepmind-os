@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { and, type Database, type Executor, eq, like, schema } from "@agenteschat/db";
+import { and, type Database, type Executor, eq, like, schema } from "@keepmind/db";
 import { recordAudit } from "./audit";
 import { randomToken } from "./crypto";
 import { ConflictError, ForbiddenError, NotFoundError } from "./errors";

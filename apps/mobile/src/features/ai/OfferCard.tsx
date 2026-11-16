@@ -10,22 +10,22 @@ import {
   useCustomServers,
   useMembers,
   useSkills,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 import {
   actionCardOf,
   connectAppDone,
   installSkillDone,
   inviteDone,
   skillUpdateState,
-} from "@agenteschat/client/lib/action-cards";
-import { APP_PAGES, appPagePath } from "@agenteschat/client/lib/app-pages";
-import { slotText } from "@agenteschat/client/lib/calendar";
-import { connectedItems } from "@agenteschat/client/lib/connected";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { joinNames } from "@agenteschat/client/lib/format";
-import { hostOf } from "@agenteschat/client/lib/import/shared";
-import { can } from "@agenteschat/client/lib/permissions";
-import { connectorName } from "@agenteschat/client/lib/scopes";
+} from "@keepmind/client/lib/action-cards";
+import { APP_PAGES, appPagePath } from "@keepmind/client/lib/app-pages";
+import { slotText } from "@keepmind/client/lib/calendar";
+import { connectedItems } from "@keepmind/client/lib/connected";
+import { errorText } from "@keepmind/client/lib/errors";
+import { joinNames } from "@keepmind/client/lib/format";
+import { hostOf } from "@keepmind/client/lib/import/shared";
+import { can } from "@keepmind/client/lib/permissions";
+import { connectorName } from "@keepmind/client/lib/scopes";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import { useOrg } from "@/providers/org";

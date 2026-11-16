@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 import type { ExecFileOptions, execFile } from "node:child_process";
-import { parseRunnerFrame } from "@agenteschat/adapters/machine-protocol";
+import { parseRunnerFrame } from "@keepmind/adapters/machine-protocol";
 import { EgressObservation, parseEgress, probeEgress, publicAddress } from "../../runner/egress";
 
 test("egress accepts only public IPv4 and IPv6, including mapped forms", () => {

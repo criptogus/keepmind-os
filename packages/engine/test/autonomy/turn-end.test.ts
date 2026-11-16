@@ -1,5 +1,5 @@
 import { afterEach, expect } from "bun:test";
-import { schema } from "@agenteschat/db";
+import { schema } from "@keepmind/db";
 import { addChannelMember, createChannel, decideApproval, postPersonMessage, runAuthority } from "../../src";
 import { ALL_GITHUB_SCOPES, fakeGithub } from "../tool-fixtures";
 import { closeWorlds, type World, world } from "./harness";

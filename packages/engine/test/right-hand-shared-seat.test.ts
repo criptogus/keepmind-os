@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import type { MachineRequest, ServerFrame } from "@agenteschat/adapters";
-import { and, eq, schema } from "@agenteschat/db";
+import type { MachineRequest, ServerFrame } from "@keepmind/adapters";
+import { and, eq, schema } from "@keepmind/db";
 import {
   auditStream,
   authorizeStream,

@@ -231,7 +231,7 @@
     "approveStop": "Beklemeyi bırak",
     "openTailscale": "Tailscale'i aç",
     "getTailscale": "Tailscale'i indir",
-    "usage": "agentes.chat'e anonim kullanım istatistikleri gönder",
+    "usage": "KeepMind OS'e anonim kullanım istatistikleri gönder",
     "usageText": "Kişi ve ajan sayısı, makine boyutları, kullanılan yapay zeka token'ları ve ajanların tarayıcılarının ne kadar veri gönderip aldığı gibi sayılar. Asla mesajlar, dosyalar, adlar veya siteler değil.",
     "start": "Başla",
     "setting": "Her şey hazırlanıyor",

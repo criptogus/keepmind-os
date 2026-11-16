@@ -1,5 +1,5 @@
-import { splitAddresses } from "@agenteschat/client/lib/mail";
-import { AffixInput, Button, Field, Token, TokenList } from "@agenteschat/ui";
+import { splitAddresses } from "@keepmind/client/lib/mail";
+import { AffixInput, Button, Field, Token, TokenList } from "@keepmind/ui";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 

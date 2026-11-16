@@ -1,4 +1,4 @@
-import { and, type Database, eq, schema } from "@agenteschat/db";
+import { and, type Database, eq, schema } from "@keepmind/db";
 import { fileRefOf } from "./artifacts";
 import { UUID } from "./authority";
 import { NotFoundError } from "./errors";

@@ -1,4 +1,4 @@
-import { and, type Executor, eq, inArray, schema } from "@agenteschat/db";
+import { and, type Executor, eq, inArray, schema } from "@keepmind/db";
 import { feedingBrief, messageRoot, type RunAuthority, runAuthorityById } from "./authority";
 import { isAgentOnlyDm } from "./dms";
 import { routineCreatorOf } from "./requester";

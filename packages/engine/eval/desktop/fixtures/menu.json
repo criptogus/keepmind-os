@@ -1,5 +1,5 @@
 {
-  "snapshot": "- toolbar \"Panel\"\n  - button \"Applications\" [pressed, ref=e1]\n  - button \"agentes.chat · Your team and your agents, in the same conversation - Chromium\" [window, ref=e2]\n  - button \"agent - Thunar\" [window, active, ref=e3]\n  - button \"Terminal - agent@desktop: ~\" [window, ref=e4]\n  - button \"2026-10-24\" [ref=e5]\n- toolbar \"Panel\"\n  - button \"Show Desktop\" [ref=e6]\n  - button \"Terminal Emulator\" [ref=e7]\n  - button \"File Manager\" [ref=e8]\n  - button \"Web Browser\" [ref=e9]\n  - button [ref=e10]\n  - button \"Directory Menu\" [ref=e11]\n- menu \"Applications\"\n  - menuitem \"Terminal Emulator\" [ref=e12]\n  - menuitem \"File Manager\" [ref=e13]\n  - menuitem \"Mail Reader\" [ref=e14]\n  - menuitem \"Web Browser\" [ref=e15]\n  - menu \"Settings\" [ref=e16]\n  - menu \"Accessories\" [ref=e17]\n  - menu \"Internet\" [ref=e18]\n  - menu \"System\" [ref=e19]\n  - menuitem \"Log Out\" [ref=e20]\n- window \"agent - Thunar\" [active, ref=e21]\n  - toolbar\n    - button \"Back\" [disabled, ref=e22]\n    - button \"Forward\" [disabled, ref=e23]\n    - button \"Open Parent\" [ref=e24]\n    - button \"Home\" [ref=e25]\n    - textbox [ref=e26]: \"/home/agent/\"\n      - img \"dialog-error-symbolic\"\n    - button \"Search for Files...\" [ref=e27]\n  - menubar\n    - menu \"File\" [ref=e28]\n    - menu \"Edit\" [ref=e29]\n    - menu \"View\" [ref=e30]\n    - menu \"Go\" [ref=e31]\n    - menu \"Bookmarks\" [ref=e32]\n    - menu \"Help\" [ref=e33]\n    - menuitem [disabled, ref=e34]\n  - status \"11 folders | 5 files: 4.8 KiB (4962 bytes) | Free space: 67.0 GiB\"\n  - group \"Icon view\"\n- window \"agentes.chat · Your team and your agents, in the same conversation - Chromium\" [agent browser: use browser_do]\n- window \"Terminal - agent@desktop: ~\" [ref=e35]",
+  "snapshot": "- toolbar \"Panel\"\n  - button \"Applications\" [pressed, ref=e1]\n  - button \"KeepMind OS · Your team and your agents, in the same conversation - Chromium\" [window, ref=e2]\n  - button \"agent - Thunar\" [window, active, ref=e3]\n  - button \"Terminal - agent@desktop: ~\" [window, ref=e4]\n  - button \"2026-10-24\" [ref=e5]\n- toolbar \"Panel\"\n  - button \"Show Desktop\" [ref=e6]\n  - button \"Terminal Emulator\" [ref=e7]\n  - button \"File Manager\" [ref=e8]\n  - button \"Web Browser\" [ref=e9]\n  - button [ref=e10]\n  - button \"Directory Menu\" [ref=e11]\n- menu \"Applications\"\n  - menuitem \"Terminal Emulator\" [ref=e12]\n  - menuitem \"File Manager\" [ref=e13]\n  - menuitem \"Mail Reader\" [ref=e14]\n  - menuitem \"Web Browser\" [ref=e15]\n  - menu \"Settings\" [ref=e16]\n  - menu \"Accessories\" [ref=e17]\n  - menu \"Internet\" [ref=e18]\n  - menu \"System\" [ref=e19]\n  - menuitem \"Log Out\" [ref=e20]\n- window \"agent - Thunar\" [active, ref=e21]\n  - toolbar\n    - button \"Back\" [disabled, ref=e22]\n    - button \"Forward\" [disabled, ref=e23]\n    - button \"Open Parent\" [ref=e24]\n    - button \"Home\" [ref=e25]\n    - textbox [ref=e26]: \"/home/agent/\"\n      - img \"dialog-error-symbolic\"\n    - button \"Search for Files...\" [ref=e27]\n  - menubar\n    - menu \"File\" [ref=e28]\n    - menu \"Edit\" [ref=e29]\n    - menu \"View\" [ref=e30]\n    - menu \"Go\" [ref=e31]\n    - menu \"Bookmarks\" [ref=e32]\n    - menu \"Help\" [ref=e33]\n    - menuitem [disabled, ref=e34]\n  - status \"11 folders | 5 files: 4.8 KiB (4962 bytes) | Free space: 67.0 GiB\"\n  - group \"Icon view\"\n- window \"KeepMind OS · Your team and your agents, in the same conversation - Chromium\" [agent browser: use browser_do]\n- window \"Terminal - agent@desktop: ~\" [ref=e35]",
   "refs": {
     "e1": {
       "role": "button",
@@ -7,7 +7,7 @@
     },
     "e2": {
       "role": "button",
-      "name": "agentes.chat · Your team and your agents, in the same conversation - Chromium"
+      "name": "KeepMind OS · Your team and your agents, in the same conversation - Chromium"
     },
     "e3": {
       "role": "button",
@@ -165,7 +165,7 @@
       "ref": "e2",
       "number": 2,
       "role": "button",
-      "name": "agentes.chat · Your team and your agents, in the same conversation - Chromium",
+      "name": "KeepMind OS · Your team and your agents, in the same conversation - Chromium",
       "box": {
         "x": 104,
         "y": 0,

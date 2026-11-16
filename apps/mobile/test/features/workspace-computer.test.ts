@@ -6,10 +6,10 @@ import {
   deletingText,
   restorable,
   settingsFrozen,
-} from "@agenteschat/client/lib/deletion";
-import { suspendedText } from "@agenteschat/client/lib/errors";
-import { type OutageTargetLike, targetOptions } from "@agenteschat/client/lib/machine-outages";
-import { quickReply } from "@agenteschat/client/lib/notifications";
+} from "@keepmind/client/lib/deletion";
+import { suspendedText } from "@keepmind/client/lib/errors";
+import { type OutageTargetLike, targetOptions } from "@keepmind/client/lib/machine-outages";
+import { quickReply } from "@keepmind/client/lib/notifications";
 import { computerIcon, type MachineOutage, targetText } from "../../src/features/outages/logic";
 import { suspendedOf } from "../../src/lib/org-choice";
 import { notification, translator } from "./fixtures";
@@ -204,12 +204,12 @@ describe("a suspended organization on the phone", () => {
     expect(suspendedOf(orgs, "d")?.reason).toBeNull();
   });
 
-  test("its line: why, and on agentes.chat Cloud how to contest it", async () => {
+  test("its line: why, and on KeepMind OS Cloud how to contest it", async () => {
     const t = await translator("pt-BR");
     expect(suspendedText(t, suspendedOf(orgs, "a"))).toBe("Este workspace está suspenso: uso fora dos termos");
     const cloud = [{ id: "e", name: "Eco", standing: { state: "suspended", reason: "Termos 5: spam", cloud: true } }];
     expect(suspendedText(t, suspendedOf(cloud, "e"))).toBe(
-      "Este workspace está suspenso: Termos 5: spam. Para contestar, escreva para legal@agentes.chat.",
+      "Este workspace está suspenso: Termos 5: spam. Para contestar, escreva para contact@zeroagency.ai.",
     );
     expect(suspendedText(t, suspendedOf(orgs, "d"))).toBe(
       "As conversas e os agentes dele estão fechados por enquanto.",

@@ -8,8 +8,8 @@ import {
   type PubSub,
   type SecretRequest,
   type ServerFrame,
-} from "@agenteschat/adapters";
-import type { Database } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import type { Database } from "@keepmind/db";
 import {
   confirmDeviceCode,
   grantScopes,
@@ -67,7 +67,7 @@ export async function pairMachine(
   input: PairInput = {},
 ) {
   const start = await startDeviceCode(
-    { db: deps.db, publicUrl: "https://agentes.chat" },
+    { db: deps.db, publicUrl: "https://keepmind.io" },
     {
       name: input.name ?? "",
       os: input.os ?? "linux",

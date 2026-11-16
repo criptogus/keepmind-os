@@ -1,6 +1,6 @@
-import type { WorkspaceMode } from "@agenteschat/client";
-import { type PurposeKind, SCENE_ACTIVITIES, SCENE_FACES } from "@agenteschat/client/lib/purpose-scene";
-import { type AgentAppearance, cx, OptionList } from "@agenteschat/ui";
+import type { WorkspaceMode } from "@keepmind/client";
+import { type PurposeKind, SCENE_ACTIVITIES, SCENE_FACES } from "@keepmind/client/lib/purpose-scene";
+import { type AgentAppearance, cx, OptionList } from "@keepmind/ui";
 import type { CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import { AgentAvatar } from "@/components/AgentAvatar";
@@ -10,7 +10,7 @@ import { LIGHT_AFTER_MS, type PurposeLife, usePurposeLife, WAKE_STEP_MS } from "
 const PURPOSES = ["personal", "team"] as const satisfies readonly WorkspaceMode[];
 
 /**
- * "What will you use agentes.chat for?" (ADR 0159, 0162): two cards one over the other, one radio each. On the left the
+ * "What will you use KeepMind OS for?" (ADR 0159, 0162): two cards one over the other, one radio each. On the left the
  * drawing; on the right the title, one line, then a cluster of pills, each an agent of the drawing and what it does.
  * The cluster is decorative (the card's name stays its title and line) and its layout never moves: at rest the pills
  * are dim and their agents doze; pointing at one brightens it and wakes its agent; choosing the card wakes the agents in

@@ -6,8 +6,8 @@ import type {
   Mission,
   MissionDecision,
   ThreadInfo,
-} from "@agenteschat/client";
-import { resources } from "@agenteschat/i18n";
+} from "@keepmind/client";
+import { resources } from "@keepmind/i18n";
 import i18next, { type TFunction } from "i18next";
 import { featureKeysEn } from "../../src/features/i18n/keys.en";
 import { featureKeysPtBR } from "../../src/features/i18n/keys.pt-BR";

@@ -1,4 +1,4 @@
-import type { ImportCard } from "@agenteschat/client/lib/import/flow";
+import type { ImportCard } from "@keepmind/client/lib/import/flow";
 
 /**
  * Each import source's official logo (assets/images/brands/README.md), a dark file where the maker has one. Our own

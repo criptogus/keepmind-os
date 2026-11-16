@@ -1,4 +1,4 @@
-import { type Database, eq, schema, sql } from "@agenteschat/db";
+import { type Database, eq, schema, sql } from "@keepmind/db";
 import { z } from "zod";
 import { UUID } from "./authority";
 import { encodeCursor } from "./cursor";

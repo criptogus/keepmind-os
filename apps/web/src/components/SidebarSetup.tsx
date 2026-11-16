@@ -1,5 +1,5 @@
-import type { SidebarItem, SidebarPlace } from "@agenteschat/client";
-import { useSetSidebarItem, useSetSidebarToolOrder, useSidebarItems, useSidebarToolOrder } from "@agenteschat/client";
+import type { SidebarItem, SidebarPlace } from "@keepmind/client";
+import { useSetSidebarItem, useSetSidebarToolOrder, useSidebarItems, useSidebarToolOrder } from "@keepmind/client";
 import {
   moveSection,
   moveShownTool,
@@ -9,8 +9,8 @@ import {
   sidebarItemOrder,
   sidebarPlace,
   sidebarSections,
-} from "@agenteschat/client/lib/sidebar-items";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client/lib/sidebar-items";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import {
   Button,
   Dialog,
@@ -20,7 +20,7 @@ import {
   type IconName,
   Segmented,
   type SegmentedOption,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import {
   cloneElement,
   type DragEvent,

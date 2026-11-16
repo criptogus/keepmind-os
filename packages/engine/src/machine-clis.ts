@@ -6,8 +6,8 @@ import {
   type CliInstall,
   type InstallableCli,
   parseExecutors,
-} from "@agenteschat/adapters";
-import type { Database } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import type { Database } from "@keepmind/db";
 import { recordAudit } from "./audit";
 import { ConflictError, ForbiddenError, NotFoundError, ValidationError } from "./errors";
 import { type AccessDeps, cliRequestKey, storeMachineExecutors } from "./machine-access";

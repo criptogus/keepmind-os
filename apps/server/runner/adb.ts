@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import net from "node:net";
 import path from "node:path";
-import type { PhoneKind, PhoneReason, PhoneState, RunnerPhone } from "@agenteschat/adapters/machine-protocol";
+import type { PhoneKind, PhoneReason, PhoneState, RunnerPhone } from "@keepmind/adapters/machine-protocol";
 
 /**
  * Android phones through `adb` (bring your own devices): which `adb` to use, what `adb devices -l` and one

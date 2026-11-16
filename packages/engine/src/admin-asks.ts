@@ -1,4 +1,4 @@
-import { and, eq, isNull, schema } from "@agenteschat/db";
+import { and, eq, isNull, schema } from "@keepmind/db";
 import { recordAudit } from "./audit";
 import { ConflictError, NotFoundError } from "./errors";
 import { adminsOf } from "./notification-producers";

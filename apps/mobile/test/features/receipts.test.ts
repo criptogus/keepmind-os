@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { AGENT_ACTION_KINDS, type AgentAction, type AgentActionKind } from "@agenteschat/client";
+import { AGENT_ACTION_KINDS, type AgentAction, type AgentActionKind } from "@keepmind/client";
 import {
   type ReceiptRow,
   receiptLines,
@@ -9,7 +9,7 @@ import {
   receiptRows,
   receiptUnder,
   rowFiles,
-} from "@agenteschat/client/lib/actions";
+} from "@keepmind/client/lib/actions";
 import {
   boldRuns,
   groupStart,

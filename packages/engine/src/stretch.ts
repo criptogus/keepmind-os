@@ -1,5 +1,5 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, type Database, desc, type Executor, eq, gt, inArray, isNull, rowsOf, schema, sql } from "@agenteschat/db";
+import type { PubSub } from "@keepmind/adapters";
+import { and, type Database, desc, type Executor, eq, gt, inArray, isNull, rowsOf, schema, sql } from "@keepmind/db";
 import { getAgentCached } from "./agents";
 import { recordAudit } from "./audit";
 import { messageRoot } from "./authority";

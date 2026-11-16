@@ -1,5 +1,5 @@
-import type { Channel } from "@agenteschat/client";
-import { can, managesChannel } from "@agenteschat/client/lib/permissions";
+import type { Channel } from "@keepmind/client";
+import { can, managesChannel } from "@keepmind/client/lib/permissions";
 
 /** The person's membership: what they may do (`OrgSummary.permissions`, ADR 0085). */
 type Membership = Parameters<typeof can>[0];

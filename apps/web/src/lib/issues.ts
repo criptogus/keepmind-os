@@ -1,11 +1,11 @@
-import type { Issue, IssueColumn, IssueStatus } from "@agenteschat/client";
-import { BOARD, STATUSES } from "@agenteschat/client/lib/issues";
-import { stepPhrase } from "@agenteschat/client/lib/work";
+import type { Issue, IssueColumn, IssueStatus } from "@keepmind/client";
+import { BOARD, STATUSES } from "@keepmind/client/lib/issues";
+import { stepPhrase } from "@keepmind/client/lib/work";
 import { useTranslation } from "react-i18next";
 import { useActors } from "@/components/actors";
 import { lookOf } from "@/lib/look";
 
-export * from "@agenteschat/client/lib/issues";
+export * from "@keepmind/client/lib/issues";
 
 /** The agent's color for the pixel pieces (people and nobody: neutral). */
 export function useAssigneeColor() {

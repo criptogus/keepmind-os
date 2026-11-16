@@ -284,7 +284,7 @@ describe("bringing code into the agent's folders (git clone, fetch, pull)", () =
       "git -C .. pull",
       "git clone https://github.com/acme/web ../web",
       "git clone --filter=blob:none https://github.com/acme/web.git /Users/w/agentes/dev-0193aaaa/repos/acme/web",
-      "git clone https://agentes.chat/api/git/o/c/acme/web.git",
+      "git clone https://keepmind.io/api/git/o/c/acme/web.git",
     ]) {
       expect([command, ok(command)]).toEqual([command, true]);
     }
@@ -1111,12 +1111,12 @@ describe("whether a push waits for a person", () => {
 
   test("our git proxy's URLs", () => {
     const at =
-      "https://agentes.chat/api/git/0190a7b2-3c4d-7e5f-8a9b-0c1d2e3f4a5b/0190a7b2-3c4d-7e5f-8a9b-0c1d2e3f4a5c/";
+      "https://keepmind.io/api/git/0190a7b2-3c4d-7e5f-8a9b-0c1d2e3f4a5b/0190a7b2-3c4d-7e5f-8a9b-0c1d2e3f4a5c/";
     expect(isProxyUrl(`${at}acme/app.git`)).toBe(true);
-    expect(isProxyUrl(`http://localhost:3000${at.slice("https://agentes.chat".length)}acme/app`)).toBe(true);
+    expect(isProxyUrl(`http://localhost:3000${at.slice("https://keepmind.io".length)}acme/app`)).toBe(true);
     expect(isProxyUrl("https://github.com/acme/app.git")).toBe(false);
     expect(isProxyUrl("git@github.com:acme/app.git")).toBe(false);
-    expect(isProxyUrl("https://agentes.chat/api/git/x/y/acme/app.git")).toBe(false);
+    expect(isProxyUrl("https://keepmind.io/api/git/x/y/acme/app.git")).toBe(false);
     expect(isProxyUrl(`https://evil.example/?u=${at}acme/app.git`)).toBe(false);
   });
 });

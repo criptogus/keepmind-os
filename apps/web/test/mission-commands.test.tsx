@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { Message, MissionCommand } from "@agenteschat/client";
-import { machineTaskOf, missionAutoApprovedOf, missionCommandOf } from "@agenteschat/client/lib/missions";
+import type { Message, MissionCommand } from "@keepmind/client";
+import { machineTaskOf, missionAutoApprovedOf, missionCommandOf } from "@keepmind/client/lib/missions";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { commandApprovalOptions } from "@/components/missions/MissionBits";
 import { AutoApprovedLine, groupAutoApproved } from "@/components/missions/MissionCards";

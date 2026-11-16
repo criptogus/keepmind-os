@@ -1,7 +1,7 @@
-import type { Actor } from "@agenteschat/client";
-import { agentStateIn } from "@agenteschat/client";
-import { type AgentFace, agentFaceWord, isOutOfOffice } from "@agenteschat/client/lib/presence";
-import { splitAtNames } from "@agenteschat/client/lib/text";
+import type { Actor } from "@keepmind/client";
+import { agentStateIn } from "@keepmind/client";
+import { type AgentFace, agentFaceWord, isOutOfOffice } from "@keepmind/client/lib/presence";
+import { splitAtNames } from "@keepmind/client/lib/text";
 import {
   type AgentAppearance,
   type AgentState,
@@ -9,7 +9,7 @@ import {
   type AvatarProps,
   PixelSpinner,
   type PixelSpinnerSize,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { useOrg } from "@/components/org-context";

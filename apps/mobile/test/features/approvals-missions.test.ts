@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import type { MachineTask } from "@agenteschat/client";
+import type { MachineTask } from "@keepmind/client";
 import {
   approvalCardItems,
   approvalCards,
@@ -14,9 +14,9 @@ import {
   cardDeadline,
   itemOwnWords,
   runKeys,
-} from "@agenteschat/client/lib/approval-card";
-import { approvalEffects } from "@agenteschat/client/lib/approval-review";
-import { approvalRuleWords, approvalTitle } from "@agenteschat/client/lib/approval-words";
+} from "@keepmind/client/lib/approval-card";
+import { approvalEffects } from "@keepmind/client/lib/approval-review";
+import { approvalRuleWords, approvalTitle } from "@keepmind/client/lib/approval-words";
 import {
   approvalAction,
   approvalRisk,

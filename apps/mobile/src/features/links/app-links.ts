@@ -1,5 +1,5 @@
-import type { ApiClient, MessageCard } from "@agenteschat/client";
-import { messagePath } from "@agenteschat/client/lib/message-links";
+import type { ApiClient, MessageCard } from "@keepmind/client";
+import { messagePath } from "@keepmind/client/lib/message-links";
 import { isSafeId } from "../shared/logic";
 import { chatHref, notificationHref } from "./logic";
 

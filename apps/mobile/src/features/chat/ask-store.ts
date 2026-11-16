@@ -1,9 +1,9 @@
-import type { Message } from "@agenteschat/client";
+import type { Message } from "@keepmind/client";
 
 /**
  * The requests waiting in a conversation, without React Native, so they are unit-tested: which wait on the person,
  * which of those are out of view (the line above the composer says the first), and the times that end them. Whose a
- * request on an agent's screen is: `handoffIsMine` in `@agenteschat/client`, shared with the web.
+ * request on an agent's screen is: `handoffIsMine` in `@keepmind/client`, shared with the web.
  */
 
 /** What a request asks (`proposal`: a change to the context or to an agent's instructions; `agent`: a new agent). */
@@ -185,7 +185,7 @@ export function mayAsk(m: Pick<Message, "author" | "meta">): boolean {
   return m.author.type === "agent" && meta !== undefined && ASK_KEYS.some((key) => Boolean(meta[key]));
 }
 
-export { secretRequestOf } from "@agenteschat/client/lib/secret-requests";
+export { secretRequestOf } from "@keepmind/client/lib/secret-requests";
 
 /**
  * How long an approval waits before it expires: the engine's `APPROVAL_TTL_MS`

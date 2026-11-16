@@ -1,4 +1,4 @@
-import { and, eq, schema, sql } from "@agenteschat/db";
+import { and, eq, schema, sql } from "@keepmind/db";
 import { getAgent } from "./agents";
 import { recordAudit } from "./audit";
 import { caches } from "./cache";

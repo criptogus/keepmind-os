@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { and, eq, inArray, schema } from "@agenteschat/db";
-import { runMigration } from "@agenteschat/db/testing";
+import { and, eq, inArray, schema } from "@keepmind/db";
+import { runMigration } from "@keepmind/db/testing";
 import {
   addChannelMember,
   applyImport,

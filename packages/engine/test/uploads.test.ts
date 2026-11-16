@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { createHash } from "node:crypto";
-import { FILE_PULL_PROTOCOL, MAX_INLINE_FILE_BYTES } from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
+import { FILE_PULL_PROTOCOL, MAX_INLINE_FILE_BYTES } from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
 import {
   ARTIFACT_LIMITS,
   type ArtifactActor,

@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import { userTopic } from "@agenteschat/adapters";
-import { schema } from "@agenteschat/db";
+import { userTopic } from "@keepmind/adapters";
+import { schema } from "@keepmind/db";
 import {
   addChannelMember,
   ConflictError,

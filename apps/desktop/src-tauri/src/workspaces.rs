@@ -508,7 +508,7 @@ pub fn account_news(before: &[ServerWorkspaces], after: &[ServerWorkspaces]) -> 
     told
 }
 
-/// How a server is named to people: agentes.chat for the Cloud, the app's own server by what it is (never its
+/// How a server is named to people: KeepMind OS for the Cloud, the app's own server by what it is (never its
 /// local or Tailscale address), its host otherwise.
 pub fn server_name(server: &str, cloud_name: &str, here_name: Option<&str>) -> String {
     if server == servers::CLOUD {
@@ -829,7 +829,7 @@ mod tests {
 
     #[test]
     fn only_new_unread_elsewhere_is_told() {
-        let open = "https://app.agentes.chat";
+        let open = "https://keepmind.io";
         let own = "https://agentes.exemplo.com.br";
         let before = vec![server(open, true, vec![org("a", 1)]), server(own, true, vec![org("b", 2), org("c", 5)])];
         let after = vec![
@@ -848,8 +848,8 @@ mod tests {
     #[test]
     fn notice_words() {
         let labels: HashMap<String, String> = [
-            ("serversCloud", "agentes.chat"),
-            ("serverTitle", "O agentes.chat neste Mac"),
+            ("serversCloud", "keepmind.io"),
+            ("serverTitle", "O KeepMind OS neste Mac"),
             ("workspaceNewsOne", "1 notificação nova"),
             ("workspaceNewsMany", "{count} notificações novas"),
         ]
@@ -862,12 +862,12 @@ mod tests {
         );
         assert_eq!(
             notice_text(&labels, servers::CLOUD, false, "Acme", 1),
-            Some(("Acme · agentes.chat".into(), "1 notificação nova".into()))
+            Some(("Acme · KeepMind OS".into(), "1 notificação nova".into()))
         );
         // The app's own server by what it is, at its local or its Tailscale address alike.
         assert_eq!(
             notice_text(&labels, "https://macbook-air.tail1234.ts.net", true, "Oficina", 1),
-            Some(("Oficina · O agentes.chat neste Mac".into(), "1 notificação nova".into()))
+            Some(("Oficina · O KeepMind OS neste Mac".into(), "1 notificação nova".into()))
         );
         assert_eq!(notice_text(&HashMap::new(), servers::CLOUD, false, "Acme", 1), None, "before the labels arrived");
     }

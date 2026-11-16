@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import type { Channel } from "@agenteschat/client";
+import type { Channel } from "@keepmind/client";
 import { categoryHrefs, channelSteps, movesChannel, stepBefore } from "../../src/features/categories/logic";
 import {
   agentStarters,

@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import { schema } from "@agenteschat/db";
-import { runMigration } from "@agenteschat/db/testing";
+import { schema } from "@keepmind/db";
+import { runMigration } from "@keepmind/db/testing";
 import { COMPOSIO_EXECUTOR, composioToolkitUrl } from "../src";
 import { type Fixture, setup } from "./fixtures";
 

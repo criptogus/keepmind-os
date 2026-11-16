@@ -5,8 +5,8 @@ import {
   useWikiFolderAudience,
   useWikiPage,
   type WikiFolderAudience,
-} from "@agenteschat/client";
-import { isEveryone, sortRoles } from "@agenteschat/client/lib/roles";
+} from "@keepmind/client";
+import { isEveryone, sortRoles } from "@keepmind/client/lib/roles";
 import {
   OPEN_WIKI_ACCESS,
   type WikiAccess,
@@ -17,7 +17,7 @@ import {
   wikiAccessOf,
   wikiBaseLevels,
   wikiRowCap,
-} from "@agenteschat/client/lib/wiki";
+} from "@keepmind/client/lib/wiki";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, StyleSheet, View } from "react-native";

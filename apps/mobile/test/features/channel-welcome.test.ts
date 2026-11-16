@@ -1,7 +1,7 @@
 import { afterEach, expect, jest, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { WELCOME_CLOSE_MS, WELCOME_LEAVE_MS, welcomeClock } from "@agenteschat/client/lib/welcome";
+import { WELCOME_CLOSE_MS, WELCOME_LEAVE_MS, welcomeClock } from "@keepmind/client/lib/welcome";
 
 const source = (path: string) => readFileSync(join(import.meta.dir, "../../src/features/chat", path), "utf8");
 

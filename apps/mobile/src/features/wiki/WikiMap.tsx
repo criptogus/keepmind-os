@@ -1,4 +1,4 @@
-import { useWikiGraph } from "@agenteschat/client";
+import { useWikiGraph } from "@keepmind/client";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Pressable, StyleSheet, useWindowDimensions, View } from "react-native";

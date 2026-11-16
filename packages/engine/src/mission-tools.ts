@@ -1,5 +1,5 @@
-import { MISSION_MCP_TOOLS } from "@agenteschat/adapters";
-import { and, eq, inArray, schema } from "@agenteschat/db";
+import { MISSION_MCP_TOOLS } from "@keepmind/adapters";
+import { and, eq, inArray, schema } from "@keepmind/db";
 import { getAgentCached } from "./agents";
 import { recordAudit } from "./audit";
 import { getChannelCached } from "./context";

@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import { MACHINE_PROTOCOL_VERSION } from "@agenteschat/adapters";
-import { schema } from "@agenteschat/db";
+import { MACHINE_PROTOCOL_VERSION } from "@keepmind/adapters";
+import { schema } from "@keepmind/db";
 import {
   computerQueue,
   createAgent,
@@ -127,7 +127,7 @@ test("estimates: with no basis the line names the turn it waits for, and nothing
 
 test("a computer's queue: working turns and the line in roomHead's order, purposes without content, medians", async () => {
   f = await setup();
-  const deps = { db: f.db, pubsub: f.pubsub, publicUrl: "https://agentes.chat" };
+  const deps = { db: f.db, pubsub: f.pubsub, publicUrl: "https://keepmind.io" };
   const { machineId } = await pairMachine(deps, f.owner.id, f.org.id, {
     name: "Studio",
     hostname: "studio",

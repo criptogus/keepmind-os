@@ -9,7 +9,7 @@ import type {
   Member,
   SidebarSection as SectionKey,
   SidebarItem,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 import {
   agentStateIn,
   agentWorkingIn,
@@ -37,30 +37,30 @@ import {
   useSkills,
   useTasksUnread,
   useUnreadThreads,
-} from "@agenteschat/client";
-import { agentSections, groupOf } from "@agenteschat/client/lib/agent-groups";
-import { WORK_TICK_MS, workLine } from "@agenteschat/client/lib/agent-work";
-import { audienceChip, audienceNames, audienceNotice, canTalk, hiddenAgentIds } from "@agenteschat/client/lib/audience";
-import { workspaceNotes } from "@agenteschat/client/lib/deletion";
-import { ErrorBoundary } from "@agenteschat/client/lib/error-boundary";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { formatTime, upperFirst } from "@agenteschat/client/lib/format";
-import { waitingAgents } from "@agenteschat/client/lib/outages";
-import { can, makesAgents, managesChannel } from "@agenteschat/client/lib/permissions";
+} from "@keepmind/client";
+import { agentSections, groupOf } from "@keepmind/client/lib/agent-groups";
+import { WORK_TICK_MS, workLine } from "@keepmind/client/lib/agent-work";
+import { audienceChip, audienceNames, audienceNotice, canTalk, hiddenAgentIds } from "@keepmind/client/lib/audience";
+import { workspaceNotes } from "@keepmind/client/lib/deletion";
+import { ErrorBoundary } from "@keepmind/client/lib/error-boundary";
+import { errorText } from "@keepmind/client/lib/errors";
+import { formatTime, upperFirst } from "@keepmind/client/lib/format";
+import { waitingAgents } from "@keepmind/client/lib/outages";
+import { can, makesAgents, managesChannel } from "@keepmind/client/lib/permissions";
 import {
   AVAILABILITIES,
   agentFaceWord,
   isOutOfOffice,
   presenceOfAvailability,
   statusEndNote,
-} from "@agenteschat/client/lib/presence";
-import { recentDms } from "@agenteschat/client/lib/recent";
-import { isRightHand, rightHandSeenKey } from "@agenteschat/client/lib/right-hand";
-import { SERVER_PLACE_ICON } from "@agenteschat/client/lib/server";
-import { inSidebarList, sidebarItemOrder, sidebarPlace } from "@agenteschat/client/lib/sidebar-items";
-import { AGENT_SORTS, sortAgents, splitPinned } from "@agenteschat/client/lib/sidebar-view";
-import { badgeCount, looksUnread } from "@agenteschat/client/lib/unread";
-import { isPersonal, modeKey } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client/lib/presence";
+import { recentDms } from "@keepmind/client/lib/recent";
+import { isRightHand, rightHandSeenKey } from "@keepmind/client/lib/right-hand";
+import { SERVER_PLACE_ICON } from "@keepmind/client/lib/server";
+import { inSidebarList, sidebarItemOrder, sidebarPlace } from "@keepmind/client/lib/sidebar-items";
+import { AGENT_SORTS, sortAgents, splitPinned } from "@keepmind/client/lib/sidebar-view";
+import { badgeCount, looksUnread } from "@keepmind/client/lib/unread";
+import { isPersonal, modeKey } from "@keepmind/client/lib/workspace-mode";
 import {
   type AgentColor,
   Avatar,
@@ -93,7 +93,7 @@ import {
   Skeleton,
   SkeletonGroup,
   selectionSkyUrl,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import type { TFunction } from "i18next";
 import {
@@ -356,7 +356,7 @@ export function Sidebar() {
     .flatMap((s) => (s.work ? [`${s.agentId}:${s.work.state}`] : []))
     .sort()
     .join();
-  // The tab's title: "(3) agentes.chat", what the sidebar's numbers add up to (agents it doesn't list left out).
+  // The tab's title: "(3) KeepMind OS", what the sidebar's numbers add up to (agents it doesn't list left out).
   const hiddenAgents = useMemo(() => hiddenAgentIds(org, dir.agents), [org, dir.agents]);
   useUnreadTitle(orgId, hiddenAgents);
   const dms = useDms(orgId);
@@ -1703,6 +1703,12 @@ function MoreTools({
             <div className="ac-menu__separator" aria-hidden="true" />
           </>
         )}
+        {([['skills', 'skills', 'book'], ['second-brain', 'brain', 'book'], ['cybersecurity', 'cyber', 'shield']] as const).map(([area, label, icon]) => (
+          <Link key={area} to="/org/$orgId/ecosystem/$area" params={{ orgId: org.id, area }} className="ac-menu__item sidebar__more-item" onClick={() => setOpen(false)}>
+            <Icon name={icon} /><span className="ac-menu__label">{t(`zero.${label}.title`)}</span>
+          </Link>
+        ))}
+        <div className="ac-menu__separator" aria-hidden="true" />
         {items.map((id) => (
           <Link
             key={id}
@@ -2289,7 +2295,7 @@ function useWorkspaceLook() {
 /**
  * Your workspaces in the account menu of a personal workspace (ADR 0159): the workspace menu's list, then New
  * workspace when the person may make one. In the desktop app (ADR 0154) by server, then Add workspace; New workspace
- * (it makes one here) sits under this server's workspaces only on a server of one's own, since on agentes.chat Add
+ * (it makes one here) sits under this server's workspaces only on a server of one's own, since on KeepMind OS Add
  * workspace makes one (`offersNewWorkspace`). Mounted only while the menu is open: the counts load then. No role beside
  * each: one person's own workspaces.
  */

@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
-import { eq, schema, sql } from "@agenteschat/db";
-import { runMigration } from "@agenteschat/db/testing";
+import { eq, schema, sql } from "@keepmind/db";
+import { runMigration } from "@keepmind/db/testing";
 import {
   acceptInvitation,
   ConflictError,

@@ -1,4 +1,4 @@
-import { plural } from "@agenteschat/i18n/format";
+import { plural } from "@keepmind/i18n/format";
 import type { Inline, Text } from "../layout";
 
 /**
@@ -26,34 +26,34 @@ export const atHost = (lead: string, word: string, host: string): Text =>
   host.length > 36 ? [`${lead} ${word} `, { nobr: `${host}.` }] : [`${lead} `, { nobr: `${word} ${host}.` }];
 
 export const en = {
-  /** Who sent it: agentes.chat, or a self-hosted server named by its host. */
+  /** Who sent it: KeepMind OS, or a self-hosted server named by its host. */
   sentBy: (host: string | null): Text =>
-    host ? atHost("Sent by the agentes.chat server", "at", host) : "Sent by agentes.chat.",
+    host ? atHost("Sent by the KeepMind OS server", "at", host) : "Sent by KeepMind OS.",
   fallback: "Button not working? Copy this address into your browser:",
   role: { owner: "an owner", member: "a member" } as Record<string, string>,
   anAgent: "An agent",
   someone: "Someone",
   verify: {
-    subject: "Confirm your email for agentes.chat",
+    subject: "Confirm your email for KeepMind OS",
     preheader: "One click to confirm this address. The link works for an hour.",
     headline: "Confirm your email",
     body: "One step left: confirm that this address is yours.",
     button: "Confirm email",
     small: "The link works for an hour. If you didn't sign up, you can ignore this email.",
-    why: "You got this email because this address was used to sign up for agentes.chat.",
+    why: "You got this email because this address was used to sign up for KeepMind OS.",
   },
   reset: {
-    subject: "Reset your agentes.chat password",
+    subject: "Reset your KeepMind OS password",
     preheader: "Choose a new password. The link works for an hour.",
     headline: "Choose a new password",
     body: "We got a request to reset the password for this address.",
     button: "Choose a new password",
     note: "Didn't ask for this? Ignore this email. Your password stays the same.",
     small: "The link works for an hour.",
-    why: "You got this email because someone asked to reset the password for this address on agentes.chat.",
+    why: "You got this email because someone asked to reset the password for this address on KeepMind OS.",
   },
   invitation: {
-    subject: "You're invited to a workspace on agentes.chat",
+    subject: "You're invited to a workspace on KeepMind OS",
     preheader: "Accept within 7 days, with this email address.",
     headline: "You're invited to a workspace",
     body: (inviter: string, email: string | null, org: string, role: string): Text =>
@@ -69,7 +69,7 @@ export const en = {
       sentences(channels && ["You'll start in ", ...channels, "."], agents && ["You'll work with ", ...agents, "."]),
     /** The last place of a list cut short: how many more it holds (always 2 or more). */
     more: (n: number) => `${n} more`,
-    what: "agentes.chat is where people and AI agents work together.",
+    what: "KeepMind OS is where people and AI agents work together.",
     noteFrom: (inviter: string, note: string): Text => [{ b: inviter ? `${inviter}: ` : "Their note: " }, `“${note}”`],
     button: "Accept invitation",
     small: "The invitation works for 7 days. Accept it with this email address.",
@@ -79,8 +79,8 @@ export const en = {
     personal: {
       body: (inviter: string, email: string | null): Text =>
         inviter
-          ? [{ b: inviter }, `${email ? ` (${email})` : ""} invited you to their personal workspace on agentes.chat.`]
-          : "You're invited to a personal workspace on agentes.chat.",
+          ? [{ b: inviter }, `${email ? ` (${email})` : ""} invited you to their personal workspace on KeepMind OS.`]
+          : "You're invited to a personal workspace on KeepMind OS.",
       why: () =>
         "You got this email because someone invited this address to their personal workspace. If you don't know them, ignore it. Nothing happens until you accept.",
     },
@@ -117,41 +117,41 @@ export const en = {
     },
   },
   waitlist: {
-    subject: "Confirm your spot on the agentes.chat waiting list",
+    subject: "Confirm your spot on the KeepMind OS waiting list",
     preheader: "One click and your spot is saved.",
     headline: "Confirm your spot on the list",
     body: (email: string | null): Text =>
       email
-        ? ["We got a request to put ", { b: email }, " on the agentes.chat waiting list."]
-        : "We got a request to put this address on the agentes.chat waiting list.",
+        ? ["We got a request to put ", { b: email }, " on the KeepMind OS waiting list."]
+        : "We got a request to put this address on the KeepMind OS waiting list.",
     approve: "Here, nothing important happens without a person approving it. That goes for this request too.",
     button: "Confirm my email",
     small:
       "The link works for 48 hours. Wasn't you? Ignore this email. Without the click, the address never joins the list.",
-    why: "You got this email because this address was entered on the agentes.chat waiting list.",
+    why: "You got this email because this address was entered on the KeepMind OS waiting list.",
   },
   earlyAccess: {
-    subject: "Your invitation to agentes.chat is here",
+    subject: "Your invitation to KeepMind OS is here",
     preheader: (days: number) => `Create your account within ${days} days, with this email address.`,
     headline: "Your access is ready",
-    body: (email: string): Text => [{ b: email }, " can now create an account and a workspace on agentes.chat."],
-    what: "agentes.chat is where people and AI agents work together.",
+    body: (email: string): Text => [{ b: email }, " can now create an account and a workspace on KeepMind OS."],
+    what: "KeepMind OS is where people and AI agents work together.",
     button: "Create my account",
     small: (days: number) =>
       `The link works for ${days} days, for this address only. Sign up with a password, or with Google, GitHub or Apple on this same address.`,
-    why: "You got this email because this address is on the agentes.chat waiting list, or was invited to agentes.chat. Nothing happens until you sign up.",
+    why: "You got this email because this address is on the KeepMind OS waiting list, or was invited to KeepMind OS. Nothing happens until you sign up.",
   },
   earlyAccessAllowed: {
     subject: "You can now create your own workspace",
     preheader: "Sign in with the account you already have and set it up.",
     headline: "Create your own workspace",
     body: (email: string): Text => [
-      "You can now create your own workspace on agentes.chat with ",
+      "You can now create your own workspace on KeepMind OS with ",
       { b: email },
       ", the account you already have.",
     ],
     button: "Create my workspace",
-    why: "You got this email because this account was given early access to agentes.chat.",
+    why: "You got this email because this account was given early access to KeepMind OS.",
   },
   budget: {
     subject: {
@@ -240,7 +240,7 @@ export const en = {
     },
     button: { ai: "Connect your AI", task: "Give a first task", create: "Create an agent" },
     why: (org: string) =>
-      `You got this email because you own ${org} on agentes.chat. It's the only email about this computer.`,
+      `You got this email because you own ${org} on KeepMind OS. It's the only email about this computer.`,
     /** A personal workspace's (ADR 0159): the person's computer for their agents, who they talk to directly. */
     personal: {
       body: (): Text =>
@@ -249,7 +249,7 @@ export const en = {
         task: ["Give a first task.", "Open a conversation with one of your agents and say what you need."] as Step,
       },
       why: () =>
-        "You got this email because this workspace on agentes.chat is yours. It's the only email about this computer.",
+        "You got this email because this workspace on KeepMind OS is yours. It's the only email about this computer.",
     },
   },
   joinRequest: {
@@ -298,7 +298,7 @@ export const en = {
       reason: (reason: string): Text => [{ b: "Their note: " }, `“${reason}”`],
       small: "If you think it's a mistake, ask someone there to invite you by email.",
     },
-    why: (org: string) => `You got this email because this address asked to join ${org} on agentes.chat.`,
+    why: (org: string) => `You got this email because this address asked to join ${org} on KeepMind OS.`,
     /** Joining someone's personal workspace (ADR 0159): the person who answered, not a company. */
     personal: {
       joined: { body: (who: string): Text => `${who} approved your request. You're in their workspace now.` },
@@ -308,27 +308,27 @@ export const en = {
         body: (): Text => "The person you asked looked at your request and didn't approve it.",
         small: "If you think it's a mistake, ask them to invite you by email.",
       },
-      why: () => "You got this email because this address asked to join a personal workspace on agentes.chat.",
+      why: () => "You got this email because this address asked to join a personal workspace on KeepMind OS.",
     },
   },
   joinCode: {
-    subject: (code: string) => `${code} is your agentes.chat code`,
+    subject: (code: string) => `${code} is your KeepMind OS code`,
     preheader: "Type it on the page to ask to join. It works for 10 minutes.",
     headline: "Your code",
     body: (org: string): Text => ["Type this code on the page to ask to join ", { b: org }, "."],
     small: ["It works for 10 minutes. If you didn't ask, ", { nobr: "ignore this email." }] as Text,
     why: (org: string) =>
-      `You got this email because someone typed this address to ask to join ${org} on agentes.chat.`,
+      `You got this email because someone typed this address to ask to join ${org} on KeepMind OS.`,
     personal: {
       body: (): Text => "Type this code on the page to ask to join this workspace.",
       why: () =>
-        "You got this email because someone typed this address to ask to join a personal workspace on agentes.chat.",
+        "You got this email because someone typed this address to ask to join a personal workspace on KeepMind OS.",
     },
   },
   deletionCode: {
     subjectWorkspace: (code: string) => `${code} is your code to delete a workspace`,
     subjectAccount: (code: string) => `${code} is your code to delete your whole account`,
-    preheader: "Type it in agentes.chat to confirm. It works for 10 minutes.",
+    preheader: "Type it in KeepMind OS to confirm. It works for 10 minutes.",
     headline: "Your code",
     workspace: (org: string): Text => [
       "Type this code to delete the workspace ",
@@ -347,8 +347,8 @@ export const en = {
     ],
     noSupport:
       "It works for 10 minutes, and nothing is deleted without it. If it wasn't you, don't share it and tell the people who run this server." as Text,
-    whyWorkspace: (org: string) => `You got this email because your account asked to delete ${org} on agentes.chat.`,
-    whyAccount: "You got this email because your account asked to be deleted on agentes.chat.",
+    whyWorkspace: (org: string) => `You got this email because your account asked to delete ${org} on KeepMind OS.`,
+    whyAccount: "You got this email because your account asked to be deleted on KeepMind OS.",
     personal: {
       workspace: (org: string): Text => [
         "Type this code to delete your workspace ",
@@ -360,7 +360,7 @@ export const en = {
   emailChange: {
     code: {
       subject: (code: string) => `${code} is your code to change your email`,
-      preheader: "Type it in agentes.chat to confirm. It works for 10 minutes.",
+      preheader: "Type it in KeepMind OS to confirm. It works for 10 minutes.",
       headline: "Your code",
       body: (email: string, newEmail: string): Text => [
         "Type this code to change the email of the account ",
@@ -376,19 +376,19 @@ export const en = {
       ],
       noSupport:
         "It works for 10 minutes, and your email stays the same without it. If it wasn't you, don't share it and tell the people who run this server." as Text,
-      why: "You got this email because your account asked to change its email on agentes.chat.",
+      why: "You got this email because your account asked to change its email on KeepMind OS.",
     },
     link: {
-      subject: "Confirm your new email for agentes.chat",
+      subject: "Confirm your new email for KeepMind OS",
       preheader: "One click to sign in with this address from now on. The link works for an hour.",
       headline: "Confirm your new email",
       body: "One step left: confirm that this address is yours. Your account signs in with it from then on.",
       button: "Confirm new email",
       small: "The link works for an hour. If you didn't ask for this, you can ignore this email.",
-      why: "You got this email because someone asked to use this address for an agentes.chat account.",
+      why: "You got this email because someone asked to use this address for an KeepMind OS account.",
     },
     changed: {
-      subject: "Your agentes.chat email changed",
+      subject: "Your KeepMind OS email changed",
       preheader: "If it wasn't you, you can put this address back for 7 days.",
       headline: "Your email changed",
       body: (email: string, newEmail: string): Text => [
@@ -402,7 +402,7 @@ export const en = {
         "Wasn't you? Press the button within 7 days. This address comes back, every session is signed out, the AI apps are disconnected and ways to sign in added since then stop working. The password is cleared too, and “Forgot my password” sets the next one." as Text,
       button: "This wasn't me",
       small: "If it was you, there's nothing to do.",
-      why: "You got this email because this address was the email of an agentes.chat account.",
+      why: "You got this email because this address was the email of an KeepMind OS account.",
     },
   },
   deleting: {
@@ -418,10 +418,10 @@ export const en = {
     owner: "Changed your mind? Restore it before then.",
     button: "Restore the workspace",
     member: "If it's a mistake, ask an owner to restore it." as Text,
-    why: (org: string) => `You got this email because you're in ${org} on agentes.chat.`,
+    why: (org: string) => `You got this email because you're in ${org} on KeepMind OS.`,
     personal: {
       member: "If it's a mistake, ask whoever deleted it to restore it." as Text,
-      why: () => "You got this email because you're in this workspace on agentes.chat.",
+      why: () => "You got this email because you're in this workspace on KeepMind OS.",
     },
   },
   restored: {
@@ -430,27 +430,27 @@ export const en = {
     headline: "The workspace is back",
     body: (by: string, org: string): Text => [{ b: by }, " restored ", { b: org }, ". It works again."],
     button: "Open the workspace",
-    why: (org: string) => `You got this email because you're in ${org} on agentes.chat.`,
+    why: (org: string) => `You got this email because you're in ${org} on KeepMind OS.`,
     personal: {
-      why: () => "You got this email because you're in this workspace on agentes.chat.",
+      why: () => "You got this email because you're in this workspace on KeepMind OS.",
     },
   },
   appConnected: {
-    subject: "An app was connected to your agentes.chat account",
+    subject: "An app was connected to your KeepMind OS account",
     preheader: "It can read and send tasks to agents as you in one workspace.",
     headline: "An app was connected",
     body: (app: string, org: string): Text => [{ b: app }, " now has access to your account in ", { b: org }, "."],
     note: "Didn't connect it? Disconnect it now and change your password.",
     button: "See connected apps",
-    why: (org: string) => `You got this email because an app was connected to your account in ${org} on agentes.chat.`,
+    why: (org: string) => `You got this email because an app was connected to your account in ${org} on KeepMind OS.`,
     personal: {
       body: (app: string): Text => [{ b: app }, " now has access to your account in your personal workspace."],
       why: () =>
-        "You got this email because an app was connected to your account in your personal workspace on agentes.chat.",
+        "You got this email because an app was connected to your account in your personal workspace on KeepMind OS.",
     },
   },
   accountDeleting: {
-    subject: (day: string) => `Your agentes.chat account will be deleted on ${day}`,
+    subject: (day: string) => `Your KeepMind OS account will be deleted on ${day}`,
     preheader: "You have 7 days to change your mind.",
     headline: "Your account is being deleted",
     body: (email: string, day: string, time: string): Text => [
@@ -468,10 +468,10 @@ export const en = {
     ],
     undo: "Changed your mind? Sign in before that date and press Restore.",
     button: "Sign in to restore",
-    why: "You got this email because this address has an account on agentes.chat.",
+    why: "You got this email because this address has an account on KeepMind OS.",
   },
   accountDeleted: {
-    subject: "Your agentes.chat account was deleted",
+    subject: "Your KeepMind OS account was deleted",
     preheader: "It's signed out everywhere and can't sign in again.",
     headline: "Your account was deleted",
     body: (email: string): Text => ["We deleted the account ", { b: email }, "."],
@@ -485,7 +485,7 @@ export const en = {
     ],
     support: (address: string): Text => ["If it wasn't you, write to ", { mail: address }, "."],
     noSupport: "If it wasn't you, tell the people who run this server." as Text,
-    why: "You got this email because this address had an account on agentes.chat.",
+    why: "You got this email because this address had an account on KeepMind OS.",
   },
   autonomy: {
     subject: (day: string, stalls: string, noise: string) => `Agents on ${day}: ${stalls} stalls, ${noise} noise runs`,
@@ -565,16 +565,16 @@ export const en = {
   },
   planWaiting: {
     subject: "Your team is waiting",
-    preheader: "Your workspace is ready. It needs an agentes.chat plan to start.",
+    preheader: "Your workspace is ready. It needs an KeepMind OS plan to start.",
     headline: "Your team is waiting",
     body: (agents: number, channels: number, routines: number): Text => {
       const a = plural("en", agents, { one: "1 agent", other: `${agents} agents` });
       const c = plural("en", channels, { one: "1 channel", other: `${channels} channels` });
       const r = plural("en", routines, { one: "1 routine", other: `${routines} routines` });
-      return `${routines > 0 ? `${a}, ${c} and ${r}` : `${a} and ${c}`} are ready. They need an agentes.chat plan to start.`;
+      return `${routines > 0 ? `${a}, ${c} and ${r}` : `${a} and ${c}`} are ready. They need an KeepMind OS plan to start.`;
     },
-    button: "See agentes.chat plans",
-    why: (org: string) => `You got this email because you run ${org} on agentes.chat. We send two of these, then stop.`,
+    button: "See KeepMind OS plans",
+    why: (org: string) => `You got this email because you run ${org} on KeepMind OS. We send two of these, then stop.`,
     /** A personal workspace's (ADR 0159): the person's agents and routines, no team nor channels. */
     personal: {
       subject: "Your agents are waiting",
@@ -582,9 +582,9 @@ export const en = {
       body: (agents: number, _channels: number, routines: number): Text => {
         const a = plural("en", agents, { one: "1 agent", other: `${agents} agents` });
         const r = plural("en", routines, { one: "1 routine", other: `${routines} routines` });
-        return `Ready to go: ${routines > 0 ? `${a} and ${r}` : a}. All that's missing is an agentes.chat plan.`;
+        return `Ready to go: ${routines > 0 ? `${a} and ${r}` : a}. All that's missing is an KeepMind OS plan.`;
       },
-      why: () => "You got this email because this workspace on agentes.chat is yours. We send two of these, then stop.",
+      why: () => "You got this email because this workspace on KeepMind OS is yours. We send two of these, then stop.",
     },
   },
 };

@@ -1,16 +1,16 @@
-import type { Artifact, ArtifactSharing } from "@agenteschat/client";
-import { keys, useRoles, useSetArtifactSharing } from "@agenteschat/client";
+import type { Artifact, ArtifactSharing } from "@keepmind/client";
+import { keys, useRoles, useSetArtifactSharing } from "@keepmind/client";
 import {
   CONVERSATION_ONLY,
   isPrivateArtifact,
   onlyItsConversation,
   toggledSharing,
-} from "@agenteschat/client/lib/drive";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { joinNames } from "@agenteschat/client/lib/format";
-import { rolePicksInSight } from "@agenteschat/client/lib/personal-view";
-import { isEveryone, sortRoles } from "@agenteschat/client/lib/roles";
-import { modeKey } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client/lib/drive";
+import { errorText } from "@keepmind/client/lib/errors";
+import { joinNames } from "@keepmind/client/lib/format";
+import { rolePicksInSight } from "@keepmind/client/lib/personal-view";
+import { isEveryone, sortRoles } from "@keepmind/client/lib/roles";
+import { modeKey } from "@keepmind/client/lib/workspace-mode";
 import {
   Avatar,
   Button,
@@ -23,7 +23,7 @@ import {
   OptionCard,
   RoleMark,
   SearchSelect,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { type ReactNode, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

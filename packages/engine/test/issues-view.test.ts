@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import { and, type Database, eq, schema } from "@agenteschat/db";
-import { createTestDatabase } from "@agenteschat/db/testing";
+import { and, type Database, eq, schema } from "@keepmind/db";
+import { createTestDatabase } from "@keepmind/db/testing";
 import {
   createOrganization,
   ForbiddenError,

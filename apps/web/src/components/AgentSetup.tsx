@@ -1,4 +1,4 @@
-import type { Agent, AgentAudience, AgentSetupStep, AudienceMode } from "@agenteschat/client";
+import type { Agent, AgentAudience, AgentSetupStep, AudienceMode } from "@keepmind/client";
 import {
   keys,
   useAgentAccess,
@@ -14,7 +14,7 @@ import {
   useRoles,
   useUpdateAgent,
   useWidenAudience,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 import {
   type AccessResource,
   asksAt,
@@ -22,21 +22,21 @@ import {
   type LevelState,
   levelOf,
   resourcesOf,
-} from "@agenteschat/client/lib/access-levels";
-import { channelsAfter, sameAudience } from "@agenteschat/client/lib/agent-edit";
-import { audienceModeKey, audienceModeTextKey, audienceOf, audiencePatch } from "@agenteschat/client/lib/audience";
-import { setDraftFor } from "@agenteschat/client/lib/drafts";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { formatTime, joinNames } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { aiStateOf } from "@agenteschat/client/lib/no-ai";
-import { addsAgentsTo, can } from "@agenteschat/client/lib/permissions";
-import { rolePicksInSight } from "@agenteschat/client/lib/personal-view";
-import { planOf } from "@agenteschat/client/lib/plans";
-import { AUTO, modelChoices } from "@agenteschat/client/lib/providers";
-import { isRightHand } from "@agenteschat/client/lib/right-hand";
-import { isEveryone, sortRoles } from "@agenteschat/client/lib/roles";
-import { connectorName } from "@agenteschat/client/lib/scopes";
+} from "@keepmind/client/lib/access-levels";
+import { channelsAfter, sameAudience } from "@keepmind/client/lib/agent-edit";
+import { audienceModeKey, audienceModeTextKey, audienceOf, audiencePatch } from "@keepmind/client/lib/audience";
+import { setDraftFor } from "@keepmind/client/lib/drafts";
+import { errorText } from "@keepmind/client/lib/errors";
+import { formatTime, joinNames } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { aiStateOf } from "@keepmind/client/lib/no-ai";
+import { addsAgentsTo, can } from "@keepmind/client/lib/permissions";
+import { rolePicksInSight } from "@keepmind/client/lib/personal-view";
+import { planOf } from "@keepmind/client/lib/plans";
+import { AUTO, modelChoices } from "@keepmind/client/lib/providers";
+import { isRightHand } from "@keepmind/client/lib/right-hand";
+import { isEveryone, sortRoles } from "@keepmind/client/lib/roles";
+import { connectorName } from "@keepmind/client/lib/scopes";
 import {
   askedLine,
   nextStep,
@@ -47,8 +47,8 @@ import {
   setupSteps,
   setupTaskKeys,
   suggestedChannels,
-} from "@agenteschat/client/lib/setup-checklist";
-import { isPersonal, modeKey } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client/lib/setup-checklist";
+import { isPersonal, modeKey } from "@keepmind/client/lib/workspace-mode";
 import {
   AffixInput,
   Avatar,
@@ -68,7 +68,7 @@ import {
   Textarea,
   Token,
   TokenList,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { type ReactNode, type RefObject, useEffect, useRef, useState } from "react";

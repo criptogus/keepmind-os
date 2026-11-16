@@ -1,4 +1,4 @@
-import type { ApiClient } from "@agenteschat/client";
+import type { ApiClient } from "@keepmind/client";
 import * as Notifications from "expo-notifications";
 import type { TFunction } from "i18next";
 import type { PushData } from "@/lib/push-payload";

@@ -1,4 +1,4 @@
-import { and, type Executor, eq, inArray, isNull, or, type SQL, schema, sql } from "@agenteschat/db";
+import { and, type Executor, eq, inArray, isNull, or, type SQL, schema, sql } from "@keepmind/db";
 import { maySql } from "./permissions";
 
 const { wikiPages, wikiLinks, channels, channelMembers, organizationMembers } = schema;

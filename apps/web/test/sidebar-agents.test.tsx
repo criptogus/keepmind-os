@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { join } from "node:path";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 

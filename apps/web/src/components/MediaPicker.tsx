@@ -1,6 +1,6 @@
-import type { GifCategory, MessageMedia, StickerMood } from "@agenteschat/client";
-import { useGifSearch, useSettings, useSettled } from "@agenteschat/client";
-import { knownErrorText } from "@agenteschat/client/lib/errors";
+import type { GifCategory, MessageMedia, StickerMood } from "@keepmind/client";
+import { useGifSearch, useSettings, useSettled } from "@keepmind/client";
+import { knownErrorText } from "@keepmind/client/lib/errors";
 import {
   GIF_CATEGORY_IDS,
   GIF_SEARCH_DELAY_MS,
@@ -13,7 +13,7 @@ import {
   stickerLabel,
   stickerMedia,
   stickerWords,
-} from "@agenteschat/client/lib/media";
+} from "@keepmind/client/lib/media";
 import {
   GifPicker,
   type GifPickerLabels,
@@ -22,7 +22,7 @@ import {
   type PickerTab,
   StickerPicker,
   type StickerPickerLabels,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useApi } from "@/api/context";

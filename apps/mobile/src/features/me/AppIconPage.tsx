@@ -11,8 +11,8 @@ import {
   MADE_ICON_SKIES,
   type MadeIcon,
   type MadeIconLook,
-} from "@agenteschat/client/lib/app-icons";
-import { drawAccessory, drawAgent, gradientOf } from "@agenteschat/ui/agent/engine";
+} from "@keepmind/client/lib/app-icons";
+import { drawAccessory, drawAgent, gradientOf } from "@keepmind/ui/agent/engine";
 import { Canvas, createPicture, Picture } from "@shopify/react-native-skia";
 import { LinearGradient } from "expo-linear-gradient";
 import { type ReactNode, useMemo, useState } from "react";

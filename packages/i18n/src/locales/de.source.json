@@ -1251,7 +1251,7 @@
     "value": "Free · open source"
   },
   "hosting.cloud.name": {
-    "value": "agentes.chat Cloud"
+    "value": "KeepMind OS Cloud"
   },
   "hosting.cloud.short": {
     "value": "Always on, nothing to install."
@@ -1704,7 +1704,7 @@
     "value": "Signing in to the KeepMind OS <b>on this {{device}}</b>"
   },
   "auth.server.intoCloud": {
-    "value": "Signing in to <b>agentes.chat Cloud</b>"
+    "value": "Signing in to <b>KeepMind OS Cloud</b>"
   },
   "auth.server.change": {
     "value": "Change server"
@@ -39344,7 +39344,7 @@
     "value": "Component gallery"
   },
   "gallery.subtitle": {
-    "value": "Development only: the @agenteschat/ui components."
+    "value": "Development only: the @keepmind/ui components."
   },
   "format.list": {
     "value": "{{names, list}}"

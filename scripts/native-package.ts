@@ -145,7 +145,7 @@ export async function buildFolders(out: string, version: string) {
   rmSync(base, { recursive: true, force: true });
   mkdirSync(base, { recursive: true });
 
-  sh(["bun", "run", "--filter", "@agenteschat/web", "build"]);
+  sh(["bun", "run", "--filter", "@keepmind/web", "build"]);
   cpSync(join(ROOT, "apps/web/dist"), join(base, "web"), runtimeOnly);
   // The program that connects a computer, which every server offers for download (as the image does).
   const runner = await Bun.build({

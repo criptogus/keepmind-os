@@ -1,12 +1,12 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { ApiClient, DirectMessage, TeamTemplate } from "@agenteschat/client";
-import { ApiError, keys } from "@agenteschat/client";
-import type { OnboardingStepId } from "@agenteschat/client/lib/onboarding";
-import { browserTimezone } from "@agenteschat/client/lib/routines";
+import type { ApiClient, DirectMessage, TeamTemplate } from "@keepmind/client";
+import { ApiError, keys } from "@keepmind/client";
+import type { OnboardingStepId } from "@keepmind/client/lib/onboarding";
+import { browserTimezone } from "@keepmind/client/lib/routines";
 import { focusManager } from "@tanstack/react-query";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import {

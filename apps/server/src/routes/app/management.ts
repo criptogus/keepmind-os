@@ -80,8 +80,8 @@ import {
   updateOrgSettings,
   usageReport,
   WORKSPACE_MODES,
-} from "@agenteschat/engine";
-import { contextWindowOf, nanoUsdToUsd, PROVIDERS, pricesAt, usdToNanoUsd } from "@agenteschat/providers";
+} from "@keepmind/engine";
+import { contextWindowOf, nanoUsdToUsd, PROVIDERS, pricesAt, usdToNanoUsd } from "@keepmind/providers";
 import { createRoute, z } from "@hono/zod-openapi";
 import {
   type AppDeps,

@@ -57,7 +57,7 @@ const b64 = (bytes: ArrayBuffer | Uint8Array) => {
 const unb64 = (text: string) => Uint8Array.from(atob(text), (ch) => ch.charCodeAt(0));
 
 const EC = { name: "ECDH", namedCurve: "P-256" } as const;
-const INFO = new TextEncoder().encode("agentes.chat secret v1");
+const INFO = new TextEncoder().encode("KeepMind OS secret v1");
 
 /** What binds a box to one request: replayed onto another request or target, it doesn't open. */
 export function secretAad(input: { requestId: string; orgId: string; name: string; target: SecretTarget }) {

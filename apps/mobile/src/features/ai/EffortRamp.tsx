@@ -1,7 +1,7 @@
-import { type AgentBrainInput, type BrainKind, type BrainScope, keys, useApi } from "@agenteschat/client";
-import { type EffortLevel, effortLevelsOf, effortTextOf } from "@agenteschat/client/lib/brain-advanced";
-import { AUTO } from "@agenteschat/client/lib/providers";
-import { bodyTones } from "@agenteschat/ui/agent/engine";
+import { type AgentBrainInput, type BrainKind, type BrainScope, keys, useApi } from "@keepmind/client";
+import { type EffortLevel, effortLevelsOf, effortTextOf } from "@keepmind/client/lib/brain-advanced";
+import { AUTO } from "@keepmind/client/lib/providers";
+import { bodyTones } from "@keepmind/ui/agent/engine";
 import { Canvas, Fill, Shader, Skia, useClock } from "@shopify/react-native-skia";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";

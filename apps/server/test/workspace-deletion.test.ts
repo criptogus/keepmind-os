@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
 import { randomBytes } from "node:crypto";
-import { eq, like, schema } from "@agenteschat/db";
-import { publishOrgEvent, purgeWorkspace } from "@agenteschat/engine";
+import { eq, like, schema } from "@keepmind/db";
+import { publishOrgEvent, purgeWorkspace } from "@keepmind/engine";
 import { desktopChallenge } from "../src/desktop-sign-in";
 import { currentSubscriptions } from "../src/realtime/ws";
 import {

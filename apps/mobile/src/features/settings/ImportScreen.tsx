@@ -1,6 +1,6 @@
-import { useApi } from "@agenteschat/client";
-import { can, makesAgents } from "@agenteschat/client/lib/permissions";
-import { helpUrl } from "@agenteschat/client/lib/server";
+import { useApi } from "@keepmind/client";
+import { can, makesAgents } from "@keepmind/client/lib/permissions";
+import { helpUrl } from "@keepmind/client/lib/server";
 import { Directory, File, Paths } from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import { useState } from "react";

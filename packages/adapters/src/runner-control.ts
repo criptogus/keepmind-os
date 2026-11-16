@@ -80,7 +80,7 @@ export type ControlBrowserDoing =
 /** Where the runner stands. */
 export interface ControlStatus {
   paired: boolean;
-  /** Our server, e.g. `https://app.agentes.chat`. */
+  /** Our server, e.g. `https://keepmind.io`. */
   server?: string;
   /**
    * `logoEtag`: the organization's logo cached on this computer (absent: none);

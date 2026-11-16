@@ -36,7 +36,7 @@ export const earlyAccessInvitations = pgTable(
     id: uuid().primaryKey().defaultRandom(),
     /** Lowercase and trimmed; matched exactly. */
     email: text().notNull(),
-    /** The language of the email (a code of `@agenteschat/i18n/locale`). */
+    /** The language of the email (a code of `@keepmind/i18n/locale`). */
     locale: text().notNull().default("en"),
     /** The current link's token hash; null once used or revoked. */
     tokenHash: text(),

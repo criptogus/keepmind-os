@@ -1,4 +1,4 @@
-import { and, desc, eq, gt, isNull, or, schema, sql } from "@agenteschat/db";
+import { and, desc, eq, gt, isNull, or, schema, sql } from "@keepmind/db";
 import { type ConnectorState, connectorStates, type ServerCatalog } from "../connectors/listing";
 import { secretSite } from "../secret-request-tool";
 import { REQUEST_SECRET_TOOL, secretStillHeld } from "../secrets";

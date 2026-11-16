@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
-import { ROUTINE_TEMPLATES, templateRule } from "@agenteschat/client/lib/routine-templates";
-import { eventWebhook } from "@agenteschat/client/lib/routine-view";
+import { ROUTINE_TEMPLATES, templateRule } from "@keepmind/client/lib/routine-templates";
+import { eventWebhook } from "@keepmind/client/lib/routine-view";
 import {
   type ConnectorListingEntry,
   connectorListing,
@@ -9,7 +9,7 @@ import {
   ROUTINE_EVENTS,
   ruleToCron,
   type ScheduleRule,
-} from "@agenteschat/engine";
+} from "@keepmind/engine";
 
 const catalog = connectorListing({ oauthApps: {}, composio: {} as never }) as ConnectorListingEntry[];
 

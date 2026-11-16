@@ -1,5 +1,5 @@
-import type { Agent, RosterMember } from "@agenteschat/client";
-import { greetingSuggestions } from "@agenteschat/client/lib/chat";
+import type { Agent, RosterMember } from "@keepmind/client";
+import { greetingSuggestions } from "@keepmind/client/lib/chat";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, StyleSheet, View } from "react-native";

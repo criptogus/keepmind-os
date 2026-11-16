@@ -1,4 +1,4 @@
-import { customModelId, endpointModelId, parseCustomModel } from "@agenteschat/providers/catalog";
+import { customModelId, endpointModelId, parseCustomModel } from "@keepmind/providers/catalog";
 import type { TFunction } from "i18next";
 import type { AiStatus, Credential, Model } from "../api/types";
 import { CUSTOM_PROVIDER } from "./endpoints";
@@ -306,4 +306,4 @@ export const apiModelName = (t: TFunction, model: string, label: string | undefi
   isAuto(model) ? (maker ? providerLabel(maker) : t("brain.auto.label")) : (label ?? model);
 
 /** Automático's sizes and the server's own tier rule (`modelForTier`): a tier's default reads as the one that runs. */
-export { MODEL_TIERS, nearestTier } from "@agenteschat/providers/catalog";
+export { MODEL_TIERS, nearestTier } from "@keepmind/providers/catalog";

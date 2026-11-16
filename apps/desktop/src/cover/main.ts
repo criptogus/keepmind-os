@@ -8,9 +8,9 @@
  * expected. A server out of reach offers another one.
  */
 
-import { CLOUD_SERVER, isTailnet, serverHost } from "@agenteschat/client/lib/server";
-import { drawCompanion as drawAgent, loadCompanions } from "@agenteschat/ui/agent/companion";
-import { idlePose } from "@agenteschat/ui/agent/engine";
+import { CLOUD_SERVER, isTailnet, serverHost } from "@keepmind/client/lib/server";
+import { drawCompanion as drawAgent, loadCompanions } from "@keepmind/ui/agent/companion";
+import { idlePose } from "@keepmind/ui/agent/engine";
 import { invoke } from "@tauri-apps/api/core";
 import "@fontsource-variable/onest/index.css";
 import "../fonts.css";
@@ -157,7 +157,7 @@ const w = window as { __coverShown?: () => void; __coverFade?: () => void };
 w.__coverShown = shown;
 w.__coverFade = fade;
 
-/** The server the main window opens (servers.json, through Rust); agentes.chat before one is chosen. */
+/** The server the main window opens (servers.json, through Rust); KeepMind OS before one is chosen. */
 const currentServer = () =>
   invoke<string | null>("cover_server").then(
     (s) => s ?? SITE_URL,
@@ -202,7 +202,7 @@ async function otherServer(status: LocalServerStatus | null): Promise<string | n
   if (!list) return null;
   return list.servers.find((s) => s !== list.current && !(status && isHereServer(status, s))) ?? null;
 }
-const serverName = (server: string) => (server === CLOUD_SERVER ? "agentes.chat" : serverHost(server));
+const serverName = (server: string) => (server === CLOUD_SERVER ? "keepmind.io" : serverHost(server));
 const openServer = (server: string) => void invoke("server_choose", { server }).catch(() => {});
 
 /** "Use only on this Mac": reach off, said while it takes and when it didn't work. */

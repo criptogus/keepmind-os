@@ -1,4 +1,4 @@
-import { mixHex } from "@agenteschat/ui/agent/engine";
+import { mixHex } from "@keepmind/ui/agent/engine";
 import { LinearGradient } from "expo-linear-gradient";
 import type { ReactNode } from "react";
 import { ActivityIndicator, Text as RNText, StyleSheet, View } from "react-native";

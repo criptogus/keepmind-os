@@ -1,4 +1,4 @@
-import type { Message, MessageReceipt } from "@agenteschat/client";
+import type { Message, MessageReceipt } from "@keepmind/client";
 import {
   type ConversationWait,
   fanChipText,
@@ -10,7 +10,7 @@ import {
   queueStoppable,
   queueStopText,
   waitingFor,
-} from "@agenteschat/client/lib/computer-queue";
+} from "@keepmind/client/lib/computer-queue";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
 import { Button, Chip, LineIcon, Text } from "@/ui";

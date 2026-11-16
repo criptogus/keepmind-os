@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, setSystemTime, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { Message } from "@agenteschat/client";
-import { applyChannelEvent, emptyStreams, runsInChannel, type StreamsState } from "@agenteschat/client";
+import type { Message } from "@keepmind/client";
+import { applyChannelEvent, emptyStreams, runsInChannel, type StreamsState } from "@keepmind/client";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { ADA_ID, createFakeApi, ENG_ID, ORG_ID, seedState } from "./fake-api";
 import { renderApp, screen, settle } from "./render";

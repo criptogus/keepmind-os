@@ -1,5 +1,5 @@
-import type { KeyWrapper } from "@agenteschat/adapters";
-import { and, type Database, eq, isNotNull, schema } from "@agenteschat/db";
+import type { KeyWrapper } from "@keepmind/adapters";
+import { and, type Database, eq, isNotNull, schema } from "@keepmind/db";
 import { recordAudit } from "../audit";
 import { caches } from "../cache";
 import { openSecret } from "../crypto";

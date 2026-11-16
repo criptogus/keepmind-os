@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import { ISSUE_CARD_FIELDS, ISSUES_GROUPS, ISSUES_SORTS, ISSUES_VIEW_DEFAULT } from "@agenteschat/engine";
+import { ISSUE_CARD_FIELDS, ISSUES_GROUPS, ISSUES_SORTS, ISSUES_VIEW_DEFAULT } from "@keepmind/engine";
 import {
   ISSUES_VIEW_DEFAULT as APP_DEFAULT,
   ISSUE_CARD_FIELDS as APP_FIELDS,

@@ -1,9 +1,9 @@
-import type { MissionFileName } from "@agenteschat/client";
-import { useMission, useMissionFiles } from "@agenteschat/client";
-import { formatTime, relativeTime } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { editDiff, executorName, type MdLine, mdLines, newLineIndexes } from "@agenteschat/client/lib/missions";
-import { DetailsDialog, Diff, Icon, Segmented, Skeleton } from "@agenteschat/ui";
+import type { MissionFileName } from "@keepmind/client";
+import { useMission, useMissionFiles } from "@keepmind/client";
+import { formatTime, relativeTime } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { editDiff, executorName, type MdLine, mdLines, newLineIndexes } from "@keepmind/client/lib/missions";
+import { DetailsDialog, Diff, Icon, Segmented, Skeleton } from "@keepmind/ui";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ErrorState } from "@/components/Loading";
@@ -13,7 +13,7 @@ import { codeAndBold } from "@/lib/markdown";
 
 /**
  * "Arquivos da missão": mission.md (plan and
- * rules, written by agentes.chat), decisions.md (approved decisions) and
+ * rules, written by KeepMind OS), decisions.md (approved decisions) and
  * notes.md (the executor's notes), rendered. Lines that arrived while the
  * panel was open fade in with a faint time; an edit found on the computer
  * says we kept the approved version, with the small diff on demand.

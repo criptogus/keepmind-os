@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, expect, test } from "bun:test";
-import { recordAudit, recordToolCall } from "@agenteschat/engine";
+import { recordAudit, recordToolCall } from "@keepmind/engine";
 import { browser, createTestServer, seedOrg, signUp, type TestServer } from "./harness";
 
 let t: TestServer;

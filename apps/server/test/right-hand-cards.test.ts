@@ -1,12 +1,12 @@
 import { afterEach, beforeEach, expect, test } from "bun:test";
-import { and, eq, schema } from "@agenteschat/db";
+import { and, eq, schema } from "@keepmind/db";
 import {
   grantScopes,
   makeDefaultCredential,
   openPersonAgentDm,
   RIGHT_HAND,
   type ToolSource,
-} from "@agenteschat/engine";
+} from "@keepmind/engine";
 import { browser, createTestServer, joinByInvitation, seedOrg, signUp, type TestServer } from "./harness";
 
 /** The right hand's approvals and people cards (ADR 0137 §4): applied through the usual routes, audited via it. */

@@ -3,7 +3,7 @@
  * the newer endpoints: artifacts, storage, issues/routines/calendar and custom
  * MCP servers. Same shapes as apps/server/src/routes/app/*; nothing here ships.
  */
-import type { Agent, Channel, Me, Member, Message } from "@agenteschat/client";
+import type { Agent, Channel, Me, Member, Message } from "@keepmind/client";
 
 export interface MockContext {
   seed: boolean;

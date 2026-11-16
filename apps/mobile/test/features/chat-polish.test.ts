@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { applyReceiptEvent, receiptTicks } from "@agenteschat/client";
+import { applyReceiptEvent, receiptTicks } from "@keepmind/client";
 import { dayInView } from "../../src/features/chat/logic";
 import { appColors, toastGlow, toastToneOf, toneColor, withAlpha } from "../../src/ui/palette";
 import { message } from "./fixtures";

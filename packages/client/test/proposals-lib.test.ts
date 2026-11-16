@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { en } from "@agenteschat/i18n";
+import { en } from "@keepmind/i18n";
 import type { TFunction } from "i18next";
 import type { Proposal } from "../src/api/types";
 import {

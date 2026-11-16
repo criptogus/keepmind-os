@@ -1,4 +1,4 @@
-import { Button, EmptyState } from "@agenteschat/ui";
+import { Button, EmptyState } from "@keepmind/ui";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHost } from "./app";

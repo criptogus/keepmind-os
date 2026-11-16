@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { LiveRun } from "@agenteschat/client";
+import type { LiveRun } from "@keepmind/client";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import type { TFunction } from "i18next";
 import { HOVER_OPEN_MS } from "@/components/ProfileCard";

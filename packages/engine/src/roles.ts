@@ -1,4 +1,4 @@
-import type { PubSub } from "@agenteschat/adapters";
+import type { PubSub } from "@keepmind/adapters";
 import {
   and,
   asc,
@@ -11,7 +11,7 @@ import {
   or,
   schema,
   sql,
-} from "@agenteschat/db";
+} from "@keepmind/db";
 import type { AgentMailLoss } from "./audience";
 import { recordAudit } from "./audit";
 import { caches } from "./cache";

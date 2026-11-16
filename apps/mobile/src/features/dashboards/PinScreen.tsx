@@ -1,5 +1,5 @@
-import { useDashboards, useHomeDashboard, usePinWidget, type WidgetSchedule } from "@agenteschat/client";
-import { chartBlockToWidgetSpec, sizeToLayout, type WidgetSize } from "@agenteschat/ui/widgets/spec";
+import { useDashboards, useHomeDashboard, usePinWidget, type WidgetSchedule } from "@keepmind/client";
+import { chartBlockToWidgetSpec, sizeToLayout, type WidgetSize } from "@keepmind/ui/widgets/spec";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, StyleSheet, View } from "react-native";

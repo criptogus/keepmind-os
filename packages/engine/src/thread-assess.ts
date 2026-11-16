@@ -1,4 +1,4 @@
-import { and, desc, eq, inArray, isNull, lt, schema, sql } from "@agenteschat/db";
+import { and, desc, eq, inArray, isNull, lt, schema, sql } from "@keepmind/db";
 import { getChannelCached } from "./context";
 import { type ContextDeps, isTrustedMessage, resolveSummaryModel } from "./context/summaries";
 import { publishChannelEvent } from "./events";

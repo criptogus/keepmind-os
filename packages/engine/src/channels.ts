@@ -1,4 +1,4 @@
-import type { PubSub } from "@agenteschat/adapters";
+import type { PubSub } from "@keepmind/adapters";
 import {
   and,
   type Database,
@@ -13,7 +13,7 @@ import {
   type SQL,
   schema,
   sql,
-} from "@agenteschat/db";
+} from "@keepmind/db";
 import { resolveChannelAgentAsks } from "./admin-asks";
 import { caches } from "./cache";
 import { endOfCategory, requireCategoryInOrg } from "./channel-categories";

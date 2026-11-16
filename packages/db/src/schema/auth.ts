@@ -14,7 +14,7 @@ export const users = pgTable("users", {
   email: text().notNull().unique(),
   emailVerified: boolean().notNull().default(false),
   image: text(),
-  /** The app's language (a code of `@agenteschat/i18n/locale`): emails and pushes are written in it. */
+  /** The app's language (a code of `@keepmind/i18n/locale`): emails and pushes are written in it. */
   locale: text(),
   /**
    * The language follows each device's own ("Automático", the default) until the person picks one; the devices
@@ -35,7 +35,7 @@ export const users = pgTable("users", {
   deletionRequestedAt: timestamp({ withTimezone: true }),
   /**
    * The person's own area, asked once during the onboarding: an id of `WORK_AREAS`
-   * (`@agenteschat/client/lib/work-area`) or `skipped`; null until asked. About the person, not a workspace, read by
+   * (`@keepmind/client/lib/work-area`) or `skipped`; null until asked. About the person, not a workspace, read by
    * the operator API's account (which kinds of people stay). Not a Better Auth field.
    */
   workArea: text(),

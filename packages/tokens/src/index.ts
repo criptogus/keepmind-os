@@ -1,5 +1,5 @@
 /**
- * @agenteschat/tokens: the design system's values for platforms without CSS
+ * @keepmind/tokens: the design system's values for platforms without CSS
  * (the phone app). `docs/design/design-system/tokens.css` is the source of
  * truth; a test keeps these equal to it. Names are the CSS custom properties
  * in camelCase (`--line2` → `line2`, `--raised-2` → `raised2`).

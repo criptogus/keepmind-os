@@ -1,12 +1,12 @@
-import type { Level } from "@agenteschat/client/lib/access-levels";
-import { ROLE_DEFAULTS, ROLE_IDS, type RoleId } from "@agenteschat/client/lib/new-agent";
-import type { AgentAppearance, IconName } from "@agenteschat/ui";
+import type { Level } from "@keepmind/client/lib/access-levels";
+import { ROLE_DEFAULTS, ROLE_IDS, type RoleId } from "@keepmind/client/lib/new-agent";
+import type { AgentAppearance, IconName } from "@keepmind/ui";
 
-export * from "@agenteschat/client/lib/new-agent";
+export * from "@keepmind/client/lib/new-agent";
 
 /**
  * "Criar agente" in steps: each role's icon on the web (what it starts with is shared:
- * `@agenteschat/client/lib/new-agent`).
+ * `@keepmind/client/lib/new-agent`).
  */
 
 export interface RolePreset {

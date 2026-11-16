@@ -1,4 +1,4 @@
-import { type DesktopMode, desktopModeFrame } from "@agenteschat/client";
+import { type DesktopMode, desktopModeFrame } from "@keepmind/client";
 import type { RfbChannel } from "@novnc/novnc";
 
 /** One RFB session's side of a `DesktopLink`, in the shape noVNC takes for a socket. */

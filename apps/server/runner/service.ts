@@ -96,7 +96,7 @@ export const agentTmp = (uid: number) => path.join(AGENT_RAM_ROOT, String(uid), 
  * disk (`r!`: never on a later `--remove`), so a computer switched back to memory doesn't keep its room. Each agent's
  * runtime dir (`run`, ADR 0169) never ages, as logind's don't: a container up for weeks keeps its state there.
  */
-export const AGENT_TMP_CLEANUP = `# agentes.chat runner: each agent's own temporary folders\ne ${AGENT_RAM_ROOT}/*/* - - - 10d\nx ${AGENT_RAM_ROOT}/*/run\ne ${AGENT_TMP_ROOT}/*/* - - - 30d\nr! ${AGENT_DISK_TMP_ROOT}/image\n`;
+export const AGENT_TMP_CLEANUP = `# KeepMind OS runner: each agent's own temporary folders\ne ${AGENT_RAM_ROOT}/*/* - - - 10d\nx ${AGENT_RAM_ROOT}/*/run\ne ${AGENT_TMP_ROOT}/*/* - - - 30d\nr! ${AGENT_DISK_TMP_ROOT}/image\n`;
 /** In `/etc/tmpfiles.d`, two folders up from the unit's (`/etc/systemd/system`). */
 export const agentTmpCleanupPath = (unitPath = SYSTEM_UNIT_PATH) =>
   path.join(path.dirname(unitPath), "..", "..", "tmpfiles.d", `${SERVICE_NAME}.conf`);
@@ -245,7 +245,7 @@ export function systemdUnit(launch: Launch, args?: readonly string[]): string {
   return systemdUnitText(
     runnerService(launch, {
       // `host …`: the server's own computer in simple mode (ADR 0153 §5).
-      description: `agentes.chat runner (${args?.[0] === "host" ? "this server's computer" : "connected computer"})`,
+      description: `KeepMind OS runner (${args?.[0] === "host" ? "this server's computer" : "connected computer"})`,
       path: launch.path ?? process.env.PATH ?? "/usr/local/bin:/usr/bin:/bin",
       manager: "systemd",
       ...(args ? { args } : {}),
@@ -258,7 +258,7 @@ export function systemdUnit(launch: Launch, args?: readonly string[]): string {
 export function systemdSystemUnit(launch: Launch, args?: readonly string[]): string {
   return systemdUnitText(
     runnerService(launch, {
-      description: "agentes.chat runner (each agent as its own user)",
+      description: "KeepMind OS runner (each agent as its own user)",
       path: SYSTEM_PATH,
       manager: "systemd",
       ...(args ? { args } : {}),
@@ -271,7 +271,7 @@ export function systemdSystemUnit(launch: Launch, args?: readonly string[]): str
 export function launchdPlist(launch: Launch, args: readonly string[] = ["start"]): string {
   return launchdPlistText(
     runnerService(launch, {
-      description: "agentes.chat runner (connected computer)",
+      description: "KeepMind OS runner (connected computer)",
       path: process.env.PATH || "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin",
       manager: "launchd",
       args,
@@ -473,7 +473,7 @@ export function installService(io: ServiceIo): number {
   if (process.platform === "darwin") {
     mkdirSync(launch.home, { recursive: true, mode: 0o700 });
     const agent = runnerService(launch, {
-      description: "agentes.chat runner (connected computer)",
+      description: "KeepMind OS runner (connected computer)",
       path: process.env.PATH || "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin",
       manager: "launchd",
       ...(io.args ? { args: io.args } : {}),

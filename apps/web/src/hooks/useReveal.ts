@@ -1,4 +1,4 @@
-import { prefersReducedMotion } from "@agenteschat/ui";
+import { prefersReducedMotion } from "@keepmind/ui";
 import { type RefObject, useLayoutEffect, useRef } from "react";
 
 /** How long folded words take to grow to their whole height. */

@@ -1,4 +1,4 @@
-import type { Credential, OrgSettings } from "@agenteschat/client";
+import type { Credential, OrgSettings } from "@keepmind/client";
 import {
   useAddCredential,
   useAiAccounts,
@@ -16,18 +16,18 @@ import {
   useUpdateSettings,
   useUsageReport,
   useWorkspaceUsesApi,
-} from "@agenteschat/client";
-import { selfHosted, showsAbout } from "@agenteschat/client/lib/about";
-import { keyRemovalText } from "@agenteschat/client/lib/ai-accounts";
-import { composioUsageText, showsComposioUsage } from "@agenteschat/client/lib/composio";
-import { computerEdition } from "@agenteschat/client/lib/computer";
-import { settingsFrozen } from "@agenteschat/client/lib/deletion";
-import { CUSTOM_PROVIDER } from "@agenteschat/client/lib/endpoints";
-import { errorText, keyRefusal } from "@agenteschat/client/lib/errors";
-import { FIELD_LIMITS } from "@agenteschat/client/lib/field-limits";
-import { formatShortDate, formatUsd, relativeTime } from "@agenteschat/client/lib/format";
-import { can } from "@agenteschat/client/lib/permissions";
-import { settingsSectionNameKey, settingsSectionTextKey } from "@agenteschat/client/lib/personal-view";
+} from "@keepmind/client";
+import { selfHosted, showsAbout } from "@keepmind/client/lib/about";
+import { keyRemovalText } from "@keepmind/client/lib/ai-accounts";
+import { composioUsageText, showsComposioUsage } from "@keepmind/client/lib/composio";
+import { computerEdition } from "@keepmind/client/lib/computer";
+import { settingsFrozen } from "@keepmind/client/lib/deletion";
+import { CUSTOM_PROVIDER } from "@keepmind/client/lib/endpoints";
+import { errorText, keyRefusal } from "@keepmind/client/lib/errors";
+import { FIELD_LIMITS } from "@keepmind/client/lib/field-limits";
+import { formatShortDate, formatUsd, relativeTime } from "@keepmind/client/lib/format";
+import { can } from "@keepmind/client/lib/permissions";
+import { settingsSectionNameKey, settingsSectionTextKey } from "@keepmind/client/lib/personal-view";
 import {
   keyLooksValid,
   keyName,
@@ -36,11 +36,11 @@ import {
   providerGuess,
   providerLabel,
   providerOf,
-} from "@agenteschat/client/lib/providers";
-import type { RoleTab } from "@agenteschat/client/lib/roles";
-import { settingsNav, settingsTabs } from "@agenteschat/client/lib/settings-nav";
-import { parseAmount } from "@agenteschat/client/lib/text";
-import { isPersonal, modeKey } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client/lib/providers";
+import type { RoleTab } from "@keepmind/client/lib/roles";
+import { settingsNav, settingsTabs } from "@keepmind/client/lib/settings-nav";
+import { parseAmount } from "@keepmind/client/lib/text";
+import { isPersonal, modeKey } from "@keepmind/client/lib/workspace-mode";
 import {
   Alert,
   Button,
@@ -65,7 +65,7 @@ import {
   TabPanel,
   Tabs,
   Textarea,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { type ComponentProps, type ReactNode, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -180,7 +180,7 @@ function Settings({
   const visible = SETTINGS_SECTIONS.filter((s) => s.allowed(org, server));
   // A section a link names that this person can't open: their first one, their account, saying why. Opening the
   // settings with no section named has nothing to explain. Billing where no billing service runs, or Sobre and Voz on
-  // agentes.chat Cloud, isn't about their role.
+  // KeepMind OS Cloud, isn't about their role.
   const wanted = section ?? "general";
   const current = visible.some((s) => s.id === wanted) ? wanted : (visible[0]?.id ?? "account");
   const serverLacks =
@@ -705,7 +705,7 @@ function DeleteWorkspaceCard() {
 
 /**
  * The usage report's switch (ADR 0060 §5): the title, the switch and "Ver o que é enviado". Only the
- * installation's owner gets it (the API answers `null` to everyone else, and on agentes.chat itself).
+ * installation's owner gets it (the API answers `null` to everyone else, and on KeepMind OS itself).
  */
 function UsageStatisticsCard() {
   const { t } = useTranslation();

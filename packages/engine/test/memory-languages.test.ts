@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { EMBEDDING_DIMENSIONS, type EmbeddingProvider } from "@agenteschat/providers";
-import { createFakeEmbeddings } from "@agenteschat/providers/testing";
+import { EMBEDDING_DIMENSIONS, type EmbeddingProvider } from "@keepmind/providers";
+import { createFakeEmbeddings } from "@keepmind/providers/testing";
 import { indexSource, insertContextItem, retrieveForRun } from "../src";
 import { type Fixture, setup } from "./fixtures";
 

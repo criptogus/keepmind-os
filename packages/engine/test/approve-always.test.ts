@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { and, eq, schema } from "@agenteschat/db";
+import { and, eq, schema } from "@keepmind/db";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";

@@ -1,7 +1,7 @@
-import type { BlobStoreResolver, PubSub } from "@agenteschat/adapters";
-import { and, type Database, eq, inArray, isNull, like, or, schema, sql } from "@agenteschat/db";
-import { isCustomModel, isKnownModel, isOpenRouterModel } from "@agenteschat/providers";
-import { driveFolder, isIdHandle, isSecretFile } from "@agenteschat/ui/names";
+import type { BlobStoreResolver, PubSub } from "@keepmind/adapters";
+import { and, type Database, eq, inArray, isNull, like, or, schema, sql } from "@keepmind/db";
+import { isCustomModel, isKnownModel, isOpenRouterModel } from "@keepmind/providers";
+import { driveFolder, isIdHandle, isSecretFile } from "@keepmind/ui/names";
 import { createAgent, freeHandle, HANDLE_PATTERN, updateAgent } from "./agents";
 import { type AgentAppearance, setAgentAppearance, validateAppearance } from "./appearance";
 import { ARTIFACT_LIMITS, type ArtifactDeps, createFileArtifact } from "./artifacts";

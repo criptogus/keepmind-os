@@ -104,19 +104,19 @@ import type {
   UnreadTask,
   UsageQueue,
   WorkspaceLimits,
-} from "@agenteschat/client";
-import { ApiError } from "@agenteschat/client";
-import { moveInGroups } from "@agenteschat/client/lib/agent-groups";
-import { answersOthers, audienceOf } from "@agenteschat/client/lib/audience";
-import type { ChatPrefs } from "@agenteschat/client/lib/chat-look";
-import { ISSUES_VIEW_DEFAULT } from "@agenteschat/client/lib/issues-view";
-import { freeHandle, takenHandles } from "@agenteschat/client/lib/new-agent";
-import { stepIndex } from "@agenteschat/client/lib/onboarding";
-import type { PlanModel } from "@agenteschat/client/lib/plans";
-import { type LodiPrefs, lodiPrefsOf } from "@agenteschat/client/lib/right-hand-prefs";
-import { grants, rowMax, SUMMARY_ORDER, withRowHolders } from "@agenteschat/client/lib/roles";
-import { sidebarItemOrder, sidebarSections } from "@agenteschat/client/lib/sidebar-items";
-import { driveFolder, isSecretFile } from "@agenteschat/ui/names";
+} from "@keepmind/client";
+import { ApiError } from "@keepmind/client";
+import { moveInGroups } from "@keepmind/client/lib/agent-groups";
+import { answersOthers, audienceOf } from "@keepmind/client/lib/audience";
+import type { ChatPrefs } from "@keepmind/client/lib/chat-look";
+import { ISSUES_VIEW_DEFAULT } from "@keepmind/client/lib/issues-view";
+import { freeHandle, takenHandles } from "@keepmind/client/lib/new-agent";
+import { stepIndex } from "@keepmind/client/lib/onboarding";
+import type { PlanModel } from "@keepmind/client/lib/plans";
+import { type LodiPrefs, lodiPrefsOf } from "@keepmind/client/lib/right-hand-prefs";
+import { grants, rowMax, SUMMARY_ORDER, withRowHolders } from "@keepmind/client/lib/roles";
+import { sidebarItemOrder, sidebarSections } from "@keepmind/client/lib/sidebar-items";
+import { driveFolder, isSecretFile } from "@keepmind/ui/names";
 import { createFakeAccess } from "./fakes/access";
 import { createFakeApps, type FakeApps } from "./fakes/apps";
 import { createMockArtifacts } from "./fakes/artifacts";
@@ -209,7 +209,7 @@ export interface FakeState {
   authConfig?: Partial<AuthConfig>;
   /** Overrides `account.signInOptions` (default: no account, sign-up allowed). */
   signInOptions?: SignInOptions;
-  /** The server `account.phoneSignIn` names (default: https://app.agentes.chat). */
+  /** The server `account.phoneSignIn` names (default: https://keepmind.io). */
   phoneServer?: string;
   /** Questions someone else answered on the server (this tab still shows them open). */
   answeredElsewhere?: Set<string>;
@@ -363,7 +363,7 @@ export interface FakeState {
   holdPosts?: Promise<void>;
   /** What `orgs.billingLink` throws (default: a link on billing.example.com). */
   billingLinkError?: ApiError;
-  /** A new workspace's standing (`orgs.create`): agentes.chat Cloud starts it waiting for its first plan. */
+  /** A new workspace's standing (`orgs.create`): KeepMind OS Cloud starts it waiting for its first plan. */
   newWorkspaceStanding?: OrgStanding;
   /** `orgs.limits` (ADR 0079); unset = no limits, the members counted from `members`. */
   limits?: WorkspaceLimits;
@@ -375,7 +375,7 @@ export interface FakeState {
   answerNowRuns?: { agentId: string; runId: string }[];
   /** `system.health`'s edition; unset = the Cloud. */
   edition?: Edition;
-  /** Overrides `system.instance` (default: agentes.chat Cloud). */
+  /** Overrides `system.instance` (default: KeepMind OS Cloud). */
   instance?: Partial<Instance>;
   /** `agents.brainMachines`: the computers a new agent could think on ("Criar agente"); unset = none. */
   brainMachines?: BrainMachine[];
@@ -1397,11 +1397,11 @@ export function createFakeHttpApi(state: FakeState): Omit<HttpApi, FakedParts> {
     system: {
       health: async () => ({ status: "ok", version: "test", edition: state.edition ?? "cloud" }),
       instance: async () => ({
-        name: "agentes.chat",
+        name: "keepmind.io",
         version: "test",
         api: 1,
         minApi: 1,
-        url: "https://app.agentes.chat",
+        url: "https://keepmind.io",
         signIn: { email: true, google: false, github: true, apple: false },
         signup: "open",
         cloud: true,
@@ -1580,7 +1580,7 @@ export function createFakeHttpApi(state: FakeState): Omit<HttpApi, FakedParts> {
         log("account.phoneSignIn");
         return {
           token: `tok-${state.calls.filter((c) => c.method === "account.phoneSignIn").length}`,
-          server: state.phoneServer ?? "https://app.agentes.chat",
+          server: state.phoneServer ?? "https://keepmind.io",
           expiresIn: 180,
         };
       },

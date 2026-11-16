@@ -1,4 +1,4 @@
-import { type Credential, type EndpointCheck, keys, useApi } from "@agenteschat/client";
+import { type Credential, type EndpointCheck, keys, useApi } from "@keepmind/client";
 import {
   CHECK_VIEW,
   CUSTOM_PROVIDER,
@@ -17,7 +17,7 @@ import {
   withListedModels,
   withoutModel,
   withTypedModel,
-} from "@agenteschat/client/lib/endpoints";
+} from "@keepmind/client/lib/endpoints";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

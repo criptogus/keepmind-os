@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { createFakePushSender } from "@agenteschat/adapters";
-import { loadConfig } from "@agenteschat/config";
+import { createFakePushSender } from "@keepmind/adapters";
+import { loadConfig } from "@keepmind/config";
 import {
   apnsKeyGaps,
   apnsKeyOf,
@@ -35,7 +35,7 @@ describe("phone push without the Apple key (ADR 0178)", () => {
   });
 
   test("auto on the server that is the relay: a platform without credentials is off, never a call to itself", () => {
-    const c = config({ PUBLIC_URL: "https://app.agentes.chat" });
+    const c = config({ PUBLIC_URL: "https://keepmind.io" });
     expect(relayIsThisServer(c)).toBe(true);
     expect(phonePushMode(c, null)).toBe("off");
     expect(phonePushMode(c, createFakePushSender())).toBe("direct");

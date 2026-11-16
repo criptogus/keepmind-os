@@ -6,8 +6,8 @@ import {
   type VaultConnection,
   type VaultScope,
   type VaultSourceInfo,
-} from "@agenteschat/client";
-import { vaultConnectRefusal } from "@agenteschat/client/lib/errors";
+} from "@keepmind/client";
+import { vaultConnectRefusal } from "@keepmind/client/lib/errors";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, StyleSheet, View } from "react-native";

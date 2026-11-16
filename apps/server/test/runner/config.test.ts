@@ -1,7 +1,7 @@
 import { afterEach, expect, test } from "bun:test";
 import { existsSync, readdirSync, renameSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { redactCommon } from "@agenteschat/adapters/redact";
+import { redactCommon } from "@keepmind/adapters/redact";
 import { setTool } from "../../runner/access";
 import { ActivityLog } from "../../runner/activity";
 import {

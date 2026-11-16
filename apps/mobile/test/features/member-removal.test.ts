@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
-import type { OrgRole, Person, RemovalPreview } from "@agenteschat/client";
-import { removalLines } from "@agenteschat/client/lib/removal";
-import { leaves, removes } from "@agenteschat/client/lib/roles";
+import type { OrgRole, Person, RemovalPreview } from "@keepmind/client";
+import { removalLines } from "@keepmind/client/lib/removal";
+import { leaves, removes } from "@keepmind/client/lib/roles";
 import { translator } from "./fixtures";
 
 /** Remover do workspace on the members screen: who gets it, and what its confirmation says, in both languages. */

@@ -5,9 +5,9 @@ import {
   useWebhookSetupAction,
   type WebhookProvider,
   type WebhookSetup,
-} from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { githubHookLink, SENTRY_NEW_INTEGRATION, webhookTestState } from "@agenteschat/client/lib/routine-webhooks";
+} from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { githubHookLink, SENTRY_NEW_INTEGRATION, webhookTestState } from "@keepmind/client/lib/routine-webhooks";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, StyleSheet, TextInput, View } from "react-native";

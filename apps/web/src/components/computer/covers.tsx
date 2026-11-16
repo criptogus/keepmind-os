@@ -1,9 +1,9 @@
-import type { Edition, Machine } from "@agenteschat/client";
-import { type CantShow, cantShowLine } from "@agenteschat/client/lib/agent-computer";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { commandInReason, oneClickTerminal, toolOnCommand } from "@agenteschat/client/lib/machines";
-import type { AgentColor } from "@agenteschat/ui";
-import { Button } from "@agenteschat/ui";
+import type { Edition, Machine } from "@keepmind/client";
+import { type CantShow, cantShowLine } from "@keepmind/client/lib/agent-computer";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { commandInReason, oneClickTerminal, toolOnCommand } from "@keepmind/client/lib/machines";
+import type { AgentColor } from "@keepmind/ui";
+import { Button } from "@keepmind/ui";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { Cover } from "../browser/Cover";

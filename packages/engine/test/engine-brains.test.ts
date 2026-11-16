@@ -6,9 +6,9 @@ import {
   MACHINE_PROTOCOL_VERSION,
   OPENCODE_ACP_PROTOCOL,
   orgTopic,
-} from "@agenteschat/adapters";
-import { and, eq, schema } from "@agenteschat/db";
-import { ProviderError, systemText } from "@agenteschat/providers";
+} from "@keepmind/adapters";
+import { and, eq, schema } from "@keepmind/db";
+import { ProviderError, systemText } from "@keepmind/providers";
 import {
   activeRunsIn,
   addChannelMember,
@@ -120,7 +120,7 @@ const statusOf = (machineId: string, over: Partial<MachineStatus> = {}): Machine
 
 /** Pairs a computer and makes it the agent's, thinking with Claude Code. */
 async function computerAgent(fx: Fixture, over: Partial<typeof schema.agents.$inferInsert> = {}) {
-  const deps = { db: fx.db, pubsub: fx.pubsub, publicUrl: "https://agentes.chat" };
+  const deps = { db: fx.db, pubsub: fx.pubsub, publicUrl: "https://keepmind.io" };
   const paired = await pairMachine(deps, fx.owner.id, fx.org.id, { name: "MacBook", ...RUNNER, exec: true });
   await fx.db
     .update(schema.agents)

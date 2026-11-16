@@ -63,8 +63,8 @@ describe("connected computers helpers (ADR 0036)", () => {
   });
 
   test("commands: the installer has no code; granting quotes paths that need it", () => {
-    expect(installCommand("https://app.agentes.chat/")).toBe(
-      "curl -fsSL https://app.agentes.chat/api/machines/install.sh | sh",
+    expect(installCommand("https://keepmind.io/")).toBe(
+      "curl -fsSL https://keepmind.io/api/machines/install.sh | sh",
     );
     expect(allowFolderCommand("/Users/you/Projects/loja-v5", "bento")).toBe(
       "agentes-runner folders allow /Users/you/Projects/loja-v5 --agent bento",
@@ -82,7 +82,7 @@ describe("connected computers helpers (ADR 0036)", () => {
   });
 
   test("why a computer can't yet: the runner's code in the person's words; an older runner's own English as it is", async () => {
-    const { ptBR, resources } = await import("@agenteschat/i18n");
+    const { ptBR, resources } = await import("@keepmind/i18n");
     const i18next = (await import("i18next")).default;
     const instance = i18next.createInstance();
     void instance.init({ lng: "pt-BR", fallbackLng: "en", resources, initAsync: false });
@@ -152,10 +152,10 @@ describe("connected computers helpers (ADR 0036)", () => {
   });
 
   test("download link and location", () => {
-    expect(downloadHref("/api/desktop/download/0.2.0/a.dmg", "https://app.agentes.chat")).toBe(
-      "https://app.agentes.chat/api/desktop/download/0.2.0/a.dmg",
+    expect(downloadHref("/api/desktop/download/0.2.0/a.dmg", "https://keepmind.io")).toBe(
+      "https://keepmind.io/api/desktop/download/0.2.0/a.dmg",
     );
-    expect(downloadHref("https://cdn.example/a.dmg", "https://app.agentes.chat")).toBe("https://cdn.example/a.dmg");
+    expect(downloadHref("https://cdn.example/a.dmg", "https://keepmind.io")).toBe("https://cdn.example/a.dmg");
     expect(locationText({ city: "Curitiba", region: null, country: "Brasil" })).toBe("Curitiba, Brasil");
   });
 
@@ -368,8 +368,8 @@ describe("connected computers helpers (ADR 0036)", () => {
       new TypeError("Failed to fetch"),
       new ApiError(502, "http_502", "Bad Gateway"),
       new ApiError(521, "http_521", "Web server is down"),
-      new ApiError(409, "machine.offline", "The computer agentes.chat isn't answering right now."),
-      new ApiError(502, "machine.timeout", "the computer agentes.chat did not answer in time"),
+      new ApiError(409, "machine.offline", "The computer KeepMind OS isn't answering right now."),
+      new ApiError(502, "machine.timeout", "the computer KeepMind OS did not answer in time"),
     ])
       expect(loginReadPasses(error)).toBe(true);
     // The sign-in gone from the server or the computer, the session over, or the server's own error.
@@ -634,7 +634,7 @@ describe("one click where a tool is off (ADR 0036 §8)", () => {
 
   test("the runner's refusal of a browser that is off is read in every runner version's words", () => {
     expect(
-      browserOffMessage("Browser is turned off on this computer (its owner can turn it on from agentes.chat)"),
+      browserOffMessage("Browser is turned off on this computer (its owner can turn it on from KeepMind OS)"),
     ).toBe(true);
     expect(
       browserOffMessage(

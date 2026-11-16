@@ -1,7 +1,7 @@
-import type { Credential, Member } from "@agenteschat/client";
-import { apiPickOptions, type BrainPickOption, brainPickText } from "@agenteschat/client/lib/brain-picker";
-import { keyLine, keySource, type ModelChoice } from "@agenteschat/client/lib/providers";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+import type { Credential, Member } from "@keepmind/client";
+import { apiPickOptions, type BrainPickOption, brainPickText } from "@keepmind/client/lib/brain-picker";
+import { keyLine, keySource, type ModelChoice } from "@keepmind/client/lib/providers";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import {
   AffixInput,
   AGENT_ACCESSORIES,
@@ -25,7 +25,7 @@ import {
   SearchSelect,
   Select,
   type SelectOption,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import type { TFunction } from "i18next";
 import {
   type CSSProperties,

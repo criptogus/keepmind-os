@@ -39,7 +39,7 @@ import {
   stopRoutineRun,
   takeOverRoutine,
   updateRoutine,
-} from "@agenteschat/engine";
+} from "@keepmind/engine";
 import { createRoute, z } from "@hono/zod-openapi";
 import { errorResponse } from "../../http/errors";
 import {

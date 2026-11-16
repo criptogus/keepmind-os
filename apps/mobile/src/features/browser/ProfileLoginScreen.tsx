@@ -1,4 +1,4 @@
-import { useBrowserProfiles, useMachines } from "@agenteschat/client";
+import { useBrowserProfiles, useMachines } from "@keepmind/client";
 import { useTranslation } from "react-i18next";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";

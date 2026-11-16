@@ -1,6 +1,6 @@
-import { joinNames } from "@agenteschat/client/lib/format";
-import { type AiChoice, PLAN_CHOICES, type PlanChoice, planLabel, planMark } from "@agenteschat/client/lib/no-ai";
-import { Icon, ProviderLogo } from "@agenteschat/ui";
+import { joinNames } from "@keepmind/client/lib/format";
+import { type AiChoice, PLAN_CHOICES, type PlanChoice, planLabel, planMark } from "@keepmind/client/lib/no-ai";
+import { Icon, ProviderLogo } from "@keepmind/ui";
 import { type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 

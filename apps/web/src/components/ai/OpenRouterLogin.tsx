@@ -1,5 +1,5 @@
-import { beginOpenRouterOAuth, finishOpenRouterOAuth } from "@agenteschat/client/lib/openrouter-oauth";
-import { Button, Field, Input, SettingNote } from "@agenteschat/ui";
+import { beginOpenRouterOAuth, finishOpenRouterOAuth } from "@keepmind/client/lib/openrouter-oauth";
+import { Button, Field, Input, SettingNote } from "@keepmind/ui";
 import { useEffect, useId, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { openPopup } from "@/lib/popup";

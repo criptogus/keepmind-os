@@ -7,7 +7,7 @@ import {
   type ToolSpec,
   textOf,
   toolImageChars,
-} from "@agenteschat/providers";
+} from "@keepmind/providers";
 import { REQUEST_APPROVAL_TOOL } from "./approval-requests";
 import { ASK_CHOICES_TOOL, SHOW_BLOCK_TOOL, START_POLL_TOOL } from "./blocks";
 import { ASK_PERSON_TOOL, DESKTOP_ASK_PERSON_TOOL } from "./browser/handoff";

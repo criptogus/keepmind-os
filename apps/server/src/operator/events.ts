@@ -1,4 +1,4 @@
-import { listOperatorEvents, OPERATOR_EVENTS_PAGE_MAX, operatorReview, REVIEW_MAX_BYTES } from "@agenteschat/engine";
+import { listOperatorEvents, OPERATOR_EVENTS_PAGE_MAX, operatorReview, REVIEW_MAX_BYTES } from "@keepmind/engine";
 import { createRoute, type OpenAPIHono, z } from "@hono/zod-openapi";
 import { apiError, errorResponse } from "../http/errors";
 import { json } from "../routes/app/context";

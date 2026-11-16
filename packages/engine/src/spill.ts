@@ -1,6 +1,6 @@
-import { and, type Executor, eq, isNull, ne, schema, sql } from "@agenteschat/db";
-import { isAutoModel } from "@agenteschat/providers";
-import { claudeCodeModel, planOf } from "@agenteschat/providers/plans";
+import { and, type Executor, eq, isNull, ne, schema, sql } from "@keepmind/db";
+import { isAutoModel } from "@keepmind/providers";
+import { claudeCodeModel, planOf } from "@keepmind/providers/plans";
 import type { Agent } from "./agents";
 import { type BrainPlan, computerBrainUnavailable, planIsOwners, storedPlanUsage } from "./brains/select";
 import type { BrainAccount } from "./brains/types";

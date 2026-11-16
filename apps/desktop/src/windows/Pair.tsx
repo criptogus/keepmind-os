@@ -5,9 +5,9 @@
  * the runner with the link and waits for its maker to let it in on the web. Both show what agents can do here as
  * switches, and on a Mac go on to `Prepare` (its permissions) once paired.
  */
-import type { DeviceAudience } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { Button, Checkbox, Icon, type IconName, PixelSpinner, ProviderLogo, Select, Switch } from "@agenteschat/ui";
+import type { DeviceAudience } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { Button, Checkbox, Icon, type IconName, PixelSpinner, ProviderLogo, Select, Switch } from "@keepmind/ui";
 import { type ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHost, useSnapshot, useStore } from "../app";

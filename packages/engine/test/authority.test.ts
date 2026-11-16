@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, setSystemTime, test } from "bun:test";
-import { countQueries, eq, schema } from "@agenteschat/db";
+import { countQueries, eq, schema } from "@keepmind/db";
 import {
   accountablePerson,
   createAgent,

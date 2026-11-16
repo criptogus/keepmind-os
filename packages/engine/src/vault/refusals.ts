@@ -1,4 +1,4 @@
-import { SECRET_NAME, vaultRule, vaultRuleLabel } from "@agenteschat/adapters";
+import { SECRET_NAME, vaultRule, vaultRuleLabel } from "@keepmind/adapters";
 import { cutText } from "../format";
 import type { ToolOutput } from "../tools/types";
 import { neutralizeUntrusted } from "../untrusted";

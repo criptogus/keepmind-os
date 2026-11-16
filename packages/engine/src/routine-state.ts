@@ -1,5 +1,5 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, type Database, type Executor, eq, inArray, isNull, or, type SQL, schema, sql } from "@agenteschat/db";
+import type { PubSub } from "@keepmind/adapters";
+import { and, type Database, type Executor, eq, inArray, isNull, or, type SQL, schema, sql } from "@keepmind/db";
 import { recordAudit } from "./audit";
 import { notifyRoutinePaused } from "./notification-producers";
 import { channelMaySql } from "./permissions";

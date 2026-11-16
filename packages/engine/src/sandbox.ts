@@ -1,5 +1,5 @@
-import { AGENT_FOLDERS_PROTOCOL, type PubSub, type SandboxProvider } from "@agenteschat/adapters";
-import { type Database, eq, schema } from "@agenteschat/db";
+import { AGENT_FOLDERS_PROTOCOL, type PubSub, type SandboxProvider } from "@keepmind/adapters";
+import { type Database, eq, schema } from "@keepmind/db";
 import { getAgent, getAgentCached } from "./agents";
 import { recordAudit } from "./audit";
 import type { WorkspaceComputer } from "./context";

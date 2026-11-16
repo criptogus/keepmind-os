@@ -1,5 +1,5 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, type Database, eq, isNull, schema, sql } from "@agenteschat/db";
+import type { PubSub } from "@keepmind/adapters";
+import { and, type Database, eq, isNull, schema, sql } from "@keepmind/db";
 import { type MachineRow, publishMachineUpdated } from "./machines";
 import { recordWakeWanted } from "./operator-events";
 

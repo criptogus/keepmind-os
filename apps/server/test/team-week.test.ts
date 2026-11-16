@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, expect, test } from "bun:test";
-import { and, eq, schema } from "@agenteschat/db";
+import { and, eq, schema } from "@keepmind/db";
 import {
   IDLE_REASON,
   liveLodiSwitches,
@@ -7,7 +7,7 @@ import {
   proposeSettings,
   RIGHT_HAND,
   readLodiPrefs,
-} from "@agenteschat/engine";
+} from "@keepmind/engine";
 import { browser, createTestServer, joinByInvitation, seedOrg, signUp, type TestServer } from "./harness";
 
 /** Lodi's weekly card (ADR 0137 §9) over HTTP: my own schedule, and a row applied as me, never as someone else. */

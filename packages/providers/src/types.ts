@@ -1,6 +1,6 @@
 /**
  * Provider-neutral model interface. Only the Model Gateway
- * (`@agenteschat/engine`, `createModelGateway`) calls it: no other code talks
+ * (`@keepmind/engine`, `createModelGateway`) calls it: no other code talks
  * to a model, and API keys never leave the backend.
  */
 

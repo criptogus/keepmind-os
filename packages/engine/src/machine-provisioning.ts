@@ -1,7 +1,7 @@
 import { randomBytes } from "node:crypto";
-import type { PubSub } from "@agenteschat/adapters";
-import { and, asc, type Database, desc, type Executor, eq, inArray, isNull, schema, sql } from "@agenteschat/db";
-import { serverText } from "@agenteschat/i18n";
+import type { PubSub } from "@keepmind/adapters";
+import { and, asc, type Database, desc, type Executor, eq, inArray, isNull, schema, sql } from "@keepmind/db";
+import { serverText } from "@keepmind/i18n";
 import { type AiStatusDeps, orgHasAi } from "./ai-status";
 import { caches } from "./cache";
 import { decodeCursor, encodeCursor } from "./cursor";

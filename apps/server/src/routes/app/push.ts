@@ -8,7 +8,7 @@ import {
   stalePushNotifications,
   unregisterPushDevice,
   vapidKeys,
-} from "@agenteschat/engine";
+} from "@keepmind/engine";
 import { createRoute, z } from "@hono/zod-openapi";
 import { deviceAccountsOf, sessionOf } from "../../auth";
 import { apiError, errorResponse } from "../../http/errors";

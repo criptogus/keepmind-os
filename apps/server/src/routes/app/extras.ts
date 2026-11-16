@@ -1,4 +1,4 @@
-import type { PushSender } from "@agenteschat/adapters";
+import type { PushSender } from "@keepmind/adapters";
 import type {
   ArtifactDeps,
   BrowserLive,
@@ -17,7 +17,7 @@ import type {
   StreamBroker,
   Talker,
   VoiceDeps,
-} from "@agenteschat/engine";
+} from "@keepmind/engine";
 
 /**
  * Backend services the app API needs beyond the core deps (owned by the
@@ -60,7 +60,7 @@ export interface AppExtras {
   /** The installation's Jev key, for its owner's routes (ADR 0073); absent = those routes answer 404. */
   jevKey?: JevKey;
   /**
-   * The installation's GIPHY key, for its owner's routes (ADR 0091, amended 2026-10-31); absent (agentes.chat's own
+   * The installation's GIPHY key, for its owner's routes (ADR 0091, amended 2026-10-31); absent (KeepMind OS's own
    * servers) = those routes answer 404.
    */
   gifKey?: GifKey;

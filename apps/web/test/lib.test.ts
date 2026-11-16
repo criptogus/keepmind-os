@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { ApiError, handoffTimeLeft, type Me } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
+import { ApiError, handoffTimeLeft, type Me } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
 import {
   clockAt,
   dayLabel,
@@ -19,8 +19,8 @@ import {
   shortModel,
   timeLeft,
   whenAt,
-} from "@agenteschat/client/lib/format";
-import { agentGrammar, isFeminineName } from "@agenteschat/client/lib/grammar";
+} from "@keepmind/client/lib/format";
+import { agentGrammar, isFeminineName } from "@keepmind/client/lib/grammar";
 import {
   earlyAccessHeaders,
   earlyAccessState,
@@ -31,9 +31,9 @@ import {
   safeRedirect,
   settingUp,
   webUrl,
-} from "@agenteschat/client/lib/guards";
-import { ONBOARDING_STEPS, stepIndex } from "@agenteschat/client/lib/onboarding";
-import { can } from "@agenteschat/client/lib/permissions";
+} from "@keepmind/client/lib/guards";
+import { ONBOARDING_STEPS, stepIndex } from "@keepmind/client/lib/onboarding";
+import { can } from "@keepmind/client/lib/permissions";
 import {
   addressesIn,
   emailsFrom,
@@ -42,9 +42,9 @@ import {
   parseAmount,
   passwordState,
   slugify,
-} from "@agenteschat/client/lib/text";
-import { timeSpan } from "@agenteschat/client/lib/threads";
-import { en, ptBR } from "@agenteschat/i18n";
+} from "@keepmind/client/lib/text";
+import { timeSpan } from "@keepmind/client/lib/threads";
+import { en, ptBR } from "@keepmind/i18n";
 import type { TFunction } from "i18next";
 import { createBetterAuthClient } from "@/auth/better-auth";
 import { createI18n } from "@/i18n";

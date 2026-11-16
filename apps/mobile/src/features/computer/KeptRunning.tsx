@@ -1,5 +1,5 @@
-import { type Hold, useAgentHolds, useStopHold } from "@agenteschat/client";
-import { holdLine } from "@agenteschat/client/lib/holds";
+import { type Hold, useAgentHolds, useStopHold } from "@keepmind/client";
+import { holdLine } from "@keepmind/client/lib/holds";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useOrg } from "@/providers/org";

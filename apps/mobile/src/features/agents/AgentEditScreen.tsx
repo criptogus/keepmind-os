@@ -1,4 +1,4 @@
-import { useUpdateAgent } from "@agenteschat/client";
+import { useUpdateAgent } from "@keepmind/client";
 import {
   agentsReach,
   audienceModeKey,
@@ -7,13 +7,13 @@ import {
   modeOf,
   offersConsultable,
   reachShortKey,
-} from "@agenteschat/client/lib/audience";
-import { engineOfBrain } from "@agenteschat/client/lib/brain";
-import { FIELD_LIMITS } from "@agenteschat/client/lib/field-limits";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { cleanHandle, handleAfterRename, handleProblemText, takenHandles } from "@agenteschat/client/lib/new-agent";
-import { can } from "@agenteschat/client/lib/permissions";
-import { isRightHand } from "@agenteschat/client/lib/right-hand";
+} from "@keepmind/client/lib/audience";
+import { engineOfBrain } from "@keepmind/client/lib/brain";
+import { FIELD_LIMITS } from "@keepmind/client/lib/field-limits";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { cleanHandle, handleAfterRename, handleProblemText, takenHandles } from "@keepmind/client/lib/new-agent";
+import { can } from "@keepmind/client/lib/permissions";
+import { isRightHand } from "@keepmind/client/lib/right-hand";
 import { usePreventRemove } from "expo-router";
 import { useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

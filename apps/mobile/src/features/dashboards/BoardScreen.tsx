@@ -1,4 +1,4 @@
-import { busyWidgets } from "@agenteschat/client";
+import { busyWidgets } from "@keepmind/client";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, RefreshControl, StyleSheet, View } from "react-native";

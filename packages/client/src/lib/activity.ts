@@ -128,7 +128,7 @@ export type ActivityKind =
   | "readingConversation"
   | "usingTool";
 
-/** The computer's own permission check before a command (`PERMISSION_TOOL` in `@agenteschat/adapters`). */
+/** The computer's own permission check before a command (`PERMISSION_TOOL` in `@keepmind/adapters`). */
 export const PERMISSION_TOOL = "permission_prompt";
 
 export interface Activity {

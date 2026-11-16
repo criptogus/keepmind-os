@@ -1,8 +1,8 @@
-import type { ChannelMember } from "@agenteschat/client";
-import { canTalk } from "@agenteschat/client/lib/audience";
-import { everyoneSuggestion } from "@agenteschat/client/lib/everyone";
-import { mentionReaches } from "@agenteschat/client/lib/right-hand";
-import { Avatar, type ComposerSuggestion, Icon } from "@agenteschat/ui";
+import type { ChannelMember } from "@keepmind/client";
+import { canTalk } from "@keepmind/client/lib/audience";
+import { everyoneSuggestion } from "@keepmind/client/lib/everyone";
+import { mentionReaches } from "@keepmind/client/lib/right-hand";
+import { Avatar, type ComposerSuggestion, Icon } from "@keepmind/ui";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { AgentAvatar } from "@/components/AgentAvatar";

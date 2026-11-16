@@ -1,5 +1,5 @@
-import { type SearchHit, useSearch } from "@agenteschat/client";
-import { hitText } from "@agenteschat/client/lib/media";
+import { type SearchHit, useSearch } from "@keepmind/client";
+import { hitText } from "@keepmind/client/lib/media";
 import {
   groupHitsByPlace,
   SEARCH_HAS,
@@ -17,7 +17,7 @@ import {
   suggestActors,
   suggestPlaces,
   typingOperator,
-} from "@agenteschat/client/lib/search-filters";
+} from "@keepmind/client/lib/search-filters";
 import { useTranslation } from "react-i18next";
 import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 import Animated, { FadeIn, FadeOut, LayoutAnimationConfig, LinearTransition } from "react-native-reanimated";

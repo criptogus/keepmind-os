@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { light as lightTokens } from "@agenteschat/tokens";
+import { light as lightTokens } from "@keepmind/tokens";
 import { nextRoutine, sortWaiting, upcomingDay, waitingCardOf } from "../../src/features/activity/logic";
 import type { WorkItem } from "../../src/features/agents/logic";
 import type { ConversationRow } from "../../src/features/chats/logic";

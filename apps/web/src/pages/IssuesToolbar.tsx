@@ -1,4 +1,4 @@
-import type { Actor, Issue, IssuePriority, IssuesView } from "@agenteschat/client";
+import type { Actor, Issue, IssuePriority, IssuesView } from "@keepmind/client";
 import {
   ISSUE_CARD_FIELDS,
   ISSUES_GROUPS,
@@ -6,7 +6,7 @@ import {
   type IssuesViewChange,
   isDefaultIssuesView,
   PRIORITY_ORDER,
-} from "@agenteschat/client/lib/issues-view";
+} from "@keepmind/client/lib/issues-view";
 import {
   Button,
   Icon,
@@ -18,7 +18,7 @@ import {
   Popover,
   Segmented,
   Switch,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { type ReactNode, useId, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActorAvatar } from "@/components/AgentAvatar";

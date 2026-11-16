@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { and, eq, like, schema } from "@agenteschat/db";
-import { ProviderError } from "@agenteschat/providers";
+import { and, eq, like, schema } from "@keepmind/db";
+import { ProviderError } from "@keepmind/providers";
 import {
   askAgentToImplement,
   buildTeamDay,

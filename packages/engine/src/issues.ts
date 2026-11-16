@@ -1,4 +1,4 @@
-import { PERMISSION_TOOL, type PubSub } from "@agenteschat/adapters";
+import { PERMISSION_TOOL, type PubSub } from "@keepmind/adapters";
 import {
   and,
   asc,
@@ -13,8 +13,8 @@ import {
   type SQL,
   schema,
   sql,
-} from "@agenteschat/db";
-import { plainLine, plainLines } from "@agenteschat/ui/markdown";
+} from "@keepmind/db";
+import { plainLine, plainLines } from "@keepmind/ui/markdown";
 import { getAgent } from "./agents";
 import { audienceError, canTalkTo, speakerFor } from "./audience";
 import { recordAudit } from "./audit";

@@ -1,5 +1,5 @@
-import { isWorkAreaAnswer, WORK_AREA_ANSWERS } from "@agenteschat/client/lib/work-area";
-import { operatorListOrgs, operatorOrg, operatorUser } from "@agenteschat/engine";
+import { isWorkAreaAnswer, WORK_AREA_ANSWERS } from "@keepmind/client/lib/work-area";
+import { operatorListOrgs, operatorOrg, operatorUser } from "@keepmind/engine";
 import { createRoute, type OpenAPIHono, z } from "@hono/zod-openapi";
 import { apiError, errorResponse } from "../http/errors";
 import { iso, json, OrgParams } from "../routes/app/context";

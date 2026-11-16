@@ -1,4 +1,4 @@
-import type { ApiClient, NotificationCount, NotificationEvent, PushDeviceInput } from "@agenteschat/client";
+import type { ApiClient, NotificationCount, NotificationEvent, PushDeviceInput } from "@keepmind/client";
 import type { AuthClient } from "@/auth/client";
 import { inDesktopApp } from "./desktop";
 import { type PushOpen, pushOpenFrom } from "./push-open";

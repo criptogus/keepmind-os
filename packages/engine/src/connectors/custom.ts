@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
-import type { BlobStore } from "@agenteschat/adapters";
-import { and, asc, type Database, type Executor, eq, inArray, isNull, like, schema, sql } from "@agenteschat/db";
+import type { BlobStore } from "@keepmind/adapters";
+import { and, asc, type Database, type Executor, eq, inArray, isNull, like, schema, sql } from "@keepmind/db";
 import { recordAudit } from "../audit";
 import { caches } from "../cache";
 import { type ConnectorEventId, connectorEventsOf } from "../connector-triggers";
@@ -10,7 +10,7 @@ import type { Judge } from "../judge";
 import { oneLine } from "../mail/text";
 import { assertPublicHttpsUrl } from "../net-guard";
 import { can, requirePermission } from "../organizations";
-import { isAgentesCloud } from "../telemetry";
+import { isKeepMindCloud } from "../telemetry";
 import {
   classifyByRules,
   classifyTools,
@@ -192,7 +192,7 @@ export type CustomConnectStart =
   | { status: "connected"; server: CustomServerView; outcome: ConnectOutcome }
   | { status: "oauth"; authorizeUrl: string }
   /**
-   * `not_approved`: it has OAuth but only lets in apps it approved, and agentes.chat isn't one yet. `detail`: how it
+   * `not_approved`: it has OAuth but only lets in apps it approved, and KeepMind OS isn't one yet. `detail`: how it
    * refused our registration, in its own words (`error: error_description`, short).
    */
   | { status: "needs_key"; reason?: "not_approved"; detail?: string };
@@ -782,7 +782,7 @@ export async function connectCustomServer(
   if (apiKey) {
     if (apiKey.length < 8) throw new ValidationError("The key looks too short", "connector.key_too_short");
     // The vendor's terms forbid asking for a token: on the Cloud it signs in only (ADR 0107).
-    if (presetForServer(serverUrl)?.cloudOAuthOnly && isAgentesCloud(deps.publicUrl)) {
+    if (presetForServer(serverUrl)?.cloudOAuthOnly && isKeepMindCloud(deps.publicUrl)) {
       throw new ValidationError("This service connects by signing in", "connector.oauth_only");
     }
     return stored("api_key", { apiKey });

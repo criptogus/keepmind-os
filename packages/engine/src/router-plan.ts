@@ -1,5 +1,5 @@
-import { type AccountKind, isAccountKind, type PubSub, ROUTE_PROTOCOL, ROUTE_TIMEOUT_MS } from "@agenteschat/adapters";
-import { and, asc, type Database, type Executor, eq, isNotNull, isNull, schema } from "@agenteschat/db";
+import { type AccountKind, isAccountKind, type PubSub, ROUTE_PROTOCOL, ROUTE_TIMEOUT_MS } from "@keepmind/adapters";
+import { and, asc, type Database, type Executor, eq, isNotNull, isNull, schema } from "@keepmind/db";
 import { recordPlanUsage, toolOff } from "./brains/claude-code";
 import { publishChannelEvent } from "./events";
 import type { MachineCaller } from "./machine-hub";

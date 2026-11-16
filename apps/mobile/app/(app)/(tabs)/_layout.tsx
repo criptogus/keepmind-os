@@ -1,4 +1,4 @@
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import { NativeTabs } from "expo-router/native-tabs";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";

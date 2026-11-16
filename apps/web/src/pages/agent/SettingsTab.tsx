@@ -5,13 +5,13 @@ import {
   useModels,
   useSettings,
   useUsage,
-} from "@agenteschat/client";
-import { groupOf, NO_GROUP } from "@agenteschat/client/lib/agent-groups";
-import { audienceSummary } from "@agenteschat/client/lib/audience";
-import { engineOfBrain } from "@agenteschat/client/lib/brain";
-import { modelUnpriced } from "@agenteschat/client/lib/endpoints";
-import { formatMonth, formatPercent, formatTokensShort, formatUsd } from "@agenteschat/client/lib/format";
-import { addsAgentsTo } from "@agenteschat/client/lib/permissions";
+} from "@keepmind/client";
+import { groupOf, NO_GROUP } from "@keepmind/client/lib/agent-groups";
+import { audienceSummary } from "@keepmind/client/lib/audience";
+import { engineOfBrain } from "@keepmind/client/lib/brain";
+import { modelUnpriced } from "@keepmind/client/lib/endpoints";
+import { formatMonth, formatPercent, formatTokensShort, formatUsd } from "@keepmind/client/lib/format";
+import { addsAgentsTo } from "@keepmind/client/lib/permissions";
 import {
   type AgentAppearance,
   agentGradient,
@@ -27,7 +27,7 @@ import {
   randomAppearance,
   Select,
   SettingNote,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import type { CSSProperties, ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { AudienceChoice } from "@/components/AgentAudience";

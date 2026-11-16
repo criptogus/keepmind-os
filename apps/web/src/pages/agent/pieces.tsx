@@ -1,8 +1,8 @@
-import type { Channel, Run } from "@agenteschat/client";
-import { useChannels, useDms } from "@agenteschat/client";
-import { keeperKey } from "@agenteschat/client/lib/personal-view";
-import { modeKey } from "@agenteschat/client/lib/workspace-mode";
-import { Chip, Icon } from "@agenteschat/ui";
+import type { Channel, Run } from "@keepmind/client";
+import { useChannels, useDms } from "@keepmind/client";
+import { keeperKey } from "@keepmind/client/lib/personal-view";
+import { modeKey } from "@keepmind/client/lib/workspace-mode";
+import { Chip, Icon } from "@keepmind/ui";
 import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 import { AgentSpinner } from "@/components/AgentAvatar";

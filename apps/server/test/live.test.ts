@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, expect, test } from "bun:test";
-import { typingTopic } from "@agenteschat/adapters";
-import { schema } from "@agenteschat/db";
-import { consolidateItem } from "@agenteschat/engine";
+import { typingTopic } from "@keepmind/adapters";
+import { schema } from "@keepmind/db";
+import { consolidateItem } from "@keepmind/engine";
 import { parseClientFrame } from "../src/realtime/ws";
 import { browser, createTestServer, listen, ORIGIN, seedOrg, signUp, type TestServer } from "./harness";
 

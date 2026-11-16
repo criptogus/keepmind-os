@@ -1,4 +1,4 @@
-import type { Agent, AppNotification, Member, NotificationActor, NotificationFilter } from "@agenteschat/client";
+import type { Agent, AppNotification, Member, NotificationActor, NotificationFilter } from "@keepmind/client";
 import {
   dropNotification,
   keys,
@@ -13,17 +13,17 @@ import {
   useNotifications,
   useTaskConversation,
   useThreadMessages,
-} from "@agenteschat/client";
-import { approvalCardItems } from "@agenteschat/client/lib/approval-card";
-import { approvalOriginWords } from "@agenteschat/client/lib/approval-origin";
-import { appCreatedLine } from "@agenteschat/client/lib/apps";
-import { deviceNoticeOf } from "@agenteschat/client/lib/devices";
-import { errorText, restrictionLine } from "@agenteschat/client/lib/errors";
-import { daysBetween, formatShortDate, formatTime, namesText, timeLeft } from "@agenteschat/client/lib/format";
-import { agentGrammar, isFeminineName } from "@agenteschat/client/lib/grammar";
-import { plainLine } from "@agenteschat/client/lib/markdown";
-import { mediaKindOf, mediaWord, messageMediaOf, textOrMedia } from "@agenteschat/client/lib/media";
-import { latestText } from "@agenteschat/client/lib/message-body";
+} from "@keepmind/client";
+import { approvalCardItems } from "@keepmind/client/lib/approval-card";
+import { approvalOriginWords } from "@keepmind/client/lib/approval-origin";
+import { appCreatedLine } from "@keepmind/client/lib/apps";
+import { deviceNoticeOf } from "@keepmind/client/lib/devices";
+import { errorText, restrictionLine } from "@keepmind/client/lib/errors";
+import { daysBetween, formatShortDate, formatTime, namesText, timeLeft } from "@keepmind/client/lib/format";
+import { agentGrammar, isFeminineName } from "@keepmind/client/lib/grammar";
+import { plainLine } from "@keepmind/client/lib/markdown";
+import { mediaKindOf, mediaWord, messageMediaOf, textOrMedia } from "@keepmind/client/lib/media";
+import { latestText } from "@keepmind/client/lib/message-body";
 import {
   allItems,
   askersOf,
@@ -44,10 +44,10 @@ import {
   WIDGET_NOTICES,
   widgetNoticeOf,
   workspaceHeadline,
-} from "@agenteschat/client/lib/notifications";
-import { usageLimitLine } from "@agenteschat/client/lib/person-usage";
-import { routineNotificationWords } from "@agenteschat/client/lib/routine-view";
-import { secretNoticeLine } from "@agenteschat/client/lib/secret-requests";
+} from "@keepmind/client/lib/notifications";
+import { usageLimitLine } from "@keepmind/client/lib/person-usage";
+import { routineNotificationWords } from "@keepmind/client/lib/routine-view";
+import { secretNoticeLine } from "@keepmind/client/lib/secret-requests";
 import {
   Button,
   Chip,
@@ -69,7 +69,7 @@ import {
   prefersReducedMotion,
   Segmented,
   Spinner,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import type { TFunction } from "i18next";
 import {

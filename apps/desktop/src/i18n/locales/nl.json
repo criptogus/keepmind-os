@@ -231,7 +231,7 @@
     "approveStop": "Stoppen met wachten",
     "openTailscale": "Tailscale openen",
     "getTailscale": "Tailscale downloaden",
-    "usage": "Anonieme gebruiksstatistieken naar agentes.chat sturen",
+    "usage": "Anonieme gebruiksstatistieken naar KeepMind OS sturen",
     "usageText": "Aantallen zoals mensen, agents, machinegroottes, gebruikte AI-tokens en hoeveel data de browsers van de agents versturen en ontvangen. Nooit berichten, bestanden, namen of sites.",
     "start": "Beginnen",
     "setting": "Alles wordt klaargezet",

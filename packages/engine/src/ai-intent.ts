@@ -1,4 +1,4 @@
-import { isKnownProvider, PROVIDERS } from "@agenteschat/providers";
+import { isKnownProvider, PROVIDERS } from "@keepmind/providers";
 import { cutText } from "./format";
 import type { Judge, JudgeAnswer } from "./judge";
 

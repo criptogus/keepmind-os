@@ -100,16 +100,16 @@ describe("requester", () => {
 describe("transport options (the phone app)", () => {
   test("baseUrl prefixes every path, sends no browser cookie, and merges headers into JSON and file requests", async () => {
     const { fetch, calls } = fakeFetch({
-      "https://app.agentes.chat/api/app/me": { status: 200, body: { user: { id: "u1" } } },
-      "POST https://app.agentes.chat/api/app/organizations/o1/artifacts/files": {
+      "https://keepmind.io/api/app/me": { status: 200, body: { user: { id: "u1" } } },
+      "POST https://keepmind.io/api/app/organizations/o1/artifacts/files": {
         status: 201,
         body: { id: "a1", kind: "file" },
       },
-      "https://app.agentes.chat/api/app/organizations/o1/artifacts/a1/file": { status: 200, body: { raw: true } },
+      "https://keepmind.io/api/app/organizations/o1/artifacts/a1/file": { status: 200, body: { raw: true } },
     });
     let n = 0;
     const api = createHttpApi({
-      baseUrl: "https://app.agentes.chat/",
+      baseUrl: "https://keepmind.io/",
       fetch,
       headers: async () => ({ cookie: `session=${++n}`, "x-agentes-client": "mobile" }),
     });
@@ -117,9 +117,9 @@ describe("transport options (the phone app)", () => {
     await api.artifacts.upload("o1", new File(["x"], "a.txt", { type: "text/plain" }), { title: "a" });
     await api.artifacts.fileBlob("o1", "a1");
     expect(calls.map((c) => c.url)).toEqual([
-      "https://app.agentes.chat/api/app/me",
-      "https://app.agentes.chat/api/app/organizations/o1/artifacts/files",
-      "https://app.agentes.chat/api/app/organizations/o1/artifacts/a1/file",
+      "https://keepmind.io/api/app/me",
+      "https://keepmind.io/api/app/organizations/o1/artifacts/files",
+      "https://keepmind.io/api/app/organizations/o1/artifacts/a1/file",
     ]);
     for (const [i, c] of calls.entries()) {
       expect(c.init.credentials).toBe("omit");
@@ -129,7 +129,7 @@ describe("transport options (the phone app)", () => {
     }
     expect(((calls[0] as Call).init.headers as Record<string, string>).accept).toBe("application/json");
     expect(api.artifacts.fileUrl("o1", "a1")).toBe(
-      "https://app.agentes.chat/api/app/organizations/o1/artifacts/a1/file",
+      "https://keepmind.io/api/app/organizations/o1/artifacts/a1/file",
     );
   });
 
@@ -442,21 +442,21 @@ describe("HTTP client: drive, storage, issues, routines, calendar, custom MCP, i
     ]);
   });
 
-  test("the desktop app's newest build: the server's own, else agentes.chat's, asked without the cookie", async () => {
+  test("the desktop app's newest build: the server's own, else KeepMind OS's, asked without the cookie", async () => {
     const release = {
       version: "0.6.0",
-      url: "https://app.agentes.chat/api/desktop/download/0.6.0/agentes_0.6.0_x64-setup.exe",
+      url: "https://keepmind.io/api/desktop/download/0.6.0/agentes_0.6.0_x64-setup.exe",
       sha256: "ab",
       publishedAt: "t",
     };
     const { fetch, calls } = fakeFetch({
-      "GET https://app.agentes.chat/api/desktop/latest?target=windows&arch=x64": { status: 200, body: release },
+      "GET https://keepmind.io/api/desktop/latest?target=windows&arch=x64": { status: 200, body: release },
     });
     const api = createHttpApi({ fetch });
     expect(await api.machines.desktopLatest("windows", "x64")).toEqual(release);
     expect(calls.map((c) => [c.url, c.init.credentials])).toEqual([
       ["/api/desktop/latest?target=windows&arch=x64", "same-origin"],
-      ["https://app.agentes.chat/api/desktop/latest?target=windows&arch=x64", "omit"],
+      ["https://keepmind.io/api/desktop/latest?target=windows&arch=x64", "omit"],
     ]);
   });
 

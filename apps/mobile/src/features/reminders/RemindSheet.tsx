@@ -1,5 +1,5 @@
-import { ApiError, type Message, type ReminderInput, useReminderAction } from "@agenteschat/client";
-import { textOrMedia } from "@agenteschat/client/lib/media";
+import { ApiError, type Message, type ReminderInput, useReminderAction } from "@keepmind/client";
+import { textOrMedia } from "@keepmind/client/lib/media";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";

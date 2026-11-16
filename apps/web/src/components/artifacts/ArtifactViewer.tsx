@@ -1,4 +1,4 @@
-import type { ArtifactAuthor, ArtifactContent, ArtifactDetail, ArtifactRef } from "@agenteschat/client";
+import type { ArtifactAuthor, ArtifactContent, ArtifactDetail, ArtifactRef } from "@keepmind/client";
 import {
   keys,
   useArtifact,
@@ -6,12 +6,12 @@ import {
   useArtifactVersions,
   useChannels,
   useSaveArtifact,
-} from "@agenteschat/client";
-import { artifactText, KIND_ICON } from "@agenteschat/client/lib/artifacts";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { fileIcon, formatBytes, isPreviewImage, previewKind } from "@agenteschat/client/lib/files";
-import { keepWhole, relativeTime } from "@agenteschat/client/lib/format";
-import { filePath } from "@agenteschat/client/lib/message-links";
+} from "@keepmind/client";
+import { artifactText, KIND_ICON } from "@keepmind/client/lib/artifacts";
+import { errorText } from "@keepmind/client/lib/errors";
+import { fileIcon, formatBytes, isPreviewImage, previewKind } from "@keepmind/client/lib/files";
+import { keepWhole, relativeTime } from "@keepmind/client/lib/format";
+import { filePath } from "@keepmind/client/lib/message-links";
 import {
   Alert,
   Button,
@@ -26,7 +26,7 @@ import {
   Menu,
   MenuItem,
   Textarea,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { flushSync } from "react-dom";

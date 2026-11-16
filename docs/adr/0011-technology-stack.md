@@ -21,9 +21,9 @@
 
 ## Packages
 
-`@agenteschat/config` (env schema) · `db` (schema, migrations, client) · `adapters` (edition-swappable interfaces + core defaults) · `providers` (model provider interface, Anthropic, catalog, fake) · `modules` (`AgentesModule`) · `engine` (domain services, gateway, outbox, runs) · `server` (`apps/server`: HTTP, WebSocket, auth, workers, boot).
+`@keepmind/config` (env schema) · `db` (schema, migrations, client) · `adapters` (edition-swappable interfaces + core defaults) · `providers` (model provider interface, Anthropic, catalog, fake) · `modules` (`AgentesModule`) · `engine` (domain services, gateway, outbox, runs) · `server` (`apps/server`: HTTP, WebSocket, auth, workers, boot).
 
 ## Consequences
 
 - One process to self-host; no Next.js second process.
-- Import Drizzle operators from `@agenteschat/db`, never `drizzle-orm` directly (two copies break its types).
+- Import Drizzle operators from `@keepmind/db`, never `drizzle-orm` directly (two copies break its types).

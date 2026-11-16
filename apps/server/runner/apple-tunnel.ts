@@ -3,7 +3,7 @@ import { readFile, rm } from "node:fs/promises";
 import net from "node:net";
 import os from "node:os";
 import path from "node:path";
-import type { PhoneReason } from "@agenteschat/adapters/machine-protocol";
+import type { PhoneReason } from "@keepmind/adapters/machine-protocol";
 import { tunnelOf } from "./apple-devices";
 import { RunnerError } from "./errors";
 import { killTree } from "./exec";

@@ -1,7 +1,7 @@
-import type { HumanCheck, PubSub } from "@agenteschat/adapters";
-import type { Config } from "@agenteschat/config";
-import type { Database } from "@agenteschat/db";
-import { type MachineHub, type SessionScreening, safeEqual } from "@agenteschat/engine";
+import type { HumanCheck, PubSub } from "@keepmind/adapters";
+import type { Config } from "@keepmind/config";
+import type { Database } from "@keepmind/db";
+import { type MachineHub, type SessionScreening, safeEqual } from "@keepmind/engine";
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { apiError, domainErrorResponse, routeOf, validationHook } from "../http/errors";
 import type { Logger } from "../logger";
@@ -88,7 +88,7 @@ export function createOperatorApp(deps: OperatorDeps, token: string, readToken?:
   api.doc31("/openapi.json", {
     openapi: "3.1.0",
     info: {
-      title: "agentes.chat operator API",
+      title: "KeepMind OS operator API",
       version: deps.version,
       description:
         "Workspace and account lookups, what a run did and why a message started one or none, what a workspace connected, recorded, asked and scheduled, what a person was notified of and reaches, the messages no run answered, the job queue, the emails queued to an address and what model calls spent, workspace standing, billing holds and limits (ADR 0079), the events feed and review blocks, the workspaces' computers from an external provisioner, who may sign up (the waiting list and early-access invitations, ADR 0078), how new Claude sign-ins for all agents are made (ADR 0150), and how connectors are used (ADR 0103), for the people who run this instance (ADR 0056).",

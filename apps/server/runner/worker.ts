@@ -13,7 +13,7 @@ import {
   parseAccess,
   parsePause,
   type TurnContext,
-} from "@agenteschat/adapters/machine-protocol";
+} from "@keepmind/adapters/machine-protocol";
 import { realFoldersFor } from "./access";
 import { agentAccountHome, agentAccountsDir, grantOf, lentAccounts } from "./accounts";
 import { dropAgySignIns } from "./agy-home";
@@ -210,7 +210,7 @@ export class WorkerLink {
   private end(handlers: SocketHandlers | null) {
     if (!handlers || this.session !== handlers) return;
     this.session = null;
-    this.unanswered("The computer lost its connection to agentes.chat");
+    this.unanswered("The computer lost its connection to KeepMind OS");
     queueMicrotask(() => handlers.onClose(1000, ""));
   }
 

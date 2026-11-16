@@ -1,6 +1,6 @@
-import { markTerms } from "@agenteschat/client/lib/search-filters";
-import { isPersonal, modeKey } from "@agenteschat/client/lib/workspace-mode";
-import { type AgentPresetColor, gradientOf, mixHex } from "@agenteschat/ui/agent/engine";
+import { markTerms } from "@keepmind/client/lib/search-filters";
+import { isPersonal, modeKey } from "@keepmind/client/lib/workspace-mode";
+import { type AgentPresetColor, gradientOf, mixHex } from "@keepmind/ui/agent/engine";
 import { type NativeStackNavigationOptions, useIsFocused, useNavigation } from "expo-router";
 import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

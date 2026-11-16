@@ -1,4 +1,4 @@
-import { dayLabel } from "@agenteschat/client/lib/format";
+import { dayLabel } from "@keepmind/client/lib/format";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
 import Animated, { type SharedValue, useAnimatedStyle } from "react-native-reanimated";

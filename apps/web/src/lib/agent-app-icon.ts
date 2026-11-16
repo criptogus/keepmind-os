@@ -1,5 +1,5 @@
-import type { AgentAppearance } from "@agenteschat/ui";
-import { bodyTones, drawAccessory, drawAgent, inBody, toneAt } from "@agenteschat/ui/agent/engine";
+import type { AgentAppearance } from "@keepmind/ui";
+import { bodyTones, drawAccessory, drawAgent, inBody, toneAt } from "@keepmind/ui/agent/engine";
 
 /**
  * A workspace's agent as the app icon (ADR 0179): the Night icon's sky (`/app-icons/night-sky.png`, written by

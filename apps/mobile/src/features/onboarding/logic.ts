@@ -1,7 +1,7 @@
-import type { WorkspaceMode } from "@agenteschat/client";
-import { knownErrorText } from "@agenteschat/client/lib/errors";
-import { platformZoneName } from "@agenteschat/client/lib/routines";
-import { webmailOf } from "@agenteschat/client/lib/text";
+import type { WorkspaceMode } from "@keepmind/client";
+import { knownErrorText } from "@keepmind/client/lib/errors";
+import { platformZoneName } from "@keepmind/client/lib/routines";
+import { webmailOf } from "@keepmind/client/lib/text";
 import type { TFunction } from "i18next";
 
 /**
@@ -9,7 +9,7 @@ import type { TFunction } from "i18next";
  * right hand; then its DM (ADR 0137). Pure: no React Native imports.
  */
 
-/** The two answers to "What will you use agentes.chat for?" (ADR 0159), in this order. */
+/** The two answers to "What will you use KeepMind OS for?" (ADR 0159), in this order. */
 export const PURPOSES = ["personal", "team"] as const satisfies readonly WorkspaceMode[];
 
 /**

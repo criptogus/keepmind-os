@@ -106,7 +106,7 @@ export const defaultDatabasePolicy = (connection?: Pick<DatabaseConnection, "sug
 /** The time limits people can pick, in seconds. */
 export const DATABASE_TIMEOUTS = [15, 30, 60] as const;
 
-// Rule names (`schema.table`, `schema.table.column`) as SQL, mirrored from `@agenteschat/engine`'s
+// Rule names (`schema.table`, `schema.table.column`) as SQL, mirrored from `@keepmind/engine`'s
 // `databases/identifiers.ts` (`apps/server/test/database-identifiers.test.ts` keeps the two the same).
 const PLAIN = /^[a-z_][a-z0-9_$]*$/;
 

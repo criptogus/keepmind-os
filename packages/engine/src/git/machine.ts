@@ -10,8 +10,8 @@ import {
   type GitSyncRequest,
   gitCheckoutDir,
   isGitRepoName,
-} from "@agenteschat/adapters";
-import { and, type Database, eq, isNull, schema } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { and, type Database, eq, isNull, schema } from "@keepmind/db";
 import { getAgentCached } from "../agents";
 import { recordAudit } from "../audit";
 import { activeConnections } from "../connectors/connections";
@@ -117,7 +117,7 @@ export async function machineGitSetup(
   return {
     proxy: { base: gitProxyBase(deps.git.publicUrl, orgId, connection.id), token },
     author: bot
-      ? { name: `${agent.name} (agentes.chat)`, email: bot.email }
+      ? { name: `${agent.name} (KeepMind OS)`, email: bot.email }
       : { name: `${agent.name} (agentes)`, email: agentCommitEmail(deps.git.publicUrl, agent.handle) },
     agent: scope ?? { id: agent.id, handle: agent.handle, name: agent.name },
   };

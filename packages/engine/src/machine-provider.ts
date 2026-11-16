@@ -16,7 +16,7 @@ import {
   SECRETS_PROTOCOL,
   VAULT_PASSWORD_PROTOCOL,
   VAULT_PROTOCOL,
-} from "@agenteschat/adapters";
+} from "@keepmind/adapters";
 import { ARTIFACT_LIMITS } from "./artifacts";
 import { ToolOffError } from "./errors";
 import { type MachineCaller, MachineRequestError, type MachineStatus } from "./machine-hub";

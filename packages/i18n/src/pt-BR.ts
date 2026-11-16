@@ -7,10 +7,44 @@ import type { LocaleStrings } from "./plurals";
  * no exclamation marks, buttons start with a verb, "agentes" in lower case.
  */
 export const ptBR = {
+  "zero.manageConnection": "Gerenciar conexão",
+  "zero.products": "Produtos Zero Agency",
+  "zero.notFound": "Esta área não existe. Abra Skills, Second Brain ou Cybersegurança pelo menu Mais.",
+  "zero.optional": "Opcional · conecte quando precisar",
+  "zero.needsAI": "Conecte a IA do Kivo para delegar esta preparação.",
+  "zero.configureAI": "Configurar IA",
+  "zero.sending": "Enviando objetivo…",
+  "zero.progress": "O Kivo conduz o trabalho no chat, mostra os bloqueios e pede apenas as decisões necessárias.",
+  "zero.skills.title": "Skills",
+  "zero.skills.intro": "Conhecimento prático para seus agentes. Encontre, aplique e aprimore suas skills.",
+  "zero.skills.help": "Use suas skills normalmente. Se quiser avaliá-las e aprimorá-las com o SuperAgentSkill, conecte sua conta. Abra uma skill e escolha Melhorar com IA para revisar a proposta antes de aplicar.",
+  "zero.skills.connect": "Conectar SuperAgentSkill",
+  "zero.skills.visit": "Explorar o catálogo",
+  "zero.brain.title": "Second Brain",
+  "zero.brain.intro": "Memórias e decisões que continuam úteis depois da conversa.",
+  "zero.brain.goal": "Escolha onde seu conhecimento vai viver",
+  "zero.brain.help": "Mantenha as memórias do workspace ou prepare um Second Brain versionado em um repositório privado do GitHub. Para um cofre próprio, peça a instalação do KeepMind SB.",
+  "zero.brain.context": "Nome do repositório ou contexto (opcional)",
+  "zero.brain.placeholder": "keepmind-brain",
+  "zero.brain.boundary": "Nada é exportado automaticamente. Você aprova o repositório ou a instalação antes da execução. Memórias pessoais e de equipe preservam acessos separados.",
+  "zero.brain.start": "Preparar no GitHub",
+  "zero.brain.install": "Preparar instalação KeepMind SB",
+  "zero.brain.download": "Baixar schema",
+  "zero.cyber.title": "Cybersegurança",
+  "zero.cyber.intro": "Um time dedicado a entender riscos e acompanhar correções, com evidências.",
+  "zero.cyber.goal": "Prepare seu time de Cybersec",
+  "zero.cyber.help": "O Kivo verifica a conexão e o plano pago da Liquid, prepara os agentes e propõe o escopo. Se a assinatura não puder ser verificada, a ativação fica pendente.",
+  "zero.cyber.context": "Produto ou sistema que quer proteger",
+  "zero.cyber.placeholder": "Meu aplicativo e seus repositórios",
+  "zero.cyber.boundary": "Requer plano pago ativo na Liquid Cybersec. Não contratamos planos aqui. Criar o time não inicia testes: alvos, acessos e consumo de créditos exigem autorização.",
+  "zero.cyber.start": "Preparar meu time",
+  "zero.cyber.connect": "Conectar Liquid Cybersec",
+  "zero.cyber.plans": "Conhecer os planos",
+
   "keepmind.connect.githubSetup":
     "Conecte pelo navegador, sem copiar tokens. Na primeira vez, o GitHub cria o app KeepMind na sua conta; depois você escolhe os repositórios e autoriza o acesso.",
   "keepmind.connect.oauthSetup":
-    "{{name}} oferece OAuth, mas ele ainda não foi configurado neste servidor. O responsável pelo servidor precisa habilitá-lo. Enquanto isso, a chave é uma alternativa manual.",
+    "{{name}} oferece OAuth, mas ele ainda não foi configurado neste servidor. O responsável pelo servidor precisa habilitá-lo. Enquanto isso, a chave de API é uma alternativa manual.",
   "keepmind.connect.prepareGitHub": "Configurar conexão no GitHub",
   "keepmind.ai.manualKey": "Já tenho uma chave de API",
   "keepmind.ai.localTitle": "Conectar um modelo local ou outro provedor",
@@ -78,7 +112,7 @@ export const ptBR = {
       "Revise a skill {{name}} (v{{version}}), usando o SuperAgentSkill se disponível. Preserve suas capacidades e controles de acesso. {{goal}} Prepare uma proposta completa para minha aprovação antes de aplicar qualquer mudança. Explique as mudanças e mostre o cartão de aprovação. Não publique nada.",
   },
   app: {
-    name: "agentes",
+    name: "KeepMind OS",
     /** The browser tab's title on every screen that doesn't set its own. */
     tabTitle: "KeepMind OS · Seu time e seus agentes, na mesma conversa",
   },
@@ -622,7 +656,7 @@ export const ptBR = {
     recommended: "Recomendado",
     free: "Grátis · código aberto",
     cloud: {
-      name: "agentes.chat Cloud",
+      name: "KeepMind OS Cloud",
       short: "Sempre ligado, sem nada para instalar.",
       on: "Computador dos agentes sempre ligado",
       care: "Atualizações e backups por nossa conta",
@@ -801,7 +835,7 @@ export const ptBR = {
     server: {
       into: "Entrando em <b>{{server}}</b>",
       intoHere: "Entrando no KeepMind OS <b>deste {{device}}</b>",
-      intoCloud: "Entrando no <b>agentes.chat Cloud</b>",
+      intoCloud: "Entrando no <b>KeepMind OS Cloud</b>",
       /** Trocar's name for screen readers: the e-mail's Trocar sits on the same screen. */
       change: "Trocar de servidor",
     },
@@ -1306,7 +1340,7 @@ export const ptBR = {
           "Conectar com MCP fica desligado enquanto este workspace está pausado. Por enquanto, traga os agentes por aqui.",
       },
       otherName: "Outro app",
-      agenteschatName: "agentes.chat",
+      agenteschatName: "keepmind.io",
       where: {
         openbotrun:
           "Solte o openbot-import.json (do Migrator by OpenBot) ou o openbot-transfer.json (da transferência da instância), ou o .zip em que ele veio.",
@@ -5703,7 +5737,7 @@ export const ptBR = {
     noInstructions_female: "A {{name}} ainda não tem instruções. Diga como deve trabalhar.",
     savedToast: "Alterações do {{name}} salvas.",
     savedToast_female: "Alterações da {{name}} salvas.",
-    builtinName: "agentes",
+    builtinName: "KeepMind",
     builtinNote: "permissões embutidas",
     connectHint: "Conectar serviços",
     subtitle: "{{role}} · de <b>{{owner}}</b> · {{model}} {{key}}",
@@ -16010,7 +16044,7 @@ export const ptBR = {
     },
     telemetry: {
       title: "Estatísticas de uso",
-      label: "Enviar estatísticas de uso anônimas ao agentes.chat",
+      label: "Enviar estatísticas de uso anônimas ao KeepMind OS",
       help: "Contagens como pessoas, agentes, tamanho das máquinas, tokens de IA usados e o volume de dados que os navegadores dos agentes enviam e recebem. Nunca mensagens, arquivos, nomes ou sites.",
       envOff: "Desligado nas configurações deste servidor (TELEMETRY=off).",
       envOffDesktop:
@@ -16408,7 +16442,7 @@ export const ptBR = {
   },
   gallery: {
     title: "Galeria de componentes",
-    subtitle: "Só em desenvolvimento: os componentes de @agenteschat/ui.",
+    subtitle: "Só em desenvolvimento: os componentes de @keepmind/ui.",
   },
   format: {
     list: "{{names, list}}",
@@ -17995,7 +18029,7 @@ export const ptBR = {
       teamReady: "Seu time está pronto. Falta um plano do KeepMind OS para ele começar.",
       invites: "Os convites abrem com o plano do KeepMind OS.",
     },
-    /** agentes.chat Cloud only: what the restriction is, the Terms section and how to contest it (`restrictionLine`). */
+    /** KeepMind OS Cloud only: what the restriction is, the Terms section and how to contest it (`restrictionLine`). */
     cloud: {
       review:
         "Pausado para uma análise de segurança, até a nossa equipe olhar o caso. As nossas verificações automáticas detectaram uma atividade que pode violar os nossos Termos (seção 5). Para contestar, escreva para {{email}}.",
@@ -18430,7 +18464,7 @@ export const ptBR = {
       notice: "Os programas do computador do {{name}} veem a tela e o que você digita ou cola.",
       notice_female: "Os programas do computador da {{name}} veem a tela e o que você digita ou cola.",
     },
-    /** The ⓘ beside the control line, on agentes.chat Cloud only (ADR 0076). */
+    /** The ⓘ beside the control line, on KeepMind OS Cloud only (ADR 0076). */
     session: {
       check: "Verificações de segurança",
       screening:
@@ -19767,7 +19801,7 @@ export const ptBR = {
     mark: "Beta",
     open: "Enviar feedback",
     ask: "O que faltou, quebrou ou incomodou?",
-    goesCloud: "O que você escrever vai por e-mail para o time do agentes.chat.",
+    goesCloud: "O que você escrever vai por e-mail para o time do KeepMind OS.",
     goesServer: "O que você escrever vai por e-mail para quem administra este servidor.",
     placeholder: "Escreva do seu jeito",
     report: "Reportar um problema aqui",
@@ -19793,14 +19827,14 @@ export const ptBR = {
     offer: {
       group: "Relato sobre o app",
       ready: "<b>Relato pronto</b>: {{summary}}",
-      goesCloud: "Vai no seu nome para o time do agentes.chat",
+      goesCloud: "Vai no seu nome para o time do KeepMind OS",
       goesServer: "Vai no seu nome para quem administra este servidor",
       see: "Ver o relato",
       hide: "Fechar o relato",
       send: "Enviar",
       notNow: "Agora não",
       answer: "A resposta chega no seu e-mail.",
-      sentCloud: "<b>Relato enviado</b> para o time do agentes.chat",
+      sentCloud: "<b>Relato enviado</b> para o time do KeepMind OS",
       sentServer: "<b>Relato enviado</b> para quem administra este servidor",
       sentAuto: "<b>Relato enviado sem perguntar</b>: {{summary}}",
       view: "Ver",

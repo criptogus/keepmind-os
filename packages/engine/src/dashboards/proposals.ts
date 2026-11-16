@@ -1,4 +1,4 @@
-import { and, eq, inArray, isNull, schema } from "@agenteschat/db";
+import { and, eq, inArray, isNull, schema } from "@keepmind/db";
 import { ConflictError, ForbiddenError, NotFoundError, ValidationError } from "../errors";
 import { notifyDashboardProposal, resolveDashboardProposal } from "../notification-producers";
 import { requireDashboard } from "./access";

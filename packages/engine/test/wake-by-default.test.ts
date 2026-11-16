@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, setDefaultTimeout, test } from "bun:test";
-import { asc, eq, schema } from "@agenteschat/db";
-import { type ModelRequest, systemText } from "@agenteschat/providers";
+import { asc, eq, schema } from "@keepmind/db";
+import { type ModelRequest, systemText } from "@keepmind/providers";
 import {
   addChannelMember,
   createAgent,

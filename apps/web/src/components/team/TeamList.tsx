@@ -1,8 +1,8 @@
-import type { AgentGroup, Team, TeamAgent } from "@agenteschat/client";
-import { useApprovals, useRoles } from "@agenteschat/client";
-import { agentSections } from "@agenteschat/client/lib/agent-groups";
-import { can } from "@agenteschat/client/lib/permissions";
-import { filterTeam, sortTeam, type TeamFilter, type TeamSort } from "@agenteschat/client/lib/team-views";
+import type { AgentGroup, Team, TeamAgent } from "@keepmind/client";
+import { useApprovals, useRoles } from "@keepmind/client";
+import { agentSections } from "@keepmind/client/lib/agent-groups";
+import { can } from "@keepmind/client/lib/permissions";
+import { filterTeam, sortTeam, type TeamFilter, type TeamSort } from "@keepmind/client/lib/team-views";
 import {
   Button,
   Card,
@@ -15,7 +15,7 @@ import {
   TabPanel,
   Tabs,
   Toolbar,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { Link } from "@tanstack/react-router";
 import { Fragment, type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";

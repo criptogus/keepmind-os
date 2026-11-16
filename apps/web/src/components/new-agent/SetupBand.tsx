@@ -1,8 +1,8 @@
-import type { Agent } from "@agenteschat/client";
-import { useCatalog } from "@agenteschat/client";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { connectorName } from "@agenteschat/client/lib/scopes";
-import { Icon, ProviderLogo, playAgentReaction, prefersReducedMotion } from "@agenteschat/ui";
+import type { Agent } from "@keepmind/client";
+import { useCatalog } from "@keepmind/client";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { connectorName } from "@keepmind/client/lib/scopes";
+import { Icon, ProviderLogo, playAgentReaction, prefersReducedMotion } from "@keepmind/ui";
 import { type CSSProperties, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { AgentAvatar } from "@/components/AgentAvatar";

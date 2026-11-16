@@ -1,5 +1,5 @@
-import type { ConnectorDef } from "@agenteschat/client";
-import { type AgentPresetColor, gradientOf, mixHex } from "@agenteschat/ui/agent/engine";
+import type { ConnectorDef } from "@keepmind/client";
+import { type AgentPresetColor, gradientOf, mixHex } from "@keepmind/ui/agent/engine";
 import { Image } from "expo-image";
 import { useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";

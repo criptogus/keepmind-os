@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
-import { limitIp } from "@agenteschat/adapters";
-import { loadConfig } from "@agenteschat/config";
+import { limitIp } from "@keepmind/adapters";
+import { loadConfig } from "@keepmind/config";
 import { clientIp } from "../src/http/client-ip";
 
 test("a public client behind a proxy that appends its own internal hop", () => {

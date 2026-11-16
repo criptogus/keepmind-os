@@ -3,8 +3,8 @@
  * or gave to a command, a line in the audit log. Never the value. A login's
  * place is kept as its origin only: a page's path or query may carry a token.
  */
-import { vaultOrigin } from "@agenteschat/adapters";
-import { and, desc, type Executor, eq, inArray, type SQL, schema, sql } from "@agenteschat/db";
+import { vaultOrigin } from "@keepmind/adapters";
+import { and, desc, type Executor, eq, inArray, type SQL, schema, sql } from "@keepmind/db";
 import { recordAudit } from "../audit";
 import { UUID } from "../authority";
 import { type VaultRunPerson, vaultPersonOfRun } from "./access";

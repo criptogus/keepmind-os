@@ -3,8 +3,8 @@
  * (Folders, Tools, Activity, Advanced). Everything about this computer acts through the runners; nothing is
  * granted from the site.
  */
-import { CLOUD_SERVER } from "@agenteschat/client/lib/server";
-import { CountChip, Icon, type IconName } from "@agenteschat/ui";
+import { CLOUD_SERVER } from "@keepmind/client/lib/server";
+import { CountChip, Icon, type IconName } from "@keepmind/ui";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHost, useSnapshot } from "../app";
@@ -64,7 +64,7 @@ export function Prefs() {
 
   const homes = pairedHomes(snap);
   const works = homes.length > 0;
-  const machine = homes.find((h) => h.status?.machine)?.status?.machine?.name ?? "agentes.chat";
+  const machine = homes.find((h) => h.status?.machine)?.status?.machine?.name ?? "keepmind.io";
   const folderCount = homes.reduce((n, h) => n + (h.access?.folders.length ?? 0), 0);
   // A tab of this computer asked for while no agents work here: General instead.
   const shown: PrefTab = works || !DEVICE_TABS.some((d) => d.id === tab) ? tab : "general";
@@ -88,7 +88,7 @@ export function Prefs() {
         <div className="dk-pnav__who">
           {works ? <MacPortrait state={macStateOf(homes)} /> : <BrandFace size="md" />}
           <span className="dk-pnav__whotext">
-            <b>{works ? machine : "agentes.chat"}</b>
+            <b>{works ? machine : "keepmind.io"}</b>
             <small>
               {works
                 ? t("desktop.orgCount", { count: homes.length })

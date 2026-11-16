@@ -1,7 +1,7 @@
-import { type ComputerDevice, useWifiIphones } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { computerKind } from "@agenteschat/client/lib/machines";
-import { can } from "@agenteschat/client/lib/permissions";
+import { type ComputerDevice, useWifiIphones } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { computerKind } from "@keepmind/client/lib/machines";
+import { can } from "@keepmind/client/lib/permissions";
 import { useTranslation } from "react-i18next";
 import { useOrg } from "@/providers/org";
 import { Button, GroupedFooter, GroupedHeader, GroupedList, GroupedRow, useToast } from "@/ui";

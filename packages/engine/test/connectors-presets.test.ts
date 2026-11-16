@@ -50,7 +50,7 @@ describe("one-click MCP connectors", () => {
     for (const [id, auth] of ways) expect([id, auth]).toEqual([id, "managed"]);
   });
 
-  test("vendors that refuse agentes.chat until they approve it stay listed as `soon`: greyed out, not connectable", () => {
+  test("vendors that refuse KeepMind OS until they approve it stay listed as `soon`: greyed out, not connectable", () => {
     expect(
       MCP_PRESETS.filter((p) => p.soon)
         .map((p) => p.id)

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import type { ActivityEntry } from "@agenteschat/adapters/runner-control";
+import type { ActivityEntry } from "@keepmind/adapters/runner-control";
 import i18next from "i18next";
 import { groupByDay, hasMore, homesToFetch, mergePages, saidText, startCursor } from "../src/control/activity";
 import { desktopEn } from "../src/i18n/keys.en";

@@ -7,8 +7,8 @@
  * The same login twice (same scope, website and username): the same password is skipped as a duplicate, another one
  * replaces the saved password. Within one file the first row wins.
  */
-import { MAX_SECRET_BYTES, vaultOrigin } from "@agenteschat/adapters";
-import { and, eq, isNull, schema } from "@agenteschat/db";
+import { MAX_SECRET_BYTES, vaultOrigin } from "@keepmind/adapters";
+import { and, eq, isNull, schema } from "@keepmind/db";
 import { recordAudit } from "../audit";
 import { ConflictError, ValidationError } from "../errors";
 import { publishVaultChanged } from "../events";

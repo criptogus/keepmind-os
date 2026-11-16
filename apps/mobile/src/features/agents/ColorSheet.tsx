@@ -6,7 +6,7 @@ import {
   hsvToHex,
   isHexColor,
   pickerStart,
-} from "@agenteschat/ui/agent/engine";
+} from "@keepmind/ui/agent/engine";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

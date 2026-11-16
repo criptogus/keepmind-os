@@ -7,8 +7,8 @@ import {
   STREAM_CLOSE,
   STREAM_LIMITS,
   type StreamRequest,
-} from "@agenteschat/adapters";
-import { and, type Database, eq, gt, inArray, isNull, schema } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { and, type Database, eq, gt, inArray, isNull, schema } from "@keepmind/db";
 import { recordAudit } from "./audit";
 import {
   agentUsesScreen,

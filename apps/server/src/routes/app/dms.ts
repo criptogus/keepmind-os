@@ -1,4 +1,4 @@
-import { dmReads, listDms, markChannelRead, openDm, setChannelMuted } from "@agenteschat/engine";
+import { dmReads, listDms, markChannelRead, openDm, setChannelMuted } from "@keepmind/engine";
 import { createRoute, z } from "@hono/zod-openapi";
 import {
   type AppDeps,

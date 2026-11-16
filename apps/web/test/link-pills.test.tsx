@@ -1,5 +1,5 @@
 import { afterEach, beforeAll, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
@@ -13,7 +13,7 @@ import { createI18n } from "@/i18n";
 beforeAll(() => createI18n("pt-BR"));
 afterEach(() => cleanup());
 
-const PR = "https://github.com/agentes-chat/agentes.chat/pull/148";
+const PR = "https://github.com/agentes-chat/keepmind-os/pull/148";
 const body = (text: string) => render(<MessageBody body={text} />).container;
 const anchor = (el: Element) => el.querySelector("a") as HTMLAnchorElement;
 
@@ -21,7 +21,7 @@ describe("a bare address of a known service", () => {
   test("is a pill: the logo and a short label, still an ordinary link to the full address", () => {
     const a = anchor(body(`Abri o ${PR} para revisão.`));
     expect(a.className).toContain("channel-ref");
-    expect(a.textContent).toBe("agentes.chat #148");
+    expect(a.textContent).toBe("KeepMind OS #148");
     expect(a.getAttribute("href")).toBe(PR);
     expect(a.getAttribute("title")).toBe(PR);
     expect(a.getAttribute("target")).toBe("_blank");
@@ -34,10 +34,10 @@ describe("a bare address of a known service", () => {
 
   test("a pull request and an issue tell which they are by icon, and to a screen reader by name", () => {
     const pull = anchor(body(PR));
-    const issue = anchor(body("https://github.com/agentes-chat/agentes.chat/issues/148"));
+    const issue = anchor(body("https://github.com/agentes-chat/keepmind-os/issues/148"));
     expect(pull.querySelector("svg")?.innerHTML).not.toBe(issue.querySelector("svg")?.innerHTML);
-    expect(pull.getAttribute("aria-label")).toBe("GitHub Pull request agentes.chat #148");
-    expect(issue.getAttribute("aria-label")).toBe("GitHub Issue agentes.chat #148");
+    expect(pull.getAttribute("aria-label")).toBe("GitHub Pull request KeepMind OS #148");
+    expect(issue.getAttribute("aria-label")).toBe("GitHub Issue KeepMind OS #148");
   });
 
   test("with no title in the address, a word in the reader's language", () => {
@@ -59,13 +59,13 @@ describe("a bare address of a known service", () => {
   });
 
   test("a link whose words are another address stays as written, with no pill inside it", () => {
-    const el = body(`[${PR}](https://github.com/agentes-chat/agentes.chat/pull/9)`);
+    const el = body(`[${PR}](https://github.com/agentes-chat/keepmind-os/pull/9)`);
     expect(el.querySelector(".link-pill")).toBeNull();
     expect(el.textContent).toContain(PR);
   });
 
   test("written as its own link's words, it is still a bare address", () => {
-    expect(anchor(body(`[${PR}](${PR})`)).textContent).toBe("agentes.chat #148");
+    expect(anchor(body(`[${PR}](${PR})`)).textContent).toBe("KeepMind OS #148");
   });
 
   test("in a table its words keep their column: only a word too long for the line breaks", () => {
@@ -83,11 +83,11 @@ describe("copying a selection with a pill", () => {
 
   test("each pill's words become its address, in order", () => {
     const pills = [
-      one("agentes.chat #1", "https://github.com/a/agentes.chat/pull/1"),
-      one("agentes.chat #2", "https://github.com/a/agentes.chat/pull/2"),
+      one("KeepMind OS #1", "https://github.com/a/keepmind-os/pull/1"),
+      one("KeepMind OS #2", "https://github.com/a/keepmind-os/pull/2"),
     ];
-    expect(withPillAddresses("ver agentes.chat #1 e agentes.chat #2.", pills)).toBe(
-      "ver https://github.com/a/agentes.chat/pull/1 e https://github.com/a/agentes.chat/pull/2.",
+    expect(withPillAddresses("ver KeepMind OS #1 e KeepMind OS #2.", pills)).toBe(
+      "ver https://github.com/a/keepmind-os/pull/1 e https://github.com/a/keepmind-os/pull/2.",
     );
   });
 

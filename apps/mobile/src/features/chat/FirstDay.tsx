@@ -1,7 +1,7 @@
-import { type Agent, useMe } from "@agenteschat/client";
-import { firstName } from "@agenteschat/client/lib/format";
-import { playSound } from "@agenteschat/client/lib/sounds";
-import { modeKey } from "@agenteschat/client/lib/workspace-mode";
+import { type Agent, useMe } from "@keepmind/client";
+import { firstName } from "@keepmind/client/lib/format";
+import { playSound } from "@keepmind/client/lib/sounds";
+import { modeKey } from "@keepmind/client/lib/workspace-mode";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, StyleSheet, View } from "react-native";

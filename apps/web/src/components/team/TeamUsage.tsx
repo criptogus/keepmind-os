@@ -1,5 +1,5 @@
-import { can } from "@agenteschat/client/lib/permissions";
-import { Icon } from "@agenteschat/ui";
+import { can } from "@keepmind/client/lib/permissions";
+import { Icon } from "@keepmind/ui";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { useOrg } from "@/components/org-context";

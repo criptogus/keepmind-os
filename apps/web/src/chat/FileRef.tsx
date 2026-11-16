@@ -1,8 +1,8 @@
-import { type ArtifactKind, useArtifact } from "@agenteschat/client";
-import { KIND_ICON } from "@agenteschat/client/lib/artifacts";
-import { fileIcon } from "@agenteschat/client/lib/files";
-import { type FileLink, filePath } from "@agenteschat/client/lib/message-links";
-import { Icon } from "@agenteschat/ui";
+import { type ArtifactKind, useArtifact } from "@keepmind/client";
+import { KIND_ICON } from "@keepmind/client/lib/artifacts";
+import { fileIcon } from "@keepmind/client/lib/files";
+import { type FileLink, filePath } from "@keepmind/client/lib/message-links";
+import { Icon } from "@keepmind/ui";
 import { useTranslation } from "react-i18next";
 import { useMaybeArtifactViewer } from "@/components/artifacts/ArtifactViewer";
 import { useOrg } from "@/components/org-context";

@@ -2,7 +2,7 @@
  * Three rules for the public repository, run in CI via `bun run check:boundaries`:
  *
  * - The edition boundary (docs/adr/0002-editions-and-modules.md): open-source code under apps/ and
- *   packages/ must never import a Cloud-only package (`@agenteschat/cloud`) or an `@agenteschat/ee` module.
+ *   packages/ must never import a Cloud-only package (`@keepmind/cloud`) or an `@keepmind/ee` module.
  * - No private files: nothing under PRIVATE_PATHS may be tracked here.
  * - No internal notes: every file is public, comments included, so none may point at the maintainers'
  *   private docs (planning decision ids, progress logs, prototype screens) or name the team's other
@@ -104,7 +104,7 @@ if (import.meta.main) {
   for (const pkgFile of ["apps", "packages"].flatMap((d) => [...new Glob(`${d}/*/package.json`).scanSync()])) {
     const pkg = await Bun.file(pkgFile).json();
     const deps = { ...pkg.dependencies, ...pkg.devDependencies, ...pkg.peerDependencies };
-    for (const name of ["@agenteschat/cloud", "@agenteschat/ee"]) {
+    for (const name of ["@keepmind/cloud", "@keepmind/ee"]) {
       if (name in deps) violations.push(`${pkgFile}: depends on ${name}`);
     }
   }

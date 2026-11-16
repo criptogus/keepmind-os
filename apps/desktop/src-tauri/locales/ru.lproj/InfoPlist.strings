@@ -1,4 +1,4 @@
-"NSMicrophoneUsageDescription" = "agentes.chat использует микрофон для записи голосовых сообщений.";
+"NSMicrophoneUsageDescription" = "KeepMind OS использует микрофон для записи голосовых сообщений.";
 "NSDesktopFolderUsageDescription" = "Позволяет агентам, работающим на этом Mac, открывать файлы на Рабочем столе.";
 "NSDocumentsFolderUsageDescription" = "Позволяет агентам, работающим на этом Mac, открывать файлы в папке «Документы».";
 "NSDownloadsFolderUsageDescription" = "Позволяет агентам, работающим на этом Mac, открывать файлы в папке «Загрузки».";

@@ -1,4 +1,4 @@
-import { schema } from "@agenteschat/db";
+import { schema } from "@keepmind/db";
 import {
   BILLING_HOLDS,
   OPERATOR_EXPLAIN_AGENTS,
@@ -28,7 +28,7 @@ import {
   operatorToolCalls,
   operatorUnanswered,
   operatorUnansweredCounts,
-} from "@agenteschat/engine";
+} from "@keepmind/engine";
 import { createRoute, type OpenAPIHono, z } from "@hono/zod-openapi";
 import { apiError, errorResponse } from "../http/errors";
 import { iso, json, OrgParams } from "../routes/app/context";

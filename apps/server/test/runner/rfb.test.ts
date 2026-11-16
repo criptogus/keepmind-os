@@ -1,7 +1,7 @@
 import { afterEach, expect, test } from "bun:test";
 import type net from "node:net";
 import path from "node:path";
-import { type AgentScope, STREAM_CLOSE } from "@agenteschat/adapters/machine-protocol";
+import { type AgentScope, STREAM_CLOSE } from "@keepmind/adapters/machine-protocol";
 import { connectVnc, openDesktopStream, serveNone, vncAuthResponse } from "../../runner/rfb";
 import {
   desktopOn,

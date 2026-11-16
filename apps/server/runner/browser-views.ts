@@ -3,7 +3,7 @@ import {
   encodeBrowserFrame,
   type RunnerFrame,
   STREAM_CLOSE,
-} from "@agenteschat/adapters/machine-protocol";
+} from "@keepmind/adapters/machine-protocol";
 import type { DataSocket } from "./streams";
 
 type Frame = Extract<RunnerFrame, { type: "browser.frame" }>;

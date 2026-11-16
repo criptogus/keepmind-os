@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { randomBytes } from "node:crypto";
-import { accountCodeAad, secretAad as cardAad } from "@agenteschat/client/lib/secret-box";
+import { accountCodeAad, secretAad as cardAad } from "@keepmind/client/lib/secret-box";
 import { secretAad as computerAad, generateSecretKeyPair, openSecret } from "../../../packages/adapters/src/secret-box";
 import { sealSecretWith } from "../src/lib/secret-seal";
 

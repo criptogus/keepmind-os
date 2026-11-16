@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { en, ptBR } from "@agenteschat/i18n";
-import { PERSON_DEFAULT, PERSON_FIELDS, type PersonRecipe } from "@agenteschat/ui";
+import { en, ptBR } from "@keepmind/i18n";
+import { PERSON_DEFAULT, PERSON_FIELDS, type PersonRecipe } from "@keepmind/ui";
 import { NAMED_FIELDS, optionsOf, switchBuild, tabsOf } from "@/components/AvatarBuilder";
 
 const she: PersonRecipe = { ...PERSON_DEFAULT, build: "f", hair: "wavy", skin: "s4", eyes: "green", bg: "rose" };

@@ -1,6 +1,6 @@
-import { splitChannelRefs } from "@agenteschat/client/lib/channel-refs";
-import { loneIdRef, splitIdRefs } from "@agenteschat/client/lib/id-refs";
-import { linkPill } from "@agenteschat/client/lib/link-pills";
+import { splitChannelRefs } from "@keepmind/client/lib/channel-refs";
+import { loneIdRef, splitIdRefs } from "@keepmind/client/lib/id-refs";
+import { linkPill } from "@keepmind/client/lib/link-pills";
 import {
   codeAndBoldParts,
   headingId,
@@ -9,8 +9,8 @@ import {
   parseMarkdown,
   parseWikiToken,
   SAFE_URL,
-} from "@agenteschat/client/lib/markdown";
-import { parseFileLink, parseMessageLink } from "@agenteschat/client/lib/message-links";
+} from "@keepmind/client/lib/markdown";
+import { parseFileLink, parseMessageLink } from "@keepmind/client/lib/message-links";
 import { type ReactNode, useMemo } from "react";
 import { FileRef } from "@/chat/FileRef";
 import { LinkPill } from "@/chat/LinkPill";
@@ -22,12 +22,12 @@ import { TableBox } from "@/components/TableBox";
 
 /**
  * A small, safe Markdown renderer for chat messages and artifact documents
- * (the parser is shared: `@agenteschat/client/lib/markdown`). It builds React
+ * (the parser is shared: `@keepmind/client/lib/markdown`). It builds React
  * elements only: raw HTML in the source is shown as text, never interpreted.
  * Links allow http(s) and mailto. In messages, line breaks are kept and
  * @mentions become our mention chips.
  */
-export * from "@agenteschat/client/lib/markdown";
+export * from "@keepmind/client/lib/markdown";
 
 export type MentionRenderer = (handle: string, key: string) => ReactNode;
 /** `#name` (lower case): a channel link, or the text as written (`#Name`) when it means no channel. */

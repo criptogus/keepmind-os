@@ -1,7 +1,7 @@
 /**
  * Dashboards and widgets (ADR 0135) as the API sends them: the server's views
  * (`packages/engine/src/dashboards/types.ts`) and request bodies. `WidgetSpec` mirrors
- * `@agenteschat/ui/widgets/spec` (where it is checked and its helpers live): the web and the phone pass these
+ * `@keepmind/ui/widgets/spec` (where it is checked and its helpers live): the web and the phone pass these
  * straight to the renderers, so the two stay the same shape.
  */
 

@@ -6,8 +6,8 @@ import {
   resizeItem,
   useRemoveWidget,
   useSaveLayout,
-} from "@agenteschat/client";
-import { layoutToSize, sizeToLayout, WIDGET_SIZES, type WidgetSize } from "@agenteschat/ui/widgets/spec";
+} from "@keepmind/client";
+import { layoutToSize, sizeToLayout, WIDGET_SIZES, type WidgetSize } from "@keepmind/ui/widgets/spec";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Alert, StyleSheet, View } from "react-native";

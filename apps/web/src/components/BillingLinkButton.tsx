@@ -1,5 +1,5 @@
-import { type BillingFrom, useApi } from "@agenteschat/client";
-import { Button, type ButtonProps } from "@agenteschat/ui";
+import { type BillingFrom, useApi } from "@keepmind/client";
+import { Button, type ButtonProps } from "@keepmind/ui";
 import { useMutation } from "@tanstack/react-query";
 import { useRouterState } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";

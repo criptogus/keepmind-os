@@ -1,5 +1,5 @@
 {
-  "name": "@agenteschat/desktop",
+  "name": "@keepmind/desktop",
   "version": "0.2.0-alpha.3",
   "private": true,
   "type": "module",
@@ -13,10 +13,10 @@
   },
   "license": "AGPL-3.0-only",
   "dependencies": {
-    "@agenteschat/adapters": "workspace:*",
-    "@agenteschat/client": "workspace:*",
-    "@agenteschat/i18n": "workspace:*",
-    "@agenteschat/ui": "workspace:*",
+    "@keepmind/adapters": "workspace:*",
+    "@keepmind/client": "workspace:*",
+    "@keepmind/i18n": "workspace:*",
+    "@keepmind/ui": "workspace:*",
     "@fontsource-variable/martian-mono": "^5.3.0",
     "@fontsource-variable/onest": "^5.3.1",
     "@tauri-apps/api": "^2.5.0",

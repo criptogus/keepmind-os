@@ -1,4 +1,4 @@
-import { MAX_SECRET_BYTES, SECRET_NAME, VaultSourceError } from "@agenteschat/adapters";
+import { MAX_SECRET_BYTES, SECRET_NAME, VaultSourceError } from "@keepmind/adapters";
 import {
   connectVaultSource,
   createVaultItem,
@@ -18,7 +18,7 @@ import {
   ValidationError,
   type VaultDeps,
   VaultRefusal,
-} from "@agenteschat/engine";
+} from "@keepmind/engine";
 import { createRoute, z } from "@hono/zod-openapi";
 import type { Context } from "hono";
 import { bodyLimit } from "hono/body-limit";

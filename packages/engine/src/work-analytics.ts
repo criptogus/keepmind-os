@@ -1,5 +1,5 @@
-import { type Database, rowsOf, type SQL, sql } from "@agenteschat/db";
-import { nanoUsdToUsd } from "@agenteschat/providers";
+import { type Database, rowsOf, type SQL, sql } from "@keepmind/db";
+import { nanoUsdToUsd } from "@keepmind/providers";
 import { ANALYTICS_ROWS_MAX, analyticsRange } from "./connector-usage";
 import { getOrMake } from "./format";
 import { apiNano, tokensOf } from "./plan-usage";

@@ -1,8 +1,8 @@
-import { type ApiClient, ApiProvider as SharedApiProvider } from "@agenteschat/client";
-import { playAgentReaction } from "@agenteschat/ui";
+import { type ApiClient, ApiProvider as SharedApiProvider } from "@keepmind/client";
+import { playAgentReaction } from "@keepmind/ui";
 import type { ReactNode } from "react";
 
-export { useApi } from "@agenteschat/client";
+export { useApi } from "@keepmind/client";
 
 /** The shared provider with the web's effects (an agent's face on 👍/👎). */
 export function ApiProvider({ client, children }: { client: ApiClient; children: ReactNode }) {

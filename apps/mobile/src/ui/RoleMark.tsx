@@ -1,4 +1,4 @@
-import { bodyTones } from "@agenteschat/ui/agent/engine";
+import { bodyTones } from "@keepmind/ui/agent/engine";
 import { useId } from "react";
 import { StyleSheet, View } from "react-native";
 import Svg, { Circle, ClipPath, Defs, G, Path } from "react-native-svg";

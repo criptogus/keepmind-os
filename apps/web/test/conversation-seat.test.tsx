@@ -1,11 +1,11 @@
 import { afterEach, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { resetHeldPlaces } from "@agenteschat/client";
-import { SHARED_SEAT } from "@agenteschat/client/lib/seat";
-import { ConversationSeat } from "@agenteschat/client/lib/seat-context";
+import { resetHeldPlaces } from "@keepmind/client";
+import { SHARED_SEAT } from "@keepmind/client/lib/seat";
+import { ConversationSeat } from "@keepmind/client/lib/seat-context";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { BrowserCard } from "@/components/browser/BrowserCard";
 import { ADA_ID, createFakeApi, ENG_ID, fakeBrowserOf, LODI_ID, ORG_ID, seedState, withRightHand } from "./fake-api";

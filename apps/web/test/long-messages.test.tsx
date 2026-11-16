@@ -1,10 +1,10 @@
 import { afterAll, afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { ApiError, type Message } from "@agenteschat/client";
-import { LONG_MESSAGE, MAX_MESSAGE_LENGTH } from "@agenteschat/client/lib/message-length";
+import { ApiError, type Message } from "@keepmind/client";
+import { LONG_MESSAGE, MAX_MESSAGE_LENGTH } from "@keepmind/client/lib/message-length";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { ADA_ID, comfortable, createFakeApi, ENG_ID, NOW, ORG_ID, seedState } from "./fake-api";
 import { renderApp, screen, settle } from "./render";

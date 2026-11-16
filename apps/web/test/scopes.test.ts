@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { scopeGroups, scopeSummary } from "@agenteschat/client/lib/scopes";
+import { scopeGroups, scopeSummary } from "@keepmind/client/lib/scopes";
 import type { TFunction } from "i18next";
 import { approvalAction } from "@/components/ApprovalItem";
 import { createI18n } from "@/i18n";

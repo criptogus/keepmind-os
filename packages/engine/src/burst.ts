@@ -1,5 +1,5 @@
-import { type PubSub, typingTopic } from "@agenteschat/adapters";
-import { and, type Database, eq, gte, isNull, schema, sql } from "@agenteschat/db";
+import { type PubSub, typingTopic } from "@keepmind/adapters";
+import { and, type Database, eq, gte, isNull, schema, sql } from "@keepmind/db";
 import type { Message } from "./messages";
 
 const { messages } = schema;

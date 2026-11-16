@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { eq, schema } from "@agenteschat/db";
+import { eq, schema } from "@keepmind/db";
 import { getVaultItem, listUsableVault, releaseVaultKeys, releaseVaultLogin, saveSecretRequestToVault } from "../src";
 import { openItemValue } from "../src/vault/seal";
 import { everythingStored, runAskedBy, type VaultFixture, vaultSetup } from "./vault-fixtures";

@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, expect, test } from "bun:test";
-import { eq, schema } from "@agenteschat/db";
-import { consolidateItem, createIssueToolSource, insertMessage, linkRunActions } from "@agenteschat/engine";
+import { eq, schema } from "@keepmind/db";
+import { consolidateItem, createIssueToolSource, insertMessage, linkRunActions } from "@keepmind/engine";
 import { browser, createTestServer, joinByInvitation, seedOrg, signUp, type TestServer } from "./harness";
 
 let t: TestServer;

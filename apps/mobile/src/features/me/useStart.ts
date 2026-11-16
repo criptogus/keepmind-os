@@ -1,4 +1,4 @@
-import { useChannels, useDms } from "@agenteschat/client";
+import { useChannels, useDms } from "@keepmind/client";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useEffect } from "react";
 import { readValue, STORED, writeValue } from "@/lib/storage";

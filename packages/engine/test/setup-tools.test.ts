@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { eq, schema } from "@agenteschat/db";
+import { eq, schema } from "@keepmind/db";
 import {
   type ActionCard,
   ADD_MCP_CARD,
@@ -257,7 +257,7 @@ test("offer_connect_app: a mailbox or a database says where it's connected; a se
   const soon = listing.find((e) => e.soon);
   const off = listing.find((e) => !e.available && !e.soon);
   if (!soon || !off) throw new Error("no soon or unavailable entry");
-  expect((await run({ app: soon.label, why: "x" })).content).toContain("doesn't let agentes.chat connect in one click");
+  expect((await run({ app: soon.label, why: "x" })).content).toContain("doesn't let KeepMind OS connect in one click");
   expect((await run({ app: off.label, why: "x" })).content).toContain("isn't available on this installation");
   expect(await cards(f)).toEqual([]);
 });

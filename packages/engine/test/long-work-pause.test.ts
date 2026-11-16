@@ -1,7 +1,7 @@
 import { afterEach, expect, test } from "bun:test";
-import { MACHINE_PROTOCOL_VERSION, userTopic } from "@agenteschat/adapters";
-import { and, eq, schema } from "@agenteschat/db";
-import { extraUsageLeft, extraUsageOn, planBinding } from "@agenteschat/ui/plan-state";
+import { MACHINE_PROTOCOL_VERSION, userTopic } from "@keepmind/adapters";
+import { and, eq, schema } from "@keepmind/db";
+import { extraUsageLeft, extraUsageOn, planBinding } from "@keepmind/ui/plan-state";
 import {
   addChannelMember,
   answerNow,
@@ -284,7 +284,7 @@ const statusOf = (machineId: string): MachineStatus => ({
 });
 
 async function computerAgent(fx: Fixture, over: Partial<typeof schema.agents.$inferInsert> = {}) {
-  const deps = { db: fx.db, pubsub: fx.pubsub, publicUrl: "https://agentes.chat" };
+  const deps = { db: fx.db, pubsub: fx.pubsub, publicUrl: "https://keepmind.io" };
   const paired = await pairMachine(deps, fx.owner.id, fx.org.id, { name: "MacBook", ...RUNNER, exec: true });
   await fx.db
     .update(schema.agents)

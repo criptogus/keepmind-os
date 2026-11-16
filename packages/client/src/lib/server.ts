@@ -1,20 +1,20 @@
-import { docsUrl } from "@agenteschat/i18n/docs";
-import { appLocale } from "@agenteschat/i18n/locale";
+import { docsUrl } from "@keepmind/i18n/docs";
+import { appLocale } from "@keepmind/i18n/locale";
 import type { FetchLike } from "../api/http";
 import type { Instance } from "../api/types";
 
 /**
  * Choosing a server in the phone and desktop apps ("Seu servidor"): the address a person types, the connect
  * link that the web app's QR code and the self-host setup print, and the check that an address is an
- * agentes.chat server these apps can talk to.
+ * KeepMind OS server these apps can talk to.
  */
 
-export const CLOUD_SERVER = "https://app.agentes.chat";
+export const CLOUD_SERVER = "https://keepmind.io";
 
 /**
  * A help page on the public docs site, in the reader's language, at a section. Every edition and app links there,
  * with only the page, the language and the section: no server, organization or person. Every language has every
- * page (`@agenteschat/i18n` help test), so no English fallback here.
+ * page (`@keepmind/i18n` help test), so no English fallback here.
  */
 export const helpUrl = (slug: string, locale: string, section?: string) =>
   docsUrl(appLocale([locale], true) ?? "en", slug, section);
@@ -162,10 +162,10 @@ export type ServerCheck =
   | { ok: true; server: string; instance: Instance }
   | { ok: false; server: string; problem: ServerProblem };
 
-/** What `GET /api/instance` answered: an agentes.chat server these apps can use, or why not. */
+/** What `GET /api/instance` answered: an KeepMind OS server these apps can use, or why not. */
 export function readInstance(server: string, body: unknown): ServerCheck {
   const instance = (body ?? {}) as Partial<Instance>;
-  if (instance.name !== "agentes.chat" || typeof instance.api !== "number")
+  if (!["KeepMind OS", "agentes.chat", "keepmind.io"].includes(instance.name ?? "") || typeof instance.api !== "number")
     return { ok: false, server, problem: "not-agentes" };
   if (instance.api < APP_API) return { ok: false, server, problem: "server-too-old" };
   if ((instance.minApi ?? 1) > APP_API) return { ok: false, server, problem: "app-too-old" };

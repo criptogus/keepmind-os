@@ -1,9 +1,9 @@
-import type { Message } from "@agenteschat/client";
-import { useAiStatus, useAuthConfig, useMessages, useThreadMessages } from "@agenteschat/client";
-import { withoutApiKeys } from "@agenteschat/client/lib/api-key-text";
-import type { BillingHold } from "@agenteschat/client/lib/billing";
-import { FIX_BRAIN_SCREEN, failedRunFix } from "@agenteschat/client/lib/errors";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
+import type { Message } from "@keepmind/client";
+import { useAiStatus, useAuthConfig, useMessages, useThreadMessages } from "@keepmind/client";
+import { withoutApiKeys } from "@keepmind/client/lib/api-key-text";
+import type { BillingHold } from "@keepmind/client/lib/billing";
+import { FIX_BRAIN_SCREEN, failedRunFix } from "@keepmind/client/lib/errors";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
 import {
   aiStateOf,
   keptCardState,
@@ -20,11 +20,11 @@ import {
   planOfKind,
   type RightHandPlanLine,
   signInAgainPlan,
-} from "@agenteschat/client/lib/no-ai";
-import { can } from "@agenteschat/client/lib/permissions";
-import { isRightHand } from "@agenteschat/client/lib/right-hand";
-import { modeKey } from "@agenteschat/client/lib/workspace-mode";
-import { Button, Chip, Dialog, DialogFooter, EventPillAction, Icon, InfoHint } from "@agenteschat/ui";
+} from "@keepmind/client/lib/no-ai";
+import { can } from "@keepmind/client/lib/permissions";
+import { isRightHand } from "@keepmind/client/lib/right-hand";
+import { modeKey } from "@keepmind/client/lib/workspace-mode";
+import { Button, Chip, Dialog, DialogFooter, EventPillAction, Icon, InfoHint } from "@keepmind/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";

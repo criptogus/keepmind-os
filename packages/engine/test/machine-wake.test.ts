@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { MACHINE_PROTOCOL_VERSION, orgTopic } from "@agenteschat/adapters";
-import { asc, eq, schema } from "@agenteschat/db";
+import { MACHINE_PROTOCOL_VERSION, orgTopic } from "@keepmind/adapters";
+import { asc, eq, schema } from "@keepmind/db";
 import {
   callWhenBack,
   computerBackSoon,

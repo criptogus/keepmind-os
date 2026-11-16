@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { asc, eq, schema, sql } from "@agenteschat/db";
+import { asc, eq, schema, sql } from "@keepmind/db";
 import { createAgent, insertMessage, normalizeNote, personOfMessage, type ToolContext } from "../src";
 import { addMember, type Fixture, setup } from "./fixtures";
 

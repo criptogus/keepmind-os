@@ -1,4 +1,4 @@
-import type { Agent, MailAccount, MailConnectError, MailPolicy, MailProviders } from "@agenteschat/client";
+import type { Agent, MailAccount, MailConnectError, MailPolicy, MailProviders } from "@keepmind/client";
 import {
   keys,
   useAgentMail,
@@ -6,11 +6,11 @@ import {
   useMailAction,
   useMailProviders,
   useMailSuggestedAddresses,
-} from "@agenteschat/client";
-import { LEVELS, type Level } from "@agenteschat/client/lib/access-levels";
-import { canTalk } from "@agenteschat/client/lib/audience";
-import { errorText, knownErrorText } from "@agenteschat/client/lib/errors";
-import { relativeTime } from "@agenteschat/client/lib/format";
+} from "@keepmind/client";
+import { LEVELS, type Level } from "@keepmind/client/lib/access-levels";
+import { canTalk } from "@keepmind/client/lib/audience";
+import { errorText, knownErrorText } from "@keepmind/client/lib/errors";
+import { relativeTime } from "@keepmind/client/lib/format";
 import {
   CUSTOM_PRESET,
   choiceOf,
@@ -30,8 +30,8 @@ import {
   onlyForOwner,
   setMailLevel,
   splitEmails,
-} from "@agenteschat/client/lib/mail";
-import { can } from "@agenteschat/client/lib/permissions";
+} from "@keepmind/client/lib/mail";
+import { can } from "@keepmind/client/lib/permissions";
 import {
   Alert,
   Button,
@@ -48,7 +48,7 @@ import {
   Segmented,
   Select,
   useUnsavedInDialog,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { TFunction } from "i18next";
 import { useState } from "react";

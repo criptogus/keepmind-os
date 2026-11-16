@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { channelTopic, createPostgresPubSub, type RealtimeEvent } from "@agenteschat/adapters";
-import { and, eq, schema, sql } from "@agenteschat/db";
+import { channelTopic, createPostgresPubSub, type RealtimeEvent } from "@keepmind/adapters";
+import { and, eq, schema, sql } from "@keepmind/db";
 import {
   type AgentProposalCard,
   addChannelMember,

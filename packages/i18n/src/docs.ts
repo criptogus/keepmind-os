@@ -1,7 +1,7 @@
 import type { AppLocale } from "./locale";
 
 /** The public docs site (the landing): the same for every edition, self-hosted servers included. */
-export const DOCS_SITE = "https://agentes.chat";
+export const DOCS_SITE = "https://keepmind.io";
 
 /** The landing's language folders: English at the root, Chinese under `zh/`, Portuguese under `pt/`. */
 const FOLDER: Partial<Record<AppLocale, string>> = { en: "", "pt-BR": "pt/", "zh-Hans": "zh/" };

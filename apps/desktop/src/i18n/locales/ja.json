@@ -228,7 +228,7 @@
     "approveStop": "待つのをやめる",
     "openTailscale": "Tailscaleを開く",
     "getTailscale": "Tailscaleを入手",
-    "usage": "匿名の利用統計をagentes.chatに送信する",
+    "usage": "匿名の利用統計をKeepMind OSに送信する",
     "usageText": "人数、エージェント数、マシンのサイズ、使ったAIトークン、エージェントのブラウザが送受信したデータ量などの数値です。メッセージ、ファイル、名前、サイトは送りません。",
     "start": "始める",
     "setting": "すべて準備しています",

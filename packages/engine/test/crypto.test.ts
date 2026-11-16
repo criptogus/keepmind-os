@@ -61,3 +61,10 @@ test("derived secrets differ per purpose and are stable", () => {
   expect(deriveSecret(SECRET, "sessions")).not.toBe(deriveSecret(SECRET, "provider-credentials-kek"));
   expect(sha256("x")).toHaveLength(64);
 });
+
+test("rebranding preserves the installed session key derivation", () => {
+  // Frozen pre-rebrand vector: changing the salt would invalidate sessions and encrypted credentials.
+  expect(deriveSecret("keepmind-compatibility-fixture-2026", "sessions")).toBe(
+    "6d54f2a5e4f25187519fd6f8dcb654600ae190fc15fe05a2a3bf447112dc0346",
+  );
+});

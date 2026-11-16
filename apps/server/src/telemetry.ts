@@ -3,20 +3,20 @@
  * an hour after the server first started), and prints it for `agentes telemetry`. What goes in it is
  * `buildTelemetryReport`.
  */
-import { LOAD_SAMPLE_MS } from "@agenteschat/adapters";
-import { inContainer, LoadWindow, machineSize, sampleLoad } from "@agenteschat/adapters/host-stats";
-import type { Config } from "@agenteschat/config";
-import type { Database } from "@agenteschat/db";
+import { LOAD_SAMPLE_MS } from "@keepmind/adapters";
+import { inContainer, LoadWindow, machineSize, sampleLoad } from "@keepmind/adapters/host-stats";
+import type { Config } from "@keepmind/config";
+import type { Database } from "@keepmind/db";
 import {
   buildTelemetryReport,
-  isAgentesCloud,
+  isKeepMindCloud,
   markServerStarted,
   saveHostLoad,
   setNextReport,
   type TelemetryFacts,
   telemetrySends,
   telemetryState,
-} from "@agenteschat/engine";
+} from "@keepmind/engine";
 import type { Logger } from "./logger";
 import { version } from "./version";
 
@@ -38,7 +38,7 @@ export function telemetryFacts(config: Config): TelemetryFacts {
   const container = inContainer();
   return {
     version,
-    edition: isAgentesCloud(config.PUBLIC_URL) ? "cloud" : "selfhost",
+    edition: isKeepMindCloud(config.PUBLIC_URL) ? "cloud" : "selfhost",
     install: installMode(config, container),
     os: process.platform,
     arch: process.arch,
@@ -140,7 +140,7 @@ export function startTelemetry(deps: TelemetryDeps) {
     schedule(next);
   };
 
-  const cloud = isAgentesCloud(config.PUBLIC_URL);
+  const cloud = isKeepMindCloud(config.PUBLIC_URL);
   // A development server is nobody's installation.
   const sends = (cloud || config.TELEMETRY === "on") && config.NODE_ENV === "production";
   const ready = (async () => {
@@ -185,7 +185,7 @@ export async function printTelemetry(
   out.write(`${JSON.stringify(report, null, 2)}\n`);
   const on = `On: sent once a day to ${config.TELEMETRY_URL}.`;
   err.write(
-    isAgentesCloud(config.PUBLIC_URL)
+    isKeepMindCloud(config.PUBLIC_URL)
       ? `${on}\n`
       : telemetrySends(config, state.enabled)
         ? `${on} TELEMETRY=off in .env turns it off.\n`

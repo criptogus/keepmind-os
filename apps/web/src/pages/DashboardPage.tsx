@@ -1,4 +1,4 @@
-import type { Dashboard } from "@agenteschat/client";
+import type { Dashboard } from "@keepmind/client";
 import {
   frozenBoard,
   useDashboard,
@@ -6,9 +6,9 @@ import {
   useDeleteDashboard,
   useSetHomeDashboard,
   useUpdateDashboard,
-} from "@agenteschat/client";
-import { errorCode, errorText } from "@agenteschat/client/lib/errors";
-import { relativeTime } from "@agenteschat/client/lib/format";
+} from "@keepmind/client";
+import { errorCode, errorText } from "@keepmind/client/lib/errors";
+import { relativeTime } from "@keepmind/client/lib/format";
 import {
   Button,
   Dialog,
@@ -24,7 +24,7 @@ import {
   MenuSeparator,
   PageHeader,
   Textarea,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";

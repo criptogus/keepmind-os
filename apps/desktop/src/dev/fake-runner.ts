@@ -4,7 +4,7 @@
  * (two organizations, one with a logo, agents at work, a folder request), so every screen can be seen
  * without the Tauri shell. Never part of the real app's behaviour: the host picks it only outside Tauri.
  */
-import type { RunnerAccess, RunnerAccountInfo, RunnerPause, RunnerPhone } from "@agenteschat/adapters/machine-protocol";
+import type { RunnerAccess, RunnerAccountInfo, RunnerPause, RunnerPhone } from "@keepmind/adapters/machine-protocol";
 import {
   type ActivityEntry,
   CONTROL_PROTOCOL_VERSION,
@@ -17,7 +17,7 @@ import {
   type ControlOut,
   type ControlStatus,
   parseControlIn,
-} from "@agenteschat/adapters/runner-control";
+} from "@keepmind/adapters/runner-control";
 
 /** The fake runners' server: one of the person's own, on a Tailscale network. */
 export const FAKE_SERVER = "https://agentes.tail1234.ts.net";

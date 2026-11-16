@@ -1,4 +1,4 @@
-import { and, asc, type Database, type Executor, eq, inArray, isNull, schema, sql } from "@agenteschat/db";
+import { and, asc, type Database, type Executor, eq, inArray, isNull, schema, sql } from "@keepmind/db";
 import { getAgent } from "./agents";
 import { recordAudit } from "./audit";
 import { ForbiddenError, NotFoundError } from "./errors";
@@ -15,7 +15,7 @@ const { agents, approvalRules, connectorConnections, customTools, routines, user
  * kind (`commandKind`: `gh issue create`), on every brain and wherever the agent works.
  */
 
-/** The tool of a command rule (`approval_rules.tool`, no connection). Mirrored in `@agenteschat/client` `lib/approval-words.ts`. */
+/** The tool of a command rule (`approval_rules.tool`, no connection). Mirrored in `@keepmind/client` `lib/approval-words.ts`. */
 export const COMMAND_RULE_TOOL = "command";
 
 /** What "Aprovar sempre" covers on one approval (`approvals.approve_always`). */
@@ -37,7 +37,7 @@ export const OWN_ACTION_NAME = /^[A-Za-z0-9_.:-]{1,128}$/;
 
 /**
  * The action of an "Aprovar sempre leituras" rule (`ToolDefinition.sqlReads`): the prefix, then the call's other
- * arguments (`project_id=abc`). Mirrored in `@agenteschat/client` `lib/approval-kind.ts`.
+ * arguments (`project_id=abc`). Mirrored in `@keepmind/client` `lib/approval-kind.ts`.
  */
 export const SQL_READS = "sql-read:";
 

@@ -1,5 +1,5 @@
-import type { AgentPlanUsage } from "@agenteschat/client";
-import { useAgentPlanUsage, useApi, useModels } from "@agenteschat/client";
+import type { AgentPlanUsage } from "@keepmind/client";
+import { useAgentPlanUsage, useApi, useModels } from "@keepmind/client";
 import {
   formatMonth,
   formatPercent,
@@ -7,8 +7,8 @@ import {
   formatTokensShort,
   formatUsd,
   joinNames,
-} from "@agenteschat/client/lib/format";
-import { apiProviderOf } from "@agenteschat/client/lib/providers";
+} from "@keepmind/client/lib/format";
+import { apiProviderOf } from "@keepmind/client/lib/providers";
 import {
   Card,
   CardFooter,
@@ -20,7 +20,7 @@ import {
   ProviderLogo,
   UsageDays,
   UsageSwatch,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { type CSSProperties, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { ErrorState, LoadingList } from "@/components/Loading";

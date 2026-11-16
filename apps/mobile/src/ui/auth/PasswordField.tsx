@@ -1,4 +1,4 @@
-import { passwordState } from "@agenteschat/client/lib/text";
+import { passwordState } from "@keepmind/client/lib/text";
 import { type ComponentRef, forwardRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { type TextInput, View } from "react-native";

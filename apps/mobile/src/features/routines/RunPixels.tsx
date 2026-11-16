@@ -1,4 +1,4 @@
-import { type AgentColorName, mixHex } from "@agenteschat/ui/agent/engine";
+import { type AgentColorName, mixHex } from "@keepmind/ui/agent/engine";
 import { memo, useEffect, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { useFrameTime, useLivePaused } from "@/agent/live";

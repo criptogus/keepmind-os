@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
-import { applyWorkspaceEvent, keys } from "@agenteschat/client";
+import { applyWorkspaceEvent, keys } from "@keepmind/client";
 import { QueryClient } from "@tanstack/react-query";
 
 const src = (f: string) => readFileSync(new URL(`../../src/${f}`, import.meta.url), "utf8");

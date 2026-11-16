@@ -10,7 +10,7 @@ import {
   type SQL,
   schema,
   sql,
-} from "@agenteschat/db";
+} from "@keepmind/db";
 import { recordAudit } from "../audit";
 import { caches } from "../cache";
 import { NotFoundError, ValidationError } from "../errors";

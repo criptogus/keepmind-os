@@ -1,4 +1,4 @@
-import type { SocketFactory, SocketLike } from "@agenteschat/client";
+import type { SocketFactory, SocketLike } from "@keepmind/client";
 
 /** React Native's WebSocket takes a third argument with headers (not in the browser's type). */
 type NativeWebSocket = new (

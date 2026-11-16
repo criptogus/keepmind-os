@@ -1,5 +1,5 @@
-import { fileIcon } from "@agenteschat/client/lib/files";
-import { Button, Icon, Spinner } from "@agenteschat/ui";
+import { fileIcon } from "@keepmind/client/lib/files";
+import { Button, Icon, Spinner } from "@keepmind/ui";
 import { type DragEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { UploadItem } from "@/components/artifacts/Upload";

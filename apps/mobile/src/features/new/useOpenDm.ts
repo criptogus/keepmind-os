@@ -1,4 +1,4 @@
-import { keys, useApi } from "@agenteschat/client";
+import { keys, useApi } from "@keepmind/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCallback } from "react";
 import { router } from "@/ui/navigation";

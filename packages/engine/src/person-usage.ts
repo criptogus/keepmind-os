@@ -1,6 +1,6 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, type Database, type Executor, eq, gte, inArray, rowsOf, schema, sql } from "@agenteschat/db";
-import { nanoUsdToUsd } from "@agenteschat/providers";
+import type { PubSub } from "@keepmind/adapters";
+import { and, type Database, type Executor, eq, gte, inArray, rowsOf, schema, sql } from "@keepmind/db";
+import { nanoUsdToUsd } from "@keepmind/providers";
 import { recordAudit } from "./audit";
 import { caches } from "./cache";
 import { ConflictError, ForbiddenError, PersonLimitError, ValidationError } from "./errors";

@@ -1,5 +1,5 @@
-import { useMissionList, useNotifications } from "@agenteschat/client";
-import { approvalTitle } from "@agenteschat/client/lib/approval-words";
+import { useMissionList, useNotifications } from "@keepmind/client";
+import { approvalTitle } from "@keepmind/client/lib/approval-words";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useOrgId } from "../shared/hooks";

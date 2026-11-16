@@ -4,7 +4,7 @@ import {
   decodeBrowserFrame,
   type RunnerFrame,
   STREAM_CLOSE,
-} from "@agenteschat/adapters/machine-protocol";
+} from "@keepmind/adapters/machine-protocol";
 import { BrowserViews } from "../../runner/browser-views";
 import type { DataListener, DataSocket } from "../../runner/streams";
 import { waitFor } from "./helpers";

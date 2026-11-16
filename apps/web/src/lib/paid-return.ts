@@ -1,4 +1,4 @@
-import { isPaidReturn } from "@agenteschat/client/lib/billing";
+import { isPaidReturn } from "@keepmind/client/lib/billing";
 import { useSearch } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { STORAGE_KEYS, sessionStore } from "@/lib/storage";

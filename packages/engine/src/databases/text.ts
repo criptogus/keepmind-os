@@ -1,4 +1,4 @@
-import type { DatabaseRows } from "@agenteschat/adapters";
+import type { DatabaseRows } from "@keepmind/adapters";
 import { cutText } from "../format";
 import { neutralizeUntrusted } from "../untrusted";
 

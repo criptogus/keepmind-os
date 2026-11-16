@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
-import { CURSOR_PROTOCOL } from "@agenteschat/adapters";
-import { loginPerAgent } from "@agenteschat/providers/plans";
+import { CURSOR_PROTOCOL } from "@keepmind/adapters";
+import { loginPerAgent } from "@keepmind/providers/plans";
 import {
   brainModelOptions,
   brainOptions,

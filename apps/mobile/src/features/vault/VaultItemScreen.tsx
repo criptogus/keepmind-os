@@ -8,9 +8,9 @@ import {
   type VaultItemDetail,
   type VaultMatch,
   type VaultScope,
-} from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { canMoveVaultItem } from "@agenteschat/client/lib/vault";
+} from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { canMoveVaultItem } from "@keepmind/client/lib/vault";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, StyleSheet, View } from "react-native";

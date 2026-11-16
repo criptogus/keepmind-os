@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
 import { join } from "node:path";
-import { modelChoices } from "@agenteschat/client/lib/providers";
+import { modelChoices } from "@keepmind/client/lib/providers";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { channelNameError, toChannelName } from "@/components/NewChannelDialog";
 import { ADA_ID, ATLAS_ID, createFakeApi, ENG_ID, ORG_ID, seedDm, seedState } from "./fake-api";

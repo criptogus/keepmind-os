@@ -1,4 +1,4 @@
-import type { ConnectorDef } from "@agenteschat/client";
+import type { ConnectorDef } from "@keepmind/client";
 import {
   keys,
   useAgents,
@@ -9,16 +9,16 @@ import {
   useMembers,
   useSkill,
   useSkills,
-} from "@agenteschat/client";
-import { type Level, saveLevels } from "@agenteschat/client/lib/access-levels";
-import { errorText as failureText } from "@agenteschat/client/lib/errors";
-import { FIELD_LIMITS } from "@agenteschat/client/lib/field-limits";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { useHeldWhile } from "@agenteschat/client/lib/hold";
-import { addsAgentsTo, can } from "@agenteschat/client/lib/permissions";
-import { connectorName, scopeText } from "@agenteschat/client/lib/scopes";
-import { skillsToGive } from "@agenteschat/client/lib/skills";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client";
+import { type Level, saveLevels } from "@keepmind/client/lib/access-levels";
+import { errorText as failureText } from "@keepmind/client/lib/errors";
+import { FIELD_LIMITS } from "@keepmind/client/lib/field-limits";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { useHeldWhile } from "@keepmind/client/lib/hold";
+import { addsAgentsTo, can } from "@keepmind/client/lib/permissions";
+import { connectorName, scopeText } from "@keepmind/client/lib/scopes";
+import { skillsToGive } from "@keepmind/client/lib/skills";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import {
   type AgentAppearance,
   type AgentColor,
@@ -39,7 +39,7 @@ import {
   randomAppearance,
   setGaze,
   spriteTone,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import {

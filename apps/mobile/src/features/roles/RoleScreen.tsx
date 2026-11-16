@@ -1,8 +1,8 @@
-import type { OrgRole, Person } from "@agenteschat/client";
-import { useChangeRole, useCreateRole, useDeleteRole } from "@agenteschat/client";
-import { formatInt } from "@agenteschat/client/lib/format";
-import { can } from "@agenteschat/client/lib/permissions";
-import { holdsAll, isEveryone, peopleWith, roleLock, roleName } from "@agenteschat/client/lib/roles";
+import type { OrgRole, Person } from "@keepmind/client";
+import { useChangeRole, useCreateRole, useDeleteRole } from "@keepmind/client";
+import { formatInt } from "@keepmind/client/lib/format";
+import { can } from "@keepmind/client/lib/permissions";
+import { holdsAll, isEveryone, peopleWith, roleLock, roleName } from "@keepmind/client/lib/roles";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
 import { GroupedFooter, GroupedHeader, GroupedList, GroupedRow, type IconName, useToast } from "@/ui";

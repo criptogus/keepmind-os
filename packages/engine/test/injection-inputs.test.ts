@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { eq, schema } from "@agenteschat/db";
+import { eq, schema } from "@keepmind/db";
 import {
   createWebToolSource,
   drainOutbox,

@@ -12,9 +12,9 @@ import {
   STREAM_LIMITS,
   type Unsubscribe,
   userTopic,
-} from "@agenteschat/adapters";
-import type { Config } from "@agenteschat/config";
-import { and, type Database, eq, inArray, isNotNull, isNull, or, schema, sql } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import type { Config } from "@keepmind/config";
+import { and, type Database, eq, inArray, isNotNull, isNull, or, schema, sql } from "@keepmind/db";
 import {
   activityAudience,
   adminChannelSql,
@@ -38,7 +38,7 @@ import {
   requireProfileWatcher,
   taskReaderSql,
   touchLastSeen,
-} from "@agenteschat/engine";
+} from "@keepmind/engine";
 import type { Auth, SessionUser } from "../auth";
 import type { Logger } from "../logger";
 import { allowedOrigins, requestOriginAllowed } from "../routes/app/context";

@@ -95,7 +95,7 @@ test("a program's hold: systemd-inhibit's idle lock by root, in a scope in the a
     "/usr/bin/systemd-inhibit",
     "--what=idle",
     "--mode=block",
-    "--who=agentes.chat",
+    "--who=KeepMind OS",
     "--why=keep_running",
   ]);
   expect(t.argv().slice(12, 14)).toEqual(["/bin/sh", "-c"]);

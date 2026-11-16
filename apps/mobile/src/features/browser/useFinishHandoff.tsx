@@ -1,4 +1,4 @@
-import { type BrowserHandoff, handoffWantsWords, useBrowserHandoffActions } from "@agenteschat/client";
+import { type BrowserHandoff, handoffWantsWords, useBrowserHandoffActions } from "@keepmind/client";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";

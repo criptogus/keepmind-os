@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
@@ -41,7 +41,7 @@ describe("links read as ours, never the browser's blue", () => {
       expect(a?.className).toBe("ac-link ac-link--muted");
       expect(a?.getAttribute("target")).toBe("_blank");
       expect(a?.getAttribute("rel")).toBe("noopener noreferrer");
-      expect(a?.getAttribute("href")).toBe(`https://agentes.chat/${folder}docs/computers#folders`);
+      expect(a?.getAttribute("href")).toBe(`https://keepmind.io/${folder}docs/computers#folders`);
       cleanup();
     }
   });

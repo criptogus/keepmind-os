@@ -8,11 +8,11 @@ import {
   browserTrailSpanMs,
   type ScreenKind,
   trailProfile,
-} from "@agenteschat/client";
-import { formatTime, lowerFirst } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { formatDuration } from "@agenteschat/client/lib/work";
-import { agentGradient, BrowserMark, BrowserStrip, Chip, Icon } from "@agenteschat/ui";
+} from "@keepmind/client";
+import { formatTime, lowerFirst } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { formatDuration } from "@keepmind/client/lib/work";
+import { agentGradient, BrowserMark, BrowserStrip, Chip, Icon } from "@keepmind/ui";
 import type { TFunction } from "i18next";
 import { type CSSProperties, useState } from "react";
 import { useTranslation } from "react-i18next";

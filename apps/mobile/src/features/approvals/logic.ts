@@ -1,8 +1,8 @@
-import type { Approval } from "@agenteschat/client";
-import { approvalCards } from "@agenteschat/client/lib/approval-card";
-import { approvalWhy } from "@agenteschat/client/lib/approval-origin";
-import { approvalValues } from "@agenteschat/client/lib/approval-words";
-import { plainLine } from "@agenteschat/client/lib/markdown";
+import type { Approval } from "@keepmind/client";
+import { approvalCards } from "@keepmind/client/lib/approval-card";
+import { approvalWhy } from "@keepmind/client/lib/approval-origin";
+import { approvalValues } from "@keepmind/client/lib/approval-words";
+import { plainLine } from "@keepmind/client/lib/markdown";
 import type { TFunction } from "i18next";
 import { genderOf } from "../shared/logic";
 
@@ -12,7 +12,7 @@ import { genderOf } from "../shared/logic";
  * of what waits on you.
  */
 
-// The verb, the risk and the chips are the web's own rules (`@agenteschat/client/lib/approval-kind`).
+// The verb, the risk and the chips are the web's own rules (`@keepmind/client/lib/approval-kind`).
 export {
   type ApprovalAction,
   type ApprovalTrait,
@@ -20,8 +20,8 @@ export {
   approvalRisk,
   approvalTraits,
   approveAlwaysOffered,
-} from "@agenteschat/client/lib/approval-kind";
-export { approveAlwaysHint, approveAlwaysLabel } from "@agenteschat/client/lib/approval-words";
+} from "@keepmind/client/lib/approval-kind";
+export { approveAlwaysHint, approveAlwaysLabel } from "@keepmind/client/lib/approval-words";
 
 /**
  * The toast after "Aprovar sempre": the agent won't ask for this again, and where to undo it (its profile). With

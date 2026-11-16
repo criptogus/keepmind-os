@@ -4,9 +4,9 @@
  * the workspace), the part of the name or handle that matched, and the text after picking.
  */
 
-import type { Agent } from "@agenteschat/client";
-import { channelQuery, insertChannelRef } from "@agenteschat/client/lib/channel-refs";
-import { mentionReaches } from "@agenteschat/client/lib/right-hand";
+import type { Agent } from "@keepmind/client";
+import { channelQuery, insertChannelRef } from "@keepmind/client/lib/channel-refs";
+import { mentionReaches } from "@keepmind/client/lib/right-hand";
 
 /** Lowercase, accent-free: "João" → "joao" (same length for composed text). */
 export const fold = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");

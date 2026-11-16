@@ -5,8 +5,8 @@ import {
   type DatabaseRun,
   type DatabaseTarget,
   type KeyWrapper,
-} from "@agenteschat/adapters";
-import { and, asc, type Database, eq, inArray, isNull, schema, sql } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { and, asc, type Database, eq, inArray, isNull, schema, sql } from "@keepmind/db";
 import { recordAudit } from "../audit";
 import { caches, TtlCache } from "../cache";
 import { openSecret, sealSecret } from "../crypto";

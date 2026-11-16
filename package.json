@@ -1,5 +1,5 @@
 {
-  "name": "agentes-chat",
+  "name": "keepmind-os",
   "private": true,
   "type": "module",
   "workspaces": [
@@ -7,9 +7,9 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "bun run --filter '@agenteschat/server' --filter '@agenteschat/web' dev",
-    "start": "bun run --filter '@agenteschat/server' start",
-    "build": "bun run --filter '@agenteschat/web' build && bun run --filter '@agenteschat/server' build",
+    "dev": "bun run --filter '@keepmind/server' --filter '@keepmind/web' dev",
+    "start": "bun run --filter '@keepmind/server' start",
+    "build": "bun run --filter '@keepmind/web' build && bun run --filter '@keepmind/server' build",
     "test": "bun test",
     "typecheck": "bun run --filter '*' typecheck",
     "lint": "biome check .",
@@ -21,7 +21,7 @@
     "sync:unavailable": "bun scripts/unavailable-page.ts",
     "ci:local": "bash scripts/ci-local.sh",
     "db:generate": "cd packages/db && bunx drizzle-kit generate --name",
-    "docs:env": "bun run --filter '@agenteschat/config' docs",
+    "docs:env": "bun run --filter '@keepmind/config' docs",
     "i18n:missing": "bun scripts/i18n.ts missing",
     "i18n:apply": "bun scripts/i18n.ts apply",
     "i18n:status": "bun scripts/i18n.ts status",

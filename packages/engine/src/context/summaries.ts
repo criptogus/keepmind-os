@@ -1,5 +1,5 @@
-import type { ErrorReporter, PubSub, SearchIndexResolver } from "@agenteschat/adapters";
-import { and, type Database, desc, eq, gte, inArray, isNull, lt, schema } from "@agenteschat/db";
+import type { ErrorReporter, PubSub, SearchIndexResolver } from "@keepmind/adapters";
+import { and, type Database, desc, eq, gte, inArray, isNull, lt, schema } from "@keepmind/db";
 import { cutText, cutTextEnd } from "../format";
 import type { ModelGateway } from "../gateway";
 import { createLlmJudge, type Judge } from "../judge";

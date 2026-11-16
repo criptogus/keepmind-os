@@ -1,4 +1,4 @@
-import { endpointPricesFromUsd, endpointPricesToUsd, type listCredentials } from "@agenteschat/engine";
+import { endpointPricesFromUsd, endpointPricesToUsd, type listCredentials } from "@keepmind/engine";
 import type { z } from "@hono/zod-openapi";
 import { iso } from "./context";
 import type { EndpointModel } from "./schemas";

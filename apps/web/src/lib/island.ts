@@ -1,5 +1,5 @@
-import type { NotificationEvent } from "@agenteschat/client";
-import { createIsland, type OnScreen, raisesIsland, settledBy } from "@agenteschat/client/lib/island";
+import type { NotificationEvent } from "@keepmind/client";
+import { createIsland, type OnScreen, raisesIsland, settledBy } from "@keepmind/client/lib/island";
 
 /**
  * The island in this tab (ADR 0071 §9): one list for the workspace on screen, fed by the socket

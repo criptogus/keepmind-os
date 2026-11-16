@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { looksLikePassword, nameIsPassword } from "@agenteschat/client/lib/text";
+import { looksLikePassword, nameIsPassword } from "@keepmind/client/lib/text";
 
 /* Every phone flow that makes an account (or a request that becomes one) refuses a password equal to the name. */
 

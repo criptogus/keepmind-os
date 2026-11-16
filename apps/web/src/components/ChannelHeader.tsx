@@ -1,5 +1,5 @@
-import type { Agent, Channel, Member } from "@agenteschat/client";
-import { Icon } from "@agenteschat/ui";
+import type { Agent, Channel, Member } from "@keepmind/client";
+import { Icon } from "@keepmind/ui";
 import { useTranslation } from "react-i18next";
 import { ChannelPinsButton } from "@/components/ChannelPins";
 import { QueueButton } from "@/components/ComputerQueue";

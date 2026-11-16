@@ -1,6 +1,6 @@
 import { randomInt, randomUUID } from "node:crypto";
-import type { RateLimiter } from "@agenteschat/adapters";
-import { type Database, type Executor, eq, schema, sql } from "@agenteschat/db";
+import type { RateLimiter } from "@keepmind/adapters";
+import { type Database, type Executor, eq, schema, sql } from "@keepmind/db";
 import { sha256 } from "./crypto";
 import { type EmailLocale, type EmailTemplate, emailLocale, queueEmail } from "./email";
 import { ConflictError, ForbiddenError, TooManyError, ValidationError } from "./errors";

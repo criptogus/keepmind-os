@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { userTopic } from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
+import { userTopic } from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
 import {
   acceptDelivery,
   addChannelMember,

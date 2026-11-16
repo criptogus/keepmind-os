@@ -10,8 +10,8 @@ import {
   XCODE_FIX_STATES,
   type XcodeFix,
   type XcodeFixKind,
-} from "@agenteschat/adapters";
-import { and, type Database, eq, isNull, schema } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { and, type Database, eq, isNull, schema } from "@keepmind/db";
 import { recordAudit } from "./audit";
 import { mayManageDevice, publishDevicesChanged } from "./devices";
 import { ForbiddenError, NotFoundError } from "./errors";
@@ -28,7 +28,7 @@ const { machinePhones } = schema;
  * its owner's, on their adb.
  */
 
-/** A pairing as the apps see it; `update`: the computer's agentes.chat is too old to pair over Wi-Fi. */
+/** A pairing as the apps see it; `update`: the computer's KeepMind OS is too old to pair over Wi-Fi. */
 export interface WifiPairing {
   id: string;
   way: "qr" | "code";
@@ -193,7 +193,7 @@ export async function lookForPhones(deps: Deps, actorId: string, orgId: string, 
 /**
  * iPhones on a Mac's Wi-Fi (ADR 0042): the Mac lists the ones that trust it (they did over a cable once), and uses one
  * only after the person who manages the Mac picks it. Only they see the list: it names phones near the Mac, which may
- * be anyone's. `update`: the Mac's agentes.chat is too old to use iPhones over Wi-Fi.
+ * be anyone's. `update`: the Mac's KeepMind OS is too old to use iPhones over Wi-Fi.
  */
 export interface WifiIphones {
   available: WifiIphone[];
@@ -254,7 +254,7 @@ export async function pickIphoneOverWifi(
 
 /**
  * Fixing a Mac's own Xcode for an iPhone's setup (`xcode.fix`): `update` (from `XCODE_FIX_PROTOCOL` on, `start`
- * answers it): the Mac's agentes.chat is too old, the apps show the Terminal command instead. `fix: null`: none ran.
+ * answers it): the Mac's KeepMind OS is too old, the apps show the Terminal command instead. `fix: null`: none ran.
  */
 export interface XcodeFixView {
   fix: XcodeFix | null;

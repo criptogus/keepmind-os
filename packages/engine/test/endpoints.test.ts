@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { eq, schema } from "@agenteschat/db";
-import { customModelId, ProviderError } from "@agenteschat/providers";
+import { eq, schema } from "@keepmind/db";
+import { customModelId, ProviderError } from "@keepmind/providers";
 import {
   agentAiState,
   allowsPrivateEndpoints,
@@ -74,9 +74,9 @@ describe("the address", () => {
     );
   });
 
-  test("private addresses: on by default, off on agentes.chat Cloud, the flag wins", () => {
+  test("private addresses: on by default, off on KeepMind OS Cloud, the flag wins", () => {
     expect(allowsPrivateEndpoints({ PUBLIC_URL: "https://chat.example.com" })).toBe(true);
-    expect(allowsPrivateEndpoints({ PUBLIC_URL: "https://app.agentes.chat" })).toBe(false);
+    expect(allowsPrivateEndpoints({ PUBLIC_URL: "https://keepmind.io" })).toBe(false);
     expect(allowsPrivateEndpoints({ PUBLIC_URL: "https://chat.example.com", ALLOW_SIGNUP: true })).toBe(false);
     expect(allowsPrivateEndpoints({ PUBLIC_URL: "https://chat.example.com", MODEL_ENDPOINTS_PRIVATE: false })).toBe(
       false,

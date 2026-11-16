@@ -5,11 +5,11 @@ Pod::Spec.new do |s|
   s.summary        = 'The app icon a person picks on their phone.'
   s.description    = s.summary
   s.license        = 'AGPL-3.0-only'
-  s.author         = 'agentes.chat'
-  s.homepage       = 'https://agentes.chat'
+  s.author         = 'KeepMind OS'
+  s.homepage       = 'https://keepmind.io'
   s.platforms      = { :ios => '16.4' }
   s.swift_version  = '5.9'
-  s.source         = { git: 'https://github.com/agentes-chat/agentes-chat.git' }
+  s.source         = { git: 'https://github.com/criptogus/keepmind-os.git' }
   s.static_framework = true
 
   s.dependency 'ExpoModulesCore'

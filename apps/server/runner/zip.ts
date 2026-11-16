@@ -1,7 +1,7 @@
 import { readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import { deflateRawSync } from "node:zlib";
-import { inBrowserProfile } from "@agenteschat/adapters/command-policy";
+import { inBrowserProfile } from "@keepmind/adapters/command-policy";
 import { RunnerError } from "./errors";
 import { isInside } from "./paths";
 

@@ -1,4 +1,4 @@
-import { and, type Database, desc, type Executor, eq, isNull, schema } from "@agenteschat/db";
+import { and, type Database, desc, type Executor, eq, isNull, schema } from "@keepmind/db";
 import {
   endpointModelId,
   isAutoModel,
@@ -7,7 +7,7 @@ import {
   modelForTier,
   modelInfo,
   parseCustomModel,
-} from "@agenteschat/providers";
+} from "@keepmind/providers";
 import type { Agent } from "./agents";
 import { agentBrainSummaries, brainOf, CLAUDE_CODE_MODELS } from "./brain-settings";
 import type { BrainPlan } from "./brains/select";

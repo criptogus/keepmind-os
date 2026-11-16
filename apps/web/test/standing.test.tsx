@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { ApiError, keys, type OrgStanding, type Role } from "@agenteschat/client";
+import { ApiError, keys, type OrgStanding, type Role } from "@keepmind/client";
 import type { QueryClient } from "@tanstack/react-query";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { setNavigateAway } from "@/lib/navigate";
@@ -105,8 +105,8 @@ describe("on hold: a line on top of the work area", () => {
     expect(document.body.textContent).toContain("As conversas e os agentes dele estão fechados por enquanto.");
     expect(document.body.textContent).not.toContain("Precisa de ajuda");
     cleanup();
-    await open({ state: "hold", reason: null }, false, "suporte@agentes.chat", { cloud: true });
-    expect(banner().textContent).toContain("Precisa de ajuda? Escreva para suporte@agentes.chat.");
+    await open({ state: "hold", reason: null }, false, "contact@zeroagency.ai", { cloud: true });
+    expect(banner().textContent).toContain("Precisa de ajuda? Escreva para contact@zeroagency.ai.");
   });
 
   test("an active workspace shows nothing", async () => {
@@ -252,7 +252,7 @@ describe("a billing hold (ADR 0079): its own words, and its fix for whoever runs
   });
 });
 
-const CONTEST = "Para contestar, escreva para legal@agentes.chat.";
+const CONTEST = "Para contestar, escreva para contact@zeroagency.ai.";
 
 describe("on KeepMind OS Cloud: what it is, the Terms section and how to contest it", () => {
   test("the automatic hold reads the review line, an operator's reason how to contest it, a silent hold neither", async () => {

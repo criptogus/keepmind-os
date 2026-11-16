@@ -1,6 +1,6 @@
-import { holdEvents, type PubSub } from "@agenteschat/adapters";
-import { and, count, eq, inArray, isNull, or, schema, sql } from "@agenteschat/db";
-import { isKnownProvider, PROVIDERS } from "@agenteschat/providers";
+import { holdEvents, type PubSub } from "@keepmind/adapters";
+import { and, count, eq, inArray, isNull, or, schema, sql } from "@keepmind/db";
+import { isKnownProvider, PROVIDERS } from "@keepmind/providers";
 import { actWithUndo, publishMessageActions } from "./agent-actions";
 import {
   AGENT_PROPOSAL_CARD,
@@ -89,7 +89,7 @@ export const OPEN_PAGE_CARD = "action_open_page";
 /**
  * The screens an "Abrir" card opens (`offer_open_page`), each with what it is for the model. The screen asks what
  * it always asks there (the email code and the typed name of a deletion, Stripe for billing, our dialogs for keys)
- * and checks the clicker's permissions. Mirrored in `@agenteschat/client/lib/app-pages` (their paths on the web and
+ * and checks the clicker's permissions. Mirrored in `@keepmind/client/lib/app-pages` (their paths on the web and
  * the phone).
  */
 export const APP_PAGES = {
@@ -242,7 +242,7 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /**
  * A catalog connector or one-click MCP server by its id or name ("GitHub", "google-drive"). With `server`, as this
- * server's "Adicionar conector" lists it, whether it connects here (`soon`: its vendor hasn't approved agentes.chat).
+ * server's "Adicionar conector" lists it, whether it connects here (`soon`: its vendor hasn't approved KeepMind OS).
  */
 export function catalogConnector(
   name: string,
@@ -869,7 +869,7 @@ export function createSetupToolSource(deps: {
           if (listed && !listed.available) {
             return {
               content: listed.soon
-                ? `${listed.label} doesn't let agentes.chat connect in one click yet. If it gives an API key, ask the person for its MCP server's https address and pass it as \`url\` (the dialog asks for the key).`
+                ? `${listed.label} doesn't let KeepMind OS connect in one click yet. If it gives an API key, ask the person for its MCP server's https address and pass it as \`url\` (the dialog asks for the key).`
                 : `${listed.label} isn't available on this installation: whoever runs it has to turn it on first. Tell the person.`,
               isError: true,
             };

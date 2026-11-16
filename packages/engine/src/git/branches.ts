@@ -1,4 +1,4 @@
-import { and, type Database, desc, type Executor, eq, gt, gte, inArray, ne, schema } from "@agenteschat/db";
+import { and, type Database, desc, type Executor, eq, gt, gte, inArray, ne, schema } from "@keepmind/db";
 import { RULE_REMOVED_AUDIT } from "../approval-rules";
 import { connectorScope } from "../connectors/catalog";
 import { type ConnectorConnection, type ConnectorDeps, connectionHeaders } from "../connectors/connections";
@@ -38,7 +38,7 @@ export function pushGrantKeyOf(input: Record<string, unknown>): string | null {
 export const githubHeaders = (token: string) => ({
   authorization: `Bearer ${token}`,
   accept: "application/vnd.github+json",
-  "user-agent": "agentes.chat",
+  "user-agent": "keepmind.io",
 });
 
 /** A branch name in a REST path: each part escaped, the slashes kept. */

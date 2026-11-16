@@ -13,7 +13,7 @@ import {
   rowsOf,
   schema,
   sql,
-} from "@agenteschat/db";
+} from "@keepmind/db";
 import { audienceSql } from "./audience";
 import { messageRoot, personOfMessage, routinePostRun, runAuthorityById } from "./authority";
 import { agentLineRank, frontOfLine } from "./computer-queue";

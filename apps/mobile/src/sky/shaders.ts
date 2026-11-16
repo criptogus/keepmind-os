@@ -107,7 +107,7 @@ half4 main(float2 pos) {
 const OVERLAID: ReadonlySet<DitherKind> = new Set(["workspace"]);
 
 const FIELDS: Record<DitherKind, string> = {
-  // The workspace's sky (@agenteschat/ui sky/workspace): `phoneField`, then `cloudAt` (hour 0, the Cloud) or
+  // The workspace's sky (@keepmind/ui sky/workspace): `phoneField`, then `cloudAt` (hour 0, the Cloud) or
   // `starAt` (hour 1, a server of one's own) in PHONE_AREA, line by line.
   workspace: `
 uniform float hour;
@@ -230,7 +230,7 @@ float field(float u, float v, float x, float y) {
   return (edge && mod(x + y, 2.0) < 0.5) ? 0.2 : 0.0;
 }
 `,
-  // A picture forming out of the agent's sky (@agenteschat/ui sky/forming `formingField`, line by line): cells arrive
+  // A picture forming out of the agent's sky (@keepmind/ui sky/forming `formingField`, line by line): cells arrive
   // from the bottom-left with noise, deeper at the bottom; whole, it holds, fades and starts again (8 s). Drawn still
   // (t = 0: reduced motion, off screen) it is whole.
   forming: `
@@ -271,7 +271,7 @@ export const shaderSource = (kind: DitherKind) =>
   `${PRELUDE}${FIELDS[kind]}${OVERLAID.has(kind) ? MAIN_OVERLAY : MAIN}`;
 
 /**
- * The effort ramp (`drawEffort` of @agenteschat/ui's EffortPixels, on the UI thread): one-pixel bars a pixel apart
+ * The effort ramp (`drawEffort` of @keepmind/ui's EffortPixels, on the UI thread): one-pixel bars a pixel apart
  * climbing left to right in `steps` groups, filled up to `pos` in the agent's tone and breathing out of phase with
  * their neighbours, an ink column at the edge, the rest dotted. `t` in milliseconds, as there.
  */

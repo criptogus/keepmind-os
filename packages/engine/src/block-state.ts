@@ -1,6 +1,6 @@
-import { redactCommon } from "@agenteschat/adapters";
-import { and, type Database, eq, inArray, isNull, schema } from "@agenteschat/db";
-import { type BlockSpec, compileBlock, type Value, viewBlock } from "@agenteschat/ui/blocks/spec";
+import { redactCommon } from "@keepmind/adapters";
+import { and, type Database, eq, inArray, isNull, schema } from "@keepmind/db";
+import { type BlockSpec, compileBlock, type Value, viewBlock } from "@keepmind/ui/blocks/spec";
 import { type ArtifactDeps, getArtifact } from "./artifacts";
 import { requireChannelAccess } from "./channels";
 import { ForbiddenError, NotFoundError, ValidationError } from "./errors";

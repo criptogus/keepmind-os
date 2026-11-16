@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { channelTopic } from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
-import { type ModelRequest, textOf } from "@agenteschat/providers";
+import { channelTopic } from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
+import { type ModelRequest, textOf } from "@keepmind/providers";
 import {
   activeRunsIn,
   addChannelMember,

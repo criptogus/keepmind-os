@@ -1,5 +1,5 @@
-import { type SoundName, setSoundPlayer } from "@agenteschat/client/lib/sounds";
-import { DEFAULT_SOUND_STYLE, isSoundStyle, renderSound, SAMPLE_RATE, type SoundStyle } from "@agenteschat/ui/sfx";
+import { type SoundName, setSoundPlayer } from "@keepmind/client/lib/sounds";
+import { DEFAULT_SOUND_STYLE, isSoundStyle, renderSound, SAMPLE_RATE, type SoundStyle } from "@keepmind/ui/sfx";
 import { STORAGE_KEYS, sessionStore, storage } from "./storage";
 
 /**

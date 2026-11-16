@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
@@ -18,10 +18,10 @@ import type {
   TaskSteps,
   TaskWait,
   WorkingRun,
-} from "@agenteschat/client";
-import { keys, TASK_MANAGER_POLL_MS } from "@agenteschat/client";
-import { formatTime } from "@agenteschat/client/lib/format";
-import { usageWhenShort } from "@agenteschat/client/lib/plan-usage";
+} from "@keepmind/client";
+import { keys, TASK_MANAGER_POLL_MS } from "@keepmind/client";
+import { formatTime } from "@keepmind/client/lib/format";
+import { usageWhenShort } from "@keepmind/client/lib/plan-usage";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { ADA_ID, ATLAS_ID, createFakeApi, ENG_ID, type FakeState, fakeMachinesOf, ORG_ID, seedState } from "./fake-api";
 import { renderApp, screen, settle, showIn } from "./render";

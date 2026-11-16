@@ -1,12 +1,12 @@
 import { createSign } from "node:crypto";
-import { and, type Database, eq, isNull, schema } from "@agenteschat/db";
+import { and, type Database, eq, isNull, schema } from "@keepmind/db";
 
 const { githubAppInstallations } = schema;
 
 /**
  * Our GitHub App (ADR 0033, 0156): `GITHUB_APP_*`, else the one the server's owner made from Settings
  * (`github-app-settings.ts`). Short tokens scoped to one repo. The app is public; installations count only for the
- * organization that installed it from agentes.chat (`github_app_installations`, see `github-app-installs.ts`).
+ * organization that installed it from KeepMind OS (`github_app_installations`, see `github-app-installs.ts`).
  */
 export interface GitHubAppConfig {
   appId: string;
@@ -58,7 +58,7 @@ function appJwt(app: GitHubAppConfig, now = Date.now()) {
 const appHeaders = (app: GitHubAppConfig) => ({
   authorization: `Bearer ${appJwt(app)}`,
   accept: "application/vnd.github+json",
-  "user-agent": "agentes.chat",
+  "user-agent": "keepmind.io",
 });
 
 /** The installation is bound to this organization and not suspended. */
@@ -209,7 +209,7 @@ export async function botIdentity(app: GitHubAppConfig, http: GitHubHttp) {
   const login = `${app.slug}[bot]`;
   const res = await http
     .fetch(`${http.apiUrl}/users/${encodeURIComponent(login)}`, {
-      headers: { accept: "application/vnd.github+json", "user-agent": "agentes.chat" },
+      headers: { accept: "application/vnd.github+json", "user-agent": "keepmind.io" },
     })
     .catch(() => null);
   const body = res?.ok ? ((await res.json().catch(() => null)) as { id?: unknown } | null) : null;

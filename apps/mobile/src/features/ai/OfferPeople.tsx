@@ -1,4 +1,4 @@
-import { CardVia, type Message, useChangeRole, useMembers, useRoles, useSetMemberRoles } from "@agenteschat/client";
+import { CardVia, type Message, useChangeRole, useMembers, useRoles, useSetMemberRoles } from "@keepmind/client";
 import {
   type MemberChangeRow,
   type MemberChangesCard,
@@ -7,8 +7,8 @@ import {
   memberRowsBlocked,
   memberRowText,
   rolesAfter,
-} from "@agenteschat/client/lib/action-cards";
-import { can } from "@agenteschat/client/lib/permissions";
+} from "@keepmind/client/lib/action-cards";
+import { can } from "@keepmind/client/lib/permissions";
 import { useId, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";

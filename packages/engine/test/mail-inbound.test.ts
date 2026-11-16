@@ -5,8 +5,8 @@ import {
   fakeMailAuthError,
   MailError,
   type MailSummary,
-} from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
 import {
   completeComposioConnect,
   createRoutine,

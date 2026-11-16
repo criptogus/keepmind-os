@@ -4,7 +4,7 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, w
 import { homedir } from "node:os";
 import path from "node:path";
 import { createInterface } from "node:readline";
-import { type CommandProfile, shellWords } from "@agenteschat/adapters/command-policy";
+import { type CommandProfile, shellWords } from "@keepmind/adapters/command-policy";
 import {
   type AgentScope,
   type BrainEffort,
@@ -12,7 +12,7 @@ import {
   isAccountId,
   isBrainEffort,
   isContextTokens,
-} from "@agenteschat/adapters/machine-protocol";
+} from "@keepmind/adapters/machine-protocol";
 import {
   ACCOUNT_MISSING_MESSAGE,
   ACCOUNT_SIGNED_OUT,

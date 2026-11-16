@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { createFakeErrorReporter } from "@agenteschat/adapters";
-import { schema, sql } from "@agenteschat/db";
-import { createTestDatabase } from "@agenteschat/db/testing";
-import { createOutboxPump, enqueue, NotFoundError } from "@agenteschat/engine";
-import type { AgentesModule, ModuleContext } from "@agenteschat/modules";
+import { createFakeErrorReporter } from "@keepmind/adapters";
+import { schema, sql } from "@keepmind/db";
+import { createTestDatabase } from "@keepmind/db/testing";
+import { createOutboxPump, enqueue, NotFoundError } from "@keepmind/engine";
+import type { AgentesModule, ModuleContext } from "@keepmind/modules";
 import { validator } from "hono/validator";
 import { createApp } from "../src/app";
 import { createLogger } from "../src/logger";

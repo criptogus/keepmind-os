@@ -11,7 +11,7 @@
 #
 # To read it before it runs: curl -fsSLo install.sh https://agentes.chat/install, then sh install.sh.
 #
-# It gets this computer ready, then hands over to the setup (@agenteschat/setup), which asks its few
+# It gets this computer ready, then hands over to the setup (@keepmind/setup), which asks its few
 # questions, writes .env and starts everything. On Linux it makes sure of Docker and its Compose
 # plugin, and starts the engine when it's stopped. On a Mac it starts the Docker it finds (Docker
 # Desktop, OrbStack or Colima), or installs Colima with Homebrew; each after asking (--yes doesn't
@@ -191,7 +191,7 @@ main() {
   fi
   case $DIR in /*) ;; *) DIR=$PWD/$DIR ;; esac
 
-  SETUP="@agenteschat/setup@$SETUP_VERSION"
+  SETUP="@keepmind/setup@$SETUP_VERSION"
   if [ -n "${AGENTES_INSTALL_SETUP:-}" ]; then
     case $AGENTES_INSTALL_SETUP in /*) ;; *) AGENTES_INSTALL_SETUP=$PWD/$AGENTES_INSTALL_SETUP ;; esac
     [ -f "$AGENTES_INSTALL_SETUP" ] ||

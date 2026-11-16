@@ -1,4 +1,4 @@
-import { bodyTones, toneAt } from "@agenteschat/ui/agent/engine";
+import { bodyTones, toneAt } from "@keepmind/ui/agent/engine";
 import { ICON_NAMES, type IconName } from "./icons.data";
 
 /**

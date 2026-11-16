@@ -1,5 +1,5 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, type Database, desc, type Executor, eq, gt, schema, sql } from "@agenteschat/db";
+import type { PubSub } from "@keepmind/adapters";
+import { and, type Database, desc, type Executor, eq, gt, schema, sql } from "@keepmind/db";
 import { type Agent, getAgentCached } from "./agents";
 import { runBrainOf } from "./brains/select";
 import { endsAsking } from "./brakes";

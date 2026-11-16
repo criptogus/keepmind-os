@@ -1,4 +1,4 @@
-import { ComposioSignatureError } from "@agenteschat/adapters";
+import { ComposioSignatureError } from "@keepmind/adapters";
 import {
   addGitHubRepoHook,
   createWebhookEndpoint,
@@ -14,7 +14,7 @@ import {
   WEBHOOK_PROVIDERS,
   type WebhookProvider,
   webhookSetup,
-} from "@agenteschat/engine";
+} from "@keepmind/engine";
 import { createRoute, type OpenAPIHono, z } from "@hono/zod-openapi";
 import { requestLimitIp } from "../http/client-ip";
 import { apiError } from "../http/errors";

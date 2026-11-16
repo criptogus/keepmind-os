@@ -4,7 +4,7 @@ import {
   useDeleteDashboard,
   useSetHomeDashboard,
   useUpdateDashboard,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { ActionSheetIOS, Alert, Platform } from "react-native";

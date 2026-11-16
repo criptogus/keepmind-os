@@ -16,7 +16,7 @@ import {
   WAITLIST_LOCALES,
   waitlistCounts,
   waitlistNext,
-} from "@agenteschat/engine";
+} from "@keepmind/engine";
 import { createRoute, type OpenAPIHono, z } from "@hono/zod-openapi";
 import { apiError, errorResponse } from "../http/errors";
 import { body, iso, json } from "../routes/app/context";
@@ -134,7 +134,7 @@ export function registerOperatorAccess(api: OpenAPIHono, { db, config, emails }:
       tags,
       summary: "Open sign-up to everyone, or back to invitation only",
       description:
-        "Takes effect at once, with no restart. Setting the current mode changes nothing. On agentes.chat Cloud, while it is `invite`, only the accounts early access allowed make workspaces, as many as they like; `open` lets every account make workspaces, each with its own computer. Refused (409 `signup.host_computer`) to open while this server is its agents' computer (`HOST_COMPUTER_TOKEN`).",
+        "Takes effect at once, with no restart. Setting the current mode changes nothing. On KeepMind OS Cloud, while it is `invite`, only the accounts early access allowed make workspaces, as many as they like; `open` lets every account make workspaces, each with its own computer. Refused (409 `signup.host_computer`) to open while this server is its agents' computer (`HOST_COMPUTER_TOKEN`).",
       request: { body: body(z.object({ mode: z.enum(SIGNUP_MODES) })) },
       responses: {
         200: json(Signup),

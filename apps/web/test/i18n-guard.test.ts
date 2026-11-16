@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join, relative } from "node:path";
-import { en, ptBR } from "@agenteschat/i18n";
-import { legalDocuments } from "@agenteschat/i18n/legal";
+import { en, ptBR } from "@keepmind/i18n";
+import { legalDocuments } from "@keepmind/i18n/legal";
 import { leaves } from "../../../packages/i18n/test/leaves";
 import { filesNamingMakers, MAKER_WORDS, sourceFiles, withoutComments } from "../../../packages/i18n/test/maker-words";
 

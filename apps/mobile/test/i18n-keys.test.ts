@@ -1,9 +1,9 @@
 import { expect, test } from "bun:test";
 import { readdirSync, readFileSync } from "node:fs";
 import { join, relative } from "node:path";
-import { resources } from "@agenteschat/i18n";
-import { LOCALES } from "@agenteschat/i18n/locale";
-import { checkLocale } from "@agenteschat/i18n/testing";
+import { resources } from "@keepmind/i18n";
+import { LOCALES } from "@keepmind/i18n/locale";
+import { checkLocale } from "@keepmind/i18n/testing";
 import identical from "../../../packages/i18n/test/identical.json";
 import { leaves as entries } from "../../../packages/i18n/test/leaves";
 import { filesNamingMakers } from "../../../packages/i18n/test/maker-words";

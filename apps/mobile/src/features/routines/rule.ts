@@ -1,6 +1,6 @@
-import type { ApiRule, ProposedRoutine } from "@agenteschat/client";
-import { clockHour, joinNames, toYmd } from "@agenteschat/client/lib/format";
-import { timezoneName } from "@agenteschat/client/lib/routines";
+import type { ApiRule, ProposedRoutine } from "@keepmind/client";
+import { clockHour, joinNames, toYmd } from "@keepmind/client/lib/format";
+import { timezoneName } from "@keepmind/client/lib/routines";
 import {
   BUSINESS_DAYS,
   nextOccurrences,
@@ -8,14 +8,14 @@ import {
   type Weekday,
   weekdayOfYmd,
   zonedInstant,
-} from "@agenteschat/ui/recurrence";
+} from "@keepmind/ui/recurrence";
 import type { TFunction } from "i18next";
 
 /**
  * A routine's "when" on the phone: the rule the API sends turned into the form's rule and back, the sentence
  * in the person's language ("Toda semana, seg, às 09:00") and the next runs, as the web says them
  * (`apps/web/src/lib/recurrence.ts`, an app module the phone can't import). The date math itself is the shared
- * `@agenteschat/ui/recurrence`. Pure TypeScript, so it runs in `bun test`.
+ * `@keepmind/ui/recurrence`. Pure TypeScript, so it runs in `bun test`.
  */
 
 export type { RecurrenceRule };
@@ -130,7 +130,7 @@ export function upcomingLabels(locale: string, rule: RecurrenceRule, from = new 
 }
 
 /** A next run on this phone's clock: "seg 20 out, 09:00". */
-export { nextLabel } from "@agenteschat/client/lib/format";
+export { nextLabel } from "@keepmind/client/lib/format";
 
 // ── The API's rule ⇄ the form's ────────────────────────────────────────────
 

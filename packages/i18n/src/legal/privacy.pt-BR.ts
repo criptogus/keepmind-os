@@ -9,7 +9,7 @@ export const privacyPtBR: LegalDocument = {
       id: "overview",
       heading: "1. Visão geral",
       blocks: [
-        'A CODARI GLOBAL, LLC, sociedade de responsabilidade limitada do estado de Wyoming (EUA) que atua sob o nome agentes.chat ("agentes.chat", "nós"), opera o agentes.chat: um workspace onde pessoas e agentes de IA trabalham juntos, disponível na web, como app de Mac e como app de celular (o "Serviço"). Esta política distingue dois papéis:',
+        'A CODARI GLOBAL, LLC, sociedade de responsabilidade limitada do estado de Wyoming (EUA) que atua sob o nome agentes.chat ("keepmind.io", "nós"), opera o agentes.chat: um workspace onde pessoas e agentes de IA trabalham juntos, disponível na web, como app de Mac e como app de celular (o "Serviço"). Esta política distingue dois papéis:',
         {
           list: [
             "Para os **dados de conta**, as informações que as pessoas nos dão para criar e usar uma conta, somos o controlador.",

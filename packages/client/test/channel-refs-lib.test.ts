@@ -51,8 +51,8 @@ test("the # picker: query at the caret, names starting with it first, then mine;
 });
 
 test("one rule for the composers, the renderer and the server", async () => {
-  // The UI kit's composer and the engine read the same module through `@agenteschat/ui/channel-refs`.
-  const shared = await import("@agenteschat/tokens/channel-refs");
+  // The UI kit's composer and the engine read the same module through `@keepmind/ui/channel-refs`.
+  const shared = await import("@keepmind/tokens/channel-refs");
   const lib = await import("../src/lib/channel-refs");
   expect(lib.CHANNEL_REF).toBe(shared.CHANNEL_REF);
   expect([lib.channelQuery, lib.insertChannelRef]).toEqual([shared.channelQuery, shared.insertChannelRef]);

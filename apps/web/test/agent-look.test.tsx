@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { ACCESSORIES, AGENT_ACCESSORIES, Avatar, normalizeAppearance, randomAppearance } from "@agenteschat/ui";
+import { ACCESSORIES, AGENT_ACCESSORIES, Avatar, normalizeAppearance, randomAppearance } from "@keepmind/ui";
 import { act, cleanup, fireEvent, render, within } from "@testing-library/react";
 import { ADA_ID, createFakeApi, ORG_ID, seedDm, seedState } from "./fake-api";
 import { renderApp, screen, settle } from "./render";

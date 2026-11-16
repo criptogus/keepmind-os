@@ -1,7 +1,7 @@
-import type { Artifact, ArtifactContent } from "@agenteschat/client";
-import { documentPreview, parsePatch } from "@agenteschat/client/lib/artifacts";
-import { fileIcon, previewKind } from "@agenteschat/client/lib/files";
-import { daysBetween } from "@agenteschat/client/lib/format";
+import type { Artifact, ArtifactContent } from "@keepmind/client";
+import { documentPreview, parsePatch } from "@keepmind/client/lib/artifacts";
+import { fileIcon, previewKind } from "@keepmind/client/lib/files";
+import { daysBetween } from "@keepmind/client/lib/format";
 
 /**
  * The Drive on the phone: the type chips, the sections by day

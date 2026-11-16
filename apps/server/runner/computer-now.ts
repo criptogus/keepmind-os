@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { cgroupCounters, meminfoBytes } from "@agenteschat/adapters/host-stats";
+import { cgroupCounters, meminfoBytes } from "@keepmind/adapters/host-stats";
 import { AGENTS_CGROUP } from "./service";
 import { isOrgSharedGroup } from "./shared-folder";
 

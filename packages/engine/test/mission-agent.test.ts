@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { MACHINE_PROTOCOL_VERSION } from "@agenteschat/adapters";
-import { and, eq, schema } from "@agenteschat/db";
-import { systemText } from "@agenteschat/providers";
+import { MACHINE_PROTOCOL_VERSION } from "@keepmind/adapters";
+import { and, eq, schema } from "@keepmind/db";
+import { systemText } from "@keepmind/providers";
 import {
   addChannelMember,
   chooseDecision,

@@ -12,7 +12,7 @@ export const waitlistEntries = pgTable(
   {
     id: uuid().primaryKey().defaultRandom(),
     email: text().notNull(),
-    /** The language of the invitation email (a code of `@agenteschat/i18n/locale`). */
+    /** The language of the invitation email (a code of `@keepmind/i18n/locale`). */
     locale: text().notNull().default("en"),
     /** Where they joined from ("landing"). */
     source: text().notNull().default("landing"),
@@ -36,7 +36,7 @@ export const waitlistEntries = pgTable(
 
 /**
  * People who want to join the partner program (agencies and consultants who
- * would set agentes.chat up for their own clients), from the landing page's
+ * would set KeepMind OS up for their own clients), from the landing page's
  * partner page. Its own list: nobody here is invited to the product, and the
  * email provider keeps them apart from the product's waiting list (contact
  * property `partner_waitlist`, never `waitlist`). Not tenant-owned: it exists
@@ -52,7 +52,7 @@ export const partnerWaitlistEntries = pgTable(
     name: text().notNull(),
     /** As sent: E.164 from the page's country picker ("+5511912345678"), or as typed on a page without it. */
     whatsapp: text().notNull(),
-    /** The page's language (a code of `@agenteschat/i18n/locale`). */
+    /** The page's language (a code of `@keepmind/i18n/locale`). */
     locale: text().notNull().default("en"),
     /** Where they joined from ("partners", the partner page). */
     source: text().notNull().default("partners"),

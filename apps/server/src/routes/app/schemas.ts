@@ -1,4 +1,4 @@
-import { ACCOUNT_KINDS, BRAIN_EFFORTS, BRAIN_SPEEDS } from "@agenteschat/adapters";
+import { ACCOUNT_KINDS, BRAIN_EFFORTS, BRAIN_SPEEDS } from "@keepmind/adapters";
 import {
   AGENT_ACTION_KINDS,
   AGENT_STYLES,
@@ -10,8 +10,8 @@ import {
   STANDING_STATES,
   START_PAGES,
   WORKSPACE_MODES,
-} from "@agenteschat/engine";
-import { CONTEXT_LIMITS, ENDPOINT_STYLES, MODEL_TIERS, PROVIDER_IDS } from "@agenteschat/providers";
+} from "@keepmind/engine";
+import { CONTEXT_LIMITS, ENDPOINT_STYLES, MODEL_TIERS, PROVIDER_IDS } from "@keepmind/providers";
 import { z } from "@hono/zod-openapi";
 
 /** Who a task or a wiki page is for (ADR 0151): "only me" is a list of one. Administrators always see it. */
@@ -156,7 +156,7 @@ export const Organization = z
         reason: z.string().nullable().openapi({ description: "Only when the workspace is told why; else null." }),
         cloud: z.literal(true).optional().openapi({
           description:
-            "agentes.chat Cloud: the apps read `review` as the automatic review hold's line (`review.<category>` naming what was flagged), and add how to contest a reason.",
+            "KeepMind OS Cloud: the apps read `review` as the automatic review hold's line (`review.<category>` naming what was flagged), and add how to contest a reason.",
         }),
       })
       .optional()

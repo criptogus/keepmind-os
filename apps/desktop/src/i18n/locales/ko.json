@@ -228,7 +228,7 @@
     "approveStop": "그만 기다리기",
     "openTailscale": "Tailscale 열기",
     "getTailscale": "Tailscale 받기",
-    "usage": "agentes.chat에 익명 사용 통계 보내기",
+    "usage": "KeepMind OS에 익명 사용 통계 보내기",
     "usageText": "사람 수, 에이전트 수, 머신 사양, 사용한 AI 토큰, 에이전트 브라우저가 주고받은 데이터양 같은 수치예요. 메시지, 파일, 이름, 사이트는 절대 보내지 않아요.",
     "start": "시작",
     "setting": "모두 준비하는 중",

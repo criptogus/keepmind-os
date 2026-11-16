@@ -1,4 +1,4 @@
-import { modelInfo } from "@agenteschat/providers";
+import { modelInfo } from "@keepmind/providers";
 import { cutText } from "./format";
 import type { ModelGateway } from "./gateway";
 import { callJev, type JevKeySource } from "./jev-key";

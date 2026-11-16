@@ -7,10 +7,10 @@ import {
   MISSION_PROTOCOL,
   OPENCODE_ACP_PROTOCOL,
   SPEED_PROTOCOL,
-} from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
-import { MODEL_CATALOG } from "@agenteschat/providers";
-import { CODING_PLANS, learnPlanModels, planOf } from "@agenteschat/providers/plans";
+} from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
+import { MODEL_CATALOG } from "@keepmind/providers";
+import { CODING_PLANS, learnPlanModels, planOf } from "@keepmind/providers/plans";
 import {
   ConflictError,
   canTalkTo,
@@ -125,7 +125,7 @@ describe("brain settings", () => {
         .slice(1, 3)
         .map((o) => [o.kind, o.available, o.reason ?? null]);
     const executors = { claude: { version: "2" }, codex: { version: "codex-cli 0.170.0" }, detectedAt: "x" };
-    // An older Windows runner refuses every Codex turn: "update the agentes.chat program", not "update Codex".
+    // An older Windows runner refuses every Codex turn: "update the KeepMind OS program", not "update Codex".
     expect(reasons(mac({ os: "windows", protocol: CODEX_WINDOWS_PROTOCOL - 1, executors }))).toEqual([
       ["claude_code", true, null],
       ["codex", false, "runner_old"],

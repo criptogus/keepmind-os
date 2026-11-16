@@ -13,7 +13,7 @@ import {
   revokeToken,
   startAuthorization,
   touchGrant,
-} from "@agenteschat/engine";
+} from "@keepmind/engine";
 import type { OpenAPIHono } from "@hono/zod-openapi";
 import type { Context } from "hono";
 import { bodyLimit } from "hono/body-limit";
@@ -22,7 +22,7 @@ import { requestLimitIp } from "../http/client-ip";
 import type { AppDeps } from "./app/context";
 
 /**
- * agentes.chat as a remote MCP server for AI apps (ADR 0119): the discovery documents, this server's own OAuth 2.1
+ * KeepMind OS as a remote MCP server for AI apps (ADR 0119): the discovery documents, this server's own OAuth 2.1
  * authorization server (`/api/oauth/*`) and the MCP endpoint (`/mcp`). One origin for all of them: Claude drops
  * `Authorization` on a cross-host redirect.
  */
@@ -91,7 +91,7 @@ export function registerAppsRoot(app: OpenAPIHono, deps: AppDeps, options: AppsR
     authorization_servers: [urls.issuer],
     scopes_supported: [...APP_SCOPES],
     bearer_methods_supported: ["header"],
-    resource_name: "agentes.chat",
+    resource_name: "KeepMind OS",
     resource_documentation: urls.docs,
   };
   const authorizationServer = {

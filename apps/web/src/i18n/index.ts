@@ -1,6 +1,6 @@
-import { type LocaleState, useLocaleSync } from "@agenteschat/client/lib/locale-sync";
-import { resources } from "@agenteschat/i18n";
-import { loadStrings } from "@agenteschat/i18n/load";
+import { type LocaleState, useLocaleSync } from "@keepmind/client/lib/locale-sync";
+import { resources } from "@keepmind/i18n";
+import { loadStrings } from "@keepmind/i18n/load";
 import {
   type AppLocale,
   appLocale,
@@ -9,7 +9,7 @@ import {
   LOCALE_CODES,
   localeInfo,
   readyLocales,
-} from "@agenteschat/i18n/locale";
+} from "@keepmind/i18n/locale";
 import i18n, { type i18n as I18n, type InitOptions } from "i18next";
 import { useEffect, useState } from "react";
 import { initReactI18next, useTranslation } from "react-i18next";
@@ -32,7 +32,7 @@ export const TYPED_VALUES = { tOptions: { interpolation: { escapeValue: true } }
 const STORAGE_KEY = "agentes.locale";
 /** "1" while a choice made signed out waits for the next sign-in to reach the server. */
 const PENDING_KEY = "agentes.locale.pending";
-/** The landing's language switch (agentes.chat), shared with the app's host. */
+/** The landing's language switch (KeepMind OS), shared with the app's host. */
 const LANDING_COOKIE = "agentes_locale";
 
 function browserLanguages(): readonly string[] {

@@ -1,4 +1,4 @@
-import type { PlanAccountInfo, PlanUsage } from "@agenteschat/client";
+import type { PlanAccountInfo, PlanUsage } from "@keepmind/client";
 import {
   accountName,
   accountOwner,
@@ -7,9 +7,9 @@ import {
   type MeterWindow,
   planMeterText,
   planModelUsage,
-} from "@agenteschat/client/lib/plan-usage";
-import { planName } from "@agenteschat/client/lib/plans";
-import { mixHex } from "@agenteschat/ui/agent/engine";
+} from "@keepmind/client/lib/plan-usage";
+import { planName } from "@keepmind/client/lib/plans";
+import { mixHex } from "@keepmind/ui/agent/engine";
 import {
   PLAN_ALMOST,
   PLAN_TONE,
@@ -18,7 +18,7 @@ import {
   planState,
   planWindows,
   renewals,
-} from "@agenteschat/ui/plan-state";
+} from "@keepmind/ui/plan-state";
 import { Canvas, createPicture, Picture, Skia } from "@shopify/react-native-skia";
 import { type ReactNode, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -29,7 +29,7 @@ import { useColors } from "../shared/hooks";
 /*
  * The usage views' pieces (ADR 0063), as the web draws them (`PlanMeter`, `UsageDays`, `PlanUsage.tsx`): a plan's
  * windows as bars, an account's head, a month day by day. The words come from the shared
- * `@agenteschat/client/lib/plan-usage`.
+ * `@keepmind/client/lib/plan-usage`.
  */
 
 type MeterUsage = { windows: readonly MeterWindow[]; limited?: boolean; at: string };

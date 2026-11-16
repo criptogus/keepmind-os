@@ -11,15 +11,15 @@
       },
     },
     "apps/desktop": {
-      "name": "@agenteschat/desktop",
-      "version": "0.5.6",
+      "name": "@keepmind/desktop",
+      "version": "0.2.0-alpha.3",
       "dependencies": {
-        "@agenteschat/adapters": "workspace:*",
-        "@agenteschat/client": "workspace:*",
-        "@agenteschat/i18n": "workspace:*",
-        "@agenteschat/ui": "workspace:*",
         "@fontsource-variable/martian-mono": "^5.3.0",
         "@fontsource-variable/onest": "^5.3.1",
+        "@keepmind/adapters": "workspace:*",
+        "@keepmind/client": "workspace:*",
+        "@keepmind/i18n": "workspace:*",
+        "@keepmind/ui": "workspace:*",
         "@tauri-apps/api": "^2.5.0",
         "i18next": "^26.4.2",
         "react": "^19.2.8",
@@ -36,16 +36,16 @@
       },
     },
     "apps/mobile": {
-      "name": "@agenteschat/mobile",
+      "name": "@keepmind/mobile",
       "version": "0.0.0",
       "dependencies": {
-        "@agenteschat/adapters": "workspace:*",
-        "@agenteschat/client": "workspace:*",
-        "@agenteschat/i18n": "workspace:*",
-        "@agenteschat/tokens": "workspace:*",
-        "@agenteschat/ui": "workspace:*",
         "@better-auth/expo": "^1.7.10",
         "@expo/metro-runtime": "~58.0.14",
+        "@keepmind/adapters": "workspace:*",
+        "@keepmind/client": "workspace:*",
+        "@keepmind/i18n": "workspace:*",
+        "@keepmind/tokens": "workspace:*",
+        "@keepmind/ui": "workspace:*",
         "@legendapp/list": "3.7.0",
         "@noble/ciphers": "^2.4.0",
         "@noble/curves": "^2.4.0",
@@ -106,22 +106,22 @@
       },
     },
     "apps/server": {
-      "name": "@agenteschat/server",
-      "version": "0.1.0",
+      "name": "@keepmind/server",
+      "version": "0.2.0-alpha.1",
       "dependencies": {
-        "@agenteschat/adapters": "workspace:*",
-        "@agenteschat/client": "workspace:*",
-        "@agenteschat/config": "workspace:*",
-        "@agenteschat/db": "workspace:*",
-        "@agenteschat/engine": "workspace:*",
-        "@agenteschat/i18n": "workspace:*",
-        "@agenteschat/modules": "workspace:*",
-        "@agenteschat/providers": "workspace:*",
-        "@agenteschat/setup": "workspace:*",
-        "@agenteschat/tokens": "workspace:*",
-        "@agenteschat/ui": "workspace:*",
         "@better-auth/expo": "^1.7.7",
         "@hono/zod-openapi": "^1.6.3",
+        "@keepmind/adapters": "workspace:*",
+        "@keepmind/client": "workspace:*",
+        "@keepmind/config": "workspace:*",
+        "@keepmind/db": "workspace:*",
+        "@keepmind/engine": "workspace:*",
+        "@keepmind/i18n": "workspace:*",
+        "@keepmind/modules": "workspace:*",
+        "@keepmind/providers": "workspace:*",
+        "@keepmind/setup": "workspace:*",
+        "@keepmind/tokens": "workspace:*",
+        "@keepmind/ui": "workspace:*",
         "@scalar/hono-api-reference": "^0.12.9",
         "better-auth": "^1.7.7",
         "hono": "^4.13.13",
@@ -133,17 +133,17 @@
       },
     },
     "apps/web": {
-      "name": "@agenteschat/web",
+      "name": "@keepmind/web",
       "version": "0.0.0",
       "dependencies": {
-        "@agenteschat/adapters": "workspace:*",
-        "@agenteschat/client": "workspace:*",
-        "@agenteschat/i18n": "workspace:*",
-        "@agenteschat/ui": "workspace:*",
         "@fontsource-variable/jetbrains-mono": "^5.3.0",
         "@fontsource-variable/martian-mono": "^5.3.0",
         "@fontsource-variable/onest": "^5.3.1",
         "@fontsource-variable/source-sans-3": "^5.3.1",
+        "@keepmind/adapters": "workspace:*",
+        "@keepmind/client": "workspace:*",
+        "@keepmind/i18n": "workspace:*",
+        "@keepmind/ui": "workspace:*",
         "@novnc/novnc": "1.7.0",
         "@sentry/browser": "10.76.2",
         "@tanstack/react-query": "^5.104.1",
@@ -171,11 +171,11 @@
       },
     },
     "packages/adapters": {
-      "name": "@agenteschat/adapters",
+      "name": "@keepmind/adapters",
       "version": "0.0.0",
       "dependencies": {
         "@1password/sdk": "0.5.0",
-        "@agenteschat/db": "workspace:*",
+        "@keepmind/db": "workspace:*",
         "@noble/ciphers": "^2.4.0",
         "@noble/hashes": "^2.4.0",
         "@sentry/core": "10.76.2",
@@ -192,13 +192,13 @@
       },
     },
     "packages/client": {
-      "name": "@agenteschat/client",
+      "name": "@keepmind/client",
       "version": "0.0.0",
       "dependencies": {
-        "@agenteschat/i18n": "workspace:*",
-        "@agenteschat/providers": "workspace:*",
-        "@agenteschat/tokens": "workspace:*",
-        "@agenteschat/ui": "workspace:*",
+        "@keepmind/i18n": "workspace:*",
+        "@keepmind/providers": "workspace:*",
+        "@keepmind/tokens": "workspace:*",
+        "@keepmind/ui": "workspace:*",
         "yaml": "^2.9.1",
       },
       "devDependencies": {
@@ -214,20 +214,20 @@
       },
     },
     "packages/config": {
-      "name": "@agenteschat/config",
+      "name": "@keepmind/config",
       "version": "0.0.0",
       "dependencies": {
         "zod": "^4.6.5",
       },
     },
     "packages/db": {
-      "name": "@agenteschat/db",
+      "name": "@keepmind/db",
       "version": "0.0.0",
       "dependencies": {
-        "@agenteschat/config": "workspace:*",
         "@electric-sql/pglite": "0.5.8",
         "@electric-sql/pglite-pgvector": "0.0.9",
         "@electric-sql/pglite-tools": "0.4.8",
+        "@keepmind/config": "workspace:*",
         "drizzle-orm": "^0.45.3",
         "postgres": "^3.4.9",
       },
@@ -236,15 +236,15 @@
       },
     },
     "packages/engine": {
-      "name": "@agenteschat/engine",
+      "name": "@keepmind/engine",
       "version": "0.0.0",
       "dependencies": {
-        "@agenteschat/adapters": "workspace:*",
-        "@agenteschat/db": "workspace:*",
-        "@agenteschat/i18n": "workspace:*",
-        "@agenteschat/providers": "workspace:*",
-        "@agenteschat/tokens": "workspace:*",
-        "@agenteschat/ui": "workspace:*",
+        "@keepmind/adapters": "workspace:*",
+        "@keepmind/db": "workspace:*",
+        "@keepmind/i18n": "workspace:*",
+        "@keepmind/providers": "workspace:*",
+        "@keepmind/tokens": "workspace:*",
+        "@keepmind/ui": "workspace:*",
         "@modelcontextprotocol/sdk": "^1.32.1",
         "@modelcontextprotocol/server": "2.3.1",
         "libpg-query": "17",
@@ -255,25 +255,25 @@
       },
     },
     "packages/i18n": {
-      "name": "@agenteschat/i18n",
+      "name": "@keepmind/i18n",
       "version": "0.0.0",
       "devDependencies": {
         "i18next": "^26.4.2",
       },
     },
     "packages/modules": {
-      "name": "@agenteschat/modules",
+      "name": "@keepmind/modules",
       "version": "0.0.0",
       "dependencies": {
-        "@agenteschat/adapters": "workspace:*",
-        "@agenteschat/config": "workspace:*",
-        "@agenteschat/db": "workspace:*",
-        "@agenteschat/providers": "workspace:*",
         "@hono/zod-openapi": "^1.6.3",
+        "@keepmind/adapters": "workspace:*",
+        "@keepmind/config": "workspace:*",
+        "@keepmind/db": "workspace:*",
+        "@keepmind/providers": "workspace:*",
       },
     },
     "packages/providers": {
-      "name": "@agenteschat/providers",
+      "name": "@keepmind/providers",
       "version": "0.0.0",
       "dependencies": {
         "@anthropic-ai/sdk": "^0.133.0",
@@ -281,8 +281,8 @@
       },
     },
     "packages/setup": {
-      "name": "@agenteschat/setup",
-      "version": "0.1.0",
+      "name": "@keepmind/setup",
+      "version": "0.1.1",
       "bin": {
         "agentes-setup": "dist/index.js",
       },
@@ -291,15 +291,15 @@
       },
     },
     "packages/tokens": {
-      "name": "@agenteschat/tokens",
+      "name": "@keepmind/tokens",
       "version": "0.0.0",
     },
     "packages/ui": {
-      "name": "@agenteschat/ui",
+      "name": "@keepmind/ui",
       "version": "0.0.0",
       "dependencies": {
-        "@agenteschat/i18n": "workspace:*",
-        "@agenteschat/tokens": "workspace:*",
+        "@keepmind/i18n": "workspace:*",
+        "@keepmind/tokens": "workspace:*",
         "radix-ui": "^1.8.1",
         "uqr": "0.1.3",
       },
@@ -326,36 +326,6 @@
     "@1password/sdk": ["@1password/sdk@0.5.0", "", { "dependencies": { "@1password/sdk-core": "0.5.0" } }, "sha512-k6kov3pcA7PRg2tev9CgTfEf/3JSyAp11BPQNCEsqAD32QbqM032OXC1rfjyC8Ba0sfH+NHYZxcifUZToyGyYA=="],
 
     "@1password/sdk-core": ["@1password/sdk-core@0.5.0", "", {}, "sha512-9g7LWOKRKdePZ85evVgE9xEom3DAg3hRIyQdOwLPvpL/F7KpDXmUHMi72rsqJxKaDbWApXmrYjDExMSPqUg7xw=="],
-
-    "@agenteschat/adapters": ["@agenteschat/adapters@workspace:packages/adapters"],
-
-    "@agenteschat/client": ["@agenteschat/client@workspace:packages/client"],
-
-    "@agenteschat/config": ["@agenteschat/config@workspace:packages/config"],
-
-    "@agenteschat/db": ["@agenteschat/db@workspace:packages/db"],
-
-    "@agenteschat/desktop": ["@agenteschat/desktop@workspace:apps/desktop"],
-
-    "@agenteschat/engine": ["@agenteschat/engine@workspace:packages/engine"],
-
-    "@agenteschat/i18n": ["@agenteschat/i18n@workspace:packages/i18n"],
-
-    "@agenteschat/mobile": ["@agenteschat/mobile@workspace:apps/mobile"],
-
-    "@agenteschat/modules": ["@agenteschat/modules@workspace:packages/modules"],
-
-    "@agenteschat/providers": ["@agenteschat/providers@workspace:packages/providers"],
-
-    "@agenteschat/server": ["@agenteschat/server@workspace:apps/server"],
-
-    "@agenteschat/setup": ["@agenteschat/setup@workspace:packages/setup"],
-
-    "@agenteschat/tokens": ["@agenteschat/tokens@workspace:packages/tokens"],
-
-    "@agenteschat/ui": ["@agenteschat/ui@workspace:packages/ui"],
-
-    "@agenteschat/web": ["@agenteschat/web@workspace:apps/web"],
 
     "@antfu/install-pkg": ["@antfu/install-pkg@2.1.0", "", { "dependencies": { "package-manager-detector": "^1.8.0", "tinyexec": "^1.3.1" } }, "sha512-sdg9NxU3zR4Mnawfbc/x6GB5Wf17WYud5qOuEuxXjaKpYpMkISSJEjItGebXJ2bQ4DIcly4NYH23mtkGJjvKUw=="],
 
@@ -679,6 +649,8 @@
 
     "@expo/sudo-prompt": ["@expo/sudo-prompt@9.3.2", "", {}, "sha512-HHQigo3rQWKMDzYDLkubN5WQOYXJJE2eNqIQC2axC2iO3mHdwnIR7FgZVvHWtBwAdzBgAP0ECp8KqS8TiMKvgw=="],
 
+    "@expo/ws-tunnel": ["@expo/ws-tunnel@2.0.1", "", { "peerDependencies": { "ws": "^8.0.0" } }, "sha512-mljsRffbOHzmSimYQbQu9h9NR3alwCCwEEouRGFL4QRTt8dNvsNtKEPa/5jHmtDLDtsh4xXsWKwzjN9BTpeXHQ=="],
+
     "@expo/xcpretty": ["@expo/xcpretty@4.4.7", "", { "dependencies": { "@babel/code-frame": "^7.20.0", "chalk": "^4.1.0", "js-yaml": "^4.1.0" }, "bin": { "excpretty": "build/cli.js" } }, "sha512-EbxYllZ7/ozONVZd425cm4XnolfW+AmSFT5aP7Jdno6oc3WrYQcHz2CO20z/2rwWwYgztmV2PXvYH+BQ8YFjqg=="],
 
     "@floating-ui/core": ["@floating-ui/core@1.8.0", "", { "dependencies": { "@floating-ui/utils": "^0.2.12" } }, "sha512-0CIZ5itps/8x7BG8dEIhs53BvCUH2PCoogtakwRTut+Arm58sJooJ0AuZhLw2HJYIR5cMLNPBSS728sPho2khQ=="],
@@ -724,6 +696,36 @@
     "@jridgewell/sourcemap-codec": ["@jridgewell/sourcemap-codec@1.6.0", "", {}, "sha512-T7jf+5zgsZHwNJ4lvQ7/aezbyk0nNX+zJVWpmHA7VYsEx7a7qr5Rg5IbtJFqkgze5Y2sruq1RUY8Q837Od7iFw=="],
 
     "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.31", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw=="],
+
+    "@keepmind/adapters": ["@keepmind/adapters@workspace:packages/adapters"],
+
+    "@keepmind/client": ["@keepmind/client@workspace:packages/client"],
+
+    "@keepmind/config": ["@keepmind/config@workspace:packages/config"],
+
+    "@keepmind/db": ["@keepmind/db@workspace:packages/db"],
+
+    "@keepmind/desktop": ["@keepmind/desktop@workspace:apps/desktop"],
+
+    "@keepmind/engine": ["@keepmind/engine@workspace:packages/engine"],
+
+    "@keepmind/i18n": ["@keepmind/i18n@workspace:packages/i18n"],
+
+    "@keepmind/mobile": ["@keepmind/mobile@workspace:apps/mobile"],
+
+    "@keepmind/modules": ["@keepmind/modules@workspace:packages/modules"],
+
+    "@keepmind/providers": ["@keepmind/providers@workspace:packages/providers"],
+
+    "@keepmind/server": ["@keepmind/server@workspace:apps/server"],
+
+    "@keepmind/setup": ["@keepmind/setup@workspace:packages/setup"],
+
+    "@keepmind/tokens": ["@keepmind/tokens@workspace:packages/tokens"],
+
+    "@keepmind/ui": ["@keepmind/ui@workspace:packages/ui"],
+
+    "@keepmind/web": ["@keepmind/web@workspace:apps/web"],
 
     "@legendapp/list": ["@legendapp/list@3.7.0", "", { "dependencies": { "use-sync-external-store": "^1.5.0" }, "peerDependencies": { "react": "*", "react-dom": "*", "react-native": "*" }, "optionalPeers": ["react-dom", "react-native"] }, "sha512-Er2D5eKIv+rfbakJ3ra4pD7NCNtOj2m1nrU6s6Ea3dO+x3vgt0h9NE0dn5WHOLIRkPEWHiwbslgl95QxZiEkjg=="],
 
@@ -2347,8 +2349,6 @@
 
     "zxing-wasm": ["zxing-wasm@3.1.6", "", { "dependencies": { "@types/emscripten": "^1.41.6", "type-fest": "^5.10.0" } }, "sha512-mU7UNuvl+hOT+nlSOQTMHZ2tM8lRMsbjDIp5IO/+HmBl/FOq77q0OSZPJ3cm42A9c1MKU6Uve67FiGdkhsrT9g=="],
 
-    "@agenteschat/mobile/react": ["react@19.3.0", "", {}, "sha512-E8LUcbtBWt20bbl2YoHfx4ZDBdxVTfOKtCZn9cDSJ4l6/nuoApcpIBcj47t2wZoVX8g2ZHuMHbiShgCR1T5Sog=="],
-
     "@babel/core/semver": ["semver@6.3.1", "", { "bin": { "semver": "bin/semver.js" } }, "sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA=="],
 
     "@babel/helper-compilation-targets/semver": ["semver@6.3.1", "", { "bin": { "semver": "bin/semver.js" } }, "sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA=="],
@@ -2361,8 +2361,6 @@
 
     "@esbuild-kit/core-utils/esbuild": ["esbuild@0.18.20", "", { "optionalDependencies": { "@esbuild/android-arm": "0.18.20", "@esbuild/android-arm64": "0.18.20", "@esbuild/android-x64": "0.18.20", "@esbuild/darwin-arm64": "0.18.20", "@esbuild/darwin-x64": "0.18.20", "@esbuild/freebsd-arm64": "0.18.20", "@esbuild/freebsd-x64": "0.18.20", "@esbuild/linux-arm": "0.18.20", "@esbuild/linux-arm64": "0.18.20", "@esbuild/linux-ia32": "0.18.20", "@esbuild/linux-loong64": "0.18.20", "@esbuild/linux-mips64el": "0.18.20", "@esbuild/linux-ppc64": "0.18.20", "@esbuild/linux-riscv64": "0.18.20", "@esbuild/linux-s390x": "0.18.20", "@esbuild/linux-x64": "0.18.20", "@esbuild/netbsd-x64": "0.18.20", "@esbuild/openbsd-x64": "0.18.20", "@esbuild/sunos-x64": "0.18.20", "@esbuild/win32-arm64": "0.18.20", "@esbuild/win32-ia32": "0.18.20", "@esbuild/win32-x64": "0.18.20" }, "bin": { "esbuild": "bin/esbuild" } }, "sha512-ceqxoedUrcayh7Y7ZX6NdbbDzGROiyVBgC4PriJThBKSVPWnnFHZAkfI1lJT8QFkOwH4qOS2SJkS4wvpGl8BpA=="],
 
-    "@expo/cli/@expo/ws-tunnel": ["@expo/ws-tunnel@2.0.1", "", { "peerDependencies": { "ws": "^8.0.0" } }, "sha512-mljsRffbOHzmSimYQbQu9h9NR3alwCCwEEouRGFL4QRTt8dNvsNtKEPa/5jHmtDLDtsh4xXsWKwzjN9BTpeXHQ=="],
-
     "@expo/cli/accepts": ["accepts@1.3.8", "", { "dependencies": { "mime-types": "~2.1.34", "negotiator": "0.6.3" } }, "sha512-PYAthTa2m2VKxuvSD3DPC/Gy+U+sOA1LAuT8mkmRuvw+NACSaeXEQ+NHcVF7rONl6qcaxV3Uuemwawk+7+SJLw=="],
 
     "@expo/cli/send": ["send@0.19.2", "", { "dependencies": { "debug": "2.6.9", "depd": "2.0.0", "destroy": "1.2.0", "encodeurl": "~2.0.0", "escape-html": "~1.0.3", "etag": "~1.8.1", "fresh": "~0.5.2", "http-errors": "~2.0.1", "mime": "1.6.0", "ms": "2.1.3", "on-finished": "~2.4.1", "range-parser": "~1.2.1", "statuses": "~2.0.2" } }, "sha512-VMbMxbDeehAxpOtWJXlcUS5E8iXh6QmN+BkRX1GARS3wRaXEEgzCcB10gTQazO42tpNIya8xIyNx8fll1OFPrg=="],
@@ -2373,7 +2371,11 @@
 
     "@expo/devcert/debug": ["debug@3.2.7", "", { "dependencies": { "ms": "^2.1.1" } }, "sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ=="],
 
+    "@expo/ws-tunnel/ws": ["ws@8.22.0", "", { "peerDependencies": { "bufferutil": "^4.0.1", "utf-8-validate": ">=5.0.2" }, "optionalPeers": ["bufferutil", "utf-8-validate"] }, "sha512-Ydggc987+RO0AnWtZ/7Wq9FtNvcrL1b/RO0ud9mWjUPgDrsAAwQSF51sm2hm1XofbU/4jkpGEsLFsZZxU+1DOg=="],
+
     "@jest/types/@types/node": ["@types/node@26.6.5", "", { "dependencies": { "undici-types": "~8.9.0" } }, "sha512-uMzsv9stDdofIZBx4UGh4Z9ZgXnGC9seRDscilBcTHAeOFk67MZg/k9bWVfO+bk4qZmG+l52hRnLwUiH2LnJTg=="],
+
+    "@keepmind/mobile/react": ["react@19.3.0", "", {}, "sha512-E8LUcbtBWt20bbl2YoHfx4ZDBdxVTfOKtCZn9cDSJ4l6/nuoApcpIBcj47t2wZoVX8g2ZHuMHbiShgCR1T5Sog=="],
 
     "@react-native/community-cli-plugin/commander": ["commander@12.1.0", "", {}, "sha512-Vw8qHK3bZM9y/P10u3Vib8o/DdkvA2OtPtZvD871QKjy74Wj1WSKFILMPRPSdUSx5RFK1arlJzEtA4PkFgnbuA=="],
 

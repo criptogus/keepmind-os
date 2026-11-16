@@ -1,11 +1,11 @@
-import { durations, motion as motionCurves, radius as radii, type ShadowLayer } from "@agenteschat/tokens";
+import { durations, motion as motionCurves, radius as radii, type ShadowLayer } from "@keepmind/tokens";
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { AccessibilityInfo, Platform, useColorScheme } from "react-native";
 import { readValue, STORED, writeValue } from "@/lib/storage";
 import { type AppColors, appColors, appShadows, type Scheme } from "./palette";
 
 /**
- * The theme for React Native, from `@agenteschat/tokens` (tokens.css is the source of truth), with the light
+ * The theme for React Native, from `@keepmind/tokens` (tokens.css is the source of truth), with the light
  * theme made native like iOS (`palette.ts`). Rules (design system): neutral cards, chips with icons (never
  * colored dots), the brand blue only for agent identity, amber only for what waits on you, names in ink,
  * the mono font only for code; counts in the system font (Doto only for a rare hero number).

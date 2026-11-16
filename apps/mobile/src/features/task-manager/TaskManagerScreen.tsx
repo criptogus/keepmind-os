@@ -5,10 +5,10 @@ import {
   type ManagedTask,
   type PendingReturn,
   useCancelFollowUp,
-} from "@agenteschat/client";
-import { returnClock, returnWhen } from "@agenteschat/client/lib/agent-work";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { formatLineTime } from "@agenteschat/client/lib/format";
+} from "@keepmind/client";
+import { returnClock, returnWhen } from "@keepmind/client/lib/agent-work";
+import { errorText } from "@keepmind/client/lib/errors";
+import { formatLineTime } from "@keepmind/client/lib/format";
 import {
   type AgentTasks,
   agentSummary,
@@ -28,7 +28,7 @@ import {
   taskTitle,
   taskWaitWords,
   type WaitCause,
-} from "@agenteschat/client/lib/task-manager";
+} from "@keepmind/client/lib/task-manager";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Pressable, RefreshControl, StyleSheet, View } from "react-native";

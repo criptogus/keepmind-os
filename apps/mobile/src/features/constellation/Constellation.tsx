@@ -1,4 +1,4 @@
-import { type AgentColorName, gradientOf } from "@agenteschat/ui/agent/engine";
+import { type AgentColorName, gradientOf } from "@keepmind/ui/agent/engine";
 import { Canvas, Path, Skia } from "@shopify/react-native-skia";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

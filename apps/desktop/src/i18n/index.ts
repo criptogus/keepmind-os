@@ -1,5 +1,5 @@
-import { resources as shared } from "@agenteschat/i18n";
-import { loadStrings } from "@agenteschat/i18n/load";
+import { resources as shared } from "@keepmind/i18n";
+import { loadStrings } from "@keepmind/i18n/load";
 import {
   type AppLocale,
   appLocale,
@@ -7,9 +7,9 @@ import {
   isAppLocale,
   LOCALE_CODES,
   readyLocales,
-} from "@agenteschat/i18n/locale";
-import { fillPluralGaps, type LocaleStrings } from "@agenteschat/i18n/plurals";
-import { deepMerge } from "@agenteschat/i18n/tree";
+} from "@keepmind/i18n/locale";
+import { fillPluralGaps, type LocaleStrings } from "@keepmind/i18n/plurals";
+import { deepMerge } from "@keepmind/i18n/tree";
 import i18next, { type i18n as I18n, type InitOptions } from "i18next";
 import { initReactI18next } from "react-i18next";
 import type { Platform } from "../control/platform";

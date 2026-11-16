@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { createFakeEmailSender, createMemoryRateLimiter, type EmailSender } from "@agenteschat/adapters";
-import { eq, inArray, schema } from "@agenteschat/db";
+import { createFakeEmailSender, createMemoryRateLimiter, type EmailSender } from "@keepmind/adapters";
+import { eq, inArray, schema } from "@keepmind/db";
 import {
   approveJoinRequest,
   askToJoin,
@@ -465,7 +465,7 @@ describe("the code's email", () => {
     const code = await send(token, "felipe@example.com");
     await drainOutbox(fx().db, createJobHandlers({ ...fx().jobDeps, email: sender }));
     expect(sender.sent.map((m) => [m.to, m.subject])).toEqual([
-      [["felipe@example.com"], `${code} is your agentes.chat code`],
+      [["felipe@example.com"], `${code} is your KeepMind OS code`],
     ]);
     expect(sender.sent[0]?.text).toContain(`\n\n${code}\n\n`);
     expect(await codeEmails()).toEqual([]);

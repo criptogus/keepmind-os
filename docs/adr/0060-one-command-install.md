@@ -7,7 +7,7 @@
 
 ## Context
 
-Self-hosting starts with the setup wizard (`npx @agenteschat/setup`, which needs Node.js, or the same wizard from the app's image) and needs Docker with Compose ≥ 2.23.1. Distribution packages differ: Debian 13's `docker.io` has no Compose plugin, and Debian 12's `docker-compose` is Compose v1. Most Macs have no Docker, and installing a VM just to try an app is the friction that stops people.
+Self-hosting starts with the setup wizard (`npx @keepmind/setup`, which needs Node.js, or the same wizard from the app's image) and needs Docker with Compose ≥ 2.23.1. Distribution packages differ: Debian 13's `docker.io` has no Compose plugin, and Debian 12's `docker-compose` is Compose v1. Most Macs have no Docker, and installing a VM just to try an app is the friction that stops people.
 
 After the install, agents still need a computer, and on a fresh server nobody has connected one yet (ADR 0025). And the screens about computers (onboarding, preparing, the computer's page) are read by people who aren't developers.
 
@@ -22,7 +22,7 @@ After the install, agents still need a computer, and on a fresh server nobody ha
 - **Terminal:** it uses `/dev/tty` only when it opens (`(exec </dev/tty) 2>/dev/null`). `[ -r /dev/tty ]` is true with no controlling terminal (cloud-init, CI), where opening it fails. Without a terminal the wizard gets `/dev/null` (defaults plus flags), because under `curl | sh` stdin is the rest of the script.
 - **Docker (Linux):** Docker's own install script runs only after a yes (or `--yes`), and never when `docker` exists. When Compose v2 ≥ 2.23.1 is missing, it installs the official plugin binary, pinned with its SHA-256 in the script, instead of relying on package names (in Docker's system plugin folder as root, in the user's own otherwise). Without root, and without access to Docker or with `--computer yes` (the agents' computer needs root on Linux), it runs itself again with `sudo` before anything else: the same file under `sh install.sh`, or, under `curl | sh` where there is no file, the published installer. An install that user has in `~/agentes` stays there, since root's default folder is another.
 - **Bun:** a pinned version with its SHA-256 in the script, unless a new enough `bun` is on `PATH`. On x64 it's the `-baseline` build, because server CPUs may lack AVX2. musl systems are refused with a clear message.
-- **Hand-off:** `cd` to the install folder, then `bun x --bun @agenteschat/setup@<version>` with the flags passed through.
+- **Hand-off:** `cd` to the install folder, then `bun x --bun @keepmind/setup@<version>` with the flags passed through.
 - **Flags:** `--dir`, `--yes`, and `--plan` (or `--dry-run`), which prints each decision and the commands it would run and runs nothing (what the tests assert). `--native` comes with the installer's native path (§2); until then it says so and stops. Every other flag goes to the wizard, and a test checks the wizard accepts every option the installer hands it; with its `--json`, the installer's own lines go to stderr. `AGENTES_INSTALL_SETUP` points at a local build of the wizard. A version is held the compose file's way, with `AGENTES_IMAGE` in `.env`.
 - **Folders:** `/opt/agentes` as root, `~/agentes` for a user who can already use Docker, `~/.agentes` in native mode.
 - **The wizard's last questions,** after the way in and email, each a yes/no with its default and a flag: the agents' computer (§3, `--computer`, and `--computer-commands` for a Mac) and the usage report (§5, `--telemetry on|off`, yes by default, in the words of the web app's switch, which a test keeps equal). The usage answer goes into `.env` as `TELEMETRY=on|off` either way, so it's visible there and a run again doesn't ask; the wizard never prints the report. Which question comes next and what `.env` gets are pure functions of the flags, `.env` and the answers so far (`decideComputer`, `decideTelemetry`), tested like the plan.
@@ -176,12 +176,12 @@ The terminal and the card stay short, and the full explanation lives in one publ
 - On Linux, the server's computer runs agents' commands on the host. Their isolation is the system mode's OS users, not a container.
 - The server's computer holds the agents of every organization it serves, and so of different people, on one machine. Fixed browser debugging and stream ports are guarded before any worker starts. Other local listeners are still discovered every 2 seconds; their startup and stale-port windows mean arbitrary local ports are not a hard boundary between agents.
 - The first install is longer: the agent browser and the command-line tools come with the computer.
-- The installer needs `@agenteschat/setup` on npm; until then, `AGENTES_INSTALL_SETUP` and locally built images are how it's tested.
+- The installer needs `@keepmind/setup` on npm; until then, `AGENTES_INSTALL_SETUP` and locally built images are how it's tested.
 - The wizard's compose download needs agentes.chat to run a release that serves `/install/docker-compose.yml`, so the wizard ships after agentes.chat does.
 
 ## Alternatives considered
 
-- **`npx @agenteschat/setup` as the one command:** needs Node.js, which many servers and Macs don't have.
+- **`npx @keepmind/setup` as the one command:** needs Node.js, which many servers and Macs don't have.
 - **A container as the server's computer:** Chrome's sandbox needs seccomp and AppArmor exceptions there, and per-agent users, slices and desktops don't fit in it.
 - **Embedded Postgres binaries, Homebrew or Postgres.app for native mode:** no pgvector, or one more install.
 - **The server's computer for every organization, with the server refusing to start while sign-up is open:** invitations and creating an organization still let other people's agents onto the operator's machine.

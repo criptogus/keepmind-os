@@ -22,12 +22,12 @@ test("only the official exchange receives the verifier; malformed responses and 
     expect(body.code_verifier).toBe(pending.verifier);
     expect(opts?.redirect).toBe("error");
     return Response.json({ key: `sk-or-v1-${"a".repeat(32)}` });
-  }) as typeof fetch;
+  }) as unknown as typeof fetch;
   expect(await finishOpenRouterOAuth(pending, " test-code ", request)).toStartWith("sk-or-v1-");
   await expect(finishOpenRouterOAuth({ ...pending, expiresAt: 0 }, "test-code", request)).rejects.toThrow();
   await expect(finishOpenRouterOAuth(pending, "https://openrouter.ai/auth", request)).rejects.toThrow();
   expect(count).toBe(1);
   await expect(
-    finishOpenRouterOAuth(pending, "test-code", (async () => Response.json({ key: "bad" })) as typeof fetch),
+    finishOpenRouterOAuth(pending, "test-code", (async () => Response.json({ key: "bad" })) as unknown as typeof fetch),
   ).rejects.toThrow();
 });

@@ -1,12 +1,12 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
 import { readFileSync } from "node:fs";
-import type { SecretBox, SecretRequest, SecretTarget } from "@agenteschat/client";
-import { ApiError } from "@agenteschat/client";
-import { secretAad } from "@agenteschat/client/lib/secret-box";
+import type { SecretBox, SecretRequest, SecretTarget } from "@keepmind/client";
+import { ApiError } from "@keepmind/client";
+import { secretAad } from "@keepmind/client/lib/secret-box";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 // The computer's side, from the server code: what the card seals must open there.
 import { generateSecretKeyPair, openSecret } from "../../../packages/adapters/src/secret-box";
@@ -173,7 +173,7 @@ describe("secret requests (ADR 0027)", () => {
     const site = { kind: "site" as const, site: "https://accounts.google.com" };
     await withRequest("u-walter", pair.publicKey, site, "LIA_GOOGLE_PASSWORD", undefined, {
       label: "Senha da Conta Google",
-      username: "lia@agentes.chat",
+      username: "contact@zeroagency.ai",
       site: site.site,
       purpose: "Preciso entrar na minha Conta Google.",
     });
@@ -183,10 +183,10 @@ describe("secret requests (ADR 0027)", () => {
     const lead = card.querySelector(".rq__lead");
     expect(lead?.textContent).toBe("Preciso entrar na minha Conta Google.");
     expect(lead?.nextElementSibling?.querySelector("b")?.textContent).toBe("Senha da Conta Google");
-    expect(card.textContent).toContain("Conta: lia@agentes.chat.");
+    expect(card.textContent).toContain("Conta: contact@zeroagency.ai.");
     expect(within(card).getByLabelText("Senha da Conta Google")).not.toBeNull();
     // The Vault part comes filled in with it.
-    expect((within(card).getByLabelText("Usuário") as HTMLInputElement).value).toBe("lia@agentes.chat");
+    expect((within(card).getByLabelText("Usuário") as HTMLInputElement).value).toBe("contact@zeroagency.ai");
   });
 
   test("what the card says isn't cut: its title, where it goes and its ended line wrap", () => {

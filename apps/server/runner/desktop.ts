@@ -18,7 +18,7 @@ import {
   type MachineReplies,
   type RunnerDesktopInfo,
   type RunnerDesktopUseInfo,
-} from "@agenteschat/adapters/machine-protocol";
+} from "@keepmind/adapters/machine-protocol";
 import {
   HELPER_ENV,
   HELPER_TEXT_MAX,

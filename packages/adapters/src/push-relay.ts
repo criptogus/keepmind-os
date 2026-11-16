@@ -4,7 +4,7 @@ import { FCM_PUSH_TOKEN } from "./push-fcm";
 
 /**
  * Phone pushes through the push relay (ADR 0152, ADR 0178). The phone app is one app in the stores, built
- * with agentes.chat's Firebase project and signed by its Apple team, whose service account and APNs key a
+ * with KeepMind OS's Firebase project and signed by its Apple team, whose service account and APNs key a
  * self-hosted server doesn't have. So the server sends through a relay that holds them: it registers itself
  * on first use (no account, nothing to configure), keeps the credentials the relay gave it, and sends the
  * messages it would send to Firebase or to Apple.
@@ -38,7 +38,7 @@ export function createRelayPushSender(options: {
 }): PushSender {
   const http = options.fetch ?? fetch;
   const base = options.url.replace(/\/+$/, "");
-  const userAgent = `agentes.chat/${options.version ?? "dev"}`;
+  const userAgent = `KeepMind OS/${options.version ?? "dev"}`;
   const timeoutMs = options.timeoutMs ?? 15_000;
   let registering: Promise<{ instanceId: string; secret: string }> | null = null;
 

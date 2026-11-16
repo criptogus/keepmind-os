@@ -1,6 +1,6 @@
-import { type AppLocale, appLocale, DEFAULT_LOCALE, isAppLocale } from "@agenteschat/i18n/locale";
-import { fillPluralGaps, type LocaleStrings } from "@agenteschat/i18n/plurals";
-import { deepMerge } from "@agenteschat/i18n/tree";
+import { type AppLocale, appLocale, DEFAULT_LOCALE, isAppLocale } from "@keepmind/i18n/locale";
+import { fillPluralGaps, type LocaleStrings } from "@keepmind/i18n/plurals";
+import { deepMerge } from "@keepmind/i18n/tree";
 import { mobileEn } from "./keys.en";
 import { mobilePtBR } from "./keys.pt-BR";
 import de from "./locales/de.json";
@@ -41,7 +41,7 @@ type Strings = Record<string, unknown>;
 type Resources = Record<string, Record<string, Strings>>;
 
 /**
- * The shared resources (`@agenteschat/i18n`, i18next shape: locale -> namespace -> strings) with the app's
+ * The shared resources (`@keepmind/i18n`, i18next shape: locale -> namespace -> strings) with the app's
  * own strings added under `mobile` in every namespace, so `t("mobile.auth.social.failed")` works with
  * whatever namespace the shared package uses. `extra` adds more `mobile.*` strings per locale (the
  * screens' keys); a key a language lacks falls back to English through i18next's `fallbackLng`.

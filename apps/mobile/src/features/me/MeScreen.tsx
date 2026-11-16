@@ -1,7 +1,7 @@
-import { useAuthConfig, useIssues, useMe, useOverview } from "@agenteschat/client";
-import { showsAbout } from "@agenteschat/client/lib/about";
-import { isPersonal, modeKey } from "@agenteschat/client/lib/workspace-mode";
-import { isAppLocale, localeInfo, readyLocales } from "@agenteschat/i18n/locale";
+import { useAuthConfig, useIssues, useMe, useOverview } from "@keepmind/client";
+import { showsAbout } from "@keepmind/client/lib/about";
+import { isPersonal, modeKey } from "@keepmind/client/lib/workspace-mode";
+import { isAppLocale, localeInfo, readyLocales } from "@keepmind/i18n/locale";
 import Constants from "expo-constants";
 import { useHeaderHeight } from "expo-router/react-navigation";
 import { type ReactNode, useEffect, useState } from "react";

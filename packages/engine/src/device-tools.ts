@@ -5,9 +5,9 @@ import {
   PHONES_PROTOCOL,
   type PubSub,
   workspacePath,
-} from "@agenteschat/adapters";
-import { and, type Database, type Executor, eq, isNotNull, schema, sql } from "@agenteschat/db";
-import { serverText } from "@agenteschat/i18n";
+} from "@keepmind/adapters";
+import { and, type Database, type Executor, eq, isNotNull, schema, sql } from "@keepmind/db";
+import { serverText } from "@keepmind/i18n";
 import { getAgentCached } from "./agents";
 import { type ArtifactDeps, cleanFileName, getArtifact, storedFileOfArtifact } from "./artifacts";
 import { MODEL_IMAGE_BYTES, sniffModelImage } from "./avatars";

@@ -1,11 +1,11 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { LiveWork, Run, RunStep } from "@agenteschat/client";
-import { agentStateIn, agentStateOfRun, type LiveRun } from "@agenteschat/client";
-import { workFromSteps, workHeader } from "@agenteschat/client/lib/work";
+import type { LiveWork, Run, RunStep } from "@keepmind/client";
+import { agentStateIn, agentStateOfRun, type LiveRun } from "@keepmind/client";
+import { workFromSteps, workHeader } from "@keepmind/client/lib/work";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { LiveTools, SavedTools } from "@/components/ToolCalls";
 import { createI18n } from "@/i18n";

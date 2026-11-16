@@ -1,4 +1,4 @@
-import type { SearchHit } from "@agenteschat/client";
+import type { SearchHit } from "@keepmind/client";
 import {
   dedupe,
   formatSearch,
@@ -11,7 +11,7 @@ import {
   searchSortFor,
   searchWords,
   typingOperator,
-} from "@agenteschat/client/lib/search-filters";
+} from "@keepmind/client/lib/search-filters";
 import { useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, type TextInputInstance, View } from "react-native";

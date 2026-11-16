@@ -1,4 +1,4 @@
-import { useIdRef } from "@agenteschat/client";
+import { useIdRef } from "@keepmind/client";
 import type { ReactElement } from "react";
 import { Text as RNText, StyleSheet } from "react-native";
 import { useOrg } from "@/providers/org";

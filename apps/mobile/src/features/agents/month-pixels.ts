@@ -1,8 +1,8 @@
-import { type AgentColorName, bodyTones, mixHex } from "@agenteschat/ui/agent/engine";
+import { type AgentColorName, bodyTones, mixHex } from "@keepmind/ui/agent/engine";
 import { CellGrid, type CellRun, column } from "../browser/trail-pixels";
 
 /**
- * The agent's month in pixels on its profile, the web's drawing (`MonthRuns` in `@agenteschat/ui`
+ * The agent's month in pixels on its profile, the web's drawing (`MonthRuns` in `@keepmind/ui`
  * `RunPixels.tsx`, the agent page's Atividade tab) as cell lists a Skia canvas replays: a dithered column per
  * day in the agent's tones, as tall as that day's runs over the busiest day's; a day with a failure wears a cap
  * in the danger tone; a day without runs, and every day to come, is a dot on the line. Lower than the web's

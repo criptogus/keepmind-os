@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { AiStatus, JevKey } from "@agenteschat/client";
+import type { AiStatus, JevKey } from "@keepmind/client";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { createFakeApi, ORG_ID, seedState } from "./fake-api";
 import { renderApp, screen, settle } from "./render";
@@ -139,7 +139,7 @@ describe("Jev's key in Configurações › IA e uso", () => {
     const section = screen().getByRole("region", { name: "Quem escolhe os agentes" });
     expect(section.textContent).toContain("Cada plano escolhe só nas mensagens de quem o conectou.");
     expect(within(section).getByRole("link", { name: "Como os agentes são escolhidos" }).getAttribute("href")).toBe(
-      "https://agentes.chat/pt/docs/who-answers",
+      "https://keepmind.io/pt/docs/who-answers",
     );
     expect(screen().queryByRole("region", { name: "Jev" })).toBeNull();
     expect(document.body.textContent).not.toMatch(/jev|typesafe/i);
@@ -179,7 +179,7 @@ describe("Jev's key in Configurações › IA e uso", () => {
     ])
       expect(card().textContent).toContain(why);
     expect(within(card()).getByRole("link", { name: "Como o Jev funciona" }).getAttribute("href")).toBe(
-      "https://agentes.chat/pt/docs/jev",
+      "https://keepmind.io/pt/docs/jev",
     );
     expect(within(card()).queryByLabelText("Cole aqui")).toBeNull();
 

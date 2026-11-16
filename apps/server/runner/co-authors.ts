@@ -1,6 +1,6 @@
 import { chmodSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import type { AgentScope } from "@agenteschat/adapters/machine-protocol";
+import type { AgentScope } from "@keepmind/adapters/machine-protocol";
 
 /**
  * The `Co-authored-by` lines on every commit the agent's own processes make with git (ADR 0156): the server sends
@@ -61,7 +61,7 @@ export const CO_AUTHORS_ENV = "AGENTES_CO_AUTHORS";
 const BEFORE_ENV = "AGENTES_GIT_CONFIG_PARAMETERS";
 
 export const HOOK_SCRIPT = `#!/bin/sh
-# agentes.chat (ADR 0156): the repository's own hook of this name (else Git LFS's where it uses LFS), then, in
+# KeepMind OS (ADR 0156): the repository's own hook of this name (else Git LFS's where it uses LFS), then, in
 # commit-msg, the agent's lines.
 d=$(GIT_CONFIG_PARAMETERS=\${${BEFORE_ENV}-} git rev-parse --git-path hooks 2>/dev/null)
 h=$d/\${0##*/}

@@ -1,5 +1,5 @@
-import type { Issue, IssueColumn, IssuePatch, IssueStatus } from "@agenteschat/client";
-import { keys, useIssueAction, useIssueColumnAction } from "@agenteschat/client";
+import type { Issue, IssueColumn, IssuePatch, IssueStatus } from "@keepmind/client";
+import { keys, useIssueAction, useIssueColumnAction } from "@keepmind/client";
 import {
   Button,
   cx,
@@ -17,7 +17,7 @@ import {
   MenuSeparator,
   OptionList,
   useDragScroll,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { type Query, useQueryClient } from "@tanstack/react-query";
 import { type CSSProperties, type ReactNode, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

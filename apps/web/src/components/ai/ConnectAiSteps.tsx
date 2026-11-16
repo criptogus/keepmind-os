@@ -1,4 +1,4 @@
-import type { BrainScope, Credential, Edition, MachineAccount, MachineAccountKind } from "@agenteschat/client";
+import type { BrainScope, Credential, Edition, MachineAccount, MachineAccountKind } from "@keepmind/client";
 import {
   keys,
   useAgentBrain,
@@ -8,7 +8,7 @@ import {
   useComputerSetup,
   useMachines,
   useModels,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 import {
   type AccountChoice,
   accountAbout,
@@ -18,9 +18,9 @@ import {
   ownSignInLower,
   planWordOf,
   signInPlan,
-} from "@agenteschat/client/lib/ai-accounts";
-import { answersOthers, audienceOf } from "@agenteschat/client/lib/audience";
-import type { BillingHold } from "@agenteschat/client/lib/billing";
+} from "@keepmind/client/lib/ai-accounts";
+import { answersOthers, audienceOf } from "@keepmind/client/lib/audience";
+import type { BillingHold } from "@keepmind/client/lib/billing";
 import {
   computerEdition,
   computerName,
@@ -28,12 +28,12 @@ import {
   managedNamed,
   setupView,
   statusRestatesChip,
-} from "@agenteschat/client/lib/computer";
-import { CUSTOM_PROVIDER } from "@agenteschat/client/lib/endpoints";
-import { errorText, holdText, keyRefusal } from "@agenteschat/client/lib/errors";
-import { NAMES_SHOWN, namesText } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { brainTool, installableCli } from "@agenteschat/client/lib/machines";
+} from "@keepmind/client/lib/computer";
+import { CUSTOM_PROVIDER } from "@keepmind/client/lib/endpoints";
+import { errorText, holdText, keyRefusal } from "@keepmind/client/lib/errors";
+import { NAMES_SHOWN, namesText } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { brainTool, installableCli } from "@keepmind/client/lib/machines";
 import {
   type AiChoice,
   ALL_AGENTS,
@@ -58,8 +58,8 @@ import {
   planPickText,
   planTitle,
   signsInOnce,
-} from "@agenteschat/client/lib/no-ai";
-import { can } from "@agenteschat/client/lib/permissions";
+} from "@keepmind/client/lib/no-ai";
+import { can } from "@keepmind/client/lib/permissions";
 import {
   geminiPersonal,
   isPlanId,
@@ -67,7 +67,7 @@ import {
   planReplies,
   providerFitsChoice,
   signInProviderOf,
-} from "@agenteschat/client/lib/plans";
+} from "@keepmind/client/lib/plans";
 import {
   keyLine,
   keyLooksValid,
@@ -77,9 +77,9 @@ import {
   type ProviderId,
   providerLabel,
   providerOf,
-} from "@agenteschat/client/lib/providers";
-import { agentOnKey, rightHandOnKey, thinksWithLine } from "@agenteschat/client/lib/right-hand";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client/lib/providers";
+import { agentOnKey, rightHandOnKey, thinksWithLine } from "@keepmind/client/lib/right-hand";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import {
   type AgentAppearance,
   AvatarStack,
@@ -96,8 +96,8 @@ import {
   Select,
   SettingNote,
   Spinner,
-} from "@agenteschat/ui";
-import { matchesWords } from "@agenteschat/ui/search";
+} from "@keepmind/ui";
+import { matchesWords } from "@keepmind/ui/search";
 import { useQueryClient } from "@tanstack/react-query";
 import type { TFunction } from "i18next";
 import { Fragment, type ReactNode, useCallback, useEffect, useId, useRef, useState } from "react";
@@ -1593,7 +1593,7 @@ export function usePlanHold() {
 }
 
 /**
- * A plan a workspace with no agentes.chat plan in force can't use, in place of its steps: why, and the way to that
+ * A plan a workspace with no KeepMind OS plan in force can't use, in place of its steps: why, and the way to that
  * plan for whoever pays (anyone else reads who can). A hold stops the Model Gateway for keys too, so no key is offered
  * as a way around it.
  */

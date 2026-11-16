@@ -1,5 +1,5 @@
-import type { BlobStoreResolver, PubSub } from "@agenteschat/adapters";
-import { and, type Database, type Executor, eq, inArray, isNull, schema, sql } from "@agenteschat/db";
+import type { BlobStoreResolver, PubSub } from "@keepmind/adapters";
+import { and, type Database, type Executor, eq, inArray, isNull, schema, sql } from "@keepmind/db";
 import type { AgentDeletionDeps } from "./agent-deletion";
 import { ARTIFACT_TRASH_DAYS } from "./artifacts";
 import { recordAudit } from "./audit";

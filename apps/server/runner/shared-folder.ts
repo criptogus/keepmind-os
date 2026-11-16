@@ -2,7 +2,7 @@ import { execFile } from "node:child_process";
 import { mkdirSync } from "node:fs";
 import path from "node:path";
 import { promisify } from "node:util";
-import { ALL_AGENTS, type RunnerAccess } from "@agenteschat/adapters/machine-protocol";
+import { ALL_AGENTS, type RunnerAccess } from "@keepmind/adapters/machine-protocol";
 import { type RunCommand, runSync } from "./service";
 
 /**

@@ -190,7 +190,7 @@ describe("a desktop's plan and report", () => {
       text: `- window "Report.odt - Writer" [ref=e1]
   - dialog "Save As" [ref=e2]
     - button "Save" [ref=e3]
-- window "agentes.chat - Chromium" [agent browser: use browser_do]`,
+- window "KeepMind OS - Chromium" [agent browser: use browser_do]`,
       url: "desktop://libreoffice-writer/dialog",
       title: "Save As",
     });
@@ -198,7 +198,7 @@ describe("a desktop's plan and report", () => {
     expect(describeElement(save as NonNullable<typeof save>)).toBe(
       'button "Save" — in dialog "Save As" › window "Report.odt - Writer"',
     );
-    expect(screenOverview(o).text).toContain('- window "agentes.chat - Chromium" [agent browser: use browser_do]');
+    expect(screenOverview(o).text).toContain('- window "KeepMind OS - Chromium" [agent browser: use browser_do]');
     expect(o.title).toBe("Save As");
     // A browser's look has no title.
     expect("title" in observeSnapshot({ text: '- button "Go" [ref=e1]', url: "https://a.example/" })).toBe(false);

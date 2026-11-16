@@ -1,5 +1,5 @@
-import type { AgentColorName } from "@agenteschat/ui/agent/engine";
-import { agentTones, SPRITE, softTones, spriteTone } from "@agenteschat/ui/sky/math";
+import type { AgentColorName } from "@keepmind/ui/agent/engine";
+import { agentTones, SPRITE, softTones, spriteTone } from "@keepmind/ui/sky/math";
 import { Canvas, Group, Path, Skia, type SkPath, useClock } from "@shopify/react-native-skia";
 import { useMemo, useState } from "react";
 import { type LayoutChangeEvent, type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";

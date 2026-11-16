@@ -1,10 +1,10 @@
 import { describe, expect, test } from "bun:test";
-import type { AgentBrainLine } from "@agenteschat/client";
-import { brainLine } from "@agenteschat/client/lib/brain";
-import { KEY_MARKS, PLAN_MARKS } from "@agenteschat/client/lib/no-ai";
-import { keyStepHint, PROVIDERS } from "@agenteschat/client/lib/providers";
-import { resources } from "@agenteschat/i18n";
-import { markOf, PROVIDER_MARKS } from "@agenteschat/ui/brand/marks";
+import type { AgentBrainLine } from "@keepmind/client";
+import { brainLine } from "@keepmind/client/lib/brain";
+import { KEY_MARKS, PLAN_MARKS } from "@keepmind/client/lib/no-ai";
+import { keyStepHint, PROVIDERS } from "@keepmind/client/lib/providers";
+import { resources } from "@keepmind/i18n";
+import { markOf, PROVIDER_MARKS } from "@keepmind/ui/brand/marks";
 import i18next, { type TFunction } from "i18next";
 import { featureKeysEn } from "../src/features/i18n/keys.en";
 import { featureKeysPtBR } from "../src/features/i18n/keys.pt-BR";

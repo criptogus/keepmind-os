@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { connectLink, parseConnectLink, readInstance, type ServerCheck } from "@agenteschat/client/lib/server";
-import { LOCALES } from "@agenteschat/i18n/locale";
+import { connectLink, parseConnectLink, readInstance, type ServerCheck } from "@keepmind/client/lib/server";
+import { LOCALES } from "@keepmind/i18n/locale";
 import { menuBarShown } from "../src/control/dock";
 import {
   connectOutcome,
@@ -22,7 +22,7 @@ const TOKEN = "Qm9vdHN0cmFwLXRva2VuLTEyMzQ1Njc4OTBhYmNkZWY";
 const CLAIM = "b3duZXItY2xhaW0tYWJjZGVmZ2hpamtsbW5vcHFyc3R1";
 
 const instance = (url: string, over: Record<string, unknown> = {}) => ({
-  name: "agentes.chat",
+  name: "keepmind.io",
   version: "1.4.0",
   api: 1,
   minApi: 1,
@@ -43,7 +43,7 @@ describe("which screen", () => {
   });
 
   test("the setup's command", () => {
-    expect(INSTALL_COMMAND).toBe("curl -fsSL https://agentes.chat/install | sh");
+    expect(INSTALL_COMMAND).toBe("curl -fsSL https://keepmind.io/install | sh");
   });
 
   test("Esc: back a screen, or the window closes; never while KeepMind OS is being set up here", () => {
@@ -174,7 +174,7 @@ describe("a link to a server", () => {
       button: "connect",
       leave: null,
     });
-    expect(linkView(link(), ok(BOX), "https://app.agentes.chat")).toMatchObject({ kind: "ask", leave: "agentes.chat" });
+    expect(linkView(link(), ok(BOX), "https://keepmind.io")).toMatchObject({ kind: "ask", leave: "keepmind.io" });
     expect(linkView(link(), ok(BOX), BOX)).toEqual({ kind: "front", server: BOX });
   });
 
@@ -190,13 +190,13 @@ describe("a link to a server", () => {
   });
 
   test("a claim: the owner page while the server waits for its owner; ignored once it has one", () => {
-    expect(linkView(link({ claim: CLAIM }), ok(BOX, { ownerClaim: true }), "https://app.agentes.chat")).toEqual({
+    expect(linkView(link({ claim: CLAIM }), ok(BOX, { ownerClaim: true }), "https://keepmind.io")).toEqual({
       kind: "ask",
       server: BOX,
       question: "questionClaim",
       button: "continue",
       page: `/owner#claim=${CLAIM}`,
-      leave: "agentes.chat",
+      leave: "keepmind.io",
     });
     expect(linkView(link({ claim: CLAIM }), ok(BOX), null)).toMatchObject({ kind: "ask", question: "question" });
     // A server waiting for its owner, without the claim: the installer's link is needed.

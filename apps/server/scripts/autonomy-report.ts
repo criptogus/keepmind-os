@@ -8,9 +8,9 @@
  * In the server's container: `docker compose exec agentes bun run report:autonomy`.
  */
 import { parseArgs } from "node:util";
-import { loadConfig } from "@agenteschat/config";
-import { createDatabase } from "@agenteschat/db";
-import { autonomyReport, autonomyTable } from "@agenteschat/engine";
+import { loadConfig } from "@keepmind/config";
+import { createDatabase } from "@keepmind/db";
+import { autonomyReport, autonomyTable } from "@keepmind/engine";
 
 const { values } = parseArgs({ options: { day: { type: "string" }, org: { type: "string" } } });
 const day = values.day ?? new Date(Date.now() - 86_400_000).toISOString().slice(0, 10);

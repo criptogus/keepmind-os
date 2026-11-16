@@ -1,4 +1,4 @@
-import type { AppNotification, PersonLimitCard, UsagePlace } from "@agenteschat/client";
+import type { AppNotification, PersonLimitCard, UsagePlace } from "@keepmind/client";
 import {
   keys,
   useApi,
@@ -6,10 +6,10 @@ import {
   usePersonUsage,
   useRaisePersonLimit,
   useRefuseMoreUsage,
-} from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { formatDecimal, formatShortDate, formatUsd, relativeTime } from "@agenteschat/client/lib/format";
-import { type PersonRow, personAmount } from "@agenteschat/client/lib/person-usage";
+} from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { formatDecimal, formatShortDate, formatUsd, relativeTime } from "@keepmind/client/lib/format";
+import { type PersonRow, personAmount } from "@keepmind/client/lib/person-usage";
 import { useQueryClient } from "@tanstack/react-query";
 import type { TFunction } from "i18next";
 import { useState } from "react";

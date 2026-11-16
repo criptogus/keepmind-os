@@ -1,4 +1,4 @@
-import { type GifKey, isAgentesCloud, NotFoundError, pinnedOwner, ValidationError } from "@agenteschat/engine";
+import { type GifKey, isKeepMindCloud, NotFoundError, pinnedOwner, ValidationError } from "@keepmind/engine";
 import { createRoute, z } from "@hono/zod-openapi";
 import { apiError, errorResponse } from "../../http/errors";
 import { type AppDeps, body, createAppRouter, errors, json, requireSession, security } from "./context";
@@ -29,11 +29,11 @@ const ApiKey = z.object({
 /** Limits checking keys through this server, so it can't test keys in bulk. */
 const WRITES = { limit: 10, windowMs: 60_000 };
 
-const notFound = "404 for everyone but the installation's pinned owner (ADR 0073), and on agentes.chat itself.";
+const notFound = "404 for everyone but the installation's pinned owner (ADR 0073), and on KeepMind OS itself.";
 const tooMany = { 429: errorResponse("Too many tries (`rate_limited`)") };
 
 /**
- * The installation's GIPHY key (ADR 0091, amended 2026-10-31): only its pinned owner, and never on agentes.chat's own
+ * The installation's GIPHY key (ADR 0091, amended 2026-10-31): only its pinned owner, and never on KeepMind OS's own
  * servers, whose key is in their environment. A save or a removal turns GIFs on or off in every workspace at once
  * (`gifsAvailable`).
  */
@@ -44,7 +44,7 @@ export function gifKeyRoutes(deps: AppDeps) {
 
   const ownerOnly = async (userId: string): Promise<GifKey> => {
     const gifKey = deps.extras?.gifKey;
-    if (!gifKey || isAgentesCloud(config.PUBLIC_URL) || (await pinnedOwner(db)) !== userId) throw new NotFoundError();
+    if (!gifKey || isKeepMindCloud(config.PUBLIC_URL) || (await pinnedOwner(db)) !== userId) throw new NotFoundError();
     return gifKey;
   };
   const allowed = async (userId: string) =>

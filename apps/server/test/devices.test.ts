@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import { eq, schema } from "@agenteschat/db";
-import { syncMachinePhones } from "@agenteschat/engine";
+import { eq, schema } from "@keepmind/db";
+import { syncMachinePhones } from "@keepmind/engine";
 import { browser, createTestServer, joinByInvitation, pairComputer, seedOrg, signUp, type TestServer } from "./harness";
 
 let t: TestServer;

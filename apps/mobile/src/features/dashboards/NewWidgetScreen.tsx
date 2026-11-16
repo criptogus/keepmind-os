@@ -15,9 +15,9 @@ import {
   widgetAiReady,
   widgetNeedsAi,
   widgetStepWords,
-} from "@agenteschat/client";
-import { canTalk } from "@agenteschat/client/lib/audience";
-import { taskClock } from "@agenteschat/client/lib/task-manager";
+} from "@keepmind/client";
+import { canTalk } from "@keepmind/client/lib/audience";
+import { taskClock } from "@keepmind/client/lib/task-manager";
 import {
   sizeToLayout,
   WIDGET_FORMATS,
@@ -25,7 +25,7 @@ import {
   WIDGET_SCHEDULES,
   WIDGET_SIZES,
   type WidgetSize,
-} from "@agenteschat/ui/widgets/spec";
+} from "@keepmind/ui/widgets/spec";
 import { type ReactNode, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Pressable, ScrollView, StyleSheet, TextInput, View } from "react-native";

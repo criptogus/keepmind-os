@@ -1,7 +1,7 @@
-import type { MailAccount, MailPolicy } from "@agenteschat/client";
-import { useMailFolders } from "@agenteschat/client";
-import { AUTO_FROM, canSendWithoutAsking, mailboxAddresses, normalizePolicy } from "@agenteschat/client/lib/mail";
-import { AffixInput, CheckboxPill, Field, Icon, Input, Select, Switch } from "@agenteschat/ui";
+import type { MailAccount, MailPolicy } from "@keepmind/client";
+import { useMailFolders } from "@keepmind/client";
+import { AUTO_FROM, canSendWithoutAsking, mailboxAddresses, normalizePolicy } from "@keepmind/client/lib/mail";
+import { AffixInput, CheckboxPill, Field, Icon, Input, Select, Switch } from "@keepmind/ui";
 import { useTranslation } from "react-i18next";
 import { AddressList } from "@/components/AddressList";
 import { useOrg } from "@/components/org-context";

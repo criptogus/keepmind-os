@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { resources } from "@agenteschat/i18n";
+import { resources } from "@keepmind/i18n";
 import i18next from "i18next";
 import type { AppNotification } from "../src/api/types";
 import { openTarget, sortWaiting, TEAM_WATCH_CAUSES, teamWatchOf, waitingCardOf } from "../src/lib/notifications";

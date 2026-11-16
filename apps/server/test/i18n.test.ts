@@ -41,7 +41,7 @@ test("errors carry a stable code and params (English message as fallback); rule 
 });
 
 test("run failures, approvals and memory updates carry codes", async () => {
-  const { runErrorDetail, scalarParams } = await import("@agenteschat/engine");
+  const { runErrorDetail, scalarParams } = await import("@keepmind/engine");
   expect(runErrorDetail("budget_exceeded")).toEqual({ errorCode: "run.budget_exceeded" });
   expect(runErrorDetail("provider_error: rate limited")).toEqual({
     errorCode: "run.provider_error",

@@ -1,5 +1,5 @@
-import { invitationQuery, type SignInOptions, type SignInProvider, useApi, useAuthConfig } from "@agenteschat/client";
-import { type HumanAction, humanCheckHeaders, withHumanCheck } from "@agenteschat/client/lib/human-check";
+import { invitationQuery, type SignInOptions, type SignInProvider, useApi, useAuthConfig } from "@keepmind/client";
+import { type HumanAction, humanCheckHeaders, withHumanCheck } from "@keepmind/client/lib/human-check";
 import {
   emailTypoFix,
   isEmail,
@@ -7,7 +7,7 @@ import {
   nameIsPassword,
   passwordState,
   webmailOf,
-} from "@agenteschat/client/lib/text";
+} from "@keepmind/client/lib/text";
 import { useQuery } from "@tanstack/react-query";
 import { useIsFocused } from "expo-router";
 import { openBrowserAsync } from "expo-web-browser";

@@ -5,7 +5,7 @@ import {
   setDeletionHold,
   setOrgStanding,
   setUserBlocked,
-} from "@agenteschat/engine";
+} from "@keepmind/engine";
 import { createRoute, type OpenAPIHono, z } from "@hono/zod-openapi";
 import { apiError, errorResponse } from "../http/errors";
 import { body, iso, json, OrgParams } from "../routes/app/context";
@@ -41,7 +41,7 @@ const StandingInput = z.object({
   state: StandingState,
   reason: z.string().trim().min(1).max(64).openapi({
     description:
-      "Shown to the workspace with the notice `shown`, its owners' notice included. On agentes.chat Cloud, `review` reads as the automatic review hold's line, `review.<category>` as that line naming what was flagged (`phishing_impersonation`, `account_takeover`, `fraud` or `illegal_content`, any other category reading as plain `review`), `ended` (a plan that ended) as it is, and any other reason is followed by how to contest it, so name the Terms section it rests on.",
+      "Shown to the workspace with the notice `shown`, its owners' notice included. On KeepMind OS Cloud, `review` reads as the automatic review hold's line, `review.<category>` as that line naming what was flagged (`phishing_impersonation`, `account_takeover`, `fraud` or `illegal_content`, any other category reading as plain `review`), `ended` (a plan that ended) as it is, and any other reason is followed by how to contest it, so name the Terms section it rests on.",
   }),
   note: z.string().trim().max(2000).optional(),
   notice: StandingNotice,
@@ -124,7 +124,7 @@ export function registerOperatorStanding(api: OpenAPIHono, { db, pubsub, hub }: 
       tags,
       summary: "Hold one agent, or let it go",
       description:
-        "Held, the agent starts nothing (no run, model call, computer work, routine or bridge call) and is never picked to answer; the rest of the workspace works. What it is doing stops at its next model, computer or bridge call. The workspace reads only that the agent is paused, never the reason. On agentes.chat Cloud it reads the hold's kind with how to contest it (`network` for a reason starting with `network.`, else `operator`), and the agent's responsible person and the workspace's owners and admins get a notice, replaced when it is held again for another kind and closed when the agent is let go. At once in this process, within 5 seconds in the others.",
+        "Held, the agent starts nothing (no run, model call, computer work, routine or bridge call) and is never picked to answer; the rest of the workspace works. What it is doing stops at its next model, computer or bridge call. The workspace reads only that the agent is paused, never the reason. On KeepMind OS Cloud it reads the hold's kind with how to contest it (`network` for a reason starting with `network.`, else `operator`), and the agent's responsible person and the workspace's owners and admins get a notice, replaced when it is held again for another kind and closed when the agent is let go. At once in this process, within 5 seconds in the others.",
       request: { params: AgentParams, body: body(z.object({ held: z.boolean(), reason: Reason })) },
       responses: { 200: json(AgentHold), ...errors },
     }),
@@ -163,7 +163,7 @@ export function registerOperatorStanding(api: OpenAPIHono, { db, pubsub, hub }: 
       tags,
       summary: "Block an account, or let it back",
       description:
-        "Blocked: its sessions and phones are signed out now, it can't sign in again, every workspace refuses it on its next request (no waiting for a session cookie to expire) and its open connections close. Unblocking lets it sign in again; it keeps its workspaces. On agentes.chat Cloud the refused sign-in reads the block's kind, never its reason: `abuse` for `abuse.resignup`, `legal` for `legal_hold`, else `other`.",
+        "Blocked: its sessions and phones are signed out now, it can't sign in again, every workspace refuses it on its next request (no waiting for a session cookie to expire) and its open connections close. Unblocking lets it sign in again; it keeps its workspaces. On KeepMind OS Cloud the refused sign-in reads the block's kind, never its reason: `abuse` for `abuse.resignup`, `legal` for `legal_hold`, else `other`.",
       request: { params: UserParams, body: body(z.object({ blocked: z.boolean(), reason: Reason })) },
       responses: { 200: json(UserBlock), ...errors },
     }),

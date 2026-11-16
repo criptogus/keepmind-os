@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
@@ -136,11 +136,11 @@ describe("Preferences: a setting's explanation behind its ⓘ", () => {
       "here",
       <Servers />,
       (el) =>
-        row(el, "Send anonymous usage statistics to agentes.chat") &&
+        row(el, "Send anonymous usage statistics to KeepMind OS") &&
         row(el, "Reach it from your phone and teammates")?.line === null,
       (el) => {
-        expect(row(el, "Send anonymous usage statistics to agentes.chat")).toEqual({
-          title: "Send anonymous usage statistics to agentes.chat",
+        expect(row(el, "Send anonymous usage statistics to KeepMind OS")).toEqual({
+          title: "Send anonymous usage statistics to KeepMind OS",
           hint: "Counts such as people, agents, machine sizes, AI tokens used and how much data the agents' browsers send and receive. Never messages, files, names or sites. Changing it restarts KeepMind OS for a moment.",
           switch:
             "Counts such as people, agents, machine sizes, AI tokens used and how much data the agents' browsers send and receive. Never messages, files, names or sites. Changing it restarts KeepMind OS for a moment.",
@@ -186,7 +186,7 @@ describe("Preferences: a setting's explanation behind its ⓘ", () => {
         const link = [...el.querySelectorAll("button")].find((b) => b.textContent === "How folders work");
         expect(link?.className).toBe("ac-link ac-link--muted dk-link");
         await act(async () => link?.click());
-        expect(opened).toEqual(["https://agentes.chat/docs/computers#folders"]);
+        expect(opened).toEqual(["https://keepmind.io/docs/computers#folders"]);
         expect(el.textContent).not.toContain("Removing deletes nothing");
       },
     ));

@@ -275,8 +275,8 @@ describe("OpenRouter adapter (Chat Completions, scripted transport)", () => {
     const req = requests[0];
     expect(req?.url).toBe("https://openrouter.ai/api/v1/chat/completions");
     expect(req?.headers.get("authorization")).toBe("Bearer or-test-key");
-    expect(req?.headers.get("http-referer")).toBe("https://agentes.chat");
-    expect(req?.headers.get("x-openrouter-title")).toBe("agentes.chat");
+    expect(req?.headers.get("http-referer")).toBe("https://keepmind.io");
+    expect(req?.headers.get("x-openrouter-title")).toBe("keepmind.io");
     expect(req?.body).toMatchObject({
       model: "~z-ai/glm-latest",
       max_tokens: 900,

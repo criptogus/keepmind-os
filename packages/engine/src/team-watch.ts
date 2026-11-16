@@ -1,7 +1,7 @@
-import { and, type Database, desc, eq, gt, inArray, isNull, lt, rowsOf, type SQL, schema, sql } from "@agenteschat/db";
-import { serverText } from "@agenteschat/i18n";
-import { formatList } from "@agenteschat/i18n/format";
-import type { AppLocale } from "@agenteschat/i18n/locale";
+import { and, type Database, desc, eq, gt, inArray, isNull, lt, rowsOf, type SQL, schema, sql } from "@keepmind/db";
+import { serverText } from "@keepmind/i18n";
+import { formatList } from "@keepmind/i18n/format";
+import type { AppLocale } from "@keepmind/i18n/locale";
 import type { Agent } from "./agents";
 import { backgroundAiState } from "./ai-status";
 import { postApprovalsDigest } from "./approvals-digest";

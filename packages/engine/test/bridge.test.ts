@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { MCP_TOOLS_MAX, MISSION_MCP_TOOLS, type ServerFrame } from "@agenteschat/adapters";
-import { and, eq, schema } from "@agenteschat/db";
+import { MCP_TOOLS_MAX, MISSION_MCP_TOOLS, type ServerFrame } from "@keepmind/adapters";
+import { and, eq, schema } from "@keepmind/db";
 import {
   createMission,
   createMissionRunToolSource,
@@ -105,7 +105,7 @@ async function runningRun(threadRootId?: string) {
 }
 
 async function otherMachine() {
-  const deps = { db: f.db, pubsub: f.pubsub, publicUrl: "https://agentes.chat" };
+  const deps = { db: f.db, pubsub: f.pubsub, publicUrl: "https://keepmind.io" };
   return pairMachine(deps, f.owner.id, f.org.id, { name: "Other", ...RUNNER, exec: true });
 }
 

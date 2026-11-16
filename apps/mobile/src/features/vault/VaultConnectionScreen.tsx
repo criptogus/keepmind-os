@@ -1,5 +1,5 @@
-import { useDeleteVaultConnection, useSyncVaultConnection, useVault } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
+import { useDeleteVaultConnection, useSyncVaultConnection, useVault } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { GroupedFooter, GroupedHeader, GroupedList, GroupedRow, useToast } from "@/ui";

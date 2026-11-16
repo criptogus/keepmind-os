@@ -1,4 +1,4 @@
-import { and, type Executor, eq, isNotNull, rowsOf, type SQL, schema, sql } from "@agenteschat/db";
+import { and, type Executor, eq, isNotNull, rowsOf, type SQL, schema, sql } from "@keepmind/db";
 import { caches } from "./cache";
 import { maySql } from "./permissions";
 

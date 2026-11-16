@@ -28,7 +28,7 @@
  */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { createAnthropicProvider, type ModelProvider } from "@agenteschat/providers";
+import { createAnthropicProvider, type ModelProvider } from "@keepmind/providers";
 import { type CheckResult, deterministicChecks } from "./behavior-checks";
 import { type BehaviorCase, type CaseRun, clip, judge, runCase } from "./behavior-run";
 

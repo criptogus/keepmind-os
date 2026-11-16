@@ -1,4 +1,4 @@
-import type { AppNotification } from "@agenteschat/client";
+import type { AppNotification } from "@keepmind/client";
 import type { WorkItem } from "../agents/logic";
 import { type AppHref, chatHref, notificationHref } from "../links/logic";
 import type { ConversationRow } from "./logic";

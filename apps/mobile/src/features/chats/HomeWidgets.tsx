@@ -1,4 +1,4 @@
-import { frozenBoard, useHomeBoard, type Widget } from "@agenteschat/client";
+import { frozenBoard, useHomeBoard, type Widget } from "@keepmind/client";
 import { useTranslation } from "react-i18next";
 import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { useOrg } from "@/providers/org";

@@ -1,4 +1,4 @@
-import type { AgentColorName, EyeStyle } from "@agenteschat/ui/agent/engine";
+import type { AgentColorName, EyeStyle } from "@keepmind/ui/agent/engine";
 
 /** What the engine needs to draw an agent. */
 export interface AgentLookInput {

@@ -1,7 +1,7 @@
-import { keys, useApi } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { matchesName } from "@agenteschat/client/lib/text";
+import { keys, useApi } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { matchesName } from "@keepmind/client/lib/text";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

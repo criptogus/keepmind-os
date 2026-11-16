@@ -1,4 +1,4 @@
-import { formatPercent } from "@agenteschat/client/lib/format";
+import { formatPercent } from "@keepmind/client/lib/format";
 import {
   clampPan,
   clickZoom,
@@ -15,8 +15,8 @@ import {
   ZOOM_MAX,
   type ZoomView,
   zoomAt,
-} from "@agenteschat/client/lib/zoom";
-import { Button, Spinner } from "@agenteschat/ui";
+} from "@keepmind/client/lib/zoom";
+import { Button, Spinner } from "@keepmind/ui";
 import { type PointerEvent as ReactPointerEvent, useCallback, useEffect, useId, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useMatchMedia } from "@/hooks/useMatchMedia";

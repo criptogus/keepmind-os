@@ -1,4 +1,4 @@
-import { and, type Database, desc, type Executor, eq, inArray, isNull, lt, ne, schema, sql } from "@agenteschat/db";
+import { and, type Database, desc, type Executor, eq, inArray, isNull, lt, ne, schema, sql } from "@keepmind/db";
 import {
   clipText,
   DASHBOARDS_MAX,
@@ -14,7 +14,7 @@ import {
   WIDGET_STATUSES,
   WIDGETS_PER_DASHBOARD_MAX,
   widgetSpecOf,
-} from "@agenteschat/ui/widgets/spec";
+} from "@keepmind/ui/widgets/spec";
 import { type Agent, getAgent } from "../agents";
 import { canTalkTo, speakerOf } from "../audience";
 import { ConflictError, ForbiddenError, NotFoundError, ValidationError } from "../errors";

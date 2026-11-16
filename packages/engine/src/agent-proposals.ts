@@ -1,4 +1,4 @@
-import { isAccountKind, type PubSub } from "@agenteschat/adapters";
+import { isAccountKind, type PubSub } from "@keepmind/adapters";
 import {
   and,
   asc,
@@ -11,8 +11,8 @@ import {
   notInArray,
   schema,
   sql,
-} from "@agenteschat/db";
-import { AUTO_MODEL } from "@agenteschat/providers";
+} from "@keepmind/db";
+import { AUTO_MODEL } from "@keepmind/providers";
 import { orgToolCatalog, setAgentAccess } from "./access";
 import { type Agent, createAgent, getAgent, HANDLE_PATTERN, NEW_AGENT_DEFAULTS, takenHandles } from "./agents";
 import { type AiStatusDeps, agentAiState } from "./ai-status";

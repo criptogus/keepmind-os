@@ -18,7 +18,7 @@ export async function beginOpenRouterOAuth() {
 export async function finishOpenRouterOAuth(
   pending: { verifier: string; expiresAt: number },
   code: string,
-  request: typeof fetch = fetch,
+  request: (input: Parameters<typeof fetch>[0], init?: RequestInit) => Promise<Response> = fetch,
 ): Promise<string> {
   if (Date.now() >= pending.expiresAt || !code.trim() || code.trim().length > 2048 || /^https?:/i.test(code.trim()))
     throw new Error("oauth.invalid_code");
@@ -31,7 +31,7 @@ export async function finishOpenRouterOAuth(
   });
   if (!response.ok) throw new Error("oauth.exchange_failed");
   const data = await response.json();
-  if (typeof data.key !== "string" || !/^sk-or-v\d+-[A-Za-z0-9]{32,}$/.test(data.key))
+  if (!data || typeof data !== "object" || !("key" in data) || typeof data.key !== "string" || !/^sk-or-v\d+-[A-Za-z0-9]{32,}$/.test(data.key))
     throw new Error("oauth.exchange_failed");
   return data.key;
 }

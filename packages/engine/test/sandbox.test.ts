@@ -1,12 +1,12 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { FILE_PULL_PROTOCOL, MAX_INLINE_FILE_BYTES } from "@agenteschat/adapters";
+import { FILE_PULL_PROTOCOL, MAX_INLINE_FILE_BYTES } from "@keepmind/adapters";
 import {
   ASK_AGAIN,
   approvalMessage,
   DELETE_BRANCHES_POINTER,
   SECRET_MESSAGE,
-} from "@agenteschat/adapters/command-policy";
-import { eq, schema } from "@agenteschat/db";
+} from "@keepmind/adapters/command-policy";
+import { eq, schema } from "@keepmind/db";
 import {
   createAgent,
   createOrganization,

@@ -1,5 +1,5 @@
-import { useApi, useMe } from "@agenteschat/client";
-import { Button, EmptyState } from "@agenteschat/ui";
+import { useApi, useMe } from "@keepmind/client";
+import { Button, EmptyState } from "@keepmind/ui";
 import { createRootRouteWithContext, Link, Outlet, useRouter, useRouterState } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";

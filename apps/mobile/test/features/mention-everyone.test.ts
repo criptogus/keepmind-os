@@ -4,7 +4,7 @@ import {
   isEveryoneMention,
   mentionsReader,
   offersEveryone,
-} from "@agenteschat/client/lib/everyone";
+} from "@keepmind/client/lib/everyone";
 import { parseBlocks } from "../../src/features/chat/logic";
 import { insertMention, mentionQuery } from "../../src/features/chat/mentions";
 

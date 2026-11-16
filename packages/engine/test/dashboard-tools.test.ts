@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import type { PubSub } from "@agenteschat/adapters";
-import { type Database, eq, schema, sql } from "@agenteschat/db";
-import { type ModelRequest, systemText } from "@agenteschat/providers";
-import type { FakeReply } from "@agenteschat/providers/testing";
+import type { PubSub } from "@keepmind/adapters";
+import { type Database, eq, schema, sql } from "@keepmind/db";
+import { type ModelRequest, systemText } from "@keepmind/providers";
+import type { FakeReply } from "@keepmind/providers/testing";
 import {
   createDashboard,
   createDashboardToolSource,

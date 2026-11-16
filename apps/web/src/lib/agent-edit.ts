@@ -1,5 +1,5 @@
-import type { AgentAudience } from "@agenteschat/client";
-import type { Level, LevelState } from "@agenteschat/client/lib/access-levels";
+import type { AgentAudience } from "@keepmind/client";
+import type { Level, LevelState } from "@keepmind/client/lib/access-levels";
 import {
   type AgentSection,
   type AgentTab,
@@ -8,12 +8,12 @@ import {
   sameAudience,
   sameBrain,
   sameList,
-} from "@agenteschat/client/lib/agent-edit";
-import { handleAfterRename } from "@agenteschat/client/lib/new-agent";
-import { type RepoChoice, sameRepoChoice } from "@agenteschat/client/lib/repos";
-import type { AgentAppearance } from "@agenteschat/ui";
+} from "@keepmind/client/lib/agent-edit";
+import { handleAfterRename } from "@keepmind/client/lib/new-agent";
+import { type RepoChoice, sameRepoChoice } from "@keepmind/client/lib/repos";
+import type { AgentAppearance } from "@keepmind/ui";
 
-export * from "@agenteschat/client/lib/agent-edit";
+export * from "@keepmind/client/lib/agent-edit";
 
 /*
  * The agent page: one draft over

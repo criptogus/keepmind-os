@@ -15,7 +15,7 @@ import {
   type ControlOut,
   type ControlReplies,
   type ControlRequest,
-} from "@agenteschat/adapters/runner-control";
+} from "@keepmind/adapters/runner-control";
 
 export type HelloLine = Extract<ControlOut, { type: "hello" }>;
 

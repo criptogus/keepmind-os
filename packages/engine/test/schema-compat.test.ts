@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { MISSION_MCP_TOOLS } from "@agenteschat/adapters";
+import { MISSION_MCP_TOOLS } from "@keepmind/adapters";
 import { toBrainSchema, validateJson } from "../src";
 
 describe("toBrainSchema", () => {

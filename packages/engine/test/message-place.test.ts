@@ -1,7 +1,7 @@
 import { afterEach, expect, test } from "bun:test";
-import { channelTopic } from "@agenteschat/adapters";
-import { schema } from "@agenteschat/db";
-import { systemText } from "@agenteschat/providers";
+import { channelTopic } from "@keepmind/adapters";
+import { schema } from "@keepmind/db";
+import { systemText } from "@keepmind/providers";
 import {
   buildRunContext,
   catchUpText,

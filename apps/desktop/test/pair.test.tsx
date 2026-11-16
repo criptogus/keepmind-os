@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { CLOUD_SERVER } from "@agenteschat/client/lib/server";
+import { CLOUD_SERVER } from "@keepmind/client/lib/server";
 import { act, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import { I18nextProvider } from "react-i18next";
@@ -92,14 +92,14 @@ const pairedWith = (store: DesktopStore, orgId: string) =>
 describe("pairing from the app", () => {
   test("a pair link as Rust hands it over: the server and the stored code", () => {
     expect(parsePairLink(pairLink("ABCDEFGH"))).toEqual({ server: FAKE_SERVER, code: "ABCDEFGH" });
-    expect(parsePairLink("agenteschat://pair/?link=abcd-efgh&server=https://app.agentes.chat")).toEqual({
+    expect(parsePairLink("agenteschat://pair/?link=abcd-efgh&server=https://keepmind.io")).toEqual({
       server: CLOUD_SERVER,
       code: "ABCDEFGH",
     });
     for (const bad of [
-      "agenteschat://connect?server=https%3A%2F%2Fapp.agentes.chat",
+      "agenteschat://connect?server=https%3A%2F%2Fkeepmind.io",
       "agenteschat://pair?server=http%3A%2F%2Fagentes.example.com&link=ABCDEFGH",
-      "agenteschat://pair?server=https%3A%2F%2Fapp.agentes.chat&link=ABCDEFG",
+      "agenteschat://pair?server=https%3A%2F%2Fkeepmind.io&link=ABCDEFG",
     ])
       expect(parsePairLink(bad)).toBeNull();
   });

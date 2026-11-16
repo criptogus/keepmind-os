@@ -1,10 +1,10 @@
-import { ApiError, type AskToJoinResult, type InvitationPreview, keys, useApi } from "@agenteschat/client";
-import { formatTimeLeft } from "@agenteschat/client/lib/actions";
-import { errorCode, invitedErrorText } from "@agenteschat/client/lib/errors";
-import { withHumanCheck } from "@agenteschat/client/lib/human-check";
-import { CODE_LENGTH, JOIN_NAME_MAX, JOIN_NOTE_MAX, typedCode } from "@agenteschat/client/lib/join-requests";
-import { emailTypoFix, isEmail, nameIsPassword, passwordState, webmailOf } from "@agenteschat/client/lib/text";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+import { ApiError, type AskToJoinResult, type InvitationPreview, keys, useApi } from "@keepmind/client";
+import { formatTimeLeft } from "@keepmind/client/lib/actions";
+import { errorCode, invitedErrorText } from "@keepmind/client/lib/errors";
+import { withHumanCheck } from "@keepmind/client/lib/human-check";
+import { CODE_LENGTH, JOIN_NAME_MAX, JOIN_NOTE_MAX, typedCode } from "@keepmind/client/lib/join-requests";
+import { emailTypoFix, isEmail, nameIsPassword, passwordState, webmailOf } from "@keepmind/client/lib/text";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import { useQueryClient } from "@tanstack/react-query";
 import { type ComponentRef, type ReactNode, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

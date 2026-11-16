@@ -1,9 +1,9 @@
 import { describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { APP_ICONS } from "@agenteschat/client/lib/app-icons";
+import { APP_ICONS } from "@keepmind/client/lib/app-icons";
 import {
   agentOf,
   appIcon,

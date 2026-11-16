@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import { and, eq, like, schema } from "@agenteschat/db";
+import { and, eq, like, schema } from "@keepmind/db";
 import {
   audienceMailLoss,
   ConflictError,

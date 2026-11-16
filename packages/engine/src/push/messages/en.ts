@@ -137,7 +137,7 @@ export const en: PushStrings = {
   browserHandoffBody: "Tap to open the screen.",
   desktopHandoffTitle: (a) => `${a} needs you on the computer`,
   desktopHandoffReminderTitle: (a) => `${a} still needs you on the computer`,
-  desktopHandoffBody: "Open agentes.chat on a laptop to help.",
+  desktopHandoffBody: "Open KeepMind OS on a laptop to help.",
   secretTitle: (a) => `${a} needs a secret from you`,
   secretBody: "Tap to send it securely.",
   widgetAlertTitle: (a, w) => (w ? `${a}: ${w}` : `${a} flagged a widget`),

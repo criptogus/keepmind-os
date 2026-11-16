@@ -1,7 +1,7 @@
 import { mkdirSync, realpathSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { GROK_ACCOUNT_HOMES } from "@agenteschat/adapters/command-policy";
+import { GROK_ACCOUNT_HOMES } from "@keepmind/adapters/command-policy";
 import {
   cgroupCounters,
   diskFigures,
@@ -10,7 +10,7 @@ import {
   machineSize,
   sampleLoad,
   TrafficWindow,
-} from "@agenteschat/adapters/host-stats";
+} from "@keepmind/adapters/host-stats";
 import {
   type AccountKind,
   type AgentScope,
@@ -30,8 +30,8 @@ import {
   type RunnerPause,
   type RunnerToolchains,
   type RunnerTools,
-} from "@agenteschat/adapters/machine-protocol";
-import { redactCommon } from "@agenteschat/adapters/redact";
+} from "@keepmind/adapters/machine-protocol";
+import { redactCommon } from "@keepmind/adapters/redact";
 import {
   type ActivityEntry,
   type ActivitySaid,
@@ -43,7 +43,7 @@ import {
   type ControlJob,
   type ControlReplies,
   type ControlStatus,
-} from "@agenteschat/adapters/runner-control";
+} from "@keepmind/adapters/runner-control";
 import {
   AccessRequests,
   addFolder,
@@ -711,7 +711,7 @@ export class RunnerDaemon implements RequestObserver {
     if (!session) {
       throw new RunnerError(
         "internal",
-        "This computer isn't connected to agentes.chat right now. Try again in a minute.",
+        "This computer isn't connected to KeepMind OS right now. Try again in a minute.",
       );
     }
     const { tools } = this.access();
@@ -2662,7 +2662,7 @@ export class RunnerDaemon implements RequestObserver {
       const byName = (typeof req.byName === "string" ? req.byName : "").slice(0, 80);
       this.emit({ kind: "access.allowed", tool, byName });
       this.opts.print?.(
-        `${byName || "Its owner"} turned on ${tool} from agentes.chat. To turn it off: agentes-runner tools disable ${tool}`,
+        `${byName || "Its owner"} turned on ${tool} from KeepMind OS. To turn it off: agentes-runner tools disable ${tool}`,
       );
     }
     return { access: this.access() };

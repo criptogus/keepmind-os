@@ -1,6 +1,6 @@
-import { type ArtifactDetail, useApi, useArtifact } from "@agenteschat/client";
-import { formatJson, highlightCode } from "@agenteschat/client/lib/code";
-import { isJsonFile } from "@agenteschat/client/lib/files";
+import { type ArtifactDetail, useApi, useArtifact } from "@keepmind/client";
+import { formatJson, highlightCode } from "@keepmind/client/lib/code";
+import { isJsonFile } from "@keepmind/client/lib/files";
 import { useQuery } from "@tanstack/react-query";
 import { Image } from "expo-image";
 import { useMemo, useState } from "react";

@@ -1,11 +1,11 @@
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { ApiClient, Artifact } from "@agenteschat/client";
-import { onlyItsConversation, toggledSharing } from "@agenteschat/client/lib/drive";
-import { filePath, parseFileLink } from "@agenteschat/client/lib/message-links";
+import type { ApiClient, Artifact } from "@keepmind/client";
+import { onlyItsConversation, toggledSharing } from "@keepmind/client/lib/drive";
+import { filePath, parseFileLink } from "@keepmind/client/lib/message-links";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { ATLAS_ID, createFakeApi, ENG_ID, GENERAL_ID, ORG_ID, seedState } from "./fake-api";
 import { renderApp, screen, settle } from "./render";

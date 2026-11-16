@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { and, asc, eq, schema } from "@agenteschat/db";
+import { and, asc, eq, schema } from "@keepmind/db";
 import {
   AUTO_MODEL,
   customModelId,
@@ -7,8 +7,8 @@ import {
   modelForTier,
   parseOpenRouterModels,
   setOpenRouterModels,
-} from "@agenteschat/providers";
-import { CODING_PLANS, planModel } from "@agenteschat/providers/plans";
+} from "@keepmind/providers";
+import { CODING_PLANS, planModel } from "@keepmind/providers/plans";
 import fixture from "../../providers/test/fixtures/openrouter-models.json";
 import {
   agentBrainLines,

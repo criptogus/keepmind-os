@@ -16,7 +16,7 @@ import {
 } from "../src/lib/server";
 
 const instance = (over: Record<string, unknown> = {}) => ({
-  name: "agentes.chat",
+  name: "keepmind.io",
   version: "1.2.0",
   api: APP_API,
   minApi: APP_API,
@@ -40,7 +40,7 @@ describe("server addresses", () => {
     expect(normalizeServer("agentes.tail1234.ts.net")).toBe("https://agentes.tail1234.ts.net");
     expect(normalizeServer("  https://Chat.Example.com/login?x=1 ")).toBe("https://chat.example.com");
     expect(normalizeServer("box.tail1234.ts.net:8443")).toBe("https://box.tail1234.ts.net:8443");
-    expect(normalizeServer("https://app.agentes.chat/")).toBe("https://app.agentes.chat");
+    expect(normalizeServer("https://keepmind.io/")).toBe("https://keepmind.io");
   });
 
   test("https only; http just for a development build on the local network", () => {
@@ -84,20 +84,20 @@ describe("server addresses", () => {
     expect(serverHost("https://box.tail1234.ts.net")).toBe("box.tail1234.ts.net");
     expect(serverHost("https://chat.example.com:8443")).toBe("chat.example.com:8443");
     expect(isTailnet("https://box.tail1234.ts.net")).toBe(true);
-    expect(isTailnet("https://app.agentes.chat")).toBe(false);
+    expect(isTailnet("https://keepmind.io")).toBe(false);
   });
 });
 
 describe("help links", () => {
-  test("a page on agentes.chat in the reader's language, with only the section after it", () => {
-    expect(helpUrl("memory", "en")).toBe("https://agentes.chat/docs/memory");
-    expect(helpUrl("computers", "pt-BR", "folders")).toBe("https://agentes.chat/pt/docs/computers#folders");
-    expect(helpUrl("wiki", "en-GB")).toBe("https://agentes.chat/docs/wiki");
+  test("a page on KeepMind OS in the reader's language, with only the section after it", () => {
+    expect(helpUrl("memory", "en")).toBe("https://keepmind.io/docs/memory");
+    expect(helpUrl("computers", "pt-BR", "folders")).toBe("https://keepmind.io/pt/docs/computers#folders");
+    expect(helpUrl("wiki", "en-GB")).toBe("https://keepmind.io/docs/wiki");
     // Any language of the app, in the docs site's folders.
-    expect(helpUrl("wiki", "fr-CA")).toBe("https://agentes.chat/fr/docs/wiki");
-    expect(helpUrl("wiki", "zh-TW")).toBe("https://agentes.chat/zh/docs/wiki");
-    expect(helpUrl("wiki", "ko")).toBe("https://agentes.chat/ko/docs/wiki");
-    expect(helpUrl("wiki", "xx")).toBe("https://agentes.chat/docs/wiki");
+    expect(helpUrl("wiki", "fr-CA")).toBe("https://keepmind.io/fr/docs/wiki");
+    expect(helpUrl("wiki", "zh-TW")).toBe("https://keepmind.io/zh/docs/wiki");
+    expect(helpUrl("wiki", "ko")).toBe("https://keepmind.io/ko/docs/wiki");
+    expect(helpUrl("wiki", "xx")).toBe("https://keepmind.io/docs/wiki");
   });
 });
 
@@ -109,9 +109,9 @@ describe("connect links", () => {
     const link = connectLink("https://box.tail1234.ts.net", { token });
     expect(link).toBe(`agenteschat://connect?server=https%3A%2F%2Fbox.tail1234.ts.net&token=${token}`);
     expect(parseConnectLink(link)).toEqual({ server: "https://box.tail1234.ts.net", token });
-    expect(parseConnectLink(connectLink("https://app.agentes.chat"))).toEqual({ server: "https://app.agentes.chat" });
-    expect(parseConnectLink("agenteschat:///connect?server=https://app.agentes.chat")).toEqual({
-      server: "https://app.agentes.chat",
+    expect(parseConnectLink(connectLink("https://keepmind.io"))).toEqual({ server: "https://keepmind.io" });
+    expect(parseConnectLink("agenteschat:///connect?server=https://keepmind.io")).toEqual({
+      server: "https://keepmind.io",
     });
   });
 
@@ -129,18 +129,18 @@ describe("connect links", () => {
   });
 
   test("a token or claim that isn't one, or a link that is too long, is no link", () => {
-    const base = "agenteschat://connect?server=https%3A%2F%2Fapp.agentes.chat";
+    const base = "agenteschat://connect?server=https%3A%2F%2Fkeepmind.io";
     expect(parseConnectLink(`${base}&token=short`)).toBeNull();
     expect(parseConnectLink(`${base}&claim=${"x".repeat(19)}`)).toBeNull();
     expect(parseConnectLink(`${base}&claim=${encodeURIComponent("<script>alert(1)</script>xxxxxxxxxx")}`)).toBeNull();
     expect(parseConnectLink(`${base}&token=${"a".repeat(201)}`)).toBeNull();
     expect(parseConnectLink(`${base}&x=${"a".repeat(2048)}`)).toBeNull();
-    expect(parseConnectLink(`${base}&token=`)).toEqual({ server: "https://app.agentes.chat" });
+    expect(parseConnectLink(`${base}&token=`)).toEqual({ server: "https://keepmind.io" });
   });
 
   test("anything else is not a connect link", () => {
     for (const other of [
-      "https://app.agentes.chat",
+      "https://keepmind.io",
       "agenteschat://chat/123",
       "agenteschat://connect",
       "agenteschat://connect?server=",
@@ -151,12 +151,12 @@ describe("connect links", () => {
   });
 
   test("the desktop app's pair link: the server and the connect link's code", () => {
-    expect(pairLink("https://app.agentes.chat", "K7QM-4ZPA")).toBe(
-      "agenteschat://pair?server=https%3A%2F%2Fapp.agentes.chat&link=K7QM-4ZPA",
+    expect(pairLink("https://keepmind.io", "K7QM-4ZPA")).toBe(
+      "agenteschat://pair?server=https%3A%2F%2Fkeepmind.io&link=K7QM-4ZPA",
     );
-    expect(parseConnectLink(pairLink("https://app.agentes.chat", "K7QM-4ZPA"))).toBeNull();
+    expect(parseConnectLink(pairLink("https://keepmind.io", "K7QM-4ZPA"))).toBeNull();
     // Only where the app takes it: https, not on this computer.
-    expect(["https://app.agentes.chat", "https://chat.example.com:8443"].map(appPairsWith)).toEqual([true, true]);
+    expect(["https://keepmind.io", "https://chat.example.com:8443"].map(appPairsWith)).toEqual([true, true]);
     for (const other of [
       "http://192.168.1.20:3000",
       "http://chat.example.com",
@@ -168,7 +168,7 @@ describe("connect links", () => {
 });
 
 describe("checking a server", () => {
-  test("an agentes.chat server the app can use", () => {
+  test("an KeepMind OS server the app can use", () => {
     expect(readInstance("https://box.tail1234.ts.net", instance())).toMatchObject({ ok: true });
   });
 

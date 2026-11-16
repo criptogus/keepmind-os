@@ -1,5 +1,5 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, type Database, desc, eq, inArray, isNull, lt, ne, schema, sql } from "@agenteschat/db";
+import type { PubSub } from "@keepmind/adapters";
+import { and, type Database, desc, eq, inArray, isNull, lt, ne, schema, sql } from "@keepmind/db";
 import { stopRun } from "./cancel";
 import { widgetRoutineHeld } from "./dashboards/refresh-ledger";
 import { notifyRoutineStalled, notifyRoutineWaitingPlan } from "./notification-producers";

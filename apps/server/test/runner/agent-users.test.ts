@@ -860,7 +860,7 @@ test("ensureContainers: one its start limit stopped stays down for the same comm
   // A stop that timed out says nothing about its next start; a changed command gets its own tries.
   for (const failed of [
     `ActiveState=failed\nDescription=${description}\nResult=timeout\n`,
-    "ActiveState=failed\nDescription=agentes.chat containers 0000000000000000\nResult=exit-code\n",
+    "ActiveState=failed\nDescription=KeepMind OS containers 0000000000000000\nResult=exit-code\n",
   ]) {
     shown = failed;
     calls.length = 0;

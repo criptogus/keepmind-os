@@ -1,11 +1,11 @@
 import { describe, expect, test } from "bun:test";
-import type { LiveConsult, LiveRun, LiveWork, Message, RunConsultation, SecretRequest } from "@agenteschat/client";
-import { activitySentence, barElapsed, barFaces, barWords, facesOf } from "@agenteschat/client/lib/activity";
-import { questionWaitsOn } from "@agenteschat/client/lib/agent-questions";
-import { runAround, runPosition } from "@agenteschat/client/lib/chat";
-import { consultBlocksNearEnd, consultsForLine } from "@agenteschat/client/lib/consult-group";
-import { formatInt } from "@agenteschat/client/lib/format";
-import { issueTakenOf, issueWorkOf } from "@agenteschat/client/lib/issues";
+import type { LiveConsult, LiveRun, LiveWork, Message, RunConsultation, SecretRequest } from "@keepmind/client";
+import { activitySentence, barElapsed, barFaces, barWords, facesOf } from "@keepmind/client/lib/activity";
+import { questionWaitsOn } from "@keepmind/client/lib/agent-questions";
+import { runAround, runPosition } from "@keepmind/client/lib/chat";
+import { consultBlocksNearEnd, consultsForLine } from "@keepmind/client/lib/consult-group";
+import { formatInt } from "@keepmind/client/lib/format";
+import { issueTakenOf, issueWorkOf } from "@keepmind/client/lib/issues";
 import {
   latestSecret,
   secretClosedBy,
@@ -14,9 +14,9 @@ import {
   secretRequestOf,
   secretValueProblem,
   secretWhere,
-} from "@agenteschat/client/lib/secret-requests";
-import { secretOutcome } from "@agenteschat/client/lib/secret-words";
-import { toolCalls, toolNow, toolPhrase, toolWhy } from "@agenteschat/client/lib/work";
+} from "@keepmind/client/lib/secret-requests";
+import { secretOutcome } from "@keepmind/client/lib/secret-words";
+import { toolCalls, toolNow, toolPhrase, toolWhy } from "@keepmind/client/lib/work";
 import {
   AGENT_WORDS_MIN,
   aboutFits,

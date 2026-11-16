@@ -4,7 +4,7 @@
  * Menu paths and button names stay in the vendor's English, as its docs write them.
  */
 
-import type { en } from "@agenteschat/i18n/en";
+import type { en } from "@keepmind/i18n/en";
 
 type Dialog = (typeof en)["apps"]["dialog"];
 /** A key under `apps.dialog`, as "claude.step1". */
@@ -116,13 +116,13 @@ export const clineCommand = (url: string) => `cline mcp add ${MCP_SERVER_NAME} $
 export const warpConfig = (url: string) => json({ [MCP_SERVER_NAME]: { url, headers: { Authorization: BEARER } } });
 
 export const gooseInstallLink = (url: string) =>
-  `goose://extension?url=${encodeURIComponent(url)}&type=streamable_http&id=${MCP_SERVER_NAME}&name=agentes.chat`;
+  `goose://extension?url=${encodeURIComponent(url)}&type=streamable_http&id=${MCP_SERVER_NAME}&name=KeepMind OS`;
 
 export const gooseConfig = (url: string) =>
   [
     "extensions:",
     `  ${MCP_SERVER_NAME}:`,
-    "    name: agentes.chat",
+    "    name: KeepMind OS",
     "    type: streamable_http",
     `    uri: "${url}"`,
     "    enabled: true",

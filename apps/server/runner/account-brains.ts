@@ -11,7 +11,7 @@ import {
   type ToolNotice,
   type TurnContext,
   type WireBrainEvent,
-} from "@agenteschat/adapters/machine-protocol";
+} from "@keepmind/adapters/machine-protocol";
 import { ACCOUNT_SIGNED_OUT, type AccountManager } from "./accounts";
 import { ACCOUNT_STORES, type AccountUsers, type AgentUser, accountLauncher } from "./agent-users";
 import { BrainManager, type DelegatedFrame, type DelegatedTurn, neutralizeCliInput, redactTokenShapes } from "./brain";

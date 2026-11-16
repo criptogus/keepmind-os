@@ -11,7 +11,7 @@ import type {
   ApiClient,
   Connection,
   CustomServer,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 
 type FakeTool = { name: string; label: string; description: string; sensitive: boolean; readOnly: boolean };
 const tool = (name: string, label: string, description: string, readOnly = false, sensitive = false): FakeTool => ({

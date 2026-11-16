@@ -4,9 +4,9 @@ import {
   inDmOnly,
   parseSearch,
   searchChipKey,
-} from "@agenteschat/client/lib/search-filters";
-import { modeKey } from "@agenteschat/client/lib/workspace-mode";
-import { Button } from "@agenteschat/ui";
+} from "@keepmind/client/lib/search-filters";
+import { modeKey } from "@keepmind/client/lib/workspace-mode";
+import { Button } from "@keepmind/ui";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { COMPACT_QUERY } from "@/components/NavDrawer";

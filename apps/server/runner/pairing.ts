@@ -86,7 +86,7 @@ export function movedFrom(
   if (!prev?.token || !prev.orgId || !org.id || prev.orgId === org.id) return null;
   const from = prev.orgName || "another workspace";
   const to = org.name || "this workspace";
-  return `This computer was connected to ${from}. It works for ${to} now, and ${from} no longer reaches it. One connection serves one workspace: for several, use the agentes.chat app.`;
+  return `This computer was connected to ${from}. It works for ${to} now, and ${from} no longer reaches it. One connection serves one workspace: for several, use the KeepMind OS app.`;
 }
 
 /** Who may use the computer it just connected, in a sentence; null from a server that doesn't say. */

@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import type { Me, OrgSummary } from "@agenteschat/client";
+import type { Me, OrgSummary } from "@keepmind/client";
 import { workspacesBeyond } from "../src/features/me/logic";
 import { orderedServers, unreadElsewhere, workspacesOf } from "../src/features/me/workspaces-logic";
 import { newWorkspaceMade, offersNewWorkspaceHere } from "../src/lib/new-workspace";
@@ -28,7 +28,7 @@ import {
 } from "../src/lib/server-choice";
 
 // Workspaces across servers (ADR 0154).
-const cloud = "https://app.agentes.chat";
+const cloud = "https://keepmind.io";
 const box = "https://agentes.exemplo.com.br";
 const lab = "https://lab.tail1234.ts.net";
 
@@ -144,7 +144,7 @@ describe("Workspaces", () => {
       ],
       failed: false,
     });
-    expect(here.host).toBe("agentes.chat");
+    expect(here.host).toBe("keepmind.io");
     expect(here.orgs.map((o) => [o.id, o.unread])).toEqual([
       ["a", 2],
       ["n", 3],
@@ -188,7 +188,7 @@ describe("Workspaces", () => {
     expect(offersNewWorkspaceHere(box, me())).toBe(true);
     expect(offersNewWorkspaceHere(box, me(false))).toBe(false);
     expect(offersNewWorkspaceHere(box, undefined)).toBe(false);
-    // On agentes.chat its own row makes one there.
+    // On KeepMind OS its own row makes one there.
     expect(offersNewWorkspaceHere(cloud, me(true))).toBe(false);
     const sheet = readFileSync(join(import.meta.dir, "../src/features/me/WorkspacesPages.tsx"), "utf8");
     expect(sheet).toContain("{offersNewWorkspaceHere(server, me) ? (");

@@ -1,4 +1,4 @@
-import type { MailAddress } from "@agenteschat/adapters";
+import type { MailAddress } from "@keepmind/adapters";
 import { cutText } from "../format";
 import { neutralizeUntrusted } from "../untrusted";
 

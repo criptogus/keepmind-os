@@ -1,5 +1,5 @@
-import type { Credential, EndpointCheck, EndpointStyle } from "@agenteschat/client";
-import { useAddCredential, useEndpointModels, useSetEndpointModels } from "@agenteschat/client";
+import type { Credential, EndpointCheck, EndpointStyle } from "@keepmind/client";
+import { useAddCredential, useEndpointModels, useSetEndpointModels } from "@keepmind/client";
 import {
   CHECK_VIEW,
   CUSTOM_PROVIDER,
@@ -19,7 +19,7 @@ import {
   withListedModels,
   withoutModel,
   withTypedModel,
-} from "@agenteschat/client/lib/endpoints";
+} from "@keepmind/client/lib/endpoints";
 import {
   AffixInput,
   Button,
@@ -36,7 +36,7 @@ import {
   Segmented,
   SettingNote,
   Spinner,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { type ReactNode, useId, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 

@@ -54,7 +54,7 @@ export type RoleGroupId = (typeof ROLE_GROUPS)[number]["id"];
 
 /* ---------- What a role starts with ---------- */
 
-/** A look as the agent engine draws it (names from `@agenteschat/ui`'s `AgentAppearance`). */
+/** A look as the agent engine draws it (names from `@keepmind/ui`'s `AgentAppearance`). */
 export interface RoleLook {
   color: string;
   eyes: string;

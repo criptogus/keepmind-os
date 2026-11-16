@@ -14,7 +14,7 @@ export const legalId: Partial<Record<LegalKind, LegalDocument>> = {
         id: "agreement",
         heading: "1. Perjanjian",
         blocks: [
-          'Ketentuan Penggunaan ini ("Ketentuan") merupakan perjanjian yang mengikat antara CODARI GLOBAL, LLC, sebuah perusahaan dengan tanggung jawab terbatas (limited liability company) Wyoming yang menjalankan usaha dengan nama agentes.chat ("agentes.chat", "kami"), dan orang atau entitas yang membuat akun atau ruang kerja ("Anda"). Dengan membuat akun, bergabung dengan ruang kerja, atau dengan cara lain menggunakan agentes.chat di web, aplikasi Mac, atau aplikasi ponsel ("Layanan"), Anda menerima Ketentuan ini dan Kebijakan Privasi kami. Apabila Anda menggunakan Layanan atas nama perusahaan atau entitas lain, Anda menyatakan bahwa Anda berwenang untuk mengikat entitas tersebut.',
+          'Ketentuan Penggunaan ini ("Ketentuan") merupakan perjanjian yang mengikat antara CODARI GLOBAL, LLC, sebuah perusahaan dengan tanggung jawab terbatas (limited liability company) Wyoming yang menjalankan usaha dengan nama agentes.chat ("keepmind.io", "kami"), dan orang atau entitas yang membuat akun atau ruang kerja ("Anda"). Dengan membuat akun, bergabung dengan ruang kerja, atau dengan cara lain menggunakan agentes.chat di web, aplikasi Mac, atau aplikasi ponsel ("Layanan"), Anda menerima Ketentuan ini dan Kebijakan Privasi kami. Apabila Anda menggunakan Layanan atas nama perusahaan atau entitas lain, Anda menyatakan bahwa Anda berwenang untuk mengikat entitas tersebut.',
           "Anda harus berusia sekurang-kurangnya 18 tahun dan cakap untuk membuat kontrak agar dapat menggunakan Layanan.",
         ],
       },
@@ -181,7 +181,7 @@ export const legalId: Partial<Record<LegalKind, LegalDocument>> = {
         id: "overview",
         heading: "1. Ikhtisar",
         blocks: [
-          'CODARI GLOBAL, LLC, sebuah perusahaan dengan tanggung jawab terbatas (limited liability company) Wyoming yang menjalankan usaha dengan nama agentes.chat ("agentes.chat", "kami"), mengoperasikan agentes.chat: ruang kerja tempat manusia dan agen AI bekerja bersama, yang tersedia di web, sebagai aplikasi Mac, dan sebagai aplikasi ponsel ("Layanan"). Kebijakan ini membedakan dua peran:',
+          'CODARI GLOBAL, LLC, sebuah perusahaan dengan tanggung jawab terbatas (limited liability company) Wyoming yang menjalankan usaha dengan nama agentes.chat ("keepmind.io", "kami"), mengoperasikan agentes.chat: ruang kerja tempat manusia dan agen AI bekerja bersama, yang tersedia di web, sebagai aplikasi Mac, dan sebagai aplikasi ponsel ("Layanan"). Kebijakan ini membedakan dua peran:',
           {
             list: [
               "Untuk **data akun**, yaitu informasi yang diberikan orang kepada kami untuk membuat dan menggunakan akun, kami adalah pengendali data.",

@@ -1,6 +1,6 @@
-import { type UsageQueueClosedRow, type UsageQueueRow, useCancelUsageQueue, useUsageQueue } from "@agenteschat/client";
-import { relativeTime } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
+import { type UsageQueueClosedRow, type UsageQueueRow, useCancelUsageQueue, useUsageQueue } from "@keepmind/client";
+import { relativeTime } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
 import {
   usageQueueResuming,
   usageQueueShared,
@@ -10,7 +10,7 @@ import {
   usageQueueTitle,
   usageQueueWhere,
   usageQueueWho,
-} from "@agenteschat/client/lib/usage-queue";
+} from "@keepmind/client/lib/usage-queue";
 import { type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Pressable, StyleSheet, View } from "react-native";

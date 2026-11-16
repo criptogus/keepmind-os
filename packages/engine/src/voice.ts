@@ -1,6 +1,6 @@
-import type { BlobStoreResolver, PubSub, SpeechEngine } from "@agenteschat/adapters";
-import { firstWords, typingTopic } from "@agenteschat/adapters";
-import { and, asc, count, type Database, desc, eq, gt, gte, isNull, lt, ne, schema, sql } from "@agenteschat/db";
+import type { BlobStoreResolver, PubSub, SpeechEngine } from "@keepmind/adapters";
+import { firstWords, typingTopic } from "@keepmind/adapters";
+import { and, asc, count, type Database, desc, eq, gt, gte, isNull, lt, ne, schema, sql } from "@keepmind/db";
 import { requireChannelAccess } from "./channels";
 import { ForbiddenError, NotFoundError, ValidationError } from "./errors";
 import { publishTyping, publishUserEvent } from "./events";
@@ -45,7 +45,7 @@ const VOICE_TYPES = [
   "audio/wav",
 ];
 
-/** Limits on agentes.chat's own servers (ADR 0100); null everywhere else. Zero turns a limit off. */
+/** Limits on KeepMind OS's own servers (ADR 0100); null everywhere else. Zero turns a limit off. */
 export interface VoiceLimits {
   personMinutesPerDay: number;
   orgMinutesPerMember: number;

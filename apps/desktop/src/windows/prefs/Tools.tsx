@@ -6,9 +6,9 @@ import {
   isInstallableCli,
   type RunnerExecutorInfo,
   type RunnerTools,
-} from "@agenteschat/adapters/machine-protocol";
-import type { ControlStatus } from "@agenteschat/adapters/runner-control";
-import { CLI_INSTALL_POLL_MS, GIT_FOR_WINDOWS_URL } from "@agenteschat/client/lib/machines";
+} from "@keepmind/adapters/machine-protocol";
+import type { ControlStatus } from "@keepmind/adapters/runner-control";
+import { CLI_INSTALL_POLL_MS, GIT_FOR_WINDOWS_URL } from "@keepmind/client/lib/machines";
 import {
   BrainPortrait,
   type BrainPortraitState,
@@ -21,7 +21,7 @@ import {
   InfoHint,
   ProviderLogo,
   Switch,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHost, useSnapshot, useStore } from "../../app";
@@ -96,7 +96,7 @@ export function Tools() {
         toast(t(command ? "desktop.tools.stillMissing" : "desktop.tools.notFoundYet", { tool: name }), "alert");
     });
 
-  // The vendor's own installer, run by this computer's agentes.chat for the person here; once it ends, every
+  // The vendor's own installer, run by this computer's KeepMind OS for the person here; once it ends, every
   // organization's runner looks again, so each server hears of it.
   const [installs, setInstalls] = useState<Partial<Record<Cli, CliInstall | null>>>({});
   const installHome = homes.find((h) => (h.status?.protocol ?? 0) >= CLI_INSTALL_PROTOCOL);

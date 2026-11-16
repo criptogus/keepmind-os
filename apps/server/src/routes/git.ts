@@ -1,4 +1,4 @@
-import { type GitProxyDeps, handleGitProxy } from "@agenteschat/engine";
+import { type GitProxyDeps, handleGitProxy } from "@keepmind/engine";
 import type { OpenAPIHono } from "@hono/zod-openapi";
 
 /**

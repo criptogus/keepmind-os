@@ -16,7 +16,7 @@ import {
   PLAN_KEYS_PROTOCOL,
   type PlanUsage,
   type PubSub,
-} from "@agenteschat/adapters";
+} from "@keepmind/adapters";
 import {
   and,
   asc,
@@ -29,7 +29,7 @@ import {
   ne,
   schema,
   sql,
-} from "@agenteschat/db";
+} from "@keepmind/db";
 import {
   AUTO_MODEL,
   type ContextLimit,
@@ -40,7 +40,7 @@ import {
   MODEL_CATALOG,
   modelProvider,
   parseCustomModel,
-} from "@agenteschat/providers";
+} from "@keepmind/providers";
 import {
   ANTIGRAVITY_MODELS,
   antigravityBaseModel,
@@ -52,7 +52,7 @@ import {
   planModelById,
   planOf,
   speedFits,
-} from "@agenteschat/providers/plans";
+} from "@keepmind/providers/plans";
 import { type Agent, getAgent, rememberAgentSetup, setupOfAgent } from "./agents";
 import {
   type AgentAudience,
@@ -227,7 +227,7 @@ export const codexModels = (): BrainModelOption[] =>
 
 /**
  * The model choices of a brain (none for the model brain: it uses the agent's model). A coding plan's are in its
- * catalog (`@agenteschat/providers/plans`), which the apps read.
+ * catalog (`@keepmind/providers/plans`), which the apps read.
  */
 export function brainModelOptions(
   kind: BrainKind,

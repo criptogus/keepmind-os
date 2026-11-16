@@ -1,5 +1,5 @@
-import { and, type Executor, eq, type SQL, schema, sql } from "@agenteschat/db";
-import { PROVIDERS, type ProviderCause, ProviderError, providerCause } from "@agenteschat/providers";
+import { and, type Executor, eq, type SQL, schema, sql } from "@keepmind/db";
+import { PROVIDERS, type ProviderCause, ProviderError, providerCause } from "@keepmind/providers";
 import { wakeLineOfRun } from "./approval-order";
 import { BRAIN_NAMES, type ComputerBrainKind, planName } from "./brains/types";
 import { cutText, pgSafeJson } from "./format";

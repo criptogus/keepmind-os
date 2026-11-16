@@ -1,5 +1,5 @@
-import { type InvitationPreview, useAuthConfig } from "@agenteschat/client";
-import { joinNames } from "@agenteschat/client/lib/format";
+import { type InvitationPreview, useAuthConfig } from "@keepmind/client";
+import { joinNames } from "@keepmind/client/lib/format";
 import { useTranslation } from "react-i18next";
 import { Pressable, StyleSheet, View } from "react-native";
 import Animated, { Easing, FadeInUp } from "react-native-reanimated";

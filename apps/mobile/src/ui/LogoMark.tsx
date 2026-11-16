@@ -1,4 +1,4 @@
-import { bodyPath, bodyTones, eyeShapes, toneAt } from "@agenteschat/ui/agent/engine";
+import { bodyPath, bodyTones, eyeShapes, toneAt } from "@keepmind/ui/agent/engine";
 import { useId } from "react";
 import Svg, { ClipPath, Defs, G, Path, Rect } from "react-native-svg";
 import { useTheme } from "./theme";

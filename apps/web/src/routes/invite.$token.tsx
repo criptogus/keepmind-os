@@ -1,4 +1,4 @@
-import { INVITATION_MAIL_PARAM, invitationMailProof } from "@agenteschat/client/lib/guards";
+import { INVITATION_MAIL_PARAM, invitationMailProof } from "@keepmind/client/lib/guards";
 import { createFileRoute } from "@tanstack/react-router";
 import { InvitePage } from "@/pages/InvitePage";
 

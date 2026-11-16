@@ -4,10 +4,10 @@ import {
   useChannels,
   useJoinChannel,
   useUnarchiveChannel,
-} from "@agenteschat/client";
-import { joinable } from "@agenteschat/client/lib/channel-access";
-import { channelCardFacts, resolveChannelRef } from "@agenteschat/client/lib/channel-refs";
-import { errorText } from "@agenteschat/client/lib/errors";
+} from "@keepmind/client";
+import { joinable } from "@keepmind/client/lib/channel-access";
+import { channelCardFacts, resolveChannelRef } from "@keepmind/client/lib/channel-refs";
+import { errorText } from "@keepmind/client/lib/errors";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Text as RNText, StyleSheet, View } from "react-native";
 import { Button, Icon, Text, useToast } from "@/ui";

@@ -1,4 +1,4 @@
-import type { PubSub } from "@agenteschat/adapters";
+import type { PubSub } from "@keepmind/adapters";
 import {
   and,
   type Database,
@@ -11,7 +11,7 @@ import {
   type SQL,
   schema,
   sql,
-} from "@agenteschat/db";
+} from "@keepmind/db";
 import { TtlCache } from "./cache";
 import { NotFoundError } from "./errors";
 import { publishOrgEvent } from "./events";

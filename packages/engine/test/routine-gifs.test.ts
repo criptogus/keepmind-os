@@ -1,7 +1,7 @@
 import { afterEach, expect, test } from "bun:test";
-import { createFakeGifs } from "@agenteschat/adapters";
-import { schema } from "@agenteschat/db";
-import type { ModelRequest } from "@agenteschat/providers";
+import { createFakeGifs } from "@keepmind/adapters";
+import { schema } from "@keepmind/db";
+import type { ModelRequest } from "@keepmind/providers";
 import { drainOutbox, runRoutineNow } from "../src";
 import { type Fixture, setup } from "./fixtures";
 import { channelRoutine, messagesIn, routineDeps } from "./routine-fixtures";

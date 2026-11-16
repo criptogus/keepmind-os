@@ -1,9 +1,9 @@
-import { useAgentDetail, useChannels, useProposals, useRuns } from "@agenteschat/client";
-import { whenAt } from "@agenteschat/client/lib/format";
-import { pendingOnAgent, proposalTitle } from "@agenteschat/client/lib/proposals";
-import { excerpt } from "@agenteschat/client/lib/text";
-import { modeKey } from "@agenteschat/client/lib/workspace-mode";
-import { Button, Card, Icon } from "@agenteschat/ui";
+import { useAgentDetail, useChannels, useProposals, useRuns } from "@keepmind/client";
+import { whenAt } from "@keepmind/client/lib/format";
+import { pendingOnAgent, proposalTitle } from "@keepmind/client/lib/proposals";
+import { excerpt } from "@keepmind/client/lib/text";
+import { modeKey } from "@keepmind/client/lib/workspace-mode";
+import { Button, Card, Icon } from "@keepmind/ui";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { AgentSetupCard } from "@/components/AgentSetup";

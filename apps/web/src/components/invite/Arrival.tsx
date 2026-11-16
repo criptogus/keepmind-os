@@ -1,8 +1,8 @@
-import type { Channel } from "@agenteschat/client";
-import { useChannels, useSidebarView } from "@agenteschat/client";
-import { canTalk, listsAgent } from "@agenteschat/client/lib/audience";
-import { heldWhole, namesText } from "@agenteschat/client/lib/format";
-import { Avatar, Button } from "@agenteschat/ui";
+import type { Channel } from "@keepmind/client";
+import { useChannels, useSidebarView } from "@keepmind/client";
+import { canTalk, listsAgent } from "@keepmind/client/lib/audience";
+import { heldWhole, namesText } from "@keepmind/client/lib/format";
+import { Avatar, Button } from "@keepmind/ui";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

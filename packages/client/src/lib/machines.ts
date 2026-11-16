@@ -87,7 +87,7 @@ export function commandInReason(reason: string | null | undefined): string | nul
 export const toolOnCommand = (m: Pick<Machine, "mode">, tool: keyof MachineAccess["tools"]) =>
   `${m.mode === "system" ? "sudo " : ""}agentes-runner tools enable ${tool}`;
 
-/** A Mac or a PC: folders and tools are allowed in the agentes.chat app there. Any other may be a server without it. */
+/** A Mac or a PC: folders and tools are allowed in the KeepMind OS app there. Any other may be a server without it. */
 export const allowsInApp = (os: string | null | undefined) => os === "darwin" || os === "windows";
 
 /** The switch of the program a brain runs on its computer: Claude Code's is "claude". */
@@ -373,7 +373,7 @@ export async function desktopCpu(): Promise<string | null> {
   }
 }
 
-/** Which portrait a computer gets; same names as `ComputerKind` in @agenteschat/ui. */
+/** Which portrait a computer gets; same names as `ComputerKind` in @keepmind/ui. */
 export type ComputerKind = "mac" | "windows" | "linux";
 export type ComputerState = "online" | "paused" | "offline";
 

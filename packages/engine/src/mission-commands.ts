@@ -20,8 +20,8 @@ import {
   SECRET_MESSAGE,
   secretRead,
   TASK_LIMITS,
-} from "@agenteschat/adapters";
-import { type Executor, rowsOf, schema, sql } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { type Executor, rowsOf, schema, sql } from "@keepmind/db";
 import { getAgent } from "./agents";
 import { addApprovalRules, COMMAND_RULE_TOOL, coveringRules, decidesAgentApprovals } from "./approval-rules";
 import { recordAudit } from "./audit";

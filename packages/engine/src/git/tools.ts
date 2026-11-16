@@ -1,4 +1,4 @@
-import type { PubSub } from "@agenteschat/adapters";
+import type { PubSub } from "@keepmind/adapters";
 import { getAgentCached } from "../agents";
 import { connectorScope } from "../connectors/catalog";
 import { activeConnections, type ConnectorDeps } from "../connectors/connections";

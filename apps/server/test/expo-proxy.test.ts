@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, expect, test } from "bun:test";
 import { randomBytes } from "node:crypto";
-import { setSignupMode } from "@agenteschat/engine";
+import { setSignupMode } from "@keepmind/engine";
 import { desktopChallenge } from "../src/desktop-sign-in";
 import { phoneFlowStarted } from "../src/phone-browser-sign-in";
 import { type Browser, browser, createTestServer, fakeGoogle, ORIGIN, signUp, type TestServer } from "./harness";

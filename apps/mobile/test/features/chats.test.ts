@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
-import type { Channel, DirectMessage, OrgSummary } from "@agenteschat/client";
-import { previewBody, serverBody } from "@agenteschat/client/lib/message-body";
-import { resources } from "@agenteschat/i18n";
+import type { Channel, DirectMessage, OrgSummary } from "@keepmind/client";
+import { previewBody, serverBody } from "@keepmind/client/lib/message-body";
+import { resources } from "@keepmind/i18n";
 import i18next from "i18next";
 import {
   appBadgeCount,

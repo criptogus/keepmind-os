@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, expect, test } from "bun:test";
-import { type VaultSource, VaultSourceError } from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
+import { type VaultSource, VaultSourceError } from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
 import { type Browser, browser, createTestServer, joinByInvitation, seedOrg, signUp, type TestServer } from "./harness";
 
 /*

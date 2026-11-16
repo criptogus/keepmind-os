@@ -1,11 +1,11 @@
-import type { MachineConnection, MachineHub } from "@agenteschat/engine";
+import type { MachineConnection, MachineHub } from "@keepmind/engine";
 
 /**
  * `GET /api/machines/connect`: the runner's WebSocket (ADR 0025). No cookie
  * and no Origin: it is not a browser, and the first frame (`hello`) carries
  * the machine token. A request with an Origin header is refused, so a web
  * page can't open it from someone's browser. Everything after the upgrade
- * is the hub's (`@agenteschat/engine` `createMachineHub`).
+ * is the hub's (`@keepmind/engine` `createMachineHub`).
  */
 export interface MachineSocketData {
   kind: "machine";

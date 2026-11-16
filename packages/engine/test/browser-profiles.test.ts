@@ -4,8 +4,8 @@ import {
   BROWSER_PROFILE_PROTOCOL,
   channelTopic,
   type MachineRequest,
-} from "@agenteschat/adapters";
-import { and, eq, schema, sql } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { and, eq, schema, sql } from "@keepmind/db";
 import {
   absorbBrowserCall,
   absorbToolData,
@@ -474,7 +474,7 @@ test("Fazer login the computer refuses opens nothing: the browser off there says
   const p = await b.profile([b.bia.id]);
   let refusal: MachineRequestError | Error | null = new MachineRequestError(
     "not_allowed",
-    "Browser is turned off on this computer (its owner can turn it on from agentes.chat)",
+    "Browser is turned off on this computer (its owner can turn it on from KeepMind OS)",
   );
   const hub: MachineCaller = {
     status: b.hub.status,

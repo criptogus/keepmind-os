@@ -5,16 +5,16 @@ import {
   useModels,
   useNewAgentSetup,
   usePlatformKey,
-} from "@agenteschat/client";
-import { newAgentStart } from "@agenteschat/client/lib/agent-setup";
+} from "@keepmind/client";
+import { newAgentStart } from "@keepmind/client/lib/agent-setup";
 import {
   brainPickInput,
   brainPickOptions,
   planAccountOption,
   planAccountOptionOf,
-} from "@agenteschat/client/lib/brain-picker";
-import { can } from "@agenteschat/client/lib/permissions";
-import { AUTO, modelChoices, usableModels } from "@agenteschat/client/lib/providers";
+} from "@keepmind/client/lib/brain-picker";
+import { can } from "@keepmind/client/lib/permissions";
+import { AUTO, modelChoices, usableModels } from "@keepmind/client/lib/providers";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useApi } from "@/api/context";

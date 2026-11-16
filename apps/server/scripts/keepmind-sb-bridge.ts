@@ -1,4 +1,4 @@
-import { createKeepMindBrainBridge } from "@agenteschat/engine";
+import { createKeepMindBrainBridge } from "@keepmind/engine";
 
 // Operator-side process, not an agent launcher. Put credentials in a protected env file, never in chat.
 const fetch = createKeepMindBrainBridge({

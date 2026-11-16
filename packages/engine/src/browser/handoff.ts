@@ -4,7 +4,7 @@ import {
   type PubSub,
   SCREEN_KINDS,
   type ScreenKind,
-} from "@agenteschat/adapters";
+} from "@keepmind/adapters";
 import {
   and,
   type Database,
@@ -19,7 +19,7 @@ import {
   lte,
   schema,
   sql,
-} from "@agenteschat/db";
+} from "@keepmind/db";
 import { getAgentCached, workspaceHomeId } from "../agents";
 import { recordAudit } from "../audit";
 import { isChannelMember } from "../channels";
@@ -917,7 +917,7 @@ async function afterChange(deps: HandoffDeps, row: BrowserHandoffRow, movedFrom?
  * never signs it in on its computer. What it changes goes through its tools and cards, else a link to the page.
  */
 export const ownAppRefusal = (orgId: string) =>
-  `Nothing was asked: that is agentes.chat itself, the app you work in. Never sign in to it on your computer, nor ask a person to. Change the workspace with your own tools, which post cards a person applies as themselves (propose_remove_agents archives or deletes agents, propose_agent creates them, propose_settings_change, offer_invites, offer_connect_app; find_tools finds them). When no tool does it, send the person the link to the page instead: the team ${appPageLink(orgId, "/team")}, settings ${appPageLink(orgId, "/settings/members")} (or /settings/roles, /settings/connectors, /settings/computers, /settings/usage).`;
+  `Nothing was asked: that is KeepMind OS itself, the app you work in. Never sign in to it on your computer, nor ask a person to. Change the workspace with your own tools, which post cards a person applies as themselves (propose_remove_agents archives or deletes agents, propose_agent creates them, propose_settings_change, offer_invites, offer_connect_app; find_tools finds them). When no tool does it, send the person the link to the page instead: the team ${appPageLink(orgId, "/team")}, settings ${appPageLink(orgId, "/settings/members")} (or /settings/roles, /settings/connectors, /settings/computers, /settings/usage).`;
 
 /** The address the agent's browser shows, as its computer says (short: it runs before a person is asked). */
 async function browserUrl(hub: MachineCaller, machineId: string, agent: { id: string; handle: string }) {
@@ -958,7 +958,7 @@ export function createBrowserHandoffToolSource(
       }
       if (!servesDesktops(s)) {
         return {
-          unavailable: `The desktop isn't on or ready on the computer ${s.name}. Whoever connected it can turn it on from agentes.chat; tell the people.`,
+          unavailable: `The desktop isn't on or ready on the computer ${s.name}. Whoever connected it can turn it on from KeepMind OS; tell the people.`,
         };
       }
       return { machineId: s.id, name: s.name, online: s.online };

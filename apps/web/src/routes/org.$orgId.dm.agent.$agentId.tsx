@@ -1,4 +1,4 @@
-import { isPaidReturn } from "@agenteschat/client/lib/billing";
+import { isPaidReturn } from "@keepmind/client/lib/billing";
 import { createFileRoute } from "@tanstack/react-router";
 import { agentPanelSearch, threadSearch } from "@/lib/open-param";
 import { DmPage } from "@/pages/DmPage";

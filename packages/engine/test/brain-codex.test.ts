@@ -5,7 +5,7 @@ import {
   CONTEXT_LIMIT_PROTOCOL,
   MACHINE_PROTOCOL_VERSION,
   OPENCODE_ACP_PROTOCOL,
-} from "@agenteschat/adapters";
+} from "@keepmind/adapters";
 import {
   type BrainTurnRequest,
   CodexBrain,

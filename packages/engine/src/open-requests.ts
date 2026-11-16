@@ -1,4 +1,4 @@
-import { and, type Executor, eq, gt, rowsOf, schema, sql } from "@agenteschat/db";
+import { and, type Executor, eq, gt, rowsOf, schema, sql } from "@keepmind/db";
 import { UUID } from "./authority";
 import { cutText } from "./format";
 

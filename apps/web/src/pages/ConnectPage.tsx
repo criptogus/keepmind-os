@@ -1,10 +1,10 @@
-import type { Machine } from "@agenteschat/client";
-import { ApiError, useConfirmDevice, useDenyDevice, useMachineDevice, useMe } from "@agenteschat/client";
-import { workspaceLabel, workspaceNotes } from "@agenteschat/client/lib/deletion";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { relativeTime } from "@agenteschat/client/lib/format";
-import { computerKind, formatUserCode, locationText } from "@agenteschat/client/lib/machines";
-import { can } from "@agenteschat/client/lib/permissions";
+import type { Machine } from "@keepmind/client";
+import { ApiError, useConfirmDevice, useDenyDevice, useMachineDevice, useMe } from "@keepmind/client";
+import { workspaceLabel, workspaceNotes } from "@keepmind/client/lib/deletion";
+import { errorText } from "@keepmind/client/lib/errors";
+import { relativeTime } from "@keepmind/client/lib/format";
+import { computerKind, formatUserCode, locationText } from "@keepmind/client/lib/machines";
+import { can } from "@keepmind/client/lib/permissions";
 import {
   Alert,
   Button,
@@ -16,7 +16,7 @@ import {
   Locked,
   Select,
   Switch,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";

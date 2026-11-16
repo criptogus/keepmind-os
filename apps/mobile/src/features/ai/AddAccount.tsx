@@ -1,7 +1,7 @@
-import type { AccountLoginStart, MachineAccount, MachineAccountKind } from "@agenteschat/client";
-import { keys, useAccountLogin, useAiAccounts, useApi } from "@agenteschat/client";
-import { accountTitle, reusableAccount, signInOf } from "@agenteschat/client/lib/ai-accounts";
-import { knownErrorText } from "@agenteschat/client/lib/errors";
+import type { AccountLoginStart, MachineAccount, MachineAccountKind } from "@keepmind/client";
+import { keys, useAccountLogin, useAiAccounts, useApi } from "@keepmind/client";
+import { accountTitle, reusableAccount, signInOf } from "@keepmind/client/lib/ai-accounts";
+import { knownErrorText } from "@keepmind/client/lib/errors";
 import {
   beginLogin,
   freeDuplicate,
@@ -12,9 +12,9 @@ import {
   loginRead,
   loginReadPasses,
   otherThanHint,
-} from "@agenteschat/client/lib/machines";
-import { GEMINI_ENTERPRISE_PROVIDER, planKeyFits, signInKey } from "@agenteschat/client/lib/plans";
-import { accountCodeAad } from "@agenteschat/client/lib/secret-box";
+} from "@keepmind/client/lib/machines";
+import { GEMINI_ENTERPRISE_PROVIDER, planKeyFits, signInKey } from "@keepmind/client/lib/plans";
+import { accountCodeAad } from "@keepmind/client/lib/secret-box";
 import { useQueryClient } from "@tanstack/react-query";
 import * as Clipboard from "expo-clipboard";
 import { type ReactNode, useEffect, useRef, useState } from "react";

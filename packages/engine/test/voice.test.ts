@@ -7,8 +7,8 @@ import {
   SpeechError,
   type SpeechProviderId,
   typingTopic,
-} from "@agenteschat/adapters";
-import { and, eq, schema } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { and, eq, schema } from "@keepmind/db";
 import {
   acceptVoiceClip,
   createLocalKeyWrapper,

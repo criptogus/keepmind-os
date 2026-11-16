@@ -1,6 +1,6 @@
-import { useMe } from "@agenteschat/client";
-import { membershipIn, settingUp } from "@agenteschat/client/lib/guards";
-import { can } from "@agenteschat/client/lib/permissions";
+import { useMe } from "@keepmind/client";
+import { membershipIn, settingUp } from "@keepmind/client/lib/guards";
+import { can } from "@keepmind/client/lib/permissions";
 import { createFileRoute, Outlet, redirect, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import { requireUserIn } from "@/app/guards";

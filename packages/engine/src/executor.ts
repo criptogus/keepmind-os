@@ -5,7 +5,7 @@ import {
   type PlanUsage,
   type ProviderFailureCause,
   type PubSub,
-} from "@agenteschat/adapters";
+} from "@keepmind/adapters";
 import {
   and,
   count,
@@ -20,7 +20,7 @@ import {
   queryTrace,
   schema,
   sql,
-} from "@agenteschat/db";
+} from "@keepmind/db";
 import {
   type ContentBlock,
   ensureOpenRouterModels,
@@ -33,9 +33,9 @@ import {
   type SystemBlock,
   type ToolImage,
   textOf,
-} from "@agenteschat/providers";
-import { autoPlanModel, droppedPlanModel, ownLimitsModel, planModel, planOf } from "@agenteschat/providers/plans";
-import { PLAN_NOTICE, PLAN_PAUSE } from "@agenteschat/ui/plan-state";
+} from "@keepmind/providers";
+import { autoPlanModel, droppedPlanModel, ownLimitsModel, planModel, planOf } from "@keepmind/providers/plans";
+import { PLAN_NOTICE, PLAN_PAUSE } from "@keepmind/ui/plan-state";
 import { pendingConnectors } from "./access";
 import { linkRunActions, publishMessageActions } from "./agent-actions";
 import { withTimeout } from "./agent-media";

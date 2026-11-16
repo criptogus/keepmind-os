@@ -1,7 +1,7 @@
-import type { Agent } from "@agenteschat/client";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { routineReachWarnings } from "@agenteschat/client/lib/reach";
-import { Icon } from "@agenteschat/ui";
+import type { Agent } from "@keepmind/client";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { routineReachWarnings } from "@keepmind/client/lib/reach";
+import { Icon } from "@keepmind/ui";
 import { Trans } from "react-i18next";
 import { useOrg } from "@/components/org-context";
 import { AllowTalkButton } from "@/components/ReachLines";

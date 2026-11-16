@@ -1,4 +1,4 @@
-import type { Agent, AgentAudience, AgentProposal } from "@agenteschat/client";
+import type { Agent, AgentAudience, AgentProposal } from "@keepmind/client";
 import {
   ApiError,
   useAgentProposal,
@@ -19,9 +19,9 @@ import {
   useRoles,
   useSettings,
   useSkills,
-} from "@agenteschat/client";
-import { LEVELS, type Level, saveLevels, sharedLevel } from "@agenteschat/client/lib/access-levels";
-import { draftLevels, draftMailLevels } from "@agenteschat/client/lib/action-cards";
+} from "@keepmind/client";
+import { LEVELS, type Level, saveLevels, sharedLevel } from "@keepmind/client/lib/access-levels";
+import { draftLevels, draftMailLevels } from "@keepmind/client/lib/action-cards";
 import {
   autonomyName,
   autonomyWords,
@@ -29,8 +29,8 @@ import {
   type NewAgentStart,
   newAgentStart,
   newAgentStartText,
-} from "@agenteschat/client/lib/agent-setup";
-import { thinksWith } from "@agenteschat/client/lib/brain";
+} from "@keepmind/client/lib/agent-setup";
+import { thinksWith } from "@keepmind/client/lib/brain";
 import {
   type BrainPickOption,
   brainPickInput,
@@ -39,19 +39,19 @@ import {
   needsOwnSignIn,
   newPlanAccountOption,
   planAccountOption,
-} from "@agenteschat/client/lib/brain-picker";
-import { type ConnectedItem, itemName } from "@agenteschat/client/lib/connected";
-import { errorText as failureText } from "@agenteschat/client/lib/errors";
-import { FIELD_LIMITS } from "@agenteschat/client/lib/field-limits";
-import { joinNames } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { choiceOf, defaultPolicy, MAIL_ACTIONS, toMailLevel } from "@agenteschat/client/lib/mail";
-import { type PlanChoice as AiPlan, planOfKind } from "@agenteschat/client/lib/no-ai";
-import { addsAgentsTo, can } from "@agenteschat/client/lib/permissions";
-import { keeperKey } from "@agenteschat/client/lib/personal-view";
-import { AUTO, apiProviderOf, isAuto, modelChoices, usableModels } from "@agenteschat/client/lib/providers";
-import { scopeText } from "@agenteschat/client/lib/scopes";
-import { isPersonal, modeKey } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client/lib/brain-picker";
+import { type ConnectedItem, itemName } from "@keepmind/client/lib/connected";
+import { errorText as failureText } from "@keepmind/client/lib/errors";
+import { FIELD_LIMITS } from "@keepmind/client/lib/field-limits";
+import { joinNames } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { choiceOf, defaultPolicy, MAIL_ACTIONS, toMailLevel } from "@keepmind/client/lib/mail";
+import { type PlanChoice as AiPlan, planOfKind } from "@keepmind/client/lib/no-ai";
+import { addsAgentsTo, can } from "@keepmind/client/lib/permissions";
+import { keeperKey } from "@keepmind/client/lib/personal-view";
+import { AUTO, apiProviderOf, isAuto, modelChoices, usableModels } from "@keepmind/client/lib/providers";
+import { scopeText } from "@keepmind/client/lib/scopes";
+import { isPersonal, modeKey } from "@keepmind/client/lib/workspace-mode";
 import {
   AffixInput,
   type AgentAppearance,
@@ -81,7 +81,7 @@ import {
   Spinner,
   Switch,
   Textarea,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { type ReactNode, type RefObject, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

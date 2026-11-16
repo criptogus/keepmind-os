@@ -1,4 +1,4 @@
-import { ACCOUNT_KINDS } from "@agenteschat/client/lib/ai-accounts";
+import { ACCOUNT_KINDS } from "@keepmind/client/lib/ai-accounts";
 import { createFileRoute } from "@tanstack/react-router";
 import { ConnectingPage } from "@/pages/ConnectingPage";
 

@@ -1,7 +1,7 @@
 import { afterEach, expect, test } from "bun:test";
-import type { HumanAction, HumanCheck } from "@agenteschat/adapters";
-import { ConfigError } from "@agenteschat/config";
-import { schema } from "@agenteschat/db";
+import type { HumanAction, HumanCheck } from "@keepmind/adapters";
+import { ConfigError } from "@keepmind/config";
+import { schema } from "@keepmind/db";
 import { checkHumanCheckAtBoot } from "../src/http/human-check";
 import { createHumanPasses } from "../src/http/human-pass";
 import { createLogger } from "../src/logger";
