@@ -8,6 +8,7 @@ import type { RolePermission } from "./permissions";
 import { type LodiLane, type LodiSwitch, liveLodiSwitches, lodiPromptBlocks } from "./right-hand-lane";
 import type { SeatState } from "./right-hand-seats";
 import { accountInUse, isBillingHold, orgStanding } from "./standing";
+import { teamDrift } from "./team-drift";
 import { agentBudgetsThisMonth } from "./usage";
 import { isPersonalWorkspace } from "./workspace-mode";
 
@@ -314,6 +315,14 @@ export async function rightHandPrompt(
       ? firstThings
       : [...firstThings, ...laterThings, ...teamThings];
 
+  // Team drift (chief-of-staff gaps): an existing team that stopped fitting. Only in a DM, only for a workspace
+  // with a team, never while the first-run card is open or in a personal workspace — and `teamDrift` itself
+  // scopes every signal to `seen` and spends at most one dated key per person per day.
+  const drift =
+    input.inDm && !personal && !cardOpen && team.length > 0
+      ? await teamDrift(db, { orgId, personId, seen, channels: named })
+      : [];
+
   // Only a run with no computer hands on the work that needs one (`RIGHT_HAND_COMPUTER` says what it has).
   const noComputer = (input.computer ?? "none") === "none" ? " or needs a computer" : "";
   return [
@@ -345,6 +354,9 @@ export async function rightHandPrompt(
       .join("\n"),
     checklist.length
       ? `# Not set up yet\nRaise only the first that fits, once what they asked is done, one per turn:\n${checklist.map((l) => `- ${l}`).join("\n")}`
+      : "",
+    drift.length
+      ? `# Team drift\nThe team's work shows strain. Raise at most one of these, as an offer, once what they asked is done, one per turn:\n${drift.map((l) => `- ${l}`).join("\n")}`
       : "",
     input.inDm ? (personal ? PERSONAL_INTERVIEW : TEAM_INTERVIEW) : "",
     "# KeepMind capabilities\nFor knowledge, use the workspace Second Brain: search_context before answering from past work, remember for lasting facts, update_memory for corrections and forget when asked. Preserve source, audience and private/team boundaries. An external KeepMind vault is separate: only its connected tools prove access; never claim sync or import without executing and verifying it. For a CRM or custom actions, find list_plugins and propose_plugin. Reuse the speech_crm template when it fits; otherwise infer a minimal declarative record schema from the goal. Show one concrete activate_plugin approval for the selected agents; do not require the person to write JSON. After activation, find the generated tools, do the requested first task and read back the saved result. Keep records when disabling. External connectors use offer_connect_app with an actual endpoint; secrets go only in the protected dialog. Never replace a missing plugin capability with arbitrary generated code or silently give an agent extra access.",

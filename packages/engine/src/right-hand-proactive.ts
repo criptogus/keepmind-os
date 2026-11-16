@@ -129,6 +129,19 @@ export async function saidOnce(db: Executor, orgId: string, key: string): Promis
   return rows.length > 0;
 }
 
+/**
+ * Whether `key` was already said, without spending it: `saidOnce` consumes on write, so a caller that must know
+ * before deciding (a prompt line built per run) peeks here and spends with `saidOnce` only when it injects.
+ */
+export async function saidAlready(db: Executor, orgId: string, key: string): Promise<boolean> {
+  const rows = await db
+    .select({ id: outbox.id })
+    .from(outbox)
+    .where(eq(outbox.dedupeKey, saidKey(orgId, key)))
+    .limit(1);
+  return rows.length > 0;
+}
+
 /** Rewrites a message's card (`meta.actionCard`) where it stands and tells who has the conversation open. */
 export async function setCardOnMessage(
   deps: { db: Executor; pubsub?: PubSub },
