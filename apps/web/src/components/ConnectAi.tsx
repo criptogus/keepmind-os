@@ -287,8 +287,14 @@ export function ConnectAiProvider({
 const PAIR_START: ConnectStart = { step: "choose" };
 
 /** A chosen plan's steps, named as its maker sells it; the key's, as the picker names it. */
-const stepTitle = (t: TFunction, choice: AiChoice) =>
-  choice === "key" ? t("connectAi.title.api_key") : planTitle(t, choice);
+const stepTitle = (t: TFunction, choice: AiChoice, provider?: string) =>
+  choice === "key"
+    ? provider === "openrouter"
+      ? t("keepmind.ai.openrouter.login")
+      : provider === "custom"
+        ? t("keepmind.ai.localTitle")
+        : t("connectAi.title.api_key")
+    : planTitle(t, choice);
 
 /** A footer's note: its icon on the words' first line, the footer's buttons outside it, centred with the line. */
 const footNote = (icon: IconName, text: string) => (
@@ -820,7 +826,7 @@ function ConnectAiDialog({
     <ProviderKeySelect
       value={draft.provider}
       disabled={add.isPending}
-      onChange={(provider) => setDraft((d) => ({ ...d, provider }))}
+      onChange={(provider) => setDraft((d) => ({ ...d, provider, preset: undefined }))}
     />
   );
   const panel =
@@ -837,6 +843,7 @@ function ConnectAiDialog({
         onSave={saveKey}
         endpoint={
           <EndpointForm
+            initialPreset={draft.preset}
             orgId={org.id}
             onDone={async (key) => {
               await settleKey(key);
@@ -1016,7 +1023,7 @@ function ConnectAiDialog({
               ? t(personal ? "connectAi.team.wokeAllPersonal" : "connectAi.team.wokeAll")
               : t("connectAi.team.woke", { count: woke.length })
           : chosen
-            ? stepTitle(t, choice)
+            ? stepTitle(t, choice, draft.provider)
             : listing
               ? t("connectAi.chat.allTitle")
               : adding && rows.length > 0
@@ -1267,7 +1274,16 @@ function ConnectAiDialog({
                 )}
               </>
             ) : (
-              <ConnectChoices mayAddKey={mayAddKey} dims={dims} perAgent={perAgent} onPick={(next) => pick(next)} />
+              <ConnectChoices
+                onProvider={(provider) => {
+                  setDraft({ provider, apiKey: "", ...(provider === "custom" ? { preset: "ollama" as const } : {}) });
+                  pick("key");
+                }}
+                mayAddKey={mayAddKey}
+                dims={dims}
+                perAgent={perAgent}
+                onPick={(next) => pick(next)}
+              />
             )}
           </div>
         )}
@@ -1314,7 +1330,7 @@ function ConnectAiDialog({
     };
     const listing = picking && allOpen;
     const title = chosen
-      ? stepTitle(t, choice)
+      ? stepTitle(t, choice, draft.provider)
       : listing
         ? t("connectAi.chat.allTitle")
         : adding && rows.length > 0
@@ -1476,7 +1492,15 @@ function ConnectAiDialog({
                 )}
               </>
             ) : (
-              <ConnectChoices mayAddKey={mayAddKey} dims={dims} onPick={(next) => pick(next)} />
+              <ConnectChoices
+                onProvider={(provider) => {
+                  setDraft({ provider, apiKey: "", ...(provider === "custom" ? { preset: "ollama" as const } : {}) });
+                  pick("key");
+                }}
+                mayAddKey={mayAddKey}
+                dims={dims}
+                onPick={(next) => pick(next)}
+              />
             )}
           </div>
         )}
@@ -1497,7 +1521,7 @@ function ConnectAiDialog({
       <Dialog
         open
         onOpenChange={(o) => !o && onClose()}
-        title={chosen ? stepTitle(t, choice) : t("arrival.connect.title")}
+        title={chosen ? stepTitle(t, choice, draft.provider) : t("arrival.connect.title")}
         closeLabel={t("common.close")}
         width={820}
         bare
@@ -1551,7 +1575,7 @@ function ConnectAiDialog({
             )}
             <div className="ac-actline">
               <span className="ac-dialog__title" aria-hidden="true">
-                {chosen ? stepTitle(t, choice) : t("arrival.connect.title")}
+                {chosen ? stepTitle(t, choice, draft.provider) : t("arrival.connect.title")}
               </span>
             </div>
             <span className="ac-dialog__close ac-acts">
@@ -1577,6 +1601,13 @@ function ConnectAiDialog({
               </div>
             ) : (
               <ConnectChoices
+                onProvider={(provider) => {
+                  setDraft({ provider, apiKey: "", ...(provider === "custom" ? { preset: "ollama" as const } : {}) });
+                  setPicked("key");
+                  setLogin(null);
+                  setChosen(true);
+                  setHeldReader(undefined);
+                }}
                 mayAddKey={mayAddKey}
                 dims={(c) => (agents.length > 0 || bare) && gateDims(gateOf(c))}
                 onPick={(next) => {

@@ -50,12 +50,14 @@ import { useTranslation } from "react-i18next";
  */
 export function EndpointForm({
   orgId,
+  initialPreset,
   credential,
   lead,
   onCancel,
   onDone,
 }: {
   orgId: string;
+  initialPreset?: "ollama";
   credential?: Credential;
   /** The form's first field, owned by the caller (the provider's select): locked and laid out with the rest. */
   lead?: ReactNode;
@@ -66,8 +68,14 @@ export function EndpointForm({
   const { t } = useTranslation();
   const ids = useId();
   const [draft, setDraft] = useState<EndpointDraft>(() =>
-    credential?.endpoint ? draftOfEndpoint(credential.label, credential.endpoint) : emptyEndpointDraft(),
+    credential?.endpoint
+      ? draftOfEndpoint(credential.label, credential.endpoint)
+      : initialPreset === "ollama"
+        ? { ...emptyEndpointDraft(), name: "Ollama", baseURL: "http://localhost:11434/v1" }
+        : emptyEndpointDraft(),
   );
+  const [localPreset, setLocalPreset] = useState(initialPreset === "ollama");
+  const [advanced, setAdvanced] = useState(false);
   const [typed, setTyped] = useState("");
   const [typedWrong, setTypedWrong] = useState(false);
   const typedBox = useRef<HTMLInputElement>(null);
@@ -185,6 +193,42 @@ export function EndpointForm({
           {lead}
           {!editing && (
             <>
+              <Button
+                disabled={list.isPending}
+                loading={list.isPending}
+                onClick={() => {
+                  setLocalPreset(true);
+                  const preset = { ...emptyEndpointDraft(), name: "Ollama", baseURL: "http://localhost:11434/v1" };
+                  setDraft(preset);
+                  list.mutate(
+                    { style: "openai", baseURL: preset.baseURL },
+                    {
+                      onSuccess: (r) => {
+                        setDraft({
+                          ...withListedModels(preset, r.models),
+                          baseURL: r.baseURL,
+                          models: r.models.map((m, i) => ({ id: m.id, on: i === 0, input: "", output: "" })),
+                        });
+                      },
+                    },
+                  );
+                }}
+              >
+                {t("keepmind.ai.ollama.detect")}
+              </Button>
+              {localPreset && <SettingNote icon="info">{t("keepmind.ai.ollama.location")}</SettingNote>}
+              {localPreset && list.isSuccess && draft.models.length === 0 && (
+                <SettingNote icon="alert">{t("keepmind.ai.ollama.empty")}</SettingNote>
+              )}
+            </>
+          )}
+          {localPreset && (
+            <Button variant="ghost" size="sm" onClick={() => setAdvanced(!advanced)}>
+              {t("keepmind.ai.advanced")}
+            </Button>
+          )}
+          {!editing && (!localPreset || advanced) && (
+            <>
               <Field label={t("endpoint.name")} id={`${ids}-name`}>
                 <Input
                   value={draft.name}
@@ -230,56 +274,58 @@ export function EndpointForm({
               </Field>
             </>
           )}
-          <Field
-            label={t("endpoint.addModel")}
-            id={`${ids}-typed`}
-            error={typedWrong ? t("endpoint.modelInvalid") : undefined}
-            labelAside={
-              !editing && (
-                <button
-                  type="button"
-                  className="ac-link ac-link--muted small"
-                  aria-busy={list.isPending || undefined}
-                  disabled={list.isPending || !endpointAddressLooksValid(draft.baseURL)}
-                  onClick={fetchModels}
-                >
-                  <span className="ac-iconline">
-                    {list.isPending && <Spinner size={12} />}
-                    {t("endpoint.fetch")}
-                  </span>
-                </button>
-              )
-            }
-          >
-            <AffixInput
-              ref={typedBox}
-              value={typed}
-              spellCheck={false}
-              autoComplete="off"
-              placeholder={t("endpoint.modelPlaceholder")}
-              invalid={typedWrong}
-              action={
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  iconOnly
-                  icon="plus"
-                  aria-label={t("endpoint.add")}
-                  disabled={!typed.trim()}
-                  onClick={addTyped}
-                />
+          {(!localPreset || advanced) && (
+            <Field
+              label={t("endpoint.addModel")}
+              id={`${ids}-typed`}
+              error={typedWrong ? t("endpoint.modelInvalid") : undefined}
+              labelAside={
+                !editing && (
+                  <button
+                    type="button"
+                    className="ac-link ac-link--muted small"
+                    aria-busy={list.isPending || undefined}
+                    disabled={list.isPending || !endpointAddressLooksValid(draft.baseURL)}
+                    onClick={fetchModels}
+                  >
+                    <span className="ac-iconline">
+                      {list.isPending && <Spinner size={12} />}
+                      {t("endpoint.fetch")}
+                    </span>
+                  </button>
+                )
               }
-              onChange={(e) => {
-                setTyped(e.target.value);
-                setTypedWrong(false);
-              }}
-              onKeyDown={(e) => {
-                if (e.key !== "Enter") return;
-                e.preventDefault();
-                addTyped();
-              }}
-            />
-          </Field>
+            >
+              <AffixInput
+                ref={typedBox}
+                value={typed}
+                spellCheck={false}
+                autoComplete="off"
+                placeholder={t("endpoint.modelPlaceholder")}
+                invalid={typedWrong}
+                action={
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    iconOnly
+                    icon="plus"
+                    aria-label={t("endpoint.add")}
+                    disabled={!typed.trim()}
+                    onClick={addTyped}
+                  />
+                }
+                onChange={(e) => {
+                  setTyped(e.target.value);
+                  setTypedWrong(false);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key !== "Enter") return;
+                  e.preventDefault();
+                  addTyped();
+                }}
+              />
+            </Field>
+          )}
           {list.data?.error && (
             <SettingNote icon="alert">{t("endpoint.listFailed", { error: list.data.error })}</SettingNote>
           )}
@@ -318,7 +364,7 @@ export function EndpointForm({
                         typedBox.current?.focus();
                       }}
                     />
-                    {m.on && (
+                    {m.on && (!localPreset || advanced) && (
                       <span className="endpoint-model__prices">
                         <Input
                           aria-label={t("endpoint.priceIn", { model: m.id })}

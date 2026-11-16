@@ -908,16 +908,21 @@ function AddAccountFlow({
   } else if (kind === "codex") {
     steps = (
       <>
-        <Step n={1} side={<OpenPage href={CHATGPT_SECURITY}>{t("connectAi.chatgptCode.open")}</OpenPage>}>
-          <b>{t("connectAi.chatgptCode.title")}</b>
-          <span>{t("connectAi.chatgptCode.text")}</span>
-        </Step>
         {firstStep(
           signInLabel ?? t("agentPage.work.brain.add.open.codex"),
           <StepTitle title={t("agentPage.work.brain.add.stepOne.codex")} hint={signInHint} />,
-          2,
+          1,
         )}
-        {login?.userCode && deviceCode(after(3), t("agentPage.work.brain.add.deviceCode"), login.userCode)}
+        {login?.userCode && deviceCode(after(2), t("agentPage.work.brain.add.deviceCode"), login.userCode)}
+        <div className="ai-panel__row">
+          <details>
+            <summary>{t("connectAi.chatgptCode.title")}</summary>
+            <Step n={1} side={<OpenPage href={CHATGPT_SECURITY}>{t("connectAi.chatgptCode.open")}</OpenPage>}>
+              <b>{t("connectAi.chatgptCode.title")}</b>
+              <span>{t("connectAi.chatgptCode.text")}</span>
+            </Step>
+          </details>
+        </div>
       </>
     );
   } else {

@@ -79,6 +79,25 @@ describe("Outro provedor in Settings › Chaves de IA", () => {
     return { add, api };
   };
 
+  test("Ollama detection needs no key or pricing and preserves advanced endpoint controls", async () => {
+    const state = seedState({
+      endpointList: { baseURL: "http://localhost:11434/v1", models: [{ id: "qwen2.5:1.5b" }] },
+    });
+    const { add } = await openForm(state);
+    await click(within(add).getByRole("button", { name: "Detectar modelos do Ollama" }));
+    expect(state.calls.find((c) => c.method === "agents.endpointModels")?.args[1]).toMatchObject({
+      style: "openai",
+      baseURL: "http://localhost:11434/v1",
+    });
+    expect(within(add).getByRole("checkbox", { name: "qwen2.5:1.5b" }).getAttribute("aria-checked")).toBe("true");
+    expect(within(add).queryByRole("textbox", { name: "Chave de API" })).toBeNull();
+    expect(within(add).queryByRole("alert")).toBeNull();
+    await click(within(add).getByRole("button", { name: "Opções avançadas" }));
+    expect((within(add).getByRole("textbox", { name: "Endereço" }) as HTMLInputElement).value).toBe(
+      "http://localhost:11434/v1",
+    );
+  });
+
   test("laid out as a dialog: its fields in the body, Buscar modelos on the label's line, Cancelar then the save in the footer", async () => {
     const { add } = await openForm();
     const body = add.querySelector(".ac-dialog__body") as HTMLElement;

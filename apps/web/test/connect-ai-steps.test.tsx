@@ -1301,6 +1301,8 @@ describe("Conectar uma IA: one picker, plans first", () => {
       hidden: true,
     });
     await chooseAi(dialog, "OpenRouter", true);
+    expect(within(panel).getByRole("button", { name: "Conectar com OpenRouter" })).toBeTruthy();
+    await click(within(panel).getByRole("button", { name: "Já tenho uma chave de API" }));
     expect(hintOf("Crie a sua chave de API OpenRouter", panel)).toMatchObject({
       text: "O que seus agentes enviam é repassado por OpenRouter à empresa que faz ou hospeda o modelo, sob os termos e as configurações de privacidade de OpenRouter.",
       hidden: true,

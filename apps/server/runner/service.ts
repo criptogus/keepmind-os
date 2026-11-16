@@ -1,4 +1,5 @@
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { chmodSync, existsSync, mkdirSync, rmSync, statSync, writeFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -9,6 +10,13 @@ import { xmlEscape } from "./xml";
 
 export const SERVICE_NAME = "agentes-runner";
 export const LAUNCHD_LABEL = "chat.agentes.runner";
+/** Custom paired homes must not replace another computer's persistent service. */
+export function runnerLaunchdLabel(home: string): string {
+  const absolute = path.resolve(home);
+  if (absolute === path.join(os.homedir(), ".agentes-runner")) return LAUNCHD_LABEL;
+  return `${LAUNCHD_LABEL}.${createHash("sha256").update(absolute).digest("hex").slice(0, 12)}`;
+}
+
 export const WINDOWS_TASK = "agentes-runner";
 export const SYSTEM_UNIT_PATH = `/etc/systemd/system/${SERVICE_NAME}.service`;
 /** The root service's PATH: only folders root owns, never the installing shell's. */
@@ -217,7 +225,7 @@ function runnerService(
 ): ServiceDefinition {
   return {
     unit: SERVICE_NAME,
-    label: LAUNCHD_LABEL,
+    label: runnerLaunchdLabel(launch.home),
     description: o.description,
     program: [launch.runtime, ...(launch.script ? [launch.script] : [])],
     args: o.args ?? ["start"],
@@ -413,7 +421,12 @@ export function removeOwnService(
   const platform = o.platform ?? process.platform;
   const home = o.home ?? os.homedir();
   if (o.manager === "launchd" && platform === "darwin") {
-    const file = launchdPlistPath(home);
+    const ownLabel = process.env.XPC_SERVICE_NAME;
+    const label =
+      ownLabel === LAUNCHD_LABEL || /^chat\.agentes\.runner\.[a-f0-9]{12}$/.test(ownLabel ?? "")
+        ? ownLabel!
+        : runnerLaunchdLabel(runnerHome());
+    const file = launchdPlistPath(home, label);
     if (!existsSync(file)) return null;
     rmSync(file, { force: true });
     return file;
@@ -466,7 +479,7 @@ export function installService(io: ServiceIo): number {
       ...(io.args ? { args: io.args } : {}),
     });
     if (!startLaunchAgent(agent, { print, run, ...(io.sleep ? { sleep: io.sleep } : {}) })) return 1;
-    print(`Installed ${launchdPlistPath()} and started it.`);
+    print(`Installed ${launchdPlistPath(os.homedir(), agent.label)} and started it.`);
     print(`Logs: ${path.join(launch.home, "runner.log")}`);
     return 0;
   }
@@ -592,7 +605,9 @@ export function uninstallService(io: ServiceIo & { system?: boolean }): number {
     return 0;
   }
   if (process.platform === "linux" || process.platform === "darwin") {
-    print(`Removed ${removeUserService({ unit: SERVICE_NAME, label: LAUNCHD_LABEL }, run)}.`);
+    print(
+      `Removed ${removeUserService({ unit: SERVICE_NAME, label: runnerLaunchdLabel((io.launch ?? currentLaunch()).home) }, run)}.`,
+    );
     return 0;
   }
   if (process.platform === "win32") {
@@ -611,7 +626,7 @@ export function serviceStatus(run: RunCommand = runSync, system = false): string
     return `systemd unit ${SYSTEM_UNIT_PATH} (${active})`;
   }
   if (process.platform === "linux" || process.platform === "darwin") {
-    return userServiceStatus({ unit: SERVICE_NAME, label: LAUNCHD_LABEL }, run);
+    return userServiceStatus({ unit: SERVICE_NAME, label: runnerLaunchdLabel(runnerHome()) }, run);
   }
   if (process.platform === "win32") {
     return run("schtasks", ["/Query", "/TN", WINDOWS_TASK]).code === 0 ? `scheduled task ${WINDOWS_TASK}` : null;

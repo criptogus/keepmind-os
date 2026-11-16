@@ -115,6 +115,7 @@ import { useToast } from "@/lib/toast";
 import { AddAccount, OpenPage, Step, StepTitle } from "./AddAccountFlow";
 import { CliMissing } from "./CliMissing";
 import { EndpointForm } from "./EndpointForm";
+import { OpenRouterLogin } from "./OpenRouterLogin";
 import { PlanReplies, usePlanRepliesShown } from "./PlanReplies";
 
 /*
@@ -1788,6 +1789,7 @@ function GateWait({
 
 /** The API key being added: its maker and the key. */
 export interface KeyDraft {
+  preset?: "ollama";
   /** `custom`: a workspace's own endpoint (ADR 0146), which has a form of its own (`endpoint`). */
   provider: ProviderId | typeof CUSTOM_PROVIDER;
   apiKey: string;
@@ -1828,6 +1830,7 @@ export function KeyPanel({
   const { t } = useTranslation();
   const fieldId = useId();
   const [touched, setTouched] = useState(false);
+  const [manualKey, setManualKey] = useState(false);
   const { provider, apiKey } = draft;
   const keyOf = provider === CUSTOM_PROVIDER ? null : provider;
   const maker = keyOf ? providerOf(keyOf) : undefined;
@@ -1860,56 +1863,68 @@ export function KeyPanel({
         </>
       ) : keyOf && maker && site ? (
         <>
-          <Step
-            n={1}
-            side={
-              <OpenPage href={site.href} primary={!apiKey}>
-                {t("aiAccounts.add.openKeys", { site: site.host })}
-              </OpenPage>
-            }
-          >
-            <StepTitle
-              title={t("connectAi.key.create", { provider: providerLabel(keyOf) })}
-              hint={hint && t(hint, { provider: maker.label })}
-            />
-          </Step>
-          <Step n={2}>
-            <label htmlFor={fieldId}>
-              <b>{t("connectAi.key.paste")}</b>
-            </label>
-            <span className="agp-addacct__paste">
-              <Locked when={Boolean(saving)}>
-                <Input
-                  id={fieldId}
-                  type="password"
-                  autoComplete="off"
-                  spellCheck={false}
-                  placeholder={maker.placeholder}
-                  value={apiKey}
-                  invalid={wrong}
-                  onChange={(e) => onDraft({ provider, apiKey: e.target.value })}
-                  onBlur={() => setTouched(true)}
-                  onKeyDown={(e) => {
-                    if (e.key !== "Enter" || !onSave) return;
-                    e.preventDefault();
-                    setTouched(true);
-                    if (valid) onSave();
-                  }}
+          {provider === "openrouter" && !apiKey && (
+            <OpenRouterLogin onKey={(key) => onDraft({ provider, apiKey: key })} />
+          )}
+          {provider === "openrouter" && !apiKey && (
+            <Button variant="ghost" size="sm" onClick={() => setManualKey(!manualKey)}>
+              {t("keepmind.ai.manualKey")}
+            </Button>
+          )}
+          {(provider !== "openrouter" || apiKey || manualKey) && (
+            <>
+              <Step
+                n={1}
+                side={
+                  <OpenPage href={site.href} primary={!apiKey}>
+                    {t("aiAccounts.add.openKeys", { site: site.host })}
+                  </OpenPage>
+                }
+              >
+                <StepTitle
+                  title={t("connectAi.key.create", { provider: providerLabel(keyOf) })}
+                  hint={hint && t(hint, { provider: maker.label })}
                 />
-              </Locked>
-              {onSave && apiKey.trim() && (
-                <Button variant="primary" loading={saving} disabled={!valid} onClick={onSave}>
-                  {t("settings.saveKey")}
-                </Button>
-              )}
-            </span>
-            {wrong && (
-              <div className="ac-field__error" role="alert">
-                <KeyMismatch provider={keyOf} apiKey={apiKey} onPick={pick} />
-              </div>
-            )}
-            {refused && <KeyRefused refusal={refused} />}
-          </Step>
+              </Step>
+              <Step n={2}>
+                <label htmlFor={fieldId}>
+                  <b>{t("connectAi.key.paste")}</b>
+                </label>
+                <span className="agp-addacct__paste">
+                  <Locked when={Boolean(saving)}>
+                    <Input
+                      id={fieldId}
+                      type="password"
+                      autoComplete="off"
+                      spellCheck={false}
+                      placeholder={maker.placeholder}
+                      value={apiKey}
+                      invalid={wrong}
+                      onChange={(e) => onDraft({ provider, apiKey: e.target.value })}
+                      onBlur={() => setTouched(true)}
+                      onKeyDown={(e) => {
+                        if (e.key !== "Enter" || !onSave) return;
+                        e.preventDefault();
+                        setTouched(true);
+                        if (valid) onSave();
+                      }}
+                    />
+                  </Locked>
+                  {onSave && apiKey.trim() && (
+                    <Button variant="primary" loading={saving} disabled={!valid} onClick={onSave}>
+                      {t("settings.saveKey")}
+                    </Button>
+                  )}
+                </span>
+                {wrong && (
+                  <div className="ac-field__error" role="alert">
+                    <KeyMismatch provider={keyOf} apiKey={apiKey} onPick={pick} />
+                  </div>
+                )}
+                {refused && <KeyRefused refusal={refused} />}
+              </Step>
+            </>
+          )}
           <SettingNote icon="agent">{forLine ?? t("connectAi.key.forAll")}</SettingNote>
         </>
       ) : null}

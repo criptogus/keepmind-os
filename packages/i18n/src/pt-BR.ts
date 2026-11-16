@@ -7,6 +7,28 @@ import type { LocaleStrings } from "./plurals";
  * no exclamation marks, buttons start with a verb, "agentes" in lower case.
  */
 export const ptBR = {
+  "keepmind.ai.manualKey": "Já tenho uma chave de API",
+  "keepmind.ai.localTitle": "Conectar um modelo local ou outro provedor",
+  "keepmind.ai.advanced": "Opções avançadas",
+
+  "keepmind.ai.routerChoice": "Entre com sua conta ou use uma chave. Modelos gratuitos e pagos.",
+  "keepmind.ai.localChoice": "Use modelos no seu computador, sem chave de API.",
+  "keepmind.ai.ollama.detect": "Detectar modelos do Ollama",
+  "keepmind.ai.ollama.location":
+    "A busca acontece no computador que roda o servidor KeepMind. Se o servidor estiver em outra máquina, use um endereço acessível por ele nas opções abaixo.",
+  "keepmind.ai.ollama.empty":
+    "Ollama respondeu, mas não há modelos instalados. Baixe um modelo no Ollama e tente novamente.",
+
+  "keepmind.ai.openrouter.login": "Conectar com OpenRouter",
+  "keepmind.ai.openrouter.instructions":
+    "Autorize no OpenRouter e cole o código que ele mostrar. Sua senha fica somente lá.",
+  "keepmind.ai.openrouter.code": "Código de autorização",
+  "keepmind.ai.openrouter.finish": "Concluir autorização",
+  "keepmind.ai.openrouter.error": "Não foi possível concluir. Confira o código ou comece uma nova autorização.",
+  "keepmind.ai.openrouter.cost":
+    "Depois da autorização, teste e salve a conexão. Modelos gratuitos têm limites; modelos pagos usam seus créditos.",
+  "keepmind.ai.reopen": "Abrir novamente",
+
   keepmindHome: {
     routineBlockers: "Rotinas que precisam de atenção",
     blockers: "Há trabalho bloqueado",
