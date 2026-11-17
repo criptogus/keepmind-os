@@ -162,7 +162,7 @@ describe("the tools step", () => {
     await mount();
     const g = group() as HTMLElement;
     expect(g.getAttribute("aria-label")).toBe("Precisam da sua decisão · 2");
-    expect(g.querySelector(".ac-toolpx-ask")).toBeTruthy();
+    expect(g.querySelector(".km-decision[aria-hidden='true'] canvas.ac-sticker[data-mood='thinking']")).toBeTruthy();
     expect(g.textContent).toContain("O nome não diz o que fazem.");
     // First in the list, before the subjects.
     expect(document.querySelector(".tr-subjects")?.firstElementChild).toBe(g);
@@ -207,7 +207,7 @@ describe("the tools step", () => {
     expect(moved).toEqual(["2 sugestões aceitas"]);
     expect(group()).toBeNull();
     const done = screen().getByRole("region", { name: "Pronto. Tudo revisado." });
-    expect(done.querySelector(".ac-toolpx-agent")).toBeTruthy();
+    expect(done.querySelector("canvas.ac-sticker[data-mood='celebrate']")).toBeTruthy();
     expect(done.textContent).toContain("O agente já sabe o que pode fazer sozinho no Ads.");
     const bar = within(done).getByRole("img");
     expect(bar.getAttribute("aria-label")).toBe("2 consultam · 3 mudam · 2 pedem aprovação");
