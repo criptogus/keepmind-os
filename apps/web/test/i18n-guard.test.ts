@@ -2,7 +2,6 @@ import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join, relative } from "node:path";
 import { en, ptBR } from "@keepmind/i18n";
-import { legalDocuments } from "@keepmind/i18n/legal";
 import { leaves } from "../../../packages/i18n/test/leaves";
 import { filesNamingMakers, MAKER_WORDS, sourceFiles, withoutComments } from "../../../packages/i18n/test/maker-words";
 
@@ -101,41 +100,19 @@ describe("a failed request in the person's words", () => {
 });
 
 describe("Claude and ChatGPT, not their makers, in what a person reads", () => {
-  /** A legal text names the company, once, beside the product people know. */
-  const MAKER = {
-    en: "Anthropic, which makes Claude",
-    "pt-BR": "a Anthropic, que faz o Claude",
-    es: "Anthropic, que crea Claude",
-    fr: "Anthropic, qui développe Claude",
-    de: "Anthropic, dem Hersteller von Claude",
-    it: "Anthropic, che sviluppa Claude",
-    nl: "Anthropic, de maker van Claude",
-    ja: "Claude を開発する Anthropic",
-    ko: "Claude를 만드는 Anthropic",
-    "zh-Hans": "开发 Claude 的 Anthropic",
-    id: "Anthropic, yang membuat Claude",
-    tr: "Claude'u geliştiren Anthropic",
-    pl: "Anthropic, twórca Claude",
-    ru: "Anthropic, создатель Claude",
-  } as const;
   const inCopy = new RegExp(MAKER_WORDS.source, "i");
 
   // The phone's and the Mac app's own code: in their own tests, which run when only those apps change.
-  test("the copy, the terms, and the web app's, design system's and client's code", () => {
+  test("the copy, and the web app's, design system's and client's code", () => {
     const copy = [
       ...leaves(en).map(([k, v]) => [`en ${k}`, v] as const),
       ...leaves(ptBR).map(([k, v]) => [`pt-BR ${k}`, v] as const),
     ]
       .filter(([, v]) => inCopy.test(String(v)))
       .map(([k]) => k);
-    const legal = Object.entries(legalDocuments).flatMap(([kind, byLocale]) =>
-      Object.entries(byLocale)
-        .filter(([lng, doc]) => inCopy.test(JSON.stringify(doc).replaceAll(MAKER[lng as keyof typeof MAKER], "")))
-        .map(([lng]) => `${kind} ${lng}`),
-    );
     const words = filesNamingMakers(
       ["apps/web/src", "packages/ui/src", "packages/client/src"].map((d) => join(REPO, d)),
     );
-    expect([...copy, ...legal, ...words.map((f) => relative(REPO, f))]).toEqual([]);
+    expect([...copy, ...words.map((f) => relative(REPO, f))]).toEqual([]);
   });
 });

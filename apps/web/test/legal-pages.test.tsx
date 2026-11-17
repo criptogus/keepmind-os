@@ -3,18 +3,15 @@ import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { legalDocument } from "@keepmind/i18n/legal";
 import { cleanup } from "@testing-library/react";
-import { LegalPage } from "@/pages/LegalPage";
 import { createFakeApi, seedState } from "./fake-api";
-import { renderApp, renderPage, screen } from "./render";
+import { renderApp, screen } from "./render";
 
 afterEach(() => {
   cleanup();
   localStorage.clear();
 });
 
-const signedOut = () => createFakeApi(seedState({ me: null }));
 const OWN = { termsUrl: "https://example.com/terms", privacyUrl: "https://example.com/privacy" };
 /** A server that isn't KeepMind OS's, with these legal links of its own. */
 const ownServer = (authConfig: Partial<typeof OWN> = {}) =>
@@ -27,14 +24,6 @@ const cloud = () =>
       authConfig: { termsUrl: "https://keepmind.io/terms", privacyUrl: "https://keepmind.io/privacy" },
     }),
   );
-
-test("the tab reads a legal page's title while it shows, and what it read before once it's left", async () => {
-  document.title = "keepmind.io";
-  await renderPage(<LegalPage kind="terms" />, { api: signedOut() });
-  expect(document.title).toBe(`${legalDocument("terms", "en").title} · KeepMind OS`);
-  cleanup();
-  expect(document.title).toBe("keepmind.io");
-});
 
 describe("the Terms and the Privacy Policy", () => {
   test("Cloud also uses operator policies instead of upstream legal documents", async () => {
