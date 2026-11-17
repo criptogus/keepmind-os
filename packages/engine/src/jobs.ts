@@ -26,6 +26,7 @@ import { typingLogFor } from "./burst";
 import { CHANNEL_DELETE_JOB, purgeChannel } from "./channel-deletion";
 import { crowdedAgents, publishQueueChanged } from "./computer-queue";
 import type { ConnectorDeps } from "./connectors/connections";
+import { CONNECTOR_PROBE_JOB, probeConnectionById } from "./connectors/probe";
 import { startNoteRun } from "./consultations";
 import { getChannelCached } from "./context";
 import { consolidateOrg } from "./context/consolidate";
@@ -562,6 +563,11 @@ export function createJobHandlers(deps: JobDeps): JobHandlers {
       await advanceLegacyWorkflow(deps.db, orgOf(job), String(job.payload.runId));
     },
     // A wake the brakes deferred (its agent at its cap of unrequested work, or its computer full) looks again.
+    // A connector's scheduled sign-in check (connectors/probe.ts): best-effort, one attempt.
+    [CONNECTOR_PROBE_JOB]: async (job) => {
+      if (!deps.connectors) return;
+      await probeConnectionById(deps.connectors, orgOf(job), String(job.payload.connectionId ?? ""));
+    },
     [LATER_JOB]: async (job) => {
       const orgId = orgOf(job);
       const message = await getMessage(deps.db, orgId, String(job.payload.messageId));
