@@ -7227,6 +7227,7 @@ export const ptBR = {
     },
     roleGroups: {
       advisory: "Consultoria e futuro",
+      exec: "Executivos",
       inspired: "Perfis inspirados",
       /** A personal workspace's one group: the right hand's personal agents (ADR 0159). */
       personal: "Para o seu dia",

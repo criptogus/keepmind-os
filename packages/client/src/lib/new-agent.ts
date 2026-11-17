@@ -67,6 +67,12 @@ export const ROLE_IDS = [
   "inspired_godin",
   "inspired_taleb",
   "inspired_blount",
+  "exec_cfo",
+  "exec_cmo",
+  "exec_cto",
+  "exec_coo",
+  "exec_people",
+  "exec_research",
   "custom",
 ] as const;
 export type RoleId = (typeof ROLE_IDS)[number];
@@ -77,6 +83,10 @@ export const ROLE_GROUPS = [
   { id: "customers", roles: ["support", "sales", "marketing", "content"] },
   { id: "operations", roles: ["data", "finance", "people", "research", "assistant"] },
   { id: "advisory", roles: ["consulting", "strategy", "trends"] },
+  {
+    id: "exec",
+    roles: ["exec_cfo", "exec_cmo", "exec_cto", "exec_coo", "exec_people", "exec_research"],
+  },
   {
     id: "inspired",
     roles: [
@@ -137,6 +147,12 @@ export const RESTRICTED_ROLE_IDS: readonly RoleId[] = [
   "inspired_godin",
   "inspired_taleb",
   "inspired_blount",
+  "exec_cfo",
+  "exec_cmo",
+  "exec_cto",
+  "exec_coo",
+  "exec_people",
+  "exec_research",
 ];
 
 /* ---------- What a role starts with ---------- */
@@ -270,6 +286,37 @@ export const ROLE_DEFAULTS = {
     look: { color: "green", eyes: "wide", accessory: "headphones" },
     levels: {},
     channels: [],
+  }),
+  // Executives: they advise the C-suite; like every advisor, no connection is implicit.
+  exec_cfo: starts({
+    look: { color: "graphite", eyes: "dots", accessory: "hat" },
+    levels: {},
+    channels: ["financeiro", "finance", "financas", "cfo", "diretoria", "executive"],
+  }),
+  exec_cmo: starts({
+    look: { color: "rose", eyes: "wide", accessory: "scarf" },
+    levels: {},
+    channels: ["marketing", "cmo", "growth", "campanhas", "diretoria", "executive"],
+  }),
+  exec_cto: starts({
+    look: { color: "indigo", eyes: "dots", accessory: "antenna" },
+    levels: {},
+    channels: ["tech", "cto", "engenharia", "engineering", "diretoria", "executive"],
+  }),
+  exec_coo: starts({
+    look: { color: "amber", eyes: "round", accessory: "cap" },
+    levels: {},
+    channels: ["ops", "coo", "operacoes", "operations", "diretoria", "executive"],
+  }),
+  exec_people: starts({
+    look: { color: "violet", eyes: "happy", accessory: "bow" },
+    levels: {},
+    channels: ["rh", "people", "pessoas", "hr", "cpo", "diretoria", "executive"],
+  }),
+  exec_research: starts({
+    look: { color: "sky", eyes: "dots", accessory: "none" },
+    levels: {},
+    channels: ["pesquisa", "research", "insights", "estudos", "diretoria", "executive"],
   }),
   custom: starts({ look: { color: "sky", eyes: "round", accessory: "none" }, levels: {}, channels: [] }),
 } satisfies Record<RoleId, RoleDefaults>;

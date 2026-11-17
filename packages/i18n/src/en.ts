@@ -7263,6 +7263,7 @@ export const en = {
     },
     roleGroups: {
       advisory: "Consulting and foresight",
+      exec: "Executives",
       inspired: "Inspired profiles",
       /** A personal workspace's one group: the right hand's personal agents (ADR 0159). */
       personal: "For your day",

@@ -303,6 +303,7 @@ const GROUP_ICON: Record<RoleGroupId, "code" | "members" | "layers"> = {
   tech: "code",
   customers: "members",
   advisory: "layers",
+  exec: "layers",
   inspired: "members",
   operations: "layers",
 };
@@ -310,6 +311,12 @@ const ROLE_SEARCH_ALIASES: Partial<Record<RoleId, string>> = {
   dev: "desenvolvimento development software programação",
   finance: "finanças finances financeiro",
   cybersec: "cybersegurança cybersecurity segurança security",
+  exec_cfo: "cfo chief financial officer financeiro finanças treasurer",
+  exec_cmo: "cmo chief marketing officer marketing growth marca",
+  exec_cto: "cto chief technology officer tecnologia technology arquitetura",
+  exec_coo: "coo chief operating officer operações operations processos",
+  exec_people: "cpo chief people officer rh hr pessoas cultura",
+  exec_research: "head research pesquisa insights estudos",
 };
 /**
  * The skills each starting point opens when needed, as the team templates name them (`teamTemplates.skills.{key}`),

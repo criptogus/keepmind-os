@@ -158,6 +158,7 @@ const GROUP_ICON: Record<RoleGroupId, IconName> = {
   tech: "code",
   customers: "members",
   advisory: "layers",
+  exec: "layers",
   inspired: "members",
   operations: "layers",
 };

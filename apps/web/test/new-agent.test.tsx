@@ -288,7 +288,14 @@ describe("Criar agente: steps", () => {
       within(step)
         .getAllByRole("heading", { level: 2 })
         .map((h) => h.textContent),
-    ).toEqual(["Produto e tecnologia", "Clientes", "Operação", "Consultoria e futuro", "Perfis inspirados"]);
+    ).toEqual([
+      "Produto e tecnologia",
+      "Clientes",
+      "Operação",
+      "Consultoria e futuro",
+      "Executivos",
+      "Perfis inspirados",
+    ]);
     const names = (heading: string) =>
       within(within(step).getByRole("region", { name: heading }))
         .getAllByRole("button")

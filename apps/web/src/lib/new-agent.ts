@@ -59,6 +59,12 @@ const ROLE_ICON: Record<RoleId, IconName> = {
   inspired_godin: "layers",
   inspired_taleb: "layers",
   inspired_blount: "layers",
+  exec_cfo: "chart",
+  exec_cmo: "globe",
+  exec_cto: "code",
+  exec_coo: "bolt",
+  exec_people: "members",
+  exec_research: "search",
   custom: "plus",
 };
 
