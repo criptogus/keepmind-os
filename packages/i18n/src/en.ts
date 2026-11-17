@@ -11724,6 +11724,7 @@ export const en = {
         help: "The link of a repository, a folder or a .md file. Markdown notes become pages and the images they show go to the Drive. The rest of the repository stays out. A private repository is read through the workspace's GitHub.",
         read: "Read the notes",
         error: { notGithub: "Paste a github.com link." },
+        short: "Connect GitHub",
       },
       anotherLink: "Change link",
       dropTitle: "Drop the vault .zip here",
@@ -11823,11 +11824,6 @@ export const en = {
       retry_other: "Try {{count}} again",
       overlayTitle: "Drop to import into the wiki",
       overlayText: "An Obsidian vault .zip, the vault folder or .md files. You review everything before it goes in.",
-      github: {
-        short: "Connect GitHub",
-        title: "Connect GitHub as second brain",
-        text: "Import notes from your GitHub repositories into the wiki. Agents will read them as knowledge.",
-      },
       error: {
         empty: "No .md notes found. Send the vault folder's .zip, the folder or .md files.",
         too_big: "The vault is over 500 MB. Send it without the big attachments, or in parts.",

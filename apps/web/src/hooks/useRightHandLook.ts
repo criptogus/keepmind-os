@@ -1,4 +1,4 @@
-import { rightHandOf, RIGHT_HAND_DEFAULT } from "@keepmind/client/lib/right-hand";
+import { RIGHT_HAND_DEFAULT, rightHandOf } from "@keepmind/client/lib/right-hand";
 import { useOrg } from "@/components/org-context";
 import { useDirectory } from "@/hooks/useDirectory";
 import { lookOf } from "@/lib/look";
@@ -7,5 +7,5 @@ import { lookOf } from "@/lib/look";
 export function useRightHandLook() {
   const { org } = useOrg();
   const rh = rightHandOf(useDirectory(org.id).agents);
-  return rh?.appearance ? lookOf(rh) : RIGHT_HAND_DEFAULT.appearance;
+  return (rh?.appearance ? lookOf(rh) : undefined) ?? RIGHT_HAND_DEFAULT.appearance;
 }

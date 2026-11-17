@@ -479,7 +479,20 @@ export function buildEngine(o: EngineOptions) {
         hooks: hookConfig(config),
         connectors: connectorDeps,
       }),
-      createWikiToolSource({ pubsub: adapters.pubsub, search: context }),
+      createWikiToolSource({
+        pubsub: adapters.pubsub,
+        search: context,
+        github: {
+          fetch: o.http,
+          resolveHost: o.resolveHost,
+          github: {
+            connectors: connectorDeps,
+            get app() {
+              return githubApp.current();
+            },
+          },
+        },
+      }),
       createSecondBrainToolSource(context),
       createPluginToolSource(),
       createConnectorToolSource({

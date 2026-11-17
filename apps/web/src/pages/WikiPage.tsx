@@ -80,7 +80,10 @@ export function WikiPage({ slug, newTitle }: { slug?: string; newTitle?: string 
   const pages = tree.data ?? [];
   const [view, setView] = useState<View>("home");
   const [writing, setWriting] = useState<{ title: string; folder: string } | null>(null);
-  const [importing, setImporting] = useState<{ files?: Promise<VaultFile[]> } | null>(null);
+  const [importing, setImporting] = useState<{
+    files?: Promise<VaultFile[]>;
+    source?: "obsidian" | "github" | "files";
+  } | null>(null);
   const [navOpen, setNavOpen] = useState(false);
   const [tag, setTag] = useState<string | null>(null);
   const current = pages.find((p) => p.slug === slug);
@@ -144,7 +147,14 @@ export function WikiPage({ slug, newTitle }: { slug?: string; newTitle?: string 
   else if (slug) center = <WikiReader key={slug} slug={slug} pages={pages} onCreate={startNew} onTag={setTag} />;
   else if (tree.isLoading) center = <LoadingCards count={4} />;
   else if (pages.length === 0)
-    center = <WikiEmpty onNew={() => startNew()} onImport={() => setImporting({})} onNav={() => setNavOpen(true)} />;
+    center = (
+      <WikiEmpty
+        onNew={() => startNew()}
+        onImport={() => setImporting({})}
+        onGithub={() => setImporting({ source: "github" })}
+        onNav={() => setNavOpen(true)}
+      />
+    );
   else
     center = (
       <WikiHome
@@ -204,7 +214,9 @@ export function WikiPage({ slug, newTitle }: { slug?: string; newTitle?: string 
         {center}
       </div>
       {drop.over && <VaultDropOverlay />}
-      {importing && <WikiImportDialog files={importing.files} onClose={() => setImporting(null)} />}
+      {importing && (
+        <WikiImportDialog files={importing.files} initialSource={importing.source} onClose={() => setImporting(null)} />
+      )}
     </div>
   );
 }
@@ -783,7 +795,17 @@ function WikiHome({
 }
 
 /** No pages yet: import a vault, the suggested start, or a blank page. */
-function WikiEmpty({ onNew, onImport, onNav }: { onNew: () => void; onImport: () => void; onNav: () => void }) {
+function WikiEmpty({
+  onNew,
+  onImport,
+  onGithub,
+  onNav,
+}: {
+  onNew: () => void;
+  onImport: () => void;
+  onGithub: () => void;
+  onNav: () => void;
+}) {
   const { t } = useTranslation();
   const { org } = useOrg();
   const toast = useToast();
@@ -830,7 +852,7 @@ function WikiEmpty({ onNew, onImport, onNav }: { onNew: () => void; onImport: ()
               <Button icon="upload" onClick={onImport}>
                 {t("wiki.import.cta")}
               </Button>
-              <Button variant="ghost" icon="link" onClick={onImport}>
+              <Button variant="ghost" icon="link" onClick={onGithub}>
                 {t("wiki.import.github.short")}
               </Button>
               <Button variant="ghost" icon="plus" onClick={onNew}>

@@ -400,10 +400,13 @@ const SOURCES: WikiImportSource[] = ["obsidian", "github", "files"];
 export function WikiImportDialog({
   files,
   name,
+  initialSource,
   onClose,
 }: {
   files?: Promise<VaultFile[]> | null;
   name?: string;
+  /** Opens straight on this source's step, skipping the picker (e.g. "Connect GitHub"). */
+  initialSource?: WikiImportSource | null;
   onClose: () => void;
 }) {
   const { t, i18n } = useTranslation();
@@ -425,7 +428,7 @@ export function WikiImportDialog({
   const [stopping, setStopping] = useState(false);
 
   /** The second step's source; null on the first, where it is picked. */
-  const [from, setFrom] = useState<WikiImportSource | null>(null);
+  const [from, setFrom] = useState<WikiImportSource | null>(initialSource ?? null);
   const [url, setUrl] = useState("");
   const [fetching, setFetching] = useState(false);
   const [linkError, setLinkError] = useState<string | null>(null);

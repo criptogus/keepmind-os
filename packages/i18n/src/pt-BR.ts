@@ -11762,6 +11762,7 @@ export const ptBR = {
         help: "O link de um repositório, de uma pasta ou de um arquivo .md. As notas em Markdown viram páginas e as imagens que elas mostram vão para o Drive. O resto do repositório fica de fora. Repositório privado é lido pelo GitHub do workspace.",
         read: "Ler as notas",
         error: { notGithub: "Cole um link do github.com." },
+        short: "Conectar GitHub",
       },
       anotherLink: "Trocar link",
       dropTitle: "Solte o .zip da vault aqui",
@@ -11861,11 +11862,6 @@ export const ptBR = {
       retry_other: "Tentar {{count}} de novo",
       overlayTitle: "Solte para importar para a wiki",
       overlayText: "Um .zip da vault do Obsidian, a pasta da vault ou arquivos .md. Você revisa tudo antes de entrar.",
-      github: {
-        short: "Conectar GitHub",
-        title: "Conectar GitHub como second brain",
-        text: "Importe notas dos seus repositórios GitHub para a wiki. Os agentes passam a ler como conhecimento.",
-      },
       error: {
         empty: "Nenhuma nota .md encontrada. Mande o .zip da pasta da vault, a pasta ou arquivos .md.",
         too_big: "A vault passa de 500 MB. Mande sem os anexos grandes, ou por partes.",

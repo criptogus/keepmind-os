@@ -2,8 +2,9 @@ import { SECRET_FILE } from "./agent-import";
 import { zip } from "./docx";
 import { ValidationError } from "./errors";
 import { can, requirePermission } from "./organizations";
-import { type GithubReadDeps, linkedRepository } from "./skills";
-import { inflateZipEntry } from "./zip";
+import { type GithubReadDeps, linkedRepository, parseGithubUrl } from "./skills";
+import { importWikiPages, WIKI_IMPORT_MAX_NOTES, type WikiDeps, type WikiImportNote } from "./wiki";
+import { inflateZipEntry, listZip } from "./zip";
 
 /**
  * Notes for the wiki from a GitHub link (a repository, a folder or one Markdown file): what the app's own import
@@ -72,4 +73,119 @@ export async function readGithubNotes(deps: GithubReadDeps, actorId: string, org
     ...read.map((f): [string, Uint8Array] => [f.path, f.data]),
     ...attachments.map((f): [string, Uint8Array] => [f.path, inflateZipEntry(archive, f.entry)]),
   ]);
+}
+
+/** What bringing a GitHub link's notes into the wiki needs: reading the repository and the wiki's own deps. */
+export type GithubWikiDeps = GithubReadDeps & Omit<WikiDeps, "db">;
+
+/** `---` frontmatter of a note: its `tags`/`tag` and `aliases`/`alias`, and the body without it. */
+function noteFrontmatter(text: string): { tags: string[]; aliases: string[]; body: string } {
+  const m = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?/.exec(text);
+  if (!m) return { tags: [], aliases: [], body: text };
+  const meta: Record<string, string[]> = {};
+  let key: string | null = null;
+  for (const line of (m[1] ?? "").split(/\r?\n/)) {
+    const kv = /^([A-Za-z_][\w-]*):\s*(.*)$/.exec(line);
+    if (kv) {
+      key = (kv[1] ?? "").toLowerCase();
+      const v = (kv[2] ?? "").trim();
+      meta[key] = v.startsWith("[")
+        ? v
+            .slice(1, -1)
+            .split(",")
+            .map((s) => s.trim())
+            .filter(Boolean)
+        : v
+          ? [v]
+          : [];
+      continue;
+    }
+    const li = /^\s*-\s+(.*)$/.exec(line);
+    if (li && key) meta[key]?.push((li[1] ?? "").trim());
+  }
+  const clean = (a: string[] | undefined) =>
+    (a ?? []).map((s) => s.replace(/^["']|["']$/g, "").replace(/^#/, "")).filter(Boolean);
+  return {
+    tags: clean([...(meta.tags ?? []), ...(meta.tag ?? [])]),
+    aliases: clean([...(meta.aliases ?? []), ...(meta.alias ?? [])]),
+    body: text.slice(m[0].length),
+  };
+}
+
+const INLINE_TAGS = /(?:^|\s)#([\p{L}\d_/-]*[\p{L}_/-][\p{L}\d_/-]*)/gu;
+
+/**
+ * The Markdown notes a `readGithubNotes` zip holds, as import notes: frontmatter and `#tags` kept, each file's
+ * folder kept. Attachments aren't copied — uploading them to the Drive is the app review's step — so a note's
+ * image links stay as the author wrote them.
+ */
+export function githubNotesFromZip(bytes: Uint8Array): WikiImportNote[] {
+  const notes: WikiImportNote[] = [];
+  for (const entry of listZip(bytes)) {
+    if (entry.symlink || !NOTE.test(entry.path)) continue;
+    // The same exclusions `readGithubNotes` applies: hidden folders and files, installed packages, secret names.
+    if (LEFT_OUT.test(entry.path) || SECRET_FILE.test(entry.path.split("/").pop() ?? entry.path)) continue;
+    const fm = noteFrontmatter(new TextDecoder().decode(inflateZipEntry(bytes, entry)));
+    const noCode = fm.body.replace(/```[\s\S]*?```/g, "").replace(/`[^`\n]*`/g, "");
+    const parts = entry.path.split("/");
+    const file = parts.pop() ?? entry.path;
+    const inline = [...noCode.matchAll(INLINE_TAGS)].map((m) => m[1] ?? "");
+    notes.push({
+      title: file.replace(/\.(md|markdown)$/i, ""),
+      ...(parts.length ? { folder: parts.join("/") } : {}),
+      body: fm.body,
+      tags: [...new Set([...fm.tags, ...inline].map((t) => t.toLowerCase()))],
+      ...(fm.aliases.length ? { aliases: fm.aliases } : {}),
+    });
+  }
+  return notes;
+}
+
+/**
+ * A GitHub link's Markdown notes as wiki pages, without the app's review step: for an agent asked to bring a
+ * repository into the wiki. Reads as `readGithubNotes` does (the person's `edit_wiki`; private repositories through
+ * the workspace's GitHub for whoever may manage agents), then imports in batches under one `importId` per
+ * repository: asking again adds only the notes that are new and never duplicates the ones already in.
+ */
+export async function importGithubWiki(
+  deps: GithubWikiDeps,
+  userId: string,
+  orgId: string,
+  url: string,
+  options: { folder?: string } = {},
+): Promise<{
+  source: string;
+  created: number;
+  alreadyIn: number;
+  titles: string[];
+  skipped: string[];
+  failed: { title: string; reason: "title" | "too_long" }[];
+}> {
+  const target = parseGithubUrl(url);
+  const source = `${target.owner}/${target.repo}`;
+  const bytes = await readGithubNotes(deps, userId, orgId, url);
+  const notes = githubNotesFromZip(bytes);
+  if (notes.length === 0) throw new ValidationError("No Markdown notes in that link", "wiki.github_no_notes");
+  const wiki: WikiDeps = { db: deps.db, pubsub: deps.pubsub, search: deps.search };
+  const titles: string[] = [];
+  const skipped: string[] = [];
+  const failed: { title: string; reason: "title" | "too_long" }[] = [];
+  let created = 0;
+  let alreadyIn = 0;
+  for (let i = 0; i < notes.length; i += WIKI_IMPORT_MAX_NOTES) {
+    const r = await importWikiPages(wiki, userId, orgId, {
+      source: { type: "github", name: source },
+      notes: notes.slice(i, i + WIKI_IMPORT_MAX_NOTES),
+      folder: options.folder,
+      onConflict: "keep_both",
+      importId: `github:${source.toLowerCase()}`,
+    });
+    const again = new Set(r.alreadyIn.map((p) => p.id));
+    created += r.created.length - r.alreadyIn.length;
+    alreadyIn += r.alreadyIn.length;
+    titles.push(...r.created.filter((p) => !again.has(p.id)).map((p) => p.title));
+    skipped.push(...r.skipped);
+    failed.push(...r.failed);
+  }
+  return { source, created, alreadyIn, titles, skipped, failed };
 }

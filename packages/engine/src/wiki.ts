@@ -1172,6 +1172,8 @@ export async function importWikiPages(
   created: WikiPageSummary[];
   skipped: string[];
   failed: { title: string; reason: "title" | "too_long" }[];
+  /** Of `created`, the pages this import had already brought (a batch sent twice counts them once). */
+  alreadyIn: WikiPageSummary[];
 }> {
   const { db } = deps;
   const actor: WikiActor = { type: "person", userId };
@@ -1185,6 +1187,7 @@ export async function importWikiPages(
   const base = cleanFolder(input.folder);
   const skipped: string[] = [];
   const failed: { title: string; reason: "title" | "too_long" }[] = [];
+  const againIds = new Set<string>();
   const note = `imported from "${sourceName}"`;
   const rows = await db.transaction(async (tx) => {
     const made: PageRow[] = [];
@@ -1295,12 +1298,13 @@ export async function importWikiPages(
         failed: failed.length,
       },
     });
+    for (const p of again) againIds.add(p.id);
     return [...made, ...again];
   });
   const created = await summaries(db, rows);
   const first = created[0];
   if (first) await announce(deps, orgId, first, "imported", { count: created.length });
-  return { created, skipped, failed };
+  return { created, skipped, failed, alreadyIn: created.filter((p) => againIds.has(p.id)) };
 }
 
 /** "by Theo, at Walter's request: …" for agent edits; the given text for people. */
