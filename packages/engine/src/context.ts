@@ -531,6 +531,8 @@ export interface RunContext {
   system: ContextBlock[];
   messages: ModelMessage[];
   stats: { historyMessages: number; systemChars: number; truncated: boolean };
+  /** Agents' DM only: the same-reader messages the verbatim window cut, for `ensureDmSummary` to summarize. */
+  dmOlder?: { reader: string | null; messages: Message[] } | null;
   /** The issue this run works on: its thread is this agent's work on it, or its trigger starts that work. */
   issueId: string | null;
   /**
@@ -687,6 +689,10 @@ export async function buildRunContext(
   const rootTime = rootIsTrigger
     ? sql`${trigger.createdAt.toISOString()}::timestamptz`
     : sql`(select ${messages.createdAt} from ${messages} where ${messages.id} = ${run.threadRootId} and ${messages.orgId} = ${run.orgId})`;
+  // The agents' DM (ADR 0053 §9): a run reads only the exchanges made for the same person. Its window is wider
+  // than a channel's: the newest `DM_VERBATIM` stay whole and the rest is summarized (`ensureDmSummary`).
+  const agentsDm = !background && isAgentOnlyDm(channel) && !isRoutineRoomKey(channel.dmKey);
+  const historyWindow = agentsDm ? DM_SUMMARY_FETCH : options.maxMessages;
   const [rootRows, thread, before] = await Promise.all([
     rootIsTrigger || background
       ? Promise.resolve([trigger])
@@ -701,7 +707,7 @@ export async function buildRunContext(
           .from(messages)
           .where(and(scope, eq(messages.threadId, run.threadRootId), upToTrigger))
           .orderBy(desc(messages.createdAt), desc(messages.id))
-          .limit(options.maxMessages),
+          .limit(historyWindow),
     background
       ? Promise.resolve([] as Message[])
       : range
@@ -726,7 +732,7 @@ export async function buildRunContext(
               ),
             )
             .orderBy(desc(messages.createdAt), desc(messages.id))
-            .limit(Math.max(1, options.maxMessages - 1))
+            .limit(Math.max(1, historyWindow - 1))
         : // The channel as people see it: top-level messages and the replies shown under them
           // (agents answer in a thread per message), minus this thread (read above).
           db
@@ -741,7 +747,7 @@ export async function buildRunContext(
               ),
             )
             .orderBy(desc(messages.createdAt), desc(messages.id))
-            .limit(Math.max(1, options.maxMessages - 1)),
+            .limit(Math.max(1, historyWindow - 1)),
   ]);
   const root = rootRows[0];
   // Other agents waiting (their plan, budget or computer) on what it answers, its thread's root included: it may let
@@ -754,21 +760,23 @@ export async function buildRunContext(
   // A range longer than that loses its oldest messages (the thread summary, when the
   // thread itself is long, covers the thread, not the range).
   const fetched = before.length;
-  before.splice(Math.max(0, options.maxMessages - thread.length - 1));
+  before.splice(Math.max(0, historyWindow - thread.length - 1));
   // Older messages were left out: start at an anchor, so the history's start (and its cached prefix) stays the same
   // for several runs instead of moving by one message every time (token-trim B8).
-  if (!range && fetched >= Math.max(1, options.maxMessages - 1)) {
+  if (!range && fetched >= Math.max(1, historyWindow - 1)) {
     before.splice(before.length - historyStart([...before].reverse().map((m) => m.id)));
   }
-  const rangeCut = range !== null && (before.length < fetched || fetched >= Math.max(1, options.maxMessages - 1));
+  const rangeCut = range !== null && (before.length < fetched || fetched >= Math.max(1, historyWindow - 1));
   const fullHistory: Message[] = background
     ? [trigger]
     : [...before.reverse(), ...(root ? [rangeRoot(root, range !== null)] : []), ...thread.reverse()];
   if (!fullHistory.some((m) => m.id === trigger.id)) fullHistory.push(trigger);
-  // The agents' DM (ADR 0053 §9): a run reads only the exchanges made for the same person.
-  const agentsDm = !background && isAgentOnlyDm(channel) && !isRoutineRoomKey(channel.dmKey);
   const samePerson = agentsDm ? await forSamePerson(db, run, fullHistory, trigger.id) : null;
-  const history = samePerson ? samePerson.history : fullHistory;
+  const filtered = samePerson ? samePerson.history : fullHistory;
+  // Past `DM_VERBATIM` the older exchanges are not sent: the executor summarizes them (`ensureDmSummary`) and the
+  // summary stands in, so a long agents' DM costs a summary instead of its whole length on every run.
+  const dmOlder = agentsDm && filtered.length > DM_VERBATIM ? filtered.slice(0, filtered.length - DM_VERBATIM) : null;
+  const history = dmOlder ? filtered.slice(-DM_VERBATIM) : filtered;
 
   const [names, members, zone, talks, personLines, origins] = await Promise.all([
     authorNames(db, history),
@@ -1292,6 +1300,7 @@ export async function buildRunContext(
       personal,
     }),
     stats: { historyMessages: history.length, systemChars, truncated: thread.length >= options.maxMessages },
+    dmOlder: dmOlder ? { reader: samePerson?.reader ?? null, messages: dmOlder } : null,
     issueId:
       workIssueId ??
       (taskAsked && taskHere ? taskHere.issueId : null) ??
@@ -1730,6 +1739,7 @@ async function forSamePerson(db: Database, run: AgentRun, history: Message[], tr
   const kept = history.filter((m, i) => m.id === triggerId || readers[i] === reader);
   return {
     personId,
+    reader,
     history: kept,
     runIds: new Set(kept.flatMap((m) => (m.agentRunId ? [m.agentRunId] : []))),
   };
@@ -2384,6 +2394,10 @@ const isAnchor = (id: string) => Number.parseInt(id.replace(/-/g, "").slice(-6),
 
 /** Messages at the end of the history always read whole. */
 export const KEEP_WHOLE = 8;
+/** Agents' DM (ADR 0053 §9): the newest exchanges stay whole; older fetched ones are summarized instead. */
+export const DM_VERBATIM = 24;
+/** How far back an agents' DM run fetches for the summary (`DM_VERBATIM` of it stays verbatim). */
+const DM_SUMMARY_FETCH = 160;
 /** An older message longer than this reads as its start (`OLD_MESSAGE_START`) and the id `expand` reopens it by. */
 export const LONG_OLD_MESSAGE = 1500;
 const OLD_MESSAGE_START = 600;

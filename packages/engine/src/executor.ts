@@ -160,7 +160,7 @@ import { recordContextUse } from "./context/feedback";
 import { afterTurnDone, learnTags, reportLearnFailure } from "./context/learn";
 import { rulesForRun } from "./context/rules";
 import { memoryArmOf } from "./context/scorecard";
-import { type ContextDeps, ensureThreadSummary } from "./context/summaries";
+import { type ContextDeps, ensureDmSummary, ensureThreadSummary } from "./context/summaries";
 import { EXPAND_TOOL, itemLabel, retrieveForRun } from "./context/tools";
 import { compactToolResults, cutOldToolSteps, cutResultIds, dropOldImages, fitContextWindow } from "./context-budget";
 import {
@@ -2358,6 +2358,19 @@ async function executeRunInner(
         system.push({
           conversation: true,
           text: `# Earlier in this thread (summary)\n${itemLabel(summary)} ${summary.content}`,
+        });
+    }
+    if (contextDeps && context.dmOlder) {
+      // Agents' DM: the summary stands in for the exchanges the verbatim window cut, for this reader only.
+      const found = await ensureDmSummary(contextDeps, run.orgId, run.channelId, context.dmOlder).catch(() => null);
+      const dm = found
+        ? await agentsDmReads(db, run.orgId, run.channelId, () => readerOfRun(db, run.orgId, run.id))
+        : null;
+      const summary = found && (!dm || (await dm.item(found))) ? found : null;
+      if (summary)
+        system.push({
+          conversation: true,
+          text: `# Earlier in this agents' conversation (summary)\n${itemLabel(summary)} ${summary.content}`,
         });
     }
     // Per turn like memory: who the run acts for picks the rules, so they never move the cached prompt.
