@@ -126,26 +126,19 @@ describe("teamDrift", () => {
       authorUserId: f.owner.id,
       body: "oi",
     });
-    const lines = await drift(f, seenOf(f), [
-      ...fresh,
-      { id: room.id, name: room.name, createdAt: old },
-    ]);
+    const lines = await drift(f, seenOf(f), [...fresh, { id: room.id, name: room.name, createdAt: old }]);
     expect(lines).toEqual([]);
   });
 
   test("a new channel isn't drift for being quiet", async () => {
     f = await setup({ rightHand: true });
-    const lines = await drift(f, seenOf(f), [
-      { id: crypto.randomUUID(), name: "novo", createdAt: new Date() },
-    ]);
+    const lines = await drift(f, seenOf(f), [{ id: crypto.randomUUID(), name: "novo", createdAt: new Date() }]);
     expect(lines).toEqual([]);
   });
 
   test("five pending approvals suggest a rule", async () => {
     f = await setup({ rightHand: true });
-    const root = (
-      await f.db.select({ id: schema.messages.id }).from(schema.messages).limit(1)
-    )[0]?.id;
+    const root = (await f.db.select({ id: schema.messages.id }).from(schema.messages).limit(1))[0]?.id;
     for (let i = 0; i < 5; i++)
       await f.db.insert(schema.approvals).values({
         orgId: f.org.id,

@@ -423,7 +423,11 @@ test("ownLimitsModel: an OpenCode account's Go models (`opencode-go/`) are the G
   // The OpenCode account's provider is `zen`; its Go models carry the `opencode-go/` prefix.
   expect(ownLimitsModel("zen", `opencode-go/${glm.id}`)?.id).toBe(glm.id);
   // Zen's and the free tier's `opencode/` models keep the account's scope: no model of their own.
-  for (const value of ["opencode/big-pickle", "opencode/glm-5.3-flash-free", "opencode/big-pickle".replace("big-pickle", glm.id)])
+  for (const value of [
+    "opencode/big-pickle",
+    "opencode/glm-5.3-flash-free",
+    "opencode/big-pickle".replace("big-pickle", glm.id),
+  ])
     expect(ownLimitsModel("zen", value)).toBeNull();
   // Other plans and unprefixed values are untouched.
   expect(ownLimitsModel("zen", glm.id)).toBeNull();

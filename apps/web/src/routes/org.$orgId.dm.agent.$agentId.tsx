@@ -10,7 +10,8 @@ export const Route = createFileRoute("/org/$orgId/dm/agent/$agentId")({
   // is the one in its panel, `?agent=` the agent's page there instead.
   validateSearch: (
     search: Record<string, unknown>,
-  ): { m?: string; paid?: true; say?: "team" } & ReturnType<typeof threadSearch> & ReturnType<typeof agentPanelSearch> => ({
+  ): { m?: string; paid?: true; say?: "team" } & ReturnType<typeof threadSearch> &
+    ReturnType<typeof agentPanelSearch> => ({
     ...threadSearch(search),
     ...agentPanelSearch(search),
     ...(typeof search.m === "string" && search.m ? { m: search.m } : {}),
