@@ -217,6 +217,7 @@ const BUILTIN: Record<string, ActivityKind> = {
   read_wiki_page: "readingWiki",
   search_wiki: "readingWiki",
   link_to_wiki: "linkingWiki",
+  import_github_to_wiki: "writingWiki",
   // Setting up the workspace.
   create_channel: "creatingChannel",
   offer_connect_ai: "offeringConnectAi",
