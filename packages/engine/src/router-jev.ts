@@ -1,3 +1,5 @@
+import { cachesEnabled, TtlCache } from "./cache";
+import { sha256 } from "./crypto";
 import { cutText } from "./format";
 import { callJev, type JevKeySource, JevOffError } from "./jev-key";
 import {
@@ -13,6 +15,7 @@ import {
   socialChoice,
   withAddressee,
 } from "./router";
+import { canonicalJson } from "./tools/json-schema";
 
 /**
  * TypeSafe Jev (System One) as a router strategy (docs/adr/0013-router.md):
@@ -77,6 +80,12 @@ export function createJevRouterStrategy(options: {
   timeoutMs?: number;
   fetch?: typeof fetch;
 }): RouterStrategy {
+  /**
+   * The same state and questions are routed once: a retry or a repeated message
+   * costs no call. Only a successful answer is kept; a hit records no usage
+   * because no call was made.
+   */
+  const decisions = new TtlCache<RoutingResult>(15 * 60_000, 2000);
   return {
     name: "jev",
     on: () => typeof options.key === "string" || options.key.usable(),
@@ -179,6 +188,13 @@ export function createJevRouterStrategy(options: {
         };
       }
 
+      const cacheKey = cachesEnabled()
+        ? `jev-router:${input.orgId}:${options.model ?? "jev-latest"}:${sha256(canonicalJson({ state, questions }))}`
+        : null;
+      if (cacheKey) {
+        const hit = decisions.get(cacheKey);
+        if (hit) return hit;
+      }
       const body = await callJev<{
         model?: string;
         answers?: Record<string, JevAnswer>;
@@ -228,7 +244,7 @@ export function createJevRouterStrategy(options: {
       ]
         .filter(Boolean)
         .join("; ");
-      return {
+      const result: RoutingResult = {
         ...scored,
         ...(bestPlaced
           ? { best: { agentId: bestPlaced.agentId, confidence: clamp(answers.best_agent?.confidence) } }
@@ -246,6 +262,8 @@ export function createJevRouterStrategy(options: {
         strategy: "jev",
         decidedBy: { step: "jev" },
       };
+      if (cacheKey) decisions.set(cacheKey, result);
+      return result;
     },
   };
 }

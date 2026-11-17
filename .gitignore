@@ -28,4 +28,4 @@ i18n-work/
 
 # Packaged desktop artifacts and the legacy skills test (imports a removed path).
 release/
-test/
+/test/
