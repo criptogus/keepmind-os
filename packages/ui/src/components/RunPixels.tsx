@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
-import { AGENT_GRADIENTS, bodyTones, gradientOf, mixHex, spriteGrid } from "../agent/engine.js";
+import { companionMark } from "../agent/companion-mark";
+import { AGENT_GRADIENTS, bodyTones, gradientOf, mixHex } from "../agent/engine.js";
 import { cx } from "../cx";
 import type { AgentColor, AgentEyes } from "./AgentLook";
 
@@ -183,7 +184,7 @@ const SPRITES = new Map<string, string[]>();
 export const spriteOf = (eyes: string) => {
   let g = SPRITES.get(eyes);
   if (!g) {
-    g = spriteGrid(9, eyes);
+    g = companionMark(eyes);
     SPRITES.set(eyes, g);
   }
   return g;
@@ -239,7 +240,6 @@ export function RunLane({
     }
     const cx0 = running ? X(now) + 6 : next !== undefined ? Math.max(X(next), X(now) + 6) : null;
     if (cx0 === null) return;
-    const tones = bodyTones(color);
     const grid = spriteOf(eyes);
     const still = reduced();
     const seed = color.length + eyes.length;
@@ -250,20 +250,7 @@ export function RunLane({
       for (let x = 0; x < row.length; x++) {
         const c = row[x];
         if (c === ".") continue;
-        if (c === "o")
-          ctx.fillStyle = running
-            ? y === 4
-              ? "#ffffff"
-              : (tones[1] ?? "#000")
-            : blink
-              ? (tones[1] ?? "#000")
-              : "#ffffff";
-        else {
-          const s = (1 - y / 8) * 3;
-          const b = Math.floor(s);
-          ctx.fillStyle =
-            tones[Math.min(4, 1 + (s - b > (BAYER[((y & 3) << 2) | (x & 3)] ?? 0.5) ? b + 1 : b))] ?? "#888";
-        }
+        ctx.fillStyle = c === "o" && !blink && (!running || y === 4) ? "#c4ff3d" : "#333630";
         ctx.fillRect(cx0 - 4 + x, top + y, 1, 1);
       }
     });

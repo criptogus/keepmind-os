@@ -1,4 +1,6 @@
-import { bodyTones, drawAgent, idlePose, mixHex, type Pose } from "../agent/engine.js";
+import { useEffect } from "react";
+import { drawCompanion as drawAgent, loadCompanions } from "../agent/companion";
+import { bodyTones, idlePose, mixHex, type Pose } from "../agent/engine.js";
 import { cx } from "../cx";
 import type { AgentColor, AgentEyes } from "./AgentLook";
 import { reduced, token, useCanvas } from "./RunPixels";
@@ -141,6 +143,15 @@ export function AutonomyPixels({
       // A canvas without 2D drawing (tests): nothing to show.
     }
   }, alive);
+  useEffect(
+    () =>
+      loadCompanions(() => {
+        const canvas = ref.current;
+        const ctx = canvas?.getContext("2d");
+        if (canvas && ctx) drawAutonomy(ctx, canvas, { kind, color, eyes, alive, t: 2 });
+      }),
+    [kind, color, eyes, alive, ref],
+  );
   return (
     <span
       className={cx("ac-autonomy", className)}

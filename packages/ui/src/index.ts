@@ -266,7 +266,7 @@ export {
   type PixelStopProps,
   pixelCell,
 } from "./components/PixelMarks";
-export { glowOptions, PixelSky, SkyGlow } from "./components/PixelSky";
+export { PixelSky, SkyGlow } from "./components/PixelSky";
 export {
   ORBIT_RING,
   ORBIT_STEP_MS,

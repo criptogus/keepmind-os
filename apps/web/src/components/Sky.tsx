@@ -8,7 +8,6 @@ import {
   cloudAt,
   cx,
   drawSprite,
-  EYE,
   formingField,
   HEADER_AREA,
   headerField,
@@ -739,8 +738,8 @@ export function OnboardingProgress({ progress }: { progress: number }) {
   const level = useRef({ now: target, target });
   level.current.target = target;
   if (reduced) level.current.now = target;
-  const body = pixelOf(spriteTone("sky"));
-  const eye = pixelOf(EYE);
+  const body = pixelOf("#333630");
+  const eye = pixelOf("#c4ff3d");
   const opts: SkyOptions = {
     pixel: 3,
     surface: "--sunken",
@@ -748,8 +747,8 @@ export function OnboardingProgress({ progress }: { progress: number }) {
     palette: (bg) => {
       const [r, g, b] = parseColor(bg);
       const dark = r * 0.3 + g * 0.59 + b * 0.11 < 128;
-      const sky = dark ? ["#0f56c4", "#2b74e6", "#4b93ff", "#78b4ff"] : ["#a6cfff", "#78b4ff", "#4b93ff", "#2b74e6"];
-      return [bg, mix(bg, "#78b4ff", dark ? 0.1 : 0.14), ...sky];
+      const sky = dark ? ["#333630", "#486600", "#87b82a", "#c4ff3d"] : ["#eef7d8", "#c4ff3d", "#87b82a", "#486600"];
+      return [bg, mix(bg, "#c4ff3d", dark ? 0.1 : 0.14), ...sky];
     },
     // Called once per frame, before the field: eases the fill toward the target.
     blobs: () => {

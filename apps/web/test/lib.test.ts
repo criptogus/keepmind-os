@@ -304,7 +304,26 @@ describe("grammar", () => {
   test("the app's starter agents get their names' own pronoun and article", () => {
     const english = createI18n("en");
     const te = english.t.bind(english) as TFunction;
-    const feminine = ["Ada", "Iris", "Nina", "Mila", "Dora", "Clara", "Eva", "Sentinela", "Prisma", "Forma", "Faísca"];
+    const feminine = [
+      "Ada",
+      "Iris",
+      "Nina",
+      "Mila",
+      "Dora",
+      "Clara",
+      "Eva",
+      "Sentinela",
+      "Prisma",
+      "Forma",
+      "Faísca",
+      "Fonte",
+      "Sinapse",
+      "Brecha",
+      "Sonda",
+      "Semente",
+      "Malha",
+      "Tração",
+    ];
     const masculine = [
       "Atlas",
       "Theo",
@@ -322,6 +341,18 @@ describe("grammar", () => {
       "Horizonte",
       "Elo",
       "Essencial",
+      "Faro",
+      "Eco",
+      "Núcleo",
+      "Motor",
+      "Vínculo",
+      "Vetor",
+      "Prumo",
+      "Silício",
+      "Zero",
+      "Eixo",
+      "Ímã",
+      "Cisne",
     ];
     for (const dict of [ptBR, en]) {
       const roles = Object.values(dict.newAgent.roles as Record<string, { agent?: string }>);

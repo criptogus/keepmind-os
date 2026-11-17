@@ -124,10 +124,7 @@ async function firstDrift(
   const ranRecently = new Set(recentRuns.map((r) => r.agent_id));
   const idle = routineAgents
     .map((r) => byId.get(r.agent_id))
-    .filter(
-      (a): a is DriftAgent =>
-        !!a && !ranRecently.has(a.id) && asTime(a.createdAt) < now.getTime() - WEEK,
-    )
+    .filter((a): a is DriftAgent => !!a && !ranRecently.has(a.id) && asTime(a.createdAt) < now.getTime() - WEEK)
     .sort((a, b) => a.handle.localeCompare(b.handle));
   if (idle.length)
     return `${handle(idle[0]!.id)} has routines but hasn't run in over a week: offer to check they still fit or pause them (propose_settings_change).`;
@@ -138,10 +135,7 @@ async function firstDrift(
   const silent = channels
     .slice(0, CHANNELS_CHECKED)
     .filter(
-      (c) =>
-        c.createdAt != null &&
-        asTime(c.createdAt) < now.getTime() - CHANNEL_IDLE_MIN_AGE &&
-        !active.has(c.id),
+      (c) => c.createdAt != null && asTime(c.createdAt) < now.getTime() - CHANNEL_IDLE_MIN_AGE && !active.has(c.id),
     )
     .slice(0, 2);
   if (silent.length) {

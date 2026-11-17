@@ -1,10 +1,11 @@
+import { companionMark } from "../agent/companion-mark";
 /**
  * The pixel sky's math, DOM-free: tones, the field (blobs, the pointer light,
  * calm zones), the Bayer 4×4 ordered dither and the 9×9 pixel agents. The web
  * draws it on a canvas (`engine.ts`); the phone app reproduces it in a shader
  * and tests it against these functions (ADR 0035).
  */
-import { type AgentColorName, EYE_COLOR, gradientOf, spriteBody, spriteGrid } from "../agent/engine.js";
+import { type AgentColorName, EYE_COLOR, gradientOf, spriteBody } from "../agent/engine.js";
 
 /* ---------- tones ---------- */
 
@@ -184,7 +185,7 @@ export function ditherIndex(f: number, levels: number, x: number, y: number): nu
 /* ---------- pixel agents ---------- */
 
 /** 9×9 pixel agent from the agent engine: the same shape and eyes as every agent ("X" body, "o" eye). */
-export const SPRITE = spriteGrid(9);
+export const SPRITE = companionMark();
 
 /** A frame being drawn: RGBA pixels (`pixelOf`) row by row. */
 export interface SkyFrame {
