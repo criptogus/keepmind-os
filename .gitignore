@@ -25,3 +25,7 @@ docs/design/telas/
 
 # Translation work files (bun run i18n:missing)
 i18n-work/
+
+# Packaged desktop artifacts and the legacy skills test (imports a removed path).
+release/
+test/
