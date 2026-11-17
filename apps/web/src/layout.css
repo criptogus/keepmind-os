@@ -5814,8 +5814,8 @@ html:not([data-pointer]) .tr-ok:focus-visible {
 }
 .tr-done {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  column-gap: 20px;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: 12px;
   align-items: center;
   border-radius: 20px;
   background: var(--raised);
@@ -5876,10 +5876,6 @@ html:not([data-pointer]) .tr-ok:focus-visible {
   .tr-done {
     padding: 18px;
     column-gap: 14px;
-  }
-  .tr-done .ac-toolpx-agent {
-    width: 52px;
-    height: 52px;
   }
   .tr-done__title {
     font-size: 25px;
@@ -9527,6 +9523,13 @@ html:not([data-pointer]) .newag__addrow:focus-visible {
   font-size: 26px;
   line-height: 1;
   letter-spacing: -0.02em;
+}
+/* Long template titles use the full card width below their companion. */
+.newag__role:not(.newag__role--blank) .newag__role-head {
+  padding-right: 0;
+}
+.newag__role:not(.newag__role--blank) .newag__role-name b {
+  grid-column: 1 / -1;
 }
 .newag__role-name span {
   grid-column: 1 / -1;

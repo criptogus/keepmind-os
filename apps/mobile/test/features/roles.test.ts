@@ -614,7 +614,7 @@ describe("The order (P2's Ordenar), people and new cargos", () => {
     expect(newRoleInput("Moderação", "mod", [])).toEqual({
       name: "Moderação",
       icon: "flag",
-      color: "teal",
+      color: "violet",
       permissions: ["create_channels", "manage_channels"],
     });
     expect(newRoleInput("Cópia", "copy:fin", [fin])).toMatchObject({ icon: "wallet", permissions: fin.permissions });
