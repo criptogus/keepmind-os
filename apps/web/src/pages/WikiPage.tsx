@@ -830,6 +830,9 @@ function WikiEmpty({ onNew, onImport, onNav }: { onNew: () => void; onImport: ()
               <Button icon="upload" onClick={onImport}>
                 {t("wiki.import.cta")}
               </Button>
+              <Button variant="ghost" icon="link" onClick={onImport}>
+                {t("wiki.import.github.short")}
+              </Button>
               <Button variant="ghost" icon="plus" onClick={onNew}>
                 {t("wiki.blankPage")}
               </Button>

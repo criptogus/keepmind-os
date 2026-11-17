@@ -11861,6 +11861,11 @@ export const ptBR = {
       retry_other: "Tentar {{count}} de novo",
       overlayTitle: "Solte para importar para a wiki",
       overlayText: "Um .zip da vault do Obsidian, a pasta da vault ou arquivos .md. Você revisa tudo antes de entrar.",
+      github: {
+        short: "Conectar GitHub",
+        title: "Conectar GitHub como second brain",
+        text: "Importe notas dos seus repositórios GitHub para a wiki. Os agentes passam a ler como conhecimento.",
+      },
       error: {
         empty: "Nenhuma nota .md encontrada. Mande o .zip da pasta da vault, a pasta ou arquivos .md.",
         too_big: "A vault passa de 500 MB. Mande sem os anexos grandes, ou por partes.",
