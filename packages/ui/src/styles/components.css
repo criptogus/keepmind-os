@@ -8649,7 +8649,7 @@ html:not([data-pointer]) .ac-stickers__cell:focus-visible {
 .ac-sticker {
   display: block;
   flex: none;
-  image-rendering: pixelated;
+  image-rendering: auto;
 }
 /*
  * A GIF in a message: the picture in the cut-corner frame, as wide as it is up to 300px (`--gif-w`), its shape
@@ -12772,4 +12772,57 @@ html:not([data-pointer]) .ac-foldrow__head:focus-visible {
 .km-logo-os {
   font-weight: 400;
   color: var(--muted);
+}
+
+/* KeepMind companions: quiet orbital accents, no legacy pixel mascot. */
+.km-presence {
+  display: grid;
+  place-items: center;
+}
+.km-presence__orbits {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  color: var(--agent);
+  stroke: currentColor;
+  opacity: 0.24;
+}
+.km-presence__orbits circle {
+  fill: currentColor;
+  stroke: none;
+}
+.km-presence > .ac-sticker {
+  position: relative;
+}
+.km-searching,
+.km-decision {
+  display: inline-grid;
+  position: relative;
+  place-items: center;
+  flex: none;
+}
+.km-searching > svg {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  right: 0;
+  bottom: 6px;
+  stroke: var(--agent);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.km-decision__question {
+  position: absolute;
+  right: 0;
+  top: 0;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 600;
 }

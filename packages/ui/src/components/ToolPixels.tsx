@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { bodyTones, drawAgent, idlePose, mixHex } from "../agent/engine.js";
+import { bodyTones, mixHex } from "../agent/engine.js";
 import { cx } from "../cx";
 import type { AgentColor, AgentEyes } from "./AgentLook";
-import { BAYER, reduced, token, useCanvas } from "./RunPixels";
+import { AgentSticker } from "./AgentSticker";
+import { BAYER, token, useCanvas } from "./RunPixels";
 
 /**
  * The pixel pieces of a connector's tool review:
@@ -196,70 +197,19 @@ export function SuggestSpark({ color = "sky", className }: { color?: AgentColor;
   return <canvas ref={ref} className={cx("ac-toolpx-spark", className)} width={5} height={5} />;
 }
 
-const ASK = [
-  ".xxxxxxx.",
-  "xxxwwwxxx",
-  "xxwxxxwxx",
-  "xxxxxwwxx",
-  "xxxxwxxxx",
-  "xxxxxxxxx",
-  "xxxxwxxxx",
-  ".xxxxxxx.",
-  "..xx.....",
-  "..x......",
-];
-
-/**
- * "Needs your decision" (22×22 cells, 2 css px each; the mission settings'
- * family): the agent bottom-left and a "?" bubble top-right, alive (it
- * blinks, the bubble bobs); still with reduced motion.
- */
-export function AskPixels({
-  color = "sky",
-  eyes = "round",
-  className,
-}: {
-  color?: AgentColor;
-  eyes?: AgentEyes;
-  className?: string;
-}) {
-  const N = 22;
-  const ref = useCanvas((ctx, canvas, tt) => {
-    const dpr = Math.min(2, (typeof devicePixelRatio === "number" && devicePixelRatio) || 1);
-    const P = Math.round(2 * dpr);
-    const W = N * P;
-    if (canvas.width !== W) {
-      canvas.width = W;
-      canvas.height = W;
-    }
-    ctx.clearRect(0, 0, W, W);
-    ctx.imageSmoothingEnabled = false;
-    const still = reduced();
-    const t = still ? 2 : tt;
-    const tn = bodyTones(color);
-    const as = 14;
-    const pose = idlePose(t, 3, { every: 7, expressions: ["happy"] });
-    if (still) {
-      pose.blink = false;
-      pose.expression = undefined;
-    }
-    drawAgent(ctx, 0, (N - as) * P, as * P, { color, eyes, cells: 12, pose });
-    const gy = still ? 0 : Math.round((Math.sin(t * 3) + 1) / 2);
-    ASK.forEach((r, y) => {
-      [...r].forEach((ch, x) => {
-        if (ch === ".") return;
-        ctx.fillStyle = ch === "w" ? "#ffffff" : ((y < 4 ? tn[3] : tn[2]) ?? "#888888");
-        ctx.fillRect((12 + x) * P, (gy + y) * P, P, P);
-      });
-    });
-  }, true);
-  return <canvas ref={ref} className={cx("ac-toolpx-ask", className)} width={44} height={44} />;
+/** The pending decision keeps its question mark and its accessible surrounding copy. */
+export function AskPixels({ color, eyes, className }: { color?: AgentColor; eyes?: AgentEyes; className?: string }) {
+  return (
+    <span className={cx("km-decision", className)} aria-hidden="true">
+      <AgentSticker appearance={{ color, eyes }} mood="thinking" size={44} />
+      <span className="km-decision__question">?</span>
+    </span>
+  );
 }
 
-/** The done card's agent: happy, idle, alive (still with reduced motion). Its size comes from CSS (64px). */
 export function HappyAgent({
-  color = "sky",
-  eyes = "round",
+  color,
+  eyes,
   size = 64,
   className,
 }: {
@@ -268,20 +218,5 @@ export function HappyAgent({
   size?: number;
   className?: string;
 }) {
-  const t0 = useRef(typeof performance !== "undefined" ? performance.now() / 1000 : 0);
-  const ref = useCanvas((ctx, canvas, t) => {
-    const dpr = Math.min(2, (typeof devicePixelRatio === "number" && devicePixelRatio) || 1);
-    const s = Math.round((canvas.clientWidth || size) * dpr);
-    if (canvas.width !== s) {
-      canvas.width = s;
-      canvas.height = s;
-    }
-    ctx.clearRect(0, 0, s, s);
-    const pose = idlePose(t - t0.current, 3, { expressions: [] });
-    pose.expression = "happy";
-    pose.blink = false;
-    const inner = s * 0.82;
-    drawAgent(ctx, (s - inner) / 2, s - inner - s * 0.04, inner, { color, eyes, pose, cells: 16 });
-  }, true);
-  return <canvas ref={ref} className={cx("ac-toolpx-agent", className)} width={size} height={size} />;
+  return <AgentSticker appearance={{ color, eyes }} mood="celebrate" size={size} className={className} />;
 }

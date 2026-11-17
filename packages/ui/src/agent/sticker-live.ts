@@ -1,3 +1,4 @@
+import { drawCompanion } from "./companion";
 /**
  * Living stickers (ADR 0091): one shared loop draws every sticker on screen, about 25 times a second, and only the
  * ones in view (a picker full of them, or a long conversation, costs what is visible). With reduced motion the loop
@@ -62,7 +63,15 @@ export function drawLiveSticker(sticker: LiveSticker, t: number) {
   }
   ctx.clearRect(0, 0, side, side);
   const at = end === undefined ? t + seed : Math.min(Math.max(0, t + seed), end);
-  drawSticker(ctx, look, mood, reduced() ? STICKER_STILL_T : at, side);
+  drawSticker(
+    ctx,
+    look,
+    mood,
+    reduced() ? STICKER_STILL_T : at,
+    side,
+    (g, x, y, size, options) => drawCompanion(g as CanvasRenderingContext2D, x, y, size, options),
+    false,
+  );
 }
 
 function tick(time: number) {
