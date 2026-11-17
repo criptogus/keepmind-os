@@ -164,8 +164,10 @@ export function opencodeConfig(input: {
    * chose that a key pays for.
    */
   model?: string;
-  /** The account has a key: the `opencode` provider reads it from `OPENCODE_API_KEY`. */
+  /** The account has a key: the model's provider reads it from `OPENCODE_API_KEY`. */
   key?: boolean;
+  /** A Go model (`opencode-go/<id>`): its provider is `opencode-go`, not Zen's `opencode`. */
+  go?: boolean;
   /** OpenCode's own provider alone. */
   freeTier?: boolean;
 }): string {
@@ -174,7 +176,9 @@ export function opencodeConfig(input: {
     ...(input.model ? { model: input.model, small_model: input.model } : {}),
     share: "disabled",
     autoupdate: false,
-    ...(input.key ? { provider: { opencode: { options: { apiKey: `{env:${OPENCODE_KEY_ENV}}` } } } } : {}),
+    ...(input.key
+      ? { provider: { [input.go ? "opencode-go" : "opencode"]: { options: { apiKey: `{env:${OPENCODE_KEY_ENV}}` } } } }
+      : {}),
     ...(input.freeTier ? { enabled_providers: ["opencode"] } : {}),
   });
 }
@@ -565,6 +569,7 @@ export async function runOpencodeTurn(input: OpencodeTurnInput, opts: OpencodeTu
       ...(input.chat ? { chat: true } : {}),
       ...(input.model ? { model: input.model } : {}),
       key: Boolean(key),
+      go: typeof input.model === "string" && input.model.startsWith("opencode-go/"),
       freeTier,
     }),
     ...(input.account ? { account: input.account } : {}),

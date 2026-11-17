@@ -2885,9 +2885,19 @@ export class AccountManager {
     }
     if (!own && (this.lentTo(target.kind, id) !== null || shared)) return null;
     const probe = { command: this.command(target.kind, Boolean(own)), cwd: target.cwd, env: target.env, ...limits };
+    // An OpenCode key's Go usage is on the console's Go endpoint; a Zen-only key answers nothing there (null).
+    if (target.kind === "opencode") {
+      const key = own ? null : await opencodeKeyOf(target.cwd);
+      return key
+        ? fetchPlanKeyUsage("opencode", key, {
+            ...limits,
+            ...(this.opts.fetch ? { fetch: this.opts.fetch } : {}),
+          })
+        : null;
+    }
     // Cursor's CLI reports no plan usage: its turns' `usage` is all there is.
-    // Nor does OpenCode's: its key's usage is on OpenCode's console. Grok Build shows its plan's only in its TUI.
-    if (target.kind === "cursor" || target.kind === "opencode" || target.kind === "grok") return null;
+    // Nor does Grok Build's: its plan's shows only in its TUI.
+    if (target.kind === "cursor" || target.kind === "grok") return null;
     // The Antigravity CLI answers `/usage` itself in print mode: the plan's quotas and when they refresh.
     if (target.kind === "antigravity") {
       if (own) return null;

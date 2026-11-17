@@ -401,8 +401,11 @@ export const planModelValue = (m: PlanModel): string => m.alias ?? m.id;
  * whose id its limit is kept; null on any other plan.
  */
 export function ownLimitsModel(provider: unknown, value: string | null | undefined): PlanModel | null {
-  const plan = planOf(provider);
-  return plan?.limitsPerModel && value ? planModel(plan, value) : null;
+  // An OpenCode account's key (`zen`) runs Go's models as `opencode-go/<id>`: their limits are the Go plan's own,
+  // per model; its `opencode/` models are Zen's or the free tier's, whose refusals stay the account's.
+  const go = typeof value === "string" && value.startsWith("opencode-go/");
+  const plan = planOf(provider === "zen" && go ? "opencode" : provider);
+  return plan?.limitsPerModel && value ? planModel(plan, value.replace(/^opencode(?:-go)?\//, "")) : null;
 }
 
 /** How long a model's own limit with no known reset (or no subscription) holds once seen: then a turn asks again. */
