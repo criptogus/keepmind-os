@@ -11914,6 +11914,7 @@ export const en = {
       refused: "Refused for this key",
       textOnly: "Reads text only",
       search: "Search models",
+      freeOnly: "Free only",
       account: "Account",
       connect: "Connect an AI",
       applies: "Applies from the next reply.",

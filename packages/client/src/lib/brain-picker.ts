@@ -555,6 +555,8 @@ export interface PickerModel {
   refused: boolean;
   /** It reads text only. */
   textOnly: boolean;
+  /** It costs nothing on its plan or key: the picker offers a free-only view. */
+  free: boolean;
 }
 
 /** How full an account is: its tightest window's use, unknown as empty. */
@@ -657,6 +659,7 @@ export function modelPickerModels(
         checked: tile.current && isAuto(apiModel),
         refused: false,
         textOnly: false,
+        free: false,
       },
       ...list
         .filter((c) => c.available || (tile.current && c.model.id === apiModel))
@@ -668,6 +671,7 @@ export function modelPickerModels(
           checked: tile.current && m.id === apiModel,
           refused: false,
           textOnly: false,
+          free: freeModel(m),
         })),
     ];
   }
@@ -697,6 +701,7 @@ export function modelPickerModels(
       checked: here && r.checked,
       refused: Boolean(limit && (limit.off || limit.region || limit.inactive)),
       textOnly: m?.images === false,
+      free: m?.free === true,
     };
   });
 }

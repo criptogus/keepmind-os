@@ -27,6 +27,7 @@ import { isRightHand } from "@keepmind/client/lib/right-hand";
 import {
   BrainIcon,
   Button,
+  CheckboxPill,
   cx,
   EffortPixels,
   EventPill,
@@ -38,7 +39,7 @@ import {
   planLine,
 } from "@keepmind/ui";
 import { useQueryClient } from "@tanstack/react-query";
-import { type CSSProperties, type ReactElement, useState } from "react";
+import { type CSSProperties, type ReactElement, useId, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useOpenAgentPanel } from "@/components/agent-panel-context";
 import { TeamScene } from "@/components/arrival/TeamScene";
@@ -204,7 +205,12 @@ function PickerBody({ agent, view, onClose }: { agent: Agent; view: AgentBrain; 
   const account = tile?.accounts.find((a) => a.id === accountId) ?? tile?.accounts[0];
   const rows = tile ? modelPickerModels(t, i18n.language, view, tile, account, choices, agent.model) : [];
   const [q, setQ] = useState("");
-  const shown = q.trim() ? rows.filter((r) => r.label.toLowerCase().includes(q.trim().toLowerCase())) : rows;
+  const freeId = useId();
+  // Plans with free models (OpenCode Go's): one tap narrows the list to them; every model stays a pick away.
+  const [freeOnly, setFreeOnly] = useState(false);
+  const anyFree = rows.some((r) => r.free);
+  const pool = freeOnly && anyFree ? rows.filter((r) => r.free) : rows;
+  const shown = q.trim() ? pool.filter((r) => r.label.toLowerCase().includes(q.trim().toLowerCase())) : pool;
   const [busy, setBusy] = useState(false);
   const checked = rows.find((r) => r.checked);
   const effortOn = tile?.current && checked && !checked.auto;
@@ -294,6 +300,7 @@ function PickerBody({ agent, view, onClose }: { agent: Agent; view: AgentBrain; 
               setTileKey(x.key);
               setAccountId(undefined);
               setQ("");
+              setFreeOnly(false);
             }}
           >
             <ProviderLogo id={x.mark} size="sm" />
@@ -323,7 +330,10 @@ function PickerBody({ agent, view, onClose }: { agent: Agent; view: AgentBrain; 
                 className="mp__account"
                 aria-label={t("brain.picker.account")}
                 value={account?.id ?? ""}
-                onChange={(e) => setAccountId(e.target.value || null)}
+                onChange={(e) => {
+                  setAccountId(e.target.value || null);
+                  setFreeOnly(false);
+                }}
               >
                 {tile.accounts.map((a) => (
                   <option key={a.id ?? "own"} value={a.id ?? ""}>
@@ -350,6 +360,13 @@ function PickerBody({ agent, view, onClose }: { agent: Agent; view: AgentBrain; 
           placeholder={t("brain.picker.search")}
           aria-label={t("brain.picker.search")}
         />
+      )}
+      {anyFree && (
+        <div className="mp__filters">
+          <CheckboxPill id={freeId} checked={freeOnly} onCheckedChange={setFreeOnly} className="mp__free">
+            {t("brain.picker.freeOnly")}
+          </CheckboxPill>
+        </div>
       )}
       <div className="mp__models" role="listbox" aria-label={tile?.name ?? ""}>
         {shown.map((r) => (

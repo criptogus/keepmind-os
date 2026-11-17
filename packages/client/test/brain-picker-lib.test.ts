@@ -453,6 +453,15 @@ describe("the model picker: the agent's AI changed in place", () => {
     expect(rows.find((r) => r.checked)?.value).toBe("sonnet");
     expect(rows.find((r) => r.value === "sonnet")?.refused).toBe(true);
     expect(rows.find((r) => r.value === "deepseek-v4.1-flash")?.textOnly).toBe(true);
+    // The free-only view's rows: Automático and the paid models stay out; the plan's free ones are marked.
+    expect(rows.find((r) => r.value === "auto")?.free).toBe(false);
+    expect(rows.find((r) => r.value === "deepseek-v4.1-flash")?.free).toBe(false);
+    expect(rows.filter((r) => r.free).map((r) => r.value)).toEqual([
+      "longcat-2.5-free",
+      "beam-free",
+      "crouton-alpha-free",
+      "iceman-contributor-free",
+    ]);
     // Another tile: nothing checked there.
     const claudeTile = tiles.find((x) => x.key === "claude");
     if (!claudeTile) throw new Error("no Claude tile");

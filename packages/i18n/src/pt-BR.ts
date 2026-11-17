@@ -11953,6 +11953,7 @@ export const ptBR = {
       refused: "Recusado por esta chave",
       textOnly: "Só lê texto",
       search: "Buscar modelos",
+      freeOnly: "Só gratuitos",
       account: "Conta",
       connect: "Conectar uma IA",
       applies: "Vale a partir da próxima resposta.",
