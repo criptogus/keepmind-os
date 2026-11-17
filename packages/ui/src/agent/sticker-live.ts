@@ -69,7 +69,36 @@ export function drawLiveSticker(sticker: LiveSticker, t: number) {
     mood,
     reduced() ? STICKER_STILL_T : at,
     side,
-    (g, x, y, size, options) => drawCompanion(g as CanvasRenderingContext2D, x, y, size, options),
+    (g, x, y, size, options) =>
+      drawCompanion(g as CanvasRenderingContext2D, x, y, size, {
+        ...options,
+        after:
+          look.accessory === "headset" || look.accessory === "headphones"
+            ? (context, side) => {
+                const c = context as CanvasRenderingContext2D;
+                c.strokeStyle = "#555b4c";
+                c.lineWidth = side * 0.035;
+                c.lineCap = "round";
+                c.beginPath();
+                c.arc(side * 0.5, side * 0.48, side * 0.33, Math.PI, Math.PI * 2);
+                c.stroke();
+                c.fillStyle = "#333630";
+                for (const at of [0.13, 0.81]) {
+                  c.beginPath();
+                  c.roundRect(side * at, side * 0.42, side * 0.06, side * 0.18, side * 0.025);
+                  c.fill();
+                }
+                if (look.accessory === "headset") {
+                  c.strokeStyle = "#c4ff3d";
+                  c.lineWidth = side * 0.018;
+                  c.beginPath();
+                  c.moveTo(side * 0.16, side * 0.58);
+                  c.quadraticCurveTo(side * 0.16, side * 0.7, side * 0.37, side * 0.67);
+                  c.stroke();
+                }
+              }
+            : options?.after,
+      }),
     false,
   );
 }
