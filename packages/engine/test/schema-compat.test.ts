@@ -83,4 +83,26 @@ describe("toBrainSchema", () => {
     });
     expect(toBrainSchema({})).toEqual({ type: "object", properties: {} });
   });
+
+  test("a property whose type is implied gets one: strict providers (Moonshot's tool check) refuse it otherwise", () => {
+    const out = toBrainSchema({
+      type: "object",
+      properties: {
+        kind: { enum: ["document", "table"] },
+        count: { enum: [1, 2] },
+        flag: { const: true },
+        nested: { properties: { inner: { enum: ["x"] } } },
+        list: { items: { enum: ["a", "b"] } },
+        anything: {},
+      },
+    });
+    expect(out.properties).toEqual({
+      kind: { enum: ["document", "table"], type: "string" },
+      count: { enum: [1, 2], type: "integer" },
+      flag: { const: true, type: "boolean" },
+      nested: { properties: { inner: { enum: ["x"], type: "string" } }, type: "object" },
+      list: { items: { enum: ["a", "b"], type: "string" }, type: "array" },
+      anything: {},
+    });
+  });
 });

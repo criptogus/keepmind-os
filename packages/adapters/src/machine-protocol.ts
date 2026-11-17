@@ -3941,7 +3941,7 @@ export const MISSION_MCP_TOOLS: readonly MissionMcpTool[] = [
       type: "object",
       properties: {
         summary: { type: "string", minLength: 1, maxLength: 4000 },
-        status: { enum: ["working", "blocked", "done"] },
+        status: { type: "string", enum: ["working", "blocked", "done"] },
         pr_url: { type: "string", maxLength: 500 },
       },
       required: ["summary"],
@@ -3964,7 +3964,7 @@ export const MISSION_MCP_TOOLS: readonly MissionMcpTool[] = [
             properties: {
               id: { type: "string", minLength: 1, maxLength: 40 },
               title: { type: "string", minLength: 1, maxLength: 200 },
-              status: { enum: PLAN_STATUSES },
+              status: { type: "string", enum: PLAN_STATUSES },
               note: { type: "string", maxLength: 500 },
             },
             required: ["title", "status"],
@@ -4022,7 +4022,7 @@ export const MISSION_MCP_TOOLS: readonly MissionMcpTool[] = [
     inputSchema: {
       type: "object",
       properties: {
-        action: { enum: ["merge", "deploy", "rollback"] },
+        action: { type: "string", enum: ["merge", "deploy", "rollback"] },
         target: { type: "string", minLength: 1, maxLength: 300 },
         detail: { type: "string", maxLength: 1000 },
       },
@@ -4064,7 +4064,7 @@ export const MISSION_MCP_TOOLS: readonly MissionMcpTool[] = [
       properties: {
         title: { type: "string", minLength: 1, maxLength: 120 },
         prompt: { type: "string", minLength: 1, maxLength: 20000 },
-        mode: { enum: ["write", "read"] },
+        mode: { type: "string", enum: ["write", "read"] },
       },
       required: ["title", "prompt"],
       additionalProperties: false,
