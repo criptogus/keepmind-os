@@ -591,7 +591,7 @@ export const ROLE_TEMPLATES: readonly {
   color: string;
 }[] = [
   { id: "blank", keys: [], icon: "bolt", color: "graphite" },
-  { id: "mod", keys: ["create_channels", "manage_channels"], icon: "flag", color: "teal" },
+  { id: "mod", keys: ["create_channels", "manage_channels"], icon: "flag", color: "violet" },
   {
     id: "agents",
     keys: ["create_agents", "manage_agents", "approve_actions", "manage_routines", "review_memory"],

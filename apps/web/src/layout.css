@@ -840,7 +840,7 @@ html:not([data-pointer]) .sidebar__item:focus-visible {
   white-space: nowrap;
 }
 .sidebar__channel-icon {
-  color: var(--ink-muted);
+  color: var(--action);
 }
 /* The icon rail: a channel's initials stand in for its "#" (Sidebar.tsx, channelInitials), on a tile as big as the
    faces under it, so they read as its mark and not as a cut name. */
@@ -6225,7 +6225,7 @@ html:not([data-pointer]) .tr-ok:focus-visible {
   opacity: 0.8;
 }
 .sidebar .sidebar__item[data-kind="channel"]:is([data-unread="true"], [data-status="active"]) > .sidebar__channel-icon {
-  color: var(--ink2);
+  color: var(--action);
   opacity: 1;
 }
 .sidebar__item[data-kind="channel"][data-unread="true"] .sidebar__item-label {
@@ -12421,7 +12421,7 @@ html[data-menu-overlay] .shell {
   width: 14px;
   height: 14px;
   margin: 0 1px;
-  color: var(--faint);
+  color: var(--action);
 }
 /*
  * The sidebar's faces as tokens, so New agent's empty face is always the agents' own (ADR 0164): on the rail a step up

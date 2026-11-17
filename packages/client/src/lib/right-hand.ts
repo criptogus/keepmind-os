@@ -191,7 +191,7 @@ export function sceneTeam<A extends { id: string }>(agents: readonly A[], lead: 
  */
 export const RIGHT_HAND_DEFAULT = {
   name: "Kivo",
-  appearance: { color: "teal", eyes: "happy", accessory: "headset" },
+  appearance: { color: "violet", eyes: "happy", accessory: "headset" },
 } as const;
 
 /** The default companion introduction is shown only while it keeps its default name. */

@@ -30,7 +30,7 @@ const ME: SceneFace[] = [
   { x: 30, y: 86, size: 36, look: { color: "green", eyes: "round", accessory: "cap" } },
   { x: 70, y: 30, size: 36, look: { color: "amber", eyes: "wide", accessory: "headphones" } },
   { x: 170, y: 30, size: 36, look: { color: "rose", eyes: "happy", accessory: "flower" } },
-  { x: 210, y: 86, size: 36, look: { color: "teal", eyes: "happy", accessory: "bow" } },
+  { x: 210, y: 86, size: 36, look: { color: "indigo", eyes: "happy", accessory: "bow" } },
   { x: 170, y: 142, size: 36, look: { color: "sky", eyes: "dots", accessory: "beanie" } },
   { x: 70, y: 142, size: 36, look: { color: "violet", eyes: "round", accessory: "antenna" } },
 ];
@@ -42,7 +42,7 @@ const TEAM: SceneFace[] = [
   { x: 120, y: 89, size: 34, teammate: true },
   { x: 194, y: 89, size: 34, look: { color: "green", eyes: "wide", accessory: "antenna" } },
   { x: 88, y: 145, size: 30, look: { color: "rose", eyes: "happy", accessory: "scarf" } },
-  { x: 152, y: 145, size: 30, look: { color: "teal", eyes: "dots", accessory: "cap" } },
+  { x: 152, y: 145, size: 30, look: { color: "indigo", eyes: "dots", accessory: "cap" } },
 ];
 
 export const SCENE_FACES: Record<PurposeKind, readonly SceneFace[]> = { personal: ME, team: TEAM };

@@ -13,7 +13,7 @@ test("a channel's # is no louder than a category's chevron, in its column, and e
   expect([value(mark, "width"), value(mark, "height"), value(mark, "color"), value(mark, "margin")]).toEqual([
     "14px",
     "14px",
-    "var(--faint)",
+    "var(--action)",
     "0 1px",
   ]);
   expect([value(chevron, "color"), value(chevron, "margin")]).toEqual(["var(--faint)", "0 1px"]);

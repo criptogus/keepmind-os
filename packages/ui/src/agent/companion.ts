@@ -24,8 +24,8 @@ export function loadCompanions(onReady: () => void): () => void {
 
 /** Names belong to the user; the body is derived from an existing saved appearance, without a data migration. */
 export function companionIndex(color?: string): number {
-  if (!color || color === "graphite" || color === "teal") return 0;
-  if (["sky", "indigo", "violet"].includes(color)) return 1;
+  if (!color || color === "graphite" || color === "violet") return 0;
+  if (["sky", "indigo", "teal"].includes(color)) return 1;
   if (["rose", "amber"].includes(color)) return 2;
   return 3;
 }

@@ -4,8 +4,8 @@ import { COMPANIONS, companionEyeColor, companionIndex } from "../src/agent/comp
 test("saved appearances resolve to the original KeepMind family without changing user data", () => {
   expect(COMPANIONS).toEqual(["Kivo", "Luma", "Nexo", "Faro"]);
   expect(companionIndex("graphite")).toBe(0);
-  expect(companionIndex("teal")).toBe(0);
-  expect(companionIndex("violet")).toBe(1);
+  expect(companionIndex("violet")).toBe(0);
+  expect(companionIndex("teal")).toBe(1);
   expect(companionIndex("amber")).toBe(2);
   expect(companionIndex("#123456")).toBe(3);
 });

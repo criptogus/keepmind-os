@@ -144,7 +144,7 @@ export const ROLE_DEFAULTS = {
   }),
   // Customers: reads where the customer already is; sending to them asks a person first.
   support: starts({
-    look: { color: "teal", eyes: "happy", accessory: "headset" },
+    look: { color: "violet", eyes: "happy", accessory: "headset" },
     levels: { intercom: "write", notion: "read", linear: "read", stripe: "read" },
     channels: ["suporte", "support", "atendimento", "clientes", "customers", "help"],
   }),
@@ -230,7 +230,7 @@ export const PERSONAL_STARTERS = [
   { id: "mel", name: "Mel", look: { color: "rose", eyes: "dots", accessory: "scarf" } },
   { id: "gabi", name: "Gabi", look: { color: "indigo", eyes: "wide", accessory: "antenna" } },
   { id: "lu", name: "Lu", look: { color: "violet", eyes: "sleepy", accessory: "beanie" } },
-  { id: "rosa", name: "Rosa", look: { color: "teal", eyes: "happy", accessory: "flower" } },
+  { id: "rosa", name: "Rosa", look: { color: "green", eyes: "happy", accessory: "flower" } },
   { id: "vic", name: "Vic", look: { color: "sky", eyes: "dots", accessory: "hat" } },
   { id: "rui", name: "Rui", look: { color: "graphite", eyes: "round", accessory: "headset" } },
 ] as const satisfies readonly { id: string; name: string; look: RoleLook }[];

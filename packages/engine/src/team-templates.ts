@@ -88,7 +88,7 @@ const MEMBERS: Record<Member, { name: string; look: AgentAppearance; cron: strin
   },
   bia: {
     name: "Bia",
-    look: { color: "teal", eyes: "dots", accessory: "headset" },
+    look: { color: "violet", eyes: "dots", accessory: "headset" },
     cron: "0 16 * * 5",
     skill: "answers",
   },
@@ -136,7 +136,7 @@ const MEMBERS: Record<Member, { name: string; look: AgentAppearance; cron: strin
   },
   rosa: {
     name: "Rosa",
-    look: { color: "teal", eyes: "happy", accessory: "flower" },
+    look: { color: "violet", eyes: "happy", accessory: "flower" },
     // Saturday morning.
     cron: "0 9 * * 6",
     skill: null,
