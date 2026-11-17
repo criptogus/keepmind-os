@@ -46440,7 +46440,7 @@
     "value": "Tell us what was missing or got in your way. We read everything."
   },
   "arrival.beta.where": {
-    "value": "To write to us, use Send feedback, at the bottom of the sidebar."
+    "value": "Open Help in your account menu and choose Send feedback."
   },
   "arrival.stage.ready": {
     "value": "Your team is ready"
@@ -46477,9 +46477,6 @@
   },
   "arrival.connect.later": {
     "value": "Not now"
-  },
-  "feedback.mark": {
-    "value": "Beta"
   },
   "feedback.open": {
     "value": "Send feedback"
@@ -46603,5 +46600,8 @@
   },
   "feedback.offer.askFirst": {
     "value": "Ask before sending"
+  },
+  "shell.help": {
+    "value": "Help"
   }
 }

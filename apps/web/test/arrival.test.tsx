@@ -16,6 +16,26 @@ const CONNECT = "Conecte uma IA para o seu time pensar";
 
 const click = (el: Element) => act(async () => fireEvent.click(el));
 const type = (el: Element, value: string) => act(async () => fireEvent.change(el, { target: { value } }));
+/** Radix menus open from the keyboard here (a pointer press, not a click, opens them with a mouse). */
+const press = async (k: string, el: Element | Document | HTMLElement = document.activeElement ?? document.body) => {
+  await act(async () => {
+    fireEvent.keyDown(el, { key: k });
+    fireEvent.keyUp(el, { key: k });
+  });
+  await settle(2);
+};
+/** Conta → Ajuda → Enviar feedback: the form's one door where the server takes feedback. */
+const openFeedbackForm = async () => {
+  const account = screen().getByRole("button", { name: /^Conta: / });
+  account.focus();
+  await press("Enter", account);
+  const menu = screen().getAllByRole("menu")[0] as HTMLElement;
+  within(menu).getByRole("menuitem", { name: "Ajuda" }).focus();
+  await press("ArrowRight");
+  const sub = screen().getAllByRole("menu")[1] as HTMLElement;
+  await click(within(sub).getByRole("menuitem", { name: "Enviar feedback" }));
+  await settle(4);
+};
 const open = async (state = seedState(), search = "") => {
   const r = await renderApp(`/org/${ORG_ID}${search}`, { api: createFakeApi(state) });
   await settle(6);
@@ -79,14 +99,19 @@ describe("the arrival, right after the onboarding", () => {
 });
 
 describe("feedback", () => {
-  test("no Beta mark where the server takes no feedback", async () => {
+  test("no way to the form where the server takes no feedback", async () => {
     await open();
-    expect(screen().queryByRole("button", { name: "Enviar feedback" })).toBeNull();
+    const account = screen().getByRole("button", { name: /^Conta: / });
+    account.focus();
+    await press("Enter", account);
+    const menu = screen().getAllByRole("menu")[0] as HTMLElement;
+    expect(within(menu).queryByRole("menuitem", { name: "Ajuda" })).toBeNull();
+    expect(within(menu).queryByRole("menuitem", { name: "Enviar feedback" })).toBeNull();
   });
 
-  test("the Beta mark opens the form, and what was typed is sent with the workspace and the screen", async () => {
+  test("Ajuda opens the form, and what was typed is sent with the workspace and the screen", async () => {
     const { state } = await open(seedState({ authConfig: { feedback: true } }));
-    await click(screen().getByRole("button", { name: "Enviar feedback" }));
+    await openFeedbackForm();
     const form = screen().getByRole("dialog", { name: "O que faltou, quebrou ou incomodou?" });
     const send = within(form).getByRole("button", { name: /^Enviar/ });
     expect(send.hasAttribute("disabled")).toBe(true);
@@ -159,7 +184,7 @@ describe("feedback about what was clicked", () => {
 
   test("a picture is added, listed and sent by its id; anything else is refused before it is uploaded", async () => {
     const { state } = await open(seedState({ authConfig: { feedback: true } }));
-    await click(screen().getByRole("button", { name: "Enviar feedback" }));
+    await openFeedbackForm();
     const form = screen().getByRole("dialog", { name: "O que faltou, quebrou ou incomodou?" });
     const picker = form.querySelector('input[type="file"]') as HTMLInputElement;
     const choose = (files: File[]) => act(async () => fireEvent.change(picker, { target: { files } }));
@@ -177,7 +202,7 @@ describe("feedback about what was clicked", () => {
 
   test("where it goes to the KeepMind OS team, the form says so and takes photos only", async () => {
     const { state } = await open(seedState({ authConfig: { feedback: true, feedbackRelay: true } }));
-    await click(screen().getByRole("button", { name: "Enviar feedback" }));
+    await openFeedbackForm();
     const form = screen().getByRole("dialog", { name: "O que faltou, quebrou ou incomodou?" });
     expect(within(form).getByText("O que você escrever vai por e-mail para o time do KeepMind OS.")).toBeTruthy();
     expect(within(form).getByRole("button", { name: "Anexar foto" })).toBeTruthy();

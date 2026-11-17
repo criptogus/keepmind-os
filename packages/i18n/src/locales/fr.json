@@ -1998,6 +1998,7 @@
       "homePersonal": "Ta journée : ce qui t'attend et ce que font tes agents"
     },
     "customizeSidebar": "Personnaliser la barre latérale",
+    "help": "Aide",
     "sidebarMenu": {
       "title": "Barre latérale",
       "newChannel": "Nouveau canal",
@@ -20263,7 +20264,7 @@
         "title": "Vos retours décident de la suite",
         "text": "Dites-nous ce qui a manqué ou gêné. Nous lisons tout."
       },
-      "where": "Pour nous écrire, utilisez Envoyer un retour, en bas de la barre latérale."
+      "where": "Ouvrez Aide dans le menu de votre compte et choisissez Envoyer un retour."
     },
     "stage": {
       "ready": "Votre équipe est prête",
@@ -20283,7 +20284,6 @@
     }
   },
   "feedback": {
-    "mark": "Beta",
     "open": "Envoyer un retour",
     "ask": "Qu'est-ce qui a manqué, cassé ou gêné ?",
     "goesCloud": "Ce que vous écrivez part par e-mail à l'équipe d'KeepMind OS.",

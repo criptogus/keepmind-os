@@ -1946,6 +1946,7 @@
       "homePersonal": "Dein Tag: was auf dich wartet und was deine Agenten gerade tun"
     },
     "customizeSidebar": "Seitenleiste anpassen",
+    "help": "Hilfe",
     "sidebarMenu": {
       "title": "Seitenleiste",
       "newChannel": "Neuer Kanal",
@@ -19567,7 +19568,7 @@
         "title": "Dein Feedback entscheidet, was als Nächstes kommt",
         "text": "Sag uns, was gefehlt oder gestört hat. Wir lesen alles."
       },
-      "where": "Um uns zu schreiben, nutze „Feedback senden“ unten in der Seitenleiste."
+      "where": "Öffne Hilfe in deinem Kontomenü und wähle Feedback senden."
     },
     "stage": {
       "ready": "Dein Team ist bereit",
@@ -19587,7 +19588,6 @@
     }
   },
   "feedback": {
-    "mark": "Beta",
     "open": "Feedback senden",
     "ask": "Was hat gefehlt, ist kaputtgegangen oder hat gestört?",
     "goesCloud": "Was du schreibst, geht per E-Mail an das Team von KeepMind OS.",

@@ -1896,6 +1896,7 @@
       "homePersonal": "Harimu: apa yang menunggumu dan apa yang sedang dikerjakan agenmu"
     },
     "customizeSidebar": "Sesuaikan sidebar",
+    "help": "Bantuan",
     "sidebarMenu": {
       "title": "Bilah samping",
       "newChannel": "Kanal baru",
@@ -19056,7 +19057,7 @@
         "title": "Masukanmu menentukan yang berikutnya",
         "text": "Ceritakan apa yang kurang atau mengganggu. Kami baca semuanya."
       },
-      "where": "Untuk menulis ke kami, pakai Kirim masukan, di bagian bawah bilah sisi."
+      "where": "Buka Bantuan di menu akun Anda, lalu pilih Kirim masukan."
     },
     "stage": {
       "ready": "Timmu sudah siap",
@@ -19076,7 +19077,6 @@
     }
   },
   "feedback": {
-    "mark": "Beta",
     "open": "Kirim masukan",
     "ask": "Apa yang kurang, rusak, atau mengganggu?",
     "goesCloud": "Yang kamu tulis dikirim lewat email ke tim KeepMind OS.",

@@ -2191,6 +2191,8 @@ export const en = {
       homePersonal: "Your day: what waits for you and what your agents are doing",
     },
     customizeSidebar: "Customize sidebar",
+    /** The account menu's Ajuda/Help submenu: the feedback form lives there now. */
+    help: "Help",
     /** The sidebar's own menu (right click on its empty space), its headers' + and its rows' hover buttons. */
     sidebarMenu: {
       title: "Sidebar",
@@ -19787,8 +19789,8 @@ export const en = {
         title: "Your feedback decides what comes next",
         text: "Tell us what was missing or got in your way. We read everything.",
       },
-      /** "Send feedback" is the row at the bottom of the sidebar (`feedback.open`): the same words. */
-      where: "To write to us, use Send feedback, at the bottom of the sidebar.",
+      /** "Send feedback" is under Help in the account menu (`feedback.open`): the same words. */
+      where: "Open Help in your account menu and choose Send feedback.",
     },
     /** Over the sky where the workspace's agents stand: asleep at night, then awake by day. */
     stage: {
@@ -19809,10 +19811,8 @@ export const en = {
       later: "Not now",
     },
   },
-  /** The feedback form behind the Beta mark (ADR 0160): what the person writes goes by email. */
+  /** The feedback form (ADR 0160): what the person writes goes by email. Ajuda in the account menu opens it. */
   feedback: {
-    /** The small label at the end of the Send feedback row. */
-    mark: "Beta",
     open: "Send feedback",
     ask: "What was missing, broke or got in your way?",
     goesCloud: "What you write goes by email to the KeepMind OS team.",

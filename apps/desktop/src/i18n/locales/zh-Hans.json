@@ -868,6 +868,7 @@
     "requests": "访问请求",
     "bringAllToFront": "全部置于顶层",
     "help": "帮助",
+    "feedback": "发送反馈",
     "downloaded": "下载完成"
   }
 }

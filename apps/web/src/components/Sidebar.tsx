@@ -19,6 +19,7 @@ import {
   useAgentStatuses,
   useAiAccounts,
   useArchivedChannels,
+  useAuthConfig,
   useChannelCategories,
   useChannels,
   useConnections,
@@ -124,6 +125,7 @@ import { requestChannelDetails } from "@/lib/channel-details";
 import type { MenuEntry } from "@/lib/context-menu";
 import { onPhoneAsk, takePhoneAsk, thisMac } from "@/lib/desktop";
 import { entityMenu } from "@/lib/entity-menu";
+import { openFeedback } from "@/lib/feedback";
 import { useOpenParam } from "@/lib/open-param";
 import { markOpen } from "@/lib/perf";
 import { ownPlanLines, planNearLimit, planWord } from "@/lib/plan-usage";
@@ -149,7 +151,6 @@ import { AgentWorkLine } from "./AgentWorkLine";
 import { AgoraButton } from "./Agora";
 import { ArchivedChannelsDialog } from "./ArchivedChannelsDialog";
 import { ChangeAvatarDialog } from "./AvatarBuilder";
-import { FeedbackMark } from "./arrival/FeedbackDialog";
 import { MoveChannelDialog, NewCategoryDialog, RenameCategoryDialog } from "./ChannelCategoryDialogs";
 import { openPalette } from "./CommandMenu";
 import { DeleteAccountDialog } from "./DeleteAccount";
@@ -966,9 +967,6 @@ export function Sidebar() {
       {groupDialog && <GroupNameDialog purpose={groupDialog} onClose={() => setGroupDialog(null)} />}
       {deletingGroup && <DeleteGroupDialog group={deletingGroup} onClose={() => setDeletingGroup(null)} />}
 
-      {/* Beta: the way to the feedback form, a row of its own at the bottom, where this server takes it. Not beside
-          the person's name, which it would leave no room for; the rail has no room for a row's words. */}
-      {!rail && <FeedbackMark />}
       {!rail && (
         <a className="sidebar__powered" href="https://zeroagency.ai" target="_blank" rel="noopener noreferrer">
           Powered by ZeroAgency.ai
@@ -2127,6 +2125,8 @@ function AccountMenu({ personal = false }: { personal?: boolean }) {
     setAccount("password");
   }, []);
   const handle = dir.memberById.get(me.user.id)?.handle;
+  // The feedback form exists only where this server takes feedback (`auth.feedback`): no Ajuda entry elsewhere.
+  const takesFeedback = useAuthConfig().data?.feedback === true;
   // How you appear to yourself, read as the members column reads it (hidden stays hidden), and your line.
   const shown = usePersonPresence(me.user.id);
   const picked = shown?.person.availability;
@@ -2270,6 +2270,18 @@ function AccountMenu({ personal = false }: { personal?: boolean }) {
             <MenuWorkspaces />
           </>
         )}
+        {takesFeedback &&
+          (compact ? (
+            <MenuItem icon="message" onSelect={openAfter(() => openFeedback())}>
+              {t("feedback.open")}
+            </MenuItem>
+          ) : (
+            <MenuSub icon="question" label={t("shell.help")}>
+              <MenuItem icon="message" onSelect={openAfter(() => openFeedback())}>
+                {t("feedback.open")}
+              </MenuItem>
+            </MenuSub>
+          ))}
         <MenuSeparator />
         <MenuItem icon="arrowRight" danger onSelect={() => void signOut()}>
           {t("auth.signOut")}

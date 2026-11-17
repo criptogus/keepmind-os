@@ -5,7 +5,6 @@ import { aiStateOf } from "@keepmind/client/lib/no-ai";
 import { rightHandOf } from "@keepmind/client/lib/right-hand";
 import {
   Button,
-  Chip,
   Dialog,
   DialogBody,
   DialogFooter,
@@ -480,22 +479,4 @@ export function FeedbackHost() {
   useEffect(() => closeFeedback, []);
   if (!on || !open) return null;
   return <FeedbackDialog key={open.n} reported={open.reported} onClose={closeFeedback} />;
-}
-
-/**
- * The way to the feedback form: a quiet row at the bottom of the sidebar, marked Beta. Only where the server takes
- * feedback (`FEEDBACK_EMAIL`): elsewhere there is no row.
- */
-export function FeedbackMark() {
-  const { t } = useTranslation();
-  if (useAuthConfig().data?.feedback !== true) return null;
-  return (
-    <div className="sidebar__feedback">
-      <button type="button" className="sidebar__item" aria-label={t("feedback.open")} onClick={() => openFeedback()}>
-        <Icon name="message" />
-        <span className="sidebar__item-label">{t("feedback.open")}</span>
-        <Chip>{t("feedback.mark")}</Chip>
-      </button>
-    </div>
-  );
 }

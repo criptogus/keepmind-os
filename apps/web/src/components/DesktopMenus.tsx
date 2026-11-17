@@ -15,6 +15,7 @@ import {
   setMenuHost,
 } from "@/lib/context-menu";
 import { inDesktopApp, thisMac } from "@/lib/desktop";
+import { openFeedback } from "@/lib/feedback";
 import { useToast } from "@/lib/toast";
 import { openPalette } from "./CommandMenu";
 import { useOrg } from "./org-context";
@@ -179,6 +180,8 @@ export function MenuBarActions({ orgId }: { orgId: string }) {
       goWiki: to(`${org}/wiki`),
       goDrive: to(`${org}/drive`),
       orgSettings: to(`${org}/settings`),
+      // Help › Send feedback (menus.rs): the form the sidebar's row used to open.
+      feedback: () => openFeedback(),
     };
     const w = window as { __agentesMenu?: (action: string, arg?: string) => void };
     w.__agentesMenu = (action, arg) => {

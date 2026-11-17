@@ -947,6 +947,7 @@ export const desktopEn = {
     requests: "Access requests",
     bringAllToFront: "Bring all to front",
     help: "Help",
+    feedback: "Send feedback",
     downloaded: "Download complete",
   },
 };

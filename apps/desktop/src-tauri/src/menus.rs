@@ -28,6 +28,7 @@ const SITE_ACTIONS: &[(&str, Option<&str>)] = &[
     ("goWiki", Some("CmdOrCtrl+4")),
     ("goDrive", Some("CmdOrCtrl+5")),
     ("orgSettings", Some("CmdOrCtrl+Shift+,")),
+    ("feedback", None),
 ];
 
 /// Zoom steps of the main window (⌘+ / ⌘− / ⌘0).
@@ -288,8 +289,8 @@ fn build_app_menu(
         window = window.item(&own("thisMac", None)?).item(&own("requests", None)?).item(&sep()?);
     }
     let window = window.bring_all_to_front_with_text(l("bringAllToFront")).build()?;
-    // Empty on purpose: the Mac puts its search of every menu item there.
-    let help = SubmenuBuilder::new(app, l("help")).build()?;
+    // The feedback form (where the server takes it; the page decides): the way to it left the sidebar.
+    let help = SubmenuBuilder::new(app, l("help")).item(&site("feedback")?).build()?;
     #[cfg(target_os = "macos")]
     {
         let _ = window.set_as_windows_menu_for_nsapp();

@@ -1946,6 +1946,7 @@
       "homePersonal": "Günün: seni bekleyenler ve ajanlarının şu an yaptıkları"
     },
     "customizeSidebar": "Kenar çubuğunu özelleştir",
+    "help": "Yardım",
     "sidebarMenu": {
       "title": "Kenar çubuğu",
       "newChannel": "Yeni kanal",
@@ -19498,7 +19499,7 @@
         "title": "Sıradakini sizin geri bildiriminiz belirler",
         "text": "Neyin eksik kaldığını ya da rahatsız ettiğini anlatın. Hepsini okuyoruz."
       },
-      "where": "Bize yazmak için kenar çubuğunun altındaki Geri bildirim gönder seçeneğini kullanın."
+      "where": "Hesap menünüzde Yardım'ı açın ve Geri bildirim gönder'i seçin."
     },
     "stage": {
       "ready": "Ekibiniz hazır",
@@ -19518,7 +19519,6 @@
     }
   },
   "feedback": {
-    "mark": "Beta",
     "open": "Geri bildirim gönder",
     "ask": "Ne eksikti, ne bozuldu ya da ne rahatsız etti?",
     "goesCloud": "Yazdıklarınız e-postayla KeepMind OS ekibine gider.",

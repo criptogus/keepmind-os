@@ -926,6 +926,7 @@ export const desktopPtBR = {
     requests: "Pedidos de acesso",
     bringAllToFront: "Trazer tudo para a frente",
     help: "Ajuda",
+    feedback: "Enviar feedback",
     downloaded: "Download concluído",
   },
 } satisfies LocaleStrings;

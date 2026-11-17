@@ -1946,6 +1946,7 @@
       "homePersonal": "Je dag: wat op je wacht en wat je agents nu doen"
     },
     "customizeSidebar": "Zijbalk aanpassen",
+    "help": "Help",
     "sidebarMenu": {
       "title": "Zijbalk",
       "newChannel": "Nieuw kanaal",
@@ -19746,7 +19747,7 @@
         "title": "Jouw feedback bepaalt wat er komt",
         "text": "Vertel ons wat er ontbrak of in de weg zat. We lezen alles."
       },
-      "where": "Gebruik Feedback sturen, onderaan de zijbalk, om ons te schrijven."
+      "where": "Open Help in je accountmenu en kies Feedback sturen."
     },
     "stage": {
       "ready": "Je team staat klaar",
@@ -19766,7 +19767,6 @@
     }
   },
   "feedback": {
-    "mark": "Beta",
     "open": "Feedback sturen",
     "ask": "Wat ontbrak er, ging er stuk of zat in de weg?",
     "goesCloud": "Wat je schrijft gaat per e-mail naar het team van KeepMind OS.",

@@ -1062,24 +1062,6 @@ html:not([data-pointer]) .arrival-have__link:focus-visible {
   line-height: 18px;
 }
 
-/* The way to the feedback form: a quiet row at the sidebar's bottom, over its foot when it has one. */
-.sidebar__feedback {
-  flex: none;
-  margin-top: auto;
-}
-.sidebar__feedback + .sidebar__foot {
-  margin-top: 0;
-}
-.sidebar__feedback > .sidebar__item {
-  color: var(--muted);
-}
-.sidebar__feedback > .sidebar__item > .ac-icon {
-  color: inherit;
-}
-.sidebar__feedback .ac-chip {
-  margin-left: auto;
-}
-
 /* A screen that changes slides in from the side it comes from (deeper ones from the end), its title with it; who is
    signing in now moves along the faces, and a check or a mark pops onto a face as it lands. */
 @media (prefers-reduced-motion: no-preference) {

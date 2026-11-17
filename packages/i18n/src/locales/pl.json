@@ -2049,6 +2049,7 @@
       "homePersonal": "Twój dzień: co na ciebie czeka i co robią twoi agenci"
     },
     "customizeSidebar": "Dostosuj pasek boczny",
+    "help": "Pomoc",
     "sidebarMenu": {
       "title": "Pasek boczny",
       "newChannel": "Nowy kanał",
@@ -20804,7 +20805,7 @@
         "title": "Twoja opinia decyduje, co będzie dalej",
         "text": "Napisz, czego zabrakło albo co przeszkadzało. Czytamy wszystko."
       },
-      "where": "Aby do nas napisać, użyj opcji Wyślij opinię na dole paska bocznego."
+      "where": "Otwórz Pomoc w menu swojego konta i wybierz Wyślij opinię."
     },
     "stage": {
       "ready": "Twój zespół jest gotowy",
@@ -20824,7 +20825,6 @@
     }
   },
   "feedback": {
-    "mark": "Beta",
     "open": "Wyślij opinię",
     "ask": "Czego zabrakło, co się zepsuło albo przeszkadzało?",
     "goesCloud": "To, co napiszesz, trafi e-mailem do zespołu KeepMind OS.",

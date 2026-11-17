@@ -2102,6 +2102,8 @@ export const ptBR = {
       homePersonal: "O seu dia: o que espera você e o que os seus agentes estão fazendo",
     },
     customizeSidebar: "Personalizar a barra lateral",
+    /** O submenu Ajuda do menu da conta: o formulário de feedback mora lá agora. */
+    help: "Ajuda",
     /** The sidebar's own menu (right click on its empty space), its headers' + and its rows' hover buttons. */
     sidebarMenu: {
       title: "Barra lateral",
@@ -19799,7 +19801,7 @@ export const ptBR = {
         title: "O seu feedback decide o que vem",
         text: "Conte o que faltou ou incomodou. A gente lê tudo.",
       },
-      where: "Para escrever para a gente, use Enviar feedback, no fim da barra lateral.",
+      where: "Abra Ajuda no menu da sua conta e escolha Enviar feedback.",
     },
     stage: {
       ready: "O seu time está pronto",
@@ -19818,9 +19820,8 @@ export const ptBR = {
       later: "Agora não",
     },
   },
-  /** The feedback form behind the Beta mark (ADR 0160): what the person writes goes by email. */
+  /** The feedback form (ADR 0160): what the person writes goes by email. Ajuda no menu da conta abre ele. */
   feedback: {
-    mark: "Beta",
     open: "Enviar feedback",
     ask: "O que faltou, quebrou ou incomodou?",
     goesCloud: "O que você escrever vai por e-mail para o time do KeepMind OS.",

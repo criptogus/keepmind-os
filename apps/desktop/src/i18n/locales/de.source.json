@@ -2386,5 +2386,8 @@
   },
   "menu.downloaded": {
     "value": "Download complete"
+  },
+  "menu.feedback": {
+    "value": "Send feedback"
   }
 }

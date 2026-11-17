@@ -1997,6 +1997,7 @@
       "homePersonal": "Tu día: lo que te espera y lo que hacen tus agentes"
     },
     "customizeSidebar": "Personalizar la barra lateral",
+    "help": "Ayuda",
     "sidebarMenu": {
       "title": "Barra lateral",
       "newChannel": "Nuevo canal",
@@ -20119,7 +20120,7 @@
         "title": "Tu feedback decide lo que viene",
         "text": "Cuéntanos qué faltó o qué molestó. Lo leemos todo."
       },
-      "where": "Para escribirnos, usa Enviar feedback, al final de la barra lateral."
+      "where": "Abre Ayuda en el menú de tu cuenta y elige Enviar feedback."
     },
     "stage": {
       "ready": "Tu equipo está listo",
@@ -20139,7 +20140,6 @@
     }
   },
   "feedback": {
-    "mark": "Beta",
     "open": "Enviar feedback",
     "ask": "¿Qué faltó, se rompió o molestó?",
     "goesCloud": "Lo que escribas va por correo al equipo de KeepMind OS.",
