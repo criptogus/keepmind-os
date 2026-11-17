@@ -46603,5 +46603,26 @@
   },
   "shell.help": {
     "value": "Help"
+  },
+  "team.askKivo": {
+    "value": "Tell {{name}} what you need"
+  },
+  "team.now.title": {
+    "value": "Now"
+  },
+  "team.now.empty": {
+    "value": "No one is working right now."
+  },
+  "wiki.import.github.short": {
+    "value": "Connect GitHub"
+  },
+  "brain.picker.freeOnly": {
+    "value": "Free only"
+  },
+  "teamPlan.templates.describeSend": {
+    "value": "I want to set up my team. Can you interview me?"
+  },
+  "teamPlan.templates.describeSendPersonal": {
+    "value": "I want to set up my agents. Can you interview me?"
   }
 }
