@@ -127,13 +127,11 @@ const ReconnectId = z.uuid().optional().openapi({
  * until an admin classifies each as read, write or approval. Agents get
  * `custom:{serverId}:read` / `:write` scopes.
  */
-export function customConnectorRoutes(deps: AppDeps) {
+/** The deps every custom/MCP connector flow shares (also the WhatsApp connector's). */
+export function customConnectorDeps(deps: AppDeps): CustomDeps {
   const { db, config, adapters } = deps;
-  const app = createAppRouter(deps);
-  app.use("/organizations/*", requireSession(deps.auth));
-  app.use("/connector-icons/*", requireSession(deps.auth));
   const composio = composioConnectorsOf(adapters.mail);
-  const custom: CustomDeps = {
+  return {
     db,
     keyWrappers: [adapters.keyWrapper, ...adapters.legacyKeyWrappers],
     oauthApps: connectorOAuthApps(config),
@@ -146,12 +144,20 @@ export function customConnectorRoutes(deps: AppDeps) {
     blobs: adapters.platformBlobs,
     log: deps.log,
   };
+}
+
+export function customConnectorRoutes(deps: AppDeps) {
+  const { db } = deps;
+  const app = createAppRouter(deps);
+  app.use("/organizations/*", requireSession(deps.auth));
+  app.use("/connector-icons/*", requireSession(deps.auth));
+  const custom = customConnectorDeps(deps);
 
   // A server's icon, for the org's members.
   app.get("/connector-icons/:orgId/:connectionId/:file", async (c) =>
     imageFile(
       await connectorIconFile(
-        { db, blobs: adapters.platformBlobs },
+        { db, blobs: deps.adapters.platformBlobs },
         c.get("user").id,
         c.req.param("orgId"),
         c.req.param("connectionId"),
@@ -260,7 +266,9 @@ export function customConnectorRoutes(deps: AppDeps) {
       const { orgId, presetId } = c.req.valid("param");
       const preset = mcpPreset(presetId);
       if (!preset) throw new NotFoundError("Unknown connector");
-      const way = connectorListing({ oauthApps: custom.oauthApps ?? {}, composio }).find((e) => e.id === preset.id);
+      const way = connectorListing({ oauthApps: custom.oauthApps ?? {}, composio: custom.composio }).find(
+        (e) => e.id === preset.id,
+      );
       if (way?.soon) {
         throw new ValidationError(`${preset.label} hasn't approved KeepMind OS yet`, "connector.not_approved", {
           connector: preset.id,
@@ -365,7 +373,7 @@ export function customConnectorRoutes(deps: AppDeps) {
     }),
     async (c) => {
       const { orgId, serverId } = c.req.valid("param");
-      await revokeConnection(db, c.get("user").id, orgId, serverId, composio);
+      await revokeConnection(db, c.get("user").id, orgId, serverId, custom.composio);
       return c.body(null, 204);
     },
   );

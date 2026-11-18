@@ -301,7 +301,7 @@ describe("Criar agente: steps", () => {
         .getAllByRole("button")
         .map((b) => b.querySelector(".newag__role-name b")?.textContent);
     expect(names("Produto e tecnologia")).toEqual(["Dev", "Ops", "QA", "PM", "Cybersec"]);
-    expect(names("Clientes")).toEqual(["Atendimento", "Vendas", "Marketing", "Conteúdo"]);
+    expect(names("Clientes")).toEqual(["Atendimento", "Vendas", "Marketing", "Conteúdo", "SEO & GEO"]);
     expect(names("Operação")).toEqual(["Dados", "Financeiro", "Pessoas", "Pesquisa", "Assistente"]);
     expect(within(step).getAllByRole("button")[0]?.textContent).toContain("Do zero");
     // Every card, Do zero too, opens on its tile with the name and its line centred beside it (no cap-top rise).
@@ -342,6 +342,17 @@ describe("Criar agente: steps", () => {
     expect((screen().getByLabelText("Instruções") as HTMLTextAreaElement).value).toContain(
       "Enviar mensagem ao cliente, reembolso e desconto só com aprovação.",
     );
+  });
+
+  test("batch creation: the route's 30-agent cap stops the next pick, said on a toast", async () => {
+    await open();
+    const cards = [...document.querySelectorAll<HTMLButtonElement>(".newag__role")].filter(
+      (b) => !b.className.includes("--blank"),
+    );
+    expect(cards.length).toBeGreaterThanOrEqual(31);
+    for (const card of cards.slice(0, 30)) await click(card);
+    await click(cards[30] as HTMLElement);
+    expect(document.body.textContent).toContain("30 agentes");
   });
 
   test("Trazer agentes de outro app: the import flow in place of the cards, Voltar (or Esc) back to them", async () => {

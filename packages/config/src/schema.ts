@@ -971,6 +971,34 @@ export const envVars = {
     section: "Storage",
     example: "/data/files",
   },
+  WHATSAPP_DATA_DIR: {
+    schema: z.string().optional(),
+    description:
+      "Absolute path for WhatsApp session data (the unofficial QR bridge's credentials, one folder per organization). Defaults to a `whatsapp` folder next to FILES_DIR, or `./whatsapp-sessions` when FILES_DIR is unset. Session credentials never leave this server; choose a persistent volume.",
+    section: "Storage",
+    example: "/data/whatsapp",
+  },
+  WHATSAPP_BRIDGE_ENTRY: {
+    schema: z.string().optional(),
+    description:
+      "Path to the whatsapp-bridge entry the server spawns per organization (default: the bridge's own bin in a source checkout, or the bundled `whatsapp-bridge.mjs` shipped next to `server/` in native packages).",
+    section: "Storage",
+    example: "/app/server/whatsapp-bridge.mjs",
+  },
+  REA_DATA_DIR: {
+    schema: z.string().optional(),
+    description:
+      "Absolute path for REA sidecar working directories (one folder per organization, where analysis output lands). Defaults to a `rea` folder next to FILES_DIR, or `./rea-workspaces` when FILES_DIR is unset. REA reads host files for analysis: only enable it where agents may see this server's filesystem.",
+    section: "Storage",
+    example: "/data/rea",
+  },
+  REA_PACKAGE: {
+    schema: z.string().optional(),
+    description:
+      "npm package spec the REA sidecar runs via `npx -y` (default `rea-agents`, pinned to a reviewed version). Requires Node.js 22+ on PATH. Pin or mirror the package in air-gapped deployments.",
+    section: "Storage",
+    example: "rea-agents@6.9.0",
+  },
   S3_ENDPOINT: {
     schema: z.url().optional(),
     description:

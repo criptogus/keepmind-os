@@ -62,7 +62,10 @@ import {
   enableAccountContacts,
   enableCaches,
   enableOperatorEvents,
+  ensureBuiltinSkills,
+  ensureReaOnBoot,
   ensureRightHands,
+  ensureWhatsAppBridgesOnBoot,
   type GifKey,
   isBlockedAddress,
   isKeepMindCloud,
@@ -425,6 +428,12 @@ async function boot(
       if (made > 0) log.info("right hands created", { made });
     })
     .catch((error: unknown) => log.warn("right hands backfill failed", { error: String(error) }));
+  // Off the boot path: workspaces get the built-in skills they lack (vendored methodology, `metadata.builtin`).
+  void ensureBuiltinSkills(database.db)
+    .then((made) => {
+      if (made > 0) log.info("built-in skills seeded", { made });
+    })
+    .catch((error: unknown) => log.warn("built-in skills backfill failed", { error: String(error) }));
   // Off the boot path, once (ADR 0167): untrusted memories saved from a person's own words are trusted again, and
   // how-tos agents worked out between themselves that name nobody reach their other work.
   void backfillMemoryTrust(database.db)
@@ -464,6 +473,16 @@ async function boot(
   // A worker (`SERVER_ROLE=worker`) runs jobs only: no app, API, sockets or usage report, its health check alone. Its
   // runs reach computers through the process that holds their socket (`machine_rpc`).
   const worker = config.SERVER_ROLE === "worker";
+  // WhatsApp bridges live in the app process: it is the one answering the
+  // bridge's internal event route. Off the boot path — spawning is slow.
+  if (!worker) {
+    void ensureWhatsAppBridgesOnBoot(engine.whatsapp).catch((error: unknown) =>
+      log.warn("whatsapp bridges failed to resume", { error: String(error) }),
+    );
+    void ensureReaOnBoot(engine.rea).catch((error: unknown) =>
+      log.warn("rea sidecars failed to resume", { error: String(error) }),
+    );
+  }
   const slots = { quick: config.OUTBOX_QUICK_SLOTS, long: config.OUTBOX_MAX_IN_FLIGHT - config.OUTBOX_QUICK_SLOTS };
   const memoryBytes = memoryBudget({
     limitBytes: process.constrainedMemory() || totalmem(),
@@ -547,6 +566,8 @@ async function boot(
         voice: engine.voice,
         gitProxy: engine.gitProxy,
         pushRelaySender: relayServeSender(direct),
+        whatsapp: engine.whatsapp,
+        rea: engine.rea,
       },
     },
     log,

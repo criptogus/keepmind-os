@@ -317,6 +317,7 @@ const ROLE_SEARCH_ALIASES: Partial<Record<RoleId, string>> = {
   exec_coo: "coo chief operating officer operações operations processos",
   exec_people: "cpo chief people officer rh hr pessoas cultura",
   exec_research: "head research pesquisa insights estudos",
+  seo: "seo geo search engine optimization google ai search aio buscador ranqueamento",
 };
 /**
  * The skills each starting point opens when needed, as the team templates name them (`teamTemplates.skills.{key}`),

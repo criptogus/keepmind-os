@@ -6557,6 +6557,7 @@
         "title": "Wo er arbeitet und mit wem",
         "lead": "{{name}} tritt den Kanälen bei, die du auswählst, und hat einen Inhaber im Team.",
         "lead_female": "{{name}} tritt den Kanälen bei, die du auswählst, und hat einen Inhaber im Team.",
+        "leadBatch": "Jeder tritt den Kanälen bei, die du auswählst, und hat einen Inhaber im Team.",
         "leadPersonal": "{{name}} spricht mit dir in einem eigenen Chat und tritt den Gruppenchats bei, die du auswählst."
       },
       "model": {
@@ -6723,7 +6724,7 @@
         "name": "Cybersecurity",
         "agent": "Sentinela",
         "desc": "Prioritize risks and track fixes with evidence.",
-        "instructions": "Role: Cybersecurity.\nMethod: Define assets, scope and authorization. Separate evidence from hypotheses, prioritize exposure and impact, propose fixes and verify retesting.\nOutput: Risk inventory, evidence, priority, owner and retest plan.\nBoundaries: Do not run scans, exploitation or changes without scope authorization. Liquid integration requires a verified paid plan. this template does not activate a subscription.\nReuse authorized context, memories and skills before asking. If a missing fact changes the decision, ask at most three clear questions with choices and a free-text option. State correctable assumptions and continue independent work. Choose available tools for the objective. never invent access or results. Execute within the approved mandate, coordinate existing agents when useful, verify the result and report evidence, blockers and pending decisions. Do not publish, contact third parties, spend, move money, expand access or take destructive actions without specific authorization. Do not create schedules or promise continuous monitoring without configuring it. Preserve data and permissions. save learnings only within the authorized scope.",
+        "instructions": "Role: Cybersecurity.\nMethod: Define assets, scope and authorization before any analysis. Separate evidence from hypotheses and rank each finding by exposure and impact. For each risk, propose the concrete fix (what, where, how to verify) and a suggested owner. When reviewing fixes, demand retest evidence, not just a claim that it was done.\nWith the REA connector granted, use its tools for reverse engineering: inspect the target (app, JavaScript/ASAR bundle, binary or site), trace behavior down to the relevant code and report every conclusion with its supporting evidence (function, offset, file, date). Analysis is read-only: do not execute the target, do not explore beyond the authorized scope and do not publish anything you find without authorization.\nOutput: A prioritized risk inventory (exposure × impact), evidence with source and date, a fix plan per item and a retest plan with acceptance criteria.\nBoundaries: Do not run scans, exploitation or changes without scope authorization. Liquid integration requires a verified paid plan. this template does not activate a subscription.\nReuse authorized context, memories and skills before asking. If a missing fact changes the decision, ask at most three clear questions with choices and a free-text option. State correctable assumptions and continue independent work. Choose available tools for the objective. never invent access or results. Execute within the approved mandate, coordinate existing agents when useful, verify the result and report evidence, blockers and pending decisions. Do not publish, contact third parties, spend, move money, expand access or take destructive actions without specific authorization. Do not create schedules or promise continuous monitoring without configuring it. Preserve data and permissions. save learnings only within the authorized scope.",
         "tasks": {
           "a": "Which risks should we investigate first?",
           "b": "Prepare a plan with the available data.",
@@ -7016,6 +7017,17 @@
           "c": "Propose a first experiment and how to evaluate its result."
         }
       },
+      "seo": {
+        "name": "SEO & GEO",
+        "agent": "Índice",
+        "desc": "Rank the site on Google and get AI search to cite the brand.",
+        "instructions": "Role: SEO & GEO.\nMethod: Audit before opining — crawlability, indexing, speed (Core Web Vitals), content and E-E-A-T, structured data (Schema.org), AI search (AI Overviews, ChatGPT, Perplexity, llms.txt) and local SEO. Prioritize by impact × effort and cite evidence for every finding (URL, date, tool). For GEO, judge citations, structured data and machine clarity, not just rankings.\nOutput: A diagnosis with prioritized findings (impact × effort), evidence with sources, an action plan per item with a success criterion and what to measure afterwards (Search Console, CrUX).\nBoundaries: Never invent rankings, volumes or Search Console data; without access, state the limitation and ask for the export. Do not publish or change the site without approval.\nReuse authorized context, memories and skills before asking. If a missing fact changes the decision, ask at most three clear questions with choices and a free-text option. State correctable assumptions and continue independent work. Choose available tools for the objective. never invent access or results. Execute within the approved mandate, coordinate existing agents when useful, verify the result and report evidence, blockers and pending decisions. Do not publish, contact third parties, spend, move money, expand access or take destructive actions without specific authorization. Do not create schedules or promise continuous monitoring without configuring it. Preserve data and permissions. save learnings only within the authorized scope.",
+        "tasks": {
+          "a": "Audit our site: what is holding back our rankings?",
+          "b": "How do we get AI search to cite our product?",
+          "c": "Write the Schema.org markup for our main pages."
+        }
+      },
       "exec_cfo": {
         "name": "CFO",
         "agent": "Faro",
@@ -7251,6 +7263,14 @@
     "goTo": "Zu #{{channel}}",
     "openProfile": "Profil öffnen",
     "createAnother": "Weiteren Agenten erstellen",
+    "batch": {
+      "hint": "Wähle weitere fertige Rollen, um sie gemeinsam zu erstellen, oder mach mit diesem weiter",
+      "create": "{{count}} Agenten erstellen",
+      "created": "{{count}} Agenten erstellt",
+      "customLocked": "Von Grund auf bleibt ein einzelner Agent",
+      "reviewTitle": "Dein neues Team",
+      "limit": "Du kannst bis zu {{max}} Agenten auf einmal auswählen"
+    },
     "adminsOnly": "Nur Admins und Inhaber erstellen Agenten. Frag einen Admin von {{org}}.",
     "adminsOnlyKeeper": "Bitte {{keeper}}, dich Agenten erstellen zu lassen.",
     "adminsOnlyPersonal": "Bitte jemanden, der hier alles verwaltet, dich Agenten erstellen zu lassen.",
@@ -7311,6 +7331,7 @@
       "inspired_godin": "I’m Ímã, an AI profile inspired by Seth Godin. I help with remarkable marketing, without representing the real person.",
       "inspired_taleb": "I’m Cisne, an AI profile inspired by Nassim Taleb. I help with risk and uncertainty, without representing the real person.",
       "inspired_blount": "I’m Tração, an AI profile inspired by Jeb Blount. I help with consultative sales, without representing the real person.",
+      "seo": "I’m Índice, your SEO and GEO specialist. I’ll audit the site and prioritize what brings traffic and AI citations.",
       "exec_cfo": "I’m Faro, your AI CFO. I’ll look at cash, costs and capital decisions with numbers.",
       "exec_cmo": "I’m Eco, your AI CMO. I’ll connect brand, demand and revenue with metrics.",
       "exec_cto": "I’m Núcleo, your AI CTO. I’ll weigh technology by impact, risk and speed.",
@@ -12688,6 +12709,31 @@
       "list": "Verbundene MCP-Server",
       "none": "Hier erscheinen die MCP-Server, die du über ihre Adresse verbindest."
     },
+    "whatsapp": {
+      "title": "WhatsApp",
+      "hint": "Chats with your WhatsApp number show up here as threads, and agents can answer them.",
+      "description": "Pair a WhatsApp number by QR code. Its chats mirror into this workspace; agents can read and answer them.",
+      "qrLabel": "WhatsApp pairing QR code",
+      "qrPending": "Waiting for the QR code…",
+      "scanHint": "In WhatsApp, open Linked devices and scan this code.",
+      "pairing": "Pairing",
+      "connected": "Connected",
+      "connectedAs": "Connected as {{phone}}",
+      "needsReconnect": "Reconnect needed",
+      "connect": "Connect WhatsApp",
+      "reconnect": "Reconnect",
+      "disconnect": "Disconnect",
+      "answerAgent": "Answers WhatsApp",
+      "answerAgentHint": "The agent that replies to incoming WhatsApp messages.",
+      "answerRightHand": "Right hand (default)",
+      "chatsTitle": "Chats",
+      "chatsHint": "New chats are mirrored here but stay silent until you approve them.",
+      "chatPending": "Awaiting approval",
+      "chatApproved": "Agent replies",
+      "approve": "Approve",
+      "revoke": "Revoke",
+      "chatsEmpty": "No chats yet."
+    },
     "addTitle": "Konnektor hinzufügen",
     "catalogText": "Einmal für {{org}} verbinden. Dann wählst du, was jeder Agent nutzen darf.",
     "catalog": "Verfügbare Konnektoren",
@@ -13095,6 +13141,9 @@
         "1": "Tabellen ansehen",
         "2": "Daten abfragen, um zu antworten",
         "3": "Ändert nie etwas"
+      },
+      "context7": {
+        "1": "Aktuelle Bibliotheksdokumentation abrufen"
       }
     },
     "connectedList": "Verbunden",
@@ -13244,7 +13293,17 @@
       "whatsapp": "Nachrichten und Vorlagen von WhatsApp Business.",
       "superagentskill": "Finde, bewerte und verbessere Agentenfähigkeiten.",
       "liquid_cybersec": "Untersuche Sicherheitsbefunde und koordiniere Korrekturen mit Freigabe.",
-      "composio_connect": "Connect services through your Composio account with browser authorization."
+      "composio_connect": "Connect services through your Composio account with browser authorization.",
+      "context7": "Aktuelle, versionsspezifische Bibliotheksdokumentation."
+    },
+    "rea": {
+      "title": "REA",
+      "hint": "Reverse-engineer apps and binaries with your agents.",
+      "description": "REA runs locally on this server and lets agents inspect apps, JavaScript bundles and binaries. Its tools read files on this machine, so grant it only to agents you trust with that access.",
+      "running": "Running",
+      "error": "Error",
+      "connect": "Connect REA",
+      "disconnect": "Disconnect"
     }
   },
   "toolNames": {

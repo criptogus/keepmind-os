@@ -55,6 +55,7 @@ import { personUsageRoutes } from "./routes/app/person-usage";
 import { planUsageRoutes } from "./routes/app/plan-usage";
 import { pushRoutes } from "./routes/app/push";
 import { questionRoutes } from "./routes/app/questions";
+import { reaRoutes } from "./routes/app/rea";
 import { roleRoutes } from "./routes/app/roles";
 import { routineRoutes } from "./routes/app/routines";
 import { sandboxRoutes } from "./routes/app/sandboxes";
@@ -67,6 +68,7 @@ import { threadRoutes } from "./routes/app/threads";
 import { vaultRoutes } from "./routes/app/vault";
 import { speechKeyRoutes, voiceRoutes } from "./routes/app/voice";
 import { waitingRoutes } from "./routes/app/waiting";
+import { whatsappRoutes } from "./routes/app/whatsapp";
 import { wikiRoutes } from "./routes/app/wiki";
 import {
   createDesktopReleases,
@@ -79,6 +81,7 @@ import { registerGitProxy } from "./routes/git";
 import { githubAppRoutes, registerGitHubAppWebhook } from "./routes/github-app";
 import { registerHealth } from "./routes/health";
 import { registerInstance } from "./routes/instance";
+import { registerWhatsAppInternal } from "./routes/internal-whatsapp";
 import { machineAppRoutes, registerMachinePublicRoutes } from "./routes/machines";
 import { type AppsRouteOptions, registerAppsRoot, registerOauthRoutes } from "./routes/oauth";
 import { pushRelayRoutes } from "./routes/push-relay";
@@ -187,6 +190,8 @@ export function createApp(options: AppOptions) {
     api.route("/app", auditRoutes(deps));
     api.route("/app", customConnectorRoutes(deps));
     api.route("/app", connectorRoutes(deps));
+    api.route("/app", whatsappRoutes(deps));
+    api.route("/app", reaRoutes(deps));
     api.route("/app", mailRoutes(deps, log));
     api.route("/app", databaseRoutes(deps));
     api.route("/app", managementRoutes(deps));
@@ -237,6 +242,7 @@ export function createApp(options: AppOptions) {
     registerRoutineHooks(api, deps);
     registerGitHubAppWebhook(api, deps);
     registerMachinePublicRoutes(api, deps);
+    registerWhatsAppInternal(api, deps);
     registerConnectLinkInfo(api, deps);
     registerDesktopRoutes(
       api,

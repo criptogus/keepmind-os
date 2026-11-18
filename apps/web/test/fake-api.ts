@@ -2343,6 +2343,30 @@ export function createFakeHttpApi(state: FakeState): Omit<HttpApi, FakedParts> {
         if (input.proposal) Object.assign(proposalCard(input.proposal).card, { state: "created", agentId: agent.id });
         return agent;
       },
+      createBatch: async (orgId, input) => {
+        log("agents.createBatch", orgId, input);
+        const shared = input.shared ?? {};
+        const agents = input.agents.map((item) => {
+          const agent: Agent = {
+            id: id("agent"),
+            name: item.name,
+            handle: item.handle ?? item.name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+            role: item.role ?? "",
+            instructions: item.instructions ?? "",
+            model: shared.model ?? "claude-sonnet-5-5",
+            ownerUserId: shared.ownerUserId ?? null,
+            hasCredential: Boolean(shared.credentialId),
+            monthlyBudgetUsd: shared.monthlyBudgetUsd ?? null,
+            createdAt: NOW.toISOString(),
+            audience: shared.audience ?? { mode: "everyone", userIds: [] },
+            ...(item.appearance ? { appearance: item.appearance } : {}),
+            setup: { role: item.setup?.role ?? null, done: ["who", "how"] },
+          };
+          state.agents.push(agent);
+          return agent;
+        });
+        return { agents };
+      },
       proposal: async (_orgId, messageId) => proposalView(messageId),
       // The right hand's team card (ADR 0137 §10): the card in its message changes as the server's does.
       createTeam: async (orgId, messageId) => {
@@ -3517,6 +3541,19 @@ export function createFakeHttpApi(state: FakeState): Omit<HttpApi, FakedParts> {
         for (const k of Object.keys(state.scopes))
           state.scopes[k] = (state.scopes[k] ?? []).filter((g) => g.connectionId !== connectionId);
       },
+    },
+    whatsapp: {
+      session: async () => ({ session: null }),
+      connect: async () => ({ session: null }),
+      disconnect: async () => ({ session: null }),
+      setAnswerAgent: async () => ({ session: null }),
+      chats: async () => ({ chats: [] }),
+      setChatApproval: async () => ({ chat: null }),
+    },
+    rea: {
+      status: async () => ({ rea: null }),
+      connect: async () => ({ rea: { status: "running" as const, lastError: null } }),
+      disconnect: async () => ({ rea: { status: "off" as const, lastError: null } }),
     },
     githubApp: {
       access: async () =>

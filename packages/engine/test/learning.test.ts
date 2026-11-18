@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { createFakeErrorReporter } from "@keepmind/adapters";
-import { and, eq, schema } from "@keepmind/db";
+import { and, eq, ne, schema } from "@keepmind/db";
 import { ProviderError, systemText } from "@keepmind/providers";
 import {
   addChannelMember,
@@ -333,7 +333,10 @@ describe("agents learn on their own (ADR 0120)", () => {
     }
     expect((await items())[0]?.recurrence).toBe(4);
     await consolidateOrg(f.context, f.org.id);
-    const [skill] = await f.db.select().from(schema.skills).where(eq(schema.skills.orgId, f.org.id));
+    const [skill] = await f.db
+      .select()
+      .from(schema.skills)
+      .where(and(eq(schema.skills.orgId, f.org.id), ne(schema.skills.source, "builtin")));
     expect([skill?.slug, skill?.origin, skill?.ownerAgentId, skill?.source]).toEqual([
       "northwind-api",
       "agent",
@@ -372,7 +375,10 @@ describe("agents learn on their own (ADR 0120)", () => {
       await afterTurnDone(f.context, used, { judged: true, signal: "none" });
     }
     await consolidateOrg(f.context, f.org.id);
-    const [skill] = await f.db.select().from(schema.skills).where(eq(schema.skills.orgId, f.org.id));
+    const [skill] = await f.db
+      .select()
+      .from(schema.skills)
+      .where(and(eq(schema.skills.orgId, f.org.id), ne(schema.skills.source, "builtin")));
     expect([skill?.slug, skill?.ownerUserId]).toEqual(["northwind-api", member.id]);
   });
 
@@ -402,7 +408,7 @@ describe("agents learn on their own (ADR 0120)", () => {
         });
     }
     await consolidateOrg(f.context, f.org.id);
-    expect(await f.db.select().from(schema.skills)).toEqual([]);
+    expect(await f.db.select().from(schema.skills).where(ne(schema.skills.source, "builtin"))).toEqual([]);
     expect([(await items())[0]?.status, (await items())[0]?.disputed]).toEqual(["active", true]);
   });
 
@@ -469,7 +475,7 @@ describe("agents learn on their own (ADR 0120)", () => {
     // Low trust is never promoted, however often it is reused.
     await f.db.update(schema.contextItems).set({ recurrence: 10, relevance: 0.9 });
     await consolidateOrg(f.context, f.org.id);
-    expect(await f.db.select().from(schema.skills)).toEqual([]);
+    expect(await f.db.select().from(schema.skills).where(ne(schema.skills.source, "builtin"))).toEqual([]);
   });
 
   test("who holds which access becomes a workspace fact every agent reads, from a browser run too, kept current", async () => {
@@ -1409,13 +1415,15 @@ describe("quiet learning (ADR 0120 addendum)", () => {
     };
     for (let i = 0; i < 3; i++) await use(msg.id);
     await consolidateOrg(f.context, f.org.id);
-    expect(await f.db.select().from(schema.skills)).toEqual([]);
+    expect(await f.db.select().from(schema.skills).where(ne(schema.skills.source, "builtin"))).toEqual([]);
     expect((await items())[0]?.status).toBe("active");
 
     const { msg: other } = await personRun("@dev another conversation");
     await use(other.id);
     await consolidateOrg(f.context, f.org.id);
-    expect((await f.db.select().from(schema.skills)).map((s) => s.ownerAgentId)).toEqual([f.agent.id]);
+    expect(
+      (await f.db.select().from(schema.skills).where(ne(schema.skills.source, "builtin"))).map((s) => s.ownerAgentId),
+    ).toEqual([f.agent.id]);
   });
 
   test("nobody is asked to confirm its technical lessons; its playbook is listed only for its owner and admins", async () => {

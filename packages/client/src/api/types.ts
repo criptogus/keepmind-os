@@ -1033,6 +1033,25 @@ export interface AgentInput {
   setup?: { role: RoleId | null; hello?: string; starter?: string; apps?: Record<string, "read" | "write"> };
 }
 
+/** One agent of a batch create (`POST …/agents/batch`): its name, and the fields that differ per agent. */
+export interface AgentBatchItemInput {
+  name: string;
+  handle?: string;
+  role?: string;
+  instructions?: string;
+  appearance?: AgentLookInput | null;
+  setup?: AgentInput["setup"];
+}
+
+/** A batch create: up to 30 agents in one transaction, all or nothing; `shared` gives them all the rest. */
+export interface AgentBatchInput {
+  agents: AgentBatchItemInput[];
+  shared?: Omit<
+    AgentInput,
+    "name" | "handle" | "role" | "instructions" | "appearance" | "setup" | "proposal" | "brakes" | "mailLossSeen"
+  >;
+}
+
 /** A person's answer to an agent's proposal of costly work nobody asked for (ADR 0131 §3). */
 export type CostlyDecision = "go" | "not_now" | "never" | "always";
 
@@ -2947,6 +2966,33 @@ export interface ComposioUsage {
   limit: number | null;
   /** `2026-11`. */
   month: string;
+}
+
+/** The WhatsApp connector's pairing state (`GET …/whatsapp`). */
+export interface WhatsAppSessionView {
+  status: "pairing" | "connected" | "needs_reconnect" | "off";
+  phone: string | null;
+  lastError: string | null;
+  /** The live pairing QR while `status` is `pairing`. */
+  qr: string | null;
+  /** The agent that answers inbound messages; null = the workspace right hand. */
+  answerAgentId: string | null;
+}
+
+/** A mirrored WhatsApp chat (`GET …/whatsapp/chats`): approved chats get agent replies. */
+export interface WhatsAppChatView {
+  chatId: string;
+  participantName: string | null;
+  threadRootId: string;
+  /** When a `manage_connectors` admin approved it; null = mirrored but silent. */
+  approvedAt: string | null;
+  createdAt: string;
+}
+
+/** The REA sidecar's state (`GET …/rea`). */
+export interface ReaStatusView {
+  status: "running" | "off";
+  lastError: string | null;
 }
 
 /** What connecting did: a new account, a new sign-in for one ("Reconectar"), or the same account again. */

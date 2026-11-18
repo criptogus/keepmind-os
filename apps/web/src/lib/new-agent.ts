@@ -27,6 +27,7 @@ const ROLE_ICON: Record<RoleId, IconName> = {
   sales: "coin",
   marketing: "globe",
   content: "edit",
+  seo: "search",
   data: "chart",
   finance: "wallet",
   people: "members",

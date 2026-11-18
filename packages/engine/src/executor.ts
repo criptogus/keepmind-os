@@ -25,6 +25,7 @@ import {
   type ContentBlock,
   ensureOpenRouterModels,
   isAutoModel,
+  isCustomModel,
   type ModelMessage,
   type ModelResult,
   PROVIDERS,
@@ -184,6 +185,7 @@ import { WIDGET_FAILURES } from "./dashboards/types";
 import { publishDelivery } from "./delivery";
 import { kickParkedWakes } from "./dispatch";
 import { isAgentOnlyDm } from "./dms";
+import { noteEndpointModelFailure } from "./endpoints";
 import {
   BudgetExceededError,
   codedErrorMessage,
@@ -2533,6 +2535,11 @@ async function executeRunInner(
     const words = outageNote(error, plan.account, BRAIN_NAMES[brain]);
     await deferred;
     await addRunStep(db, run, "error", { reason: "provider_outage", message, parked: n + 1 });
+    // An endpoint model that can't be reached stops being Automático's pick (`noteEndpointModelFailure`): this run's
+    // retry ladder is unchanged, the choice for the next run isn't. Best-effort: never fails the park.
+    if (error instanceof ProviderError && isCustomModel(thinker.model)) {
+      await noteEndpointModelFailure(db, thinker.model, error).catch(() => {});
+    }
     // Said once where it answers, so the wait reads as the provider's or the computer's, not as a question to a person.
     // The computer's own names its code and no computer: the apps keep it a plain note, never the card that waits for
     // a computer to come back, which an online one would close at once as back.

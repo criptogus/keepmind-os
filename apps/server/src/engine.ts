@@ -1,3 +1,4 @@
+import { dirname, join } from "node:path";
 import {
   type Adapters,
   type BrainTurnRequest,
@@ -95,6 +96,7 @@ import {
   type GitProxyDeps,
   GrokBrain,
   getAgentCached,
+  handleInboundWhatsAppMessage,
   hubBrainLink,
   isKeepMindCloud,
   isRightHand,
@@ -110,6 +112,7 @@ import {
   prepareAgentCode,
   publishUserEvent,
   queueBudgetEmail,
+  type ReaDeps,
   type ResolveHost,
   RIGHT_HAND_TURN,
   ROUTER_QUIET_MS,
@@ -131,6 +134,7 @@ import {
   type ToolSource,
   type VaultDeps,
   type VoiceDeps,
+  type WhatsAppDeps,
   warmAgentBrowser,
   withComposio,
   withJudgeFallback,
@@ -189,6 +193,10 @@ export interface EngineOptions {
   };
   /** Error reports (ADR 0104) for failures nothing logs: learning's (`reportLearnFailure`). */
   errors?: ErrorReporter;
+  /** Tests: fake spawn/fetch/paths for the WhatsApp bridge supervisor. */
+  whatsapp?: Partial<WhatsAppDeps>;
+  /** Tests: fake spawn/fetch/paths for the REA sidecar supervisor. */
+  rea?: Partial<ReaDeps>;
 }
 
 /**
@@ -869,6 +877,33 @@ export function buildEngine(o: EngineOptions) {
     publicUrl: config.PUBLIC_URL,
     resolveHost: o.resolveHost,
   };
+  // The WhatsApp QR bridge supervisor (unofficial session mode): sessions under
+  // WHATSAPP_DATA_DIR, defaulting next to FILES_DIR so docker volumes carry them.
+  const whatsapp: WhatsAppDeps = {
+    db,
+    keyWrappers,
+    pubsub: adapters.pubsub,
+    dataDir:
+      config.WHATSAPP_DATA_DIR ??
+      (config.FILES_DIR ? join(dirname(config.FILES_DIR), "whatsapp") : join(process.cwd(), "whatsapp-sessions")),
+    apiBaseUrl: `http://127.0.0.1:${config.PORT}`,
+    bridgeEntry: config.WHATSAPP_BRIDGE_ENTRY,
+    handleMessage: (orgId, msg) => handleInboundWhatsAppMessage({ db, whatsapp }, orgId, msg),
+    ...o.whatsapp,
+  };
+  // Agent replies in mirrored WhatsApp threads go back out through the bridge (job `message.posted`).
+  jobDeps.whatsapp = whatsapp;
+  // The REA reverse-engineering sidecar (`rea-agents mcp --http`): spawned per
+  // org on connect, workspaces under REA_DATA_DIR. Opt-in — an admin connects it.
+  const rea: ReaDeps = {
+    db,
+    pubsub: adapters.pubsub,
+    dataDir:
+      config.REA_DATA_DIR ??
+      (config.FILES_DIR ? join(dirname(config.FILES_DIR), "rea") : join(process.cwd(), "rea-workspaces")),
+    packageSpec: config.REA_PACKAGE ?? "rea-agents@6.9.0",
+    ...o.rea,
+  };
   return {
     gateway,
     /** The search index's vectors (undefined: words alone), for the boot backfill (`queueEmbeddingBackfill`). */
@@ -900,6 +935,10 @@ export function buildEngine(o: EngineOptions) {
     /** Likewise: the speech engines, read before the first voice message. */
     speech,
     voice,
+    /** The WhatsApp bridge supervisor deps (spawn/health/state), for its routes and boot. */
+    whatsapp,
+    /** The REA sidecar supervisor deps, for its routes and boot. */
+    rea,
   };
 }
 

@@ -23,6 +23,7 @@ import { type AgentStyle, isAgentStyle, saveAgentStyle } from "./agent-style";
 import { dropAgentRules } from "./approval-rules";
 import { revokeMemberApps } from "./apps/revoke";
 import { recordAudit } from "./audit";
+import { ensureBuiltinSkillsForOrg } from "./builtin-skills";
 import { caches } from "./cache";
 import { memberCardVia } from "./card-via";
 import { type ChatPrefs, chatPrefsOf, saveChatPrefs } from "./chat-prefs";
@@ -347,6 +348,7 @@ export async function createOrganization(
     // The team's right hand comes with the workspace (ADR 0137), after the owner's handle so `@lodi` stays theirs if
     // it is their own.
     await ensureRightHand(tx, organization.id);
+    await ensureBuiltinSkillsForOrg(tx, organization.id);
     const [general] = await tx
       .insert(channels)
       .values({ orgId: organization.id, name: "general", createdByUserId: userId })

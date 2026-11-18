@@ -77,6 +77,7 @@ import type {
   Agent,
   AgentAction,
   AgentAudience,
+  AgentBatchInput,
   AgentComputer,
   AgentDatabase,
   AgentDatabaseInput,
@@ -786,6 +787,20 @@ export function useCreateAgent(orgId: string) {
       void qc.invalidateQueries({ queryKey: keys.overview(orgId) });
       // Made from a card: the card says so (its conversation gets the change live too).
       if (input.proposal) void qc.invalidateQueries({ queryKey: keys.agentProposal(orgId, input.proposal) });
+    },
+  });
+}
+
+/** Several agents at once (`POST …/agents/batch`), all or nothing. */
+export function useCreateAgents(orgId: string) {
+  const api = useApi();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: AgentBatchInput) => api.agents.createBatch(orgId, input),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: keys.agents(orgId) });
+      // The workspace's "N people · N agents" counts them at once (it kept "0 agents" until the next visit).
+      void qc.invalidateQueries({ queryKey: keys.overview(orgId) });
     },
   });
 }
@@ -2246,6 +2261,92 @@ export function cacheCardDelegate(
 export const useCatalog = () => {
   const api = useApi();
   return useQuery({ queryKey: keys.catalog, queryFn: () => api.connectors.catalog(), staleTime: 10 * 60_000 });
+};
+
+/** The WhatsApp connector's pairing state; polls fast while a QR is outstanding. */
+export const useWhatsAppSession = (orgId: string, enabled = true) => {
+  const api = useApi();
+  return useQuery({
+    queryKey: keys.whatsapp(orgId),
+    queryFn: () => api.whatsapp.session(orgId),
+    enabled,
+    refetchInterval: (query) => (query.state.data?.session?.status === "pairing" ? 3_000 : false),
+  });
+};
+
+export const useWhatsAppConnect = (orgId: string) => {
+  const api = useApi();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => api.whatsapp.connect(orgId),
+    onSuccess: () => qc.invalidateQueries({ queryKey: keys.whatsapp(orgId) }),
+  });
+};
+
+export const useWhatsAppDisconnect = (orgId: string) => {
+  const api = useApi();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => api.whatsapp.disconnect(orgId),
+    onSuccess: () => qc.invalidateQueries({ queryKey: keys.whatsapp(orgId) }),
+  });
+};
+
+export const useWhatsAppAnswerAgent = (orgId: string) => {
+  const api = useApi();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (agentId: string | null) => api.whatsapp.setAnswerAgent(orgId, agentId),
+    onSuccess: () => qc.invalidateQueries({ queryKey: keys.whatsapp(orgId) }),
+  });
+};
+
+/** The mirrored WhatsApp chats and their approval state (admins). */
+export const useWhatsAppChats = (orgId: string, enabled = true) => {
+  const api = useApi();
+  return useQuery({
+    queryKey: keys.whatsappChats(orgId),
+    queryFn: () => api.whatsapp.chats(orgId),
+    enabled,
+  });
+};
+
+export const useWhatsAppChatApproval = (orgId: string) => {
+  const api = useApi();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ chatId, approved }: { chatId: string; approved: boolean }) =>
+      api.whatsapp.setChatApproval(orgId, chatId, approved),
+    onSuccess: () => qc.invalidateQueries({ queryKey: keys.whatsappChats(orgId) }),
+  });
+};
+
+/** The REA sidecar's status (admins). */
+export const useReaStatus = (orgId: string, enabled = true) => {
+  const api = useApi();
+  return useQuery({
+    queryKey: keys.rea(orgId),
+    queryFn: () => api.rea.status(orgId),
+    enabled,
+  });
+};
+
+export const useReaConnect = (orgId: string) => {
+  const api = useApi();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => api.rea.connect(orgId),
+    onSuccess: () => qc.invalidateQueries({ queryKey: keys.rea(orgId) }),
+  });
+};
+
+export const useReaDisconnect = (orgId: string) => {
+  const api = useApi();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => api.rea.disconnect(orgId),
+    onSuccess: () => qc.invalidateQueries({ queryKey: keys.rea(orgId) }),
+  });
 };
 
 export const useConnections = (orgId: string, enabled = true) => {

@@ -15,9 +15,9 @@ import {
 } from "@keepmind/db";
 import { AUTO_MODEL, endpointModelId, isAutoModel, MODEL_CATALOG, parseCustomModel } from "@keepmind/providers";
 import { isIdHandle } from "@keepmind/ui/names";
-import type { AgentAppearance } from "./appearance";
+import { type AgentAppearance, setAgentAppearance } from "./appearance";
 import { dropAgentRules } from "./approval-rules";
-import { answersOthers, audienceOf, canTalkTo, speakerFor } from "./audience";
+import { type AgentAudience, answersOthers, audienceOf, canTalkTo, setAgentAudience, speakerFor } from "./audience";
 import { recordAudit } from "./audit";
 import { type AutonomySettings, autonomySettings, chosenAutonomy } from "./autonomy-settings";
 import { isComputerBrain } from "./brains/types";
@@ -368,6 +368,89 @@ export async function createAgent(
     if (isUniqueViolation(error)) throw handleTaken(values.handle, await takenHandles(db, orgId));
     throw error;
   }
+}
+
+/**
+ * A handle from a batch item's name when it brings none: lowercase, each run of characters a handle can't have
+ * one dash, edges trimmed, 32 at most; `agent` when nothing valid is left (a single letter, say).
+ */
+export function slugHandle(name: string): string {
+  const slug = name
+    .toLowerCase()
+    .replace(/[^a-z0-9_-]+/g, "-")
+    .replace(/^[-_]+/, "")
+    .replace(/-+$/, "")
+    .slice(0, 32);
+  return HANDLE_PATTERN.test(slug) ? slug : "agent";
+}
+
+/** One agent of a batch (`createAgents`): its name and handle (derived from the name when absent), the rest optional. */
+export interface BatchAgentItem {
+  name: string;
+  handle?: string;
+  role?: string;
+  instructions?: string;
+  appearance?: AgentAppearance | null;
+  setup?: { role: string | null } & SetupExtras;
+}
+
+/**
+ * Several agents at once ("Criar o time" picks templates): one transaction, each made by `createAgent` with the
+ * shared fields (its model defaulting like a single create's), so permissions, budgets and audits are the same.
+ * Handles come from the item or its name, suffixed `-2`, `-3` and on against the workspace's and the batch's own so far.
+ * `shared.audience` is applied per agent after its creation (`setAgentAudience`), inside the same transaction.
+ * Returns them in request order; any failure undoes them all.
+ */
+export async function createAgents(
+  db: Database,
+  actorId: string,
+  orgId: string,
+  items: BatchAgentItem[],
+  shared: Omit<AgentInput, "name" | "handle" | "role" | "instructions"> & {
+    autonomy?: CommandApproval;
+    audienceMode?: Agent["audienceMode"];
+    audience?: AgentAudience;
+  },
+  defaults: { model: string },
+  options: { remember?: boolean; via?: string; pubsub?: PubSub } = {},
+): Promise<Agent[]> {
+  if (items.length === 0) throw new ValidationError("A batch needs at least one agent");
+  const { autonomy, audienceMode, audience, ...fields } = shared;
+  return db.transaction(async (raw) => {
+    const tx = raw as unknown as Database;
+    const taken = await takenHandles(tx, orgId);
+    const created: Agent[] = [];
+    for (const item of items) {
+      const base = (item.handle ?? slugHandle(item.name)).toLowerCase();
+      const handle = taken.has(base) ? freeHandle(base, taken) : base;
+      taken.add(handle);
+      let agent = await createAgent(
+        tx,
+        actorId,
+        orgId,
+        {
+          ...fields,
+          name: item.name,
+          handle,
+          ...(item.role !== undefined ? { role: item.role } : {}),
+          ...(item.instructions !== undefined ? { instructions: item.instructions } : {}),
+          ...(item.setup !== undefined ? { setup: item.setup } : {}),
+          ...(autonomy !== undefined ? { autonomy } : {}),
+          ...(audienceMode !== undefined ? { audienceMode } : {}),
+        },
+        defaults,
+        options,
+      );
+      if (item.appearance !== undefined) {
+        agent = await setAgentAppearance(tx, actorId, orgId, agent.id, item.appearance, {
+          pubsub: options.pubsub,
+        });
+      }
+      if (audience) agent = await setAgentAudience(tx, actorId, orgId, agent.id, audience);
+      created.push(agent);
+    }
+    return created;
+  });
 }
 
 /** Whose plan the agent's computer brain thinks with: its account's owner, else whoever connected its computer. */

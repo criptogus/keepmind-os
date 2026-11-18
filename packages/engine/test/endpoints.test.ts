@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { eq, schema } from "@keepmind/db";
-import { customModelId, ProviderError } from "@keepmind/providers";
+import { customModelId, endpointModelId, ProviderError } from "@keepmind/providers";
 import {
   agentAiState,
   allowsPrivateEndpoints,
@@ -15,6 +15,7 @@ import {
   listCredentials,
   listEndpoint,
   modelInfoFor,
+  noteEndpointModelFailure,
   pickerModels,
   rotateCredential,
   updateAgent,
@@ -353,5 +354,25 @@ describe("the test call", () => {
     expect(saved?.endpoint).toMatchObject({ baseURL: "https://gw.example/v1", models: [{ id: "tools" }] });
     expect(saved?.endpoint?.models[0]?.check).toBeUndefined();
     expect(await checkCredential(f.db, f.gateway, f.owner.id, f.org.id, cred.id)).toBe("unchecked");
+  });
+
+  test("a run's unreachable endpoint model is marked failed so Automático picks another; a rate limit marks nothing", async () => {
+    f = await setup({ reply: () => ({ chunks: [] }) });
+    const cred = await addEndpoint(f, [{ id: "one" }, { id: "two" }]);
+    await noteEndpointModelFailure(
+      f.db,
+      customModelId(cred.id, "one"),
+      new ProviderError("could not reach provider", true),
+    );
+    await noteEndpointModelFailure(
+      f.db,
+      customModelId(cred.id, "two"),
+      new ProviderError("rate limit exceeded", true, 429),
+    );
+    // Not an endpoint model: nothing to mark, nothing thrown.
+    await noteEndpointModelFailure(f.db, "claude-sonnet-4", new ProviderError("could not reach provider", true));
+    const [saved] = (await listCredentials(f.db, f.owner.id, f.org.id)).filter((c) => c.id === cred.id);
+    expect(saved?.endpoint?.models.map((m) => m.check)).toEqual(["failed", undefined]);
+    expect(endpointModelId(cred.id, saved?.endpoint?.models ?? [])).toBe(customModelId(cred.id, "two"));
   });
 });

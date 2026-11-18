@@ -77,6 +77,8 @@ import {
   mailChoices,
 } from "@/components/MailConnect";
 import { useOrg } from "@/components/org-context";
+import { ReaConnect } from "@/components/ReaConnect";
+import { WhatsAppConnect } from "@/components/WhatsAppConnect";
 import { useAgentsAccess } from "@/hooks/useAgentsAccess";
 import { useRightHandLook } from "@/hooks/useRightHandLook";
 import { takesConnectorReturn } from "@/lib/desktop";
@@ -305,6 +307,8 @@ export function ConnectorsSection({
         />
       </Card>
       <GitHubAppServerCard />
+      <WhatsAppConnect orgId={org.id} admin={admin} agents={agentList} />
+      <ReaConnect orgId={org.id} admin={admin} />
       <Card aria-labelledby="sec-mcp">
         <CardHeader
           id="sec-mcp"

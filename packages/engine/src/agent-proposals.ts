@@ -1,5 +1,18 @@
 import { isAccountKind, type PubSub } from "@keepmind/adapters";
-import { and, asc, type Database, eq, inArray, isNotNull, isNull, like, notInArray, schema, sql } from "@keepmind/db";
+import {
+  and,
+  asc,
+  type Database,
+  eq,
+  inArray,
+  isNotNull,
+  isNull,
+  like,
+  notInArray,
+  or,
+  schema,
+  sql,
+} from "@keepmind/db";
 import { AUTO_MODEL } from "@keepmind/providers";
 import { orgToolCatalog, setAgentAccess } from "./access";
 import { type Agent, createAgent, getAgent, HANDLE_PATTERN, NEW_AGENT_DEFAULTS, takenHandles } from "./agents";
@@ -53,7 +66,8 @@ export const AGENT_PROPOSAL_CARD = "agent_proposal";
 
 /**
  * The AI a proposed agent starts with (ADR 0081): an account of the person it is for that thinks for no agent,
- * else the workspace's model when it has a key, else none (connected after it is created).
+ * else the workspace's model when it has a key, else none (connected after it is created). An account the runner
+ * says thinks for all of its owner's agents (`machine_accounts.shared`) may already think for some: suggested too.
  */
 export type SuggestedAi =
   | {
@@ -513,7 +527,8 @@ export async function checkAgentDraft(
  * The AI the draft suggests (ADR 0081): the first account of `userId`'s that thinks for no agent (an active
  * sign-in on a computer still there), else the workspace's model when a new agent on it would have a key, else
  * none. A plan thinks only for its owner's agents (ADR 0059 §3), so an account is suggested only to someone who
- * may create the agent and own it.
+ * may create the agent and own it. An account the runner says thinks for all of its owner's agents
+ * (`machine_accounts.shared`, ADR 0059 §2) may already think for some: it is suggested all the same.
  */
 export async function suggestAgentAi(
   deps: { db: Database; gateway?: AiStatusDeps["gateway"] },
@@ -540,7 +555,8 @@ export async function suggestAgentAi(
           eq(machineAccounts.createdBy, userId),
           eq(machineAccounts.status, "active"),
           inArray(machineAccounts.kind, ["claude_code", "codex", "cursor", "opencode", "grok", "antigravity"]),
-          notInArray(machineAccounts.id, used),
+          // One agent at most unless the runner says it thinks for all of its owner's (ADR 0059 §2).
+          or(eq(machineAccounts.shared, true), notInArray(machineAccounts.id, used)),
         ),
       )
       .orderBy(asc(machineAccounts.createdAt))
