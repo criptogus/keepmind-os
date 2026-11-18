@@ -6552,6 +6552,7 @@
         "title": "Wo er arbeitet und mit wem",
         "lead": "{{name}} tritt den Kanälen bei, die du auswählst, und hat einen Inhaber im Team.",
         "lead_female": "{{name}} tritt den Kanälen bei, die du auswählst, und hat einen Inhaber im Team.",
+        "leadBatch": "Jeder tritt den Kanälen bei, die du auswählst, und hat einen Inhaber im Team.",
         "leadPersonal": "{{name}} spricht mit dir in einem eigenen Chat und tritt den Gruppenchats bei, die du auswählst."
       },
       "model": {
@@ -7257,6 +7258,13 @@
     "goTo": "Zu #{{channel}}",
     "openProfile": "Profil öffnen",
     "createAnother": "Weiteren Agenten erstellen",
+    "batch": {
+      "hint": "Wähle weitere fertige Rollen, um sie gemeinsam zu erstellen, oder mach mit diesem weiter",
+      "create": "{{count}} Agenten erstellen",
+      "created": "{{count}} Agenten erstellt",
+      "customLocked": "Von Grund auf bleibt ein einzelner Agent",
+      "reviewTitle": "Dein neues Team"
+    },
     "adminsOnly": "Nur Admins und Inhaber erstellen Agenten. Frag einen Admin von {{org}}.",
     "adminsOnlyKeeper": "Bitte {{keeper}}, dich Agenten erstellen zu lassen.",
     "adminsOnlyPersonal": "Bitte jemanden, der hier alles verwaltet, dich Agenten erstellen zu lassen.",

@@ -6519,6 +6519,7 @@
         "name": "Nerede ve kimle",
         "title": "Nerede ve kimle çalışacak",
         "lead": "{{name}}, işaretlediğiniz kanallara katılır ve ekipte bir sahibi olur.",
+        "leadBatch": "Her biri işaretlediğiniz kanallara katılır ve ekipte bir sahibi olur.",
         "leadPersonal": "{{name}}, sizinle kendi sohbetinde konuşur ve işaretlediğiniz grup sohbetlerine katılır."
       },
       "model": {
@@ -7218,6 +7219,13 @@
     "goTo": "#{{channel}} kanalına git",
     "openProfile": "Profili aç",
     "createAnother": "Başka bir ajan oluştur",
+    "batch": {
+      "hint": "Birlikte oluşturmak için hazır rollerden daha fazla seçin ya da bununla devam edin",
+      "create": "{{count}} ajan oluştur",
+      "created": "{{count}} ajan oluşturuldu",
+      "customLocked": "Sıfırdan tek bir ajan olarak kalır",
+      "reviewTitle": "Yeni ekibiniz"
+    },
     "adminsOnly": "Ajanları yalnızca yöneticiler ve sahipler oluşturur. {{org}} yöneticilerinden birine sorun.",
     "adminsOnlyKeeper": "Ajan oluşturmanıza {{keeper}} izin verebilir.",
     "adminsOnlyPersonal": "Ajan oluşturmanıza izin vermesini burayı yöneten birinden isteyin.",

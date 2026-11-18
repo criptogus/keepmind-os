@@ -6796,6 +6796,7 @@
         "name": "Où et avec qui",
         "title": "Où il travaille et avec qui",
         "lead": "{{name}} rejoint les canaux que vous cochez et a un responsable dans l'équipe.",
+        "leadBatch": "Chacun rejoint les canaux que vous cochez et a un responsable dans l'équipe.",
         "leadPersonal": "{{name}} vous parle dans sa propre discussion et rejoint les discussions de groupe que vous cochez."
       },
       "model": {
@@ -7499,6 +7500,13 @@
     "goTo": "Aller dans #{{channel}}",
     "openProfile": "Ouvrir le profil",
     "createAnother": "Créer un autre agent",
+    "batch": {
+      "hint": "Choisissez d'autres rôles prêts pour les créer ensemble, ou continuez avec celui-ci",
+      "create": "Créer {{count}} agents",
+      "created": "{{count}} agents créés",
+      "customLocked": "Partir de zéro reste un seul agent",
+      "reviewTitle": "Votre nouvelle équipe"
+    },
     "adminsOnly": "Seuls les admins et les propriétaires créent des agents. Demandez à un admin de {{org}}.",
     "adminsOnlyKeeper": "Demandez à {{keeper}} de vous laisser créer des agents.",
     "adminsOnlyPersonal": "Demandez à une personne qui gère cet espace de vous laisser créer des agents.",

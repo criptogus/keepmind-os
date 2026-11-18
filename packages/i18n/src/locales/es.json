@@ -6744,6 +6744,7 @@
         "name": "Dónde y con quién",
         "title": "Dónde trabaja y con quién",
         "lead": "{{name}} entra en los canales que marques y tiene un responsable en el equipo.",
+        "leadBatch": "Cada uno entra en los canales que marques y tiene un responsable en el equipo.",
         "leadPersonal": "{{name}} habla contigo en su propio chat y entra en las conversaciones en grupo que marques."
       },
       "model": {
@@ -7447,6 +7448,13 @@
     "goTo": "Ir a #{{channel}}",
     "openProfile": "Abrir perfil",
     "createAnother": "Crear otro agente",
+    "batch": {
+      "hint": "Elige más roles listos para crearlos juntos, o sigue con este",
+      "create": "Crear {{count}} agentes",
+      "created": "{{count}} agentes creados",
+      "customLocked": "Desde cero sigue siendo un solo agente",
+      "reviewTitle": "Tu nuevo equipo"
+    },
     "adminsOnly": "Solo los admins y propietarios crean agentes. Pídeselo a un admin de {{org}}.",
     "adminsOnlyKeeper": "Pide a {{keeper}} que te deje crear agentes.",
     "adminsOnlyPersonal": "Pide a quien administra este espacio que te deje crear agentes.",

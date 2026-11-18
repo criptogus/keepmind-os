@@ -6349,6 +6349,7 @@
         "name": "在哪里，和谁",
         "title": "在哪里工作，和谁一起",
         "lead": "{{name}} 会加入你勾选的频道，并在团队中有一位负责人。",
+        "leadBatch": "每个都会加入你勾选的频道，并在团队中有一位负责人。",
         "leadPersonal": "{{name}} 会在专属聊天里和你交流，并加入你勾选的群聊。"
       },
       "model": {
@@ -7044,6 +7045,13 @@
     "goTo": "前往 #{{channel}}",
     "openProfile": "打开个人资料",
     "createAnother": "再创建一个智能体",
+    "batch": {
+      "hint": "再选一些现成的角色一起创建，或继续用这一个",
+      "create": "创建 {{count}} 个智能体",
+      "created": "已创建 {{count}} 个智能体",
+      "customLocked": "从零开始仍然只是一个智能体",
+      "reviewTitle": "你的新团队"
+    },
     "adminsOnly": "只有管理员和所有者可以创建智能体。请联系 {{org}} 的管理员。",
     "adminsOnlyKeeper": "请 {{keeper}} 允许你创建智能体。",
     "adminsOnlyPersonal": "请管理这里的人允许你创建智能体。",
