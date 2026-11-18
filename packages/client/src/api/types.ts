@@ -1046,7 +1046,10 @@ export interface AgentBatchItemInput {
 /** A batch create: up to 30 agents in one transaction, all or nothing; `shared` gives them all the rest. */
 export interface AgentBatchInput {
   agents: AgentBatchItemInput[];
-  shared?: Omit<AgentInput, "name" | "handle" | "role" | "instructions" | "appearance" | "setup" | "proposal">;
+  shared?: Omit<
+    AgentInput,
+    "name" | "handle" | "role" | "instructions" | "appearance" | "setup" | "proposal" | "brakes" | "mailLossSeen"
+  >;
 }
 
 /** A person's answer to an agent's proposal of costly work nobody asked for (ADR 0131 §3). */

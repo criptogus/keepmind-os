@@ -259,7 +259,11 @@ const BatchAgentFields = AgentFields.pick({
   setup: AgentSetupInput.optional(),
 });
 
-/** What every agent of a batch shares: the single create's fields minus the per-agent ones (name, role, instructions, appearance, setup). */
+/**
+ * What every agent of a batch shares: the single create's fields minus the per-agent ones (name, role, instructions,
+ * appearance, setup) and `brakes`, which the single create drops too (changing autonomy brakes needs `manage_agents`,
+ * ADR 0131; a batch never carries them).
+ */
 const BatchSharedFields = AgentFields.pick({
   ownerUserId: true,
   audience: true,
@@ -267,7 +271,6 @@ const BatchSharedFields = AgentFields.pick({
   monthlyBudgetUsd: true,
   model: true,
   mediaReplies: true,
-  brakes: true,
   approvalsLevel: true,
 }).extend({
   autonomy: CommandApproval.optional().openapi({
@@ -1126,9 +1129,9 @@ export function agentRoutes(deps: AppDeps) {
       const { agents: items, shared } = c.req.valid("json");
       const { orgId } = c.req.valid("param");
       const userId = c.get("user").id;
-      const { monthlyBudgetUsd, brakes, audience, ...fields } = shared ?? {};
-      // The shared audience is applied to each agent inside createAgents' transaction; `brakes` maps to
-      // `autonomyBrakes` like the edit route does, and `monthlyBudgetUsd` to nano-USD like the single create.
+      const { monthlyBudgetUsd, audience, ...fields } = shared ?? {};
+      // The shared audience is applied to each agent inside createAgents' transaction; `monthlyBudgetUsd` maps to
+      // nano-USD like the single create. `brakes` isn't a batch field (the single create drops it too).
       const created = await createAgents(
         db,
         userId,
@@ -1139,7 +1142,6 @@ export function agentRoutes(deps: AppDeps) {
           monthlyBudgetNanoUsd: budget(monthlyBudgetUsd),
           // Older apps leave `roleIds` out: a new agent has none picked yet, so absent reads as [].
           ...(audience ? { audience: { ...audience, roleIds: audience.roleIds ?? [] } } : {}),
-          ...(brakes ? { autonomyBrakes: brakes } : {}),
         },
         NEW_AGENT_DEFAULTS,
         // The person's Criar agente, as the single create: what they pick is what the next one starts with.

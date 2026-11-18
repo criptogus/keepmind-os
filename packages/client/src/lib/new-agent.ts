@@ -24,6 +24,9 @@ export const PERSONAL_SKIPPED_STEPS: readonly NewAgentStep[] = ["tools", "where"
  */
 export const BATCH_SKIPPED_STEPS: readonly NewAgentStep[] = ["identity", "instructions", "tools"];
 
+/** The most agents one batch create takes (`POST …/agents/batch`'s cap); the wizard stops picking past it. */
+export const BATCH_MAX = 30;
+
 /** The step after (`dir` 1) or before (-1) `index`, past the skipped ones; never past the first or the last. */
 export function stepAfter(index: number, dir: 1 | -1, skipped: readonly NewAgentStep[]): number {
   const last = NEW_AGENT_STEPS.length - 1;

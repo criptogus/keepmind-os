@@ -7039,7 +7039,8 @@
       "create": "Buat {{count}} agen",
       "created": "{{count}} agen dibuat",
       "customLocked": "Dari awal tetap satu agen saja",
-      "reviewTitle": "Tim barumu"
+      "reviewTitle": "Tim barumu",
+      "limit": "Anda dapat memilih hingga {{max}} agen sekaligus"
     },
     "adminsOnly": "Hanya admin dan pemilik yang bisa membuat agen. Minta pada admin {{org}}.",
     "adminsOnlyKeeper": "Minta {{keeper}} untuk mengizinkanmu membuat agen.",

@@ -7430,6 +7430,7 @@ export const en = {
       create: "Create {{count}} agents",
       created: "{{count}} agents created",
       customLocked: "From scratch stays a single agent",
+      limit: "You can pick up to {{max}} agents at once",
       reviewTitle: "Your new team",
     },
     adminsOnly: "Only admins and owners create agents. Ask a {{org}} admin.",

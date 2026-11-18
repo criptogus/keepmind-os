@@ -124,6 +124,7 @@ import { flowReturn } from "@/lib/flow-return";
 import { CARD_MARK, IMPORT_CARDS } from "@/lib/import-flow";
 import {
   AGENT_HANDLE,
+  BATCH_MAX,
   BATCH_SKIPPED_STEPS,
   type BatchDraft,
   BLANK_LOOK,
@@ -1120,6 +1121,11 @@ function NewAgentFlow({
         return nextTried;
       });
     if (batch) {
+      if (!picked.includes(id) && picked.length >= BATCH_MAX) {
+        // The route takes at most BATCH_MAX: past it the pick is refused, said on a toast.
+        toast.show(t("newAgent.batch.limit", { max: BATCH_MAX }), "error");
+        return;
+      }
       const nextPicked = picked.includes(id) ? picked.filter((p) => p !== id) : [...picked, id];
       setPicked(nextPicked);
       clearTried();

@@ -7505,7 +7505,8 @@
       "create": "Créer {{count}} agents",
       "created": "{{count}} agents créés",
       "customLocked": "Partir de zéro reste un seul agent",
-      "reviewTitle": "Votre nouvelle équipe"
+      "reviewTitle": "Votre nouvelle équipe",
+      "limit": "Vous pouvez choisir jusqu'à {{max}} agents à la fois"
     },
     "adminsOnly": "Seuls les admins et les propriétaires créent des agents. Demandez à un admin de {{org}}.",
     "adminsOnlyKeeper": "Demandez à {{keeper}} de vous laisser créer des agents.",

@@ -344,6 +344,17 @@ describe("Criar agente: steps", () => {
     );
   });
 
+  test("batch creation: the route's 30-agent cap stops the next pick, said on a toast", async () => {
+    await open();
+    const cards = [...document.querySelectorAll<HTMLButtonElement>(".newag__role")].filter(
+      (b) => !b.className.includes("--blank"),
+    );
+    expect(cards.length).toBeGreaterThanOrEqual(31);
+    for (const card of cards.slice(0, 30)) await click(card);
+    await click(cards[30] as HTMLElement);
+    expect(document.body.textContent).toContain("30 agentes");
+  });
+
   test("Trazer agentes de outro app: the import flow in place of the cards, Voltar (or Esc) back to them", async () => {
     const state = await open();
     await click(screen().getByRole("button", { name: "Trazer agentes de outro app" }));

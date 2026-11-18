@@ -7403,6 +7403,7 @@ export const ptBR = {
       create: "Criar {{count}} agentes",
       created: "{{count}} agentes criados",
       customLocked: "Do zero continua sendo um agente só",
+      limit: "Você pode escolher até {{max}} agentes por vez",
       reviewTitle: "Seu novo time",
     },
     adminsOnly: "Só admins e donos criam agentes. Peça a um admin da {{org}}.",

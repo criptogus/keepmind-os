@@ -256,6 +256,8 @@ describe("organizations, agents and credentials", () => {
           credentialId,
           monthlyBudgetUsd: 10,
           audience: { mode: "people", userIds: [ownerId], roleIds: [] },
+          // Not a batch field (the single create drops it too): stripped, never applied.
+          brakes: { maxUnrequested: 3 },
         },
       },
     });
@@ -285,6 +287,8 @@ describe("organizations, agents and credentials", () => {
     expect(beto?.setup?.hello).toBe("Oi!");
     expect(beto?.audienceMode).toBe("people");
     expect(beto?.audienceUserIds).toEqual([ownerId]);
+    expect(ana?.autonomyBrakes).toEqual({});
+    expect(beto?.autonomyBrakes).toEqual({});
   });
 
   test("POST /agents/batch refuses an empty batch and a member without Criar agentes", async () => {

@@ -7050,7 +7050,8 @@
       "create": "创建 {{count}} 个智能体",
       "created": "已创建 {{count}} 个智能体",
       "customLocked": "从零开始仍然只是一个智能体",
-      "reviewTitle": "你的新团队"
+      "reviewTitle": "你的新团队",
+      "limit": "一次最多可选择 {{max}} 个智能体"
     },
     "adminsOnly": "只有管理员和所有者可以创建智能体。请联系 {{org}} 的管理员。",
     "adminsOnlyKeeper": "请 {{keeper}} 允许你创建智能体。",

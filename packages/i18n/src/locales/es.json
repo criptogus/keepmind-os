@@ -7453,7 +7453,8 @@
       "create": "Crear {{count}} agentes",
       "created": "{{count}} agentes creados",
       "customLocked": "Desde cero sigue siendo un solo agente",
-      "reviewTitle": "Tu nuevo equipo"
+      "reviewTitle": "Tu nuevo equipo",
+      "limit": "Puedes elegir hasta {{max}} agentes a la vez"
     },
     "adminsOnly": "Solo los admins y propietarios crean agentes. Pídeselo a un admin de {{org}}.",
     "adminsOnlyKeeper": "Pide a {{keeper}} que te deje crear agentes.",

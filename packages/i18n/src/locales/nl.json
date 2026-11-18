@@ -7303,7 +7303,8 @@
       "create": "{{count}} agents maken",
       "created": "{{count}} agents gemaakt",
       "customLocked": "Vanaf nul blijft één agent",
-      "reviewTitle": "Je nieuwe team"
+      "reviewTitle": "Je nieuwe team",
+      "limit": "Je kunt tot {{max}} agenten tegelijk kiezen"
     },
     "adminsOnly": "Alleen beheerders en eigenaren maken agents. Vraag het een beheerder van {{org}}.",
     "adminsOnlyKeeper": "Vraag {{keeper}} of je agents mag maken.",

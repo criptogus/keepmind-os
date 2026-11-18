@@ -7224,7 +7224,8 @@
       "create": "{{count}} ajan oluştur",
       "created": "{{count}} ajan oluşturuldu",
       "customLocked": "Sıfırdan tek bir ajan olarak kalır",
-      "reviewTitle": "Yeni ekibiniz"
+      "reviewTitle": "Yeni ekibiniz",
+      "limit": "Aynı anda en fazla {{max}} ajan seçebilirsiniz"
     },
     "adminsOnly": "Ajanları yalnızca yöneticiler ve sahipler oluşturur. {{org}} yöneticilerinden birine sorun.",
     "adminsOnlyKeeper": "Ajan oluşturmanıza {{keeper}} izin verebilir.",

@@ -7011,7 +7011,8 @@
       "create": "{{count}}体のエージェントを作成",
       "created": "{{count}}体のエージェントを作成しました",
       "customLocked": "ゼロからはエージェント1体だけです",
-      "reviewTitle": "新しいチーム"
+      "reviewTitle": "新しいチーム",
+      "limit": "一度に選べるエージェントは最大{{max}}体です"
     },
     "adminsOnly": "エージェントを作成できるのは管理者とオーナーだけです。{{org}}の管理者に頼んでください。",
     "adminsOnlyKeeper": "エージェントを作成できるよう{{keeper}}に頼んでください。",
