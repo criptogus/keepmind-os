@@ -442,7 +442,7 @@ export function batchDrafts(
 ): BatchDraft[] {
   const items = connectedIds.map((id) => ({ id, def: { id } }));
   return roles
-    .filter((r): r is RoleId => r !== "custom" && (ROLE_IDS as readonly string[]).includes(r))
+    .filter((r): r is Exclude<RoleId, "custom"> => r !== "custom" && (ROLE_IDS as readonly string[]).includes(r))
     .map((roleId) => {
       const agentName = t(`newAgent.roles.${roleId}.agent`);
       return {
