@@ -136,7 +136,6 @@ t_intro() {
 # pixels make one line of ▀▄█; the word carries its leading gap so an empty row leaves no trailing space.
 t_logo() {
   printf '\\n' >&"$T_FD"
-  t_row=0
   set -- ..00000000.. .0000000000. '' \\
     000w0000w000 000w000w0000 '   ▄   ▄  ▄▄▄   ▄▄▄  ▄▄▄▄  ▄   ▄  ▄  ▄ ▄▄      █' \\
     000w00w00000 000w0w000000 '   █ ▄▀  █▄▄▄█ █▄▄▄█ █   █ █▀▄▀█  ▄  █▀  █ ▄▀▀▀█' \\

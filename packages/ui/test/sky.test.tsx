@@ -281,8 +281,8 @@ describe("pixel agents and what stands on the sky", () => {
       },
     });
   }
-  const BODY = pixelOf(spriteTone("sky"));
-  const WHITE = pixelOf("#ffffff");
+  const BODY = pixelOf("#333630");
+  const WHITE = pixelOf("#c4ff3d");
   /** The agents' pixels in the last frame, as [x, y]. */
   const agentPixels = (page: { image: () => { pixels: Uint32Array; w: number } | null }) => {
     const img = page.image();

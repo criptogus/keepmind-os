@@ -49,11 +49,11 @@ describe("agent engine: one agent everywhere", () => {
     expect((closed?.h ?? 1) < (open?.h ?? 0)).toBe(true);
   });
 
-  test("the sky's pixel agent is the same shape: cut corner at bottom-left, two eyes, symmetric", () => {
-    const g = spriteGrid(9);
-    expect(SPRITE).toEqual(g);
+  test("the sky uses the KeepMind pod, preserving two symmetric eyes", () => {
+    const g = SPRITE;
+    expect(g).not.toEqual(spriteGrid(9));
     expect(g[0]?.[0]).toBe(".");
-    expect(g[8]?.[0]).toBe("X");
+    expect(g[8]?.[0]).toBe(".");
     expect(g[8]?.[8]).toBe(".");
     const eyes = g.flatMap((row, y) => [...row].flatMap((c, x) => (c === "o" ? [[x, y]] : [])));
     expect(eyes.length).toBeGreaterThanOrEqual(2);

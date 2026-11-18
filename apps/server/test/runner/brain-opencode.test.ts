@@ -562,10 +562,10 @@ for (const version of VERSIONS) {
       expect(await final({ runId: run(6), prompt: "BADKEY" })).toMatchObject({ code: "not_logged_in" });
       // A Go model's turn hands the key to `opencode-go`, not Zen's `opencode` provider.
       expect(await final({ runId: run(8), model: "opencode-go/glm-5.3" })).toMatchObject({ type: "done" });
-      const goUsed = logOf(log).filter((l) => l.start).at(-1);
-      expect(JSON.parse(goUsed?.config ?? "{}").provider["opencode-go"].options.apiKey).toBe(
-        "{env:OPENCODE_API_KEY}",
-      );
+      const goUsed = logOf(log)
+        .filter((l) => l.start)
+        .at(-1);
+      expect(JSON.parse(goUsed?.config ?? "{}").provider["opencode-go"].options.apiKey).toBe("{env:OPENCODE_API_KEY}");
       const limited = await runTurn(
         withAccounts(accountDir),
         turn({ account: ACCOUNT, runId: run(7), prompt: "LIMIT" }),

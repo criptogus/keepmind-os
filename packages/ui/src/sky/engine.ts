@@ -29,7 +29,6 @@ import {
   type SkyBlob,
   type SkyFrame,
   spriteNear,
-  spriteTone,
 } from "./math";
 
 export { drawSprite, type SkyBlob, type SkyFrame, SPRITE } from "./math";
@@ -78,7 +77,7 @@ export interface SkyOptions {
   after?: (frame: SkyFrame) => void;
 }
 
-const WHITE = pixelOf("#ffffff");
+const WHITE = pixelOf("#c4ff3d");
 
 /** How far (CSS pixels) a pixel agent keeps from a face or a pill, and one standing still from another. */
 export const CLEAR_PX = 12;
@@ -374,7 +373,7 @@ export function startSky(canvas: HTMLCanvasElement, get: () => SkyOptions): () =
       }
     }
     first = false;
-    const body = pixelOf(o.body ?? spriteTone("sky"));
+    const body = pixelOf(o.body ?? "#333630");
     // Far agents are faint light silhouettes; near ones are solid, both with white eyes.
     const ghostBody = tones[Math.max(0, levels - 1)] as number;
     const rise = (o.rise ?? 1) * (o.speed ?? 1);

@@ -97,6 +97,29 @@ function recorder() {
 }
 
 describe("the agents' stickers (ADR 0091)", () => {
+  test("every mood delegates its saved appearance and animated pose to the branded body renderer", () => {
+    for (const mood of STICKER_MOODS) {
+      const frames: unknown[] = [];
+      for (const t of [0.2, 0.5]) {
+        drawSticker(
+          recorder().ctx,
+          { color: "amber", eyes: "round", accessory: "beanie" },
+          mood,
+          t,
+          128,
+          (_ctx, _x, _y, size, options) => {
+            expect(size).toBeGreaterThan(0);
+            expect(options?.color).toBe("amber");
+            expect(options?.eyes).toBe("round");
+            expect(options?.after).toBeFunction();
+            frames.push(options?.pose);
+          },
+        );
+      }
+      expect(frames).toHaveLength(2);
+    }
+  });
+
   test("seven moods, each drawn with the engine's subset only, the same frame for the same moment", () => {
     expect([...STICKER_MOODS]).toEqual(["celebrate", "love", "deal", "thinking", "wow", "dizzy", "wave"]);
     const look = { color: "amber", eyes: "round", accessory: "beanie" };

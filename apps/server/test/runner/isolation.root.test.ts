@@ -950,6 +950,8 @@ describe.if(ROOT)("the agents' isolation on this computer, as root", () => {
       const pid = await program();
       const id = "c0000000-0000-4000-8000-0000000000a1";
       expect(await holds.start(agent, A, { op: "keep.start", holdId: id, pid })).toEqual({ held: true });
+      // Starting systemd-inhibit and registering its lock with logind are asynchronous.
+      await until(() => ours()?.length === 1, 10_000);
       const [lock] = ours() ?? [];
       console.log(`a program's hold: ${JSON.stringify(lock)}`);
       expect(lock?.slice(0, 5)).toEqual(["idle", "KeepMind OS", "keep_running", "block", 0]);

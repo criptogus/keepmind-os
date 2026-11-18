@@ -1,4 +1,5 @@
 import { useTaskManager } from "@keepmind/client";
+import { WORK_TICK_MS } from "@keepmind/client/lib/agent-work";
 import {
   type AgoraItem,
   type AgoraSection,
@@ -10,7 +11,6 @@ import {
   SHORT_NAME,
   waitsOnSomeone,
 } from "@keepmind/client/lib/agora";
-import { WORK_TICK_MS } from "@keepmind/client/lib/agent-work";
 import { todayStart } from "@keepmind/client/lib/task-manager";
 import { Button, Card, GroupHeading, Icon } from "@keepmind/ui";
 import { Link } from "@tanstack/react-router";
@@ -109,7 +109,12 @@ function TeamNowRow({ item, now, onOpen }: { item: AgoraItem; now: number; onOpe
           state={item.state === "working" ? "thinking" : waitsOnSomeone(item.state) ? "waiting" : "idle"}
         />
       )}
-      <RowName title={title} sub={context} tip={[context, time].filter((l): l is string => Boolean(l))} onClick={onOpen}>
+      <RowName
+        title={title}
+        sub={context}
+        tip={[context, time].filter((l): l is string => Boolean(l))}
+        onClick={onOpen}
+      >
         <span className="agora-row__who">
           <b data-long={name.length > SHORT_NAME || undefined}>{name}</b>{" "}
           <span className="agora-row__phrase">

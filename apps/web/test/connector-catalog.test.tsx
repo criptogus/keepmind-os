@@ -161,7 +161,9 @@ describe("Adicionar conector: one catalog", () => {
     // No grid behind it, not even "Não achou?": the empty state carries the way in.
     expect(names(dialog)).toEqual([]);
     const box = empty() as HTMLElement;
-    expect(box.querySelector(".ac-empty__art[aria-hidden='true'] canvas.ac-searchpx")).not.toBeNull();
+    expect(
+      box.querySelector(".ac-empty__art[aria-hidden='true'] .km-searching canvas.ac-sticker[data-mood='thinking']"),
+    ).not.toBeNull();
     expect(box.querySelector(".ac-empty__title")?.textContent).toBe("Nenhum conector com “zzz”");
     expect(box.querySelector(".ac-empty__text")?.textContent).toBe(
       "Você pode conectar qualquer serviço pelo endereço dele.",

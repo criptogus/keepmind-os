@@ -1,5 +1,6 @@
 import type { AgentAppearance } from "@keepmind/ui";
-import { bodyTones, drawAccessory, drawAgent, inBody, toneAt } from "@keepmind/ui/agent/engine";
+import { drawCompanion as drawAgent, loadCompanions } from "@keepmind/ui/agent/companion";
+import { drawAccessory } from "@keepmind/ui/agent/engine";
 
 /**
  * A workspace's agent as the app icon (ADR 0179): the Night icon's sky (`/app-icons/night-sky.png`, written by
@@ -14,18 +15,9 @@ export interface AgentIcon {
   look: AgentAppearance;
 }
 
-const NAVY_TILE = "#06192f";
-const SKY = "/app-icons/night-sky.png";
-let sky: Promise<HTMLImageElement | null> | null = null;
-function nightSky() {
-  sky ??= new Promise((resolve) => {
-    const img = new Image();
-    img.onload = () => resolve(img);
-    img.onerror = () => resolve(null);
-    img.src = SKY;
-  });
-  return sky;
-}
+const NAVY_TILE = "#181b16";
+// Preload without blocking favicon rendering: its vector fallback is also KeepMind.
+loadCompanions(() => {});
 
 function canvas(px: number) {
   const c = document.createElement("canvas");
@@ -38,13 +30,20 @@ async function scene(px: number, look: AgentAppearance) {
   const c = canvas(px);
   const g = c.getContext("2d");
   if (!g) return c;
-  g.imageSmoothingEnabled = false;
-  const img = await nightSky();
-  if (img) g.drawImage(img, 0, 0, px, px);
-  else {
-    g.fillStyle = NAVY_TILE;
-    g.fillRect(0, 0, px, px);
-  }
+  await new Promise<void>((resolve) => {
+    let unsubscribe = () => {};
+    const timeout = setTimeout(() => {
+      unsubscribe();
+      resolve();
+    }, 2500);
+    unsubscribe = loadCompanions(() => {
+      clearTimeout(timeout);
+      resolve();
+    });
+  });
+  g.imageSmoothingEnabled = true;
+  g.fillStyle = NAVY_TILE;
+  g.fillRect(0, 0, px, px);
   const u = px / 1024;
   const accessory = look.accessory && look.accessory !== "none" ? look.accessory : undefined;
   // On the sky's 32 cells: 576 (18 cells) from (224, 192) as the shipped icon; with an accessory 512 (16) from (256, 416).
@@ -72,23 +71,7 @@ export function agentFavicon(look: AgentAppearance, N: 16 | 32 = 32) {
   g.beginPath();
   g.roundRect(0, 0, N, N, N === 16 ? 3.5 : 7);
   g.fill();
-  const tones = bodyTones(look.color);
-  const [at, side] = N === 16 ? [2, 12] : [5, 22];
-  for (let y = 0; y < side; y++)
-    for (let x = 0; x < side; x++) {
-      if (!inBody((x + 0.5) / side, (y + 0.5) / side)) continue;
-      const tone = N === 16 ? ([4, 3, 2][Math.min(2, Math.floor(y / 4))] ?? 2) : toneAt(x >> 1, y >> 1, side / 2);
-      g.fillStyle = tones[tone] ?? tones[2] ?? NAVY_TILE;
-      g.fillRect(at + x, at + y, 1, 1);
-    }
-  g.fillStyle = "#ffffff";
-  if (N === 16) {
-    g.fillRect(6, 6, 1, 4);
-    g.fillRect(9, 6, 1, 4);
-  } else {
-    g.fillRect(12, 12, 2, 6);
-    g.fillRect(18, 12, 2, 6);
-  }
+  drawAgent(g, N * 0.08, N * 0.08, N * 0.84, { color: look.color, eyes: look.eyes });
   return c.toDataURL("image/png");
 }
 
