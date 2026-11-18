@@ -251,6 +251,7 @@ import type {
   UsageReport,
   WaitingList,
   WebhookSetup,
+  WhatsAppSessionView,
   WifiIphones,
   WifiPairing,
   WikiGraph,
@@ -1187,6 +1188,18 @@ export function createHttpApi(options: TransportOptions = {}): HttpApi {
         request<Connection>(`${org(orgId)}/connectors/${enc(connectionId)}`, { method: "PATCH", json: { label } }),
       disconnect: (orgId, connectionId) =>
         request<void>(`${org(orgId)}/connectors/${enc(connectionId)}`, { method: "DELETE" }),
+    },
+    whatsapp: {
+      session: (orgId) => request<{ session: WhatsAppSessionView | null }>(`${org(orgId)}/whatsapp`),
+      connect: (orgId) =>
+        request<{ session: WhatsAppSessionView | null }>(`${org(orgId)}/whatsapp/connect`, { method: "POST" }),
+      disconnect: (orgId) =>
+        request<{ session: WhatsAppSessionView | null }>(`${org(orgId)}/whatsapp/disconnect`, { method: "POST" }),
+      setAnswerAgent: (orgId, agentId) =>
+        request<{ session: WhatsAppSessionView | null }>(`${org(orgId)}/whatsapp/answer-agent`, {
+          method: "PUT",
+          json: { agentId },
+        }),
     },
     githubApp: {
       info: (orgId) => request<GitHubAppInfo>(`${org(orgId)}/github-app`),

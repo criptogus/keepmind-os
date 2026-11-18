@@ -2248,6 +2248,44 @@ export const useCatalog = () => {
   return useQuery({ queryKey: keys.catalog, queryFn: () => api.connectors.catalog(), staleTime: 10 * 60_000 });
 };
 
+/** The WhatsApp connector's pairing state; polls fast while a QR is outstanding. */
+export const useWhatsAppSession = (orgId: string, enabled = true) => {
+  const api = useApi();
+  return useQuery({
+    queryKey: keys.whatsapp(orgId),
+    queryFn: () => api.whatsapp.session(orgId),
+    enabled,
+    refetchInterval: (query) => (query.state.data?.session?.status === "pairing" ? 3_000 : false),
+  });
+};
+
+export const useWhatsAppConnect = (orgId: string) => {
+  const api = useApi();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => api.whatsapp.connect(orgId),
+    onSuccess: () => qc.invalidateQueries({ queryKey: keys.whatsapp(orgId) }),
+  });
+};
+
+export const useWhatsAppDisconnect = (orgId: string) => {
+  const api = useApi();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => api.whatsapp.disconnect(orgId),
+    onSuccess: () => qc.invalidateQueries({ queryKey: keys.whatsapp(orgId) }),
+  });
+};
+
+export const useWhatsAppAnswerAgent = (orgId: string) => {
+  const api = useApi();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (agentId: string | null) => api.whatsapp.setAnswerAgent(orgId, agentId),
+    onSuccess: () => qc.invalidateQueries({ queryKey: keys.whatsapp(orgId) }),
+  });
+};
+
 export const useConnections = (orgId: string, enabled = true) => {
   const api = useApi();
   return useQuery({

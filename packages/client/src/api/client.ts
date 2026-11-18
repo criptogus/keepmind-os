@@ -343,6 +343,7 @@ import type {
   WaitingList,
   WebhookProvider,
   WebhookSetup,
+  WhatsAppSessionView,
   WifiIphones,
   WifiPairing,
   WikiBulkFailed,
@@ -1077,6 +1078,13 @@ export interface ApiClient {
     /** Renames a connection, any kind (admins); its tools keep their names. 409 `connector.label_taken`. */
     rename(orgId: string, connectionId: string, label: string): Promise<Connection>;
     disconnect(orgId: string, connectionId: string): Promise<void>;
+  };
+  /** The WhatsApp connector (QR pairing): status, connect, disconnect, answering agent. */
+  whatsapp: {
+    session(orgId: string): Promise<{ session: WhatsAppSessionView | null }>;
+    connect(orgId: string): Promise<{ session: WhatsAppSessionView | null }>;
+    disconnect(orgId: string): Promise<{ session: WhatsAppSessionView | null }>;
+    setAnswerAgent(orgId: string, agentId: string | null): Promise<{ session: WhatsAppSessionView | null }>;
   };
   githubApp: {
     /** Whether this server can install the GitHub App, the organization's installations, and the server's app. */

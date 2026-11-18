@@ -2,8 +2,9 @@ import { spawn as nodeSpawn } from "node:child_process";
 import { createServer } from "node:net";
 import { join } from "node:path";
 import type { KeyWrapper, PubSub } from "@keepmind/adapters";
-import { and, type Database, eq, schema } from "@keepmind/db";
+import { and, type Database, eq, isNull, schema } from "@keepmind/db";
 import { openSecret, randomToken, safeEqual, sealSecret } from "../crypto";
+import { NotFoundError } from "../errors";
 import { publishOrgEvent } from "../events";
 
 /**
@@ -89,6 +90,8 @@ interface Running {
 export const WHATSAPP_CONNECTION = "custom:whatsapp";
 
 const running = new Map<string, Running>();
+/** The latest pairing QR per org, for the connector UI; cleared once connected. */
+const latestQr = new Map<string, string>();
 const tokenAad = (orgId: string) => `whatsapp-session|${orgId}`;
 const HEALTH_FAILS_MAX = 3;
 const DEFAULT_MAX_RESTARTS = 5;
@@ -103,6 +106,7 @@ export function __resetWhatsAppSupervisorForTests() {
     } catch {}
   }
   running.clear();
+  latestQr.clear();
 }
 
 async function freePort(): Promise<number> {
@@ -346,6 +350,7 @@ export async function stopWhatsAppBridge(deps: WhatsAppDeps, orgId: string): Pro
     running.delete(orgId);
   }
   await updateSession(deps.db, orgId, { status: "off", bridgePort: null, lastError: null });
+  latestQr.delete(orgId);
   broadcastStatus(deps, orgId, { type: "whatsapp.status", status: "off" });
 }
 
@@ -367,16 +372,47 @@ export async function whatsappStatus(db: Database, orgId: string): Promise<Whats
   return { status: row.status as WhatsAppSessionStatus, phone: row.phone, lastError: row.lastError };
 }
 
+/** Which agent answers inbound WhatsApp messages (null = the workspace right hand). */
+export async function setWhatsAppAnswerAgent(db: Database, orgId: string, agentId: string | null): Promise<void> {
+  if (agentId !== null) {
+    const [agent] = await db
+      .select({ id: schema.agents.id })
+      .from(schema.agents)
+      .where(and(eq(schema.agents.id, agentId), eq(schema.agents.orgId, orgId), isNull(schema.agents.archivedAt)))
+      .limit(1);
+    if (!agent) throw new NotFoundError("Agent not found");
+  }
+  await updateSession(db, orgId, { answerAgentId: agentId });
+}
+
+/** Status plus the live pairing QR (null once connected or off). */
+export async function whatsappSessionView(
+  deps: Pick<WhatsAppDeps, "db">,
+  orgId: string,
+): Promise<(WhatsAppSessionView & { qr: string | null; answerAgentId: string | null }) | null> {
+  const row = await sessionRow(deps.db, orgId);
+  if (!row) return null;
+  const view = {
+    status: row.status as WhatsAppSessionStatus,
+    phone: row.phone,
+    lastError: row.lastError,
+    answerAgentId: row.answerAgentId,
+  };
+  return { ...view, qr: view.status === "pairing" ? (latestQr.get(orgId) ?? null) : null };
+}
+
 /** Applies a bridge event to the session row; message events go to `handleMessage`. */
 export async function recordWhatsAppEvent(deps: WhatsAppDeps, orgId: string, event: BridgeEvent): Promise<void> {
   switch (event.type) {
     case "qr":
+      latestQr.set(orgId, event.qr);
       await updateSession(deps.db, orgId, { status: "pairing", lastError: null });
       broadcastStatus(deps, orgId, { type: "whatsapp.qr", qr: event.qr });
       return;
     case "connecting":
       return;
     case "connected":
+      latestQr.delete(orgId);
       await updateSession(deps.db, orgId, {
         status: "connected",
         phone: event.phone,
@@ -388,6 +424,7 @@ export async function recordWhatsAppEvent(deps: WhatsAppDeps, orgId: string, eve
       await updateSession(deps.db, orgId, { lastError: `disconnected: ${event.reason}` });
       return;
     case "logged_out":
+      latestQr.delete(orgId);
       await markNeedsReconnect(deps, orgId, "device unlinked on WhatsApp");
       return;
     case "message":

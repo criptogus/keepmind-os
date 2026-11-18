@@ -3518,6 +3518,12 @@ export function createFakeHttpApi(state: FakeState): Omit<HttpApi, FakedParts> {
           state.scopes[k] = (state.scopes[k] ?? []).filter((g) => g.connectionId !== connectionId);
       },
     },
+    whatsapp: {
+      session: async () => ({ session: null }),
+      connect: async () => ({ session: null }),
+      disconnect: async () => ({ session: null }),
+      setAnswerAgent: async () => ({ session: null }),
+    },
     githubApp: {
       access: async () =>
         structuredClone(

@@ -14863,3 +14863,30 @@ html:not([data-pointer]) .rh-set__face-edit:focus-visible {
     min-width: 0;
   }
 }
+
+/* WhatsApp connector card (Connectors): QR while pairing, status and actions. */
+.ac-whatsapp {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.ac-whatsapp__pair {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) 0;
+}
+.ac-whatsapp__pair svg {
+  width: 200px;
+  height: 200px;
+}
+.ac-whatsapp__actions {
+  display: flex;
+  gap: var(--space-2);
+}
+.ac-whatsapp-title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}

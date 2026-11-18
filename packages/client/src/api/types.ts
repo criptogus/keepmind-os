@@ -2949,6 +2949,17 @@ export interface ComposioUsage {
   month: string;
 }
 
+/** The WhatsApp connector's pairing state (`GET …/whatsapp`). */
+export interface WhatsAppSessionView {
+  status: "pairing" | "connected" | "needs_reconnect" | "off";
+  phone: string | null;
+  lastError: string | null;
+  /** The live pairing QR while `status` is `pairing`. */
+  qr: string | null;
+  /** The agent that answers inbound messages; null = the workspace right hand. */
+  answerAgentId: string | null;
+}
+
 /** What connecting did: a new account, a new sign-in for one ("Reconectar"), or the same account again. */
 export type ConnectOutcome = "connected" | "reconnected" | "same_account";
 
