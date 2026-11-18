@@ -2306,6 +2306,34 @@ export const useWhatsAppChatApproval = (orgId: string) => {
   });
 };
 
+/** The REA sidecar's status (admins). */
+export const useReaStatus = (orgId: string, enabled = true) => {
+  const api = useApi();
+  return useQuery({
+    queryKey: keys.rea(orgId),
+    queryFn: () => api.rea.status(orgId),
+    enabled,
+  });
+};
+
+export const useReaConnect = (orgId: string) => {
+  const api = useApi();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => api.rea.connect(orgId),
+    onSuccess: () => qc.invalidateQueries({ queryKey: keys.rea(orgId) }),
+  });
+};
+
+export const useReaDisconnect = (orgId: string) => {
+  const api = useApi();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => api.rea.disconnect(orgId),
+    onSuccess: () => qc.invalidateQueries({ queryKey: keys.rea(orgId) }),
+  });
+};
+
 export const useConnections = (orgId: string, enabled = true) => {
   const api = useApi();
   return useQuery({

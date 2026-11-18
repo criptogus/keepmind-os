@@ -789,6 +789,8 @@ ones a self-hosted instance usually touches:
 | `COMPOSIO_AUTH_CONFIGS`, `COMPOSIO_CALLS_PER_MONTH` | `0` for the cap (none) | Auth configs of your own per toolkit (`googledrive=ac_…`), and the Composio calls a workspace may make per month. |
 | `WHATSAPP_DATA_DIR` | `whatsapp` next to `FILES_DIR`, else `./whatsapp-sessions` | Folder for WhatsApp session credentials, one subfolder per organization. Put it on a persistent volume: losing it unlinks the paired number. |
 | `WHATSAPP_BRIDGE_ENTRY` | the bundled `server/whatsapp-bridge.mjs` in native packages, the bridge's `bin/` in a source checkout | The whatsapp-bridge program the server spawns per organization. |
+| `REA_DATA_DIR` | `rea` next to `FILES_DIR`, else `./rea-workspaces` | Per-organization working directories for the REA sidecar (analysis output). REA reads host files: only where agents may see this filesystem. |
+| `REA_PACKAGE` | `rea-agents@6.9.0` | npm spec the REA sidecar runs via `npx -y`; needs Node.js 22+ on `PATH`. |
 
 **Model keys.** Each organization adds its own keys (Claude, OpenAI, Gemini, DeepSeek, Kimi, Z.ai,
 MiniMax, Command Code or OpenRouter) in **Settings → AI and usage**, and each agent uses one of them. Usage and cost are recorded per agent.
@@ -898,6 +900,23 @@ through the connector's tools where the bridge supports it). Agents reach WhatsA
 `whatsapp` connector's tools (`list_chats`, `read_messages`, `search_messages` as reads;
 `send_message`, `send_media`, `mark_read` and friends as writes that ask approval) — grant them per
 agent like any connector.
+
+**REA reverse engineering (optional).** A workspace can connect **REA**
+([rea.tools](https://rea.tools/), the `rea-agents` npm package) from
+**Settings → Connectors → REA**: the server spawns one `rea-agents mcp --http`
+process per organization on a loopback port and registers it as a first-party
+connector, so agents get its analysis tools (inspect apps, JavaScript/ASAR
+bundles, native binaries, .NET assemblies and sites) under the same per-agent
+scopes, tool classification and approvals as any connector. **REA reads files on
+this server's filesystem** — its tools inspect whatever path an agent names — so
+grant it only to agents you trust with that access, and prefer it on self-hosted
+or single-tenant deployments. It needs **Node.js 22+** on `PATH` (the sidecar runs
+through `npx`; `REA_PACKAGE` pins the package spec, default `rea-agents@6.9.0`).
+Native-binary depth needs a Hopper, Ghidra, IDA or Kuna installation on the host;
+JavaScript/Electron and static analysis work without one. Per-org working
+directories live under `REA_DATA_DIR` (default: a `rea` folder next to
+`FILES_DIR`). The HTTP endpoint is loopback-only with no auth of its own, by
+upstream design — do not expose the port.
 
 **Your own MCP servers know who is calling (optional).** An MCP server you run for your own workspace
 (an internal tool your agents use) gets nothing with a call but its key, and a key that leaks works from

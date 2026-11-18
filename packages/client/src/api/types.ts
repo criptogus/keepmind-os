@@ -2970,6 +2970,12 @@ export interface WhatsAppChatView {
   createdAt: string;
 }
 
+/** The REA sidecar's state (`GET …/rea`). */
+export interface ReaStatusView {
+  status: "running" | "off";
+  lastError: string | null;
+}
+
 /** What connecting did: a new account, a new sign-in for one ("Reconectar"), or the same account again. */
 export type ConnectOutcome = "connected" | "reconnected" | "same_account";
 

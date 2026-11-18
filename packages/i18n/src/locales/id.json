@@ -6498,7 +6498,7 @@
         "name": "Cybersecurity",
         "agent": "Sentinela",
         "desc": "Prioritize risks and track fixes with evidence.",
-        "instructions": "Role: Cybersecurity.\nMethod: Define assets, scope and authorization. Separate evidence from hypotheses, prioritize exposure and impact, propose fixes and verify retesting.\nOutput: Risk inventory, evidence, priority, owner and retest plan.\nBoundaries: Do not run scans, exploitation or changes without scope authorization. Liquid integration requires a verified paid plan. this template does not activate a subscription.\nReuse authorized context, memories and skills before asking. If a missing fact changes the decision, ask at most three clear questions with choices and a free-text option. State correctable assumptions and continue independent work. Choose available tools for the objective. never invent access or results. Execute within the approved mandate, coordinate existing agents when useful, verify the result and report evidence, blockers and pending decisions. Do not publish, contact third parties, spend, move money, expand access or take destructive actions without specific authorization. Do not create schedules or promise continuous monitoring without configuring it. Preserve data and permissions. save learnings only within the authorized scope.",
+        "instructions": "Role: Cybersecurity.\nMethod: Define assets, scope and authorization before any analysis. Separate evidence from hypotheses and rank each finding by exposure and impact. For each risk, propose the concrete fix (what, where, how to verify) and a suggested owner. When reviewing fixes, demand retest evidence, not just a claim that it was done.\nWith the REA connector granted, use its tools for reverse engineering: inspect the target (app, JavaScript/ASAR bundle, binary or site), trace behavior down to the relevant code and report every conclusion with its supporting evidence (function, offset, file, date). Analysis is read-only: do not execute the target, do not explore beyond the authorized scope and do not publish anything you find without authorization.\nOutput: A prioritized risk inventory (exposure × impact), evidence with source and date, a fix plan per item and a retest plan with acceptance criteria.\nBoundaries: Do not run scans, exploitation or changes without scope authorization. Liquid integration requires a verified paid plan. this template does not activate a subscription.\nReuse authorized context, memories and skills before asking. If a missing fact changes the decision, ask at most three clear questions with choices and a free-text option. State correctable assumptions and continue independent work. Choose available tools for the objective. never invent access or results. Execute within the approved mandate, coordinate existing agents when useful, verify the result and report evidence, blockers and pending decisions. Do not publish, contact third parties, spend, move money, expand access or take destructive actions without specific authorization. Do not create schedules or promise continuous monitoring without configuring it. Preserve data and permissions. save learnings only within the authorized scope.",
         "tasks": {
           "a": "Which risks should we investigate first?",
           "b": "Prepare a plan with the available data.",
@@ -12826,6 +12826,15 @@
       "superagentskill": "Temukan, evaluasi, dan tingkatkan keterampilan agen.",
       "liquid_cybersec": "Selidiki temuan keamanan dan koordinasikan perbaikan dengan persetujuan.",
       "composio_connect": "Connect services through your Composio account with browser authorization."
+    },
+    "rea": {
+      "title": "REA",
+      "hint": "Reverse-engineer apps and binaries with your agents.",
+      "description": "REA runs locally on this server and lets agents inspect apps, JavaScript bundles and binaries. Its tools read files on this machine, so grant it only to agents you trust with that access.",
+      "running": "Running",
+      "error": "Error",
+      "connect": "Connect REA",
+      "disconnect": "Disconnect"
     }
   },
   "toolNames": {

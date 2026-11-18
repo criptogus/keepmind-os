@@ -3526,6 +3526,11 @@ export function createFakeHttpApi(state: FakeState): Omit<HttpApi, FakedParts> {
       chats: async () => ({ chats: [] }),
       setChatApproval: async () => ({ chat: null }),
     },
+    rea: {
+      status: async () => ({ rea: null }),
+      connect: async () => ({ rea: { status: "running" as const, lastError: null } }),
+      disconnect: async () => ({ rea: { status: "off" as const, lastError: null } }),
+    },
     githubApp: {
       access: async () =>
         structuredClone(

@@ -112,6 +112,7 @@ import {
   prepareAgentCode,
   publishUserEvent,
   queueBudgetEmail,
+  type ReaDeps,
   type ResolveHost,
   RIGHT_HAND_TURN,
   ROUTER_QUIET_MS,
@@ -194,6 +195,8 @@ export interface EngineOptions {
   errors?: ErrorReporter;
   /** Tests: fake spawn/fetch/paths for the WhatsApp bridge supervisor. */
   whatsapp?: Partial<WhatsAppDeps>;
+  /** Tests: fake spawn/fetch/paths for the REA sidecar supervisor. */
+  rea?: Partial<ReaDeps>;
 }
 
 /**
@@ -890,6 +893,17 @@ export function buildEngine(o: EngineOptions) {
   };
   // Agent replies in mirrored WhatsApp threads go back out through the bridge (job `message.posted`).
   jobDeps.whatsapp = whatsapp;
+  // The REA reverse-engineering sidecar (`rea-agents mcp --http`): spawned per
+  // org on connect, workspaces under REA_DATA_DIR. Opt-in — an admin connects it.
+  const rea: ReaDeps = {
+    db,
+    pubsub: adapters.pubsub,
+    dataDir:
+      config.REA_DATA_DIR ??
+      (config.FILES_DIR ? join(dirname(config.FILES_DIR), "rea") : join(process.cwd(), "rea-workspaces")),
+    packageSpec: config.REA_PACKAGE ?? "rea-agents@6.9.0",
+    ...o.rea,
+  };
   return {
     gateway,
     /** The search index's vectors (undefined: words alone), for the boot backfill (`queueEmbeddingBackfill`). */
@@ -923,6 +937,8 @@ export function buildEngine(o: EngineOptions) {
     voice,
     /** The WhatsApp bridge supervisor deps (spawn/health/state), for its routes and boot. */
     whatsapp,
+    /** The REA sidecar supervisor deps, for its routes and boot. */
+    rea,
   };
 }
 

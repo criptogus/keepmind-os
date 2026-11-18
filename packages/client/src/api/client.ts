@@ -265,6 +265,7 @@ import type {
   PushDeviceInput,
   ReactionCount,
   ReadOnlyOrgSettings,
+  ReaStatusView,
   Reminder,
   ReminderInput,
   RemovalPreview,
@@ -1088,6 +1089,12 @@ export interface ApiClient {
     setAnswerAgent(orgId: string, agentId: string | null): Promise<{ session: WhatsAppSessionView | null }>;
     chats(orgId: string): Promise<{ chats: WhatsAppChatView[] }>;
     setChatApproval(orgId: string, chatId: string, approved: boolean): Promise<{ chat: WhatsAppChatView | null }>;
+  };
+  /** The REA connector (reverse engineering sidecar): status, connect, disconnect. */
+  rea: {
+    status(orgId: string): Promise<{ rea: ReaStatusView | null }>;
+    connect(orgId: string): Promise<{ rea: ReaStatusView | null }>;
+    disconnect(orgId: string): Promise<{ rea: ReaStatusView | null }>;
   };
   githubApp: {
     /** Whether this server can install the GitHub App, the organization's installations, and the server's app. */

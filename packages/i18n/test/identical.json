@@ -335,6 +335,7 @@
       "newAgent.roles.inspired_taleb.agent",
       "newAgent.roles.inspired_blount.agent",
       "connectors.whatsapp.title",
+      "connectors.rea.title",
       "newAgent.roles.seo.name",
       "newAgent.roles.seo.agent"
     ],
@@ -936,7 +937,14 @@
       "connectors.whatsapp.chatApproved",
       "connectors.whatsapp.approve",
       "connectors.whatsapp.revoke",
-      "connectors.whatsapp.chatsEmpty"
+      "connectors.whatsapp.chatsEmpty",
+      "connectors.rea.title",
+      "connectors.rea.hint",
+      "connectors.rea.description",
+      "connectors.rea.running",
+      "connectors.rea.error",
+      "connectors.rea.connect",
+      "connectors.rea.disconnect"
     ],
     "fr": [
       "newAgent.roleGroups.exec",
@@ -1713,7 +1721,14 @@
       "connectors.whatsapp.chatApproved",
       "connectors.whatsapp.approve",
       "connectors.whatsapp.revoke",
-      "connectors.whatsapp.chatsEmpty"
+      "connectors.whatsapp.chatsEmpty",
+      "connectors.rea.title",
+      "connectors.rea.hint",
+      "connectors.rea.description",
+      "connectors.rea.running",
+      "connectors.rea.error",
+      "connectors.rea.connect",
+      "connectors.rea.disconnect"
     ],
     "de": [
       "newAgent.roleGroups.exec",
@@ -2511,7 +2526,14 @@
       "connectors.whatsapp.chatApproved",
       "connectors.whatsapp.approve",
       "connectors.whatsapp.revoke",
-      "connectors.whatsapp.chatsEmpty"
+      "connectors.whatsapp.chatsEmpty",
+      "connectors.rea.title",
+      "connectors.rea.hint",
+      "connectors.rea.description",
+      "connectors.rea.running",
+      "connectors.rea.error",
+      "connectors.rea.connect",
+      "connectors.rea.disconnect"
     ],
     "it": [
       "newAgent.roleGroups.exec",
@@ -3230,7 +3252,14 @@
       "connectors.whatsapp.chatApproved",
       "connectors.whatsapp.approve",
       "connectors.whatsapp.revoke",
-      "connectors.whatsapp.chatsEmpty"
+      "connectors.whatsapp.chatsEmpty",
+      "connectors.rea.title",
+      "connectors.rea.hint",
+      "connectors.rea.description",
+      "connectors.rea.running",
+      "connectors.rea.error",
+      "connectors.rea.connect",
+      "connectors.rea.disconnect"
     ],
     "nl": [
       "newAgent.roleGroups.exec",
@@ -4178,7 +4207,14 @@
       "connectors.whatsapp.chatApproved",
       "connectors.whatsapp.approve",
       "connectors.whatsapp.revoke",
-      "connectors.whatsapp.chatsEmpty"
+      "connectors.whatsapp.chatsEmpty",
+      "connectors.rea.title",
+      "connectors.rea.hint",
+      "connectors.rea.description",
+      "connectors.rea.running",
+      "connectors.rea.error",
+      "connectors.rea.connect",
+      "connectors.rea.disconnect"
     ],
     "ja": [
       "newAgent.roleGroups.exec",
@@ -4697,7 +4733,14 @@
       "connectors.whatsapp.chatApproved",
       "connectors.whatsapp.approve",
       "connectors.whatsapp.revoke",
-      "connectors.whatsapp.chatsEmpty"
+      "connectors.whatsapp.chatsEmpty",
+      "connectors.rea.title",
+      "connectors.rea.hint",
+      "connectors.rea.description",
+      "connectors.rea.running",
+      "connectors.rea.error",
+      "connectors.rea.connect",
+      "connectors.rea.disconnect"
     ],
     "ko": [
       "newAgent.roleGroups.exec",
@@ -5210,7 +5253,14 @@
       "connectors.whatsapp.chatApproved",
       "connectors.whatsapp.approve",
       "connectors.whatsapp.revoke",
-      "connectors.whatsapp.chatsEmpty"
+      "connectors.whatsapp.chatsEmpty",
+      "connectors.rea.title",
+      "connectors.rea.hint",
+      "connectors.rea.description",
+      "connectors.rea.running",
+      "connectors.rea.error",
+      "connectors.rea.connect",
+      "connectors.rea.disconnect"
     ],
     "zh-Hans": [
       "newAgent.roleGroups.exec",
@@ -5714,7 +5764,14 @@
       "connectors.whatsapp.chatApproved",
       "connectors.whatsapp.approve",
       "connectors.whatsapp.revoke",
-      "connectors.whatsapp.chatsEmpty"
+      "connectors.whatsapp.chatsEmpty",
+      "connectors.rea.title",
+      "connectors.rea.hint",
+      "connectors.rea.description",
+      "connectors.rea.running",
+      "connectors.rea.error",
+      "connectors.rea.connect",
+      "connectors.rea.disconnect"
     ],
     "id": [
       "newAgent.roleGroups.exec",
@@ -6367,7 +6424,14 @@
       "connectors.whatsapp.chatApproved",
       "connectors.whatsapp.approve",
       "connectors.whatsapp.revoke",
-      "connectors.whatsapp.chatsEmpty"
+      "connectors.whatsapp.chatsEmpty",
+      "connectors.rea.title",
+      "connectors.rea.hint",
+      "connectors.rea.description",
+      "connectors.rea.running",
+      "connectors.rea.error",
+      "connectors.rea.connect",
+      "connectors.rea.disconnect"
     ],
     "tr": [
       "newAgent.roleGroups.exec",
@@ -6905,7 +6969,14 @@
       "connectors.whatsapp.chatApproved",
       "connectors.whatsapp.approve",
       "connectors.whatsapp.revoke",
-      "connectors.whatsapp.chatsEmpty"
+      "connectors.whatsapp.chatsEmpty",
+      "connectors.rea.title",
+      "connectors.rea.hint",
+      "connectors.rea.description",
+      "connectors.rea.running",
+      "connectors.rea.error",
+      "connectors.rea.connect",
+      "connectors.rea.disconnect"
     ],
     "pl": [
       "newAgent.roleGroups.exec",
@@ -7552,7 +7623,14 @@
       "connectors.whatsapp.chatApproved",
       "connectors.whatsapp.approve",
       "connectors.whatsapp.revoke",
-      "connectors.whatsapp.chatsEmpty"
+      "connectors.whatsapp.chatsEmpty",
+      "connectors.rea.title",
+      "connectors.rea.hint",
+      "connectors.rea.description",
+      "connectors.rea.running",
+      "connectors.rea.error",
+      "connectors.rea.connect",
+      "connectors.rea.disconnect"
     ],
     "ru": [
       "newAgent.roleGroups.exec",
@@ -8056,7 +8134,14 @@
       "connectors.whatsapp.chatApproved",
       "connectors.whatsapp.approve",
       "connectors.whatsapp.revoke",
-      "connectors.whatsapp.chatsEmpty"
+      "connectors.whatsapp.chatsEmpty",
+      "connectors.rea.title",
+      "connectors.rea.hint",
+      "connectors.rea.description",
+      "connectors.rea.running",
+      "connectors.rea.error",
+      "connectors.rea.connect",
+      "connectors.rea.disconnect"
     ]
   },
   "mobile-base": {

@@ -12786,7 +12786,8 @@ export const en = {
     whatsapp: {
       title: "WhatsApp",
       hint: "Chats with your WhatsApp number show up here as threads, and agents can answer them.",
-      description: "Pair a WhatsApp number by QR code. Its chats mirror into this workspace; agents can read and answer them.",
+      description:
+        "Pair a WhatsApp number by QR code. Its chats mirror into this workspace; agents can read and answer them.",
       qrLabel: "WhatsApp pairing QR code",
       qrPending: "Waiting for the QR code…",
       scanHint: "In WhatsApp, open Linked devices and scan this code.",
@@ -12807,6 +12808,17 @@ export const en = {
       approve: "Approve",
       revoke: "Revoke",
       chatsEmpty: "No chats yet.",
+    },
+    /** REA connector (reverse-engineering sidecar): the card on Connectors. */
+    rea: {
+      title: "REA",
+      hint: "Reverse-engineer apps and binaries with your agents.",
+      description:
+        "REA runs locally on this server and lets agents inspect apps, JavaScript bundles and binaries. Its tools read files on this machine, so grant it only to agents you trust with that access.",
+      running: "Running",
+      error: "Error",
+      connect: "Connect REA",
+      disconnect: "Disconnect",
     },
     addTitle: "Add connector",
     catalogText: "Connect once for {{org}}. Then choose what each agent can use.",

@@ -353,6 +353,8 @@ export * from "./waitlist";
 export * from "./web-push";
 export * from "./web-tools";
 export * from "./webhooks";
+export * from "./rea/connector";
+export * from "./rea/supervisor";
 export * from "./whatsapp/chats";
 export * from "./whatsapp/connector";
 export * from "./whatsapp/inbound";

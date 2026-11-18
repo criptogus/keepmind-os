@@ -199,6 +199,7 @@ import type {
   Poll,
   Proposal,
   ReactionCount,
+  ReaStatusView,
   Reminder,
   RemovalPreview,
   RightHandApprovals,
@@ -1207,6 +1208,11 @@ export function createHttpApi(options: TransportOptions = {}): HttpApi {
           method: "PUT",
           json: { approved },
         }),
+    },
+    rea: {
+      status: (orgId) => request<{ rea: ReaStatusView | null }>(`${org(orgId)}/rea`),
+      connect: (orgId) => request<{ rea: ReaStatusView | null }>(`${org(orgId)}/rea/connect`, { method: "POST" }),
+      disconnect: (orgId) => request<{ rea: ReaStatusView | null }>(`${org(orgId)}/rea/disconnect`, { method: "POST" }),
     },
     githubApp: {
       info: (orgId) => request<GitHubAppInfo>(`${org(orgId)}/github-app`),

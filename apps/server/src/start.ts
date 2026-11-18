@@ -62,6 +62,7 @@ import {
   enableAccountContacts,
   enableCaches,
   enableOperatorEvents,
+  ensureReaOnBoot,
   ensureRightHands,
   ensureWhatsAppBridgesOnBoot,
   type GifKey,
@@ -471,6 +472,9 @@ async function boot(
     void ensureWhatsAppBridgesOnBoot(engine.whatsapp).catch((error: unknown) =>
       log.warn("whatsapp bridges failed to resume", { error: String(error) }),
     );
+    void ensureReaOnBoot(engine.rea).catch((error: unknown) =>
+      log.warn("rea sidecars failed to resume", { error: String(error) }),
+    );
   }
   const slots = { quick: config.OUTBOX_QUICK_SLOTS, long: config.OUTBOX_MAX_IN_FLIGHT - config.OUTBOX_QUICK_SLOTS };
   const memoryBytes = memoryBudget({
@@ -556,6 +560,7 @@ async function boot(
         gitProxy: engine.gitProxy,
         pushRelaySender: relayServeSender(direct),
         whatsapp: engine.whatsapp,
+        rea: engine.rea,
       },
     },
     log,

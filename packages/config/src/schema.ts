@@ -985,6 +985,20 @@ export const envVars = {
     section: "Storage",
     example: "/app/server/whatsapp-bridge.mjs",
   },
+  REA_DATA_DIR: {
+    schema: z.string().optional(),
+    description:
+      "Absolute path for REA sidecar working directories (one folder per organization, where analysis output lands). Defaults to a `rea` folder next to FILES_DIR, or `./rea-workspaces` when FILES_DIR is unset. REA reads host files for analysis: only enable it where agents may see this server's filesystem.",
+    section: "Storage",
+    example: "/data/rea",
+  },
+  REA_PACKAGE: {
+    schema: z.string().optional(),
+    description:
+      "npm package spec the REA sidecar runs via `npx -y` (default `rea-agents`, pinned to a reviewed version). Requires Node.js 22+ on PATH. Pin or mirror the package in air-gapped deployments.",
+    section: "Storage",
+    example: "rea-agents@6.9.0",
+  },
   S3_ENDPOINT: {
     schema: z.url().optional(),
     description:

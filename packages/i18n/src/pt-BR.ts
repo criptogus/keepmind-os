@@ -12814,7 +12814,8 @@ export const ptBR = {
     whatsapp: {
       title: "WhatsApp",
       hint: "As conversas do seu número do WhatsApp aparecem aqui como threads, e agentes podem respondê-las.",
-      description: "Pareie um número do WhatsApp por QR code. As conversas espelham neste workspace; agentes podem ler e responder.",
+      description:
+        "Pareie um número do WhatsApp por QR code. As conversas espelham neste workspace; agentes podem ler e responder.",
       qrLabel: "QR code de pareamento do WhatsApp",
       qrPending: "Aguardando o QR code…",
       scanHint: "No WhatsApp, abra Aparelhos conectados e escaneie este código.",
@@ -12835,6 +12836,17 @@ export const ptBR = {
       approve: "Aprovar",
       revoke: "Revogar",
       chatsEmpty: "Nenhuma conversa ainda.",
+    },
+    /** REA connector (sidecar de engenharia reversa): o card em Conectores. */
+    rea: {
+      title: "REA",
+      hint: "Faça engenharia reversa de apps e binários com seus agentes.",
+      description:
+        "O REA roda localmente neste servidor e permite aos agentes inspecionar apps, bundles JavaScript e binários. Suas ferramentas leem arquivos desta máquina, então conceda apenas a agentes em quem você confia esse acesso.",
+      running: "Rodando",
+      error: "Erro",
+      connect: "Conectar REA",
+      disconnect: "Desconectar",
     },
     addTitle: "Adicionar conector",
     catalogText: "Conecte uma vez para a {{org}}. Depois escolha o que cada agente pode usar.",

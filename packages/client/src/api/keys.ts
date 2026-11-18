@@ -61,6 +61,7 @@ export const keys = {
   connections: (orgId: string) => ["org", orgId, "connections"] as const,
   whatsapp: (orgId: string) => ["org", orgId, "whatsapp"] as const,
   whatsappChats: (orgId: string) => ["org", orgId, "whatsapp", "chats"] as const,
+  rea: (orgId: string) => ["org", orgId, "rea"] as const,
   githubApp: (orgId: string) => ["org", orgId, "github-app"] as const,
   githubRepos: (orgId: string) => ["org", orgId, "github-repositories"] as const,
   githubAccess: (orgId: string) => ["org", orgId, "github-access"] as const,

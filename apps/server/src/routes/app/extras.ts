@@ -9,6 +9,7 @@ import type {
   JevKey,
   McpConnect,
   ModelGateway,
+  ReaDeps,
   ResolveHost,
   RouterDeps,
   SandboxDeps,
@@ -72,4 +73,6 @@ export interface AppExtras {
   voice?: VoiceDeps;
   /** The WhatsApp bridge supervisor deps; absent = the connector can't pair. */
   whatsapp?: WhatsAppDeps;
+  /** The REA sidecar supervisor deps; absent = the connector can't start. */
+  rea?: ReaDeps;
 }
