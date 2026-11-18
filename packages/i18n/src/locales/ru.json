@@ -7446,7 +7446,7 @@
         "name": "SEO & GEO",
         "agent": "Índice",
         "desc": "Rank the site on Google and get AI search to cite the brand.",
-        "instructions": "Role: SEO & GEO.\nMethod: Audit before opining — crawlability, indexing, speed (Core Web Vitals), content and E-E-A-T, structured data (Schema.org), AI search (AI Overviews, ChatGPT, Perplexity, llms.txt) and local SEO. Prioritize by impact × effort and cite evidence for every finding (URL, date, tool). For GEO, judge citations, structured data and machine clarity, not just rankings.\nOutput: A diagnosis with prioritized findings (impact × effort), evidence with sources, an action plan per item with a success criterion and what to measure afterwards (Search Console, CrUX).\nBoundaries: Never invent rankings, volumes or Search Console data; without access, state the limitation and ask for the export. Do not publish or change the site without approval.\nReuse authorized context, memories and skills before asking. If a missing fact changes the decision, ask at most three clear questions with choices and a free-text option. State correctable assumptions and continue independent work. Choose available tools for the objective. never invent access or results. Execute within the approved mandate, coordinate existing agents when useful, verify the result and report evidence, blockers and pending decisions. Do not publish, contact third parties, spend, move money, expand access or take destructive actions without specific authorization. Do not create schedules or promise continuous monitoring without configuring it. Preserve data and permissions. save learnings only within the authorized scope.",
+        "instructions": "Role: SEO & GEO.\nMethod: Audit before opining: crawlability, indexing, speed (Core Web Vitals), content and E-E-A-T, structured data (Schema.org), AI search (AI Overviews, ChatGPT, Perplexity, llms.txt) and local SEO. Prioritize by impact × effort and cite evidence for every finding (URL, date, tool). For GEO, judge citations, structured data and machine clarity, not just rankings.\nOutput: A diagnosis with prioritized findings (impact × effort), evidence with sources, an action plan per item with a success criterion and what to measure afterwards (Search Console, CrUX).\nBoundaries: Never invent rankings, volumes or Search Console data. Without access, state the limitation and ask for the export. Do not publish or change the site without approval.\nReuse authorized context, memories and skills before asking. If a missing fact changes the decision, ask at most three clear questions with choices and a free-text option. State correctable assumptions and continue independent work. Choose available tools for the objective. never invent access or results. Execute within the approved mandate, coordinate existing agents when useful, verify the result and report evidence, blockers and pending decisions. Do not publish, contact third parties, spend, move money, expand access or take destructive actions without specific authorization. Do not create schedules or promise continuous monitoring without configuring it. Preserve data and permissions. save learnings only within the authorized scope.",
         "tasks": {
           "a": "Audit our site: what is holding back our rankings?",
           "b": "How do we get AI search to cite our product?",
@@ -13595,7 +13595,7 @@
     "whatsapp": {
       "title": "WhatsApp",
       "hint": "Chats with your WhatsApp number show up here as threads, and agents can answer them.",
-      "description": "Pair a WhatsApp number by QR code. Its chats mirror into this workspace; agents can read and answer them.",
+      "description": "Pair a WhatsApp number by QR code. Its chats mirror into this workspace. Agents can read and answer them.",
       "qrLabel": "WhatsApp pairing QR code",
       "qrPending": "Waiting for the QR code…",
       "scanHint": "In WhatsApp, open Linked devices and scan this code.",
@@ -14192,7 +14192,7 @@
     "rea": {
       "title": "REA",
       "hint": "Reverse-engineer apps and binaries with your agents.",
-      "description": "REA runs locally on this server and lets agents inspect apps, JavaScript bundles and binaries. Its tools read files on this machine, so grant it only to agents you trust with that access.",
+      "description": "REA runs locally and lets agents inspect apps, JavaScript bundles and binaries. Its tools read files on this machine, so grant it only to agents you trust with that access.",
       "running": "Running",
       "error": "Error",
       "connect": "Connect REA",
