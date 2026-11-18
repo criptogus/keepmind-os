@@ -301,7 +301,7 @@ describe("Criar agente: steps", () => {
         .getAllByRole("button")
         .map((b) => b.querySelector(".newag__role-name b")?.textContent);
     expect(names("Produto e tecnologia")).toEqual(["Dev", "Ops", "QA", "PM", "Cybersec"]);
-    expect(names("Clientes")).toEqual(["Atendimento", "Vendas", "Marketing", "Conteúdo"]);
+    expect(names("Clientes")).toEqual(["Atendimento", "Vendas", "Marketing", "Conteúdo", "SEO & GEO"]);
     expect(names("Operação")).toEqual(["Dados", "Financeiro", "Pessoas", "Pesquisa", "Assistente"]);
     expect(within(step).getAllByRole("button")[0]?.textContent).toContain("Do zero");
     // Every card, Do zero too, opens on its tile with the name and its line centred beside it (no cap-top rise).

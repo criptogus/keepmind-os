@@ -35,6 +35,7 @@ export const ROLE_IDS = [
   "sales",
   "marketing",
   "content",
+  "seo",
   "data",
   "finance",
   "people",
@@ -80,7 +81,7 @@ export type RoleId = (typeof ROLE_IDS)[number];
 /** The role step in groups, in order (titles in i18n: `newAgent.roleGroups.{id}`); "custom" stays apart, last. */
 export const ROLE_GROUPS = [
   { id: "tech", roles: ["dev", "ops", "qa", "pm", "cybersec"] },
-  { id: "customers", roles: ["support", "sales", "marketing", "content"] },
+  { id: "customers", roles: ["support", "sales", "marketing", "content", "seo"] },
   { id: "operations", roles: ["data", "finance", "people", "research", "assistant"] },
   { id: "advisory", roles: ["consulting", "strategy", "trends"] },
   {
@@ -153,6 +154,7 @@ export const RESTRICTED_ROLE_IDS: readonly RoleId[] = [
   "exec_coo",
   "exec_people",
   "exec_research",
+  "seo",
 ];
 
 /* ---------- What a role starts with ---------- */
@@ -317,6 +319,12 @@ export const ROLE_DEFAULTS = {
     look: { color: "sky", eyes: "dots", accessory: "none" },
     levels: {},
     channels: ["pesquisa", "research", "insights", "estudos", "diretoria", "executive"],
+  }),
+  // SEO & GEO: like every specialist, no connection is implicit.
+  seo: starts({
+    look: { color: "teal", eyes: "round", accessory: "none" },
+    levels: {},
+    channels: ["seo", "marketing", "growth", "conteudo", "content", "blog"],
   }),
   custom: starts({ look: { color: "sky", eyes: "round", accessory: "none" }, levels: {}, channels: [] }),
 } satisfies Record<RoleId, RoleDefaults>;

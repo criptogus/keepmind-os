@@ -334,7 +334,9 @@
       "newAgent.roles.inspired_godin.agent",
       "newAgent.roles.inspired_taleb.agent",
       "newAgent.roles.inspired_blount.agent",
-      "connectors.whatsapp.title"
+      "connectors.whatsapp.title",
+      "newAgent.roles.seo.name",
+      "newAgent.roles.seo.agent"
     ],
     "es": [
       "newAgent.roleGroups.exec",
@@ -919,7 +921,15 @@
       "connectors.whatsapp.disconnect",
       "connectors.whatsapp.answerAgent",
       "connectors.whatsapp.answerAgentHint",
-      "connectors.whatsapp.answerRightHand"
+      "connectors.whatsapp.answerRightHand",
+      "newAgent.hello.seo",
+      "newAgent.roles.seo.name",
+      "newAgent.roles.seo.agent",
+      "newAgent.roles.seo.desc",
+      "newAgent.roles.seo.instructions",
+      "newAgent.roles.seo.tasks.a",
+      "newAgent.roles.seo.tasks.b",
+      "newAgent.roles.seo.tasks.c"
     ],
     "fr": [
       "newAgent.roleGroups.exec",
@@ -1681,7 +1691,15 @@
       "connectors.whatsapp.disconnect",
       "connectors.whatsapp.answerAgent",
       "connectors.whatsapp.answerAgentHint",
-      "connectors.whatsapp.answerRightHand"
+      "connectors.whatsapp.answerRightHand",
+      "newAgent.hello.seo",
+      "newAgent.roles.seo.name",
+      "newAgent.roles.seo.agent",
+      "newAgent.roles.seo.desc",
+      "newAgent.roles.seo.instructions",
+      "newAgent.roles.seo.tasks.a",
+      "newAgent.roles.seo.tasks.b",
+      "newAgent.roles.seo.tasks.c"
     ],
     "de": [
       "newAgent.roleGroups.exec",
@@ -2464,7 +2482,15 @@
       "connectors.whatsapp.disconnect",
       "connectors.whatsapp.answerAgent",
       "connectors.whatsapp.answerAgentHint",
-      "connectors.whatsapp.answerRightHand"
+      "connectors.whatsapp.answerRightHand",
+      "newAgent.hello.seo",
+      "newAgent.roles.seo.name",
+      "newAgent.roles.seo.agent",
+      "newAgent.roles.seo.desc",
+      "newAgent.roles.seo.instructions",
+      "newAgent.roles.seo.tasks.a",
+      "newAgent.roles.seo.tasks.b",
+      "newAgent.roles.seo.tasks.c"
     ],
     "it": [
       "newAgent.roleGroups.exec",
@@ -3168,7 +3194,15 @@
       "connectors.whatsapp.disconnect",
       "connectors.whatsapp.answerAgent",
       "connectors.whatsapp.answerAgentHint",
-      "connectors.whatsapp.answerRightHand"
+      "connectors.whatsapp.answerRightHand",
+      "newAgent.hello.seo",
+      "newAgent.roles.seo.name",
+      "newAgent.roles.seo.agent",
+      "newAgent.roles.seo.desc",
+      "newAgent.roles.seo.instructions",
+      "newAgent.roles.seo.tasks.a",
+      "newAgent.roles.seo.tasks.b",
+      "newAgent.roles.seo.tasks.c"
     ],
     "nl": [
       "newAgent.roleGroups.exec",
@@ -4101,7 +4135,15 @@
       "connectors.whatsapp.disconnect",
       "connectors.whatsapp.answerAgent",
       "connectors.whatsapp.answerAgentHint",
-      "connectors.whatsapp.answerRightHand"
+      "connectors.whatsapp.answerRightHand",
+      "newAgent.hello.seo",
+      "newAgent.roles.seo.name",
+      "newAgent.roles.seo.agent",
+      "newAgent.roles.seo.desc",
+      "newAgent.roles.seo.instructions",
+      "newAgent.roles.seo.tasks.a",
+      "newAgent.roles.seo.tasks.b",
+      "newAgent.roles.seo.tasks.c"
     ],
     "ja": [
       "newAgent.roleGroups.exec",
@@ -4605,7 +4647,15 @@
       "connectors.whatsapp.disconnect",
       "connectors.whatsapp.answerAgent",
       "connectors.whatsapp.answerAgentHint",
-      "connectors.whatsapp.answerRightHand"
+      "connectors.whatsapp.answerRightHand",
+      "newAgent.hello.seo",
+      "newAgent.roles.seo.name",
+      "newAgent.roles.seo.agent",
+      "newAgent.roles.seo.desc",
+      "newAgent.roles.seo.instructions",
+      "newAgent.roles.seo.tasks.a",
+      "newAgent.roles.seo.tasks.b",
+      "newAgent.roles.seo.tasks.c"
     ],
     "ko": [
       "newAgent.roleGroups.exec",
@@ -5103,7 +5153,15 @@
       "connectors.whatsapp.disconnect",
       "connectors.whatsapp.answerAgent",
       "connectors.whatsapp.answerAgentHint",
-      "connectors.whatsapp.answerRightHand"
+      "connectors.whatsapp.answerRightHand",
+      "newAgent.hello.seo",
+      "newAgent.roles.seo.name",
+      "newAgent.roles.seo.agent",
+      "newAgent.roles.seo.desc",
+      "newAgent.roles.seo.instructions",
+      "newAgent.roles.seo.tasks.a",
+      "newAgent.roles.seo.tasks.b",
+      "newAgent.roles.seo.tasks.c"
     ],
     "zh-Hans": [
       "newAgent.roleGroups.exec",
@@ -5592,7 +5650,15 @@
       "connectors.whatsapp.disconnect",
       "connectors.whatsapp.answerAgent",
       "connectors.whatsapp.answerAgentHint",
-      "connectors.whatsapp.answerRightHand"
+      "connectors.whatsapp.answerRightHand",
+      "newAgent.hello.seo",
+      "newAgent.roles.seo.name",
+      "newAgent.roles.seo.agent",
+      "newAgent.roles.seo.desc",
+      "newAgent.roles.seo.instructions",
+      "newAgent.roles.seo.tasks.a",
+      "newAgent.roles.seo.tasks.b",
+      "newAgent.roles.seo.tasks.c"
     ],
     "id": [
       "newAgent.roleGroups.exec",
@@ -6230,7 +6296,15 @@
       "connectors.whatsapp.disconnect",
       "connectors.whatsapp.answerAgent",
       "connectors.whatsapp.answerAgentHint",
-      "connectors.whatsapp.answerRightHand"
+      "connectors.whatsapp.answerRightHand",
+      "newAgent.hello.seo",
+      "newAgent.roles.seo.name",
+      "newAgent.roles.seo.agent",
+      "newAgent.roles.seo.desc",
+      "newAgent.roles.seo.instructions",
+      "newAgent.roles.seo.tasks.a",
+      "newAgent.roles.seo.tasks.b",
+      "newAgent.roles.seo.tasks.c"
     ],
     "tr": [
       "newAgent.roleGroups.exec",
@@ -6753,7 +6827,15 @@
       "connectors.whatsapp.disconnect",
       "connectors.whatsapp.answerAgent",
       "connectors.whatsapp.answerAgentHint",
-      "connectors.whatsapp.answerRightHand"
+      "connectors.whatsapp.answerRightHand",
+      "newAgent.hello.seo",
+      "newAgent.roles.seo.name",
+      "newAgent.roles.seo.agent",
+      "newAgent.roles.seo.desc",
+      "newAgent.roles.seo.instructions",
+      "newAgent.roles.seo.tasks.a",
+      "newAgent.roles.seo.tasks.b",
+      "newAgent.roles.seo.tasks.c"
     ],
     "pl": [
       "newAgent.roleGroups.exec",
@@ -7385,7 +7467,15 @@
       "connectors.whatsapp.disconnect",
       "connectors.whatsapp.answerAgent",
       "connectors.whatsapp.answerAgentHint",
-      "connectors.whatsapp.answerRightHand"
+      "connectors.whatsapp.answerRightHand",
+      "newAgent.hello.seo",
+      "newAgent.roles.seo.name",
+      "newAgent.roles.seo.agent",
+      "newAgent.roles.seo.desc",
+      "newAgent.roles.seo.instructions",
+      "newAgent.roles.seo.tasks.a",
+      "newAgent.roles.seo.tasks.b",
+      "newAgent.roles.seo.tasks.c"
     ],
     "ru": [
       "newAgent.roleGroups.exec",
@@ -7874,7 +7964,15 @@
       "connectors.whatsapp.disconnect",
       "connectors.whatsapp.answerAgent",
       "connectors.whatsapp.answerAgentHint",
-      "connectors.whatsapp.answerRightHand"
+      "connectors.whatsapp.answerRightHand",
+      "newAgent.hello.seo",
+      "newAgent.roles.seo.name",
+      "newAgent.roles.seo.agent",
+      "newAgent.roles.seo.desc",
+      "newAgent.roles.seo.instructions",
+      "newAgent.roles.seo.tasks.a",
+      "newAgent.roles.seo.tasks.b",
+      "newAgent.roles.seo.tasks.c"
     ]
   },
   "mobile-base": {
