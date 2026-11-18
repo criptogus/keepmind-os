@@ -13588,6 +13588,9 @@
         "1": "Voir les tables",
         "2": "Interroger les données pour répondre",
         "3": "Ne modifie jamais rien"
+      },
+      "context7": {
+        "1": "Récupérer la documentation à jour des bibliothèques"
       }
     },
     "connectedList": "Connectés",
@@ -13742,7 +13745,8 @@
       "whatsapp": "Messages et modèles WhatsApp Business.",
       "superagentskill": "Trouvez, évaluez et améliorez les compétences des agents.",
       "liquid_cybersec": "Examinez les problèmes de sécurité et coordonnez les corrections avec approbation.",
-      "composio_connect": "Connect services through your Composio account with browser authorization."
+      "composio_connect": "Connect services through your Composio account with browser authorization.",
+      "context7": "Documentation des bibliothèques à jour, propre à chaque version."
     },
     "rea": {
       "title": "REA",

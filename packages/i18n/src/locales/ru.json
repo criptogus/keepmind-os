@@ -14008,6 +14008,9 @@
         "1": "Смотреть таблицы",
         "2": "Делать запросы к данным, чтобы отвечать",
         "3": "Никогда ничего не меняет"
+      },
+      "context7": {
+        "1": "Получать актуальную документацию библиотек"
       }
     },
     "connectedList": "Подключённые",
@@ -14167,7 +14170,8 @@
       "whatsapp": "Сообщения и шаблоны WhatsApp Business.",
       "superagentskill": "Находите, оценивайте и улучшайте навыки агентов.",
       "liquid_cybersec": "Изучайте проблемы безопасности и координируйте исправления с одобрением.",
-      "composio_connect": "Connect services through your Composio account with browser authorization."
+      "composio_connect": "Connect services through your Composio account with browser authorization.",
+      "context7": "Актуальная документация библиотек с привязкой к версиям."
     },
     "rea": {
       "title": "REA",

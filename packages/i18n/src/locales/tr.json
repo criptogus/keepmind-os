@@ -13062,6 +13062,9 @@
         "1": "Tabloları görür",
         "2": "Yanıt vermek için verileri sorgular",
         "3": "Hiçbir şeyi değiştirmez"
+      },
+      "context7": {
+        "1": "Güncel kitaplık belgelerini getir"
       }
     },
     "connectedList": "Bağlı",
@@ -13211,7 +13214,8 @@
       "whatsapp": "WhatsApp Business mesajları ve şablonları.",
       "superagentskill": "Temsilci becerilerini bulun, değerlendirin ve geliştirin.",
       "liquid_cybersec": "Güvenlik bulgularını araştırın ve düzeltmeleri onayla koordine edin.",
-      "composio_connect": "Connect services through your Composio account with browser authorization."
+      "composio_connect": "Connect services through your Composio account with browser authorization.",
+      "context7": "Sürüme özel, güncel kitaplık belgeleri."
     },
     "rea": {
       "title": "REA",

@@ -12621,6 +12621,9 @@
         "1": "테이블 보기",
         "2": "데이터를 조회해 답변하기",
         "3": "아무것도 변경하지 않음"
+      },
+      "context7": {
+        "1": "최신 라이브러리 문서 가져오기"
       }
     },
     "connectedList": "연결됨",
@@ -12765,7 +12768,8 @@
       "whatsapp": "WhatsApp Business 메시지와 템플릿.",
       "superagentskill": "에이전트 스킬을 찾고 평가하고 개선합니다.",
       "liquid_cybersec": "보안 문제를 조사하고 승인을 받아 수정을 조정합니다.",
-      "composio_connect": "Connect services through your Composio account with browser authorization."
+      "composio_connect": "Connect services through your Composio account with browser authorization.",
+      "context7": "버전별 최신 라이브러리 문서."
     },
     "rea": {
       "title": "REA",
