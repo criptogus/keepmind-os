@@ -53,7 +53,7 @@ export function WhatsAppConnect({ orgId, admin, agents }: { orgId: string; admin
               label="WhatsApp"
               size="md"
             />
-            WhatsApp
+            {t("connectors.whatsapp.title")}
           </span>
         }
         hint={{

@@ -98,6 +98,7 @@ describe("the agent's identity as a card", () => {
       "Vendas",
       "Marketing",
       "Conteúdo",
+      "SEO & GEO",
       "Dados",
       "Financeiro",
       "Pessoas",

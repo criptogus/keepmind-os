@@ -353,6 +353,7 @@ describe("grammar", () => {
       "Eixo",
       "Ímã",
       "Cisne",
+      "Índice",
     ];
     for (const dict of [ptBR, en]) {
       const roles = Object.values(dict.newAgent.roles as Record<string, { agent?: string }>);

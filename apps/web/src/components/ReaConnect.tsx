@@ -33,7 +33,7 @@ export function ReaConnect({ orgId, admin }: { orgId: string; admin: boolean }) 
         title={
           <span className="ac-whatsapp-title">
             <ConnectorIcon def={{ iconUrl: "/connectors/rea.svg", brandColor: "#7C3AED" }} label="REA" size="md" />
-            REA
+            {t("connectors.rea.title")}
           </span>
         }
         hint={{ name: t("connectors.rea.title"), text: t("connectors.rea.hint") }}
