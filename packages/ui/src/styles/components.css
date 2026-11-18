@@ -12787,6 +12787,34 @@ html:not([data-pointer]) .ac-foldrow__head:focus-visible {
   stroke: currentColor;
   opacity: 0.24;
 }
+/* The greeting may end, but empty-state companions keep a quiet idle motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .ac-empty__agent > .ac-sticker {
+    animation: km-companion-idle 4.8s ease-in-out infinite;
+  }
+  .km-presence__orbits {
+    transform-origin: 50% 56%;
+    animation: km-orbit-idle 18s ease-in-out infinite;
+  }
+}
+@keyframes km-companion-idle {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+@keyframes km-orbit-idle {
+  0%,
+  100% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(4deg);
+  }
+}
 .km-presence__orbits circle {
   fill: currentColor;
   stroke: none;
