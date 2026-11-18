@@ -7020,6 +7020,7 @@
         "name": "Gdzie i z kim",
         "title": "Gdzie pracuje i z kim",
         "lead": "{{name}} dołączy do zaznaczonych kanałów i będzie mieć opiekuna w zespole.",
+        "leadBatch": "Każdy dołącza do zaznaczonych kanałów i ma opiekuna w zespole.",
         "leadPersonal": "{{name}} rozmawia z tobą na własnym czacie i dołącza do rozmów grupowych, które zaznaczysz."
       },
       "model": {
@@ -7727,6 +7728,14 @@
     "goTo": "Przejdź do #{{channel}}",
     "openProfile": "Otwórz profil",
     "createAnother": "Utwórz kolejnego agenta",
+    "batch": {
+      "hint": "Wybierz więcej gotowych ról, aby utworzyć je razem, albo kontynuuj z tą",
+      "create": "Utwórz {{count}} agentów",
+      "created": "Utworzono {{count}} agentów",
+      "customLocked": "Od zera pozostaje pojedynczy agent",
+      "reviewTitle": "Twój nowy zespół",
+      "limit": "Możesz wybrać maksymalnie {{max}} agentów naraz"
+    },
     "adminsOnly": "Agentów tworzą tylko administratorzy i właściciele. Poproś administratora {{org}}.",
     "adminsOnlyKeeper": "Na tworzenie agentów może ci pozwolić {{keeper}}.",
     "adminsOnlyPersonal": "Poproś osobę, która zarządza tą przestrzenią, żeby pozwoliła ci tworzyć agentów.",

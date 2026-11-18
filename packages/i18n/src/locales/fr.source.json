@@ -46609,5 +46609,26 @@
   },
   "connectors.descriptions.context7": {
     "value": "Up-to-date, version-specific library documentation."
+  },
+  "newAgent.batch.hint": {
+    "value": "Pick more ready-made roles to create them together, or go on with this one"
+  },
+  "newAgent.batch.create": {
+    "value": "Create {{count}} agents"
+  },
+  "newAgent.batch.created": {
+    "value": "{{count}} agents created"
+  },
+  "newAgent.batch.customLocked": {
+    "value": "From scratch stays a single agent"
+  },
+  "newAgent.batch.limit": {
+    "value": "You can pick up to {{max}} agents at once"
+  },
+  "newAgent.batch.reviewTitle": {
+    "value": "Your new team"
+  },
+  "newAgent.steps.where.leadBatch": {
+    "value": "Each one joins the channels you check and has an owner on the team."
   }
 }

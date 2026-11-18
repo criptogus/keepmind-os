@@ -7103,6 +7103,7 @@ export const en = {
         name: "Where and who",
         title: "Where it works and with whom",
         lead: "{{name}} joins the channels you check and has an owner on the team.",
+        leadBatch: "Each one joins the channels you check and has an owner on the team.",
         leadPersonal: "{{name}} talks to you in its own chat and joins the group conversations you check.",
       },
       model: {
@@ -7423,6 +7424,15 @@ export const en = {
     goTo: "Go to #{{channel}}",
     openProfile: "Open profile",
     createAnother: "Create another agent",
+    /** Batch creation: several ready-made roles at once, one shared setup (the templates fill each agent). */
+    batch: {
+      hint: "Pick more ready-made roles to create them together, or go on with this one",
+      create: "Create {{count}} agents",
+      created: "{{count}} agents created",
+      customLocked: "From scratch stays a single agent",
+      limit: "You can pick up to {{max}} agents at once",
+      reviewTitle: "Your new team",
+    },
     adminsOnly: "Only admins and owners create agents. Ask a {{org}} admin.",
     adminsOnlyKeeper: "Ask {{keeper}} to let you create agents.",
     adminsOnlyPersonal: "Ask whoever runs this space to let you create agents.",

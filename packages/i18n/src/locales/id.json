@@ -6332,6 +6332,7 @@
         "title": "Di mana ia bekerja dan dengan siapa",
         "lead": "{{name}} bergabung ke kanal yang kamu centang dan punya pemilik di tim.",
         "lead_female": "{{name}} bergabung ke kanal yang kamu centang dan punya pemilik di tim.",
+        "leadBatch": "Masing-masing bergabung ke kanal yang kamu centang dan punya pemilik di tim.",
         "leadPersonal": "{{name}} bicara denganmu di chat-nya sendiri dan bergabung ke percakapan grup yang kamu centang."
       },
       "model": {
@@ -7033,6 +7034,14 @@
     "goTo": "Ke #{{channel}}",
     "openProfile": "Buka profil",
     "createAnother": "Buat agen lain",
+    "batch": {
+      "hint": "Pilih peran siap pakai lainnya untuk dibuat bersama, atau lanjutkan yang ini",
+      "create": "Buat {{count}} agen",
+      "created": "{{count}} agen dibuat",
+      "customLocked": "Dari awal tetap satu agen saja",
+      "reviewTitle": "Tim barumu",
+      "limit": "Anda dapat memilih hingga {{max}} agen sekaligus"
+    },
     "adminsOnly": "Hanya admin dan pemilik yang bisa membuat agen. Minta pada admin {{org}}.",
     "adminsOnlyKeeper": "Minta {{keeper}} untuk mengizinkanmu membuat agen.",
     "adminsOnlyPersonal": "Minta orang yang mengelola ruang ini untuk mengizinkanmu membuat agen.",

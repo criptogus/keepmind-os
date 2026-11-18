@@ -18,6 +18,15 @@ export type NewAgentStep = (typeof NEW_AGENT_STEPS)[number];
  */
 export const PERSONAL_SKIPPED_STEPS: readonly NewAgentStep[] = ["tools", "where", "model"];
 
+/**
+ * Batch creation's skipped steps: each picked role's template fills name, instructions and apps, so a batch walks
+ * role → where → model → review. `stepAfter` takes them the same way it takes a personal workspace's.
+ */
+export const BATCH_SKIPPED_STEPS: readonly NewAgentStep[] = ["identity", "instructions", "tools"];
+
+/** The most agents one batch create takes (`POST …/agents/batch`'s cap); the wizard stops picking past it. */
+export const BATCH_MAX = 30;
+
 /** The step after (`dir` 1) or before (-1) `index`, past the skipped ones; never past the first or the last. */
 export function stepAfter(index: number, dir: 1 | -1, skipped: readonly NewAgentStep[]): number {
   const last = NEW_AGENT_STEPS.length - 1;
@@ -402,6 +411,54 @@ export function presetLevels(role: RoleId, items: { id: string; def: { id: strin
 export function presetChannels<C extends { id: string; name: string }>(role: RoleId, channels: C[]) {
   const wanted = new Set(ROLE_DEFAULTS[role].channels);
   return channels.filter((c) => wanted.has(foldName(c.name))).map((c) => c.id);
+}
+
+/**
+ * One picked role's starting point in batch mode ("Criar vários agentes"): the template's words and look, the @ its
+ * name suggests, the channels its hints match among `myChannels` (the submit picks the first) and its app levels,
+ * restricted to the connected catalog apps (`connectedIds`, as `connectedIds()` in connected.ts gives them).
+ * `personal` widens the levels like a personal workspace's (ADR 0159 §3a). `custom` and unknown ids leave.
+ */
+export interface BatchDraft {
+  roleId: RoleId;
+  /** The role's name (`newAgent.roles.{id}.name`), what `role` carries on create. */
+  name: string;
+  /** The agent's own name (`newAgent.roles.{id}.agent`), what `name` carries on create. */
+  agentName: string;
+  instructions: string;
+  look: RoleLook;
+  /** The @ the agent's name suggests (`handleForName`); collisions resolve server-side. */
+  handleBase: string;
+  /** The role's preset channel ids among `myChannels`, in `myChannels` order. */
+  channels: string[];
+  /** Levels by connected catalog connector id, as `presetLevels` gives them. */
+  levels: Record<string, Level>;
+}
+
+/** The drafts of a batch, one per role picked and in the order picked; `custom` and non-roles are dropped. */
+export function batchDrafts(
+  roles: readonly RoleId[],
+  t: TFunction,
+  myChannels: { id: string; name: string }[],
+  connectedIds: string[],
+  personal = false,
+): BatchDraft[] {
+  const items = connectedIds.map((id) => ({ id, def: { id } }));
+  return roles
+    .filter((r): r is Exclude<RoleId, "custom"> => r !== "custom" && (ROLE_IDS as readonly string[]).includes(r))
+    .map((roleId) => {
+      const agentName = t(`newAgent.roles.${roleId}.agent`);
+      return {
+        roleId,
+        name: t(`newAgent.roles.${roleId}.name`),
+        agentName,
+        instructions: t(`newAgent.roles.${roleId}.instructions`),
+        look: ROLE_DEFAULTS[roleId].look,
+        handleBase: handleForName(agentName),
+        channels: presetChannels(roleId, myChannels),
+        levels: presetLevels(roleId, items, personal),
+      };
+    });
 }
 
 const foldName = (s: string) =>

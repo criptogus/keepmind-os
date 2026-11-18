@@ -6592,6 +6592,7 @@
         "title": "Waar hij werkt en met wie",
         "lead": "{{name}} komt in de kanalen die je aanvinkt en heeft een eigenaar in het team.",
         "lead_female": "{{name}} komt in de kanalen die je aanvinkt en heeft een eigenaar in het team.",
+        "leadBatch": "Elk komt in de kanalen die je aanvinkt en heeft een eigenaar in het team.",
         "leadPersonal": "{{name}} praat met je in een eigen chat en doet mee in de groepsgesprekken die je aanvinkt."
       },
       "model": {
@@ -7297,6 +7298,14 @@
     "goTo": "Naar #{{channel}}",
     "openProfile": "Profiel openen",
     "createAnother": "Nog een agent maken",
+    "batch": {
+      "hint": "Kies meer kant-en-klare rollen om ze samen te maken, of ga verder met deze",
+      "create": "{{count}} agents maken",
+      "created": "{{count}} agents gemaakt",
+      "customLocked": "Vanaf nul blijft één agent",
+      "reviewTitle": "Je nieuwe team",
+      "limit": "Je kunt tot {{max}} agenten tegelijk kiezen"
+    },
     "adminsOnly": "Alleen beheerders en eigenaren maken agents. Vraag het een beheerder van {{org}}.",
     "adminsOnlyKeeper": "Vraag {{keeper}} of je agents mag maken.",
     "adminsOnlyPersonal": "Vraag iemand die deze ruimte beheert of je agents mag maken.",

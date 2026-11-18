@@ -77,6 +77,7 @@ import type {
   Agent,
   AgentAction,
   AgentAudience,
+  AgentBatchInput,
   AgentComputer,
   AgentDatabase,
   AgentDatabaseInput,
@@ -786,6 +787,20 @@ export function useCreateAgent(orgId: string) {
       void qc.invalidateQueries({ queryKey: keys.overview(orgId) });
       // Made from a card: the card says so (its conversation gets the change live too).
       if (input.proposal) void qc.invalidateQueries({ queryKey: keys.agentProposal(orgId, input.proposal) });
+    },
+  });
+}
+
+/** Several agents at once (`POST …/agents/batch`), all or nothing. */
+export function useCreateAgents(orgId: string) {
+  const api = useApi();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: AgentBatchInput) => api.agents.createBatch(orgId, input),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: keys.agents(orgId) });
+      // The workspace's "N people · N agents" counts them at once (it kept "0 agents" until the next visit).
+      void qc.invalidateQueries({ queryKey: keys.overview(orgId) });
     },
   });
 }

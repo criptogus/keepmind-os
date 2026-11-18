@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, test } from "bun:test";
 import { z } from "@hono/zod-openapi";
 import { eq, schema } from "@keepmind/db";
 import { issueParams } from "../src/http/errors";
-import { browser, createTestServer, seedOrg, signUp, type TestServer } from "./harness";
+import { browser, createTestServer, joinByInvitation, seedOrg, signUp, type TestServer } from "./harness";
 
 let t: TestServer;
 beforeEach(async () => {
@@ -228,6 +228,86 @@ describe("organizations, agents and credentials", () => {
       json: { name: "X", handle: "xx", model: "gpt-5" },
     });
     expect(res.status).toBe(400);
+  });
+
+  test("POST /agents/batch creates every agent with its own fields and the shared ones", async () => {
+    const owner = browser(t);
+    await signUp(owner, "owner@example.com");
+    const { orgId, credentialId } = await seedOrg(owner);
+    const [ownerUser] = await t.db
+      .select({ id: schema.users.id })
+      .from(schema.users)
+      .where(eq(schema.users.email, "owner@example.com"));
+    const ownerId = ownerUser?.id;
+    if (!ownerId) throw new Error("owner user missing");
+    const res = await owner(`/api/app/organizations/${orgId}/agents/batch`, {
+      json: {
+        agents: [
+          {
+            name: "Ana",
+            handle: "ana-b",
+            role: "Design",
+            instructions: "Desenha.",
+            appearance: { color: "rose", eyes: "happy", accessory: "none" },
+          },
+          { name: "Beto", setup: { role: "dev", hello: "Oi!" } },
+        ],
+        shared: {
+          credentialId,
+          monthlyBudgetUsd: 10,
+          audience: { mode: "people", userIds: [ownerId], roleIds: [] },
+          // Not a batch field (the single create drops it too): stripped, never applied.
+          brakes: { maxUnrequested: 3 },
+        },
+      },
+    });
+    expect(res.status).toBe(201);
+    const { agents } = (await res.json()) as {
+      agents: {
+        name: string;
+        handle: string;
+        hasCredential: boolean;
+        monthlyBudgetUsd?: number;
+        audienceMode: string;
+      }[];
+    };
+    expect(agents.map((a) => [a.name, a.handle])).toEqual([
+      ["Ana", "ana-b"],
+      ["Beto", "beto"],
+    ]);
+    for (const agent of agents) {
+      expect(agent).toMatchObject({ hasCredential: true, monthlyBudgetUsd: 10, audienceMode: "people" });
+    }
+    const rows = await t.db.select().from(schema.agents).where(eq(schema.agents.orgId, orgId));
+    const ana = rows.find((r) => r.handle === "ana-b");
+    expect(ana?.credentialId).toBe(credentialId);
+    expect(ana?.appearance).toEqual({ color: "rose", eyes: "happy", accessory: "none" });
+    expect(ana?.monthlyBudgetNanoUsd).not.toBeNull();
+    const beto = rows.find((r) => r.handle === "beto");
+    expect(beto?.setup?.hello).toBe("Oi!");
+    expect(beto?.audienceMode).toBe("people");
+    expect(beto?.audienceUserIds).toEqual([ownerId]);
+    expect(ana?.autonomyBrakes).toEqual({});
+    expect(beto?.autonomyBrakes).toEqual({});
+  });
+
+  test("POST /agents/batch refuses an empty batch and a member without Criar agentes", async () => {
+    const owner = browser(t);
+    await signUp(owner, "owner@example.com");
+    const { orgId } = await seedOrg(owner);
+    const batch = `/api/app/organizations/${orgId}/agents/batch`;
+    expect((await owner(batch, { json: { agents: [] } })).status).toBe(400);
+
+    const member = await joinByInvitation(t, owner, orgId, "member@example.com");
+    // Criar agentes off Todos: the batch is refused like a single create is.
+    await owner(`/api/app/organizations/${orgId}/permissions/create_agents`, {
+      method: "PUT",
+      json: { everyone: 0, roles: [] },
+    });
+    const refused = await member(batch, { json: { agents: [{ name: "Nope" }] } });
+    expect(refused.status).toBe(403);
+    const rows = await t.db.select().from(schema.agents).where(eq(schema.agents.orgId, orgId));
+    expect(rows.map((r) => r.handle)).not.toContain("nope");
   });
 });
 
