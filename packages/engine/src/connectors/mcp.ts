@@ -79,7 +79,7 @@ export interface McpSession {
  */
 export type McpConnect = (
   connection: Pick<ConnectorConnection, "serverUrl"> &
-    Partial<Pick<ConnectorConnection, "orgId" | "composioAccountId">>,
+    Partial<Pick<ConnectorConnection, "authType" | "orgId" | "composioAccountId">>,
   headers: Record<string, string>,
 ) => Promise<McpSession>;
 
@@ -142,7 +142,12 @@ export const connectOverHttp: McpConnect = (connection, headers) =>
   mcpSessionOver(
     new StreamableHTTPClientTransport(new URL(connection.serverUrl), {
       requestInit: { headers },
-      fetch: tolerantMcpFetch(outboundFetch({ ownRedirects: true })),
+      // `internal` connections are server-issued loopback endpoints (the WhatsApp
+      // bridge): the SSRF guard stays on for every URL a person can type.
+      fetch:
+        connection.authType === "internal"
+          ? tolerantMcpFetch(fetch)
+          : tolerantMcpFetch(outboundFetch({ ownRedirects: true })),
     }),
   );
 

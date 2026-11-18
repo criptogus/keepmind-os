@@ -79,6 +79,7 @@ import { registerGitProxy } from "./routes/git";
 import { githubAppRoutes, registerGitHubAppWebhook } from "./routes/github-app";
 import { registerHealth } from "./routes/health";
 import { registerInstance } from "./routes/instance";
+import { registerWhatsAppInternal } from "./routes/internal-whatsapp";
 import { machineAppRoutes, registerMachinePublicRoutes } from "./routes/machines";
 import { type AppsRouteOptions, registerAppsRoot, registerOauthRoutes } from "./routes/oauth";
 import { pushRelayRoutes } from "./routes/push-relay";
@@ -237,6 +238,7 @@ export function createApp(options: AppOptions) {
     registerRoutineHooks(api, deps);
     registerGitHubAppWebhook(api, deps);
     registerMachinePublicRoutes(api, deps);
+    registerWhatsAppInternal(api, deps);
     registerConnectLinkInfo(api, deps);
     registerDesktopRoutes(
       api,

@@ -17,6 +17,7 @@ import type {
   StreamBroker,
   Talker,
   VoiceDeps,
+  WhatsAppDeps,
 } from "@keepmind/engine";
 
 /**
@@ -69,4 +70,6 @@ export interface AppExtras {
   /** Speech engines and what voice messages need (ADR 0100); absent: no voice messages. */
   speech?: SpeechSettings;
   voice?: VoiceDeps;
+  /** The WhatsApp bridge supervisor deps; absent = the connector can't pair. */
+  whatsapp?: WhatsAppDeps;
 }

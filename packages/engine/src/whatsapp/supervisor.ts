@@ -2,7 +2,7 @@ import { spawn as nodeSpawn } from "node:child_process";
 import { createServer } from "node:net";
 import { join } from "node:path";
 import type { KeyWrapper, PubSub } from "@keepmind/adapters";
-import { type Database, eq, schema } from "@keepmind/db";
+import { and, type Database, eq, schema } from "@keepmind/db";
 import { openSecret, randomToken, safeEqual, sealSecret } from "../crypto";
 import { publishOrgEvent } from "../events";
 
@@ -85,6 +85,8 @@ interface Running {
   restarts: number;
   stopping: boolean;
 }
+
+export const WHATSAPP_CONNECTION = "custom:whatsapp";
 
 const running = new Map<string, Running>();
 const tokenAad = (orgId: string) => `whatsapp-session|${orgId}`;
@@ -242,8 +244,24 @@ export async function ensureWhatsAppBridge(
   const row = await sessionRow(deps.db, orgId);
   if (row?.status === "off") return null;
 
-  const token = randomToken(32);
-  const sealed = await sealSecret(deps.keyWrappers[0]!, token, tokenAad(orgId));
+  // The token is stable across respawns: the connector row seals the same
+  // value for MCP calls, so a restart must not rotate it.
+  let token: string;
+  let sealed: { ciphertext: string; wrappedDataKey: string; kekId: string } | null = null;
+  if (row?.bridgeTokenCiphertext && row.wrappedDataKey && row.kekId) {
+    token = await openSecret(
+      deps.keyWrappers,
+      {
+        ciphertext: row.bridgeTokenCiphertext,
+        wrappedDataKey: row.wrappedDataKey,
+        kekId: row.kekId,
+      },
+      tokenAad(orgId),
+    );
+  } else {
+    token = randomToken(32);
+    sealed = await sealSecret(deps.keyWrappers[0]!, token, tokenAad(orgId));
+  }
   const port = await freePort();
   const spawnImpl = deps.spawn ?? defaultSpawn;
   const dataDir = join(deps.dataDir, "orgs", orgId, "whatsapp");
@@ -282,12 +300,25 @@ export async function ensureWhatsAppBridge(
   await updateSession(deps.db, orgId, {
     status,
     bridgePort: port,
-    bridgeTokenCiphertext: sealed.ciphertext,
-    wrappedDataKey: sealed.wrappedDataKey,
-    kekId: sealed.kekId,
+    ...(sealed
+      ? {
+          bridgeTokenCiphertext: sealed.ciphertext,
+          wrappedDataKey: sealed.wrappedDataKey,
+          kekId: sealed.kekId,
+        }
+      : {}),
     lastError: null,
   });
   broadcastStatus(deps, orgId, { type: "whatsapp.status", status });
+
+  // The bridge's loopback port changes on every spawn: keep the connector
+  // row's MCP URL pointed at the live one.
+  await deps.db
+    .update(schema.connectorConnections)
+    .set({ serverUrl: `http://127.0.0.1:${port}/mcp`, updatedAt: new Date() })
+    .where(
+      and(eq(schema.connectorConnections.orgId, orgId), eq(schema.connectorConnections.connector, WHATSAPP_CONNECTION)),
+    );
 
   proc.on("exit", (code) => {
     if (r.stopping) return;
