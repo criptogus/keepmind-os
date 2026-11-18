@@ -62,11 +62,20 @@ export async function startBridge(opts: BridgeOptions): Promise<BridgeHandle> {
     }
   });
 
+  // Only live "notify" upserts: "append" is the history-sync backlog on
+  // (re)connect, which would flood the workspace with old messages and a run
+  // each. key.id dedupes notify/append overlap and event retries.
+  const seenMessages = new Set<string>();
   socket.on("messages.upsert", (upsert: any) => {
-    if (upsert?.type !== "notify" && upsert?.type !== "append") return;
+    if (upsert?.type !== "notify") return;
     for (const msg of upsert.messages ?? []) {
       const key = msg?.key;
       if (!key || key.fromMe) continue;
+      if (key.id) {
+        if (seenMessages.has(key.id)) continue;
+        seenMessages.add(key.id);
+        if (seenMessages.size > 5000) seenMessages.delete(seenMessages.values().next().value!);
+      }
       const chatId = key.remoteJid;
       if (!chatId || chatId.endsWith("@g.us") || chatId === "status@broadcast") continue;
       const { text, hasMedia } = messageText(msg);

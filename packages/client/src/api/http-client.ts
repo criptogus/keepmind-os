@@ -251,6 +251,7 @@ import type {
   UsageReport,
   WaitingList,
   WebhookSetup,
+  WhatsAppChatView,
   WhatsAppSessionView,
   WifiIphones,
   WifiPairing,
@@ -1199,6 +1200,12 @@ export function createHttpApi(options: TransportOptions = {}): HttpApi {
         request<{ session: WhatsAppSessionView | null }>(`${org(orgId)}/whatsapp/answer-agent`, {
           method: "PUT",
           json: { agentId },
+        }),
+      chats: (orgId) => request<{ chats: WhatsAppChatView[] }>(`${org(orgId)}/whatsapp/chats`),
+      setChatApproval: (orgId, chatId, approved) =>
+        request<{ chat: WhatsAppChatView | null }>(`${org(orgId)}/whatsapp/chats/${enc(chatId)}`, {
+          method: "PUT",
+          json: { approved },
         }),
     },
     githubApp: {

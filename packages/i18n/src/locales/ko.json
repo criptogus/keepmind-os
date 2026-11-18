@@ -12205,7 +12205,14 @@
       "disconnect": "Disconnect",
       "answerAgent": "Answers WhatsApp",
       "answerAgentHint": "The agent that replies to incoming WhatsApp messages.",
-      "answerRightHand": "Right hand (default)"
+      "answerRightHand": "Right hand (default)",
+      "chatsTitle": "Chats",
+      "chatsHint": "New chats are mirrored here but stay silent until you approve them.",
+      "chatPending": "Awaiting approval",
+      "chatApproved": "Agent replies",
+      "approve": "Approve",
+      "revoke": "Revoke",
+      "chatsEmpty": "No chats yet."
     },
     "addTitle": "커넥터 추가",
     "catalogText": "{{org}}에 한 번만 연결하세요. 그다음 에이전트마다 사용할 수 있는 것을 정해요.",

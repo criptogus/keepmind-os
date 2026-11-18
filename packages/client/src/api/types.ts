@@ -2960,6 +2960,16 @@ export interface WhatsAppSessionView {
   answerAgentId: string | null;
 }
 
+/** A mirrored WhatsApp chat (`GET …/whatsapp/chats`): approved chats get agent replies. */
+export interface WhatsAppChatView {
+  chatId: string;
+  participantName: string | null;
+  threadRootId: string;
+  /** When a `manage_connectors` admin approved it; null = mirrored but silent. */
+  approvedAt: string | null;
+  createdAt: string;
+}
+
 /** What connecting did: a new account, a new sign-in for one ("Reconectar"), or the same account again. */
 export type ConnectOutcome = "connected" | "reconnected" | "same_account";
 

@@ -12275,7 +12275,14 @@
       "disconnect": "Disconnect",
       "answerAgent": "Answers WhatsApp",
       "answerAgentHint": "The agent that replies to incoming WhatsApp messages.",
-      "answerRightHand": "Right hand (default)"
+      "answerRightHand": "Right hand (default)",
+      "chatsTitle": "Chats",
+      "chatsHint": "New chats are mirrored here but stay silent until you approve them.",
+      "chatPending": "Awaiting approval",
+      "chatApproved": "Agent replies",
+      "approve": "Approve",
+      "revoke": "Revoke",
+      "chatsEmpty": "No chats yet."
     },
     "addTitle": "添加连接器",
     "catalogText": "为 {{org}} 连接一次，然后选择每个智能体可以使用什么。",

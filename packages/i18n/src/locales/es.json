@@ -13101,7 +13101,14 @@
       "disconnect": "Disconnect",
       "answerAgent": "Answers WhatsApp",
       "answerAgentHint": "The agent that replies to incoming WhatsApp messages.",
-      "answerRightHand": "Right hand (default)"
+      "answerRightHand": "Right hand (default)",
+      "chatsTitle": "Chats",
+      "chatsHint": "New chats are mirrored here but stay silent until you approve them.",
+      "chatPending": "Awaiting approval",
+      "chatApproved": "Agent replies",
+      "approve": "Approve",
+      "revoke": "Revoke",
+      "chatsEmpty": "No chats yet."
     },
     "addTitle": "Agregar conector",
     "catalogText": "Conéctalo una vez para {{org}}. Luego elige qué puede usar cada agente.",

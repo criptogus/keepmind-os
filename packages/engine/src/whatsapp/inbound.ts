@@ -49,7 +49,13 @@ async function ensureChannel(db: Database, orgId: string): Promise<string> {
   const [again] = await db
     .select({ id: schema.channels.id })
     .from(schema.channels)
-    .where(and(eq(schema.channels.orgId, orgId), eq(schema.channels.name, WHATSAPP_CHANNEL)))
+    .where(
+      and(
+        eq(schema.channels.orgId, orgId),
+        eq(schema.channels.name, WHATSAPP_CHANNEL),
+        isNull(schema.channels.archivedAt),
+      ),
+    )
     .limit(1);
   if (!again) throw new Error("whatsapp channel could not be created");
   return again.id;
@@ -165,7 +171,10 @@ export async function handleInboundWhatsAppMessage(
         .set({ participantName: msg.sender.name, updatedAt: new Date() })
         .where(and(eq(schema.whatsappChats.orgId, orgId), eq(schema.whatsappChats.chatId, msg.chat.id)));
     }
-    if (answerId) {
+    // A chat answers only after a `manage_connectors` admin approves it
+    // (`approvedAt`); until then its messages are mirrored but silent.
+    const approved = mapping ? mapping.approvedAt !== null : false;
+    if (answerId && approved) {
       await createAgentRuns(tx, message, [answerId], "mention");
     }
     return message;
@@ -183,7 +192,17 @@ export async function whatsappReplyTarget(
   // are not chat replies.
   if (message.authorType !== "agent" || !message.threadId) return null;
   const meta = message.meta as Record<string, unknown> | null;
-  if (meta?.external || meta?.notice || meta?.noAi || meta?.actionCard || meta?.talker || meta?.background) {
+  if (
+    meta?.external ||
+    meta?.notice ||
+    meta?.noAi ||
+    meta?.actionCard ||
+    meta?.talker ||
+    meta?.background ||
+    meta?.agentNote ||
+    meta?.routine ||
+    meta?.missionSuggestion
+  ) {
     return null;
   }
   const text = message.body.trim();

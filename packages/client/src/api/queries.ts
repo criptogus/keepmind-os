@@ -2286,6 +2286,26 @@ export const useWhatsAppAnswerAgent = (orgId: string) => {
   });
 };
 
+/** The mirrored WhatsApp chats and their approval state (admins). */
+export const useWhatsAppChats = (orgId: string, enabled = true) => {
+  const api = useApi();
+  return useQuery({
+    queryKey: keys.whatsappChats(orgId),
+    queryFn: () => api.whatsapp.chats(orgId),
+    enabled,
+  });
+};
+
+export const useWhatsAppChatApproval = (orgId: string) => {
+  const api = useApi();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ chatId, approved }: { chatId: string; approved: boolean }) =>
+      api.whatsapp.setChatApproval(orgId, chatId, approved),
+    onSuccess: () => qc.invalidateQueries({ queryKey: keys.whatsappChats(orgId) }),
+  });
+};
+
 export const useConnections = (orgId: string, enabled = true) => {
   const api = useApi();
   return useQuery({

@@ -1,6 +1,8 @@
 import type { Agent } from "@keepmind/client";
 import {
   useWhatsAppAnswerAgent,
+  useWhatsAppChatApproval,
+  useWhatsAppChats,
   useWhatsAppConnect,
   useWhatsAppDisconnect,
   useWhatsAppSession,
@@ -22,6 +24,8 @@ export function WhatsAppConnect({ orgId, admin, agents }: { orgId: string; admin
   const answer = useWhatsAppAnswerAgent(orgId);
   const s = session.data?.session ?? null;
   const status = s?.status ?? "off";
+  const chats = useWhatsAppChats(orgId, admin && status === "connected");
+  const chatApproval = useWhatsAppChatApproval(orgId);
 
   const chip =
     status === "connected" ? (
@@ -105,6 +109,36 @@ export function WhatsAppConnect({ orgId, admin, agents }: { orgId: string; admin
               ]}
             />
           </Field>
+        )}
+        {admin && status === "connected" && (
+          <div className="ac-whatsapp__chats">
+            <p className="small muted">{t("connectors.whatsapp.chatsHint")}</p>
+            {(chats.data?.chats ?? []).length === 0 ? (
+              <p className="small muted">{t("connectors.whatsapp.chatsEmpty")}</p>
+            ) : (
+              <ul className="ac-whatsapp__chat-list">
+                {(chats.data?.chats ?? []).map((chat) => {
+                  const approved = chat.approvedAt !== null;
+                  return (
+                    <li key={chat.chatId} className="ac-whatsapp__chat">
+                      <span className="ac-whatsapp__chat-name">{chat.participantName ?? chat.chatId}</span>
+                      <Chip icon={approved ? "check" : "waiting"} tone={approved ? "done" : "waiting"}>
+                        {approved ? t("connectors.whatsapp.chatApproved") : t("connectors.whatsapp.chatPending")}
+                      </Chip>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        loading={chatApproval.isPending}
+                        onClick={() => chatApproval.mutate({ chatId: chat.chatId, approved: !approved })}
+                      >
+                        {approved ? t("connectors.whatsapp.revoke") : t("connectors.whatsapp.approve")}
+                      </Button>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
         )}
       </div>
     </Card>

@@ -3523,6 +3523,8 @@ export function createFakeHttpApi(state: FakeState): Omit<HttpApi, FakedParts> {
       connect: async () => ({ session: null }),
       disconnect: async () => ({ session: null }),
       setAnswerAgent: async () => ({ session: null }),
+      chats: async () => ({ chats: [] }),
+      setChatApproval: async () => ({ chat: null }),
     },
     githubApp: {
       access: async () =>

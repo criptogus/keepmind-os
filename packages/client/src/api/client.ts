@@ -343,6 +343,7 @@ import type {
   WaitingList,
   WebhookProvider,
   WebhookSetup,
+  WhatsAppChatView,
   WhatsAppSessionView,
   WifiIphones,
   WifiPairing,
@@ -1085,6 +1086,8 @@ export interface ApiClient {
     connect(orgId: string): Promise<{ session: WhatsAppSessionView | null }>;
     disconnect(orgId: string): Promise<{ session: WhatsAppSessionView | null }>;
     setAnswerAgent(orgId: string, agentId: string | null): Promise<{ session: WhatsAppSessionView | null }>;
+    chats(orgId: string): Promise<{ chats: WhatsAppChatView[] }>;
+    setChatApproval(orgId: string, chatId: string, approved: boolean): Promise<{ chat: WhatsAppChatView | null }>;
   };
   githubApp: {
     /** Whether this server can install the GitHub App, the organization's installations, and the server's app. */

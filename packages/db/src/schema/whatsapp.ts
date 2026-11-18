@@ -34,6 +34,8 @@ export const whatsappSessions = pgTable("whatsapp_sessions", {
  * Maps a WhatsApp chat (its jid) to the thread that mirrors it in the
  * organization's `WhatsApp` channel. One row per chat per org; the thread
  * root is a plain message id, matching how `messages.thread_id` works.
+ * `approvedAt` gates the answer agent: until a `manage_connectors` admin
+ * approves the chat its messages are mirrored but silent.
  */
 export const whatsappChats = pgTable(
   "whatsapp_chats",
@@ -46,6 +48,8 @@ export const whatsappChats = pgTable(
     /** Root message of the mirrored thread; a plain uuid like `messages.thread_id` (no FK: messages.id isn't unique). */
     threadRootId: uuid().notNull(),
     participantName: text(),
+    /** Set when a workspace admin allows the answer agent to reply in this chat. Null = mirrored but silent. */
+    approvedAt: timestamp({ withTimezone: true }),
     createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
   },

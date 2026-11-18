@@ -4,8 +4,10 @@ import {
   type BridgeEventMessage,
   handleInboundWhatsAppMessage,
   insertMessage,
+  listWhatsAppChats,
   maybeDeliverWhatsAppReply,
   sealSecret,
+  setWhatsAppChatApproval,
   type WhatsAppDeps,
   type WhatsAppInboundDeps,
   whatsappReplyTarget,
@@ -66,7 +68,7 @@ async function whatsappChannelId(f: Awaited<ReturnType<typeof setup>>): Promise<
 }
 
 describe("whatsapp inbound mirror", () => {
-  test("an inbound message becomes a thread message authored by the relay, and wakes the answer agent", async () => {
+  test("an inbound message becomes a thread message authored by the relay; the answer agent wakes only once the chat is approved", async () => {
     const f = await setup();
     const whatsapp = await connectedSession(f, f.agent.id);
     const deps: WhatsAppInboundDeps = { db: f.db, whatsapp };
@@ -92,14 +94,14 @@ describe("whatsapp inbound mirror", () => {
     expect(relay!.archivedAt).not.toBeNull();
     expect(m.authorAgentId).toBe(relay!.id);
 
-    // The answer agent got a run on the trigger message.
-    const runs = await f.db
+    // Mirrored but silent: a brand-new chat never wakes the answer agent.
+    const runsBefore = await f.db
       .select()
       .from(schema.agentRuns)
       .where(and(eq(schema.agentRuns.orgId, f.org.id), eq(schema.agentRuns.triggerMessageId, m.id)));
-    expect(runs.map((r) => r.agentId)).toContain(f.agent.id);
+    expect(runsBefore).toHaveLength(0);
 
-    // Chat → thread mapping persisted.
+    // Chat → thread mapping persisted, pending approval.
     const [chat] = await f.db
       .select()
       .from(schema.whatsappChats)
@@ -108,6 +110,54 @@ describe("whatsapp inbound mirror", () => {
       );
     expect(chat?.threadRootId).toBe(m.id);
     expect(chat?.participantName).toBe("Maria");
+    expect(chat?.approvedAt).toBeNull();
+
+    // A manage_connectors admin approves the chat; the next message wakes the agent.
+    const approved = await setWhatsAppChatApproval(f.db, f.org.id, "5511888888888@s.whatsapp.net", true);
+    expect(approved?.approvedAt).not.toBeNull();
+    await handleInboundWhatsAppMessage(deps, f.org.id, inbound("e o relatório?"));
+
+    const runs = await f.db.select().from(schema.agentRuns).where(eq(schema.agentRuns.orgId, f.org.id));
+    expect(runs.map((r) => r.agentId)).toContain(f.agent.id);
+
+    await f.close();
+  });
+
+  test("revoking a chat's approval silences the answer agent again", async () => {
+    const f = await setup();
+    const whatsapp = await connectedSession(f, f.agent.id);
+    const deps: WhatsAppInboundDeps = { db: f.db, whatsapp };
+
+    await handleInboundWhatsAppMessage(deps, f.org.id, inbound("primeira"));
+    await setWhatsAppChatApproval(f.db, f.org.id, "5511888888888@s.whatsapp.net", true);
+    await handleInboundWhatsAppMessage(deps, f.org.id, inbound("segunda"));
+    const before = await f.db.select().from(schema.agentRuns).where(eq(schema.agentRuns.orgId, f.org.id));
+    expect(before.length).toBeGreaterThanOrEqual(1);
+
+    await setWhatsAppChatApproval(f.db, f.org.id, "5511888888888@s.whatsapp.net", false);
+    const count = before.length;
+    await handleInboundWhatsAppMessage(deps, f.org.id, inbound("terceira"));
+    const after = await f.db.select().from(schema.agentRuns).where(eq(schema.agentRuns.orgId, f.org.id));
+    expect(after.length).toBe(count);
+    // Still mirrored.
+    expect(await mirroredMessages(f)).toHaveLength(3);
+
+    await f.close();
+  });
+
+  test("listWhatsAppChats returns the mirrored chats with their approval state", async () => {
+    const f = await setup();
+    const whatsapp = await connectedSession(f, f.agent.id);
+    const deps: WhatsAppInboundDeps = { db: f.db, whatsapp };
+
+    await handleInboundWhatsAppMessage(deps, f.org.id, inbound("oi", "111@s.whatsapp.net"));
+    await handleInboundWhatsAppMessage(deps, f.org.id, inbound("olá", "222@s.whatsapp.net"));
+    await setWhatsAppChatApproval(f.db, f.org.id, "111@s.whatsapp.net", true);
+
+    const chats = await listWhatsAppChats(f.db, f.org.id);
+    expect(chats).toHaveLength(2);
+    expect(chats.find((c) => c.chatId === "111@s.whatsapp.net")?.approvedAt).not.toBeNull();
+    expect(chats.find((c) => c.chatId === "222@s.whatsapp.net")?.approvedAt).toBeNull();
 
     await f.close();
   });
@@ -118,6 +168,7 @@ describe("whatsapp inbound mirror", () => {
     const deps: WhatsAppInboundDeps = { db: f.db, whatsapp };
 
     await handleInboundWhatsAppMessage(deps, f.org.id, inbound("primeira"));
+    await setWhatsAppChatApproval(f.db, f.org.id, "5511888888888@s.whatsapp.net", true);
     await handleInboundWhatsAppMessage(deps, f.org.id, inbound("segunda"));
 
     const msgs = await mirroredMessages(f);
@@ -126,10 +177,9 @@ describe("whatsapp inbound mirror", () => {
     const reply = msgs.find((m) => m.threadId !== null);
     expect(root).toBeTruthy();
     expect(reply?.threadId).toBe(root!.id);
-    // Both woke the answer agent.
+    // The approved chat woke the answer agent.
     const runs = await f.db.select().from(schema.agentRuns).where(eq(schema.agentRuns.orgId, f.org.id));
-    // The first run is still queued, so the second trigger joins it.
-    expect(runs.length).toBeGreaterThanOrEqual(1);
+    expect(runs.map((r) => r.agentId)).toContain(f.agent.id);
 
     await f.close();
   });

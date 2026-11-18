@@ -89,12 +89,9 @@ describe("whatsapp supervisor", () => {
     await recordWhatsAppEvent(d, f.org.id, { type: "qr", qr: "qr-payload" });
     let status = await whatsappStatus(f.db, f.org.id);
     expect(status?.status).toBe("pairing");
-    expect(
-      orgEvents.some(
-        (e) =>
-          (e.event as { type?: string })?.type === "whatsapp.qr" && (e.event as { qr?: string }).qr === "qr-payload",
-      ),
-    ).toBe(true);
+    // The QR itself never leaves the server: the broadcast only says one is ready.
+    expect(orgEvents.some((e) => (e.event as { type?: string })?.type === "whatsapp.qr")).toBe(true);
+    expect(JSON.stringify(orgEvents)).not.toContain("qr-payload");
 
     await recordWhatsAppEvent(d, f.org.id, { type: "connected", phone: "5511999999999", name: "Gustavo" });
     status = await whatsappStatus(f.db, f.org.id);

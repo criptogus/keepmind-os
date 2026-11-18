@@ -1,11 +1,15 @@
 import { createRoute, z } from "@hono/zod-openapi";
 import {
-  ensureWhatsAppBridge,
+  connectWhatsApp,
+  disconnectWhatsApp,
+  listWhatsAppChats,
   requirePermission,
   setWhatsAppAnswerAgent,
-  stopWhatsAppBridge,
+  setWhatsAppChatApproval,
   whatsappSessionView,
 } from "@keepmind/engine";
+import { apiError } from "../../http/errors";
+import { customConnectorDeps } from "./connectors-custom";
 import { type AppDeps, body, createAppRouter, errors, json, OrgParams, requireSession, security } from "./context";
 
 const tags = ["Connectors"];
@@ -24,6 +28,19 @@ const Session = z
 
 const View = z.object({ session: Session.nullable() });
 
+const Chat = z
+  .object({
+    chatId: z.string(),
+    participantName: z.string().nullable(),
+    threadRootId: z.uuid(),
+    /** When a `manage_connectors` admin let the answer agent reply here; null = mirrored but silent. */
+    approvedAt: z.string().nullable(),
+    createdAt: z.string(),
+  })
+  .openapi("WhatsAppChat");
+
+const Chats = z.object({ chats: z.array(Chat) });
+
 /**
  * The WhatsApp connector's own surface: pairing status (with the live QR),
  * connect/disconnect and which agent answers. The bridge itself is an
@@ -33,11 +50,7 @@ export function whatsappRoutes(deps: AppDeps) {
   const { db } = deps;
   const app = createAppRouter(deps);
   app.use("/organizations/*", requireSession(deps.auth));
-  const whatsapp = () => {
-    const w = deps.extras?.whatsapp;
-    if (!w) throw new Error("whatsapp is not configured on this server");
-    return w;
-  };
+  const whatsapp = () => deps.extras?.whatsapp ?? null;
 
   app.openapi(
     createRoute({
@@ -71,9 +84,14 @@ export function whatsappRoutes(deps: AppDeps) {
     }),
     async (c) => {
       const orgId = c.req.valid("param").orgId;
-      await requirePermission(db, c.get("user").id, orgId, "manage_connectors");
-      await ensureWhatsAppBridge(whatsapp(), orgId);
-      const session = await whatsappSessionView(whatsapp(), orgId);
+      const userId = c.get("user").id;
+      await requirePermission(db, userId, orgId, "manage_connectors");
+      // Registers the first-party connector row too: its tools become
+      // grantable to agents and disconnect revokes them.
+      const w = whatsapp();
+      if (!w) return apiError(c, 404, "not_found", "WhatsApp is not configured on this server");
+      await connectWhatsApp({ ...customConnectorDeps(deps), whatsapp: w }, userId, orgId);
+      const session = await whatsappSessionView(w, orgId);
       return c.json({ session }, 200);
     },
   );
@@ -90,9 +108,12 @@ export function whatsappRoutes(deps: AppDeps) {
     }),
     async (c) => {
       const orgId = c.req.valid("param").orgId;
-      await requirePermission(db, c.get("user").id, orgId, "manage_connectors");
-      await stopWhatsAppBridge(whatsapp(), orgId);
-      return c.json({ session: await whatsappSessionView(whatsapp(), orgId) }, 200);
+      const userId = c.get("user").id;
+      await requirePermission(db, userId, orgId, "manage_connectors");
+      const w = whatsapp();
+      if (!w) return apiError(c, 404, "not_found", "WhatsApp is not configured on this server");
+      await disconnectWhatsApp({ ...customConnectorDeps(deps), whatsapp: w }, userId, orgId);
+      return c.json({ session: await whatsappSessionView(w, orgId) }, 200);
     },
   );
 
@@ -114,7 +135,48 @@ export function whatsappRoutes(deps: AppDeps) {
       await requirePermission(db, c.get("user").id, orgId, "manage_connectors");
       const { agentId } = c.req.valid("json");
       await setWhatsAppAnswerAgent(db, orgId, agentId);
-      return c.json({ session: await whatsappSessionView(whatsapp(), orgId) }, 200);
+      const w = deps.extras?.whatsapp;
+      return c.json({ session: w ? await whatsappSessionView(w, orgId) : null }, 200);
+    },
+  );
+
+  app.openapi(
+    createRoute({
+      method: "get",
+      path: "/organizations/{orgId}/whatsapp/chats",
+      tags,
+      security,
+      summary: "Mirrored WhatsApp chats and which ones the answer agent may reply in",
+      request: { params: OrgParams },
+      responses: { 200: json(Chats), ...errors },
+    }),
+    async (c) => {
+      const orgId = c.req.valid("param").orgId;
+      await requirePermission(db, c.get("user").id, orgId, "manage_connectors");
+      return c.json({ chats: await listWhatsAppChats(db, orgId) }, 200);
+    },
+  );
+
+  app.openapi(
+    createRoute({
+      method: "put",
+      path: "/organizations/{orgId}/whatsapp/chats/{chatId}",
+      tags,
+      security,
+      summary: "Approve or revoke a chat: approved chats get agent replies, others stay mirrored but silent",
+      request: {
+        params: OrgParams.extend({ chatId: z.string() }),
+        body: body(z.object({ approved: z.boolean() })),
+      },
+      responses: { 200: json(z.object({ chat: Chat.nullable() })), ...errors },
+    }),
+    async (c) => {
+      const { orgId, chatId } = c.req.valid("param");
+      await requirePermission(db, c.get("user").id, orgId, "manage_connectors");
+      const { approved } = c.req.valid("json");
+      const chat = await setWhatsAppChatApproval(db, orgId, chatId, approved);
+      if (!chat) return apiError(c, 404, "not_found", "WhatsApp chat not found");
+      return c.json({ chat }, 200);
     },
   );
 

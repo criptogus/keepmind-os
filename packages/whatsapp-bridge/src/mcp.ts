@@ -136,6 +136,10 @@ function registerTools(server: McpServer, deps: BridgeApiDeps) {
     },
     (args) =>
       safe(async () => {
+        // https only: Baileys fetches the URL from this host, so a plaintext or
+        // internal address would turn the tool into an SSRF/exfiltration path.
+        const mediaUrl = new URL(args.media_url);
+        if (mediaUrl.protocol !== "https:") throw new Error("media_url must be https");
         const content =
           args.media_type === "document"
             ? { document: { url: args.media_url }, caption: args.caption }
@@ -214,6 +218,9 @@ export function createBridgeApiHandler(deps: BridgeApiDeps) {
         return Response.json({ error: "invalid_json" }, { status: 400 });
       }
       if (!body.chat_id || !body.text) return Response.json({ error: "chat_id and text required" }, { status: 400 });
+      if (body.text.length > 4000 || body.chat_id.length > 100 || !body.chat_id.includes("@")) {
+        return Response.json({ error: "invalid chat_id or text" }, { status: 400 });
+      }
       try {
         const messageId = await sendText(deps, body.chat_id, body.text);
         return Response.json({ ok: true, message_id: messageId });

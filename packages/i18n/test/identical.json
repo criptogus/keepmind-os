@@ -929,7 +929,14 @@
       "newAgent.roles.seo.instructions",
       "newAgent.roles.seo.tasks.a",
       "newAgent.roles.seo.tasks.b",
-      "newAgent.roles.seo.tasks.c"
+      "newAgent.roles.seo.tasks.c",
+      "connectors.whatsapp.chatsTitle",
+      "connectors.whatsapp.chatsHint",
+      "connectors.whatsapp.chatPending",
+      "connectors.whatsapp.chatApproved",
+      "connectors.whatsapp.approve",
+      "connectors.whatsapp.revoke",
+      "connectors.whatsapp.chatsEmpty"
     ],
     "fr": [
       "newAgent.roleGroups.exec",
@@ -1699,7 +1706,14 @@
       "newAgent.roles.seo.instructions",
       "newAgent.roles.seo.tasks.a",
       "newAgent.roles.seo.tasks.b",
-      "newAgent.roles.seo.tasks.c"
+      "newAgent.roles.seo.tasks.c",
+      "connectors.whatsapp.chatsTitle",
+      "connectors.whatsapp.chatsHint",
+      "connectors.whatsapp.chatPending",
+      "connectors.whatsapp.chatApproved",
+      "connectors.whatsapp.approve",
+      "connectors.whatsapp.revoke",
+      "connectors.whatsapp.chatsEmpty"
     ],
     "de": [
       "newAgent.roleGroups.exec",
@@ -2490,7 +2504,14 @@
       "newAgent.roles.seo.instructions",
       "newAgent.roles.seo.tasks.a",
       "newAgent.roles.seo.tasks.b",
-      "newAgent.roles.seo.tasks.c"
+      "newAgent.roles.seo.tasks.c",
+      "connectors.whatsapp.chatsTitle",
+      "connectors.whatsapp.chatsHint",
+      "connectors.whatsapp.chatPending",
+      "connectors.whatsapp.chatApproved",
+      "connectors.whatsapp.approve",
+      "connectors.whatsapp.revoke",
+      "connectors.whatsapp.chatsEmpty"
     ],
     "it": [
       "newAgent.roleGroups.exec",
@@ -3202,7 +3223,14 @@
       "newAgent.roles.seo.instructions",
       "newAgent.roles.seo.tasks.a",
       "newAgent.roles.seo.tasks.b",
-      "newAgent.roles.seo.tasks.c"
+      "newAgent.roles.seo.tasks.c",
+      "connectors.whatsapp.chatsTitle",
+      "connectors.whatsapp.chatsHint",
+      "connectors.whatsapp.chatPending",
+      "connectors.whatsapp.chatApproved",
+      "connectors.whatsapp.approve",
+      "connectors.whatsapp.revoke",
+      "connectors.whatsapp.chatsEmpty"
     ],
     "nl": [
       "newAgent.roleGroups.exec",
@@ -4143,7 +4171,14 @@
       "newAgent.roles.seo.instructions",
       "newAgent.roles.seo.tasks.a",
       "newAgent.roles.seo.tasks.b",
-      "newAgent.roles.seo.tasks.c"
+      "newAgent.roles.seo.tasks.c",
+      "connectors.whatsapp.chatsTitle",
+      "connectors.whatsapp.chatsHint",
+      "connectors.whatsapp.chatPending",
+      "connectors.whatsapp.chatApproved",
+      "connectors.whatsapp.approve",
+      "connectors.whatsapp.revoke",
+      "connectors.whatsapp.chatsEmpty"
     ],
     "ja": [
       "newAgent.roleGroups.exec",
@@ -4655,7 +4690,14 @@
       "newAgent.roles.seo.instructions",
       "newAgent.roles.seo.tasks.a",
       "newAgent.roles.seo.tasks.b",
-      "newAgent.roles.seo.tasks.c"
+      "newAgent.roles.seo.tasks.c",
+      "connectors.whatsapp.chatsTitle",
+      "connectors.whatsapp.chatsHint",
+      "connectors.whatsapp.chatPending",
+      "connectors.whatsapp.chatApproved",
+      "connectors.whatsapp.approve",
+      "connectors.whatsapp.revoke",
+      "connectors.whatsapp.chatsEmpty"
     ],
     "ko": [
       "newAgent.roleGroups.exec",
@@ -5161,7 +5203,14 @@
       "newAgent.roles.seo.instructions",
       "newAgent.roles.seo.tasks.a",
       "newAgent.roles.seo.tasks.b",
-      "newAgent.roles.seo.tasks.c"
+      "newAgent.roles.seo.tasks.c",
+      "connectors.whatsapp.chatsTitle",
+      "connectors.whatsapp.chatsHint",
+      "connectors.whatsapp.chatPending",
+      "connectors.whatsapp.chatApproved",
+      "connectors.whatsapp.approve",
+      "connectors.whatsapp.revoke",
+      "connectors.whatsapp.chatsEmpty"
     ],
     "zh-Hans": [
       "newAgent.roleGroups.exec",
@@ -5658,7 +5707,14 @@
       "newAgent.roles.seo.instructions",
       "newAgent.roles.seo.tasks.a",
       "newAgent.roles.seo.tasks.b",
-      "newAgent.roles.seo.tasks.c"
+      "newAgent.roles.seo.tasks.c",
+      "connectors.whatsapp.chatsTitle",
+      "connectors.whatsapp.chatsHint",
+      "connectors.whatsapp.chatPending",
+      "connectors.whatsapp.chatApproved",
+      "connectors.whatsapp.approve",
+      "connectors.whatsapp.revoke",
+      "connectors.whatsapp.chatsEmpty"
     ],
     "id": [
       "newAgent.roleGroups.exec",
@@ -6304,7 +6360,14 @@
       "newAgent.roles.seo.instructions",
       "newAgent.roles.seo.tasks.a",
       "newAgent.roles.seo.tasks.b",
-      "newAgent.roles.seo.tasks.c"
+      "newAgent.roles.seo.tasks.c",
+      "connectors.whatsapp.chatsTitle",
+      "connectors.whatsapp.chatsHint",
+      "connectors.whatsapp.chatPending",
+      "connectors.whatsapp.chatApproved",
+      "connectors.whatsapp.approve",
+      "connectors.whatsapp.revoke",
+      "connectors.whatsapp.chatsEmpty"
     ],
     "tr": [
       "newAgent.roleGroups.exec",
@@ -6835,7 +6898,14 @@
       "newAgent.roles.seo.instructions",
       "newAgent.roles.seo.tasks.a",
       "newAgent.roles.seo.tasks.b",
-      "newAgent.roles.seo.tasks.c"
+      "newAgent.roles.seo.tasks.c",
+      "connectors.whatsapp.chatsTitle",
+      "connectors.whatsapp.chatsHint",
+      "connectors.whatsapp.chatPending",
+      "connectors.whatsapp.chatApproved",
+      "connectors.whatsapp.approve",
+      "connectors.whatsapp.revoke",
+      "connectors.whatsapp.chatsEmpty"
     ],
     "pl": [
       "newAgent.roleGroups.exec",
@@ -7475,7 +7545,14 @@
       "newAgent.roles.seo.instructions",
       "newAgent.roles.seo.tasks.a",
       "newAgent.roles.seo.tasks.b",
-      "newAgent.roles.seo.tasks.c"
+      "newAgent.roles.seo.tasks.c",
+      "connectors.whatsapp.chatsTitle",
+      "connectors.whatsapp.chatsHint",
+      "connectors.whatsapp.chatPending",
+      "connectors.whatsapp.chatApproved",
+      "connectors.whatsapp.approve",
+      "connectors.whatsapp.revoke",
+      "connectors.whatsapp.chatsEmpty"
     ],
     "ru": [
       "newAgent.roleGroups.exec",
@@ -7972,7 +8049,14 @@
       "newAgent.roles.seo.instructions",
       "newAgent.roles.seo.tasks.a",
       "newAgent.roles.seo.tasks.b",
-      "newAgent.roles.seo.tasks.c"
+      "newAgent.roles.seo.tasks.c",
+      "connectors.whatsapp.chatsTitle",
+      "connectors.whatsapp.chatsHint",
+      "connectors.whatsapp.chatPending",
+      "connectors.whatsapp.chatApproved",
+      "connectors.whatsapp.approve",
+      "connectors.whatsapp.revoke",
+      "connectors.whatsapp.chatsEmpty"
     ]
   },
   "mobile-base": {

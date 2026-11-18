@@ -14890,3 +14890,28 @@ html:not([data-pointer]) .rh-set__face-edit:focus-visible {
   align-items: center;
   gap: var(--space-2);
 }
+.ac-whatsapp__chats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.ac-whatsapp__chat-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.ac-whatsapp__chat {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.ac-whatsapp__chat-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

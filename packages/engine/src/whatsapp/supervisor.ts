@@ -90,6 +90,8 @@ interface Running {
 export const WHATSAPP_CONNECTION = "custom:whatsapp";
 
 const running = new Map<string, Running>();
+/** Concurrent ensures share one spawn; without it two callers race two bridges. */
+const inflight = new Map<string, Promise<{ port: number; token: string } | null>>();
 /** The latest pairing QR per org, for the connector UI; cleared once connected. */
 const latestQr = new Map<string, string>();
 const tokenAad = (orgId: string) => `whatsapp-session|${orgId}`;
@@ -244,6 +246,19 @@ export async function ensureWhatsAppBridge(
 ): Promise<{ port: number; token: string } | null> {
   const existing = running.get(orgId);
   if (existing && !existing.stopping) return { port: existing.port, token: existing.token };
+  const pending = inflight.get(orgId);
+  if (pending) return pending;
+  const p = ensureWhatsAppBridgeSpawn(deps, orgId).finally(() => inflight.delete(orgId));
+  inflight.set(orgId, p);
+  return p;
+}
+
+async function ensureWhatsAppBridgeSpawn(
+  deps: WhatsAppDeps,
+  orgId: string,
+): Promise<{ port: number; token: string } | null> {
+  const existing = running.get(orgId);
+  if (existing && !existing.stopping) return { port: existing.port, token: existing.token };
 
   const row = await sessionRow(deps.db, orgId);
   if (row?.status === "off") return null;
@@ -288,7 +303,18 @@ export async function ensureWhatsAppBridge(
       "--api-base-url",
       deps.apiBaseUrl,
     ],
-    { env: process.env, stdio: "ignore" },
+    {
+      // The bridge is third-party code: it gets a minimal environment, never
+      // the server's secrets (database URL, key material, provider keys).
+      env: {
+        PATH: process.env.PATH ?? "",
+        HOME: process.env.HOME ?? "",
+        LANG: process.env.LANG ?? "C.UTF-8",
+        LC_ALL: process.env.LC_ALL ?? "",
+        TMPDIR: process.env.TMPDIR ?? "/tmp",
+      },
+      stdio: "ignore",
+    },
   );
 
   const r: Running = {
@@ -410,7 +436,9 @@ export async function recordWhatsAppEvent(deps: WhatsAppDeps, orgId: string, eve
     case "qr":
       latestQr.set(orgId, event.qr);
       await updateSession(deps.db, orgId, { status: "pairing", lastError: null });
-      broadcastStatus(deps, orgId, { type: "whatsapp.qr", qr: event.qr });
+      // The QR itself stays server-side (GET …/whatsapp, manage_connectors):
+      // an org broadcast reaches every member, and the code links a phone.
+      broadcastStatus(deps, orgId, { type: "whatsapp.qr" });
       return;
     case "connecting":
       return;
