@@ -364,6 +364,42 @@ describe("the AI it suggests", () => {
       .where(eq(schema.providerCredentials.orgId, f.org.id));
     expect(await suggestAgentAi(ai, f.org.id, f.owner.id)).toEqual({ kind: "none" });
   });
+
+  test("a shared account another agent already thinks with is still suggested (it thinks for all of them)", async () => {
+    f = await setup();
+    const { machineId } = await pairMachine({ db: f.db, pubsub: f.pubsub }, f.owner.id, f.org.id, {
+      name: "MacBook",
+      exec: true,
+    });
+    const SHARED = "0193aaaa-0000-4000-8000-000000000004";
+    await f.db.insert(schema.machineAccounts).values({
+      id: SHARED,
+      orgId: f.org.id,
+      machineId,
+      kind: "claude_code",
+      provider: "opencode",
+      label: "OpenCode Go",
+      status: "active",
+      createdBy: f.owner.id,
+      shared: true,
+    });
+    // Two agents already think with it: shared, it thinks for all of its owner's.
+    await f.db
+      .update(schema.agents)
+      .set({ brain: "claude_code", machineId, brainAccountId: SHARED })
+      .where(eq(schema.agents.id, f.agent.id));
+    const ai = { db: f.db, gateway: f.gateway };
+    expect(await suggestAgentAi(ai, f.org.id, f.owner.id)).toEqual({
+      kind: "account",
+      brain: "claude_code",
+      machineId,
+      accountId: SHARED,
+      label: "OpenCode Go",
+    });
+    // The same account not shared (one agent at most) and taken: not suggested.
+    await f.db.update(schema.machineAccounts).set({ shared: false }).where(eq(schema.machineAccounts.id, SHARED));
+    expect(await suggestAgentAi(ai, f.org.id, f.owner.id)).toEqual({ kind: "model" });
+  });
 });
 
 describe("deciding", () => {
