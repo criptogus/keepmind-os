@@ -1217,6 +1217,7 @@ export class RunnerDaemon implements RequestObserver {
       maxProcesses: config.brainMaxProcesses ?? DEFAULT_LIMITS.brainMaxProcesses,
       accounts: this.accounts,
       log,
+      ...(this.opts.caffeinate !== undefined ? { caffeinate: this.opts.caffeinate } : {}),
     });
     const codexRuns = new Map<string, McpTaskInfo>();
     // Codex turns on long-lived app-servers (live steering); `codex exec` where they can't run.
@@ -1227,6 +1228,7 @@ export class RunnerDaemon implements RequestObserver {
       onRateLimits: (account, rateLimits) =>
         this.accounts.noteCodexRateLimits(account ?? OWN_USAGE_ID.codex, rateLimits),
       log,
+      ...(this.opts.caffeinate !== undefined ? { caffeinate: this.opts.caffeinate } : {}),
     });
     const mcp = new McpBridge({
       socketPath,

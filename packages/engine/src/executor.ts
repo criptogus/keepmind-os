@@ -336,7 +336,13 @@ import { isStuck, noteStep, STUCK_END_NOTE, STUCK_END_REPLY_NOTE, STUCK_NOTE, ty
 import { archivedAgentsPrompt, FIND_AGENT_TOOL, renamedAgentsPrompt, teammateMeans } from "./team";
 import { linkRunChecks, runChecksForReply } from "./team-actions";
 import { carriesCredential, cliErrorWords, maskCredentials, maskCredentialsExcept, scrubSignIns } from "./tool-detail";
-import { chooseToolGroups, keptToolGroups, recentForJudge, type ToolGroupChoice } from "./tool-loading";
+import {
+  chooseSkills,
+  chooseToolGroups,
+  keptToolGroups,
+  recentForJudge,
+  type ToolGroupChoice,
+} from "./tool-loading";
 import {
   EVERY_TOOL,
   isCore,
@@ -1820,6 +1826,8 @@ async function executeRunInner(
   if (!askingForRoom) await publishChannelEvent(deps.pubsub, event("running"));
   // Tools on demand (ADR 0043): a new run lists the core tools and the groups the judge expects it to need.
   let toolChoice = null as ToolGroupChoice | null;
+  // Skills the judge expects this message to need (shown under "# This turn" so `load_skill` goes straight to one).
+  let skillPicks: Promise<string[]> = Promise.resolve([]);
   const judge = deps.context?.judge;
   /** The latest messages where the run answers, read once for every judge that needs them. */
   let recentRead: Promise<string[]> | null = null;
@@ -1876,6 +1884,24 @@ async function executeRunInner(
           tools = presentTools(granted, isSensitive, ctx.loadedGroups);
           if (choice.groups.includes(toolGroupKey({ scope: BROWSER_SCOPE }))) {
             deps.warmBrowser?.({ orgId: run.orgId, agentId: agent.id, threadRootId: run.threadRootId });
+          }
+          // Same judge, one more cheap question: which skills this message needs (a `choice`, not per-skill nouls).
+          if (granted.some((t) => t.name === "load_skill")) {
+            skillPicks = enabledSkills(db, run.orgId, agent.id, run.id)
+              .then((list) =>
+                list.length
+                  ? chooseSkills(judge, {
+                      orgId: run.orgId,
+                      agentId: agent.id,
+                      runId: run.id,
+                      agent: { name: agent.name, role: agent.role, instructions: agent.instructions },
+                      message: trigger?.body ?? "",
+                      recent,
+                      skills: list,
+                    })
+                  : [],
+              )
+              .catch(() => [] as string[]);
           }
         })()
       : null;
@@ -2295,6 +2321,7 @@ async function executeRunInner(
             .join("\n\n"),
         ),
         skills: skillList,
+        skillPicks,
         // Granted: `find_agent` is on demand (token-trim B3), and "# Your team" stays.
         team: granted.some((t) => t.name === FIND_AGENT_TOOL),
         expand: tools.some((t) => t.name === EXPAND_TOOL),

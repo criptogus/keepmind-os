@@ -580,6 +580,11 @@ export async function buildRunContext(
     capabilities?: string | Promise<string>;
     /** Skills enabled for the agent (name and description; the body loads on demand). */
     skills?: { name: string; description: string }[];
+    /**
+     * The skills the judge expects this message to need (per run, resolved while the context is built): named
+     * under "# This turn" so `load_skill` goes straight to one instead of trying several.
+     */
+    skillPicks?: Promise<string[]>;
     /** `find_agent` is available: name the other agents in "# Your team". */
     team?: boolean;
     /** `expand` is available: long old messages come cut short, reopened with it (token-trim B9). */
@@ -1125,6 +1130,21 @@ export async function buildRunContext(
             ].join("\n"),
           },
         ]
+      : []),
+    ...(options.skillPicks
+      ? await options.skillPicks.then((picks) =>
+          picks.length > 0
+            ? [
+                {
+                  found: true as const,
+                  text: [
+                    "# Skills for this",
+                    `The judge expects this message to need: ${picks.map((p) => `\`${p}\``).join(", ")}. Load the matching one with \`load_skill\` before acting; if none fits once you read it, carry on without it.`,
+                  ].join("\n"),
+                },
+              ]
+            : [],
+        )
       : []),
     // Only when a person is behind the run: like the team, it follows the requester.
     // A heading of its own: on its own, the line would read as part of the section before it ("# Your team").

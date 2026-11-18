@@ -769,6 +769,8 @@ export interface CodexAppServersOptions {
   /** How `codex app-server` starts (a worker under systemd: in the agent's AI CLIs slice, `scope-gate.ts`). */
   spawn?: Spawn;
   log?: (line: string) => void;
+  /** macOS: hold off idle sleep while a turn runs (default on; tests pass false). */
+  caffeinate?: boolean;
 }
 
 const canceledEvent: CodexBrainEvent = { type: "error", code: "canceled", message: "The turn was canceled." };
@@ -785,6 +787,7 @@ export class CodexAppServers implements CodexAppRunner {
   /** `<bin>@<version>` whose app-server didn't start: exec for it from then on. */
   private readonly broken = new Set<string>();
   private closed = false;
+  private caffeinate: ChildProcess | null = null;
   private readonly log: (line: string) => void;
 
   constructor(private readonly opts: CodexAppServersOptions) {
@@ -840,11 +843,13 @@ export class CodexAppServers implements CodexAppRunner {
     // Held from here, so no route starts beside it, and a route already on its sign-in stops first: two
     // processes on one sign-in race on its refresh token.
     this.turns.set(input.runId, input.account?.id ?? null);
+    this.updateCaffeinate();
     try {
       await yieldRoute("codex", input.account?.home);
       await this.turnOn(input, opts, exec);
     } finally {
       this.turns.delete(input.runId);
+      this.updateCaffeinate();
     }
   }
 
@@ -1466,9 +1471,41 @@ export class CodexAppServers implements CodexAppRunner {
     live.client.close();
   }
 
+  /** macOS: hold off idle sleep while any turn runs (released when the runner exits, `-w`). */
+  private updateCaffeinate() {
+    const enabled = this.opts.caffeinate ?? process.platform === "darwin";
+    if (!enabled) return;
+    if (this.turns.size > 0 && !this.caffeinate && !this.closed) {
+      try {
+        const child = spawn("caffeinate", ["-i", "-w", String(process.pid)], { stdio: "ignore" });
+        (child as unknown as EventEmitter).on("error", () => {
+          this.caffeinate = null;
+        });
+        (child as unknown as EventEmitter).on("exit", () => {
+          if (this.caffeinate === child) this.caffeinate = null;
+        });
+        child.unref();
+        this.caffeinate = child;
+      } catch {
+        this.caffeinate = null;
+      }
+    } else if (this.turns.size === 0 && this.caffeinate) {
+      try {
+        this.caffeinate.kill();
+      } catch {}
+      this.caffeinate = null;
+    }
+  }
+
   /** The runner is exiting: every process is closed. */
   close() {
     this.closed = true;
     for (const l of [...this.live.values()]) this.drop(l);
+    if (this.caffeinate) {
+      try {
+        this.caffeinate.kill();
+      } catch {}
+      this.caffeinate = null;
+    }
   }
 }

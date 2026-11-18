@@ -82,6 +82,15 @@ describe("chooseAutoModel", () => {
     expect(call?.calibrated).toBeUndefined();
   });
 
+  test("a routine's high effort is capped at medium; a mission's is not", async () => {
+    const judge = createFakeJudge((_kind, id) => (id === "tier" ? "large" : "high"));
+    const routine = await chooseAutoModel(judge, { ...input, routine: true, mission: false });
+    expect(routine).toMatchObject({ tier: "large", effort: "medium", source: "judge" });
+    expect(routine.reason).toContain("(capped: routine)");
+    const mission = await chooseAutoModel(judge, { ...input, routine: true, mission: true });
+    expect(mission).toMatchObject({ tier: "large", effort: "high" });
+  });
+
   test("acting for the person with tools is never the small tier: it only answers", async () => {
     const judge = createFakeJudge(() => "medium");
     await chooseAutoModel(judge, { ...input, message: "me manda um print do dinzo.com.br" });

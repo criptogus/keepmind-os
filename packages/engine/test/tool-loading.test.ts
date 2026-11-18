@@ -2,6 +2,7 @@ import { afterEach, expect, test } from "bun:test";
 import { asc, eq, schema } from "@keepmind/db";
 import { systemText } from "@keepmind/providers";
 import {
+  chooseSkills,
   chooseToolGroups,
   createFakeJudge,
   createToolGateway,
@@ -358,4 +359,45 @@ test("a run whose judge lists the browser starts the agent's browser while it th
   await drainOutbox(f.db, f.handlers);
   expect(f.provider.calls).toHaveLength(2);
   expect(warmed).toHaveLength(1);
+});
+
+test("chooseSkills: one choice over the skill names, the likely ones by probability, none or no judge no picks", async () => {
+  const skills = [
+    { name: "seo-audit", description: "Audit a site's SEO." },
+    { name: "cold-email", description: "Write cold outbound." },
+    { name: "weekly-report", description: "Weekly metrics report." },
+    { name: "incident-review", description: "Review an incident." },
+    { name: "design-handoff", description: "Package design specs." },
+  ];
+  const input = {
+    orgId: "o",
+    agent: { name: "Ada", role: "Dev", instructions: "" },
+    message: "audita o SEO do blog e me diz o que corrigir",
+    recent: [],
+    skills,
+  };
+  const judge = createFakeJudge((kind) =>
+    kind === "skill_pick"
+      ? { choice: "seo-audit", probabilities: { "seo-audit": 0.7, "weekly-report": 0.25, none: 0.05 } }
+      : undefined,
+  );
+  expect(await chooseSkills(judge, input)).toEqual(["seo-audit", "weekly-report"]);
+  expect(judge.calls[0]).toMatchObject({ kind: "skill_pick" });
+  const criteria = (
+    judge.calls[0]?.questions.skill as { criteria: Record<string, string> } | undefined
+  )?.criteria;
+  expect(criteria && Object.keys(criteria)).toContain("seo-audit");
+  expect(criteria?.none).toBeTruthy();
+
+  // Fewer skills than the minimum, a timeout and a broken judge all give no picks.
+  expect(await chooseSkills(judge, { ...input, skills: skills.slice(0, 3) })).toEqual([]);
+  const slow: Judge = { name: "slow", ask: () => new Promise(() => {}) };
+  expect(await chooseSkills(slow, { ...input, timeoutMs: 5 })).toEqual([]);
+  const broken: Judge = {
+    name: "broken",
+    ask: async () => {
+      throw new Error("down");
+    },
+  };
+  expect(await chooseSkills(broken, input)).toEqual([]);
 });

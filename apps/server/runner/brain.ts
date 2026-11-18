@@ -1592,6 +1592,8 @@ export interface BrainManagerOptions {
   /** Tests: `OWN_TURN_DUE_WAIT_MS`. */
   dueWaitMs?: number;
   log?: (line: string) => void;
+  /** macOS: hold off idle sleep while a turn runs (default on; tests pass false). */
+  caffeinate?: boolean;
 }
 
 interface Live {
@@ -1748,6 +1750,7 @@ export class BrainManager {
   /** Sessions that answered here (`ranKeyOf`): resumed next time even where Claude Code's folder can't be looked at. */
   private readonly ran = new Set<string>();
   private closed = false;
+  private caffeinate: ChildProcess | null = null;
   /** The accounts its agent thinks with, as root last said (`keepAccount`); undefined: not said. */
   private keep: ReadonlySet<string> | undefined;
   /** The same per agent, where one manager runs several agents' CLIs (root's). */
@@ -2104,6 +2107,7 @@ export class BrainManager {
       bridge.runToken = typeof req.mcp?.token === "string" ? req.mcp.token : null;
     }
     this.running.set(req.runId, live);
+    this.updateCaffeinate();
     // Usage goes to the account the turn thinks with, or to the computer's own sign-in.
     const usageKey = ctx.accountHome && typeof req.account === "string" ? req.account : OWN_USAGE_ID.claude_code;
     const { delegated } = ctx;
@@ -2169,6 +2173,7 @@ export class BrainManager {
       return out;
     } finally {
       if (this.running.get(req.runId) === live) this.running.delete(req.runId);
+      this.updateCaffeinate();
       live.busy = false;
       live.lastUsed = Date.now();
       if (bridge) {
@@ -2638,9 +2643,46 @@ export class BrainManager {
     else live.proc.onExit(cleanup);
   }
 
+  /** macOS: hold off idle sleep while any turn runs (released when the runner exits, `-w`). */
+  private updateCaffeinate() {
+    const enabled = this.opts.caffeinate ?? process.platform === "darwin";
+    if (!enabled) return;
+    if (this.running.size > 0 && !this.caffeinate && !this.closed) {
+      try {
+        const child = spawn("caffeinate", ["-i", "-w", String(process.pid)], { stdio: "ignore" });
+        (child as unknown as EventEmitter).on("error", () => {
+          this.caffeinate = null;
+        });
+        (child as unknown as EventEmitter).on("exit", () => {
+          if (this.caffeinate === child) this.caffeinate = null;
+        });
+        child.unref();
+        this.caffeinate = child;
+      } catch {
+        this.caffeinate = null;
+      }
+    } else if (this.running.size === 0 && this.caffeinate) {
+      try {
+        this.caffeinate.kill();
+      } catch {}
+      this.caffeinate = null;
+    }
+  }
+
+  /** Whether macOS sleep is held right now (tests). */
+  get holdingSleep() {
+    return this.caffeinate !== null;
+  }
+
   /** The runner is exiting: every process is closed. */
   close() {
     this.closed = true;
     for (const l of [...this.live.values()]) this.drop(l);
+    if (this.caffeinate) {
+      try {
+        this.caffeinate.kill();
+      } catch {}
+      this.caffeinate = null;
+    }
   }
 }

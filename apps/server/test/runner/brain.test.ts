@@ -3007,3 +3007,17 @@ test.if(posix)("turn.context: the worker's answer: the folder as the agent resol
   expect(said).toContain("?? CLAUDE.md");
   expect(said).toContain("first");
 });
+
+test.skipIf(process.platform !== "darwin")(
+  "macOS: sleep is held while a brain turn runs and released after",
+  async () => {
+    const { m, turn } = setup({ caffeinate: true });
+    const pending = turn(90, "SLOWKEY please");
+    await waitFor(() => m.holdingSleep, 5000);
+    expect(m.holdingSleep).toBe(true);
+    await pending;
+    await waitFor(() => !m.holdingSleep, 5000);
+    expect(m.holdingSleep).toBe(false);
+  },
+  20_000,
+);

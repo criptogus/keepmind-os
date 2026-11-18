@@ -123,6 +123,81 @@ export async function chooseToolGroups(
   }
 }
 
+/** With fewer skills than this the list itself is short enough: no judge call. */
+export const SKILL_PICK_MIN = 4;
+/** Picks shown per run: enough to cover the likely ones, few enough to stay a hint. */
+const SKILL_PICKS_MAX = 2;
+/** A skill is hinted at this choice probability or more. */
+const SKILL_PICK_MIN_P = 0.2;
+
+/**
+ * Which of the agent's skills this message likely needs, in one judge request (a `choice` over the skill
+ * names plus "none"): the run's context then names them under "# This turn", so the agent loads the right
+ * one with `load_skill` instead of trying several. Never throws and never blocks: no answer, no picks.
+ */
+export async function chooseSkills(
+  judge: Judge,
+  input: {
+    orgId: string;
+    agentId?: string;
+    runId?: string;
+    agent: { name: string; role: string; instructions: string };
+    message: string;
+    recent: string[];
+    skills: { name: string; description: string }[];
+    timeoutMs?: number;
+  },
+): Promise<string[]> {
+  const candidates = input.skills.slice(0, 40);
+  if (candidates.length < SKILL_PICK_MIN) return [];
+  const criteria: Record<string, string> = { none: "No skill applies to this message." };
+  for (const s of candidates) criteria[s.name] = cutText(s.description, 200) || s.name;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<"timeout">((resolve) => {
+    timer = setTimeout(() => resolve("timeout"), input.timeoutMs ?? TOOL_GROUPS_TIMEOUT_MS);
+  });
+  try {
+    const answers = await Promise.race([
+      judge.ask({
+        orgId: input.orgId,
+        agentId: input.agentId,
+        runId: input.runId,
+        kind: "skill_pick",
+        state: {
+          agent: {
+            name: input.agent.name,
+            role: input.agent.role,
+            instructions: cutText(input.agent.instructions, 1500),
+          },
+          message: cutText(input.message, 2000),
+          recent: input.recent.map((m) => cutText(m, 400)).join("\n"),
+        },
+        questions: {
+          skill: {
+            type: "choice",
+            instructions:
+              "An AI agent of a team (`agent`) is about to answer `message` (`recent` is what was said before it). It has skills it can load with `load_skill` before acting. Which skill's instructions does this task most need? Pick `none` when no skill clearly applies.",
+            criteria,
+          },
+        },
+      }),
+      timeout,
+    ]);
+    if (answers === "timeout") return [];
+    const probabilities = answers.skill?.probabilities ?? {};
+    return candidates
+      .map((s) => ({ name: s.name, p: probabilities[s.name] ?? 0 }))
+      .filter((s) => s.p >= SKILL_PICK_MIN_P)
+      .sort((a, b) => b.p - a.p)
+      .slice(0, SKILL_PICKS_MAX)
+      .map((s) => s.name);
+  } catch {
+    return [];
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 /** Messages the judge reads before the one the run answers. */
 const RECENT_MESSAGES = 6;
 
