@@ -9,9 +9,12 @@ import {
   postEventToEngine,
   type SocketLike,
 } from "./events.ts";
+import { createBridgeApiHandler } from "./mcp.ts";
+import { ChatStore } from "./store.ts";
 import { ensureAuthDir, makeBaileysSocket } from "./wa.ts";
 
 export type { BridgeEvent, BridgeHandle, BridgeOptions, SocketLike } from "./events.ts";
+export { ChatStore } from "./store.ts";
 
 const LOGGED_OUT_STATUS = 401;
 
@@ -37,6 +40,7 @@ export async function startBridge(opts: BridgeOptions): Promise<BridgeHandle> {
   };
 
   const socket: SocketLike = await socketFactory({ authDir: opts.dataDir });
+  const store = new ChatStore();
 
   socket.on("connection.update", (update: any) => {
     if (update?.qr) emit({ type: "qr", qr: update.qr });
@@ -67,6 +71,16 @@ export async function startBridge(opts: BridgeOptions): Promise<BridgeHandle> {
       if (!chatId || chatId.endsWith("@g.us") || chatId === "status@broadcast") continue;
       const { text, hasMedia } = messageText(msg);
       if (!text) continue;
+      store.recordInbound({
+        chatId,
+        chatName: msg.pushName ?? chatId,
+        senderId: key.participant ?? chatId,
+        senderName: msg.pushName ?? key.participant ?? chatId,
+        text,
+        timestamp: Number(msg.messageTimestamp ?? Math.floor(Date.now() / 1000)),
+        hasMedia,
+        key: { id: key.id ?? "", remoteJid: chatId, fromMe: false, participant: key.participant },
+      });
       emit({
         type: "message",
         chat: { id: chatId, name: msg.pushName ?? chatId },
@@ -81,13 +95,28 @@ export async function startBridge(opts: BridgeOptions): Promise<BridgeHandle> {
     }
   });
 
+  const apiHandler = createBridgeApiHandler({ token: opts.token, store, socket });
+
   const server: Server = createServer(async (req, res) => {
     const url = new URL(req.url ?? "/", "http://127.0.0.1");
     if (req.method === "GET" && url.pathname === "/health") {
       json(res, 200, { ok: true });
       return;
     }
-    json(res, 404, { error: "not_found" });
+    const chunks: Buffer[] = [];
+    for await (const chunk of req) chunks.push(chunk as Buffer);
+    const webReq = new Request(`http://127.0.0.1${url.pathname}${url.search}`, {
+      method: req.method,
+      headers: req.headers as Record<string, string>,
+      body: chunks.length ? Buffer.concat(chunks) : undefined,
+    });
+    try {
+      const webRes = await apiHandler(webReq);
+      res.writeHead(webRes.status, Object.fromEntries(webRes.headers.entries()));
+      res.end(Buffer.from(await webRes.arrayBuffer()));
+    } catch {
+      json(res, 500, { error: "internal" });
+    }
   });
 
   await new Promise<void>((resolve, reject) => {
