@@ -15,7 +15,6 @@ import {
   setAgentAppearance,
   setAgentSkills,
 } from "../src";
-import { builtinSkills } from "../src/builtin-skills";
 import { addMember, addUser, type Fixture, setup } from "./fixtures";
 
 let f: Fixture;
@@ -166,17 +165,12 @@ test("export: what everyone may see, never keys; imported into another workspace
       { model: "claude-haiku-5-5" },
     );
   const applied = await into();
-  // The built-ins the target workspace was seeded with already exist there: skipped, not duplicated.
+  // Built-ins are product-seeded, never exported, so the bundle carries none; #general is joined, not made.
   const got = applied.items
     .filter((i) => i.action !== "create")
     .map((i) => [i.kind, i.label, i.action, i.reason])
     .sort((a, b) => String(a[1]).localeCompare(String(b[1])));
-  expect(got).toEqual(
-    [
-      ...builtinSkills().map((s) => ["skill", s.name, "skip", "exists"]),
-      ["channel", "general", "update", "exists"],
-    ].sort((a, b) => String(a[1]).localeCompare(String(b[1]))),
-  );
+  expect(got).toEqual([["channel", "general", "update", "exists"]]);
   const copy = await exportBundle(db, other.id, orgB.id);
   expect(shape(copy)).toEqual(shape(bundle));
   expect(copy.channels[0]?.key).not.toBe(general.id);
