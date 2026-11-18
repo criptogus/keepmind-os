@@ -96,6 +96,7 @@ import {
   type GitProxyDeps,
   GrokBrain,
   getAgentCached,
+  handleInboundWhatsAppMessage,
   hubBrainLink,
   isKeepMindCloud,
   isRightHand,
@@ -883,8 +884,11 @@ export function buildEngine(o: EngineOptions) {
       config.WHATSAPP_DATA_DIR ??
       (config.FILES_DIR ? join(dirname(config.FILES_DIR), "whatsapp") : join(process.cwd(), "whatsapp-sessions")),
     apiBaseUrl: `http://127.0.0.1:${config.PORT}`,
+    handleMessage: (orgId, msg) => handleInboundWhatsAppMessage({ db, whatsapp }, orgId, msg),
     ...o.whatsapp,
   };
+  // Agent replies in mirrored WhatsApp threads go back out through the bridge (job `message.posted`).
+  jobDeps.whatsapp = whatsapp;
   return {
     gateway,
     /** The search index's vectors (undefined: words alone), for the boot backfill (`queueEmbeddingBackfill`). */

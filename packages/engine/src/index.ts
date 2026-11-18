@@ -354,6 +354,7 @@ export * from "./web-push";
 export * from "./web-tools";
 export * from "./webhooks";
 export * from "./whatsapp/connector";
+export * from "./whatsapp/inbound";
 export * from "./whatsapp/supervisor";
 export * from "./wiki";
 export * from "./wiki-dm";
