@@ -13125,6 +13125,9 @@
         "1": "Tabellen ansehen",
         "2": "Daten abfragen, um zu antworten",
         "3": "Ändert nie etwas"
+      },
+      "context7": {
+        "1": "Aktuelle Bibliotheksdokumentation abrufen"
       }
     },
     "connectedList": "Verbunden",
@@ -13274,7 +13277,8 @@
       "whatsapp": "Nachrichten und Vorlagen von WhatsApp Business.",
       "superagentskill": "Finde, bewerte und verbessere Agentenfähigkeiten.",
       "liquid_cybersec": "Untersuche Sicherheitsbefunde und koordiniere Korrekturen mit Freigabe.",
-      "composio_connect": "Connect services through your Composio account with browser authorization."
+      "composio_connect": "Connect services through your Composio account with browser authorization.",
+      "context7": "Aktuelle, versionsspezifische Bibliotheksdokumentation."
     },
     "rea": {
       "title": "REA",

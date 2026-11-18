@@ -46603,5 +46603,11 @@
   },
   "shell.help": {
     "value": "Help"
+  },
+  "connectors.can.context7.1": {
+    "value": "Fetch up-to-date library documentation"
+  },
+  "connectors.descriptions.context7": {
+    "value": "Up-to-date, version-specific library documentation."
   }
 }

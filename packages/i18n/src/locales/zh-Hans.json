@@ -12691,6 +12691,9 @@
         "1": "查看数据表",
         "2": "查询数据来回答问题",
         "3": "从不更改任何内容"
+      },
+      "context7": {
+        "1": "获取最新的库文档"
       }
     },
     "connectedList": "已连接",
@@ -12835,7 +12838,8 @@
       "whatsapp": "WhatsApp Business 消息和模板。",
       "superagentskill": "查找、评估并改进智能体技能。",
       "liquid_cybersec": "调查安全发现，并在批准后协调修复。",
-      "composio_connect": "Connect services through your Composio account with browser authorization."
+      "composio_connect": "Connect services through your Composio account with browser authorization.",
+      "context7": "按版本提供的最新库文档。"
     },
     "rea": {
       "title": "REA",

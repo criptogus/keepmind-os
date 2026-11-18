@@ -13189,6 +13189,9 @@
         "1": "De tabellen bekijken",
         "2": "De data bevragen om te antwoorden",
         "3": "Wijzigt nooit iets"
+      },
+      "context7": {
+        "1": "Haal actuele bibliotheekdocumentatie op"
       }
     },
     "connectedList": "Gekoppeld",
@@ -13338,7 +13341,8 @@
       "whatsapp": "Berichten en sjablonen van WhatsApp Business.",
       "superagentskill": "Vind, beoordeel en verbeter vaardigheden van agenten.",
       "liquid_cybersec": "Onderzoek beveiligingsbevindingen en coördineer correcties met goedkeuring.",
-      "composio_connect": "Connect services through your Composio account with browser authorization."
+      "composio_connect": "Connect services through your Composio account with browser authorization.",
+      "context7": "Actuele, versionspecifieke bibliotheekdocumentatie."
     },
     "rea": {
       "title": "REA",

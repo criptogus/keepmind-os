@@ -12681,6 +12681,9 @@
         "1": "Melihat tabel",
         "2": "Menjalankan query ke data untuk menjawab",
         "3": "Tidak pernah mengubah apa pun"
+      },
+      "context7": {
+        "1": "Ambil dokumentasi pustaka terkini"
       }
     },
     "connectedList": "Terhubung",
@@ -12825,7 +12828,8 @@
       "whatsapp": "Pesan dan template WhatsApp Business.",
       "superagentskill": "Temukan, evaluasi, dan tingkatkan keterampilan agen.",
       "liquid_cybersec": "Selidiki temuan keamanan dan koordinasikan perbaikan dengan persetujuan.",
-      "composio_connect": "Connect services through your Composio account with browser authorization."
+      "composio_connect": "Connect services through your Composio account with browser authorization.",
+      "context7": "Dokumentasi pustaka terkini yang spesifik per versi."
     },
     "rea": {
       "title": "REA",

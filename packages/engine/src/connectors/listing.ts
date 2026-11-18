@@ -82,6 +82,7 @@ export const CONNECTOR_BRANDS: Record<string, { file: string; color: string | nu
   wix: { file: "wix", color: null },
   sanity: { file: "sanity", color: "#F03E2F" },
   contentful: { file: "contentful", color: "#2478CC" },
+  context7: { file: "context7", color: "#059669" },
   jotform: { file: "jotform", color: "#FF6100" },
   tally: { file: "tally", color: null },
   expo: { file: "expo", color: null },
