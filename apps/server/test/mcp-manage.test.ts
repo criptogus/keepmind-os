@@ -316,8 +316,16 @@ describe("skills", () => {
       .from(schema.agentSkills)
       .where(eq(schema.agentSkills.skillId, String(made.id)));
     expect(on.map((r) => r.agentId)).toEqual([agentId]);
-    const listed = data(await callTool(t, app.access, "list_skills", {})).skills as { name: string }[];
-    expect(listed.map((s) => s.name).sort()).toEqual(["release-notes", "support-replies"]);
+    const listed = data(await callTool(t, app.access, "list_skills", {})).skills as {
+      name: string;
+      builtin?: boolean;
+    }[];
+    expect(
+      listed
+        .filter((s) => !s.builtin)
+        .map((s) => s.name)
+        .sort(),
+    ).toEqual(["release-notes", "support-replies"]);
     const bad = await callTool(t, app.access, "create_skill", { markdown: "No name here." });
     expect(bad.isError).toBe(true);
   });
@@ -511,11 +519,13 @@ describe("import_summary", () => {
     const { b, orgId } = await setup();
     const app = await connectApp(t, b, orgId, MANAGE);
     await callTool(t, app.access, "create_skill", {
-      markdown: "---\nname: triage\ndescription: Sorts bugs\n---\nBody",
+      markdown: "---\nname: bug-sort\ndescription: Sorts bugs\n---\nBody",
     });
     const summary = data(await callTool(t, app.access, "import_summary", {}));
     expect((summary.agents as { handle: string }[]).map((a) => a.handle)).toEqual(["lodi", "dev"]);
-    expect((summary.skills as { name: string }[]).map((s) => s.name)).toEqual(["triage"]);
+    expect(
+      (summary.skills as { name: string; builtin?: boolean }[]).filter((s) => !s.builtin).map((s) => s.name),
+    ).toEqual(["bug-sort"]);
     expect((summary.channels as { name: string }[]).map((c) => c.name)).toContain("general");
     expect(summary.routines).toEqual([]);
   });

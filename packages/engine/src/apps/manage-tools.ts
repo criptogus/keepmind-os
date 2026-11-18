@@ -157,7 +157,7 @@ export function registerManageTools(deps: AppsToolDeps, p: AppPrincipal, tool: R
       ]);
       return {
         agents: agents.map((a) => ({ id: a.id, name: a.name, handle: a.handle, role: fenced(a.role, 200) })),
-        skills: skills.map((s) => ({ id: s.id, name: s.name })),
+        skills: skills.map((s) => ({ id: s.id, name: s.name, builtin: s.source === "builtin" })),
         routines: routines.map((r) => ({ id: r.id, name: r.name, agent_id: r.agentId })),
         channels: channels.map((c) => ({ id: c.id, name: c.name })),
       };
@@ -347,6 +347,7 @@ export function registerManageTools(deps: AppsToolDeps, p: AppPrincipal, tool: R
         name: s.name,
         description: fenced(s.description, 1024),
         agents_count: s.agentsCount,
+        builtin: s.source === "builtin",
       })),
     }),
   );

@@ -63,7 +63,7 @@ test("a link holding several skills answers with them, the picked ones install, 
   const its = (await (await b(`/api/app/organizations/${orgId}/agents/${agentId}/skills`)).json()) as {
     skills: { name: string; enabled: boolean }[];
   };
-  expect(its.skills.map((s) => [s.name, s.enabled])).toEqual([["review", true]]);
+  expect(its.skills.filter((s) => s.enabled).map((s) => [s.name, s.enabled])).toEqual([["review", true]]);
   const one = await importing({ url: "https://github.com/acme/skills/tree/main/skills/deploy" });
   expect(one.status).toBe(201);
   expect(await one.json()).toMatchObject({ name: "deploy", version: 1, source: "url" });
