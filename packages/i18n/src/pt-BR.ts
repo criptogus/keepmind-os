@@ -7061,6 +7061,7 @@ export const ptBR = {
         title: "Onde trabalha e com quem",
         lead: "O {{name}} entra nos canais que você marcar e tem um responsável no time.",
         lead_female: "A {{name}} entra nos canais que você marcar e tem um responsável no time.",
+        leadBatch: "Cada um entra nos canais que você marcar e tem um responsável no time.",
         leadPersonal: "O {{name}} fala com você no próprio chat e entra nas conversas em grupo que você marcar.",
         leadPersonal_female: "A {{name}} fala com você no próprio chat e entra nas conversas em grupo que você marcar.",
       },
@@ -7396,6 +7397,14 @@ export const ptBR = {
     goTo: "Ir para o #{{channel}}",
     openProfile: "Abrir perfil",
     createAnother: "Criar outro agente",
+    /** Criação em lote: vários papéis prontos de uma vez, uma configuração para todos (o modelo preenche cada um). */
+    batch: {
+      hint: "Escolha mais papéis prontos para criá-los juntos, ou siga com este",
+      create: "Criar {{count}} agentes",
+      created: "{{count}} agentes criados",
+      customLocked: "Do zero continua sendo um agente só",
+      reviewTitle: "Seu novo time",
+    },
     adminsOnly: "Só admins e donos criam agentes. Peça a um admin da {{org}}.",
     adminsOnlyKeeper: "Peça a {{keeper}} para deixar você criar agentes.",
     adminsOnlyPersonal: "Peça a quem cuida daqui para deixar você criar agentes.",
