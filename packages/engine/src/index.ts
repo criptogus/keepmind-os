@@ -353,6 +353,7 @@ export * from "./waitlist";
 export * from "./web-push";
 export * from "./web-tools";
 export * from "./webhooks";
+export * from "./whatsapp/supervisor";
 export * from "./wiki";
 export * from "./wiki-dm";
 export * from "./wiki-github";

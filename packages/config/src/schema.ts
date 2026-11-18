@@ -971,6 +971,13 @@ export const envVars = {
     section: "Storage",
     example: "/data/files",
   },
+  WHATSAPP_DATA_DIR: {
+    schema: z.string().optional(),
+    description:
+      "Absolute path for WhatsApp session data (the unofficial QR bridge's credentials, one folder per organization). Defaults to a `whatsapp` folder next to FILES_DIR, or `./whatsapp-sessions` when FILES_DIR is unset. Session credentials never leave this server; choose a persistent volume.",
+    section: "Storage",
+    example: "/data/whatsapp",
+  },
   S3_ENDPOINT: {
     schema: z.url().optional(),
     description:

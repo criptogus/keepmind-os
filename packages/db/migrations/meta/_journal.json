@@ -1919,6 +1919,13 @@
       "when": 1794756800003,
       "tag": "0277_keepmind_companion",
       "breakpoints": true
+    },
+    {
+      "idx": 276,
+      "version": "7",
+      "when": 1794965171876,
+      "tag": "0278_whatsapp_sessions",
+      "breakpoints": true
     }
   ]
 }

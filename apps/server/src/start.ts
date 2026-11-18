@@ -63,6 +63,7 @@ import {
   enableCaches,
   enableOperatorEvents,
   ensureRightHands,
+  ensureWhatsAppBridgesOnBoot,
   type GifKey,
   isBlockedAddress,
   isKeepMindCloud,
@@ -464,6 +465,13 @@ async function boot(
   // A worker (`SERVER_ROLE=worker`) runs jobs only: no app, API, sockets or usage report, its health check alone. Its
   // runs reach computers through the process that holds their socket (`machine_rpc`).
   const worker = config.SERVER_ROLE === "worker";
+  // WhatsApp bridges live in the app process: it is the one answering the
+  // bridge's internal event route. Off the boot path — spawning is slow.
+  if (!worker) {
+    void ensureWhatsAppBridgesOnBoot(engine.whatsapp).catch((error: unknown) =>
+      log.warn("whatsapp bridges failed to resume", { error: String(error) }),
+    );
+  }
   const slots = { quick: config.OUTBOX_QUICK_SLOTS, long: config.OUTBOX_MAX_IN_FLIGHT - config.OUTBOX_QUICK_SLOTS };
   const memoryBytes = memoryBudget({
     limitBytes: process.constrainedMemory() || totalmem(),
