@@ -62,6 +62,7 @@ import {
   enableAccountContacts,
   enableCaches,
   enableOperatorEvents,
+  ensureBuiltinSkills,
   ensureReaOnBoot,
   ensureRightHands,
   ensureWhatsAppBridgesOnBoot,
@@ -427,6 +428,12 @@ async function boot(
       if (made > 0) log.info("right hands created", { made });
     })
     .catch((error: unknown) => log.warn("right hands backfill failed", { error: String(error) }));
+  // Off the boot path: workspaces get the built-in skills they lack (vendored methodology, `metadata.builtin`).
+  void ensureBuiltinSkills(database.db)
+    .then((made) => {
+      if (made > 0) log.info("built-in skills seeded", { made });
+    })
+    .catch((error: unknown) => log.warn("built-in skills backfill failed", { error: String(error) }));
   // Off the boot path, once (ADR 0167): untrusted memories saved from a person's own words are trusted again, and
   // how-tos agents worked out between themselves that name nobody reach their other work.
   void backfillMemoryTrust(database.db)

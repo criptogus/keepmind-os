@@ -82,7 +82,7 @@ test("staging is private, inert, relationship-preserving and repeatable", async 
   const [routine] = await f.db.select().from(schema.routines);
   expect(routine?.active).toBe(false);
   expect(routine?.nextRunAt).toBeNull();
-  const [skill] = await f.db.select().from(schema.skills);
+  const [skill] = await f.db.select().from(schema.skills).where(eq(schema.skills.ownerUserId, f.owner.id));
   expect(skill?.ownerUserId).toBe(f.owner.id);
   expect(skill?.body).toContain("Não invente preços.");
   expect(await f.db.select().from(schema.agentSkills)).toHaveLength(1);
