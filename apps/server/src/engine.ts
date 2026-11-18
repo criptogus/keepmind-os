@@ -884,6 +884,7 @@ export function buildEngine(o: EngineOptions) {
       config.WHATSAPP_DATA_DIR ??
       (config.FILES_DIR ? join(dirname(config.FILES_DIR), "whatsapp") : join(process.cwd(), "whatsapp-sessions")),
     apiBaseUrl: `http://127.0.0.1:${config.PORT}`,
+    bridgeEntry: config.WHATSAPP_BRIDGE_ENTRY,
     handleMessage: (orgId, msg) => handleInboundWhatsAppMessage({ db, whatsapp }, orgId, msg),
     ...o.whatsapp,
   };

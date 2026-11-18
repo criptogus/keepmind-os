@@ -787,6 +787,8 @@ ones a self-hosted instance usually touches:
 | `TYPESAFE_API_KEY` | | Your TypeSafe key for Jev (AI: plans and keys). Wins over the key added in Settings → AI and usage. |
 | `COMPOSIO_API_KEY`, `COMPOSIO_WEBHOOK_SECRET` | | Your Composio project: Gmail and Outlook mailboxes and the services connected through Composio (below). |
 | `COMPOSIO_AUTH_CONFIGS`, `COMPOSIO_CALLS_PER_MONTH` | `0` for the cap (none) | Auth configs of your own per toolkit (`googledrive=ac_…`), and the Composio calls a workspace may make per month. |
+| `WHATSAPP_DATA_DIR` | `whatsapp` next to `FILES_DIR`, else `./whatsapp-sessions` | Folder for WhatsApp session credentials, one subfolder per organization. Put it on a persistent volume: losing it unlinks the paired number. |
+| `WHATSAPP_BRIDGE_ENTRY` | the bundled `server/whatsapp-bridge.mjs` in native packages, the bridge's `bin/` in a source checkout | The whatsapp-bridge program the server spawns per organization. |
 
 **Model keys.** Each organization adds its own keys (Claude, OpenAI, Gemini, DeepSeek, Kimi, Z.ai,
 MiniMax, Command Code or OpenRouter) in **Settings → AI and usage**, and each agent uses one of them. Usage and cost are recorded per agent.
@@ -880,6 +882,22 @@ deletes the account at Composio, without revoking it at the service. Instagram c
 creator accounts only, and WhatsApp a WhatsApp Business account, whose id Composio's page asks for.
 Composio's own LinkedIn and YouTube apps share their rate limits and daily quota with all of Composio's
 customers: with heavy use, give them OAuth apps of your own in `COMPOSIO_AUTH_CONFIGS`.
+
+**WhatsApp by QR code (optional, unofficial).** A workspace can pair a WhatsApp number from
+**Settings → Connectors → WhatsApp**: the server spawns one small `whatsapp-bridge` process per
+organization (Baileys, the WhatsApp Web protocol), shows a QR code, and the number's direct chats
+mirror into a private `whatsapp` channel as threads — one thread per chat, the sender marked as an
+external contact with no workspace authority. The agent picked in the card (the right hand by
+default) answers; its replies go back to WhatsApp, and connector writes still ask for approval.
+This is **not** the official WhatsApp Business API: it uses the consumer protocol, WhatsApp may ban
+the number for automated use, keep volume low and human-paced, and sessions can drop (the card then
+asks to pair again). Session credentials live under `WHATSAPP_DATA_DIR` (default: a `whatsapp`
+folder next to `FILES_DIR`); keep it on a persistent volume or the pairing is lost on restart.
+Inbound media arrives as a `[media]` placeholder; agents read and send text (and can send media
+through the connector's tools where the bridge supports it). Agents reach WhatsApp through the
+`whatsapp` connector's tools (`list_chats`, `read_messages`, `search_messages` as reads;
+`send_message`, `send_media`, `mark_read` and friends as writes that ask approval) — grant them per
+agent like any connector.
 
 **Your own MCP servers know who is calling (optional).** An MCP server you run for your own workspace
 (an internal tool your agents use) gets nothing with a call but its key, and a key that leaks works from

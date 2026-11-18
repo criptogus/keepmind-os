@@ -271,7 +271,10 @@ export async function ensureWhatsAppBridge(
   const dataDir = join(deps.dataDir, "orgs", orgId, "whatsapp");
   const bridgeEntry = deps.bridgeEntry ?? join(import.meta.dir, "../../../whatsapp-bridge/bin/whatsapp-bridge.mjs");
   const proc = spawnImpl(
-    deps.nodeBin ?? "node",
+    // The bridge is spawned with whatever JS runtime runs the server: Bun in
+    // dev, Docker and native packages (it executes the bridge's TypeScript in
+    // a source checkout and the bundled .mjs in packages).
+    deps.nodeBin ?? (process.versions.bun ? process.execPath : "node"),
     [
       bridgeEntry,
       "--org-id",

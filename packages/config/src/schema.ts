@@ -978,6 +978,13 @@ export const envVars = {
     section: "Storage",
     example: "/data/whatsapp",
   },
+  WHATSAPP_BRIDGE_ENTRY: {
+    schema: z.string().optional(),
+    description:
+      "Path to the whatsapp-bridge entry the server spawns per organization (default: the bridge's own bin in a source checkout, or the bundled `whatsapp-bridge.mjs` shipped next to `server/` in native packages).",
+    section: "Storage",
+    example: "/app/server/whatsapp-bridge.mjs",
+  },
   S3_ENDPOINT: {
     schema: z.url().optional(),
     description:

@@ -238,3 +238,18 @@
 ## Execution note
 
 Tasks 1–2 (bridge package) are independent of 3–6 (engine/UI) once interfaces are fixed — they can be built in either order; Task 5 depends on 2+3, Task 6 on 3+4.
+
+## E2E checklist (manual, real WhatsApp number)
+
+- [ ] Connectors → WhatsApp card shows "Connect WhatsApp"; click → pairing chip + QR renders.
+- [ ] Scan QR in WhatsApp → Aparelhos conectados; card flips to connected with the phone number.
+- [ ] Send a WhatsApp DM to the paired number → a thread appears in the private `whatsapp` channel, sender shown as external (no member avatar/authority).
+- [ ] The chosen answer agent (default: right hand) replies in the thread → the reply arrives on WhatsApp.
+- [ ] A workspace person's message in the thread does NOT go to WhatsApp; a second inbound message lands in the same thread.
+- [ ] `@mention` inside an inbound WhatsApp text does not wake the mentioned agent (meta.external guard).
+- [ ] Disconnect in the card → bridge process stops, session `off`, QR cleared; reconnect pairs again.
+- [ ] Kill the bridge process → supervisor restarts it; `needs_reconnect` only on logged_out.
+- [ ] Agent tool calls: `list_chats`/`read_messages` run as reads; `send_message` asks approval (unless agent is "never ask").
+- [ ] Server restart with status pairing/connected → `ensureWhatsAppBridgesOnBoot` respawns the bridge.
+- [ ] Native package: `server/whatsapp-bridge.mjs` exists and `WHATSAPP_BRIDGE_ENTRY` is exported by the launcher.
+- [ ] Docker: `docker compose up` → same flow (bridge spawned with the image's Bun).
