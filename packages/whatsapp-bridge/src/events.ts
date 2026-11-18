@@ -32,8 +32,8 @@ export interface SocketLike {
   user?: { id?: string; name?: string };
   sendMessage(chatId: string, content: unknown): Promise<unknown>;
   end?(disconnect?: boolean): Promise<void>;
-  on(event: string, listener: (...args: any[]) => void): unknown;
-  off?(event: string, listener: (...args: any[]) => void): unknown;
+  on(event: string, listener: (...args: unknown[]) => void): unknown;
+  off?(event: string, listener: (...args: unknown[]) => void): unknown;
 }
 
 export interface BridgeHandle {
@@ -67,11 +67,27 @@ export async function postEventToEngine(
 /** Extracts the phone number from a Baileys user id like "5511...:12@s.whatsapp.net". */
 export function phoneOf(userId: string | undefined): string {
   if (!userId) return "";
-  return userId.split("@")[0]!.split(":")[0]!;
+  return (userId.split("@")[0] ?? "").split(":")[0] ?? "";
 }
 
 /** Text of an inbound Baileys message, or "[media]" placeholder. */
-export function messageText(message: any): { text: string; hasMedia: boolean } {
+export interface WaProtoLike {
+  conversation?: unknown;
+  extendedTextMessage?: { text?: unknown };
+  imageMessage?: { caption?: unknown };
+  videoMessage?: { caption?: unknown };
+  documentMessage?: { caption?: unknown };
+  [key: string]: unknown;
+}
+
+export interface WaMessageLike {
+  message?: WaProtoLike;
+}
+
+export function messageText(message: WaMessageLike | null | undefined): {
+  text: string;
+  hasMedia: boolean;
+} {
   const m = message?.message;
   if (!m) return { text: "", hasMedia: false };
   if (typeof m.conversation === "string") return { text: m.conversation, hasMedia: false };

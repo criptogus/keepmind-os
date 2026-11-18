@@ -49,7 +49,7 @@ function rpc(handle: BridgeHandle, method: string, params?: unknown, token = "to
 
 async function callTool(handle: BridgeHandle, name: string, args: Record<string, unknown>) {
   const res = await rpc(handle, "tools/call", { name, arguments: args });
-  const body = (await res.json()) as any;
+  const body = (await res.json()) as { result?: { tools?: { name: string; annotations?: Record<string, unknown> }[] } };
   return body.result;
 }
 
@@ -71,8 +71,10 @@ describe("whatsapp bridge MCP surface", () => {
       clientInfo: { name: "test", version: "0" },
     });
     const res = await rpc(handle, "tools/list");
-    const body = (await res.json()) as any;
-    const names = (body.result?.tools ?? []).map((t: any) => t.name).sort();
+    const body = (await res.json()) as {
+      result?: { tools?: { name: string; annotations?: Record<string, unknown> }[] };
+    };
+    const names = (body.result?.tools ?? []).map((t) => t.name).sort();
     expect(names).toEqual([
       "whatsapp_create_group",
       "whatsapp_get_chat",
@@ -83,16 +85,17 @@ describe("whatsapp bridge MCP surface", () => {
       "whatsapp_send_media",
       "whatsapp_send_message",
     ]);
-    const send = body.result.tools.find((t: any) => t.name === "whatsapp_send_message");
-    expect(send.annotations.destructiveHint).toBe(true);
-    const list = body.result.tools.find((t: any) => t.name === "whatsapp_list_chats");
-    expect(list.annotations.readOnlyHint).toBe(true);
+    const send = body.result?.tools?.find((t) => t.name === "whatsapp_send_message");
+    expect(send?.annotations?.destructiveHint).toBe(true);
+    const list = body.result?.tools?.find((t) => t.name === "whatsapp_list_chats");
+    expect(list?.annotations?.readOnlyHint).toBe(true);
     await handle.close();
   });
 
   test("send_message calls the socket and read_messages sees inbound mail", async () => {
     const { handle, sockets } = await start();
-    const sock = sockets[0]!;
+    const sock = sockets[0];
+    if (!sock) throw new Error("no socket");
     sock.emit("messages.upsert", {
       messages: [
         {
@@ -117,13 +120,14 @@ describe("whatsapp bridge MCP surface", () => {
     });
     expect(JSON.stringify(sent)).not.toContain('"isError":true');
     expect(sock.sent).toHaveLength(1);
-    expect(sock.sent[0]!.chatId).toBe("5511888888888@s.whatsapp.net");
+    expect(sock.sent[0]?.chatId).toBe("5511888888888@s.whatsapp.net");
     await handle.close();
   });
 
   test("POST /send delivers text with bearer auth", async () => {
     const { handle, sockets } = await start();
-    const sock = sockets[0]!;
+    const sock = sockets[0];
+    if (!sock) throw new Error("no socket");
 
     const noAuth = await fetch(`http://127.0.0.1:${handle.port}/send`, {
       method: "POST",

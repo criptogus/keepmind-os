@@ -31,7 +31,7 @@ export async function startBridge(opts: BridgeOptions): Promise<BridgeHandle> {
   ensureAuthDir(opts.dataDir);
   const socketFactory = opts.socketFactory ?? makeBaileysSocket;
   const postEvent =
-    opts.postEvent ?? ((url, token, event) => postEventToEngine(opts.apiBaseUrl, opts.orgId, token, event));
+    opts.postEvent ?? ((_url, token, event) => postEventToEngine(opts.apiBaseUrl, opts.orgId, token, event));
 
   const emit = (event: BridgeEvent) => {
     opts.onEvent?.(event);
@@ -42,8 +42,13 @@ export async function startBridge(opts: BridgeOptions): Promise<BridgeHandle> {
   const socket: SocketLike = await socketFactory({ authDir: opts.dataDir });
   const store = new ChatStore();
 
-  socket.on("connection.update", (update: any) => {
-    if (update?.qr) emit({ type: "qr", qr: update.qr });
+  socket.on("connection.update", (raw) => {
+    const update = raw as {
+      qr?: unknown;
+      connection?: unknown;
+      lastDisconnect?: { error?: { output?: { statusCode?: unknown } } };
+    } | null;
+    if (typeof update?.qr === "string") emit({ type: "qr", qr: update.qr });
     if (update?.connection === "connecting") emit({ type: "connecting" });
     if (update?.connection === "open") {
       emit({
@@ -66,7 +71,16 @@ export async function startBridge(opts: BridgeOptions): Promise<BridgeHandle> {
   // (re)connect, which would flood the workspace with old messages and a run
   // each. key.id dedupes notify/append overlap and event retries.
   const seenMessages = new Set<string>();
-  socket.on("messages.upsert", (upsert: any) => {
+  socket.on("messages.upsert", (raw) => {
+    const upsert = raw as {
+      type?: string;
+      messages?: {
+        key?: { id?: string; remoteJid?: string; fromMe?: boolean; participant?: string };
+        pushName?: string;
+        messageTimestamp?: unknown;
+        message?: import("./events.ts").WaProtoLike;
+      }[];
+    } | null;
     if (upsert?.type !== "notify") return;
     for (const msg of upsert.messages ?? []) {
       const key = msg?.key;
@@ -74,7 +88,10 @@ export async function startBridge(opts: BridgeOptions): Promise<BridgeHandle> {
       if (key.id) {
         if (seenMessages.has(key.id)) continue;
         seenMessages.add(key.id);
-        if (seenMessages.size > 5000) seenMessages.delete(seenMessages.values().next().value!);
+        if (seenMessages.size > 5000) {
+          const oldest = seenMessages.values().next();
+          if (!oldest.done) seenMessages.delete(oldest.value);
+        }
       }
       const chatId = key.remoteJid;
       if (!chatId || chatId.endsWith("@g.us") || chatId === "status@broadcast") continue;

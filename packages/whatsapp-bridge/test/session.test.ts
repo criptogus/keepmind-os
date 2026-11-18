@@ -44,7 +44,8 @@ describe("whatsapp bridge session lifecycle", () => {
     const events: BridgeEvent[] = [];
     const sockets: FakeSocket[] = [];
     const handle = await startWithFake(tmpDataDir(), events, sockets);
-    const sock = sockets[0]!;
+    const sock = sockets[0];
+    if (!sock) throw new Error("no socket");
 
     sock.emit("connection.update", { qr: "qr-string-1", connection: "connecting" });
     await Bun.sleep(1);
@@ -90,7 +91,8 @@ describe("whatsapp bridge session lifecycle", () => {
     const events: BridgeEvent[] = [];
     const sockets: FakeSocket[] = [];
     const handle = await startWithFake(tmpDataDir(), events, sockets);
-    const sock = sockets[0]!;
+    const sock = sockets[0];
+    if (!sock) throw new Error("no socket");
 
     sock.emit("messages.upsert", {
       messages: [
@@ -113,7 +115,8 @@ describe("whatsapp bridge session lifecycle", () => {
     const events: BridgeEvent[] = [];
     const sockets: FakeSocket[] = [];
     const handle = await startWithFake(tmpDataDir(), events, sockets);
-    const sock = sockets[0]!;
+    const sock = sockets[0];
+    if (!sock) throw new Error("no socket");
 
     sock.emit("messages.upsert", {
       messages: [
@@ -138,7 +141,8 @@ describe("whatsapp bridge session lifecycle", () => {
     const events: BridgeEvent[] = [];
     const sockets: FakeSocket[] = [];
     const handle = await startWithFake(dataDir, events, sockets);
-    const sock = sockets[0]!;
+    const sock = sockets[0];
+    if (!sock) throw new Error("no socket");
 
     // With stored creds the socket goes straight to open — no qr event.
     sock.user = { id: "5511777777777:1@s.whatsapp.net", name: "Old" };

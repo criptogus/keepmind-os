@@ -28,7 +28,7 @@ export async function makeBaileysSocket(opts: { authDir: string }): Promise<Sock
     printQRInTerminal: false,
     browser: ["KeepMind OS", "Chrome", "1.0"],
     markOnlineOnConnect: false,
-    logger: silentLogger as any,
+    logger: silentLogger as unknown as import("pino").Logger,
     // Keep the socket alive across brief network drops; the engine marks
     // needs_reconnect when the session is truly gone (logged_out).
     keepAliveIntervalMs: 30_000,
