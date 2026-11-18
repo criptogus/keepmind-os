@@ -1033,6 +1033,22 @@ export interface AgentInput {
   setup?: { role: RoleId | null; hello?: string; starter?: string; apps?: Record<string, "read" | "write"> };
 }
 
+/** One agent of a batch create (`POST …/agents/batch`): its name, and the fields that differ per agent. */
+export interface AgentBatchItemInput {
+  name: string;
+  handle?: string;
+  role?: string;
+  instructions?: string;
+  appearance?: AgentLookInput | null;
+  setup?: AgentInput["setup"];
+}
+
+/** A batch create: up to 30 agents in one transaction, all or nothing; `shared` gives them all the rest. */
+export interface AgentBatchInput {
+  agents: AgentBatchItemInput[];
+  shared?: Omit<AgentInput, "name" | "handle" | "role" | "instructions" | "appearance" | "setup" | "proposal">;
+}
+
 /** A person's answer to an agent's proposal of costly work nobody asked for (ADR 0131 §3). */
 export type CostlyDecision = "go" | "not_now" | "never" | "always";
 

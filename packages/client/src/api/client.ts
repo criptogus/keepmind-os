@@ -36,6 +36,7 @@ import type {
   AgentAccess,
   AgentAction,
   AgentAudience,
+  AgentBatchInput,
   AgentBrain,
   AgentBrainInput,
   AgentBrowserSettings,
@@ -731,6 +732,8 @@ export interface ApiClient {
       input: { agentId: string; fromChannelId: string | null; toChannelId: string; reason: string },
     ): Promise<{ channelId: string; messageId: string; rightHandId: string }>;
     create(orgId: string, input: AgentInput): Promise<Agent>;
+    /** Several agents in one transaction, all or nothing (`POST …/agents/batch`): `shared` gives them all the same fields. */
+    createBatch(orgId: string, input: AgentBatchInput): Promise<{ agents: Agent[] }>;
     /** An agent's proposal of a new agent, by its card's message (ADR 0081). */
     proposal(orgId: string, messageId: string): Promise<AgentProposal>;
     /**
