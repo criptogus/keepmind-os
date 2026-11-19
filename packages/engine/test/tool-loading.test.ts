@@ -383,9 +383,7 @@ test("chooseSkills: one choice over the skill names, the likely ones by probabil
   );
   expect(await chooseSkills(judge, input)).toEqual(["seo-audit", "weekly-report"]);
   expect(judge.calls[0]).toMatchObject({ kind: "skill_pick" });
-  const criteria = (
-    judge.calls[0]?.questions.skill as { criteria: Record<string, string> } | undefined
-  )?.criteria;
+  const criteria = (judge.calls[0]?.questions.skill as { criteria: Record<string, string> } | undefined)?.criteria;
   expect(criteria && Object.keys(criteria)).toContain("seo-audit");
   expect(criteria?.none).toBeTruthy();
 
