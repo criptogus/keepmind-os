@@ -301,6 +301,7 @@ const starterOf = (pick: Pick) => PERSONAL_STARTERS.find((s) => s.id === pick);
 const roleOf = (pick: Pick): RoleId | null => (pick === "zero" || isStarter(pick) ? null : pick);
 const GROUP_ICON: Record<RoleGroupId, "code" | "members" | "layers"> = {
   tech: "code",
+  engineering: "code",
   customers: "members",
   advisory: "layers",
   exec: "layers",
@@ -318,6 +319,24 @@ const ROLE_SEARCH_ALIASES: Partial<Record<RoleId, string>> = {
   exec_people: "cpo chief people officer rh hr pessoas cultura",
   exec_research: "head research pesquisa insights estudos",
   seo: "seo geo search engine optimization google ai search aio buscador ranqueamento",
+  designer: "design ui ux figma canva interface visual produto",
+  ux_expert: "ux user experience pesquisa research usabilidade heurísticas jornada",
+  pr_manager: "pr pull request review code review merge revisor",
+  frontend_engineer: "frontend front-end web ui react javascript typescript css",
+  ios_engineer: "ios iphone ipad swift swiftui apple mobile",
+  android_engineer: "android kotlin mobile google",
+  software_factory: "factory fábrica bugs polish refactor improvements",
+  migration_engineer: "migration migração database schema upgrade",
+  latency_optimizer: "latency performance lentidão slow speed otimização p95",
+  platform_engineer: "platform plataforma infra infrastructure devops ci cd",
+  internal_tools: "internal tools ferramentas internas script automation",
+  release_engineer: "release versão deploy changelog versionamento",
+  code_reaper: "reaper dead code cleanup remoção código morto",
+  code_health: "health saúde débito técnico tech debt cve dependências",
+  anomaly_watcher: "anomaly anomalia watcher monitoramento métricas dados",
+  technical_writer: "writer documentação docs technical writing wiki",
+  compliance_engineer: "compliance auditoria audit controles governance",
+  chief_of_staff: "chief of staff cos coordenação orquestração time",
 };
 /**
  * The skills each starting point opens when needed, as the team templates name them (`teamTemplates.skills.{key}`),

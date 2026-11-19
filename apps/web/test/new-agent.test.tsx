@@ -290,6 +290,7 @@ describe("Criar agente: steps", () => {
         .map((h) => h.textContent),
     ).toEqual([
       "Produto e tecnologia",
+      "Engenharia e design",
       "Clientes",
       "Operação",
       "Consultoria e futuro",
@@ -301,6 +302,26 @@ describe("Criar agente: steps", () => {
         .getAllByRole("button")
         .map((b) => b.querySelector(".newag__role-name b")?.textContent);
     expect(names("Produto e tecnologia")).toEqual(["Dev", "Ops", "QA", "PM", "Cybersec"]);
+    expect(names("Engenharia e design")).toEqual([
+      "Design",
+      "UX",
+      "PR Manager",
+      "Frontend",
+      "iOS",
+      "Android",
+      "Software Factory",
+      "Migration Engineer",
+      "Performance",
+      "Plataforma",
+      "Ferramentas internas",
+      "Release",
+      "Code Reaper",
+      "Saúde do código",
+      "Anomalias",
+      "Documentação",
+      "Compliance",
+      "Chief of Staff",
+    ]);
     expect(names("Clientes")).toEqual(["Atendimento", "Vendas", "Marketing", "Conteúdo", "SEO & GEO"]);
     expect(names("Operação")).toEqual(["Dados", "Financeiro", "Pessoas", "Pesquisa", "Assistente"]);
     expect(within(step).getAllByRole("button")[0]?.textContent).toContain("Do zero");

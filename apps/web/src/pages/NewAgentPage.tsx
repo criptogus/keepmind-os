@@ -162,6 +162,7 @@ import "./new-agent.css";
 /** The icon next to each group of roles on the first step. */
 const GROUP_ICON: Record<RoleGroupId, IconName> = {
   tech: "code",
+  engineering: "code",
   customers: "members",
   advisory: "layers",
   exec: "layers",
