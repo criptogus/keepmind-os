@@ -16158,6 +16158,11 @@ export const en = {
     contextHelpPersonal: "Write it as if introducing yourself to someone who will help you every day.",
     timezone: "Time zone",
     timezoneHelp: "Routines and summaries use this time zone.",
+    quietHours: "Quiet hours",
+    quietHoursHelp:
+      "Scheduled routines don't run inside this window: a routine whose time falls here fires once it ends.",
+    quietHoursFrom: "Quiet hours start",
+    quietHoursUntil: "Quiet hours end",
     actionCheck: "Agents check what the team already did",
     actionCheckPersonal: "Agents check what was already done",
     actionCheckHelp:

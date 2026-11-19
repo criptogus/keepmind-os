@@ -1933,6 +1933,13 @@
       "when": 1794972159470,
       "tag": "0279_whatsapp_chat_approval",
       "breakpoints": true
+    },
+    {
+      "idx": 278,
+      "version": "7",
+      "when": 1795118556430,
+      "tag": "0280_quiet_hours",
+      "breakpoints": true
     }
   ]
 }

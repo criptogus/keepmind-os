@@ -1,0 +1,1 @@
+ALTER TABLE "organization_settings" ADD COLUMN "quiet_hours" jsonb DEFAULT 'null'::jsonb NOT NULL;

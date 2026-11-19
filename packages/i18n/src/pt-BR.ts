@@ -16103,6 +16103,10 @@ export const ptBR = {
     contextHelpPersonal: "Escreva como se você se apresentasse a alguém que vai te ajudar todo dia.",
     timezone: "Fuso horário",
     timezoneHelp: "As rotinas e os resumos usam este fuso.",
+    quietHours: "Horário de silêncio",
+    quietHoursHelp: "As rotinas no horário não rodam nessa faixa: a que cair aqui dispara uma vez quando ela termina.",
+    quietHoursFrom: "Início do horário de silêncio",
+    quietHoursUntil: "Fim do horário de silêncio",
     actionCheck: "Agentes conferem o que o time já fez",
     actionCheckPersonal: "Agentes conferem o que já foi feito",
     actionCheckHelp:

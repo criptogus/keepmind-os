@@ -30,6 +30,7 @@ import {
   mediaSettingsFrom,
 } from "./media";
 import { can, lockOrgMembers, requireActiveMembership, requirePermission } from "./organizations";
+import { type QuietHours, quietHoursOf } from "./quiet-hours";
 import { isRightHand, rightHandPermanent } from "./right-hand";
 import {
   agentBudgetsThisMonth,
@@ -73,6 +74,8 @@ export interface OrgSettings extends MediaSettings {
   routerModel: string | null;
   summaryModel: string | null;
   timezone: string;
+  /** Quiet hours for scheduled routines (`{ start, end }` "HH:MM" in `timezone`); null: none. */
+  quietHours: QuietHours | null;
   /** From onboarding: `solo`, `small`, `medium` or `large`. */
   teamSize: TeamSize | null;
   /** Monthly budget of agents without their own (nano-USD). Routes show it to admins only. */
@@ -107,6 +110,7 @@ export async function getOrgSettings(db: Database, actorId: string, orgId: strin
     routerModel: s?.routerModel ?? null,
     summaryModel: s?.summaryModel ?? null,
     timezone: s?.timezone ?? "UTC",
+    quietHours: quietHoursOf(s?.quietHours),
     teamSize: TEAM_SIZES.includes(s?.teamSize as TeamSize) ? (s?.teamSize as TeamSize) : null,
     defaultAgentBudgetNanoUsd: s?.defaultAgentBudgetNanoUsd ?? DEFAULT_AGENT_BUDGET_NANO_USD,
     actionCheck: s?.actionCheck ?? true,
@@ -164,6 +168,8 @@ export async function updateOrgSettings(
   }
   if (input.timezone !== undefined && !isValidTimeZone(input.timezone))
     throw new ValidationError("timezone must be an IANA time zone");
+  if (input.quietHours !== undefined && input.quietHours !== null && !quietHoursOf(input.quietHours))
+    throw new ValidationError("quietHours must be { start, end } as HH:MM, start different from end");
   if (input.gifRating !== undefined && !GIF_RATINGS.includes(input.gifRating as GifRating))
     throw new ValidationError(`gifRating must be one of ${GIF_RATINGS.join(", ")}`);
   if (input.agentMedia !== undefined && !AGENT_MEDIA_LEVELS.includes(input.agentMedia as AgentMediaLevel))
@@ -236,6 +242,9 @@ export async function updateOrgSettings(
       ...(input.routerModel !== undefined ? { routerModel: input.routerModel } : {}),
       ...(input.summaryModel !== undefined ? { summaryModel: input.summaryModel } : {}),
       ...(input.timezone !== undefined ? { timezone: input.timezone } : {}),
+      ...(input.quietHours !== undefined
+        ? { quietHours: input.quietHours === null ? null : quietHoursOf(input.quietHours) }
+        : {}),
       ...(input.teamSize !== undefined ? { teamSize: input.teamSize } : {}),
       ...(input.defaultAgentBudgetNanoUsd !== undefined
         ? { defaultAgentBudgetNanoUsd: Math.round(input.defaultAgentBudgetNanoUsd) }

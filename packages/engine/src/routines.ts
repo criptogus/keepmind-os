@@ -61,6 +61,7 @@ import { resolveRoutinePaused } from "./notification-producers";
 import { can, getMembership, requirePermission } from "./organizations";
 import { PermanentJobError } from "./outbox";
 import { maySql } from "./permissions";
+import { inQuietHours, type QuietHours, quietHoursEnd, quietHoursOf } from "./quiet-hours";
 import { isRightHand } from "./right-hand";
 import {
   type RoutineAccess,
@@ -118,6 +119,7 @@ const {
   machines,
   messages,
   organizationMembers,
+  organizationSettings,
   users,
   webhookEndpoints,
   dashboards,
@@ -436,6 +438,57 @@ const listedInRoutines = (r: RoutineRow) => targetOf(r).type !== "widget" || Boo
 export function nextRoutineTime(r: Pick<RoutineRow, "rule" | "cron" | "timezone">, after: Date): Date | null {
   if (r.rule) return nextOccurrence(r.rule as unknown as ScheduleRule, after);
   return r.cron ? nextCronTime(r.cron, r.timezone ?? "UTC", after) : null;
+}
+
+/** The workspace's schedule prefs: the zone quiet hours are read in, and the window itself (null: none). */
+interface SchedulePrefs {
+  timezone: string;
+  quiet: QuietHours | null;
+}
+
+async function schedulePrefs(db: Database, orgId: string): Promise<SchedulePrefs> {
+  const [s] = await db
+    .select({ timezone: organizationSettings.timezone, quietHours: organizationSettings.quietHours })
+    .from(organizationSettings)
+    .where(eq(organizationSettings.orgId, orgId));
+  return { timezone: s?.timezone ?? "UTC", quiet: quietHoursOf(s?.quietHours) };
+}
+
+/**
+ * A computed slot with quiet hours applied: one inside the workspace's window moves to the moment it ends, so the
+ * routine fires once then instead of skipping the night (or firing in it). `prefs` lets a caller that already read
+ * the workspace's settings (the worker tick, over many routines) skip the query.
+ */
+export async function deferQuietSlot(
+  db: Database,
+  orgId: string,
+  at: Date | null,
+  prefs?: SchedulePrefs,
+): Promise<Date | null> {
+  if (!at) return null;
+  const p = prefs ?? (await schedulePrefs(db, orgId));
+  if (!p.quiet || !inQuietHours(at, p.timezone, p.quiet)) return at;
+  return quietHoursEnd(at, p.timezone, p.quiet) ?? at;
+}
+
+/** The next slot a scheduled routine stores (`nextRoutineTime` with quiet hours applied). */
+export async function nextRoutineRunAt(
+  db: Database,
+  orgId: string,
+  r: Pick<RoutineRow, "rule" | "cron" | "timezone">,
+  after: Date,
+  prefs?: SchedulePrefs,
+): Promise<Date | null> {
+  return deferQuietSlot(db, orgId, nextRoutineTime(r, after), prefs);
+}
+
+/**
+ * The slot a due routine fires at, quiet hours applied: one inside the window (its settings changed after it was
+ * scheduled, or its `next_run_at` was written before quiet hours existed) waits for the window to end instead.
+ */
+function dueSlot(slot: Date, prefs: SchedulePrefs): Date {
+  if (!prefs.quiet || !inQuietHours(slot, prefs.timezone, prefs.quiet)) return slot;
+  return quietHoursEnd(slot, prefs.timezone, prefs.quiet) ?? slot;
 }
 
 /** Slots of a scheduled routine in [from, to) (the calendar). */
@@ -1165,7 +1218,7 @@ async function resolveTrigger(
         cron: reading.cron,
         timezone: zone,
         description: reading.description,
-        nextRunAt: reading.next as Date | null,
+        nextRunAt: await deferQuietSlot(deps.db, orgId, reading.next),
       };
     }
     const rule = reading ? reading.rule : normalizeRule({ ...trigger.rule, timezone: zone } as ScheduleRule, now);
@@ -1179,7 +1232,7 @@ async function resolveTrigger(
       timezone: rule.timezone,
       description: describeRule(rule),
       rule: rule as unknown as Record<string, unknown>,
-      nextRunAt: next as Date | null,
+      nextRunAt: await deferQuietSlot(deps.db, orgId, next),
     };
   }
   if (trigger.type === "once") {
@@ -1716,7 +1769,7 @@ export async function updateRoutine(
     set.nextRunAt = !active
       ? null
       : triggerType === "schedule"
-        ? nextRoutineTime({ ...current, ...set } as RoutineRow, new Date())
+        ? await nextRoutineRunAt(db, orgId, { ...current, ...set } as RoutineRow, new Date())
         : triggerType === "once"
           ? (set.nextRunAt ?? current.nextRunAt)
           : null;
@@ -1898,7 +1951,8 @@ export async function setRoutineActive(
 ): Promise<RoutineView> {
   const current = await loadRoutine(deps.db, orgId, id);
   await requireRoutineManager(deps.db, actorId, orgId, current.agentId);
-  const nextRunAt = active && current.triggerType === "schedule" ? nextRoutineTime(current, new Date()) : null;
+  const nextRunAt =
+    active && current.triggerType === "schedule" ? await nextRoutineRunAt(deps.db, orgId, current, new Date()) : null;
   const [row] = await deps.db
     .update(routines)
     .set({ active, nextRunAt, updatedAt: new Date(), ...(active ? { pausedReason: null, failuresInRow: 0 } : {}) })
@@ -1937,7 +1991,7 @@ export async function resumeRoutineBySystem(
     .update(routines)
     .set({
       active: true,
-      nextRunAt: nextRoutineTime(current, new Date()),
+      nextRunAt: await nextRoutineRunAt(deps.db, orgId, current, new Date()),
       updatedAt: new Date(),
       pausedReason: null,
       failuresInRow: 0,
@@ -2073,14 +2127,39 @@ export async function fireDueRoutines(deps: RoutineDeps, now = new Date()) {
       .orderBy(firesAt)
       .limit(100)
       .for("update", { skipLocked: true });
+    // Quiet hours are the workspace's, so the prefs are read once per workspace due, not per routine.
+    const orgIds = [...new Set(due.map((r) => r.orgId))];
+    const prefs = new Map<string, SchedulePrefs>();
+    if (orgIds.length > 0) {
+      const rows = await tx
+        .select({
+          orgId: organizationSettings.orgId,
+          timezone: organizationSettings.timezone,
+          quietHours: organizationSettings.quietHours,
+        })
+        .from(organizationSettings)
+        .where(inArray(organizationSettings.orgId, orgIds));
+      for (const row of rows) prefs.set(row.orgId, { timezone: row.timezone, quiet: quietHoursOf(row.quietHours) });
+    }
+    const prefsOf = (orgId: string): SchedulePrefs => prefs.get(orgId) ?? { timezone: "UTC", quiet: null };
     let fired = 0;
     for (const r of due) {
       const lock = rowsOf<{ ok: boolean }>(
         await tx.execute(sql`select pg_try_advisory_xact_lock(hashtextextended(${`routine:${r.id}`}, 0)) as ok`),
       );
       if (lock[0]?.ok === false) continue;
+      const p = prefsOf(r.orgId);
       const slot = r.nextRunAt as Date;
-      const next = r.triggerType === "schedule" ? nextRoutineTime(r, now) : null;
+      // A slot inside quiet hours (scheduled before the window was set, or written by an older version) waits for
+      // the window to end: `next_run_at` becomes that moment and the slot fires then, once.
+      if (r.triggerType === "schedule" && p.quiet && inQuietHours(slot, p.timezone, p.quiet)) {
+        const end = dueSlot(slot, p);
+        if (end.getTime() !== slot.getTime()) {
+          await tx.update(routines).set({ nextRunAt: end, updatedAt: now }).where(eq(routines.id, r.id));
+          continue;
+        }
+      }
+      const next = r.triggerType === "schedule" ? await nextRoutineRunAt(tx, r.orgId, r, now, p) : null;
       await tx.update(routines).set({ nextRunAt: next, updatedAt: now }).where(eq(routines.id, r.id));
       const [run] = await tx
         .insert(routineRuns)

@@ -2484,6 +2484,8 @@ export interface OrgSettings {
   routerModel: string | null;
   summaryModel: string | null;
   timezone: string;
+  /** Quiet hours for scheduled routines (`{ start, end }` "HH:MM" in `timezone`, overnight allowed); null: none. */
+  quietHours?: { start: string; end: string } | null;
   /** Admins only: monthly budget of every agent without its own (US$). Absent for members. */
   defaultAgentBudgetUsd?: number;
   /** Agents check what the team already did before acting outside (ADR 0064). On by default. */

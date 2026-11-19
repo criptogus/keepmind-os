@@ -348,6 +348,11 @@ export const organizationSettings = pgTable("organization_settings", {
   summaryModel: text(),
   /** IANA time zone used as the default for routines, e.g. `America/Sao_Paulo`. */
   timezone: text().notNull().default("UTC"),
+  /**
+   * Quiet hours (`{ start, end }` as "HH:MM" in `timezone`, overnight allowed): a scheduled routine whose slot
+   * lands inside waits for the window to end. Null: routines fire whenever their schedule says.
+   */
+  quietHours: jsonb().$type<{ start: string; end: string } | null>().notNull().default(null),
   /** From onboarding: `solo`, `small`, `medium` or `large`. */
   teamSize: text(),
   /**

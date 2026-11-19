@@ -65,6 +65,7 @@ import {
   TabPanel,
   Tabs,
   Textarea,
+  TimeSelect,
 } from "@keepmind/ui";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { type ComponentProps, type ReactNode, useEffect, useRef, useState } from "react";
@@ -419,6 +420,7 @@ function GeneralSection() {
   const [name, setName] = useState("");
   const [context, setContext] = useState("");
   const [timezone, setTimezone] = useState("");
+  const [quiet, setQuiet] = useState<{ start: string; end: string } | null>(null);
   const [logo, setLogo] = useState(false);
   const [switching, setSwitching] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -434,6 +436,7 @@ function GeneralSection() {
     setName(settings.data.name);
     setContext(settings.data.context);
     setTimezone(settings.data.timezone);
+    setQuiet(settings.data.quietHours ?? null);
   }, [settings.data, org.id]);
   useEffect(
     () => () => {
@@ -570,6 +573,60 @@ function GeneralSection() {
       </div>
     </div>
   );
+  const quietRow = (
+    <div className="settings-row ac-actrow">
+      <div className="settings-row__text ac-actrow__text">
+        <span className="ac-hintline">
+          <label className="settings-row__label" htmlFor="set-quiet-hours">
+            {t("settings.quietHours")}
+          </label>
+          <InfoHint name={t("common.about", { label: t("settings.quietHours") })} id="set-quiet-hours-hint">
+            {t("settings.quietHoursHelp")}
+          </InfoHint>
+        </span>
+      </div>
+      <div className="settings-row__control">
+        {quiet && (
+          <>
+            <TimeSelect
+              value={quiet.start}
+              onChange={(start) => {
+                // Equal bounds are no window at all: the pick snaps back.
+                if (start === quiet.end) return;
+                const next = { ...quiet, start };
+                setQuiet(next);
+                save({ quietHours: next });
+              }}
+              disabled={!editable}
+              aria-label={t("settings.quietHoursFrom")}
+            />
+            <TimeSelect
+              value={quiet.end}
+              onChange={(end) => {
+                if (end === quiet.start) return;
+                const next = { ...quiet, end };
+                setQuiet(next);
+                save({ quietHours: next });
+              }}
+              disabled={!editable}
+              aria-label={t("settings.quietHoursUntil")}
+            />
+          </>
+        )}
+        <Switch
+          id="set-quiet-hours"
+          checked={quiet !== null}
+          onCheckedChange={(on) => {
+            const next = on ? { start: "22:00", end: "07:00" } : null;
+            setQuiet(next);
+            save({ quietHours: next });
+          }}
+          disabled={!editable || !settings.data}
+          aria-describedby="set-quiet-hours-hint"
+        />
+      </div>
+    </div>
+  );
   // Who the workspace is for (ADR 0159 §4): the mode it is in now and, for who configures it, the switch to the other.
   const modeRow = (
     <div className="settings-row ac-actrow">
@@ -597,6 +654,7 @@ function GeneralSection() {
         {personal ? zoneRow : logoRow}
         {nameRow}
         {!personal && zoneRow}
+        {quietRow}
         {checkRow}
         {modeRow}
       </div>

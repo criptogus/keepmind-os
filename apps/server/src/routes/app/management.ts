@@ -168,6 +168,10 @@ const Settings = z
     routerModel: z.string().nullable().openapi({ description: "Null = the deployment's ROUTER_MODEL." }),
     summaryModel: z.string().nullable().openapi({ description: "Null = the deployment's SUMMARY_MODEL." }),
     timezone: z.string().openapi({ example: "America/Sao_Paulo" }),
+    quietHours: z.object({ start: z.string(), end: z.string() }).nullable().openapi({
+      description:
+        "Quiet hours for scheduled routines (`{ start, end }` as HH:MM in `timezone`, overnight allowed): a routine whose slot lands inside waits for the window to end. Null: none.",
+    }),
     teamSize: z.enum(["solo", "small", "medium", "large"]).nullable(),
     defaultAgentBudgetUsd: z.number().optional().openapi({
       description: "Monthly budget of every agent without its own. Admins only (absent for members).",
@@ -610,6 +614,14 @@ export function managementRoutes(deps: AppDeps) {
             routerModel: ModelId.nullable().optional(),
             summaryModel: ModelId.nullable().optional(),
             timezone: z.string().max(64).optional(),
+            quietHours: z
+              .object({
+                start: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/),
+                end: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/),
+              })
+              .nullable()
+              .optional()
+              .openapi({ description: "Quiet hours for scheduled routines; null turns them off." }),
             teamSize: z.enum(["solo", "small", "medium", "large"]).nullable().optional(),
             defaultAgentBudgetUsd: z
               .number()
