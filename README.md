@@ -8,6 +8,24 @@ Reconstruction of KeepMind OS on the agentes.chat engine, for shared teams at **
 
 Based on agentes.chat by Codari Global, LLC. The original project documentation and license follow.
 
+## Start with KeepMind OS
+
+For this fork, follow the [KeepMind deployment procedure](docs/KEEPMIND-REBUILD.md#deployment)
+and its production-readiness checklist. It uses this repository's
+[KeepMind Compose configuration](deploy/keepmind/compose.yml), not the upstream installer.
+
+The reconstruction is still under validation. Real-provider acceptance, production
+configuration and signed desktop packaging remain pending as described in the
+[rebuild status](docs/KEEPMIND-REBUILD.md). It does not automatically migrate existing
+KeepMind data or replace the installed desktop app.
+
+## Upstream reference documentation
+
+The sections below describe the original agentes.chat project. Its hosted service,
+installer, container images, update channels and community links belong to upstream;
+they do not install or distribute this KeepMind fork. Upstream feature status is not
+a substitute for the KeepMind validation status linked above.
+
 ---
 
 <p align="center">
@@ -58,7 +76,10 @@ under your own brand? There is a [commercial license](COMMERCIAL.md).
 An open-source alternative to team chat with bolted-on AI bots, and to single-player agent apps such
 as Grok Bot, ChatGPT dots, OpenBot.run and OpenMausBot (all of which it imports from).
 
-## Quick start
+## Quick start (upstream agentes.chat only)
+
+> **For KeepMind OS, use [the fork deployment procedure](docs/KEEPMIND-REBUILD.md#deployment).**
+> The commands and cloud service below are for upstream agentes.chat, not KeepMind.
 
 - **Cloud:** sign up at [agentes.chat](https://agentes.chat).
 - **Your own server** (Linux):
