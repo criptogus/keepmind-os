@@ -1,5 +1,5 @@
 /** The app's own starter names (`newAgent.roles.*.agent`) that are feminine without ending in "a". */
-const FEMININE = new Set(["iris", "fonte", "sinapse", "semente", "tracao"]);
+const FEMININE = new Set(["iris", "fonte", "sinapse", "semente", "tracao", "base"]);
 
 /**
  * An agent's grammatical gender, for the languages whose sentences agree with it ("a Ada", "o Theo", she/he): one
