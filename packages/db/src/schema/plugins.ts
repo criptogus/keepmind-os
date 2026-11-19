@@ -24,6 +24,24 @@ export const workspacePlugins = pgTable(
 );
 
 export interface PluginRecord {
+  interactions?: Array<{
+    requestId: string;
+    note: string;
+    source: string;
+    occurredAt: string;
+    recordedAt: string;
+    agentId: string;
+    runId: string | null;
+  }>;
+
+  history?: Array<{
+    revision: number;
+    values: Record<string, string | number | boolean>;
+    changedAt: string;
+    agentId: string;
+    runId: string | null;
+  }>;
+
   id: string;
   requestId: string;
   fingerprint: string;

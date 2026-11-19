@@ -126,7 +126,8 @@ describe("the header search (Discord's)", () => {
   test("a message older than what's loaded: the conversation pages back to it, the buttons waiting meanwhile, then they close", async () => {
     const state = seedState();
     const at = Date.now() - 3_600_000;
-    for (let i = 0; i < 400; i++)
+    // Keep the target outside the initial page without rendering 400 irrelevant rows.
+    for (let i = 0; i < 220; i++)
       state.messages.push({
         id: `h-${i}`,
         channelId: GENERAL_ID,
