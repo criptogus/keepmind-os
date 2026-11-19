@@ -4658,6 +4658,13 @@ export interface SkillPick {
 /** How a private repository was read: the GitHub App installed on its account, or the workspace's GitHub connection. */
 export type SkillVia = "github_app" | "github";
 
+/** `POST …/skills/import-local`: the server's own skill folders (`~/.claude/skills`…), what installed and what didn't. */
+export interface LocalSkillImport {
+  skills: SkillDetail[];
+  skipped: { name: string; code: string; message: string; params?: Record<string, unknown> }[];
+  sources: { label: string; found: number }[];
+}
+
 /** `GET …/agents/{id}/skills`: every skill of the library, with whether this agent has it. */
 export interface AgentSkill extends Skill {
   enabled: boolean;

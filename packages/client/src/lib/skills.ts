@@ -2,6 +2,7 @@ import type { TFunction } from "i18next";
 import { ApiError } from "../api/http";
 import type {
   GitHubRepositories,
+  LocalSkillImport,
   Skill,
   SkillAgentChange,
   SkillChoice,
@@ -30,6 +31,12 @@ export const skillPickOf = (
 /** Why a skill a link holds can't be installed, in the person's words when the server's code is known. */
 export const skippedSkillText = (t: TFunction, skipped: SkillSkipped) =>
   t("skills.pickSkipped", { reason: errorText(t, new ApiError(400, skipped.code, skipped.message, skipped.params)) });
+
+/** Why a skill found on the server's own folders can't be installed (`skills/import-local`'s `skipped`). */
+export const localSkipText = (t: TFunction, skipped: LocalSkillImport["skipped"][number]) =>
+  skipped.code === "duplicate"
+    ? t("skills.localSkipDuplicate")
+    : errorText(t, new ApiError(400, skipped.code, skipped.message, skipped.params));
 
 /** The files a skill's page lists: a skill can hold thousands, and its agents read them, not the person. */
 export const SKILL_FILES_SHOWN = 200;

@@ -242,6 +242,18 @@ export function createFakeSkills(
       }
       return installed;
     },
+    importLocal: async (orgId, personal) => {
+      log("skills.importLocal", orgId, ...(personal ? [personal] : []));
+      return {
+        skills: [],
+        skipped: [],
+        sources: [
+          { label: "~/.claude/skills", found: 0 },
+          { label: "~/.codex/skills", found: 0 },
+          { label: "~/.agents/skills", found: 0 },
+        ],
+      };
+    },
     update: async (orgId, id, patch) => {
       log("skills.update", orgId, id, patch);
       const s = await find(orgId, id);

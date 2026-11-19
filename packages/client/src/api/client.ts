@@ -192,6 +192,7 @@ import type {
   JoinClaim,
   JoinRequest,
   LearnedSkill,
+  LocalSkillImport,
   Machine,
   MachineAccess,
   MachineAccessReduce,
@@ -1292,6 +1293,12 @@ export interface ApiClient {
       forAgentId?: string,
       personal?: boolean,
     ): Promise<SkillDetail[]>;
+    /**
+     * Installs the skills found in the server's own skill folders (`~/.claude/skills`, `~/.codex/skills`,
+     * `~/.agents/skills`) — self-hosted installs find the person's own Claude Code, Codex or agents skills.
+     * Who manages agents; `personal`: the person's own skills instead of the team's.
+     */
+    importLocal(orgId: string, personal?: boolean): Promise<LocalSkillImport>;
     update(orgId: string, id: string, patch: SkillPatch): Promise<SkillDetail>;
     /** Fetch the link again (`url` skills). */
     reimport(orgId: string, id: string): Promise<SkillDetail>;

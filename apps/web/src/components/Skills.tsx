@@ -1,4 +1,5 @@
 import type {
+  LocalSkillImport,
   Skill,
   SkillAgentChange,
   SkillChoice,
@@ -31,6 +32,7 @@ import {
   githubRepoLink,
   hiddenRepoOf,
   hiddenRepoText,
+  localSkipText,
   pickSkills,
   relightsSkillUpdate,
   SKILL_FILES_SHOWN,
@@ -566,7 +568,7 @@ export function SkillPicker({
   );
 }
 
-type InstallTab = "github" | "zip" | "write";
+type InstallTab = "github" | "local" | "zip" | "write";
 
 /**
  * Where connecting GitHub from Instalar skill comes back to: Skills, with the link to read again. A link too long
@@ -654,6 +656,8 @@ export function InstallSkillDialog({
   /** The skills a link holds when it holds several, those that can't be installed, and the ones picked. */
   const [choices, setChoices] = useState<SkillChoice[] | null>(null);
   const [skipped, setSkipped] = useState<SkillSkipped[]>([]);
+  /** What "This computer" found and installed, shown in place until the dialog closes. */
+  const [localResult, setLocalResult] = useState<LocalSkillImport | null>(null);
   const [picked, setPicked] = useState<Set<string>>(new Set());
   const [via, setVia] = useState<SkillVia | null>(null);
   /** The connected GitHub's repositories in place of the tabs, to read one. */
@@ -722,6 +726,7 @@ export function InstallSkillDialog({
     setError(null);
     setHidden(null);
     setChoices(null);
+    setLocalResult(null);
     setBrowsing(false);
     setTurnOn(true);
     setScope(startScope ?? "team");
@@ -762,6 +767,24 @@ export function InstallSkillDialog({
             if (list.length === 1) return done(list[0]);
             toast.show(t("skills.installedMany", { count: list.length }));
             onOpenChange(false);
+          },
+          onError,
+        },
+      );
+    } else if (tab === "local") {
+      setLocalResult(null);
+      action.mutate(
+        { type: "importLocal", ...(personal ? { personal } : {}) },
+        {
+          onSuccess: (result) => {
+            const found = result as LocalSkillImport;
+            // Nothing to show in the list: close like the other tabs. With skips, they stay to be read.
+            if (found.skills.length > 0 && found.skipped.length === 0) {
+              if (found.skills.length === 1) return done(found.skills[0]);
+              toast.show(t("skills.installedMany", { count: found.skills.length }));
+              return onOpenChange(false);
+            }
+            setLocalResult(found);
           },
           onError,
         },
@@ -842,6 +865,7 @@ export function InstallSkillDialog({
                 label={t("skills.installHow")}
                 items={[
                   { value: "github", label: t("skills.tab.github") },
+                  { value: "local", label: t("skills.tab.local") },
                   { value: "zip", label: t("skills.tab.zip") },
                   { value: "write", label: t("skills.tab.write") },
                 ]}
@@ -947,6 +971,33 @@ export function InstallSkillDialog({
                     </label>
                   )}
                 </TabPanel>
+                <TabPanel value="local">
+                  <span className="ac-hintline small muted">{t("skills.localHelp")}</span>
+                  {localResult ? (
+                    <div className="skill-local">
+                      {localResult.sources.map((s) => (
+                        <p key={s.label} className="small muted">
+                          {s.label} · {t("skills.localCount", { count: s.found })}
+                        </p>
+                      ))}
+                      {localResult.skills.length > 0 && (
+                        <p className="small">
+                          {t("skills.localInstalled", {
+                            names: localResult.skills.map((s) => s.name).join(", "),
+                          })}
+                        </p>
+                      )}
+                      {localResult.skipped.map((s) => (
+                        <p key={`${s.name}-${s.code}`} className="small muted">
+                          {s.name} — {localSkipText(t, s)}
+                        </p>
+                      ))}
+                      {localResult.skills.length === 0 && localResult.skipped.length === 0 && (
+                        <Alert tone="neutral">{t("skills.localNone")}</Alert>
+                      )}
+                    </div>
+                  ) : null}
+                </TabPanel>
                 <TabPanel value="zip">
                   <span className="ac-hintline small muted">
                     {t("skills.zipHelp", { max: SKILL_ZIP_MB })}
@@ -1047,9 +1098,15 @@ export function InstallSkillDialog({
             <Button type="button" onClick={() => onOpenChange(false)}>
               {t("common.cancel")}
             </Button>
-            <Button type="submit" variant="primary" disabled={busy || (tab === "zip" && tooBig)} loading={busy}>
-              {t("skills.installSubmit")}
-            </Button>
+            {tab === "local" && localResult ? (
+              <Button type="button" variant="primary" onClick={() => onOpenChange(false)}>
+                {t("common.close")}
+              </Button>
+            ) : (
+              <Button type="submit" variant="primary" disabled={busy || (tab === "zip" && tooBig)} loading={busy}>
+                {t("skills.installSubmit")}
+              </Button>
+            )}
           </DialogFooter>
         </form>
       )}

@@ -9,6 +9,7 @@ import {
   getSkill,
   getSkillFile,
   getSkillSettings,
+  importLocalSkills,
   importPickedSkills,
   importSkillFromUrl,
   importSkillZip,
@@ -409,6 +410,49 @@ export function skillRoutes(deps: AppDeps) {
         throw new ValidationError("zipBase64 is not valid base64");
       }
       return c.json(await importSkillZip(skills(), actor, orgId, zip, { personal: input.personal }), 201);
+    },
+  );
+
+  app.openapi(
+    createRoute({
+      method: "post",
+      path: "/organizations/{orgId}/skills/import-local",
+      tags,
+      security,
+      summary: "Install the skills found on this server's own machine (who manages agents)",
+      description:
+        "Reads the fixed skill folders under the server's home (`~/.claude/skills`, `~/.codex/skills`, `~/.agents/skills`): each subfolder with a `SKILL.md` installs like a zip upload, the rest are listed in `skipped` with why. Self-hosted installs find the person's own Claude Code, Codex or agents skills; a server elsewhere finds none. `sources` says what each folder held.",
+      request: {
+        params: OrgParams,
+        body: body(z.object({ personal: Personal })),
+      },
+      responses: {
+        200: json(
+          z.object({
+            skills: z.array(SkillDetail),
+            skipped: z.array(
+              z.object({
+                name: z.string(),
+                code: z.string().openapi({ description: "Why it can't be installed: stable, the app translates it." }),
+                message: z.string().openapi({ description: "English fallback." }),
+                params: z.record(z.string(), z.unknown()).optional(),
+              }),
+            ),
+            sources: z.array(
+              z.object({
+                label: z.string().openapi({ description: "`~/.claude/skills`, as shown." }),
+                found: z.number().openapi({ description: "Folders with a SKILL.md it holds." }),
+              }),
+            ),
+          }),
+        ),
+        ...errors,
+      },
+    }),
+    async (c) => {
+      const { orgId } = c.req.valid("param");
+      const { personal } = c.req.valid("json");
+      return c.json(await importLocalSkills(skills(), c.get("user").id, orgId, { personal }), 200);
     },
   );
 

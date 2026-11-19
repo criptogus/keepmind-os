@@ -144,6 +144,7 @@ import type {
   JoinClaim,
   JoinRequest,
   LearnedSkill,
+  LocalSkillImport,
   Machine,
   MachineAccess,
   MachineAccount,
@@ -1448,6 +1449,8 @@ export function createHttpApi(options: TransportOptions = {}): HttpApi {
             json: { url, paths, ...(forAgentId ? { forAgentId } : {}), ...(personal ? { personal } : {}) },
           })
         ).skills,
+      importLocal: (orgId, personal) =>
+        request<LocalSkillImport>(`${org(orgId)}/skills/import-local`, { json: { personal } }),
       update: (orgId, id, patch) =>
         request<SkillDetail>(`${org(orgId)}/skills/${enc(id)}`, { method: "PATCH", json: patch }),
       reimport: (orgId, id) => request<SkillDetail>(`${org(orgId)}/skills/${enc(id)}/reimport`, { json: {} }),

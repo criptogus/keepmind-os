@@ -211,6 +211,7 @@ export * from "./mission-rules";
 export * from "./mission-runs";
 export * from "./mission-settings";
 export * from "./mission-sync";
+export * from "./local-skills";
 export * from "./mission-tools";
 export * from "./mission-worktree";
 export * from "./missions";
