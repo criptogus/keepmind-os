@@ -323,6 +323,18 @@ describe("grammar", () => {
       "Semente",
       "Malha",
       "Tração",
+      "Bússola",
+      "Lupa",
+      "Tela",
+      "Maçã",
+      "Fábrica",
+      "Travessia",
+      "Vigia",
+      "Tinta",
+      "Balança",
+      "Âncora",
+      "Oficina",
+      "Base",
     ];
     const masculine = [
       "Atlas",
@@ -354,6 +366,12 @@ describe("grammar", () => {
       "Ímã",
       "Cisne",
       "Índice",
+      "Traço",
+      "Robô",
+      "Ritmo",
+      "Podador",
+      "Vital",
+      "Timoneiro",
     ];
     for (const dict of [ptBR, en]) {
       const roles = Object.values(dict.newAgent.roles as Record<string, { agent?: string }>);
