@@ -1,6 +1,6 @@
-import { useAgents } from "@agenteschat/client";
-import { APP_ICONS, appIconNameKey } from "@agenteschat/client/lib/app-icons";
-import { type AgentAppearance, Dialog, DialogBody } from "@agenteschat/ui";
+import { useAgents } from "@keepmind/client";
+import { APP_ICONS, appIconNameKey } from "@keepmind/client/lib/app-icons";
+import { type AgentAppearance, Dialog, DialogBody } from "@keepmind/ui";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { useTranslation } from "react-i18next";
 import { useOrg } from "@/components/org-context";

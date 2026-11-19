@@ -1,4 +1,4 @@
-import { type SQL, sql } from "@agenteschat/db";
+import { type SQL, sql } from "@keepmind/db";
 import { untrustedBlock } from "./untrusted";
 
 /**

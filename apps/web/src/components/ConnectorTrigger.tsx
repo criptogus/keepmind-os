@@ -1,7 +1,7 @@
-import type { CustomServer, Routine, RoutineConnectorTrigger } from "@agenteschat/client";
-import { useAgentScopes, useCustomServers } from "@agenteschat/client";
-import { connectionReader, triggerChoices } from "@agenteschat/client/lib/routines";
-import { Field, Input, Select } from "@agenteschat/ui";
+import type { CustomServer, Routine, RoutineConnectorTrigger } from "@keepmind/client";
+import { useAgentScopes, useCustomServers } from "@keepmind/client";
+import { connectionReader, triggerChoices } from "@keepmind/client/lib/routines";
+import { Field, Input, Select } from "@keepmind/ui";
 import type { TFunction } from "i18next";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";

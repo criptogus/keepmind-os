@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { AgentAction, LiveWork, Message, Run } from "@agenteschat/client";
+import type { AgentAction, LiveWork, Message, Run } from "@keepmind/client";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { useState } from "react";
 import { LiveTools, SavedTools } from "@/components/ToolCalls";

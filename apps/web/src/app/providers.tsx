@@ -1,4 +1,4 @@
-import type { ApiClient, SocketFactory } from "@agenteschat/client";
+import type { ApiClient, SocketFactory } from "@keepmind/client";
 import { type QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { i18n as I18n } from "i18next";
 import type { ReactNode } from "react";

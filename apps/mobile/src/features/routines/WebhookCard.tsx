@@ -6,11 +6,11 @@ import {
   useRoutineAction,
   useRoutineHook,
   useRoutineHookAction,
-} from "@agenteschat/client";
-import { formatBytes } from "@agenteschat/client/lib/files";
-import { whenAt } from "@agenteschat/client/lib/format";
-import { runMessageLink } from "@agenteschat/client/lib/routine-view";
-import { hookCurl, isRefusedHookCall } from "@agenteschat/client/lib/routines";
+} from "@keepmind/client";
+import { formatBytes } from "@keepmind/client/lib/files";
+import { whenAt } from "@keepmind/client/lib/format";
+import { runMessageLink } from "@keepmind/client/lib/routine-view";
+import { hookCurl, isRefusedHookCall } from "@keepmind/client/lib/routines";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, StyleSheet, View } from "react-native";

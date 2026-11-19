@@ -1,4 +1,4 @@
-import { and, type Executor, eq, isNull, rowsOf, type SQL, schema, sql } from "@agenteschat/db";
+import { and, type Executor, eq, isNull, rowsOf, type SQL, schema, sql } from "@keepmind/db";
 import { enqueue } from "./outbox";
 import type { Approval } from "./tools/gateway";
 

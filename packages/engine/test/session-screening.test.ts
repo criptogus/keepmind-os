@@ -4,8 +4,8 @@ import {
   type MachineReplies,
   type MachineRequest,
   type StreamRequest,
-} from "@agenteschat/adapters";
-import { eq, rowsOf, schema, sql } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { eq, rowsOf, schema, sql } from "@keepmind/db";
 import {
   createSessionScreening,
   enableOperatorEvents,

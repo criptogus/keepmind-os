@@ -1,4 +1,4 @@
-import { everyoneWord, isEveryoneWord } from "@agenteschat/i18n/everyone";
+import { everyoneWord, isEveryoneWord } from "@keepmind/i18n/everyone";
 import { mentionsHandle } from "./markdown";
 import { can } from "./permissions";
 

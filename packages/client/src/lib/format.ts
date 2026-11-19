@@ -1,5 +1,5 @@
-import { dayMonthOrder, formatMoneyUsd } from "@agenteschat/i18n/format";
-import { type AppLocale, appLocale } from "@agenteschat/i18n/locale";
+import { dayMonthOrder, formatMoneyUsd } from "@keepmind/i18n/format";
+import { type AppLocale, appLocale } from "@keepmind/i18n/locale";
 import type { TFunction } from "i18next";
 
 /**

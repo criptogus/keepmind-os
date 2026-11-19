@@ -1,4 +1,4 @@
-import { keys, useApi } from "@agenteschat/client";
+import { keys, useApi } from "@keepmind/client";
 import { type QueryClient, useQueryClient } from "@tanstack/react-query";
 import * as ImagePicker from "expo-image-picker";
 import { type ReactNode, useState, useSyncExternalStore } from "react";

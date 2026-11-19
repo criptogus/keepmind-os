@@ -1,6 +1,6 @@
-import { type CostlyDecision, type Message, useApi } from "@agenteschat/client";
-import { costlyProposalOf, mayDecideCostly, mayRememberCostly } from "@agenteschat/client/lib/action-cards";
-import { can } from "@agenteschat/client/lib/permissions";
+import { type CostlyDecision, type Message, useApi } from "@keepmind/client";
+import { costlyProposalOf, mayDecideCostly, mayRememberCostly } from "@keepmind/client/lib/action-cards";
+import { can } from "@keepmind/client/lib/permissions";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useOrg } from "@/providers/org";

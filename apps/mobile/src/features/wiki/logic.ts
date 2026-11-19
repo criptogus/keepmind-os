@@ -1,6 +1,6 @@
-import type { WikiPageSummary } from "@agenteschat/client";
-import { parseWikiToken, type TableAlign, tableAt } from "@agenteschat/client/lib/markdown";
-import { type WikiFolder, wikiTree } from "@agenteschat/client/lib/wiki";
+import type { WikiPageSummary } from "@keepmind/client";
+import { parseWikiToken, type TableAlign, tableAt } from "@keepmind/client/lib/markdown";
+import { type WikiFolder, wikiTree } from "@keepmind/client/lib/wiki";
 
 /**
  * The wiki on the phone: the home's parts (Fixadas, Editadas recentemente, Pastas and the

@@ -1,5 +1,5 @@
-import type { ErrorReporter, PubSub } from "@agenteschat/adapters";
-import { type Database, ensureMessagePartitions, schema } from "@agenteschat/db";
+import type { ErrorReporter, PubSub } from "@keepmind/adapters";
+import { type Database, ensureMessagePartitions, schema } from "@keepmind/db";
 import {
   type ArtifactDeps,
   type BrowserLive,
@@ -11,6 +11,7 @@ import {
   enqueue,
   enqueueAccountContacts,
   enqueueAutonomyReport,
+  enqueueConnectorProbes,
   enqueueIdleReflections,
   enqueueOverdueAccountDeletions,
   enqueueOverdueDeletions,
@@ -63,7 +64,7 @@ import {
   sweepWidgetDrafts,
   type VoiceDeps,
   wakeSnoozedNotifications,
-} from "@agenteschat/engine";
+} from "@keepmind/engine";
 import { isExpectedError } from "./http/errors";
 import type { Logger } from "./logger";
 
@@ -207,6 +208,8 @@ export const WORKER_INTERVALS_MS = {
   planRechecks: 60_000,
   /** Phones whose setup sat on one step for 10 minutes, each reported once (`claimStuckPhoneSetups`). */
   phoneSetups: 60_000,
+  /** Each live connector's sign-in checked once per window (one outbox job per connection, `connector.probe`). */
+  connectorProbes: 15 * 60_000,
 };
 
 /**
@@ -445,6 +448,11 @@ export function startWorkers(deps: WorkerDeps) {
   every("routines", WORKER_INTERVALS_MS.routines, async () => {
     const fired = await fireDueRoutines({ db, pubsub: deps.pubsub });
     if (fired > 0) log.info("routines fired", { fired });
+  });
+
+  every("connectorProbes", WORKER_INTERVALS_MS.connectorProbes, async () => {
+    const queued = await enqueueConnectorProbes(db);
+    if (queued > 0) void ticks.get("outbox")?.();
   });
 
   const mail = deps.mail;

@@ -1,5 +1,5 @@
-import type { Agent, AgentAudience, AudienceMode } from "@agenteschat/client";
-import { useAgents, useAiStatus, useRoles } from "@agenteschat/client";
+import type { Agent, AgentAudience, AudienceMode } from "@keepmind/client";
+import { useAgents, useAiStatus, useRoles } from "@keepmind/client";
 import {
   agentsReach,
   audienceChip,
@@ -7,12 +7,12 @@ import {
   audienceModeTextKey,
   offersConsultable,
   reachShortKey,
-} from "@agenteschat/client/lib/audience";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { aiStateOf, onlyOwnerReplies } from "@agenteschat/client/lib/no-ai";
-import { rolePicksInSight } from "@agenteschat/client/lib/personal-view";
-import { isEveryone, sortRoles } from "@agenteschat/client/lib/roles";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client/lib/audience";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { aiStateOf, onlyOwnerReplies } from "@keepmind/client/lib/no-ai";
+import { rolePicksInSight } from "@keepmind/client/lib/personal-view";
+import { isEveryone, sortRoles } from "@keepmind/client/lib/roles";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import {
   Avatar,
   Checkbox,
@@ -32,7 +32,7 @@ import {
   Switch,
   Token,
   TokenList,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useOrg } from "@/components/org-context";

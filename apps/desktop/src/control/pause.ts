@@ -1,6 +1,6 @@
-import type { RunnerPause } from "@agenteschat/adapters/machine-protocol";
+import type { RunnerPause } from "@keepmind/adapters/machine-protocol";
 
-export { type PauseChoice, pauseUntil } from "@agenteschat/client/lib/machines";
+export { type PauseChoice, pauseUntil } from "@keepmind/client/lib/machines";
 
 /** "+1 hora" on a pause: one more hour from its end (or from now when it already ended). */
 export function extendPause(pause: RunnerPause, now: Date = new Date()): string | null {

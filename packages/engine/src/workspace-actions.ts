@@ -1,6 +1,6 @@
-import { holdEvents, type PubSub } from "@agenteschat/adapters";
-import { and, asc, type Database, desc, eq, gt, inArray, isNotNull, isNull, schema, sql } from "@agenteschat/db";
-import { isKnownProvider, PROVIDERS } from "@agenteschat/providers";
+import { holdEvents, type PubSub } from "@keepmind/adapters";
+import { and, asc, type Database, desc, eq, gt, inArray, isNotNull, isNull, schema, sql } from "@keepmind/db";
+import { isKnownProvider, PROVIDERS } from "@keepmind/providers";
 import {
   type ActionRecord,
   type AgentActionTarget,
@@ -1804,8 +1804,11 @@ const WORKSPACE_FIELDS = ["name", "timezone", "defaultAgentBudgetNanoUsd", "team
 
 /** The right hand's workspace switches as `update_workspace` takes them, each offered once its feature is built. */
 const WORKSPACE_SWITCHES = {
-  teamWatch: { input: "team_watch", does: "whether Lodi watches for what stops the team and tells who can fix it" },
-  welcomePeople: { input: "welcome_people", does: "whether Lodi greets each person who joins" },
+  teamWatch: {
+    input: "team_watch",
+    does: "whether the workspace coordinator watches for what stops the team and tells who can fix it",
+  },
+  welcomePeople: { input: "welcome_people", does: "whether the workspace coordinator greets each person who joins" },
 } as const;
 const workspaceSwitches = () =>
   liveLodiSwitches().flatMap((s) => (s in WORKSPACE_SWITCHES ? [s as keyof typeof WORKSPACE_SWITCHES] : []));

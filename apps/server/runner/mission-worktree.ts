@@ -16,7 +16,7 @@ import type {
   MachineReplies,
   MissionWorktreeEnsured,
   MissionWorktreeRequest,
-} from "@agenteschat/adapters/machine-protocol";
+} from "@keepmind/adapters/machine-protocol";
 import { RunnerError } from "./errors";
 import { CONFIG_LIST_ARGS, HARDENED_GIT_ARGS, unsafeConfigMessage, unsafeRepoConfig } from "./git-guard";
 import { isInside, normalizeRequestPath, resolveInWorkspace } from "./paths";

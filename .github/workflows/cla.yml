@@ -41,13 +41,15 @@ jobs:
     # closed without merging). Of the comments: only one that signs or asks for a recheck, so the others leave
     # no runs behind. `contains` and not `==`, since the action itself accepts the sentence with a full stop or
     # a line break after it.
+    # The upstream CLA grants rights to its own publisher; it does not apply to KeepMind fork contributions.
     if: >-
-      (github.event_name == 'pull_request_target'
+      github.repository == 'agentes-chat/agentes-chat' &&
+      ((github.event_name == 'pull_request_target'
         && (github.event.action != 'labeled' || github.event.label.name == 'cla')
         && (github.event.action != 'closed' || github.event.pull_request.merged))
       || (github.event_name == 'issue_comment' && github.event.issue.pull_request
         && (contains(github.event.comment.body, 'recheck')
-          || contains(github.event.comment.body, 'I hereby sign the CLA')))
+          || contains(github.event.comment.body, 'I hereby sign the CLA'))))
     steps:
       # A branch of this repository can only be pushed by the team and its own agents, so their bots' commits
       # are the team's. A fork's pull request can come from anyone, whoever wrote its commits: one of this

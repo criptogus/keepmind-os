@@ -2,14 +2,14 @@ import { afterEach, expect, test } from "bun:test";
 import { spawnSync } from "node:child_process";
 import { chmodSync, existsSync, lstatSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { PUSH_ASK_RULES } from "@agenteschat/adapters/command-policy";
+import { PUSH_ASK_RULES } from "@keepmind/adapters/command-policy";
 import {
   CLI_GIT_MISSING,
   MISSION_RULES,
   MISSION_RULES_NO_GIT,
   parseRunnerFrame,
   type RunnerFrame,
-} from "@agenteschat/adapters/machine-protocol";
+} from "@keepmind/adapters/machine-protocol";
 import {
   cachedCodexVersion,
   cachedExecutors,

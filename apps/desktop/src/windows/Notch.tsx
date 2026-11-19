@@ -5,7 +5,7 @@
  * drops for a few seconds with one line; a click opens the list. Nothing going on: hidden.
  * This window has its own store, as every window; Rust only finds the notch and places the window.
  */
-import { Button, Icon, normalizeAppearance, PixelSpinner } from "@agenteschat/ui";
+import { Button, Icon, normalizeAppearance, PixelSpinner } from "@keepmind/ui";
 import { type CSSProperties, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHost, useSnapshot, useStore } from "../app";

@@ -1,4 +1,4 @@
-import { and, asc, type Executor, eq, gt, isNull, ne, schema, sql } from "@agenteschat/db";
+import { and, asc, type Executor, eq, gt, isNull, ne, schema, sql } from "@keepmind/db";
 import { cutText } from "./format";
 import type { Message } from "./messages";
 import type { AgentRun } from "./runs";

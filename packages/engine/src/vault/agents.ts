@@ -16,8 +16,8 @@ import {
   vaultRule,
   vaultRuleLabel,
   vaultRuleMatches,
-} from "@agenteschat/adapters";
-import { and, type Executor, eq, inArray, schema } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { and, type Executor, eq, inArray, schema } from "@keepmind/db";
 import { recordAudit } from "../audit";
 import { UUID } from "../authority";
 import { SealedValueError } from "../crypto";

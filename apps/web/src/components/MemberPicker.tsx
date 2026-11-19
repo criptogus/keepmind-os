@@ -1,6 +1,6 @@
-import { listsAgent } from "@agenteschat/client/lib/audience";
-import { joinsChannels } from "@agenteschat/client/lib/right-hand";
-import { Checkbox, InfoHint, SearchField, Token, TokenList } from "@agenteschat/ui";
+import { listsAgent } from "@keepmind/client/lib/audience";
+import { joinsChannels } from "@keepmind/client/lib/right-hand";
+import { Checkbox, InfoHint, SearchField, Token, TokenList } from "@keepmind/ui";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActorAvatar } from "@/components/AgentAvatar";

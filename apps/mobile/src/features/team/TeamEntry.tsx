@@ -1,4 +1,4 @@
-import { useAgentGroups } from "@agenteschat/client";
+import { useAgentGroups } from "@keepmind/client";
 import { useTranslation } from "react-i18next";
 import { ListRow } from "@/ui";
 import { router } from "@/ui/navigation";

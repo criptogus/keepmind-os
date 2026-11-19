@@ -1,4 +1,4 @@
-import type { PubSub } from "@agenteschat/adapters";
+import type { PubSub } from "@keepmind/adapters";
 import {
   and,
   asc,
@@ -13,7 +13,7 @@ import {
   ne,
   schema,
   sql,
-} from "@agenteschat/db";
+} from "@keepmind/db";
 import {
   cheapModelOf,
   ensureOpenRouterModels,
@@ -22,13 +22,14 @@ import {
   modelProvider,
   ProviderError,
   routerModelOf,
-} from "@agenteschat/providers";
+} from "@keepmind/providers";
 import { audienceSql } from "./audience";
 import { TYPING_GRACE_MS, typesInApp, typingLogFor } from "./burst";
-import { caches } from "./cache";
+import { caches, TtlCache } from "./cache";
 import { summarizeGrants } from "./capabilities";
 import { quotedLine } from "./context";
 import { addAgentReaction, isValidReaction, normalizeReaction } from "./context/feedback";
+import { sha256 } from "./crypto";
 import { createAgentRuns, requesterOf } from "./dispatch";
 import { type DecidedBy, MENTION_NEEDED } from "./events";
 import { cutText, hasQuestionMark, wordCount } from "./format";
@@ -39,6 +40,7 @@ import { AGENT_CHIME_IN_MAX_HOP, getMessage, type Message, type ReplyRef } from 
 import { ACTIVE_RUN_STATUSES } from "./run-inbox";
 import { type AgentRun, KEPT_ON_HOLD, NO_AI } from "./runs";
 import { billingHold, OrgDeletingError, standingRefusal } from "./standing";
+import { canonicalJson } from "./tools/json-schema";
 import { isPersonalWorkspace } from "./workspace-mode";
 
 const {
@@ -467,30 +469,44 @@ export function createLlmRouterStrategy(deps: {
   /** The organization's small model (`smallModelFor`); null: none, the step is skipped. */
   resolveModel(orgId: string): Promise<string | null>;
 }): RouterStrategy {
+  /**
+   * The same routing question (org, model, prompt and schema) is answered once:
+   * a retry or a repeated message costs no call. Only a successful answer is
+   * kept, and a hit carries no usage record because no call was made.
+   */
+  const answers = new TtlCache<{ parsed: ReturnType<typeof parseRouterOutput>; usageRecordId?: string }>(
+    15 * 60_000,
+    2000,
+  );
   return {
     name: "llm",
     async decide(input) {
       const model = await deps.resolveModel(input.orgId);
       if (!model) throw new RouterSkip();
       const { system, prompt, schema } = routerPrompt(input);
+      const key = `${input.orgId}:${model}:${sha256(canonicalJson({ system, prompt, schema }))}`;
       const signal = AbortSignal.timeout(ROUTER_MODEL_TIMEOUT_MS);
-      const result = await deps.gateway
-        .complete({
-          orgId: input.orgId,
-          kind: "router",
-          model,
-          system,
-          messages: [{ role: "user", content: prompt }],
-          // Thinking counts toward the cap: a model that can't turn it off needs room for it.
-          maxTokens: modelInfo(model)?.leastThinking === "off" ? 512 : 2048,
-          effort: "none",
-          outputSchema: schema,
-          signal,
-        })
-        .catch((error: unknown) => {
-          throw signal.aborted ? new Error(`no answer in ${ROUTER_MODEL_TIMEOUT_MS / 1000} s`) : error;
-        });
-      const parsed = parseRouterOutput(result.text);
+      const result = await answers.getOrLoad(key, async () => {
+        const r = await deps.gateway
+          .complete({
+            orgId: input.orgId,
+            kind: "router",
+            model,
+            system,
+            messages: [{ role: "user", content: prompt }],
+            // Thinking counts toward the cap: a model that can't turn it off needs room for it.
+            maxTokens: modelInfo(model)?.leastThinking === "off" ? 512 : 2048,
+            effort: "none",
+            outputSchema: schema,
+            signal,
+          })
+          .catch((error: unknown) => {
+            throw signal.aborted ? new Error(`no answer in ${ROUTER_MODEL_TIMEOUT_MS / 1000} s`) : error;
+          });
+        // Parsed inside the load: a malformed answer throws here and is never cached.
+        return { parsed: parseRouterOutput(r.text), usageRecordId: r.usageRecordId };
+      });
+      const parsed = result.parsed;
       return {
         ...scoresOf(input, parsed),
         reason: parsed.reason.slice(0, 500),

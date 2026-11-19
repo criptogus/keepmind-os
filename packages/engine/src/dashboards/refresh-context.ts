@@ -1,5 +1,5 @@
-import { and, type Database, desc, eq, schema } from "@agenteschat/db";
-import { isWidgetKind, WIDGET_KINDS, WIDGET_LIMITS } from "@agenteschat/ui/widgets/spec";
+import { and, type Database, desc, eq, schema } from "@keepmind/db";
+import { isWidgetKind, WIDGET_KINDS, WIDGET_LIMITS } from "@keepmind/ui/widgets/spec";
 import { neutralizeUntrusted, untrustedBlock } from "../untrusted";
 import { widgetChangeOf } from "./refresh-ledger";
 import { WIDGET_AGENT_TITLE_MAX } from "./types";

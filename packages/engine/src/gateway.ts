@@ -1,5 +1,5 @@
-import type { ErrorReporter, KeyWrapper, PlatformCredentials, PubSub, SearchKind } from "@agenteschat/adapters";
-import { and, type Database, desc, type Executor, eq, gte, isNull, lt, rowsOf, schema, sql } from "@agenteschat/db";
+import type { ErrorReporter, KeyWrapper, PlatformCredentials, PubSub, SearchKind } from "@keepmind/adapters";
+import { and, type Database, desc, type Executor, eq, gte, isNull, lt, rowsOf, schema, sql } from "@keepmind/db";
 import {
   costNanoUsd,
   customModelOf,
@@ -34,7 +34,7 @@ import {
   promptChars,
   type SystemPrompt,
   type ToolSpec,
-} from "@agenteschat/providers";
+} from "@keepmind/providers";
 import { type Agent, getAgent } from "./agents";
 import { caches } from "./cache";
 import { decryptCredential, usableCredentialRow } from "./credentials";

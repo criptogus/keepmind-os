@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { ptBR } from "@agenteschat/i18n";
+import { ptBR } from "@keepmind/i18n";
 import i18next from "i18next";
 import { applyChannelEvent, emptyStreams } from "../src/index";
 import { barStep, STEP_WORDS_AFTER_MS } from "../src/lib/work";

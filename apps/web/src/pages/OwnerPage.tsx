@@ -1,6 +1,6 @@
-import { authErrorText } from "@agenteschat/client/lib/errors";
-import { isEmail, nameIsPassword, passwordState } from "@agenteschat/client/lib/text";
-import { Button, Icon, Input, Locked } from "@agenteschat/ui";
+import { authErrorText } from "@keepmind/client/lib/errors";
+import { isEmail, nameIsPassword, passwordState } from "@keepmind/client/lib/text";
+import { Button, Icon, Input, Locked } from "@keepmind/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { type FormEvent, useRef, useState } from "react";
@@ -64,7 +64,7 @@ export function OwnerPage({ claim }: { claim: string | null }) {
     <AuthShell>
       <form className="auth__form" onSubmit={submit} noValidate>
         <header className="auth__ask" ref={header} data-burst>
-          <AgentAvatar name="agentes.chat" size="lg" state={pending ? "writing" : undefined} />
+          <AgentAvatar name="keepmind.io" size="lg" state={pending ? "writing" : undefined} />
           <div className="auth__bubble" key={problem ?? "form"} aria-live="polite">
             <h1 className="auth__title">{title}</h1>
             <p className="auth__lead">{lead}</p>

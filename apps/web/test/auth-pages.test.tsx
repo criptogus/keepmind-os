@@ -1,11 +1,11 @@
 import { afterEach, describe, expect, spyOn, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { ApiError, type InvitationPreview, NetworkError, type SignInOptions } from "@agenteschat/client";
+import { ApiError, type InvitationPreview, NetworkError, type SignInOptions } from "@keepmind/client";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { createBetterAuthClient } from "@/auth/better-auth";
 import { rememberSignIn } from "@/components/SocialButtons";
@@ -233,7 +233,7 @@ describe("Entrar (e-mail primeiro)", () => {
     const fetchSpy = spyOn(globalThis, "fetch").mockImplementation((async (url: string) => {
       asked.push(String(url));
       if (String(url).startsWith("https://agentes.example.com/"))
-        return new Response(JSON.stringify({ name: "agentes.chat", api: 1, minApi: 1 }), { status: 200 });
+        return new Response(JSON.stringify({ name: "keepmind.io", api: 1, minApi: 1 }), { status: 200 });
       throw new TypeError("Failed to fetch");
     }) as unknown as typeof fetch);
     const went: string[] = [];
@@ -244,11 +244,11 @@ describe("Entrar (e-mail primeiro)", () => {
       await renderApp("/login", { api: authApi(ACCOUNT).api, auth: createFakeAuth().auth });
       await settle(4);
       const line = document.querySelector(".auth__place") as HTMLElement;
-      expect(line.textContent).toContain("Entrando no agentes.chat Cloud");
+      expect(line.textContent).toContain("Entrando no KeepMind OS Cloud");
       await act(async () => fireEvent.click(within(line).getByRole("button", { name: "Trocar de servidor" })));
       await settle(2);
       const sheet = screen().getByRole("dialog", { name: "Onde fica o seu workspace?" });
-      const cloud = within(sheet).getByRole("radio", { name: /agentes\.chat Cloud/ });
+      const cloud = within(sheet).getByRole("radio", { name: /KeepMind OS Cloud/ });
       expect(cloud.getAttribute("aria-checked")).toBe("true");
       expect(cloud.textContent).toContain("Recomendado");
       expect(cloud.textContent).toContain("Computador dos agentes sempre ligado");
@@ -264,19 +264,19 @@ describe("Entrar (e-mail primeiro)", () => {
       await settle(2);
       const get = screen().getByRole("dialog", { name: "Ter o seu próprio servidor" });
       expect(within(get).getByRole("link", { name: "Baixar o app" }).getAttribute("href")).toBe(
-        "https://agentes.chat/download",
+        "https://keepmind.io/download",
       );
       expect(within(get).getByRole("link", { name: "Como funciona" }).getAttribute("href")).toBe(
-        "https://agentes.chat/pt/docs/run-on-your-computer",
+        "https://keepmind.io/pt/docs/run-on-your-computer",
       );
       expect(within(get).getByRole("link", { name: "Ver o passo a passo" }).getAttribute("href")).toBe(
-        "https://agentes.chat/pt/docs/install-on-a-server",
+        "https://keepmind.io/pt/docs/install-on-a-server",
       );
       await act(async () => fireEvent.click(within(get).getByRole("button", { name: "Use o Cloud" })));
       await settle(2);
       expect(
         within(sheet)
-          .getByRole("radio", { name: /agentes\.chat Cloud/ })
+          .getByRole("radio", { name: /KeepMind OS Cloud/ })
           .getAttribute("aria-checked"),
       ).toBe("true");
       await act(async () => fireEvent.click(within(sheet).getByRole("radio", { name: /No seu servidor/ })));
@@ -361,7 +361,7 @@ describe("Entrar (e-mail primeiro)", () => {
   });
 
   test("on KeepMind OS Cloud a blocked account reads why by the block's kind, and how to contest it", async () => {
-    const contest = "Para contestar, escreva para legal@agentes.chat.";
+    const contest = "Para contestar, escreva para contact@zeroagency.ai.";
     for (const [block, says] of [
       [
         { kind: "abuse", cloud: true },
@@ -369,7 +369,7 @@ describe("Entrar (e-mail primeiro)", () => {
       ],
       [
         { kind: "legal", cloud: true },
-        "Esta conta está bloqueada enquanto guardamos os dados dela por uma questão legal. Para perguntar sobre isso, escreva para legal@agentes.chat.",
+        "Esta conta está bloqueada enquanto guardamos os dados dela por uma questão legal. Para perguntar sobre isso, escreva para contact@zeroagency.ai.",
       ],
       [{ kind: "other", cloud: true }, `Esta conta não pode entrar. ${contest}`],
       // A self-hosted server: the line it always had.
@@ -643,7 +643,7 @@ describe("Acesso antecipado (o link do convite)", () => {
 
   test("an expired link: says so, and where to ask for a new one", async () => {
     for (const [supportEmail, says] of [
-      ["suporte@agentes.chat", "Peça um novo em suporte@agentes.chat."],
+      ["contact@zeroagency.ai", "Peça um novo em contact@zeroagency.ai."],
       [null, "Peça um novo a quem convidou você."],
     ] as const) {
       const { api } = authApi({ ...NEW, canSignUp: false, accessExpired: true });
@@ -1385,11 +1385,11 @@ describe("Onboarding: the workspace's name", () => {
   const next = () => click(button("Continuar"), 8);
   const calls = (state: ReturnType<typeof seedState>, method: string) => state.calls.filter((c) => c.method === method);
 
-  test("the name, step 1 on the rail, Lodi's line on its horizon, never a guide among the presets", async () => {
+  test("the name, step 1 on the rail, Kivo's line on its horizon, never a guide among the presets", async () => {
     await start();
     expect(screen().getByRole("heading", { name: "Como se chama o seu workspace?" })).toBeTruthy();
     expect(screen().getByRole("navigation", { name: "Passos para começar" })).toBeTruthy();
-    expect(document.querySelector(".onb__say")?.textContent).toContain("Eu sou o Lodi.");
+    expect(document.querySelector(".onb__say")?.textContent).toContain("Eu sou o Kivo.");
     expect(document.body.textContent).not.toContain("Oi, eu sou a Ada");
     // A name is no misspelling.
     expect(screen().getByLabelText("Nome").getAttribute("spellcheck")).toBe("false");
@@ -1461,10 +1461,10 @@ describe("Onboarding: the workspace's name", () => {
     const user = { ...(seeded.me?.user ?? { id: "u", name: "Ana", email: "ana@acme.com", image: null }) };
     const { state } = await start({
       me: { user: { ...user, canCreateWorkspace: false, emailVerified: true }, organizations: [] },
-      authConfig: { supportEmail: "suporte@agentes.chat" },
+      authConfig: { supportEmail: "contact@zeroagency.ai" },
     });
     expect([...document.querySelectorAll(".onb__note")].map((n) => n.textContent)).toEqual([
-      "Novos workspaces precisam de convite por enquanto. Peça um em suporte@agentes.chat.",
+      "Novos workspaces precisam de convite por enquanto. Peça um em contact@zeroagency.ai.",
     ]);
     // It stops at what the workspace is for (ADR 0159): the answer is picked, and Continuar stays off.
     expect(
@@ -1482,12 +1482,12 @@ describe("Onboarding: the workspace's name", () => {
     if (!state.me) throw new Error("no me");
     state.me.organizations = [];
     state.me.user = { ...state.me.user, canCreateWorkspace: false, emailVerified: false };
-    state.authConfig = { ...state.authConfig, supportEmail: "suporte@agentes.chat" };
+    state.authConfig = { ...state.authConfig, supportEmail: "contact@zeroagency.ai" };
     const { auth, calls: authCalls } = createFakeAuth();
     await renderApp("/onboarding", { api: createFakeApi(state), auth });
     await settle(4);
     expect([...document.querySelectorAll(".onb__note")].map((n) => n.textContent)).toEqual([
-      "Novos workspaces precisam de convite por enquanto. Peça um em suporte@agentes.chat.",
+      "Novos workspaces precisam de convite por enquanto. Peça um em contact@zeroagency.ai.",
       "Já tem convite? Confirme seu e-mail primeiro.Mandar outro link",
     ]);
     await click(button("Mandar outro link"), 4);
@@ -1499,7 +1499,7 @@ describe("Onboarding: the workspace's name", () => {
     for (const [cloud, says] of [
       [
         true,
-        "Você não pode criar um workspace enquanto a sua conta ou um dos seus workspaces estiver com restrição. Para contestar, escreva para legal@agentes.chat.",
+        "Você não pode criar um workspace enquanto a sua conta ou um dos seus workspaces estiver com restrição. Para contestar, escreva para contact@zeroagency.ai.",
       ],
       [false, "Você não pode criar um workspace agora."],
     ] as const) {

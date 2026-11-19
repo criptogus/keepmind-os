@@ -8,8 +8,8 @@ import {
   useBrowserHandoff,
   useBrowserHandoffActions,
   useDesktopStatus,
-} from "@agenteschat/client";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
+} from "@keepmind/client";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Pressable, StyleSheet, View } from "react-native";

@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { defaultDatabasePolicy } from "@agenteschat/client/lib/databases";
+import { defaultDatabasePolicy } from "@keepmind/client/lib/databases";
 import { cleanup } from "@testing-library/react";
 import { openConnected } from "./catalog";
 import { ADA_ID, createFakeApi, fakeDatabasesOf, fakeMailOf, ORG_ID, seedState } from "./fake-api";

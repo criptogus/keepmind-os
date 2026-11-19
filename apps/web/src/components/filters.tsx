@@ -1,4 +1,4 @@
-import type { FilterOption } from "@agenteschat/ui";
+import type { FilterOption } from "@keepmind/ui";
 import { useTranslation } from "react-i18next";
 import { ActorAvatar, AgentAvatar } from "@/components/AgentAvatar";
 import { useOrg } from "@/components/org-context";

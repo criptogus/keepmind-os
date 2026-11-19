@@ -1,5 +1,5 @@
-import { type Executor, inArray, rowsOf, schema, sql } from "@agenteschat/db";
-import { nanoUsdToUsd } from "@agenteschat/providers";
+import { type Executor, inArray, rowsOf, schema, sql } from "@keepmind/db";
+import { nanoUsdToUsd } from "@keepmind/providers";
 import { emailLocale, emailsByLocale, queueEmail } from "./email";
 import { enqueue } from "./outbox";
 import { ACK_MAX_WORDS, DEFAULT_NEED } from "./router";

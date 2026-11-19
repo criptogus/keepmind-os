@@ -1,5 +1,5 @@
-import { type AdminAsk, type AppNotification, useAddChannelMember, useAskAdmins } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
+import { type AdminAsk, type AppNotification, useAddChannelMember, useAskAdmins } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
 import { useTranslation } from "react-i18next";
 import { Button, GroupedList, GroupedRow, useToast } from "@/ui";
 import { useOrgId } from "./hooks";

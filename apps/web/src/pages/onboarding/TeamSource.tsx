@@ -1,7 +1,7 @@
-import { keys, type Me } from "@agenteschat/client";
-import type { ImportCard, RequestCard } from "@agenteschat/client/lib/import/flow";
-import { type OnboardingStepId, stepIndex } from "@agenteschat/client/lib/onboarding";
-import { Skeleton } from "@agenteschat/ui";
+import { keys, type Me } from "@keepmind/client";
+import type { ImportCard, RequestCard } from "@keepmind/client/lib/import/flow";
+import { type OnboardingStepId, stepIndex } from "@keepmind/client/lib/onboarding";
+import { Skeleton } from "@keepmind/ui";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { TFunction } from "i18next";
 import { lazy, Suspense, useCallback, useRef, useState } from "react";

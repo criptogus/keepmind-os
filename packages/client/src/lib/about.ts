@@ -10,13 +10,13 @@ export const LICENSE_URL = "https://www.gnu.org/licenses/agpl-3.0.html";
 export const PUBLIC_SOURCE_URL = "https://github.com/criptogus/keepmind-os/tree/feat/keepmind-os-rebuild";
 
 /**
- * A self-hosted server: never agentes.chat Cloud, nor before the server's config arrives, so the Cloud never shows
+ * A self-hosted server: never KeepMind OS Cloud, nor before the server's config arrives, so the Cloud never shows
  * what is only for self-hosting for a moment.
  */
 export const selfHosted = (server: AuthConfig | undefined) => server !== undefined && server.cloud !== true;
 
 /**
- * Whether the About screen shows: on every self-hosted server, for everyone; never on agentes.chat Cloud, which is
- * agentes.chat itself.
+ * Whether the About screen shows: on every self-hosted server, for everyone; never on KeepMind OS Cloud, which is
+ * KeepMind OS itself.
  */
 export const showsAbout = selfHosted;

@@ -363,53 +363,19 @@ export function blur(src: Float64Array, w: number, h: number, radius: number): F
   return a;
 }
 
-/** The cover's text shadow under `mask` (rgba(4,32,63,.5), 8 points of blur, 1 point down), then `mask` in white. */
-function whiteWithShadow(p: Picture, layers: [Float64Array, number][]) {
-  const both = (layers[0] as [Float64Array, number])[0].map((_, i) =>
-    Math.min(
-      1,
-      layers.reduce((s, [m, a]) => s + (m[i] as number) * a, 0),
-    ),
-  );
-  const shadow = blur(both, p.w, p.h, Math.round((8 * p.k) / 3));
-  for (let yy = 0; yy < p.h; yy++)
-    for (let xx = 0; xx < p.w; xx++) {
-      const s = (shadow[Math.max(0, yy - p.k) * p.w + xx] as number) * 0.5;
-      if (s > 0.002) p.blend(xx, yy, [4, 32, 63], s);
-    }
-  for (let i = 0; i < p.w * p.h; i++) {
-    const x = i % p.w;
-    const yy = Math.floor(i / p.w);
-    for (const [m, a] of layers) p.blend(x, yy, WHITE, (m[i] as number) * a);
-  }
-}
-
-/** The wordmark centred on `cx`, its baseline at `y` (points), `size` points tall, white with the cover's shadow. */
+/** KeepMind's existing K, shared with LogoMark. Installer labels supply the product name. */
 export function wordmark(p: Picture, cx: number, y: number, size: number) {
-  const scale = (size * p.k) / 100;
-  const dx = cx * p.k - (WORDMARK.width * scale) / 2;
-  const dy = y * p.k;
-  const main = coverage(edges(WORDMARK.agentes, scale, dx, dy), p.w, p.h);
-  const dim = coverage(edges(WORDMARK.chat, scale, dx, dy), p.w, p.h);
-  whiteWithShadow(p, [
-    [main, 1],
-    [dim, 0.6],
-  ]);
+  const scale = (size * p.k) / 32;
+  const mask = coverage(
+    edges(
+      "M10 9L13 9L13 15L18 9L22 9L15 17L22 24L18 24L13 19L13 24L10 24Z",
+      scale,
+      cx * p.k - (size * p.k) / 2,
+      (y - size) * p.k,
+    ),
+    p.w,
+    p.h,
+  );
+  for (let i = 0; i < p.w * p.h; i++) p.blend(i % p.w, Math.floor(i / p.w), [196, 255, 61], mask[i] ?? 0);
 }
-
-/** "agentes" then the dotted ".chat" (0.72 of the size, 0.08 after it: a little larger than Logo.tsx, whose dots
- *  get thin on a picture), centred on `cx`. */
-export function dottedWordmark(p: Picture, cx: number, y: number, size: number) {
-  const scale = (size * p.k) / 100;
-  const advance = 376; // "agentes"' advance in Funnel Display Light at 100 px
-  const gap = 8;
-  const width = advance + gap + DOTTED_CHAT.width * 0.72;
-  const dx = cx * p.k - (width * scale) / 2;
-  const dy = y * p.k;
-  const main = coverage(edges(WORDMARK.agentes, scale, dx, dy), p.w, p.h);
-  const dot = coverage(edges(DOTTED_CHAT.d, scale * 0.72, dx + (advance + gap) * scale, dy), p.w, p.h);
-  whiteWithShadow(p, [
-    [main, 1],
-    [dot, 0.78],
-  ]);
-}
+export const dottedWordmark = wordmark;

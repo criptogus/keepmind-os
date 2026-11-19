@@ -1,8 +1,8 @@
-import type { SearchHit } from "@agenteschat/client";
-import { relativeTime } from "@agenteschat/client/lib/format";
-import { hitText } from "@agenteschat/client/lib/media";
-import { formatSearch, groupByChannel, SEARCH_SORTS } from "@agenteschat/client/lib/search-filters";
-import { Button, EmptyState, List, PageHeader, Select, TabPanel, Tabs } from "@agenteschat/ui";
+import type { SearchHit } from "@keepmind/client";
+import { relativeTime } from "@keepmind/client/lib/format";
+import { hitText } from "@keepmind/client/lib/media";
+import { formatSearch, groupByChannel, SEARCH_SORTS } from "@keepmind/client/lib/search-filters";
+import { Button, EmptyState, List, PageHeader, Select, TabPanel, Tabs } from "@keepmind/ui";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";

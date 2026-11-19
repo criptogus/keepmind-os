@@ -1,4 +1,4 @@
-import { and, arrayContained, asc, type Database, desc, eq, inArray, isNull, ne, or, schema } from "@agenteschat/db";
+import { and, arrayContained, asc, type Database, desc, eq, inArray, isNull, ne, or, schema } from "@keepmind/db";
 import { type BundleRoutine, type BundleRule, IMPORT_LIMITS, type MigrationBundle, NOTE_KINDS } from "./imports";
 import { requirePermission } from "./organizations";
 import type { RoutineTarget } from "./routines";
@@ -61,7 +61,15 @@ export async function exportBundle(db: Database, actorId: string, orgId: string)
       .select()
       .from(skills)
       // Personal skills are their people's: they stay, as private channels do.
-      .where(and(eq(skills.orgId, orgId), isNull(skills.deletedAt), isNull(skills.ownerUserId)))
+      .where(
+        and(
+          eq(skills.orgId, orgId),
+          isNull(skills.deletedAt),
+          isNull(skills.ownerUserId),
+          // Built-ins are seeded into every workspace: they are not the team's to export.
+          ne(skills.source, "builtin"),
+        ),
+      )
       .orderBy(asc(skills.createdAt)),
     // Private channels stay: an import would make them public, with what they're about.
     db

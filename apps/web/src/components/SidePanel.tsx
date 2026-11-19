@@ -1,4 +1,4 @@
-import { cx } from "@agenteschat/ui";
+import { cx } from "@keepmind/ui";
 import { type ReactNode, type RefObject, useLayoutEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";

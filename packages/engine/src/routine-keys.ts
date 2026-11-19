@@ -1,4 +1,4 @@
-import { and, type Executor, eq, isNull, schema } from "@agenteschat/db";
+import { and, type Executor, eq, isNull, schema } from "@keepmind/db";
 import { decidesAgentApprovals, MAX_OWN_ACTIONS } from "./approval-rules";
 import { approvalsLevelOf } from "./tools/run-policy";
 

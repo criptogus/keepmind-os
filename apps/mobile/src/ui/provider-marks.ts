@@ -1,4 +1,4 @@
-import { markOf, PROVIDER_MARKS } from "@agenteschat/ui/brand/marks";
+import { markOf, PROVIDER_MARKS } from "@keepmind/ui/brand/marks";
 import type { Scheme } from "./palette";
 
 /** Box and drawing per size, in points: the web's sizes, and `hero` (a page's head, on a raised tile). */

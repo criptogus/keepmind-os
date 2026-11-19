@@ -1,5 +1,5 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, type Database, desc, type Executor, eq, gt, inArray, isNull, schema, sql } from "@agenteschat/db";
+import type { PubSub } from "@keepmind/adapters";
+import { and, type Database, desc, type Executor, eq, gt, inArray, isNull, schema, sql } from "@keepmind/db";
 import { aiConnectIntent, type ConnectIntent } from "./ai-intent";
 import { type AgentAi, type AiStatusDeps, agentAiState, type NoAiReason, orgHasAi } from "./ai-status";
 import { audienceError, canTalkTo, type Speaker, speakerFor } from "./audience";
@@ -57,7 +57,7 @@ const REASON_TEXT: Partial<Record<NoAiCardReason, string>> = {
     "I didn't answer: the request didn't come from a person, and the workspace's plan serves only its owner.",
   runner_outdated: "I can't answer now: the program on my plan's computer needs an update.",
   plan_tools: "I stopped before answering: my plan's AI on that computer offers tools of its own.",
-  plan_hold: "I kept your message. I'll answer here once the workspace has an agentes.chat plan and an AI connected.",
+  plan_hold: "I kept your message. I'll answer here once the workspace has an KeepMind OS plan and an AI connected.",
 };
 /** `cli_failed` with what the plan's CLI said (`NoAiCard.why`). */
 const cliFailedText = (why: string) => `I can't answer now: my plan's AI stopped with an error (${why}).`;

@@ -1,5 +1,5 @@
-import { type Agent, type AgentBrakes, BRAKES_DEFAULTS, useUpdateAgent } from "@agenteschat/client";
-import { can } from "@agenteschat/client/lib/permissions";
+import { type Agent, type AgentBrakes, BRAKES_DEFAULTS, useUpdateAgent } from "@keepmind/client";
+import { can } from "@keepmind/client/lib/permissions";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, TextInput } from "react-native";

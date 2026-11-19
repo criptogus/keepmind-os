@@ -1,6 +1,6 @@
-import type { RightHandApprovals, RightHandApprovalsInput } from "@agenteschat/client";
-import { useRightHandApprovals, useSetRightHandApprovals } from "@agenteschat/client";
-import { FIELD_LIMITS } from "@agenteschat/client/lib/field-limits";
+import type { RightHandApprovals, RightHandApprovalsInput } from "@keepmind/client";
+import { useRightHandApprovals, useSetRightHandApprovals } from "@keepmind/client";
+import { FIELD_LIMITS } from "@keepmind/client/lib/field-limits";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";

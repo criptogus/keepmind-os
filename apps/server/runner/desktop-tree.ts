@@ -1,4 +1,4 @@
-import { type BrowserCaptureMark, DESKTOP_AGENT_BROWSER } from "@agenteschat/adapters/machine-protocol";
+import { type BrowserCaptureMark, DESKTOP_AGENT_BROWSER } from "@keepmind/adapters/machine-protocol";
 import {
   HELPER_ROOT_PATH,
   HELPER_TEXT_MAX,

@@ -1,4 +1,4 @@
-import { AGENT_ACCESSORIES, AGENT_COLORS, AGENT_EYES } from "@agenteschat/tokens/look";
+import { AGENT_ACCESSORIES, AGENT_COLORS, AGENT_EYES } from "@keepmind/tokens/look";
 
 /**
  * The app icons a person can pick on their device (ADR 0179), in the pickers' order: the first is the icon the apps

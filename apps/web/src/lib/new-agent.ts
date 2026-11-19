@@ -1,12 +1,12 @@
-import type { Level } from "@agenteschat/client/lib/access-levels";
-import { ROLE_DEFAULTS, ROLE_IDS, type RoleId } from "@agenteschat/client/lib/new-agent";
-import type { AgentAppearance, IconName } from "@agenteschat/ui";
+import type { Level } from "@keepmind/client/lib/access-levels";
+import { ROLE_DEFAULTS, ROLE_IDS, type RoleId } from "@keepmind/client/lib/new-agent";
+import type { AgentAppearance, IconName } from "@keepmind/ui";
 
-export * from "@agenteschat/client/lib/new-agent";
+export * from "@keepmind/client/lib/new-agent";
 
 /**
  * "Criar agente" in steps: each role's icon on the web (what it starts with is shared:
- * `@agenteschat/client/lib/new-agent`).
+ * `@keepmind/client/lib/new-agent`).
  */
 
 export interface RolePreset {
@@ -27,11 +27,63 @@ const ROLE_ICON: Record<RoleId, IconName> = {
   sales: "coin",
   marketing: "globe",
   content: "edit",
+  seo: "search",
   data: "chart",
   finance: "wallet",
   people: "members",
   research: "search",
   assistant: "calendar",
+  cybersec: "shield",
+  consulting: "layers",
+  strategy: "layers",
+  trends: "search",
+  inspired_musk: "layers",
+  inspired_gates: "layers",
+  inspired_buffett: "layers",
+  inspired_welch: "layers",
+  inspired_jobs: "layers",
+  inspired_ma: "layers",
+  inspired_kawasaki: "layers",
+  inspired_bezos: "layers",
+  inspired_nadella: "layers",
+  inspired_drucker: "layers",
+  inspired_altman: "layers",
+  inspired_hassabis: "layers",
+  inspired_amodei: "layers",
+  inspired_huang: "layers",
+  inspired_christensen: "layers",
+  inspired_thiel: "layers",
+  inspired_blank: "layers",
+  inspired_blakely: "layers",
+  inspired_munger: "layers",
+  inspired_dunford: "layers",
+  inspired_godin: "layers",
+  inspired_taleb: "layers",
+  inspired_blount: "layers",
+  exec_cfo: "chart",
+  exec_cmo: "globe",
+  exec_cto: "code",
+  exec_coo: "bolt",
+  exec_people: "members",
+  exec_research: "search",
+  designer: "edit",
+  ux_expert: "eye",
+  pr_manager: "pullRequest",
+  frontend_engineer: "image",
+  ios_engineer: "phone",
+  android_engineer: "grid",
+  software_factory: "codeBlock",
+  migration_engineer: "swap",
+  latency_optimizer: "bolt",
+  platform_engineer: "cloud",
+  internal_tools: "cog",
+  release_engineer: "upload",
+  code_reaper: "trash",
+  code_health: "checks",
+  anomaly_watcher: "alert",
+  technical_writer: "book",
+  compliance_engineer: "lock",
+  chief_of_staff: "crown",
   custom: "plus",
 };
 

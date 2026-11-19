@@ -1,7 +1,7 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, type Database, type Executor, eq, isNull, schema } from "@agenteschat/db";
-import { serverText } from "@agenteschat/i18n";
-import type { AppLocale } from "@agenteschat/i18n/locale";
+import type { PubSub } from "@keepmind/adapters";
+import { and, type Database, type Executor, eq, isNull, schema } from "@keepmind/db";
+import { serverText } from "@keepmind/i18n";
+import type { AppLocale } from "@keepmind/i18n/locale";
 import type { Agent } from "./agents";
 import { canTalkTo, speakerFor } from "./audience";
 import { openPersonAgentDm } from "./dms";
@@ -126,6 +126,19 @@ export async function saidOnce(db: Executor, orgId: string, key: string): Promis
     })
     .onConflictDoNothing()
     .returning({ id: outbox.id });
+  return rows.length > 0;
+}
+
+/**
+ * Whether `key` was already said, without spending it: `saidOnce` consumes on write, so a caller that must know
+ * before deciding (a prompt line built per run) peeks here and spends with `saidOnce` only when it injects.
+ */
+export async function saidAlready(db: Executor, orgId: string, key: string): Promise<boolean> {
+  const rows = await db
+    .select({ id: outbox.id })
+    .from(outbox)
+    .where(eq(outbox.dedupeKey, saidKey(orgId, key)))
+    .limit(1);
   return rows.length > 0;
 }
 

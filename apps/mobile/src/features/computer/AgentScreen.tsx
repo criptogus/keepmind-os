@@ -13,13 +13,13 @@ import {
   screenSteps,
   useApi,
   useBrowserHandoffActions,
-} from "@agenteschat/client";
-import { liveSubLine } from "@agenteschat/client/lib/agent-computer";
-import { computerName } from "@agenteschat/client/lib/computer";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { can } from "@agenteschat/client/lib/permissions";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
-import { type AgentColorName, bodyTones } from "@agenteschat/ui/agent/engine";
+} from "@keepmind/client";
+import { liveSubLine } from "@keepmind/client/lib/agent-computer";
+import { computerName } from "@keepmind/client/lib/computer";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { can } from "@keepmind/client/lib/permissions";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
+import { type AgentColorName, bodyTones } from "@keepmind/ui/agent/engine";
 import { Canvas, Fill, Shader, Skia } from "@shopify/react-native-skia";
 import * as Clipboard from "expo-clipboard";
 import { type ReactNode, useEffect, useRef, useState } from "react";

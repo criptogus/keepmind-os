@@ -1,3 +1,4 @@
+import { createRoute, z } from "@hono/zod-openapi";
 import {
   APP_SCOPES,
   appsUrls,
@@ -9,8 +10,7 @@ import {
   reachableFromInternet,
   revokeGrant,
   TOKEN_EXPIRY_DAYS,
-} from "@agenteschat/engine";
-import { createRoute, z } from "@hono/zod-openapi";
+} from "@keepmind/engine";
 import { signedInLately } from "../../auth";
 import { apiError, errorResponse } from "../../http/errors";
 import {

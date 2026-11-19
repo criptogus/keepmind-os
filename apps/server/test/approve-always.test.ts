@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, expect, test } from "bun:test";
-import { eq, schema } from "@agenteschat/db";
-import { grantScopes, type ToolSource } from "@agenteschat/engine";
+import { eq, schema } from "@keepmind/db";
+import { grantScopes, type ToolSource } from "@keepmind/engine";
 import { type Browser, browser, createTestServer, joinByInvitation, seedOrg, signUp, type TestServer } from "./harness";
 
 const WHY = "The reporter confirmed it works now: closing the ticket ends the follow-up.";

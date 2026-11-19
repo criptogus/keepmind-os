@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import { eq, schema } from "@agenteschat/db";
+import { eq, schema } from "@keepmind/db";
 import {
   type Browser,
   browser,
@@ -11,7 +11,7 @@ import {
 } from "./harness";
 
 /**
- * The installation's GIPHY key (ADR 0091, amended 2026-10-31): only its owner has it, never on agentes.chat, and GIFs
+ * The installation's GIPHY key (ADR 0091, amended 2026-10-31): only its owner has it, never on KeepMind OS, and GIFs
  * follow it in every workspace at once, without a restart.
  */
 
@@ -78,8 +78,8 @@ test("only the installation's first account reaches it: signed out 401, anyone e
   expect(await res.json()).toEqual({ source: null, hint: null, state: "off" });
 });
 
-test("on agentes.chat itself nobody has it", async () => {
-  const origin = "https://app.agentes.chat";
+test("on KeepMind OS itself nobody has it", async () => {
+  const origin = "https://keepmind.io";
   t = await createTestServer({ env: { ALLOW_SIGNUP: "true", PUBLIC_URL: origin } });
   const first = browser(t);
   const signedUp = await first("/api/auth/sign-up/email", {

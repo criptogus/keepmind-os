@@ -1,4 +1,4 @@
-import { STICKER_STILL_T, type StickerLook, type StickerMood, stickerSeed } from "@agenteschat/ui/agent/stickers";
+import { STICKER_STILL_T, type StickerLook, type StickerMood, stickerSeed } from "@keepmind/ui/agent/stickers";
 import { Canvas, createPicture, Picture } from "@shopify/react-native-skia";
 import { createContext, memo, useContext, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { useReducedMotion } from "@/ui/theme";

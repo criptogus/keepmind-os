@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { LOAD_SAMPLE_MS } from "@agenteschat/adapters";
-import { testConfig } from "@agenteschat/config";
-import { type Database, eq, schema } from "@agenteschat/db";
-import { createTestDatabase } from "@agenteschat/db/testing";
-import { setTelemetryEnabled, telemetryState } from "@agenteschat/engine";
+import { LOAD_SAMPLE_MS } from "@keepmind/adapters";
+import { testConfig } from "@keepmind/config";
+import { type Database, eq, schema } from "@keepmind/db";
+import { createTestDatabase } from "@keepmind/db/testing";
+import { setTelemetryEnabled, telemetryState } from "@keepmind/engine";
 import { createLogger } from "../src/logger";
 import {
   FIRST_REPORT_MS,
@@ -17,7 +17,7 @@ import {
 import { browser, createTestServer, deletionCode, deletionsDue, signUp, type TestServer } from "./harness";
 
 const log = createLogger("error");
-const PROD = { NODE_ENV: "production" };
+const PROD = { NODE_ENV: "production", TELEMETRY: "on" };
 
 /**
  * Timers that run only when a test fires them, on a clock of their own. `fire(ms)` runs the newest one with
@@ -112,7 +112,7 @@ describe("sending", () => {
     expect(http.calls).toHaveLength(1);
     const [call] = http.calls;
     expect(call?.url).toBe(config.TELEMETRY_URL);
-    expect(call?.url).toBe("https://telemetry.agentes.chat/v1/report");
+    expect(call?.url).toBe("https://keepmind.io/v1/report");
     expect(call?.init.method).toBe("POST");
     expect(call?.init.signal).toBeInstanceOf(AbortSignal);
     expect(Object.keys(call?.body ?? {})).toEqual([
@@ -223,12 +223,11 @@ describe("sending", () => {
     expect(http.calls).toEqual([]);
   });
 
-  test("agentes.chat's own server always sends, whatever TELEMETRY and the switch say", async () => {
-    const { clock, http } = await start({ PUBLIC_URL: "https://agentes.chat", TELEMETRY: "off" });
+  test("KeepMind hosting does not bypass TELEMETRY=off or the owner switch", async () => {
+    const { clock, http } = await start({ PUBLIC_URL: "https://keepmind.io", TELEMETRY: "off" });
     await setTelemetryEnabled(db, false);
-    await clock.fire(FIRST_REPORT_MS);
-    expect(http.calls).toHaveLength(1);
-    expect(http.calls[0]?.body.edition).toBe("cloud");
+    expect(clock.delays()).toEqual([]);
+    expect(http.calls).toEqual([]);
   });
 
   test("a development server sends nothing", async () => {
@@ -279,7 +278,7 @@ test("agentes telemetry prints exactly the next report, on or off, and sends not
   expect(JSON.parse(out.join("")).computers).toEqual([
     expect.objectContaining({ count: 1, browserTraffic: { upMb: 5, downMb: 81, hours: 1.5, computers: 1 } }),
   ]);
-  expect(err.join("")).toContain("On: sent once a day to https://telemetry.agentes.chat/v1/report");
+  expect(err.join("")).toContain("On: sent once a day to https://keepmind.io/v1/report");
 
   await setTelemetryEnabled(db, false);
   out.length = 0;
@@ -294,7 +293,7 @@ test("agentes telemetry prints exactly the next report, on or off, and sends not
 
 describe("the switch in Settings", () => {
   async function server(env: Record<string, string> = {}) {
-    t = await createTestServer({ env: { ALLOW_SIGNUP: "true", ...env } });
+    t = await createTestServer({ env: { ALLOW_SIGNUP: "true", TELEMETRY: "on", ...env } });
     const owner = browser(t);
     await signUp(owner, "owner@example.com");
     const other = browser(t);
@@ -345,8 +344,8 @@ describe("the switch in Settings", () => {
     expect(view).toMatchObject({ enabled: true, envOff: true });
   });
 
-  test("on agentes.chat itself nobody has it", async () => {
-    const origin = "https://agentes.chat";
+  test("on KeepMind OS itself nobody has it", async () => {
+    const origin = "https://keepmind.io";
     t = await createTestServer({ env: { ALLOW_SIGNUP: "true", PUBLIC_URL: origin } });
     const first = browser(t);
     const signedUp = await first("/api/auth/sign-up/email", {

@@ -1,4 +1,4 @@
-import type { ActivitySaid, ControlBrowser, ControlJob } from "@agenteschat/adapters/runner-control";
+import type { ActivitySaid, ControlBrowser, ControlJob } from "@keepmind/adapters/runner-control";
 import { browserRowState, browsersOf } from "./browser";
 import type { Home } from "./store";
 

@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { ARTIFACT_LIMITS, IMPORT_LIMITS } from "@agenteschat/engine";
-import { SKILL_ZIP_BASE64_CHARS } from "@agenteschat/tokens/skills";
+import { ARTIFACT_LIMITS, IMPORT_LIMITS } from "@keepmind/engine";
+import { SKILL_ZIP_BASE64_CHARS } from "@keepmind/tokens/skills";
 import { API_BODY_BYTES, apiBodyMax } from "../src/http/body-limit";
 import { createTestServer, ORIGIN, type TestServer } from "./harness";
 

@@ -1,4 +1,4 @@
-import type { AgentColorName } from "@agenteschat/ui/agent/engine";
+import type { AgentColorName } from "@keepmind/ui/agent/engine";
 import type { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 import { CARD_PAD, ComputerSky, Glass, type IconName, LineIcon, PixelOrbit, Text, useTheme } from "@/ui";

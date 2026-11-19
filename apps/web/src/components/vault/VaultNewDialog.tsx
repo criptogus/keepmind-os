@@ -1,5 +1,5 @@
-import type { VaultAccess, VaultItem, VaultItemKind, VaultScope } from "@agenteschat/client";
-import { modeKey } from "@agenteschat/client/lib/workspace-mode";
+import type { VaultAccess, VaultItem, VaultItemKind, VaultScope } from "@keepmind/client";
+import { modeKey } from "@keepmind/client/lib/workspace-mode";
 import {
   Button,
   DetailsDialog,
@@ -11,7 +11,7 @@ import {
   Segmented,
   Select,
   SettingNote,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useId, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useOrg } from "@/components/org-context";

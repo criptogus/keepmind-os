@@ -7,13 +7,13 @@ import {
   type BrowserStep,
   pagePoint,
   type ScreenKind,
-} from "@agenteschat/client";
-import { MAX_MESSAGE_LENGTH } from "@agenteschat/client/lib/message-length";
+} from "@keepmind/client";
+import { MAX_MESSAGE_LENGTH } from "@keepmind/client/lib/message-length";
 import type { TFunction } from "i18next";
 
 /**
  * The agent's browser on the phone (ADR 0040): what only the app decides. The
- * request, the live connection and the input events are shared with the web (`@agenteschat/client`,
+ * request, the live connection and the input events are shared with the web (`@keepmind/client`,
  * `browser/*`). Pure, so it is unit-tested.
  */
 

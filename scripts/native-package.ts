@@ -70,7 +70,8 @@ export const packageName = (version: string, target: Target) => `agentes-native-
 export const LAUNCHER = `#!/bin/sh
 # agentes.chat without Docker: this package's Bun runs its server.
 here=$(cd "$(dirname "$0")" && pwd -P)
-exec "$here/../runtime/bun" "$here/../server/native.js" "$@"
+# The WhatsApp bridge the server spawns per organization (bundled next to native.js).
+WHATSAPP_BRIDGE_ENTRY="$here/../server/whatsapp-bridge.mjs" exec "$here/../runtime/bun" "$here/../server/native.js" "$@"
 `;
 
 /** Source maps (the web app's are most of its size) and drizzle-kit's schema snapshots aren't read at run time. */
@@ -145,7 +146,7 @@ export async function buildFolders(out: string, version: string) {
   rmSync(base, { recursive: true, force: true });
   mkdirSync(base, { recursive: true });
 
-  sh(["bun", "run", "--filter", "@agenteschat/web", "build"]);
+  sh(["bun", "run", "--filter", "@keepmind/web", "build"]);
   cpSync(join(ROOT, "apps/web/dist"), join(base, "web"), runtimeOnly);
   // The program that connects a computer, which every server offers for download (as the image does).
   const runner = await Bun.build({
@@ -169,6 +170,18 @@ export async function buildFolders(out: string, version: string) {
   });
   if (!built.success) throw new AggregateError(built.logs, "the server didn't bundle");
   writeFileSync(join(server, "native.js"), ENTRY);
+  // The WhatsApp bridge the server spawns per organization (unofficial QR
+  // session): bundled like the server; Baileys' optional media/link-preview
+  // deps stay external — only text send/receive is used.
+  const bridge = await Bun.build({
+    entrypoints: [join(ROOT, "packages/whatsapp-bridge/bin/whatsapp-bridge.mjs")],
+    target: "bun",
+    external: ["sharp", "link-preview-js", "qrcode-terminal", "jimp", "axios", "cheerio"],
+    outdir: server,
+    naming: "whatsapp-bridge.mjs",
+    metafile: true,
+  });
+  if (!bridge.success) throw new AggregateError(bridge.logs, "the whatsapp bridge didn't bundle");
   // Read beside the bundle, as from the packages' own folders (`../migrations`, `../assets`).
   cpSync(join(ROOT, "packages/db/migrations"), join(server, "migrations"), runtimeOnly);
   cpSync(join(ROOT, "packages/engine/assets"), join(server, "assets"), { recursive: true });
@@ -180,7 +193,7 @@ export async function buildFolders(out: string, version: string) {
   chmodSync(join(base, "bin/agentes-server"), 0o755);
   for (const file of ["LICENSE", "NOTICE"]) cpSync(join(ROOT, file), join(base, file));
   cpSync(join(ROOT, "apps/desktop/src-tauri/licenses/bun"), join(base, "licenses/bun"), { recursive: true });
-  const inputs = [built, runner].flatMap((r) => Object.keys(r.metafile?.inputs ?? {}));
+  const inputs = [built, runner, bridge].flatMap((r) => Object.keys(r.metafile?.inputs ?? {}));
   const licensed = copyLicenses(inputs, join(base, "licenses"));
   console.log(`${relative(ROOT, base)}: server and web built, ${licensed} bundled packages' licenses`);
   return base;

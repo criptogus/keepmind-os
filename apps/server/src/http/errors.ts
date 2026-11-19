@@ -1,3 +1,5 @@
+import type { Hook } from "@hono/zod-openapi";
+import { z } from "@hono/zod-openapi";
 import {
   BudgetExceededError,
   ConflictError,
@@ -11,9 +13,7 @@ import {
   TooManyError,
   UnauthorizedError,
   ValidationError,
-} from "@agenteschat/engine";
-import type { Hook } from "@hono/zod-openapi";
-import { z } from "@hono/zod-openapi";
+} from "@keepmind/engine";
 import type { Context, Env } from "hono";
 import { HTTPException } from "hono/http-exception";
 import { matchedRoutes, routePath } from "hono/route";
@@ -82,7 +82,7 @@ export function validationHook<E extends Env>(): Hook<unknown, E, string, unknow
 }
 
 /**
- * The HTTP answer of a domain error from `@agenteschat/engine`, or of a request Hono refused: [status, code, message,
+ * The HTTP answer of a domain error from `@keepmind/engine`, or of a request Hono refused: [status, code, message,
  * params], or null for another.
  */
 function domainError(error: unknown): [ContentfulStatusCode, string, string, Record<string, unknown>?] | null {
@@ -110,7 +110,7 @@ function domainError(error: unknown): [ContentfulStatusCode, string, string, Rec
   return null;
 }
 
-/** Maps domain errors from `@agenteschat/engine` to HTTP responses. Returns null for unknown errors. */
+/** Maps domain errors from `@keepmind/engine` to HTTP responses. Returns null for unknown errors. */
 export function domainErrorResponse(error: unknown, c: Context) {
   const known = domainError(error);
   return known ? apiError(c, ...known) : null;

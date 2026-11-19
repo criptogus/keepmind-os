@@ -1,14 +1,14 @@
-import type { Agent, TeamTemplate } from "@agenteschat/client";
-import { useApplyTeamTemplate, useRoutines, useUpdateSettings } from "@agenteschat/client";
-import { planHoldPhoneLine } from "@agenteschat/client/lib/no-ai";
-import { firstJob } from "@agenteschat/client/lib/onboarding";
+import type { Agent, TeamTemplate } from "@keepmind/client";
+import { useApplyTeamTemplate, useRoutines, useUpdateSettings } from "@keepmind/client";
+import { planHoldPhoneLine } from "@keepmind/client/lib/no-ai";
+import { firstJob } from "@keepmind/client/lib/onboarding";
 import {
   aboutContext,
   aboutOf,
   BUSINESS_TYPES,
   type BusinessType,
   teamFailureText,
-} from "@agenteschat/client/lib/team-plan";
+} from "@keepmind/client/lib/team-plan";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
@@ -257,7 +257,7 @@ export function TeamStep({
 }
 
 /**
- * Step 4 on the phone, "Ligue o time" (agentes.chat Cloud, a workspace waiting for its first plan): what each agent
+ * Step 4 on the phone, "Ligue o time" (KeepMind OS Cloud, a workspace waiting for its first plan): what each agent
  * does first, then where the plan is chosen, in words only. The phone shows no price, no button and no link to pay
  * (ADR 0079 §6, App Store 3.1.1). The team sleeps on the sky above until then; the way on is the workspace itself,
  * where the hold's banner says the same.

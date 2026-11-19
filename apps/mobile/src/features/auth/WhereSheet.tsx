@@ -1,6 +1,6 @@
-import { CLOUD_SERVER, HOSTING_FOOT, HOSTING_POINTS, helpUrl } from "@agenteschat/client/lib/server";
-import { DOWNLOAD_URL } from "@agenteschat/i18n/docs";
-import { HOSTING_CAST, type Hosting, teamTones } from "@agenteschat/ui/sky/team";
+import { CLOUD_SERVER, HOSTING_FOOT, HOSTING_POINTS, helpUrl } from "@keepmind/client/lib/server";
+import { DOWNLOAD_URL } from "@keepmind/i18n/docs";
+import { HOSTING_CAST, type Hosting, teamTones } from "@keepmind/ui/sky/team";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Pressable, StyleSheet, View } from "react-native";

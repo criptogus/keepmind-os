@@ -7,12 +7,12 @@ import {
   useRoles,
   useTurnOffInviteLink,
   useUpdateInvitation,
-} from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { formatShortDate } from "@agenteschat/client/lib/format";
-import { changedLists, inviteRefusal, inviteRefusalText, type RefusedPick } from "@agenteschat/client/lib/invite-start";
-import { sendsEmail } from "@agenteschat/client/lib/join-requests";
-import { can } from "@agenteschat/client/lib/permissions";
+} from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { formatShortDate } from "@keepmind/client/lib/format";
+import { changedLists, inviteRefusal, inviteRefusalText, type RefusedPick } from "@keepmind/client/lib/invite-start";
+import { sendsEmail } from "@keepmind/client/lib/join-requests";
+import { can } from "@keepmind/client/lib/permissions";
 import { useLocalSearchParams, usePreventRemove } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

@@ -10,11 +10,11 @@ import {
   usePostMessage,
   useTeamCard,
   useTeamTemplates,
-} from "@agenteschat/client";
-import { teamProposalOf } from "@agenteschat/client/lib/action-cards";
-import { joinNames } from "@agenteschat/client/lib/format";
-import { can } from "@agenteschat/client/lib/permissions";
-import { isRightHand, RIGHT_HAND_DEFAULT } from "@agenteschat/client/lib/right-hand";
+} from "@keepmind/client";
+import { teamProposalOf } from "@keepmind/client/lib/action-cards";
+import { joinNames } from "@keepmind/client/lib/format";
+import { can } from "@keepmind/client/lib/permissions";
+import { isRightHand, RIGHT_HAND_DEFAULT } from "@keepmind/client/lib/right-hand";
 import {
   answerAfter,
   answerPicks,
@@ -28,9 +28,9 @@ import {
   teamRoutines,
   teamStatus,
   teamUndoable,
-} from "@agenteschat/client/lib/team-plan";
-import { isPersonal, modeKey } from "@agenteschat/client/lib/workspace-mode";
-import { WAVE_SECONDS } from "@agenteschat/ui/agent/stickers";
+} from "@keepmind/client/lib/team-plan";
+import { isPersonal, modeKey } from "@keepmind/client/lib/workspace-mode";
+import { WAVE_SECONDS } from "@keepmind/ui/agent/stickers";
 import type { TFunction } from "i18next";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";

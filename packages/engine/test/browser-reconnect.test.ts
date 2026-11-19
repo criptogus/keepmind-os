@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import { decodeBrowserFrame, encodeBrowserFrame, type ServerFrame, STREAM_CLOSE } from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
+import { decodeBrowserFrame, encodeBrowserFrame, type ServerFrame, STREAM_CLOSE } from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
 import {
   BROWSER_SCOPE,
   type BrowserLiveDeps,
@@ -31,7 +31,7 @@ afterEach(async () => {
 type Request = Extract<ServerFrame, { type: "request" }>;
 
 /** What the fake runner's browser shows after any command. */
-const PAGE = { snapshot: '- heading "agentes.chat" [ref=e1]', origin: "https://app.agentes.chat/" };
+const PAGE = { snapshot: '- heading "keepmind.io" [ref=e1]', origin: "https://keepmind.io/" };
 
 /**
  * A runner over an in-memory socket that answers the live view's ops. `dead`: its socket's close never
@@ -442,7 +442,7 @@ async function toolSetup() {
     const r = await (f.tools as NonNullable<Fixture["tools"]>).invoke(ctx, {
       toolUseId: `tu_${crypto.randomUUID()}`,
       name: "browser_do",
-      input: { steps: [{ do: "open", url: "https://app.agentes.chat/" }] },
+      input: { steps: [{ do: "open", url: "https://keepmind.io/" }] },
     });
     if (r.type !== "result") throw new Error("expected a result");
     return r.output;
@@ -465,7 +465,7 @@ test("a computer whose runner is dialing again: the browser waits for it and ope
   expect(offline).toEqual(["browser.batch"]);
   expect(out.content).not.toContain("isn't answering");
   expect(out.isError).toBeFalsy();
-  expect(out.content).toContain("agentes.chat");
+  expect(out.content).toContain("keepmind.io");
   expect(fresh.batches()).toHaveLength(1);
 
   await hub.close(fresh.conn);

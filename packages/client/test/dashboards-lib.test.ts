@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { resources } from "@agenteschat/i18n";
+import { resources } from "@keepmind/i18n";
 import { QueryClient } from "@tanstack/react-query";
 import i18next from "i18next";
 import {

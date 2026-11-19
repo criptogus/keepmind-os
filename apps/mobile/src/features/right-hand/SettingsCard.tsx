@@ -18,7 +18,7 @@ import {
   useRoles,
   useSendDm,
   type WorkspaceActionCard,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 import {
   actionCardApplyKey,
   actionCardDetail,
@@ -28,10 +28,10 @@ import {
   actionCardSaysDone,
   actionCardWords,
   mayApplyCard,
-} from "@agenteschat/client/lib/action-cards";
-import { delegateLine } from "@agenteschat/client/lib/approval-words";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { can } from "@agenteschat/client/lib/permissions";
+} from "@keepmind/client/lib/action-cards";
+import { delegateLine } from "@keepmind/client/lib/approval-words";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { can } from "@keepmind/client/lib/permissions";
 import {
   cardDecidedBy,
   decidersOf,
@@ -40,7 +40,7 @@ import {
   removalOf,
   sentToText,
   settingLineText,
-} from "@agenteschat/client/lib/proposals";
+} from "@keepmind/client/lib/proposals";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";

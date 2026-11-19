@@ -1,8 +1,11 @@
-import { modelInfo } from "@agenteschat/providers";
+import { modelInfo } from "@keepmind/providers";
+import { cachesEnabled, TtlCache } from "./cache";
+import { sha256 } from "./crypto";
 import { cutText } from "./format";
 import type { ModelGateway } from "./gateway";
 import { callJev, type JevKeySource } from "./jev-key";
 import { jevCostNanoUsd } from "./router-jev";
+import { canonicalJson } from "./tools/json-schema";
 
 /**
  * Small semantic judgments about what people write ("is this asking the agent
@@ -131,11 +134,25 @@ export function createJevJudge(options: {
   visionTimeoutMs?: number;
   fetch?: typeof fetch;
 }): Judge {
+  /**
+   * The same state and questions are answered once: a repeated judgment (a retry,
+   * the same check on the next turn) costs no call. Only a successful answer is
+   * kept; image requests are never cached (their bytes would sit in memory).
+   */
+  const answers = new TtlCache<Record<string, JudgeAnswer>>(10 * 60_000, 2000);
   return {
     name: "jev",
     async ask(request) {
       const vision = judgeSeesImages(request);
       const model = vision ? (options.visionModel ?? "jev-preview") : (options.model ?? "jev-latest");
+      const cacheKey =
+        !vision && cachesEnabled()
+          ? `jev:${request.orgId}:${model}:${sha256(canonicalJson({ state: request.state, questions: request.questions }))}`
+          : null;
+      if (cacheKey) {
+        const hit = answers.get(cacheKey);
+        if (hit) return hit;
+      }
       const assets = Object.fromEntries(
         Object.entries(request.images ?? {}).map(([key, image]) => [
           key,
@@ -197,6 +214,7 @@ export function createJevJudge(options: {
           };
         }
       }
+      if (cacheKey) answers.set(cacheKey, out);
       return out;
     },
   };
@@ -215,6 +233,8 @@ export function createLlmJudge(deps: {
   /** The organization's small model (`smallModelFor`); null: none, the question fails. */
   resolveModel(orgId: string): Promise<string | null>;
 }): Judge {
+  /** The same state and questions are answered once (see `createJevJudge`'s cache). */
+  const answers = new TtlCache<Record<string, JudgeAnswer>>(10 * 60_000, 2000);
   return {
     name: "llm",
     async ask(request) {
@@ -222,6 +242,13 @@ export function createLlmJudge(deps: {
       if (judgeSeesImages(request)) throw new Error("judge: images and boxes need Jev");
       const model = await deps.resolveModel(request.orgId);
       if (!model) throw new Error("judge: no small model on this workspace's keys");
+      const cacheKey = cachesEnabled()
+        ? `llm:${request.orgId}:${model}:${sha256(canonicalJson({ system: LLM_SYSTEM, state: request.state, questions: request.questions }))}`
+        : null;
+      if (cacheKey) {
+        const hit = answers.get(cacheKey);
+        if (hit) return hit;
+      }
       const ids = Object.keys(request.questions);
       const properties: Record<string, unknown> = {};
       for (const [id, q] of Object.entries(request.questions)) {
@@ -278,6 +305,7 @@ export function createLlmJudge(deps: {
           out[id] = { score, probabilities: { [String(score)]: 1 } };
         } else out[id] = { noul: clamp(parsed[id]) };
       }
+      if (cacheKey) answers.set(cacheKey, out);
       return out;
     },
   };

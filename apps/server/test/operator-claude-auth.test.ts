@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, expect, test } from "bun:test";
-import { CLAUDE_AUTH_PROTOCOL } from "@agenteschat/adapters";
-import { schema } from "@agenteschat/db";
+import { CLAUDE_AUTH_PROTOCOL } from "@keepmind/adapters";
+import { schema } from "@keepmind/db";
 import { createLogger } from "../src/logger";
 import { createOperatorApp } from "../src/operator/app";
 import { createTestServer, type TestServer } from "./harness";

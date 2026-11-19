@@ -1,19 +1,11 @@
-import type { Agent } from "@agenteschat/client";
-import { WORKSPACE_COMPUTER_KIND } from "@agenteschat/client/lib/computer";
-import { planMark, SCENE_PLANS } from "@agenteschat/client/lib/no-ai";
-import { rightHandOf, sceneTeam } from "@agenteschat/client/lib/right-hand";
-import {
-  ComputerPortrait,
-  cx,
-  DAWN_MS,
-  type Expression,
-  PixelSky,
-  ProviderLogo,
-  teamSky,
-  useDawn,
-} from "@agenteschat/ui";
-import { type CSSProperties, type ReactNode, useMemo } from "react";
+import type { Agent } from "@keepmind/client";
+import { WORKSPACE_COMPUTER_KIND } from "@keepmind/client/lib/computer";
+import { planMark, SCENE_PLANS } from "@keepmind/client/lib/no-ai";
+import { rightHandOf, sceneTeam } from "@keepmind/client/lib/right-hand";
+import { ComputerPortrait, cx, DAWN_MS, type Expression, ProviderLogo, teamSky, useDawn } from "@keepmind/ui";
+import type { CSSProperties, ReactNode } from "react";
 import { AgentAvatar } from "@/components/AgentAvatar";
+import { AgentBackdrop } from "@/components/AgentBackdrop";
 import "./arrival.css";
 
 // The onboarding's AI step takes it from here.
@@ -38,12 +30,12 @@ export interface SceneAgent {
 export function TeamScene({
   agents,
   lead,
-  day = 1,
+  day: _day = 1,
   asleep = false,
   writing = false,
   expression,
   shape = "band",
-  quiet = 0,
+  quiet: _quiet = 0,
   className,
   children,
 }: {
@@ -61,11 +53,10 @@ export function TeamScene({
   className?: string;
   children?: ReactNode;
 }) {
-  const options = useMemo(() => teamSky(day, quiet), [day, quiet]);
   const first = lead ?? agents[0]?.id;
   return (
     <div className={cx("team-scene", `team-scene--${shape}`, className)} aria-hidden="true">
-      <PixelSky options={options} />
+      <AgentBackdrop busy={writing} />
       <div className="team-scene__row">
         <div className="team-scene__cast" data-awake={asleep ? undefined : ""}>
           {agents.map((a, i) => (

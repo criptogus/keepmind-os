@@ -1,12 +1,12 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import type { AgentBrain, Credential, MachineAccount, PlanUsage } from "@agenteschat/client";
-import { newAgentStart } from "@agenteschat/client/lib/agent-setup";
-import { accountTitle, ownSignInTitle } from "@agenteschat/client/lib/ai-accounts";
-import { setupPlanQuestion } from "@agenteschat/client/lib/audience";
-import { CURSOR_KEY_PLAN, geminiPersonal, planOf, planReplies, signInKey } from "@agenteschat/client/lib/plans";
-import { markOf } from "@agenteschat/ui/brand/marks";
+import type { AgentBrain, Credential, MachineAccount, PlanUsage } from "@keepmind/client";
+import { newAgentStart } from "@keepmind/client/lib/agent-setup";
+import { accountTitle, ownSignInTitle } from "@keepmind/client/lib/ai-accounts";
+import { setupPlanQuestion } from "@keepmind/client/lib/audience";
+import { CURSOR_KEY_PLAN, geminiPersonal, planOf, planReplies, signInKey } from "@keepmind/client/lib/plans";
+import { markOf } from "@keepmind/ui/brand/marks";
 import type { TFunction } from "i18next";
 import {
   accountInput,

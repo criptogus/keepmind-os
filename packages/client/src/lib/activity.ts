@@ -128,7 +128,7 @@ export type ActivityKind =
   | "readingConversation"
   | "usingTool";
 
-/** The computer's own permission check before a command (`PERMISSION_TOOL` in `@agenteschat/adapters`). */
+/** The computer's own permission check before a command (`PERMISSION_TOOL` in `@keepmind/adapters`). */
 export const PERMISSION_TOOL = "permission_prompt";
 
 export interface Activity {
@@ -217,6 +217,7 @@ const BUILTIN: Record<string, ActivityKind> = {
   read_wiki_page: "readingWiki",
   search_wiki: "readingWiki",
   link_to_wiki: "linkingWiki",
+  import_github_to_wiki: "writingWiki",
   // Setting up the workspace.
   create_channel: "creatingChannel",
   offer_connect_ai: "offeringConnectAi",

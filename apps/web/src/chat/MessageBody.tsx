@@ -1,5 +1,5 @@
-import { isEveryoneWord } from "@agenteschat/client/lib/everyone";
-import { type AgentColor, Mention } from "@agenteschat/ui";
+import { isEveryoneWord } from "@keepmind/client/lib/everyone";
+import { type AgentColor, Mention } from "@keepmind/ui";
 import { type ReactNode, useCallback } from "react";
 import { ChannelRef } from "@/chat/ChannelRef";
 import { renderIdRef } from "@/chat/IdRef";

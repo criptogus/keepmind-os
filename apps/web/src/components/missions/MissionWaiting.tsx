@@ -1,7 +1,7 @@
-import type { Mission, MissionCommand } from "@agenteschat/client";
-import { useMissionCommands, useMissionDecisions, useMissionList, useMissionReviews } from "@agenteschat/client";
-import { relativeTime } from "@agenteschat/client/lib/format";
-import { Chip, GroupHeading, type IconName } from "@agenteschat/ui";
+import type { Mission, MissionCommand } from "@keepmind/client";
+import { useMissionCommands, useMissionDecisions, useMissionList, useMissionReviews } from "@keepmind/client";
+import { relativeTime } from "@keepmind/client/lib/format";
+import { Chip, GroupHeading, type IconName } from "@keepmind/ui";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { AgentAvatar } from "@/components/AgentAvatar";

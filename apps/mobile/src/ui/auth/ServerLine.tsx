@@ -1,5 +1,5 @@
-import { instanceQuery, useApi } from "@agenteschat/client";
-import { CLOUD_SERVER, serverHost } from "@agenteschat/client/lib/server";
+import { instanceQuery, useApi } from "@keepmind/client";
+import { CLOUD_SERVER, serverHost } from "@keepmind/client/lib/server";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { Pressable, StyleSheet, View } from "react-native";
@@ -18,7 +18,7 @@ export function useOnCloud(): boolean {
 }
 
 /**
- * The quiet line under the sign-in: where it goes, "Entrando no agentes.chat Cloud · Trocar" (the server says whether
+ * The quiet line under the sign-in: where it goes, "Entrando no KeepMind OS Cloud · Trocar" (the server says whether
  * it is the Cloud) or "Entrando em <host> · Trocar", as on the web. Trocar opens "Onde fica o seu workspace?", in front
  * of the address and QR screens. The language follows the phone's (and its per-app setting in iOS Settings); signed in,
  * it changes in Você (ADR 0122). Signed in on another server (this one added from Workspaces): "Voltar para …" goes

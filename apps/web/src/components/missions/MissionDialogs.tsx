@@ -1,4 +1,4 @@
-import type { CommandApproval, Mission, MissionExecutor, MissionParticipantRole } from "@agenteschat/client";
+import type { CommandApproval, Mission, MissionExecutor, MissionParticipantRole } from "@keepmind/client";
 import {
   cacheMission,
   keys,
@@ -10,14 +10,14 @@ import {
   useEligibleAgents,
   useMissionJoinRequests,
   useMissionParticipants,
-} from "@agenteschat/client";
-import { canTalk } from "@agenteschat/client/lib/audience";
-import { computerNameOf } from "@agenteschat/client/lib/computer";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { executorName } from "@agenteschat/client/lib/missions";
-import { can } from "@agenteschat/client/lib/permissions";
-import { isPersonal, modeKey } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client";
+import { canTalk } from "@keepmind/client/lib/audience";
+import { computerNameOf } from "@keepmind/client/lib/computer";
+import { errorText } from "@keepmind/client/lib/errors";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { executorName } from "@keepmind/client/lib/missions";
+import { can } from "@keepmind/client/lib/permissions";
+import { isPersonal, modeKey } from "@keepmind/client/lib/workspace-mode";
 import {
   Button,
   Dialog,
@@ -39,7 +39,7 @@ import {
   Switch,
   Textarea,
   Toolbar,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useId, useMemo, useState } from "react";

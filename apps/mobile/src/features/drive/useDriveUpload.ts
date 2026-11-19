@@ -1,5 +1,5 @@
-import { useApi } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
+import { useApi } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
 import * as DocumentPicker from "expo-document-picker";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

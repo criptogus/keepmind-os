@@ -1,4 +1,4 @@
-import type { Agent, LiveRun } from "@agenteschat/client";
+import type { Agent, LiveRun } from "@keepmind/client";
 import {
   ApiError,
   agentStateOfRun,
@@ -12,11 +12,11 @@ import {
   useDesktopStatus,
   useMachines,
   usesScreen,
-} from "@agenteschat/client";
-import { type AgentComputerFacts, entryState } from "@agenteschat/client/lib/agent-computer";
-import { computerEdition, setupView } from "@agenteschat/client/lib/computer";
-import { can } from "@agenteschat/client/lib/permissions";
-import { useSeat } from "@agenteschat/client/lib/seat-context";
+} from "@keepmind/client";
+import { type AgentComputerFacts, entryState } from "@keepmind/client/lib/agent-computer";
+import { computerEdition, setupView } from "@keepmind/client/lib/computer";
+import { can } from "@keepmind/client/lib/permissions";
+import { useSeat } from "@keepmind/client/lib/seat-context";
 import { useQuery } from "@tanstack/react-query";
 import { useOrg } from "@/components/org-context";
 import { useStreams } from "@/realtime/context";

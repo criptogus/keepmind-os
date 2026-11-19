@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
-import { answerAfter, answerPicks, BUSINESS_TYPES, replyChipsOf } from "@agenteschat/client/lib/team-plan";
+import { answerAfter, answerPicks, BUSINESS_TYPES, replyChipsOf } from "@keepmind/client/lib/team-plan";
 
 const src = (f: string) => readFileSync(new URL(`../../src/features/${f}`, import.meta.url), "utf8");
 

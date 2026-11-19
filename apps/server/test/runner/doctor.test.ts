@@ -1,7 +1,7 @@
 import { afterEach, expect, test } from "bun:test";
 import { chmodSync, mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { createTerm } from "@agenteschat/setup/src/term";
+import { createTerm } from "@keepmind/setup/src/term";
 import { connections, cpuName, type DoctorPhone, type DoctorSources, runDoctor } from "../../runner/doctor";
 import { acquireLock } from "../../runner/lock";
 import { removeDirs, tempDir } from "./helpers";
@@ -78,7 +78,7 @@ test("doctor: this Mac, its apps, toolchains and phones, the fix for what needs 
   const r = await doctor(mac({}, [[{ ...PIXEL, inUseSince: new Date().toISOString() }, IPHONE]]));
   expect(r.code).toBe(1);
   const lines = r.text.trimEnd().split("\n");
-  expect(lines[0]).toBe("agentes.chat check this Mac");
+  expect(lines[0]).toBe("KeepMind OS check this Mac");
   expect(r.text).toContain(
     "◇  Sam's MacBook Pro, connected to Acme\n   macOS 26.1 · Apple M3 Pro · 12 CPU · 36 GB\n   https://app.example.com · commands run as sam\n",
   );
@@ -123,7 +123,7 @@ test("doctor --wait: a phone that needs something else next is shown again; wait
   const alone = await doctor(mac({ connections: () => [] }, [[]]), { wait: true });
   expect(alone.code).toBe(1);
   expect(alone.text).toContain(
-    "■  This Mac isn't connected to a workspace\n   Connect it in agentes.chat, under Settings › Devices.\n   macOS 26.1",
+    "■  This Mac isn't connected to a workspace\n   Connect it in KeepMind OS, under Settings › Devices.\n   macOS 26.1",
   );
   expect(alone.text).toContain("○  No phones attached\n");
   expect(alone.text).not.toContain("Waiting");
@@ -149,7 +149,7 @@ test("doctor: a connection that isn't running says how to start it; Linux shows 
   });
   const r = await doctor(stopped);
   expect(r.code).toBe(1);
-  expect(r.text).toStartWith("agentes.chat check this computer\n");
+  expect(r.text).toStartWith("KeepMind OS check this computer\n");
   expect(r.text).toContain(
     "■  build-box is connected to Acme but isn't running\n   Run it in the background:\n     agentes-runner service install\n",
   );

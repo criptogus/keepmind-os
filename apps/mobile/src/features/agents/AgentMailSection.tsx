@@ -1,9 +1,9 @@
-import { type AgentMailbox, useAgentMail, useMailAccounts, useSetAgentMail } from "@agenteschat/client";
-import type { Level } from "@agenteschat/client/lib/access-levels";
-import { canTalk } from "@agenteschat/client/lib/audience";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { defaultPolicy, mailAccessOf, onlyForOwner, toMailLevel } from "@agenteschat/client/lib/mail";
-import { can } from "@agenteschat/client/lib/permissions";
+import { type AgentMailbox, useAgentMail, useMailAccounts, useSetAgentMail } from "@keepmind/client";
+import type { Level } from "@keepmind/client/lib/access-levels";
+import { canTalk } from "@keepmind/client/lib/audience";
+import { errorText } from "@keepmind/client/lib/errors";
+import { defaultPolicy, mailAccessOf, onlyForOwner, toMailLevel } from "@keepmind/client/lib/mail";
+import { can } from "@keepmind/client/lib/permissions";
 import { useTranslation } from "react-i18next";
 import { useOrg } from "@/providers/org";
 import { useToast } from "@/ui";

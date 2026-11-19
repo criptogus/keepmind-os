@@ -1,5 +1,5 @@
-import { parseChart } from "@agenteschat/client/lib/chart";
-import type { AgentColorName } from "@agenteschat/ui/agent/engine";
+import { parseChart } from "@keepmind/client/lib/chart";
+import type { AgentColorName } from "@keepmind/ui/agent/engine";
 import { memo, useMemo, useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { Icon, Text } from "@/ui";

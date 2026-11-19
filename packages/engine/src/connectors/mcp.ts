@@ -1,4 +1,4 @@
-import { type ComposioClient, composioFile, FileTooLargeError } from "@agenteschat/adapters";
+import { type ComposioClient, composioFile, FileTooLargeError } from "@keepmind/adapters";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import type { FetchLike, Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
@@ -6,8 +6,9 @@ import type { jsonSchemaValidator } from "@modelcontextprotocol/sdk/validation/t
 import { ARTIFACT_LIMITS, type ArtifactDeps, createFileArtifact, fileReach } from "../artifacts";
 import { recordAudit } from "../audit";
 import { runAuthorityById } from "../authority";
+import { TtlCache } from "../cache";
 import { connectorKeyOf } from "../connector-usage";
-import { signJwtHs256 } from "../crypto";
+import { sha256, signJwtHs256 } from "../crypto";
 import { cutText } from "../format";
 import { type GitHubAppAccess, githubCallAuth, githubListingHeaders } from "../git/github-call";
 import { githubItemOfCall, recordGitHubItem } from "../git/github-events";
@@ -16,6 +17,7 @@ import type { Judge } from "../judge";
 import { assertPublicHttpsUrl, outboundFetch, type ResolveHost } from "../net-guard";
 import { replyThreadOf } from "../runs";
 import { MAX_RESULT_CHARS } from "../tools/gateway";
+import { canonicalJson } from "../tools/json-schema";
 import type { ToolContext, ToolDefinition, ToolSource } from "../tools/types";
 import { CONNECTOR_CATALOG, type ConnectorTool, connectorScope, fillTitle } from "./catalog";
 import { sqlArgOf } from "./classify";
@@ -77,7 +79,7 @@ export interface McpSession {
  */
 export type McpConnect = (
   connection: Pick<ConnectorConnection, "serverUrl"> &
-    Partial<Pick<ConnectorConnection, "orgId" | "composioAccountId">>,
+    Partial<Pick<ConnectorConnection, "authType" | "orgId" | "composioAccountId">>,
   headers: Record<string, string>,
 ) => Promise<McpSession>;
 
@@ -92,7 +94,7 @@ const NO_OUTPUT_VALIDATION: jsonSchemaValidator = {
 
 /** Wraps an official MCP SDK client over any transport. */
 export async function mcpSessionOver(transport: Transport): Promise<McpSession> {
-  const client = new Client({ name: "agentes.chat", version: "1" }, { jsonSchemaValidator: NO_OUTPUT_VALIDATION });
+  const client = new Client({ name: "keepmind.io", version: "1" }, { jsonSchemaValidator: NO_OUTPUT_VALIDATION });
   await client.connect(transport);
   return {
     async listTools() {
@@ -140,7 +142,12 @@ export const connectOverHttp: McpConnect = (connection, headers) =>
   mcpSessionOver(
     new StreamableHTTPClientTransport(new URL(connection.serverUrl), {
       requestInit: { headers },
-      fetch: tolerantMcpFetch(outboundFetch({ ownRedirects: true })),
+      // `internal` connections are server-issued loopback endpoints (the WhatsApp
+      // bridge): the SSRF guard stays on for every URL a person can type.
+      fetch:
+        connection.authType === "internal"
+          ? tolerantMcpFetch(fetch)
+          : tolerantMcpFetch(outboundFetch({ ownRedirects: true })),
     }),
   );
 
@@ -268,6 +275,14 @@ export function createConnectorToolSource(
 ): ToolSource {
   const connect = deps.connect ?? connectOverHttp;
   const cache = new Map<string, { at: number; tools: McpTool[] }>();
+  /**
+   * Read-only calls' answers, kept a few minutes: a repeated ask (a retry, the
+   * same list across turns or agents) is answered from here instead of the
+   * network. Writes, approvals and Composio actions never are. The key holds the
+   * connection id, and a reconnect is a new row, so a changed sign-in starts
+   * clean; ids are unique, so nothing crosses workspaces.
+   */
+  const toolResults = new TtlCache<McpCallResult>(5 * 60_000, 2000);
   /** How many times a listing found changed tools and worked out a custom server's levels again. */
   let reclassified = 0;
   const github = { fetch: deps.http ?? fetch, apiUrl: "https://api.github.com", ...deps.githubApp?.http };
@@ -444,14 +459,28 @@ export function createConnectorToolSource(
             };
           },
           execute: async (input, ctx) => {
-            // Never through Composio: no server at its address ever reads a request of ours.
-            const meta = composio ? undefined : await callerStatement(connection, ctx);
+            // Only a classified read, never through Composio, is cached: its answer
+            // is the server's data, safe to repeat for a few minutes.
+            const cacheKey =
+              access === "read" && !composio && !row.sensitive
+                ? `custom:${connection.id}:${tool.name}:${sha256(canonicalJson(input))}`
+                : null;
             let result: McpCallResult;
-            try {
-              result = await withSession(connection, (s) => s.callTool(tool.name, input, meta));
-            } catch (error) {
-              if (!composio) throw error;
-              return composioFailure(deps, connection, error);
+            if (cacheKey) {
+              result = await toolResults.getOrLoad(cacheKey, async () => {
+                const meta = await callerStatement(connection, ctx);
+                const r = await withSession(connection, (s) => s.callTool(tool.name, input, meta));
+                return { content: r.content, isError: r.isError };
+              });
+            } else {
+              // Never through Composio: no server at its address ever reads a request of ours.
+              const meta = composio ? undefined : await callerStatement(connection, ctx);
+              try {
+                result = await withSession(connection, (s) => s.callTool(tool.name, input, meta));
+              } catch (error) {
+                if (!composio) throw error;
+                return composioFailure(deps, connection, error);
+              }
             }
             if (composio && deps.composio && !result.isError) {
               const kept = await keepComposioFiles(
@@ -539,7 +568,17 @@ export function createConnectorToolSource(
                 auth = how.headers;
                 args = await signed(input, mapped.sign, { ...ctx, token: how.token });
               }
-              const result = await withSession(connection, (s) => s.callTool(tool.name, args), auth);
+              // Only a catalog read is cached, and the key carries the call's auth
+              // too, so the GitHub App and a person's sign-in never share an answer.
+              const cacheKey =
+                !mapped.sensitive && mapped.scope.endsWith(".read") && !mapped.onSuccess
+                  ? `catalog:${connection.id}:${tool.name}:${sha256(canonicalJson({ args, auth: auth ?? null }))}`
+                  : null;
+              const result = cacheKey
+                ? await toolResults.getOrLoad(cacheKey, () =>
+                    withSession(connection, (s) => s.callTool(tool.name, args), auth),
+                  )
+                : await withSession(connection, (s) => s.callTool(tool.name, args), auth);
               // Where the agent's words went on GitHub: what people answer there comes back to it here.
               const item =
                 def.id === "github" && mapped.sign?.field === "body" && !result.isError

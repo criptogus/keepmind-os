@@ -1,12 +1,12 @@
-import type { GitHubRepositories } from "@agenteschat/client";
+import type { GitHubRepositories } from "@keepmind/client";
 import {
   useAgentMergeRepos,
   useGitHubApp,
   useGitHubRepos,
   useInstallGitHubApp,
   useSetAgentMergeRepos,
-} from "@agenteschat/client";
-import { can as orgCan } from "@agenteschat/client/lib/permissions";
+} from "@keepmind/client";
+import { can as orgCan } from "@keepmind/client/lib/permissions";
 import {
   applyPick,
   covers,
@@ -18,7 +18,7 @@ import {
   repoListOf,
   repoName,
   toggleRepo,
-} from "@agenteschat/client/lib/repos";
+} from "@keepmind/client/lib/repos";
 import {
   Button,
   Checkbox,
@@ -32,7 +32,7 @@ import {
   Locked,
   Menu,
   MenuItem,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { LoadingLine } from "@/components/Loading";

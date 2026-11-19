@@ -1,4 +1,4 @@
-import { DESKTOP_USE_PROTOCOL, type DesktopLookReply, type MachineRequest } from "@agenteschat/adapters";
+import { DESKTOP_USE_PROTOCOL, type DesktopLookReply, type MachineRequest } from "@keepmind/adapters";
 import type { MachineCaller, MachineStatus } from "../src";
 import { THUNAR } from "./screen-fixtures";
 

@@ -1,3 +1,4 @@
+import { createRoute, z } from "@hono/zod-openapi";
 import {
   actOnTeamWeek,
   getLodiPrefs,
@@ -5,8 +6,7 @@ import {
   liveLodiSwitches,
   type RoutineDeps,
   setLodiPrefs,
-} from "@agenteschat/engine";
-import { createRoute, z } from "@hono/zod-openapi";
+} from "@keepmind/engine";
 import {
   type AppDeps,
   body,

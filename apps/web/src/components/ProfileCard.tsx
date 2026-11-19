@@ -1,4 +1,4 @@
-import type { Actor, Agent, AgentAudience, DmTarget } from "@agenteschat/client";
+import type { Actor, Agent, AgentAudience, DmTarget } from "@keepmind/client";
 import {
   agentWorkingIn,
   useAgentDetail,
@@ -11,8 +11,8 @@ import {
   useSetMemberRoles,
   useSettings,
   useUpdateAgent,
-} from "@agenteschat/client";
-import { type WorkPlaceNames, workDetail } from "@agenteschat/client/lib/agent-work";
+} from "@keepmind/client";
+import { type WorkPlaceNames, workDetail } from "@keepmind/client/lib/agent-work";
 import {
   audienceLines,
   audienceNotice,
@@ -23,18 +23,18 @@ import {
   canTalk,
   modeOf,
   seesDetails,
-} from "@agenteschat/client/lib/audience";
-import { brainLine, engineOfBrain } from "@agenteschat/client/lib/brain";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { clockHour, formatMonthYear, formatPercent, relativeTime, shortModel } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { can } from "@agenteschat/client/lib/permissions";
-import { agentFaceWord, isOutOfOffice, statusEndNote } from "@agenteschat/client/lib/presence";
-import { apiModelName, autoMakerOf } from "@agenteschat/client/lib/providers";
-import { isRightHand, tellsNameStory } from "@agenteschat/client/lib/right-hand";
-import { rolesOf } from "@agenteschat/client/lib/roles";
-import { timezoneName } from "@agenteschat/client/lib/routines";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client/lib/audience";
+import { brainLine, engineOfBrain } from "@keepmind/client/lib/brain";
+import { errorText } from "@keepmind/client/lib/errors";
+import { clockHour, formatMonthYear, formatPercent, relativeTime, shortModel } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { can } from "@keepmind/client/lib/permissions";
+import { agentFaceWord, isOutOfOffice, statusEndNote } from "@keepmind/client/lib/presence";
+import { apiModelName, autoMakerOf } from "@keepmind/client/lib/providers";
+import { isRightHand, tellsNameStory } from "@keepmind/client/lib/right-hand";
+import { rolesOf } from "@keepmind/client/lib/roles";
+import { timezoneName } from "@keepmind/client/lib/routines";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import {
   Avatar,
   Button,
@@ -49,7 +49,7 @@ import {
   RoleMark,
   Token,
   useHoverCard,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useNavigate } from "@tanstack/react-router";
 import type { TFunction } from "i18next";
 import { type ReactNode, useRef, useState } from "react";

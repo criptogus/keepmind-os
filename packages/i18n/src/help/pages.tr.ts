@@ -4,15 +4,15 @@ import type { HelpDocument } from "./types";
 /** The help pages in tr: a page not here shows in English. */
 export const helpTr: Partial<Record<HelpSlug, HelpDocument>> = {
   "run-on-your-computer": {
-    title: "agentes.chat'i kendi bilgisayarınızda çalıştırın",
+    title: "KeepMind OS'i kendi bilgisayarınızda çalıştırın",
     summary:
-      "agentes.chat uygulaması, agentes.chat'in kendisini de bir Mac, PC ya da Linux bilgisayarda, sizin ya da küçük bir ekip için çalıştırabilir.",
+      "KeepMind OS uygulaması, KeepMind OS'in kendisini de bir Mac, PC ya da Linux bilgisayarda, sizin ya da küçük bir ekip için çalıştırabilir.",
     sections: [
       {
         id: "download",
         heading: "Uygulamayı indirin",
         blocks: [
-          "Mac, PC veya Linux bilgisayarınız için [agentes.chat uygulamasını indirin](/download) ve açın. **Kendi sunucunuzda** seçeneğini seçin, **Kendi sunucumla devam et**'e ve ardından **agentes.chat'i bu bilgisayar üzerinde çalıştır**'a basın.",
+          "Mac, PC veya Linux bilgisayarınız için [KeepMind OS uygulamasını indirin](/download) ve açın. **Kendi sunucunuzda** seçeneğini seçin, **Kendi sunucumla devam et**'e ve ardından **KeepMind OS'i bu bilgisayar üzerinde çalıştır**'a basın.",
         ],
       },
       {
@@ -20,14 +20,14 @@ export const helpTr: Partial<Record<HelpSlug, HelpDocument>> = {
         heading: "Nasıl çalışır",
         blocks: [
           "Uygulamanın içinde, kendi yerleşik veritabanıyla çalışır ve her şeyi bu bilgisayardaki tek bir klasörde, ana klasörünüzdeki `.agentes` içinde tutar. Başka hiçbir şey kurmanız gerekmez: Docker yok, kurulacak bir veritabanı yok.",
-          "Uygulamayla birlikte başlar ve uygulamadan çıktığınızda durur. Çıkmadan önce uygulama sorar, çünkü uygulama yeniden açılana kadar kimse agentes.chat'i kullanamaz. Uygulamadan çıkmadan bir süre durdurmak için saatin yanındaki agentes.chat simgesine tıklayın ve kartının **⋯** menüsünden **Durdur**'u seçin.",
+          "Uygulamayla birlikte başlar ve uygulamadan çıktığınızda durur. Çıkmadan önce uygulama sorar, çünkü uygulama yeniden açılana kadar kimse KeepMind OS'i kullanamaz. Uygulamadan çıkmadan bir süre durdurmak için saatin yanındaki KeepMind OS simgesine tıklayın ve kartının **⋯** menüsünden **Durdur**'u seçin.",
         ],
       },
       {
         id: "who",
         heading: "Kimin için",
         blocks: [
-          "Siz ya da küçük bir ekip. Açık kalan bir Mac mini, yedek bir PC ya da dizüstü bilgisayar iyi bir yuva olur: onu [Açık tutun](#keep-on) bölümündeki gibi ayarlayın. Bir Mac'te ya da PC'de agentes.chat'i Docker olmadan çalıştırmanın yolu uygulamadır.",
+          "Siz ya da küçük bir ekip. Açık kalan bir Mac mini, yedek bir PC ya da dizüstü bilgisayar iyi bir yuva olur: onu [Açık tutun](#keep-on) bölümündeki gibi ayarlayın. Bir Mac'te ya da PC'de KeepMind OS'i Docker olmadan çalıştırmanın yolu uygulamadır.",
           "Daha büyük bir ekip için [Hangi kurulumu seçmeli](/help/install-on-a-server#choose) sayfasına bakın. Verilerinizi sonra bir sunucuya taşıyabilirsiniz.",
         ],
       },
@@ -58,7 +58,7 @@ export const helpTr: Partial<Record<HelpSlug, HelpDocument>> = {
         id: "another-workspace",
         heading: "Başka bir çalışma alanına da açın",
         blocks: [
-          "Burada çalıştırdığınız sunucunun çalışma alanları bu bilgisayarı kendiliğinden kullanır. Başka bir yerdeki bir çalışma alanının da, örneğin agentes.chat Cloud'daki birinin, kullanmasını istiyorsanız **Tercihler\u00a0›\u00a0Genel** içindeki ilk kartın en altında bulunan **Çalışma alanı ekle…** düğmesine ya da **Tercihler\u00a0›\u00a0Sunucular** içindeki **Sunucu ekle…** düğmesine basın. O çalışma alanında oturum açın ve uygulama sorduğunda **İzin ver** düğmesine basın.",
+          "Burada çalıştırdığınız sunucunun çalışma alanları bu bilgisayarı kendiliğinden kullanır. Başka bir yerdeki bir çalışma alanının da, örneğin KeepMind OS Cloud'daki birinin, kullanmasını istiyorsanız **Tercihler\u00a0›\u00a0Genel** içindeki ilk kartın en altında bulunan **Çalışma alanı ekle…** düğmesine ya da **Tercihler\u00a0›\u00a0Sunucular** içindeki **Sunucu ekle…** düğmesine basın. O çalışma alanında oturum açın ve uygulama sorduğunda **İzin ver** düğmesine basın.",
           "Her çalışma alanının burada kendi ajanları ve klasörleri olur. **Komutlar** onun için de varsayılan olarak açıktır. Onları uygulamanın sorusunda **İzin ver**'e basmadan önce ya da daha sonra **Tercihler\u00a0›\u00a0Araçlar** içinde kapatın. Orada her çalışma alanının kendi anahtarı vardır ve uygulama birini yeniden açmadan önce sorar.",
         ],
       },
@@ -66,8 +66,8 @@ export const helpTr: Partial<Record<HelpSlug, HelpDocument>> = {
         id: "reach",
         heading: "Telefonunuzdan ve ekibinizden erişim",
         blocks: [
-          "**Telefonunuzdan ve ekip arkadaşlarınızdan erişin**, agentes.chat'i cihazlarınız için özel bir ağ olan Tailscale'e koyar: telefonunuz ve davet ettiğiniz kişiler bu ağa katılır, başka hiç kimse agentes.chat'e ulaşamaz. Tailscale ücretsizdir: https://tailscale.com/download. Bu seçenek kapalıyken agentes.chat yalnızca bu bilgisayarda çalışır.",
-          "Bu bilgisayar Tailscale'in 443 portunda zaten başka bir şey paylaşıyorsa agentes.chat 8443 portunu kullanır ve adresi `:8443` ile biter.",
+          "**Telefonunuzdan ve ekip arkadaşlarınızdan erişin**, KeepMind OS'i cihazlarınız için özel bir ağ olan Tailscale'e koyar: telefonunuz ve davet ettiğiniz kişiler bu ağa katılır, başka hiç kimse KeepMind OS'e ulaşamaz. Tailscale ücretsizdir: https://tailscale.com/download. Bu seçenek kapalıyken KeepMind OS yalnızca bu bilgisayarda çalışır.",
+          "Bu bilgisayar Tailscale'in 443 portunda zaten başka bir şey paylaşıyorsa KeepMind OS 8443 portunu kullanır ve adresi `:8443` ile biter.",
         ],
       },
       {
@@ -89,7 +89,7 @@ export const helpTr: Partial<Record<HelpSlug, HelpDocument>> = {
         heading: "Yedekler",
         blocks: [
           "**Tercihler\u00a0›\u00a0Sunucular** içinde **Her gece yedekle** açıksa (uygulama 0.8.1 ve sonrası), uygulama her gece saat 3:00'te veritabanını, dosyaları ve `.env` dosyasını ana klasörünüzdeki `.agentes/backups` içine kaydeder. O saatte uykuda olan bir bilgisayar uyandığında yedekler. **Şimdi yedekle** aynısını hemen yapar. Her yedekleme sunucuyu kısa bir süre durdurur ve en yeni iki yedek kalır.",
-          "**Şuraya kopyala**, her yeni yedeği seçtiğiniz bir klasöre de koyar, örneğin bir USB belleğe ya da iCloud Drive'a, ve orada da en yeni iki yedek kalır. İçlerinde anahtarlarınız var: onları gizli tutun. **Geri yükle…** agentes.chat'i bir yedeğe döndürür: mesajlar, dosyalar ve ayarlar. Bir dakikalığına durur ve önceden orada olanlar yedek klasöründe kalır.",
+          "**Şuraya kopyala**, her yeni yedeği seçtiğiniz bir klasöre de koyar, örneğin bir USB belleğe ya da iCloud Drive'a, ve orada da en yeni iki yedek kalır. İçlerinde anahtarlarınız var: onları gizli tutun. **Geri yükle…** KeepMind OS'i bir yedeğe döndürür: mesajlar, dosyalar ve ayarlar. Bir dakikalığına durur ve önceden orada olanlar yedek klasöründe kalır.",
         ],
       },
       {
@@ -111,7 +111,7 @@ export const helpTr: Partial<Record<HelpSlug, HelpDocument>> = {
           },
           {
             list: [
-              "[agentes.chat'i bir sunucuya kurun](/help/install-on-a-server), ama henüz başlatmayın. Onun `.env` dosyasına `~/.agentes/.env` içindeki `AGENTES_SECRET` değerini yazın, sonra yalnızca veritabanını başlatın: `docker compose up -d postgres`.",
+              "[KeepMind OS'i bir sunucuya kurun](/help/install-on-a-server), ama henüz başlatmayın. Onun `.env` dosyasına `~/.agentes/.env` içindeki `AGENTES_SECRET` değerini yazın, sonra yalnızca veritabanını başlatın: `docker compose up -d postgres`.",
               "Dökümü yükleyin: `docker compose exec -T postgres psql -U agentes -d agentes -v ON_ERROR_STOP=1 < agentes.sql`.",
               "`docker compose up -d` ile başlatın, `~/.agentes/files` klasörünü tam kılavuzda gösterildiği gibi içine kopyalayın ve eskisi gibi giriş yapın.",
             ],
@@ -123,11 +123,11 @@ export const helpTr: Partial<Record<HelpSlug, HelpDocument>> = {
   computers: {
     title: "Bilgisayarlarınız ve telefonlarınız",
     summary:
-      "Bir Mac, PC, Linux bilgisayar, sunucu ya da telefon getirin, ajanlarınız onun üzerinde çalışsın. Hem agentes.chat Cloud'da hem kendi sunucunuzda.",
+      "Bir Mac, PC, Linux bilgisayar, sunucu ya da telefon getirin, ajanlarınız onun üzerinde çalışsın. Hem KeepMind OS Cloud'da hem kendi sunucunuzda.",
     sections: [
       {
         id: "app",
-        heading: "agentes.chat uygulamasından",
+        heading: "KeepMind OS uygulamasından",
         blocks: [
           "Uygulamayı bilgisayara kurun, açın ve çalışma alanınızda oturum açın. Uygulama **<workspace> ajanları bu Mac cihazını kullanabilsin mi?** diye sorar (Windows'ta bu PC, Linux'ta bu bilgisayar). Kimlerin kullanabileceğini seçin ve **İzin ver** düğmesine basın. Hepsi bu.",
           "Zaten oturum açtınız mı? **Tercihler\u00a0›\u00a0Genel** bölümünü açın ve ilk karttaki çalışma alanı satırında **İzin ver** düğmesine basın. Orada yok mu? O kartın en altındaki **Çalışma alanı ekle…** düğmesine basın ve oturum açın.",
@@ -166,14 +166,14 @@ export const helpTr: Partial<Record<HelpSlug, HelpDocument>> = {
         id: "open",
         heading: "Uygulama açıkken",
         blocks: [
-          "Ajanlar bir bilgisayarda yalnızca uygulama orada çalışırken ve bilgisayar uyanıkken çalışır. Uygulama sorduğunda **Hazır tut: oturum açılınca agentes.chat'i başlat** işaretli kalsın. Kapalı ya da uykudaki bir bilgisayar **Çevrimdışı** görünür ve ajanlar onun geri gelmesini bekler.",
+          "Ajanlar bir bilgisayarda yalnızca uygulama orada çalışırken ve bilgisayar uyanıkken çalışır. Uygulama sorduğunda **Hazır tut: oturum açılınca KeepMind OS'i başlat** işaretli kalsın. Kapalı ya da uykudaki bir bilgisayar **Çevrimdışı** görünür ve ajanlar onun geri gelmesini bekler.",
         ],
       },
       {
         id: "pausing",
         heading: "Duraklatma ve bağlantıyı kesme",
         blocks: [
-          "Bilgisayarda, saatin yanındaki agentes.chat simgesi tüm çalışma alanlarının ya da yalnızca birinin ajanlarını duraklatır. **Tercihler\u00a0›\u00a0Genel** içinde her çalışma alanının anahtarı yalnızca onu duraklatır, **⋯** menüsündeki **Ayrıl** ise bağlantısını keser. Duraklatılmışken yeni hiçbir şey başlamaz ve çalışmakta olanlar tamamlanır. Bağlantıyı kesmek ajanların klasörlerini diskte bırakır.",
+          "Bilgisayarda, saatin yanındaki KeepMind OS simgesi tüm çalışma alanlarının ya da yalnızca birinin ajanlarını duraklatır. **Tercihler\u00a0›\u00a0Genel** içinde her çalışma alanının anahtarı yalnızca onu duraklatır, **⋯** menüsündeki **Ayrıl** ise bağlantısını keser. Duraklatılmışken yeni hiçbir şey başlamaz ve çalışmakta olanlar tamamlanır. Bağlantıyı kesmek ajanların klasörlerini diskte bırakır.",
           "Web sitesinden, cihazın sayfasındaki **Kaldır** onun bağlantısını keser.",
         ],
       },
@@ -181,7 +181,7 @@ export const helpTr: Partial<Record<HelpSlug, HelpDocument>> = {
         id: "organizations",
         heading: "Birden çok çalışma alanı, tek bilgisayar",
         blocks: [
-          "Aynı uygulamada her çalışma alanında oturum açın ve her biri için **İzin ver** düğmesine basın. agentes.chat Cloud'daki ve kendi sunucularınızdaki çalışma alanları aynı bilgisayarı paylaşabilir (uygulama 0.6.1 ve sonrası). Her birinin orada kendi ajanları ve klasörleri olur ve birinin bağlantısını kesmek diğerlerini etkilemez.",
+          "Aynı uygulamada her çalışma alanında oturum açın ve her biri için **İzin ver** düğmesine basın. KeepMind OS Cloud'daki ve kendi sunucularınızdaki çalışma alanları aynı bilgisayarı paylaşabilir (uygulama 0.6.1 ve sonrası). Her birinin orada kendi ajanları ve klasörleri olur ve birinin bağlantısını kesmek diğerlerini etkilemez.",
           "Uygulamanın bu bilgisayarda çalıştırdığı bir sunucu zaten bağlıdır ve hiçbir şey gerektirmez. Bu bilgisayarı başka bir yerdeki bir çalışma alanına da açmak için [Başka bir çalışma alanına da açın](/help/run-on-your-computer#another-workspace) bölümüne bakın.",
           "Uygulamayı bir dizüstünde yalnızca çalışma alanınıza açılan bir pencere olarak mı kullanıyorsunuz? Ajanların dizüstünü kullanması için izin istediğinde **Şimdi değil** derseniz uygulama sade bir pencere olarak kalır.",
           "Terminal satırıyla bağlanan bir sunucu tek bir çalışma alanı için çalışır. Onu başka bir çalışma alanından bağlamak sunucuyu o alana taşır ve ilki artık ona ulaşamaz. Bir bilgisayarda birden çok çalışma alanı için uygulamayı kullanın.",
@@ -212,10 +212,10 @@ export const helpTr: Partial<Record<HelpSlug, HelpDocument>> = {
               "dosyalarınız ve oturumlarınız",
               "diğer ajanların klasörleri, başka çalışma alanlarınınkiler dahil, ve tarayıcılarının sakladığı oturumlar",
               "bu bilgisayarı bağlayan jeton",
-              "agentes.chat'i de çalıştıran bir bilgisayarda, onun `.agentes` içindeki veritabanı ve anahtarları",
+              "KeepMind OS'i de çalıştıran bir bilgisayarda, onun `.agentes` içindeki veritabanı ve anahtarları",
             ],
           },
-          "agentes.chat anahtarların, token'ların ve oturum bilgilerinin adını geçiren komutları reddeder, ama bu bir kuraldır, duvar değil. **Komutlar** varsayılan olarak açıktır. Onları uygulamanın sorusunda **İzin ver**'e basmadan önce ya da daha sonra **Tercihler\u00a0›\u00a0Araçlar** içinde kapatın. Orada her çalışma alanının kendi anahtarı vardır (uygulama 0.8.1 ve sonrası) ve uygulama birini yeniden açmadan önce sorar. Claude Code ve Codex, Komutlar kapalıyken bile kendi komutlarını ajanın klasöründe, kendi kurallarıyla çalıştırır.",
+          "KeepMind OS anahtarların, token'ların ve oturum bilgilerinin adını geçiren komutları reddeder, ama bu bir kuraldır, duvar değil. **Komutlar** varsayılan olarak açıktır. Onları uygulamanın sorusunda **İzin ver**'e basmadan önce ya da daha sonra **Tercihler\u00a0›\u00a0Araçlar** içinde kapatın. Orada her çalışma alanının kendi anahtarı vardır (uygulama 0.8.1 ve sonrası) ve uygulama birini yeniden açmadan önce sorar. Claude Code ve Codex, Komutlar kapalıyken bile kendi komutlarını ajanın klasöründe, kendi kurallarıyla çalıştırır.",
           "Gerçek bir duvar için bir Linux sunucu kullanın. Debian 13'te `--system` ile kurulduğunda her ajan ayrı bir kullanıcıdır. Ubuntu'da ajanlar tek bir kullanıcıyı, `agentes` kullanıcısını paylaşır: birbirlerinin klasörlerini görürler, sizinkileri ya da sunucununkileri görmezler. Ya da ajanlara kendilerine ait bir bilgisayar verin.",
         ],
       },
@@ -236,14 +236,14 @@ export const helpTr: Partial<Record<HelpSlug, HelpDocument>> = {
         id: "own",
         heading: "Kendi bilgisayarlarınız ve telefonlarınız",
         blocks: [
-          "Ajanlar getirdiğiniz bilgisayarlarda ve telefonlarda da çalışabilir: agentes.chat uygulamalı bir Mac ya da PC, bir sunucu, bir Android telefon ya da bir iPhone. [Getirdiğiniz bilgisayarlar ve telefonlar](/help/computers) sayfasına bakın.",
+          "Ajanlar getirdiğiniz bilgisayarlarda ve telefonlarda da çalışabilir: KeepMind OS uygulamalı bir Mac ya da PC, bir sunucu, bir Android telefon ya da bir iPhone. [Getirdiğiniz bilgisayarlar ve telefonlar](/help/computers) sayfasına bakın.",
         ],
       },
       {
         id: "plans",
         heading: "Yapay zeka planlarınız",
         blocks: [
-          "Ajanlarınız, bu bilgisayarda giriş yapılmış Claude, ChatGPT, GLM ya da Kimi gibi kendi yapay zeka planınızla düşünebilir: API anahtarı gerekmez. Hesap bu bilgisayarda kalır ve agentes.chat şifreyi ya da erişimi asla görmez.",
+          "Ajanlarınız, bu bilgisayarda giriş yapılmış Claude, ChatGPT, GLM ya da Kimi gibi kendi yapay zeka planınızla düşünebilir: API anahtarı gerekmez. Hesap bu bilgisayarda kalır ve KeepMind OS şifreyi ya da erişimi asla görmez.",
           "Google'ın AI Pro ve Ultra planları burada çalışmaz: Google'ın koşulları başka ürünlerde kullanılmalarına izin vermez. Bir Gemini API anahtarı ise çalışır.",
         ],
       },
@@ -264,7 +264,7 @@ export const helpTr: Partial<Record<HelpSlug, HelpDocument>> = {
   import: {
     title: "Ajanlarınızı getirin",
     summary:
-      "Ajanları başka bir uygulamadan ya da başka bir agentes.chat çalışma alanından talimatları, becerileri, rutinleri ve bellekleriyle birlikte getirin.",
+      "Ajanları başka bir uygulamadan ya da başka bir KeepMind OS çalışma alanından talimatları, becerileri, rutinleri ve bellekleriyle birlikte getirin.",
     sections: [
       {
         id: "comes",
@@ -435,7 +435,7 @@ export const helpTr: Partial<Record<HelpSlug, HelpDocument>> = {
             ],
           },
           "Birinin kendi posta kutusundaki bir işlem yalnızca o kişiyi bekler. Bir ajan için yeni erişim, ajanları yönetenleri bekler.",
-          "Sağ kolunuz Lodi de diğer ajanların önerdiği yeni ajanları ve bir ajanın modeli, bütçesi ve kanallarındaki değişiklikleri, yalnızca siz istediyseniz, sizin yerinize onaylayabilir. Kimin sizin yerinize baktığını ve Lodi’nin neyi onaylayacağını **Ayarlar\u00a0›\u00a0Siz\u00a0›\u00a0Onaylar** bölümünden seçersiniz.",
+          "Sağ kolunuz Kivo de diğer ajanların önerdiği yeni ajanları ve bir ajanın modeli, bütçesi ve kanallarındaki değişiklikleri, yalnızca siz istediyseniz, sizin yerinize onaylayabilir. Kimin sizin yerinize baktığını ve Kivo’nin neyi onaylayacağını **Ayarlar\u00a0›\u00a0Siz\u00a0›\u00a0Onaylar** bölümünden seçersiniz.",
         ],
       },
       {
@@ -452,7 +452,7 @@ export const helpTr: Partial<Record<HelpSlug, HelpDocument>> = {
   },
   "who-answers": {
     title: "Bir mesajı kim yanıtlar",
-    summary: "Bir bahsetme ajanı seçer. Bahsetme yoksa agentes.chat sizin için bu sırayla seçer.",
+    summary: "Bir bahsetme ajanı seçer. Bahsetme yoksa KeepMind OS sizin için bu sırayla seçer.",
     sections: [
       {
         id: "order",
@@ -474,7 +474,7 @@ export const helpTr: Partial<Record<HelpSlug, HelpDocument>> = {
         id: "jev",
         heading: "Jev",
         blocks: [
-          "Çalışma alanınızı agentes.chat barındırıyorsa Jev dahildir. Kendi çalıştırdığınız bir sunucuda sahibin TypeSafe anahtarını kullanır, mesaj başına yaklaşık US$ 0,0001: [Jev'i kurun](/help/jev#setup).",
+          "Çalışma alanınızı KeepMind OS barındırıyorsa Jev dahildir. Kendi çalıştırdığınız bir sunucuda sahibin TypeSafe anahtarını kullanır, mesaj başına yaklaşık US$ 0,0001: [Jev'i kurun](/help/jev#setup).",
         ],
       },
       {
@@ -533,7 +533,7 @@ export const helpTr: Partial<Record<HelpSlug, HelpDocument>> = {
               "https://console.typesafe.ai adresini açın ve Google ya da e-postanızla giriş yapın. Yeni hesap da aynı şekilde açılır.",
               "Konsolda kredi ekleyin. Jev ön ödemelidir.",
               "https://console.typesafe.ai/keys adresini açın, bir anahtar oluşturun ve hemen kopyalayın.",
-              "agentes.chat'te **Ayarlar › Yapay zeka ve kullanım** bölümünü açın ve anahtarı **Jev** altına yapıştırın. Onu yalnızca bu sunucuyu kuran kişi görür.",
+              "KeepMind OS'te **Ayarlar › Yapay zeka ve kullanım** bölümünü açın ve anahtarı **Jev** altına yapıştırın. Onu yalnızca bu sunucuyu kuran kişi görür.",
             ],
           },
           "Docker ile çalıştırdığınız bir sunucuda anahtarı bunun yerine `.env` dosyasına `TYPESAFE_API_KEY` olarak koyabilirsiniz. Bu anahtar, Ayarlar'dakinin önüne geçer.",
@@ -591,14 +591,14 @@ export const helpTr: Partial<Record<HelpSlug, HelpDocument>> = {
   "apps-de-ia": {
     title: "Yapay zeka uygulamaları",
     summary:
-      "Claude, Cursor ya da başka bir MCP uygulamasından çıkmadan agentes.chat ajanlarına görev verin ve yanıtı orada alın.",
+      "Claude, Cursor ya da başka bir MCP uygulamasından çıkmadan KeepMind OS ajanlarına görev verin ve yanıtı orada alın.",
     sections: [
       {
         id: "what",
         heading: "Nasıl çalışır",
         blocks: [
-          "agentes.chat bir MCP sunucusudur. Adresini yapay zeka uygulamanıza yapıştırır, hesabınızla giriş yapar ve bir çalışma alanı seçersiniz. Bundan sonra uygulama ajanları ve kanalları listeleyebilir, sizin adınıza bir ajana görev gönderebilir, yanıtı bekleyebilir ve son görevleri okuyabilir.",
-          "Örneğin Unity ya da Blender'da bir sahnenin ortasında Claude'a şunu söyleyin: \"Pazarlama ajanından bir lansman metni iste\". Mesaj agentes.chat'te sizin mesajınız olarak, **Claude üzerinden** işaretiyle görünür ve ajanın yanıtı Claude'a geri gelir.",
+          "KeepMind OS bir MCP sunucusudur. Adresini yapay zeka uygulamanıza yapıştırır, hesabınızla giriş yapar ve bir çalışma alanı seçersiniz. Bundan sonra uygulama ajanları ve kanalları listeleyebilir, sizin adınıza bir ajana görev gönderebilir, yanıtı bekleyebilir ve son görevleri okuyabilir.",
+          "Örneğin Unity ya da Blender'da bir sahnenin ortasında Claude'a şunu söyleyin: \"Pazarlama ajanından bir lansman metni iste\". Mesaj KeepMind OS'te sizin mesajınız olarak, **Claude üzerinden** işaretiyle görünür ve ajanın yanıtı Claude'a geri gelir.",
           "Adres **Ayarlar › Yapay zeka uygulamaları** bölümündedir. Sonu `/mcp` ile biter.",
         ],
       },
@@ -608,14 +608,14 @@ export const helpTr: Partial<Record<HelpSlug, HelpDocument>> = {
         blocks: [
           {
             list: [
-              "**Claude** (claude.ai, Claude Desktop ve telefon): **Customize › Connectors** içinde **+ Add**'e, ardından **Add custom connector**'a tıklayın, adını agentes.chat koyun, adresi yapıştırın ve **Continue**'ya tıklayın. **Sign in now** seçeneğini seçin, **Add**'e tıklayın ve yetki verin. Team ve Enterprise planlarında bağlayıcıyı Claude organizasyonunun Owner'ı Organization settings › Connectors içinden ekler ve her kişi Customize › Connectors içinde **Connect**'e tıklar. Claude'un ücretsiz planında bir özel bağlayıcıya yer vardır.",
+              "**Claude** (claude.ai, Claude Desktop ve telefon): **Customize › Connectors** içinde **+ Add**'e, ardından **Add custom connector**'a tıklayın, adını KeepMind OS koyun, adresi yapıştırın ve **Continue**'ya tıklayın. **Sign in now** seçeneğini seçin, **Add**'e tıklayın ve yetki verin. Team ve Enterprise planlarında bağlayıcıyı Claude organizasyonunun Owner'ı Organization settings › Connectors içinden ekler ve her kişi Customize › Connectors içinde **Connect**'e tıklar. Claude'un ücretsiz planında bir özel bağlayıcıya yer vardır.",
               "**Claude Code:** `claude mcp add --transport http --scope user agentes <address>` komutunu çalıştırın, ardından `/mcp` yazın, agentes'i seçin ve **Authenticate**'e tıklayın. Yalnızca geçerli klasör için `--scope user` kısmını çıkarın.",
               "**Cursor:** **Ayarlar › Yapay zeka uygulamaları** içindeki **Cursor'a ekle** ya da adresi `~/.cursor/mcp.json` dosyasına ekleyin. Cursor ilk kullanımda giriş yapmanızı ister.",
               '**VS Code:** **VS Code\'a ekle** ya da adresi `"type": "http"` ile `.vscode/mcp.json` dosyasına ekleyin.',
               "**Diğer uygulamalar:** ChatGPT, Gemini, Grok, Perplexity, Codex, Zed, JetBrains ve daha fazlasının adımları, adresiniz önceden doldurulmuş olarak **Uygulama bağla** içinde.",
             ],
           },
-          "Giriş yaptığınızda agentes.chat, erişimi hangi uygulamanın istediğini ve nereye döneceğini gösterir. Yalnızca bağlantıyı az önce siz başlattıysanız devam edin.",
+          "Giriş yaptığınızda KeepMind OS, erişimi hangi uygulamanın istediğini ve nereye döneceğini gösterir. Yalnızca bağlantıyı az önce siz başlattıysanız devam edin.",
         ],
       },
       {
@@ -632,7 +632,7 @@ export const helpTr: Partial<Record<HelpSlug, HelpDocument>> = {
               "`list_recent_tasks`: uygulamalardan gönderdiğiniz görevler ve ajanların şu anda yaptıkları.",
             ],
           },
-          "Uygulama sizin adınıza hareket eder ve yalnızca sizin gördüklerinizi görür. Ajanların işlemlerini asla onaylamaz: bir ajan onay istemek için durduğunda yanıt bunu bir bağlantıyla söyler ve kararı agentes.chat'te bir kişi verir. Ayarları, üyeleri ya da izinleri de değiştirmez.",
+          "Uygulama sizin adınıza hareket eder ve yalnızca sizin gördüklerinizi görür. Ajanların işlemlerini asla onaylamaz: bir ajan onay istemek için durduğunda yanıt bunu bir bağlantıyla söyler ve kararı KeepMind OS'te bir kişi verir. Ayarları, üyeleri ya da izinleri de değiştirmez.",
         ],
       },
       {
@@ -668,7 +668,7 @@ export const helpTr: Partial<Record<HelpSlug, HelpDocument>> = {
         id: "safety",
         heading: "Başkalarının metinleri",
         blocks: [
-          "Yanıtlar, agentes.chat'teki ajanların ve kişilerin yazdığı metinleri taşır. Uygulama bu metinleri talimat olarak değil içerik olarak işaretlenmiş şekilde alır, ama bir metin yine de uygulamayı başka bir şeye ikna etmeye çalışabilir. Onaylamadan önce uygulamanızın ne yapmak üzere olduğunu kontrol edin.",
+          "Yanıtlar, KeepMind OS'teki ajanların ve kişilerin yazdığı metinleri taşır. Uygulama bu metinleri talimat olarak değil içerik olarak işaretlenmiş şekilde alır, ama bir metin yine de uygulamayı başka bir şeye ikna etmeye çalışabilir. Onaylamadan önce uygulamanızın ne yapmak üzere olduğunu kontrol edin.",
         ],
       },
       {
@@ -687,9 +687,9 @@ export const helpTr: Partial<Record<HelpSlug, HelpDocument>> = {
     ],
   },
   "install-on-a-server": {
-    title: "agentes.chat'i bir sunucuya kurun",
+    title: "KeepMind OS'i bir sunucuya kurun",
     summary:
-      "agentes.chat'i kendi sunucunuzda, ücretsiz, tüm ekibiniz için çalıştırın. Tek bir komut her şeyi hazırlar.",
+      "KeepMind OS'i kendi sunucunuzda, ücretsiz, tüm ekibiniz için çalıştırın. Tek bir komut her şeyi hazırlar.",
     sections: [
       {
         id: "choose",
@@ -697,7 +697,7 @@ export const helpTr: Partial<Record<HelpSlug, HelpDocument>> = {
         blocks: [
           {
             list: [
-              "**agentes.chat Cloud**: her ekip için, her yerden erişilebilir. Onu biz çalıştırır, günceller ve yedekleriz. Her çalışma alanına kendi bilgisayarı verilir ve orada her ajan ayrı bir kullanıcıdır.",
+              "**KeepMind OS Cloud**: her ekip için, her yerden erişilebilir. Onu biz çalıştırır, günceller ve yedekleriz. Her çalışma alanına kendi bilgisayarı verilir ve orada her ajan ayrı bir kullanıcıdır.",
               "**Uygulamayla kendi bilgisayarınız**: sizin ya da küçük bir ekip için, o bilgisayar açıkken erişilebilir. Açık kalan bir Mac mini iyi iş görür. Tek tıkla güncellenir, yedeğini elle alırsınız. Ajanlar o bilgisayarda sizin adınıza çalışır.",
               "**Bir sunucu**: daha büyük bir ekip için, her zaman açık. Üç komutla güncellenir ve her gün kendiliğinden yedek alabilir. Debian 13'te her ajan ayrı bir kullanıcıdır.",
             ],
@@ -711,7 +711,7 @@ export const helpTr: Partial<Record<HelpSlug, HelpDocument>> = {
         blocks: [
           {
             list: [
-              "64 bit Linux'lu bir sunucu ya da VPS, x64 veya arm64. Küçük bir ekip için 2 CPU, 4 GB bellek ve 20 GB disk iyi bir başlangıçtır. Bir Mac'te ya da PC'de [agentes.chat'i uygulama çalıştırır](/help/run-on-your-computer), Docker gerekmez.",
+              "64 bit Linux'lu bir sunucu ya da VPS, x64 veya arm64. Küçük bir ekip için 2 CPU, 4 GB bellek ve 20 GB disk iyi bir başlangıçtır. Bir Mac'te ya da PC'de [KeepMind OS'i uygulama çalıştırır](/help/run-on-your-computer), Docker gerekmez.",
               "Compose ile Docker. Linux'ta eksikse kurulum programı önce sorar, sonra kurar.",
               "Bir erişim yolu: ücretsiz bir Tailscale hesabı (varsayılan, özel, alan adı ve açık port gerekmez) ya da sunucuyu gösteren bir alan adı ve açık 80 ile 443 portları.",
             ],
@@ -724,11 +724,11 @@ export const helpTr: Partial<Record<HelpSlug, HelpDocument>> = {
         blocks: [
           "Sunucuda şunu çalıştırın:",
           {
-            code: "curl -fsSL https://agentes.chat/install | sh",
+            code: "curl -fsSL https://keepmind.io/install | sh",
           },
           "Eksikleri kurar, sonra birkaç soru sorar: insanların nasıl erişeceği, e-posta, bu sunucunun ajanlarınızın bilgisayarı da olup olmayacağı ve anonim kullanım istatistikleri gönderip göndermeyeceği. Önerilen cevap için Enter'a basın. `/opt/agentes` içine kurulur (Docker'ı zaten kullanabilen bir kullanıcı için `~/agentes`) ve ilk seferde yaklaşık 2 GB indirir.",
           "Sonunda sunucunuzun adresini ve telefonunuz için bir QR kodu gösterir. Tekrar çalıştırmak güvenlidir: ayarlarınızı korur ve yalnızca eksik olanı tamamlar.",
-          "Node.js 18 veya daha yenisi varsa, boş bir klasörde `npx @agenteschat/setup` aynı kurulumdur. Node yoksa uygulamanın imajından, geçerli klasörde çalışır ve gerisini başlatan komutlarla biter:",
+          "Node.js 18 veya daha yenisi varsa, boş bir klasörde `npx @keepmind/setup` aynı kurulumdur. Node yoksa uygulamanın imajından, geçerli klasörde çalışır ve gerisini başlatan komutlarla biter:",
           {
             code: 'docker run --rm -it --user "$(id -u):$(id -g)" -v "$PWD":/work -w /work ghcr.io/agentes-chat/agentes:latest setup',
           },
@@ -754,14 +754,14 @@ export const helpTr: Partial<Record<HelpSlug, HelpDocument>> = {
         heading: "Hesabınız",
         blocks: [
           "Sunucunuzun adresini açın ve kaydolun: ilk hesap sahip olur. Ardından kayıt kapanır ve insanlar **Ayarlar\u00a0›\u00a0Üyeler ve davetler** üzerinden gönderilen davetle katılır.",
-          "Tailscale'de davet ettiğiniz kişilerin de tailnet'inizde olması gerekir. Onları önce https://console.tailscale.com/admin/users sayfasında, sonra agentes.chat'te davet edin.",
+          "Tailscale'de davet ettiğiniz kişilerin de tailnet'inizde olması gerekir. Onları önce https://console.tailscale.com/admin/users sayfasında, sonra KeepMind OS'te davet edin.",
         ],
       },
       {
         id: "email",
         heading: "E-posta",
         blocks: [
-          "E-posta yoksa agentes.chat her e-postayı göndermek yerine günlüğüne yazar, böylece bir davet bağlantısını oradan kopyalayabilirsiniz. Parola sıfırlama kapalı kalır ve bir hesabın yeni e-postası kod ya da bağlantı olmadan hemen geçerli olur.",
+          "E-posta yoksa KeepMind OS her e-postayı göndermek yerine günlüğüne yazar, böylece bir davet bağlantısını oradan kopyalayabilirsiniz. Parola sıfırlama kapalı kalır ve bir hesabın yeni e-postası kod ya da bağlantı olmadan hemen geçerli olur.",
           {
             code: "docker compose logs agentes | grep 'email (not sent'",
           },
@@ -775,7 +775,7 @@ export const helpTr: Partial<Record<HelpSlug, HelpDocument>> = {
           {
             list: [
               "Tailscale'de telefonunuza Tailscale uygulamasını kurun ve aynı tailnet'e giriş yapın.",
-              "agentes.chat uygulamasını kurun.",
+              "KeepMind OS uygulamasını kurun.",
               "Kurulumun gösterdiği QR kodunu ya da **Ayarlar\u00a0›\u00a0Hesabınız\u00a0›\u00a0Telefonunuzda açın** içindekini tarayın. İkincisi oturumunuzu da açar.",
             ],
           },
@@ -787,9 +787,9 @@ export const helpTr: Partial<Record<HelpSlug, HelpDocument>> = {
         blocks: [
           "Kurulum bu sunucuyu ajanlarınızın bilgisayarı da yapabilir: komutları orada çalıştırır, bir tarayıcı kullanır ve dosyalarını orada tutarlar. Kurulum sorar ve sunucu bunu iyi kaldırabiliyorsa evet önerir. Debian 13'te her ajanın ekranı olan kendi kullanıcısı olur. Ubuntu'da ajanlar tek bir kullanıcıyı, `agentes` kullanıcısını paylaşır. Hayır dediyseniz kurulumu `--computer yes` ile yeniden çalıştırın:",
           {
-            code: "curl -fsSL https://agentes.chat/install | sh -s -- --computer yes",
+            code: "curl -fsSL https://keepmind.io/install | sh -s -- --computer yes",
           },
-          "agentes.chat uygulamalı bir Mac ya da başka bir sunucu gibi diğer bilgisayarlar **Ayarlar\u00a0›\u00a0Cihazlar** üzerinden bağlanır, [Bilgisayarlarınız ve telefonlarınız](/help/computers) sayfasındaki gibi. Tailscale'de önce tailnet'inize katılırlar.",
+          "KeepMind OS uygulamalı bir Mac ya da başka bir sunucu gibi diğer bilgisayarlar **Ayarlar\u00a0›\u00a0Cihazlar** üzerinden bağlanır, [Bilgisayarlarınız ve telefonlarınız](/help/computers) sayfasındaki gibi. Tailscale'de önce tailnet'inize katılırlar.",
         ],
       },
       {
@@ -815,7 +815,7 @@ export const helpTr: Partial<Record<HelpSlug, HelpDocument>> = {
         blocks: [
           "Kurulum klasöründe şunu çalıştırın:",
           {
-            code: "curl -fsSLO https://agentes.chat/install/docker-compose.yml\ndocker compose pull\ndocker compose up -d",
+            code: "curl -fsSLO https://keepmind.io/install/docker-compose.yml\ndocker compose pull\ndocker compose up -d",
           },
           "Yeni sürüm başlarken veritabanı kendini günceller. Ayarlarınızı `.env` içinde tutun ve `docker-compose.yml` dosyasını asla düzenlemeyin, çünkü her güncelleme onu değiştirir. Büyük bir sıçramadan önce yedek alın: daha yeni bir sürümün güncellediği bir veritabanı eski bir sürümde açılmaz.",
         ],
@@ -824,7 +824,7 @@ export const helpTr: Partial<Record<HelpSlug, HelpDocument>> = {
         id: "data",
         heading: "Ne gönderir",
         blocks: [
-          "Sunucu günde bir kez agentes.chat'e anonim kullanım istatistikleri gönderir: kişi, ajan sayısı, makine boyutları, kullanılan yapay zekâ token'ları ve ajanların tarayıcılarının ne kadar veri gönderip aldığı gibi sayılar. Asla mesajlar, dosyalar, adlar ya da siteler. `docker compose run --rm agentes telemetry` tam olarak ne gönderileceğini gösterir. Sahip bunu **Ayarlar\u00a0›\u00a0Genel** içinden ya da `.env` içinde `TELEMETRY=off` ile kapatır.",
+          "Sunucu günde bir kez KeepMind OS'e anonim kullanım istatistikleri gönderir: kişi, ajan sayısı, makine boyutları, kullanılan yapay zekâ token'ları ve ajanların tarayıcılarının ne kadar veri gönderip aldığı gibi sayılar. Asla mesajlar, dosyalar, adlar ya da siteler. `docker compose run --rm agentes telemetry` tam olarak ne gönderileceğini gösterir. Sahip bunu **Ayarlar\u00a0›\u00a0Genel** içinden ya da `.env` içinde `TELEMETRY=off` ile kapatır.",
           "Hata raporları, `SENTRY_DSN` ile kendi seçtiğiniz Sentry uyumlu bir sunucu ayarlamadıkça hiçbir yere gitmez. Bir rapor hatayı ve nerede olduğunu içerir, asla mesajları, e-postaları, IP adreslerini, çerezleri ya da token'ları içermez.",
         ],
       },
@@ -832,7 +832,7 @@ export const helpTr: Partial<Record<HelpSlug, HelpDocument>> = {
         id: "reference",
         heading: "Tam kılavuz",
         blocks: [
-          "Tüm ayarlar, nginx gibi kendi proxy'niz, Docker olmadan çalıştırma, kendi kendine kuran yapay zekâ ajanları için bir adım listesi ve bir şey ters gittiğinde ne yapılacağı, agentes.chat deposundaki `SELF_HOSTING.md` dosyasında.",
+          "Tüm ayarlar, nginx gibi kendi proxy'niz, Docker olmadan çalıştırma, kendi kendine kuran yapay zekâ ajanları için bir adım listesi ve bir şey ters gittiğinde ne yapılacağı, KeepMind OS deposundaki `SELF_HOSTING.md` dosyasında.",
         ],
       },
     ],

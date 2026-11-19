@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
-import { listenResumedTopic, orgTopic } from "@agenteschat/adapters";
-import { schema } from "@agenteschat/db";
+import { listenResumedTopic, orgTopic } from "@keepmind/adapters";
+import { schema } from "@keepmind/db";
 import { createLogger } from "../src/logger";
 import {
   authorizeSubscription,

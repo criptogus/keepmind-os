@@ -1,4 +1,5 @@
-import { connectorOAuthApps } from "@agenteschat/config";
+import { createRoute, z } from "@hono/zod-openapi";
+import { connectorOAuthApps } from "@keepmind/config";
 import {
   abandonComposioOAuth,
   acceptCustomSuggestion,
@@ -17,10 +18,10 @@ import {
   desktopReturnPath,
   GITHUB_APP_AUTH,
   getAgent,
-  isAgentesCloud,
   isAppReturn,
   isCustom,
   isDesktopReturn,
+  isKeepMindCloud,
   listAgentScopes,
   listConnections,
   listGitHubAppInstallations,
@@ -36,8 +37,7 @@ import {
   syncCustomTools,
   uninstallInstallation,
   withComposio,
-} from "@agenteschat/engine";
-import { createRoute, z } from "@hono/zod-openapi";
+} from "@keepmind/engine";
 import { sessionUser } from "../../auth";
 import { isExpectedError } from "../../http/errors";
 import { githubAccess } from "../github-app";
@@ -121,7 +121,7 @@ const CatalogEntry = z
       .openapi({ description: "Signs in with OAuth here: our OAuth app, the vendor's MCP OAuth, or Composio's." }),
     available: z.boolean().openapi({ description: "Can be connected on this server." }),
     soon: z.boolean().openapi({
-      description: "A one-click server whose vendor hasn't approved agentes.chat yet: listed, not connectable.",
+      description: "A one-click server whose vendor hasn't approved KeepMind OS yet: listed, not connectable.",
     }),
     via: z.literal("composio").optional().openapi({
       description:
@@ -179,7 +179,7 @@ export function connectorRoutes(deps: AppDeps) {
       tags,
       security,
       summary:
-        "Connectors agentes.chat knows (ours and one-click MCP servers), their scopes and tools; plus built-in scopes",
+        "Connectors KeepMind OS knows (ours and one-click MCP servers), their scopes and tools; plus built-in scopes",
       responses: {
         200: json(z.object({ connectors: z.array(CatalogEntry), builtinScopes: z.array(ScopeInfo) })),
         401: errors[401],
@@ -192,7 +192,7 @@ export function connectorRoutes(deps: AppDeps) {
             oauthApps,
             mail: adapters.mail,
             composio,
-            cloud: isAgentesCloud(config.PUBLIC_URL),
+            cloud: isKeepMindCloud(config.PUBLIC_URL),
           }),
           builtinScopes: Object.entries(BUILTIN_SCOPES).map(([id, s]) => ({
             id,

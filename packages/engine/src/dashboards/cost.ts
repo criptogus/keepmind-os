@@ -1,6 +1,6 @@
-import { and, type Database, eq, gte, inArray, isNotNull, schema, sql } from "@agenteschat/db";
-import { costNanoUsd, isAutoModel, modelForTier, modelInfo } from "@agenteschat/providers";
-import { isWidgetSchedule, scheduleRunsPerDay } from "@agenteschat/ui/widgets/spec";
+import { and, type Database, eq, gte, inArray, isNotNull, schema, sql } from "@keepmind/db";
+import { costNanoUsd, isAutoModel, modelForTier, modelInfo } from "@keepmind/providers";
+import { isWidgetSchedule, scheduleRunsPerDay } from "@keepmind/ui/widgets/spec";
 import { isComputerBrain } from "../brains/types";
 import { ValidationError } from "../errors";
 import { requireActiveMembership } from "../organizations";
@@ -70,7 +70,7 @@ export function typicalRefreshCost(model: string | null): number | null {
  * What a widget's refreshes cost (ADR 0135 §7).
  *
  * Runs a day (`scheduleRunsPerDay`) × the agent's average cost of a background (routine) run over its last 30 days,
- * from `usage_records` (at least 3 runs: `basis: "history"`); else its model's price (`@agenteschat/providers`
+ * from `usage_records` (at least 3 runs: `basis: "history"`); else its model's price (`@keepmind/providers`
  * catalog) for a typical refresh of 8,000 input and 1,000 output tokens (`basis: "model"`). A computer brain's plan
  * pays (`billedTo: "plan"`): no money. The person must be able to talk to the agent. The Model Gateway's budget
  * check still holds every run.

@@ -1,7 +1,7 @@
 import { afterEach, expect, test } from "bun:test";
-import { countQueries, eq, inArray, schema } from "@agenteschat/db";
-import type { ModelRequest } from "@agenteschat/providers";
-import { systemText } from "@agenteschat/providers";
+import { countQueries, eq, inArray, schema } from "@keepmind/db";
+import type { ModelRequest } from "@keepmind/providers";
+import { systemText } from "@keepmind/providers";
 import {
   addChannelMember,
   agentScopeNames,

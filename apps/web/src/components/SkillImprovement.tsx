@@ -1,6 +1,6 @@
-import { type SkillDetail, useAgents, useAiStatus, useSendDm } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { Alert, Button, Dialog, DialogBody, DialogFooter, Field, Select, Textarea } from "@agenteschat/ui";
+import { type SkillDetail, useAgents, useAiStatus, useSendDm } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { Alert, Button, Dialog, DialogBody, DialogFooter, Field, Select, Textarea } from "@keepmind/ui";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

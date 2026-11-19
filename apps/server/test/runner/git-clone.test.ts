@@ -2,7 +2,7 @@ import { afterAll, afterEach, beforeAll, expect, test } from "bun:test";
 import { execFileSync } from "node:child_process";
 import { chmodSync, existsSync, mkdirSync, readFileSync, renameSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import type { MachineReplies, MachineRequest } from "@agenteschat/adapters/machine-protocol";
+import type { MachineReplies, MachineRequest } from "@keepmind/adapters/machine-protocol";
 import {
   credentialHelper,
   directCredentialHelper,
@@ -24,7 +24,7 @@ const OTHER = { id: "0193cccc-bbbb-7ccc-8ddd-eeeeffff0002", handle: "ops", name:
 const BASE = "http://proxy.test/api/git/org/conn/";
 const TOKEN = `agtgit1.${"a".repeat(40)}.${"b".repeat(43)}`;
 const GH_TOKEN = `ghs_${"c".repeat(36)}`;
-const AUTHOR = { name: "Dev (agentes)", email: "dev@agents.agentes.chat" };
+const AUTHOR = { name: "Dev (agentes)", email: "contact@zeroagency.ai" };
 
 const dirs: string[] = [];
 let root = "";

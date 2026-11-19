@@ -1,5 +1,5 @@
-import type { Me } from "@agenteschat/client";
-import { authErrorText } from "@agenteschat/client/lib/errors";
+import type { Me } from "@keepmind/client";
+import { authErrorText } from "@keepmind/client/lib/errors";
 import type { TFunction } from "i18next";
 import type { AuthClient } from "@/auth/client";
 import type { ToastStore } from "@/lib/toast";

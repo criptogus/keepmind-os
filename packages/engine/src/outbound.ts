@@ -5,8 +5,8 @@ import {
   outboundUrlProblem,
   urlCopiesPrivateText,
   urlsIn,
-} from "@agenteschat/adapters";
-import { and, desc, eq, gt, inArray, isNull, not, or, schema, sql } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { and, desc, eq, gt, inArray, isNull, not, or, schema, sql } from "@keepmind/db";
 import type { ToolContext, ToolOutput } from "./tools/types";
 import { WEB_FETCH_TOOL, WEB_SEARCH_TOOL } from "./web-tools";
 

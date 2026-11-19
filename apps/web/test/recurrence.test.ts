@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { nextOccurrences, type RecurrenceRule } from "@agenteschat/ui";
+import { nextOccurrences, type RecurrenceRule } from "@keepmind/ui";
 import type { TFunction } from "i18next";
 import { createI18n } from "@/i18n";
 import { fromApiRule, ruleSentence, toApiRule, upcomingLabels } from "@/lib/recurrence";

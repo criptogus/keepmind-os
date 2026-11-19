@@ -5,7 +5,7 @@ import {
   type DesktopAction,
   type DesktopLookReply,
   type PubSub,
-} from "@agenteschat/adapters";
+} from "@keepmind/adapters";
 import { recordAudit } from "../audit";
 import { handedBackSince, markPageRead, requirePageRead, waitIfPersonInControl } from "../browser/handoff";
 import { agentFolderPath, MAX_PAGE_TEXT, MAX_PLAN_STEPS } from "../browser/tools";

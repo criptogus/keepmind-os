@@ -1,5 +1,5 @@
-import type { SignInProvider } from "@agenteschat/client";
 import { expoClient } from "@better-auth/expo/client";
+import type { SignInProvider } from "@keepmind/client";
 import { createAuthClient } from "better-auth/react";
 import { getRandomBytes } from "expo-crypto";
 import * as SecureStore from "expo-secure-store";

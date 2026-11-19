@@ -1,5 +1,5 @@
 import { expect } from "bun:test";
-import { and, eq, inArray, lte, schema } from "@agenteschat/db";
+import { and, eq, inArray, lte, schema } from "@keepmind/db";
 import { REFUSALS, runAuthority } from "../../src";
 import type { World } from "./harness";
 

@@ -1,5 +1,5 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, type Database, desc, type Executor, eq, gte, isNull, lt, ne, schema, sql } from "@agenteschat/db";
+import type { PubSub } from "@keepmind/adapters";
+import { and, type Database, desc, type Executor, eq, gte, isNull, lt, ne, schema, sql } from "@keepmind/db";
 import { runAuthorityById } from "./authority";
 import { readableChannelIds, requireChannelAccess } from "./channels";
 import { findMember, plainName } from "./chat-tools";

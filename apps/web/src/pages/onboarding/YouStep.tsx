@@ -1,7 +1,7 @@
-import { keys, type Me, useApi } from "@agenteschat/client";
-import { authErrorText, errorText } from "@agenteschat/client/lib/errors";
-import { WORK_AREAS, type WorkArea, type WorkAreaAnswer } from "@agenteschat/client/lib/work-area";
-import { Avatar, Button, Field, Icon, type IconName, Input, Locked, recipeOfUrl } from "@agenteschat/ui";
+import { keys, type Me, useApi } from "@keepmind/client";
+import { authErrorText, errorText } from "@keepmind/client/lib/errors";
+import { WORK_AREAS, type WorkArea, type WorkAreaAnswer } from "@keepmind/client/lib/work-area";
+import { Avatar, Button, Field, Icon, type IconName, Input, Locked, recipeOfUrl } from "@keepmind/ui";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

@@ -1,4 +1,4 @@
-import { Button, DialogFooter } from "@agenteschat/ui";
+import { Button, DialogFooter } from "@keepmind/ui";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 

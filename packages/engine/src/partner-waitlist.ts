@@ -1,6 +1,6 @@
-import type { EmailSender } from "@agenteschat/adapters";
-import { type Database, eq, schema } from "@agenteschat/db";
-import { appLocale } from "@agenteschat/i18n/locale";
+import type { EmailSender } from "@keepmind/adapters";
+import { type Database, eq, schema } from "@keepmind/db";
+import { appLocale } from "@keepmind/i18n/locale";
 import { rethrowEmailError } from "./email";
 import { ValidationError } from "./errors";
 import { enqueue } from "./outbox";

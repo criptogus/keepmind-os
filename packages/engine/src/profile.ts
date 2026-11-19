@@ -1,5 +1,5 @@
-import type { BrainTurnTimings } from "@agenteschat/adapters";
-import { currentQueryCount } from "@agenteschat/db";
+import type { BrainTurnTimings } from "@keepmind/adapters";
+import { currentQueryCount } from "@keepmind/db";
 
 export interface StageTiming {
   stage: string;

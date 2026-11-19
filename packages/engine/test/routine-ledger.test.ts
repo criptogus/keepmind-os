@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import { eq, schema } from "@agenteschat/db";
+import { eq, schema } from "@keepmind/db";
 import { closeRoutineRun, reapRoutineRuns, routineFailureCode, setRoutineActive } from "../src";
 import { type Fixture, setup } from "./fixtures";
 import {

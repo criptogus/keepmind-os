@@ -1,4 +1,4 @@
-import type { MarkId } from "@agenteschat/ui/brand/marks";
+import type { MarkId } from "@keepmind/ui/brand/marks";
 import { Image } from "expo-image";
 import { Text, View } from "react-native";
 import Svg, { Defs, LinearGradient, Path, Stop } from "react-native-svg";

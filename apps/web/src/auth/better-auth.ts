@@ -3,8 +3,8 @@ import {
   earlyAccessState,
   INVITATION_MAIL_HEADER,
   INVITATION_TOKEN_HEADER,
-} from "@agenteschat/client/lib/guards";
-import { humanCheckHeaders } from "@agenteschat/client/lib/human-check";
+} from "@keepmind/client/lib/guards";
+import { humanCheckHeaders } from "@keepmind/client/lib/human-check";
 import { createAuthClient } from "better-auth/client";
 import { announceAccountChange, leaveFor, loadAs } from "@/lib/accounts";
 import type { AuthClient, AuthResult } from "./client";

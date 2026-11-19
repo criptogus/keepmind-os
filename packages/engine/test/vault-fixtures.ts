@@ -5,8 +5,8 @@ import {
   type VaultSource,
   VaultSourceError,
   type VaultSourceItem,
-} from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
 import {
   addChannelMember,
   createAgent,

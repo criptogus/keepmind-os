@@ -6,10 +6,10 @@ import {
   useChannelPermissions,
   useRoles,
   useSetChannelPermission,
-} from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { grants, isEveryone, sortRoles } from "@agenteschat/client/lib/roles";
-import { Avatar, Button, Icon, RoleMark, SearchSelect, Segmented } from "@agenteschat/ui";
+} from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { grants, isEveryone, sortRoles } from "@keepmind/client/lib/roles";
+import { Avatar, Button, Icon, RoleMark, SearchSelect, Segmented } from "@keepmind/ui";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useOrg } from "@/components/org-context";

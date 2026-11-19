@@ -2,9 +2,9 @@ import { afterEach, expect, test } from "bun:test";
 import { spawn } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { accountCodeAad } from "@agenteschat/adapters/machine-protocol";
-import { cutAtWord } from "@agenteschat/adapters/redact";
-import { sealSecret } from "@agenteschat/adapters/secret-box";
+import { accountCodeAad } from "@keepmind/adapters/machine-protocol";
+import { cutAtWord } from "@keepmind/adapters/redact";
+import { sealSecret } from "@keepmind/adapters/secret-box";
 import {
   ACCOUNT_SIGNED_OUT,
   type AccountFolders,

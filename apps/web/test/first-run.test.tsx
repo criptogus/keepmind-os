@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { ApiError } from "@agenteschat/client";
+import { ApiError } from "@keepmind/client";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import {
   ADA_ID,
@@ -99,7 +99,7 @@ describe("the first-run checklist", () => {
     // The link isn't minted: the click is all this test follows, never a page left.
     state.billingLinkError = new ApiError(503, "billing.unavailable", "Billing is down");
     const api = createFakeApi(state);
-    // agentes.chat Cloud, where each workspace's own computer waits for the plan: only there is a hold.
+    // KeepMind OS Cloud, where each workspace's own computer waits for the plan: only there is a hold.
     fakeMachinesOf.get(api)?.setSetup({ state: null });
     await renderApp(`/org/${ORG_ID}/dm/agent/${LODI_ID}`, { api });
     await settle(12);

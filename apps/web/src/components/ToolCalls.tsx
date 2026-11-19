@@ -6,9 +6,9 @@ import {
   type ScreenKind,
   useCatalog,
   useRun,
-} from "@agenteschat/client";
-import type { Activity, ActivityKind } from "@agenteschat/client/lib/activity";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
+} from "@keepmind/client";
+import type { Activity, ActivityKind } from "@keepmind/client/lib/activity";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
 import {
   appKey,
   callLogo,
@@ -33,8 +33,8 @@ import {
   workFromSteps,
   workMeta,
   workSteps,
-} from "@agenteschat/client/lib/work";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client/lib/work";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import {
   type AgentColor,
   Icon,
@@ -43,7 +43,7 @@ import {
   ToolBlock,
   type ToolBlockItem,
   type ToolBlockLine,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import type { TFunction } from "i18next";
 import { type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";

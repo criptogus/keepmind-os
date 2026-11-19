@@ -1,8 +1,8 @@
-import { type TrashedArtifact, useArtifactTrash } from "@agenteschat/client";
-import { daysLeft } from "@agenteschat/client/lib/drive";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { relativeTime } from "@agenteschat/client/lib/format";
-import { Button, Chip, Dialog, DialogFooter, EmptyState, Icon } from "@agenteschat/ui";
+import { type TrashedArtifact, useArtifactTrash } from "@keepmind/client";
+import { daysLeft } from "@keepmind/client/lib/drive";
+import { errorText } from "@keepmind/client/lib/errors";
+import { relativeTime } from "@keepmind/client/lib/format";
+import { Button, Chip, Dialog, DialogFooter, EmptyState, Icon } from "@keepmind/ui";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useApi } from "@/api/context";

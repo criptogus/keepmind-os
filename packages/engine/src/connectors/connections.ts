@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
-import type { KeyWrapper } from "@agenteschat/adapters";
-import { and, asc, type Database, type Executor, eq, isNull, lt, ne, or, schema, sql } from "@agenteschat/db";
+import type { KeyWrapper } from "@keepmind/adapters";
+import { and, asc, type Database, type Executor, eq, isNull, lt, ne, or, schema, sql } from "@keepmind/db";
 import { StreamableHTTPError } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { type AuditEntry, recordAudit } from "../audit";
 import { caches } from "../cache";

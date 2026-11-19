@@ -1,4 +1,4 @@
-import type { FormerAgent } from "@agenteschat/client";
+import type { FormerAgent } from "@keepmind/client";
 import {
   useAgentGroups,
   useAiStatus,
@@ -6,12 +6,12 @@ import {
   useFormerAgents,
   useTeam,
   useUnarchiveAgent,
-} from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { can, makesAgents } from "@agenteschat/client/lib/permissions";
-import { isRightHand } from "@agenteschat/client/lib/right-hand";
-import { Button, Card, EmptyState, Icon, PageHeader, Segmented } from "@agenteschat/ui";
+} from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { can, makesAgents } from "@keepmind/client/lib/permissions";
+import { isRightHand } from "@keepmind/client/lib/right-hand";
+import { Button, Card, EmptyState, Icon, PageHeader, Segmented } from "@keepmind/ui";
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -22,6 +22,7 @@ import { useOrg } from "@/components/org-context";
 import { TeamChart } from "@/components/team/TeamChart";
 import { TeamList } from "@/components/team/TeamList";
 import { TeamMap } from "@/components/team/TeamMap";
+import { TeamNow } from "@/components/team/TeamNow";
 import { TeamSectors } from "@/components/team/TeamSectors";
 import { TeamUsage } from "@/components/team/TeamUsage";
 import { useDirectory } from "@/hooks/useDirectory";
@@ -80,9 +81,22 @@ export function TeamPage() {
   const look = useRightHandLook();
   // Its words match its button: one who may not make agents now (a workspace being deleted) reads a viewer's.
   const maker = makesAgents(org);
+  // The right hand's DM is the interview's front door: "tell it what you need" lands there and sends the starter.
+  const rightHand = dir.agents.find(isRightHand);
   // The empty state takes over the head's buttons: one way in, in the middle of the page.
   const makes = maker && (
     <>
+      {rightHand && (
+        <Button variant="ghost" icon="edit" asChild>
+          <Link
+            to="/org/$orgId/dm/agent/$agentId"
+            params={{ orgId: org.id, agentId: rightHand.id }}
+            search={{ say: "team" }}
+          >
+            {t("team.askKivo", { name: rightHand.name })}
+          </Link>
+        </Button>
+      )}
       <Button asChild icon="archiveBox">
         <Link to="/org/$orgId/settings/$section" params={{ orgId: org.id, section: "import" }}>
           {t("shell.importAgents")}
@@ -112,6 +126,7 @@ export function TeamPage() {
           options={VIEWS.map((v) => ({ value: v, label: t(`team.view.${v}`) }))}
         />
       </PageHeader>
+      {data && agents.length > 0 && <TeamNow />}
       {view !== "usage" &&
         (team.isLoading || (data && agents.length > 0 && !lookupFailed && lookups.some((q) => q.isPending))) && (
           <LoadingCards count={2} />

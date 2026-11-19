@@ -11,9 +11,9 @@ import {
   type PushSender,
   type RealtimeEvent,
   userTopic,
-} from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
-import { LOCALE_CODES } from "@agenteschat/i18n/locale";
+} from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
+import { LOCALE_CODES } from "@keepmind/i18n/locale";
 import { unplainLeaves } from "../../i18n/test/plain-marks";
 import {
   addChannelMember,
@@ -292,14 +292,14 @@ describe("push delivery", () => {
     const sent = (to: string) => push.sent.filter((p) => p.to === to).map((p) => [p.title, p.body, p.data?.kind]);
     expect(sent(TOKEN_BIA)).toEqual([
       [
-        "KeepMind",
+        "Kivo",
         "Você acabou de entrar na Acme. Do que você cuida por aqui? Me conta e eu monto seu primeiro agente com você.",
         "dm",
       ],
     ]);
     expect(sent(TOKEN_BIA_EN)).toEqual([
       [
-        "KeepMind",
+        "Kivo",
         "You just joined Acme. What do you look after here? Tell me and I set up your first agent with you.",
         "dm",
       ],
@@ -1023,7 +1023,7 @@ describe("VAPID keys", () => {
     f = await setup();
     const pinned = await vapidKeys(f.db, [f.keyWrapper], {
       PUBLIC_URL: "http://localhost:3000",
-      EMAIL_FROM: "agentes.chat <ops@example.com>",
+      EMAIL_FROM: "KeepMind OS <ops@example.com>",
       WEB_PUSH_VAPID_PUBLIC_KEY: "pub",
       WEB_PUSH_VAPID_PRIVATE_KEY: "priv",
     });
@@ -1042,7 +1042,7 @@ describe("VAPID keys", () => {
     for (const url of ["http://localhost:3000", "https://localhost", "https://agentes.local", "https://192.168.1.10"])
       expect(subject(url)).toBe(VAPID_FALLBACK_SUBJECT);
     expect(subject("http://chat.acme.com")).toBe(VAPID_FALLBACK_SUBJECT);
-    expect(subject("http://localhost:3000", "agentes.chat <ping@localhost>")).toBe(VAPID_FALLBACK_SUBJECT);
+    expect(subject("http://localhost:3000", "KeepMind OS <ping@localhost>")).toBe(VAPID_FALLBACK_SUBJECT);
     expect(subject("http://localhost:3000", "Ops <ops@acme.com>")).toBe("mailto:ops@acme.com");
     expect(subject("http://localhost:3000", "not an address")).toBe(VAPID_FALLBACK_SUBJECT);
   });

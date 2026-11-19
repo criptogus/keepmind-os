@@ -1,4 +1,4 @@
-import { and, type Executor, eq, inArray, isNull, schema, sql } from "@agenteschat/db";
+import { and, type Executor, eq, inArray, isNull, schema, sql } from "@keepmind/db";
 import { answersOthers, audienceChanged, audienceOf, canTalkTo, speakerOf } from "./audience";
 import { isComputerBrain } from "./brains/types";
 import { caches } from "./cache";

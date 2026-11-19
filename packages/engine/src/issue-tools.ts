@@ -1,4 +1,4 @@
-import { and, eq, inArray, isNull, schema, sql } from "@agenteschat/db";
+import { and, eq, inArray, isNull, schema, sql } from "@keepmind/db";
 import { type ActionRecord, type AgentActionParams, actWithUndo } from "./agent-actions";
 import { issueDiff, issueSnapshot } from "./agent-undo";
 import { currentHandles } from "./agents";

@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
@@ -106,7 +106,7 @@ test("Preferences › Servers: the server on the Tailscale network by Tailscale'
       ]);
       expect(rows).toEqual([
         ["agentes.tail1234.ts.net", "dk-tailscale"],
-        ["agentes.chat", "ac-icon"],
+        ["keepmind.io", "ac-icon"],
       ]);
       // Jev's key is a server's own: nothing about it for one this app only opens.
       expect(el.textContent).not.toContain("Jev");

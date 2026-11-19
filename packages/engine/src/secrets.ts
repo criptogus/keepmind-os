@@ -1,5 +1,5 @@
-import type { PubSub, SecretRequest } from "@agenteschat/adapters";
-import { parseSecretBox, SECRET_NAME, type SecretTarget, SITE_SECRET_TTL_MS, secretAad } from "@agenteschat/adapters";
+import type { PubSub, SecretRequest } from "@keepmind/adapters";
+import { parseSecretBox, SECRET_NAME, type SecretTarget, SITE_SECRET_TTL_MS, secretAad } from "@keepmind/adapters";
 import {
   and,
   type Database,
@@ -14,7 +14,7 @@ import {
   or,
   schema,
   sql,
-} from "@agenteschat/db";
+} from "@keepmind/db";
 import { getAgentCached } from "./agents";
 import { recordAudit } from "./audit";
 import { consultedFor } from "./consultations";

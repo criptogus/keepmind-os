@@ -9,9 +9,9 @@ import {
   orgTopic,
   type ServerFrame,
   STREAM_CLOSE,
-} from "@agenteschat/adapters";
-import { and, eq, rowsOf, schema, sql } from "@agenteschat/db";
-import { createTestDatabase } from "@agenteschat/db/testing";
+} from "@keepmind/adapters";
+import { and, eq, rowsOf, schema, sql } from "@keepmind/db";
+import { createTestDatabase } from "@keepmind/db/testing";
 import { Glob } from "bun";
 import {
   agentBrainSummaries,
@@ -147,7 +147,7 @@ describe("a workspace being deleted is read-only", () => {
     const deps = { db: f.db, pubsub: f.pubsub };
     const computer = await pairMachine(deps, f.owner.id, f.org.id, { name: "MacBook" });
     const comeBack = await startDeviceCode(
-      { db: f.db, publicUrl: "https://agentes.chat" },
+      { db: f.db, publicUrl: "https://keepmind.io" },
       {
         name: "MacBook",
         os: "linux",

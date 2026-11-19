@@ -23,7 +23,7 @@ import { organizations } from "./tenancy";
 /**
  * An organization's connection to an MCP server (layer 1 of ADR 0016: the org
  * connects once; agents get subsets of its scopes in `agent_scopes`).
- * `connector` is a key of the catalog in `@agenteschat/engine`
+ * `connector` is a key of the catalog in `@keepmind/engine`
  * (`CONNECTOR_CATALOG`), which maps each tool to one of our scopes.
  * Credentials (OAuth tokens or an API key, as JSON) are envelope-encrypted
  * like provider credentials and bound to (org_id, id). One active connection
@@ -141,7 +141,7 @@ export const oauthStates = pgTable(
 );
 
 /**
- * OAuth clients agentes.chat registered with an MCP server's authorization
+ * OAuth clients KeepMind OS registered with an MCP server's authorization
  * server (Dynamic Client Registration, RFC 7591), one per org and issuer.
  * A client secret, when the server issues one, is sealed like other secrets.
  */

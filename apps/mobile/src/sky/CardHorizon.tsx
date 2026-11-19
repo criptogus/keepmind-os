@@ -1,12 +1,12 @@
-import type { AgentColorName } from "@agenteschat/ui/agent/engine";
+import type { AgentColorName } from "@keepmind/ui/agent/engine";
 import {
   HORIZON_CELL as CELL,
   horizonCrest,
   horizonHeight,
   horizonTones,
   HORIZON_WAVE as WAVE,
-} from "@agenteschat/ui/sky/horizon";
-import { bayerAt } from "@agenteschat/ui/sky/math";
+} from "@keepmind/ui/sky/horizon";
+import { bayerAt } from "@keepmind/ui/sky/math";
 import { Canvas, Path, Skia } from "@shopify/react-native-skia";
 import { useMemo } from "react";
 import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";

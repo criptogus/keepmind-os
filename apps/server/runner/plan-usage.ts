@@ -6,8 +6,8 @@ import {
   type PlanUsage,
   type PlanWindow,
   type PlanWindowKind,
-} from "@agenteschat/adapters/machine-protocol";
-import { type PlanId, planOf } from "@agenteschat/providers/plans";
+} from "@keepmind/adapters/machine-protocol";
+import { type PlanId, planOf } from "@keepmind/providers/plans";
 import { killTree } from "./exec";
 import { cliSpawn } from "./executors";
 

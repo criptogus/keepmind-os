@@ -1,4 +1,4 @@
-import type { AgentAction, AgentActionKind, AgentActionTarget } from "@agenteschat/client";
+import type { AgentAction, AgentActionKind, AgentActionTarget } from "@keepmind/client";
 import type { IconName } from "@/ui";
 import { type AppHref, chatHref, routineHref } from "../links/logic";
 import { isSafeId } from "../shared/logic";
@@ -70,4 +70,4 @@ export function groupStart(list: readonly AgentAction[]): string | null {
   return first;
 }
 
-export { boldRuns } from "@agenteschat/client/lib/actions";
+export { boldRuns } from "@keepmind/client/lib/actions";

@@ -1,4 +1,4 @@
-import { useApi } from "@agenteschat/client";
+import { useApi } from "@keepmind/client";
 import { type Href, useLocalSearchParams } from "expo-router";
 import { useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";

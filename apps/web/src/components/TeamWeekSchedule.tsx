@@ -3,9 +3,9 @@ import {
   type LodiPrefsPatch,
   type TeamWeekPeriod,
   teamWeekOn,
-} from "@agenteschat/client/lib/right-hand-prefs";
-import { dayText, hourText } from "@agenteschat/client/lib/team-week";
-import { Button, Select } from "@agenteschat/ui";
+} from "@keepmind/client/lib/right-hand-prefs";
+import { dayText, hourText } from "@keepmind/client/lib/team-week";
+import { Button, Select } from "@keepmind/ui";
 import { useTranslation } from "react-i18next";
 
 /**

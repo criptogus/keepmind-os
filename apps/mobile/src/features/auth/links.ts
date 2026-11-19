@@ -1,4 +1,4 @@
-import { earlyAccessToken, invitationMailProof } from "@agenteschat/client/lib/guards";
+import { earlyAccessToken, invitationMailProof } from "@keepmind/client/lib/guards";
 
 /** An invitation token from a link: what the server issues (url-safe base64), nothing else. Pure. */
 export const isInviteToken = (value: unknown): value is string =>

@@ -64,7 +64,7 @@ export const stepIndex = (id: OnboardingStepId) => ONBOARDING_STEPS.findIndex((s
 /**
  * The onboarding's steps on the rail (ADR 0162), web and phone: the workspace's name, what it does, the person
  * (`you`: their name, their photo and their own area; the web's only, amended 2026-11-12), its team (its agents), the
- * plan (agentes.chat Cloud), connecting an AI and, last, inviting people (`people`: the web's team rail only, amended
+ * plan (KeepMind OS Cloud), connecting an AI and, last, inviting people (`people`: the web's team rail only, amended
  * 2026-11-11). A personal workspace (ADR 0159) has no "what it does" step: its name step is the purpose question. The
  * phone lists neither the person's step, the AI step, the people step nor a personal path (`railState`'s `funnel`).
  */

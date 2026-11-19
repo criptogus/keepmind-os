@@ -1,4 +1,4 @@
-import { previewBody } from "@agenteschat/client/lib/message-body";
+import { previewBody } from "@keepmind/client/lib/message-body";
 import { useTranslation } from "react-i18next";
 import { Pressable, type StyleProp, StyleSheet, type ViewStyle } from "react-native";
 import Animated, { type AnimatedStyle } from "react-native-reanimated";

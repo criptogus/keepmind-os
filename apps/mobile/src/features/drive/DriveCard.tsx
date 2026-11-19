@@ -1,4 +1,4 @@
-import { type Artifact, useArtifact } from "@agenteschat/client";
+import { type Artifact, useArtifact } from "@keepmind/client";
 import { Image } from "expo-image";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";

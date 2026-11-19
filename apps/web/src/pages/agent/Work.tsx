@@ -1,4 +1,4 @@
-import type { BrainKind, Machine } from "@agenteschat/client";
+import type { BrainKind, Machine } from "@keepmind/client";
 import {
   DESKTOP_TOOL_SCOPE,
   profilesApply,
@@ -11,12 +11,12 @@ import {
   useModels,
   useSetComputerTarget,
   useUpdateAgentBrowserSettings,
-} from "@agenteschat/client";
-import { saveLevels } from "@agenteschat/client/lib/access-levels";
-import type { BrainScreen } from "@agenteschat/client/lib/agent-edit";
-import { ownSignInName } from "@agenteschat/client/lib/ai-accounts";
-import { effortOf } from "@agenteschat/client/lib/brain-advanced";
-import { computerNameOf, setupPortrait, WORKSPACE_COMPUTER_KIND } from "@agenteschat/client/lib/computer";
+} from "@keepmind/client";
+import { saveLevels } from "@keepmind/client/lib/access-levels";
+import type { BrainScreen } from "@keepmind/client/lib/agent-edit";
+import { ownSignInName } from "@keepmind/client/lib/ai-accounts";
+import { effortOf } from "@keepmind/client/lib/brain-advanced";
+import { computerNameOf, setupPortrait, WORKSPACE_COMPUTER_KIND } from "@keepmind/client/lib/computer";
 import {
   allowsInApp,
   commandInReason,
@@ -24,20 +24,13 @@ import {
   computerState,
   machineReasonText,
   toolOnCommand,
-} from "@agenteschat/client/lib/machines";
-import {
-  type AiChoice,
-  aiChoiceOf,
-  aiStateOf,
-  planLabel,
-  planMark,
-  planOfAccount,
-} from "@agenteschat/client/lib/no-ai";
-import { can as canDo } from "@agenteschat/client/lib/permissions";
-import { brainModelChoice, brainModelChoices, isPlanId, planOf } from "@agenteschat/client/lib/plans";
-import { apiProviderOf, isAuto } from "@agenteschat/client/lib/providers";
-import { cleanSite, SITE } from "@agenteschat/client/lib/sites";
-import { isPersonal, modeKey } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client/lib/machines";
+import { type AiChoice, aiChoiceOf, aiStateOf, planLabel, planMark, planOfAccount } from "@keepmind/client/lib/no-ai";
+import { can as canDo } from "@keepmind/client/lib/permissions";
+import { brainModelChoice, brainModelChoices, isPlanId, planOf } from "@keepmind/client/lib/plans";
+import { apiProviderOf, isAuto } from "@keepmind/client/lib/providers";
+import { cleanSite, SITE } from "@keepmind/client/lib/sites";
+import { isPersonal, modeKey } from "@keepmind/client/lib/workspace-mode";
 import {
   Button,
   ComputerPortrait,
@@ -53,7 +46,7 @@ import {
   OptionList,
   ProviderLogo,
   SettingNote,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { Link } from "@tanstack/react-router";
 import { type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";

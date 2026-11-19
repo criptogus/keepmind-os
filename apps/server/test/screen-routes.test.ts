@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, expect, test } from "bun:test";
-import { and, eq, schema } from "@agenteschat/db";
+import { and, eq, schema } from "@keepmind/db";
 import { browser, createTestServer, pairComputer, seedOrg, signUp, type TestServer } from "./harness";
 
 let t: TestServer;

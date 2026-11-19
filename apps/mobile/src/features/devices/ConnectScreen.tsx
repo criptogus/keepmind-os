@@ -1,6 +1,6 @@
-import type { ConnectLink } from "@agenteschat/client";
-import { newComputerOf } from "@agenteschat/client/lib/devices";
-import { errorText } from "@agenteschat/client/lib/errors";
+import type { ConnectLink } from "@keepmind/client";
+import { newComputerOf } from "@keepmind/client/lib/devices";
+import { errorText } from "@keepmind/client/lib/errors";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Platform, StyleSheet, View } from "react-native";

@@ -1,11 +1,11 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { type AccessInput, type ConnectorDef, keys } from "@agenteschat/client";
-import { connectedSummary } from "@agenteschat/client/lib/connected";
-import { icons } from "@agenteschat/ui";
+import { type AccessInput, type ConnectorDef, keys } from "@keepmind/client";
+import { connectedSummary } from "@keepmind/client/lib/connected";
+import { icons } from "@keepmind/ui";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import type { TFunction } from "i18next";
 import { authKind, searchCatalog } from "@/components/ConnectorCatalog";
@@ -47,7 +47,7 @@ const levels = (inside: HTMLElement, groups: string[]) =>
         .queryAllByRole("radio")
         .find((r) => r.getAttribute("aria-checked") === "true")?.textContent ?? null,
   );
-/** A backend whose catalog also lists Asana as the server does today: its vendor hasn't approved agentes.chat yet. */
+/** A backend whose catalog also lists Asana as the server does today: its vendor hasn't approved KeepMind OS yet. */
 const withSoonAsana = (state: FakeState) => {
   const api = createFakeApi(state);
   const asana: ConnectorDef = {
@@ -161,7 +161,9 @@ describe("Adicionar conector: one catalog", () => {
     // No grid behind it, not even "Não achou?": the empty state carries the way in.
     expect(names(dialog)).toEqual([]);
     const box = empty() as HTMLElement;
-    expect(box.querySelector(".ac-empty__art[aria-hidden='true'] canvas.ac-searchpx")).not.toBeNull();
+    expect(
+      box.querySelector(".ac-empty__art[aria-hidden='true'] .km-searching canvas.ac-sticker[data-mood='thinking']"),
+    ).not.toBeNull();
     expect(box.querySelector(".ac-empty__title")?.textContent).toBe("Nenhum conector com “zzz”");
     expect(box.querySelector(".ac-empty__text")?.textContent).toBe(
       "Você pode conectar qualquer serviço pelo endereço dele.",
@@ -183,7 +185,7 @@ describe("Adicionar conector: one catalog", () => {
     expect(within(empty() as HTMLElement).getByRole("button", { name: "Conectar pelo endereço" })).toBeTruthy();
   });
 
-  test("a vendor that hasn't approved agentes.chat yet: greyed, a lock and 'Em breve', last, and its tile opens nothing", async () => {
+  test("a vendor that hasn't approved KeepMind OS yet: greyed, a lock and 'Em breve', last, and its tile opens nothing", async () => {
     const state = seedState({ connections: [] });
     const { dialog } = await open(state, withSoonAsana(state));
     const tile = within(dialog).getByRole("button", { name: "Asana, em breve" }) as HTMLButtonElement;
@@ -383,7 +385,7 @@ describe("Adicionar conector: one catalog", () => {
       const d = byId(id);
       return d ? authKind(d) : null;
     };
-    expect([kind("linear"), kind("github"), kind("sentry")]).toEqual(["oneClick", "oauthOrKey", "key"]);
+    expect([kind("linear"), kind("github"), kind("sentry")]).toEqual(["oneClick", "oauthOrKey", "oauthSetup"]);
     expect(searchCatalog(CATALOG.connectors, "ciclos").map((d) => d.id)).toEqual(["linear"]);
   });
 

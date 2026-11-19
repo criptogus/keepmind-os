@@ -1,5 +1,5 @@
-import { ApiError, useAccountDeletionPlan, useApi, useAuthConfig, useMe } from "@agenteschat/client";
-import { formatTimeLeft } from "@agenteschat/client/lib/actions";
+import { ApiError, useAccountDeletionPlan, useApi, useAuthConfig, useMe } from "@keepmind/client";
+import { formatTimeLeft } from "@keepmind/client/lib/actions";
 import {
   type AccountDeletionLine,
   accountDeletionLines,
@@ -11,11 +11,11 @@ import {
   workspaceLabel,
   workspaceNotes,
   workspaceOpens,
-} from "@agenteschat/client/lib/deletion";
-import { errorCode, errorText } from "@agenteschat/client/lib/errors";
-import { formatShortDate, joinNames } from "@agenteschat/client/lib/format";
-import { settingUp } from "@agenteschat/client/lib/guards";
-import { typedCode } from "@agenteschat/client/lib/join-requests";
+} from "@keepmind/client/lib/deletion";
+import { errorCode, errorText } from "@keepmind/client/lib/errors";
+import { formatShortDate, joinNames } from "@keepmind/client/lib/format";
+import { settingUp } from "@keepmind/client/lib/guards";
+import { typedCode } from "@keepmind/client/lib/join-requests";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, ScrollView, StyleSheet, View } from "react-native";

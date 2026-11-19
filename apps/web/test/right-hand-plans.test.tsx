@@ -1,9 +1,9 @@
 import { afterEach, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { Message } from "@agenteschat/client";
+import type { Message } from "@keepmind/client";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { openAiSelect, payWith } from "./ai-picker";
 import { createFakeApi, fakeAgentBrain, LODI_ID, NOW, ORG_ID, seedDm, seedState, withRightHand } from "./fake-api";

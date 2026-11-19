@@ -1,12 +1,5 @@
-import {
-  bodyTones,
-  drawAccessory,
-  drawAgent,
-  drawSleep,
-  type Expression,
-  EYE_COLOR,
-} from "@agenteschat/ui/agent/engine";
-import { avatarSkyCell, avatarSkyCells, avatarSkyTones } from "@agenteschat/ui/sky/avatar";
+import { bodyTones, drawAccessory, drawAgent, drawSleep, type Expression, EYE_COLOR } from "@keepmind/ui/agent/engine";
+import { avatarSkyCell, avatarSkyCells, avatarSkyTones } from "@keepmind/ui/sky/avatar";
 import { Canvas, createPicture, Picture } from "@shopify/react-native-skia";
 import { memo, useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -71,7 +64,7 @@ export function agentFrame(
   const box = frame ? framedLayout(size, Boolean(accessory)) : agentLayout(size, Boolean(accessory));
   const rec = new RecordingContext();
   if (frame) {
-    // The tile's sky (`@agenteschat/ui/sky/avatar`): a Bayer dither from the top tone to the bottom one.
+    // The tile's sky (`@keepmind/ui/sky/avatar`): a Bayer dither from the top tone to the bottom one.
     const [top, bottom] = avatarSkyTones(agent.color, frame.dark);
     const n = avatarSkyCells(size * 2);
     const cell = size / n;
@@ -168,7 +161,7 @@ function AgentAvatarView({
 }
 
 /**
- * An agent, drawn by the shared engine (`@agenteschat/ui/agent/engine`) on a Skia canvas: never any
+ * An agent, drawn by the shared engine (`@keepmind/ui/agent/engine`) on a Skia canvas: never any
  * other way. Living agents share one ~25 fps clock; with reduced motion, `live={false}`, an off-screen
  * screen or the app in the background they hold a still frame.
  */

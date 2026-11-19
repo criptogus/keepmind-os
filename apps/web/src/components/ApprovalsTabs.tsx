@@ -1,5 +1,5 @@
-import { useOverview } from "@agenteschat/client";
-import { Tabs } from "@agenteschat/ui";
+import { useOverview } from "@keepmind/client";
+import { Tabs } from "@keepmind/ui";
 import { useNavigate } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";

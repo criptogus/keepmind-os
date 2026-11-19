@@ -1,7 +1,7 @@
 import { lookup } from "node:dns/promises";
 import type { request as httpsRequest } from "node:https";
 import { isIP } from "node:net";
-import { OutboundAddressError } from "@agenteschat/adapters";
+import { OutboundAddressError } from "@keepmind/adapters";
 import { ValidationError } from "./errors";
 
 /** Resolves a host name to its addresses (injected in tests). */
@@ -216,7 +216,7 @@ export async function fetchPublicDocument(
         path: `${url.pathname}${url.search}`,
         method: "GET",
         servername: host,
-        headers: { accept: "application/json", "user-agent": "agentes.chat" },
+        headers: { accept: "application/json", "user-agent": "keepmind.io" },
         lookup: pinnedLookup(pinned.address, pinned.family) as never,
       },
       (res) => {

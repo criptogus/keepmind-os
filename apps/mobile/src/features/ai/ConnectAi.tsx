@@ -6,32 +6,26 @@ import {
   useAiStatus,
   useApi,
   useModels,
-} from "@agenteschat/client";
-import { CUSTOM_PROVIDER } from "@agenteschat/client/lib/endpoints";
-import { errorText, keyRefusal } from "@agenteschat/client/lib/errors";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import {
-  aiStateOf,
-  choiceOfIntent,
-  freePlanAccount,
-  noAiLockedLine,
-  PLAN_CHOICES,
-} from "@agenteschat/client/lib/no-ai";
-import { can, makesAgents } from "@agenteschat/client/lib/permissions";
+} from "@keepmind/client";
+import { CUSTOM_PROVIDER } from "@keepmind/client/lib/endpoints";
+import { errorText, keyRefusal } from "@keepmind/client/lib/errors";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { aiStateOf, choiceOfIntent, freePlanAccount, noAiLockedLine, PLAN_CHOICES } from "@keepmind/client/lib/no-ai";
+import { can, makesAgents } from "@keepmind/client/lib/permissions";
 import {
   keyLooksValid,
   type ProviderId,
   providerGuess,
   providerLabel,
   providerOf,
-} from "@agenteschat/client/lib/providers";
+} from "@keepmind/client/lib/providers";
 import {
   isRightHand,
   rightHandOnKey,
   type SavedKey,
   settleSavedKey,
   thinksWithLine,
-} from "@agenteschat/client/lib/right-hand";
+} from "@keepmind/client/lib/right-hand";
 import { useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams, usePreventRemove } from "expo-router";
 import { useCallback, useState } from "react";

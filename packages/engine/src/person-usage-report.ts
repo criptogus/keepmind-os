@@ -1,5 +1,5 @@
-import { and, type Database, eq, gte, inArray, isNull, lt, rowsOf, schema, sql } from "@agenteschat/db";
-import { nanoUsdToUsd } from "@agenteschat/providers";
+import { and, type Database, eq, gte, inArray, isNull, lt, rowsOf, schema, sql } from "@keepmind/db";
+import { nanoUsdToUsd } from "@keepmind/providers";
 import { accountablePerson, runAuthority } from "./authority";
 import { readableChannelIds } from "./channels";
 import { ForbiddenError, NotFoundError } from "./errors";

@@ -51,6 +51,11 @@ Third-party software keeps its own license. The license texts are next to what t
 - apps/desktop/src-tauri/installer/installer.nsi: Tauri's NSIS installer template (Apache-2.0 OR
   MIT, Copyright (c) 2017 - Present Tauri Apps Contributors), changed; apps/desktop/scripts/
   installer-art.ts holds the outlines of a few Funnel Display glyphs (SIL Open Font License 1.1).
+- packages/engine/assets/skills: built-in agent skills (MIT) adapted from
+  github.com/mattpocock/skills (Copyright (c) 2026 Matt Pocock),
+  github.com/obra/superpowers (Copyright (c) 2025 Jesse Vincent) and
+  github.com/multica-ai/andrej-karpathy-skills; each skill's metadata names
+  its upstream.
 - packages/engine/assets/fonts: the Onest and Martian Mono fonts (SIL Open Font License 1.1),
   embedded in exported PDFs.
 - apps/web/public/connectors: icons from Simple Icons (CC0 1.0).
@@ -71,6 +76,12 @@ Third-party software keeps its own license. The license texts are next to what t
   apps/web/test/fixtures/agent-import.
 - Packages installed from npm and crates.io: the license in each package. The container
   image is built on the oven/bun image (Debian and Bun), whose parts keep their licenses.
+- packages/whatsapp-bridge: the WhatsApp sidecar, a separate process the server spawns per
+  organization and that talks to the engine over localhost HTTP (the desktop app's local
+  server may spawn it too). It bundles @whiskeysockets/baileys (MIT, WhiskeySockets) and
+  its libsignal-node dependency (GPL-3.0, WhiskeySockets' fork of Signal's libsignal).
+  That component ships under GPL-3.0's own terms, not under this work's section 7 store
+  permission; its corresponding source is this repository.
 - deploy/speech: the speech image (the compose file's speech profile) holds NVIDIA's Parakeet TDT
   0.6B v3 (CC BY 4.0) and OpenAI's Whisper tiny (MIT), as ONNX exports by others; deploy/speech/
   NOTICE credits them and goes into the image. It is built on the python image (Debian, with its

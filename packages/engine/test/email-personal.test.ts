@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { eq, schema } from "@agenteschat/db";
-import { LOCALE_CODES } from "@agenteschat/i18n/locale";
+import { eq, schema } from "@keepmind/db";
+import { LOCALE_CODES } from "@keepmind/i18n/locale";
 import { type EmailTemplate, queueBudgetEmail, renderEmail } from "../src";
 import { EMAIL_SAMPLES, PERSONAL_EMAIL_SAMPLES } from "./email-samples";
 import { type Fixture, setup } from "./fixtures";
@@ -59,7 +59,7 @@ describe("a personal workspace's emails (ADR 0159)", () => {
     );
     expect(render("computer_ready-task-personal.en").text).toContain("Your agents' computer is on and set up");
     // The address is made inert in the text (no link a mail app would make of it), so only the words around it here.
-    expect(render("invitation-personal.en").text).toContain("invited you to their personal workspace on agentes.chat.");
+    expect(render("invitation-personal.en").text).toContain("invited you to their personal workspace on KeepMind OS.");
     expect(render("approval_digest-one-personal.en").text).toContain(
       "One of your agents asked to do something that needs your approval.",
     );

@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { orgTopic, type PubSub, type RealtimeEvent, userTopic } from "@agenteschat/adapters";
-import { type Database, eq, schema } from "@agenteschat/db";
-import type { ModelRequest } from "@agenteschat/providers";
-import type { FakeReply } from "@agenteschat/providers/testing";
-import { WIDGET_SCHEDULE_CRON } from "@agenteschat/ui/widgets/spec";
+import { orgTopic, type PubSub, type RealtimeEvent, userTopic } from "@keepmind/adapters";
+import { type Database, eq, schema } from "@keepmind/db";
+import type { ModelRequest } from "@keepmind/providers";
+import type { FakeReply } from "@keepmind/providers/testing";
+import { WIDGET_SCHEDULE_CRON } from "@keepmind/ui/widgets/spec";
 import {
   askWidgetChange,
   confirmWidget,

@@ -1,4 +1,4 @@
-import { and, type Database, desc, eq, inArray, isNull, schema, sql } from "@agenteschat/db";
+import { and, type Database, desc, eq, inArray, isNull, schema, sql } from "@keepmind/db";
 import { currentHandles } from "../agents";
 import { cutText, cutTextEnd } from "../format";
 import { announceMessageMemories } from "../message-memories";

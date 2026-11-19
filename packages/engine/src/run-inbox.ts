@@ -1,4 +1,4 @@
-import type { PubSub } from "@agenteschat/adapters";
+import type { PubSub } from "@keepmind/adapters";
 import {
   and,
   asc,
@@ -13,7 +13,7 @@ import {
   or,
   schema,
   sql,
-} from "@agenteschat/db";
+} from "@keepmind/db";
 import { scalarParams } from "./approvals";
 import { runAuthorityById } from "./authority";
 import { mayJoin, type RunTrigger, startOrJoinRun } from "./dispatch";

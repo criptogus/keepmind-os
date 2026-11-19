@@ -3,7 +3,7 @@ import type { EventEmitter } from "node:events";
 import { constants } from "node:os";
 import path from "node:path";
 import { StringDecoder } from "node:string_decoder";
-import type { MachineReplies } from "@agenteschat/adapters/machine-protocol";
+import type { MachineReplies } from "@keepmind/adapters/machine-protocol";
 
 /** Kept per stream (head and tail when larger). */
 export const MAX_OUTPUT_BYTES = 2 * 1024 * 1024;

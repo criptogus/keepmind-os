@@ -1,4 +1,4 @@
-import type { PubSub, ScreenKind } from "@agenteschat/adapters";
+import type { PubSub, ScreenKind } from "@keepmind/adapters";
 import {
   and,
   type Database,
@@ -15,8 +15,8 @@ import {
   type SQL,
   schema,
   sql,
-} from "@agenteschat/db";
-import { plainLine } from "@agenteschat/ui/markdown";
+} from "@keepmind/db";
+import { plainLine } from "@keepmind/ui/markdown";
 import { decidableBySql } from "./approvals";
 import { NotFoundError, ValidationError } from "./errors";
 import { publishUserEvent } from "./events";
@@ -104,7 +104,7 @@ export const NOTIFICATION_KINDS = [
   "secret_request",
   /**
    * The workspace was held, suspended or restored, with the notice shown (owners and admins, ADR 0056 §8), or on
-   * agentes.chat Cloud one of its agents was held (`statusTo: "agent_hold"`, also its responsible person, §9).
+   * KeepMind OS Cloud one of its agents was held (`statusTo: "agent_hold"`, also its responsible person, §9).
    */
   "org_standing",
   /** The workspace's own computer is ready (owners, ADR 0056 §10). */
@@ -325,7 +325,7 @@ export interface NotificationSource {
   action?: string;
   /** `agent_unreached`: the routine's creator, whom the agent's owner may let talk to `agentId`. */
   userId?: string;
-  /** The agent held on agentes.chat Cloud (`org_standing` to `agent_hold`, its name in `label`); a widget's agent. */
+  /** The agent held on KeepMind OS Cloud (`org_standing` to `agent_hold`, its name in `label`); a widget's agent. */
   agentId?: string;
   /** A board (ADR 0135): `widget_alert`, `widget_failed`, `dashboard_proposal`. */
   dashboardId?: string;
@@ -381,7 +381,7 @@ export interface NotificationLatest {
   origin?: ApprovalOrigin;
   /** `org_standing` to `agent_hold`: the hold's kind, `network` or `operator`, never its reason. */
   holdKind?: string;
-  /** `org_standing` on agentes.chat Cloud: the apps read `text` as the restriction does, with how to contest it. */
+  /** `org_standing` on KeepMind OS Cloud: the apps read `text` as the restriction does, with how to contest it. */
   cloud?: boolean;
   /**
    * `join_request`: who asked, by name (they aren't members, so no actors), the first `MAX_NAMES` in the order they

@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import type { ApiClient, Me } from "@agenteschat/client";
-import { keys } from "@agenteschat/client";
+import type { ApiClient, Me } from "@keepmind/client";
+import { keys } from "@keepmind/client";
 import { QueryClient } from "@tanstack/react-query";
 import { requireUserIn } from "@/app/guards";
 

@@ -1,8 +1,8 @@
-import type { ImportCard } from "@agenteschat/client/lib/import/flow";
+import type { ImportCard } from "@keepmind/client/lib/import/flow";
 import type { PickedFile } from "@/lib/import";
 import { filesFromDrop } from "@/lib/obsidian";
 
-export * from "@agenteschat/client/lib/import/flow";
+export * from "@keepmind/client/lib/import/flow";
 
 /**
  * Each card's tile: the app's official mark (apps/web/public/brands/README.md), and the maker's own dark

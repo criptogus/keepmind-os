@@ -190,11 +190,11 @@ export function sceneTeam<A extends { id: string }>(agents: readonly A[], lead: 
  * `RIGHT_HAND_DEFAULTS` (packages/engine/src/right-hand.ts).
  */
 export const RIGHT_HAND_DEFAULT = {
-  name: "Lodi",
-  appearance: { color: "teal", eyes: "happy", accessory: "headset" },
+  name: "Kivo",
+  appearance: { color: "violet", eyes: "happy", accessory: "headset" },
 } as const;
 
-/** Where its name comes from ("lodestar") is told only while it keeps that name: a renamed one has another story. */
+/** The default companion introduction is shown only while it keeps its default name. */
 export const tellsNameStory = (agent: Pick<Agent, "builtin" | "name"> | null | undefined) =>
   isRightHand(agent) && agent?.name === RIGHT_HAND_DEFAULT.name;
 
@@ -221,7 +221,7 @@ export async function finishOnboarding(api: ApiClient, orgId: string): Promise<O
 
 /**
  * Whether its first-run card leads with the plan for this person (the card's plan row, `firstRunSteps`, ADR 0162):
- * the card still up, the workspace waiting for its first agentes.chat plan, and an owner who may pay. Here, apart from
+ * the card still up, the workspace waiting for its first KeepMind OS plan, and an owner who may pay. Here, apart from
  * the card's rows, for the hold's banner, which every page loads.
  */
 export const leadsWithPlan = (

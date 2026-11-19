@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import { listZip, zip } from "@agenteschat/engine";
+import { listZip, zip } from "@keepmind/engine";
 import { browser, createTestServer, seedOrg, signUp, type TestServer } from "./harness";
 
 let t: TestServer | undefined;

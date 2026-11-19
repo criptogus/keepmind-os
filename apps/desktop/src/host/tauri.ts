@@ -1,4 +1,4 @@
-import { checkServer } from "@agenteschat/client/lib/server";
+import { checkServer } from "@keepmind/client/lib/server";
 import { invoke } from "@tauri-apps/api/core";
 import { LogicalSize } from "@tauri-apps/api/dpi";
 import { listen, type UnlistenFn } from "@tauri-apps/api/event";

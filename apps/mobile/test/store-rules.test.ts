@@ -9,7 +9,7 @@ describe("what the iPhone app leaves out for the App Store", () => {
     expect(saysWhereToPay(true, "ios")).toBe(false);
   });
 
-  test("accounts are not made on iOS on agentes.chat's own servers, and are anywhere else", () => {
+  test("accounts are not made on iOS on KeepMind OS's own servers, and are anywhere else", () => {
     expect(signUpInApp("ios", true)).toBe(false);
     expect(signUpInApp("ios", false)).toBe(true);
     expect(signUpInApp("ios", undefined)).toBe(true);

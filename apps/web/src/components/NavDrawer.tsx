@@ -1,5 +1,5 @@
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
-import { Button, OPEN_LAYER } from "@agenteschat/ui";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
+import { Button, OPEN_LAYER } from "@keepmind/ui";
 import { useRouterState } from "@tanstack/react-router";
 import {
   createContext,

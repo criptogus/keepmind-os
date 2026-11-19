@@ -1,10 +1,10 @@
-import { and, type Database, eq, inArray, isNull, schema, sql } from "@agenteschat/db";
+import { and, type Database, eq, inArray, isNull, schema, sql } from "@keepmind/db";
 import {
   isWidgetSchedule,
   validateWidgetSpec,
   WIDGET_SCHEDULE_CRON,
   type WidgetSchedule,
-} from "@agenteschat/ui/widgets/spec";
+} from "@keepmind/ui/widgets/spec";
 import { getAgent } from "../agents";
 import { canTalkTo, speakerOf } from "../audience";
 import { nextCronTime } from "../cron";

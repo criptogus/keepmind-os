@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import { type RealtimeEvent, userTopic } from "@agenteschat/adapters";
-import { and, eq, schema, sql } from "@agenteschat/db";
+import { type RealtimeEvent, userTopic } from "@keepmind/adapters";
+import { and, eq, schema, sql } from "@keepmind/db";
 import {
   addAgentReaction,
   addChannelMember,
@@ -499,7 +499,7 @@ test("a task's end in a thread names its computer only where the workspace has m
   f = await setup();
   const { bia } = await people();
   const root = await post(bia.id, "Can someone run the tests?");
-  const computer = "agentes.chat's computer";
+  const computer = "KeepMind OS's computer";
   await f.db.insert(schema.machines).values({ orgId: f.org.id, name: computer, kind: "managed" });
   const task = {
     id: "00000000-0000-4000-8000-000000000001",

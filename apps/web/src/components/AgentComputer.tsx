@@ -1,5 +1,5 @@
-import type { Agent, ComputerTarget, Machine } from "@agenteschat/client";
-import { useAgents, useComputer, useComputerSetup, useMachines, useSetComputerTarget } from "@agenteschat/client";
+import type { Agent, ComputerTarget, Machine } from "@keepmind/client";
+import { useAgents, useComputer, useComputerSetup, useMachines, useSetComputerTarget } from "@keepmind/client";
 import {
   type NoComputer,
   noComputerChoice,
@@ -8,18 +8,12 @@ import {
   setupPortrait,
   setupView,
   WORKSPACE_COMPUTER_KIND,
-} from "@agenteschat/client/lib/computer";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import {
-  computerKind,
-  computerState,
-  folderName,
-  foldersOfAgent,
-  machineTitle,
-} from "@agenteschat/client/lib/machines";
-import { can } from "@agenteschat/client/lib/permissions";
-import { modeKey } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client/lib/computer";
+import { errorText } from "@keepmind/client/lib/errors";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { computerKind, computerState, folderName, foldersOfAgent, machineTitle } from "@keepmind/client/lib/machines";
+import { can } from "@keepmind/client/lib/permissions";
+import { modeKey } from "@keepmind/client/lib/workspace-mode";
 import {
   Card,
   CardHeader,
@@ -30,7 +24,7 @@ import {
   List,
   Select,
   type SelectOption,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { AgentAvatar } from "@/components/AgentAvatar";

@@ -1,7 +1,7 @@
-import { type AppNotification, type InstallableCli, useCliInstall, useNotificationAction } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { firstName } from "@agenteschat/client/lib/format";
-import { cliInstallFailure, computerKind, installableCli } from "@agenteschat/client/lib/machines";
+import { type AppNotification, type InstallableCli, useCliInstall, useNotificationAction } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { firstName } from "@keepmind/client/lib/format";
+import { cliInstallFailure, computerKind, installableCli } from "@keepmind/client/lib/machines";
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";

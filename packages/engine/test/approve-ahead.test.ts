@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { channelTopic } from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
+import { channelTopic } from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";

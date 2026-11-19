@@ -1,6 +1,6 @@
-import { meQuery, useMe } from "@agenteschat/client";
-import { isPaidReturn } from "@agenteschat/client/lib/billing";
-import { settingUp } from "@agenteschat/client/lib/guards";
+import { meQuery, useMe } from "@keepmind/client";
+import { isPaidReturn } from "@keepmind/client/lib/billing";
+import { settingUp } from "@keepmind/client/lib/guards";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { requireUser } from "@/app/guards";
 import { useServerLocale } from "@/i18n";

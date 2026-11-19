@@ -14,8 +14,8 @@ import {
   type SQL,
   schema,
   sql,
-} from "@agenteschat/db";
-import type { ContentBlock, ModelMessage } from "@agenteschat/providers";
+} from "@keepmind/db";
+import type { ContentBlock, ModelMessage } from "@keepmind/providers";
 import { resolveApps } from "../access";
 import { recordAgentActions } from "../agent-actions";
 import { agentsByHandle, handleOf } from "../agents";

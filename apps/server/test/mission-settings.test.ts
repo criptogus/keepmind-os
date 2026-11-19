@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import { MACHINE_PROTOCOL_VERSION, type ServerFrame } from "@agenteschat/adapters";
-import { schema } from "@agenteschat/db";
+import { MACHINE_PROTOCOL_VERSION, type ServerFrame } from "@keepmind/adapters";
+import { schema } from "@keepmind/db";
 import { browser, createTestServer, pairComputer, seedOrg, signUp, type TestServer } from "./harness";
 
 let t: TestServer;

@@ -1,9 +1,9 @@
 import { describe, expect, test } from "bun:test";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { type DashboardList, type DashboardSummary, frozenBoard } from "@agenteschat/client";
-import { type OpenTarget, targetPath } from "@agenteschat/client/lib/notifications";
-import { chartAreaTones, chartInk } from "@agenteschat/ui/sky/chart";
+import { type DashboardList, type DashboardSummary, frozenBoard } from "@keepmind/client";
+import { type OpenTarget, targetPath } from "@keepmind/client/lib/notifications";
+import { chartAreaTones, chartInk } from "@keepmind/ui/sky/chart";
 import { agentPickNow, chooseAgent, closeAgentPick, openAgentPick } from "../../src/features/dashboards/agent-pick";
 import {
   AGENT_SEARCH_FROM,
@@ -504,7 +504,7 @@ describe("dashboards in links, notifications and routines", () => {
 
   test("the web's dashboards, a board and a widget open on Home or a board, as the app's screens", () => {
     const to = (path: string) => {
-      const link = appLinkFromUrl(`https://app.agentes.chat/org/org-1${path}`);
+      const link = appLinkFromUrl(`https://keepmind.io/org/org-1${path}`);
       const href = link && "href" in link ? link.href : "";
       return new URLSearchParams(href.slice("/link?".length)).get("to");
     };
@@ -518,7 +518,7 @@ describe("dashboards in links, notifications and routines", () => {
 
   test("every dashboards target the web opens has a screen on the phone", () => {
     const screen = (target: OpenTarget) => {
-      const link = appLinkFromUrl(`https://app.agentes.chat${targetPath("org-1", target)}`);
+      const link = appLinkFromUrl(`https://keepmind.io${targetPath("org-1", target)}`);
       const href = link && "href" in link ? link.href : "";
       return new URLSearchParams(href.slice("/link?".length)).get("to");
     };

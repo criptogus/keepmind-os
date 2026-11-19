@@ -1,5 +1,5 @@
 import { randomBytes, randomUUID } from "node:crypto";
-import { and, type Database, type Executor, eq, gt, gte, inArray, like, lte, ne, or, schema } from "@agenteschat/db";
+import { and, type Database, type Executor, eq, gt, gte, inArray, like, lte, ne, or, schema } from "@keepmind/db";
 import { revokeUserApps } from "./apps/revoke";
 import { sha256 } from "./crypto";
 import { emailLocale, queueEmail } from "./email";

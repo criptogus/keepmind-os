@@ -13,8 +13,8 @@ import {
   type PubSub,
   type ServerFrame,
   type WireBrainEvent,
-} from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
 import {
   type BrainEvent,
   type BrainTurn,
@@ -453,7 +453,7 @@ test("end to end through the real hub: the runner's brain.event frames reach the
   const fx = f;
   const hub = fx.machineHub;
   if (!hub) throw new Error("no hub");
-  const deps = { db: fx.db, pubsub: fx.pubsub, publicUrl: "https://agentes.chat" };
+  const deps = { db: fx.db, pubsub: fx.pubsub, publicUrl: "https://keepmind.io" };
   const RUNNER = {
     hostname: "mac",
     os: "darwin" as const,
@@ -560,7 +560,7 @@ test("the runner's partial text never reaches the channel: it says it writes, th
   const fx = f;
   const hub = fx.machineHub;
   if (!hub) throw new Error("no hub");
-  const deps = { db: fx.db, pubsub: fx.pubsub, publicUrl: "https://agentes.chat" };
+  const deps = { db: fx.db, pubsub: fx.pubsub, publicUrl: "https://keepmind.io" };
   const RUNNER = {
     hostname: "mac",
     os: "darwin" as const,

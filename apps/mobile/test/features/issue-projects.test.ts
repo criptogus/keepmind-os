@@ -1,14 +1,14 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import type { IssueProject } from "@agenteschat/client";
+import type { IssueProject } from "@keepmind/client";
 import {
   liveProjectFilter,
   NO_PROJECT,
   pickableProjects,
   projectFilterRows,
-} from "@agenteschat/client/lib/issue-projects";
-import { bodyTones } from "@agenteschat/ui/agent/engine";
+} from "@keepmind/client/lib/issue-projects";
+import { bodyTones } from "@keepmind/ui/agent/engine";
 
 const src = (path: string) => readFileSync(join(import.meta.dir, "../../src/features/issues", path), "utf8");
 

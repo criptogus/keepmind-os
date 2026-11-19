@@ -1,9 +1,9 @@
-import type { ThreadActor, ThreadInfo } from "@agenteschat/client";
-import { useChannels, useMissionList, useThreadList } from "@agenteschat/client";
-import { relativeTime } from "@agenteschat/client/lib/format";
-import { previewBody } from "@agenteschat/client/lib/message-body";
-import { can } from "@agenteschat/client/lib/permissions";
-import { threadStatus, threadTitle } from "@agenteschat/client/lib/threads";
+import type { ThreadActor, ThreadInfo } from "@keepmind/client";
+import { useChannels, useMissionList, useThreadList } from "@keepmind/client";
+import { relativeTime } from "@keepmind/client/lib/format";
+import { previewBody } from "@keepmind/client/lib/message-body";
+import { can } from "@keepmind/client/lib/permissions";
+import { threadStatus, threadTitle } from "@keepmind/client/lib/threads";
 import {
   AvatarStack,
   Button,
@@ -22,7 +22,7 @@ import {
   SearchField,
   Segmented,
   Toolbar,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useDeferredValue, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";

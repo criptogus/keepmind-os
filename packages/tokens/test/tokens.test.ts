@@ -102,7 +102,7 @@ function parseShadow(value: string, theme: Vars): ShadowLayer[] {
 
 const px = (name: string) => Number.parseFloat(sharedVars.get(name) ?? "NaN");
 
-describe("@agenteschat/tokens equals tokens.css", () => {
+describe("@keepmind/tokens equals tokens.css", () => {
   for (const [name, colors, vars] of [
     ["light", light, lightVars],
     ["dark", dark, darkVars],

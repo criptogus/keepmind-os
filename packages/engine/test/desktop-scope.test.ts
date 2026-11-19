@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { DESKTOP_PROTOCOL, type MachineRequest } from "@agenteschat/adapters";
-import { and, eq, inArray, schema, sql } from "@agenteschat/db";
+import { DESKTOP_PROTOCOL, type MachineRequest } from "@keepmind/adapters";
+import { and, eq, inArray, schema, sql } from "@keepmind/db";
 import {
   ALL_TOOLS,
   BUILTIN_SCOPES,

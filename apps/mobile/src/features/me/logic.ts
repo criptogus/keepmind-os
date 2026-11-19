@@ -1,5 +1,5 @@
-import { ApiError, type StartChoice } from "@agenteschat/client";
-import { startPlace } from "@agenteschat/client/lib/home";
+import { ApiError, type StartChoice } from "@keepmind/client";
+import { startPlace } from "@keepmind/client/lib/home";
 
 /**
  * Você's pure logic: the Conta form (what changed, what is wrong with it, the server's error as our

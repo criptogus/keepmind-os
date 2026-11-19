@@ -1,8 +1,8 @@
-import { keys, useCatalog, useWikiTree, type WikiImportNote, type WikiImportSource } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { joinNames } from "@agenteschat/client/lib/format";
-import { can } from "@agenteschat/client/lib/permissions";
-import { hiddenRepoOf, hiddenRepoText } from "@agenteschat/client/lib/skills";
+import { keys, useCatalog, useWikiTree, type WikiImportNote, type WikiImportSource } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { joinNames } from "@keepmind/client/lib/format";
+import { can } from "@keepmind/client/lib/permissions";
+import { hiddenRepoOf, hiddenRepoText } from "@keepmind/client/lib/skills";
 import {
   Alert,
   Button,
@@ -16,7 +16,7 @@ import {
   Input,
   OptionCard,
   Segmented,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import type { TFunction } from "i18next";
@@ -400,10 +400,13 @@ const SOURCES: WikiImportSource[] = ["obsidian", "github", "files"];
 export function WikiImportDialog({
   files,
   name,
+  initialSource,
   onClose,
 }: {
   files?: Promise<VaultFile[]> | null;
   name?: string;
+  /** Opens straight on this source's step, skipping the picker (e.g. "Connect GitHub"). */
+  initialSource?: WikiImportSource | null;
   onClose: () => void;
 }) {
   const { t, i18n } = useTranslation();
@@ -425,7 +428,7 @@ export function WikiImportDialog({
   const [stopping, setStopping] = useState(false);
 
   /** The second step's source; null on the first, where it is picked. */
-  const [from, setFrom] = useState<WikiImportSource | null>(null);
+  const [from, setFrom] = useState<WikiImportSource | null>(initialSource ?? null);
   const [url, setUrl] = useState("");
   const [fetching, setFetching] = useState(false);
   const [linkError, setLinkError] = useState<string | null>(null);

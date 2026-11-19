@@ -1,5 +1,5 @@
-import { holdEvents, type PubSub } from "@agenteschat/adapters";
-import { and, eq, isNull, schema, sql } from "@agenteschat/db";
+import { holdEvents, type PubSub } from "@keepmind/adapters";
+import { and, eq, isNull, schema, sql } from "@keepmind/db";
 import { type ActionRecord, actWithUndo } from "./agent-actions";
 import { currentHandles } from "./agents";
 import { invalidateOrg } from "./cache";

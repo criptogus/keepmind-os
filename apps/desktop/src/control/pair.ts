@@ -4,8 +4,8 @@
  * runner's code. A pair link from the web (`agenteschat://pair`, checked in `deep_link.rs`): the runner asks with the
  * link, and the link's maker lets it in on the web. Either way the person confirmed in the app first.
  */
-import type { DeviceAudience } from "@agenteschat/client";
-import { normalizeUserCode } from "@agenteschat/client/lib/machines";
+import type { DeviceAudience } from "@keepmind/client";
+import { normalizeUserCode } from "@keepmind/client/lib/machines";
 import type { Host } from "../host/types";
 import { siteApi } from "./devices";
 import { appServer, homeServer, type ServerWorkspaces } from "./server";

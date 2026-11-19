@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { AgentAction, AgentProposalCard, Message, Proposal } from "@agenteschat/client";
+import type { AgentAction, AgentProposalCard, Message, Proposal } from "@keepmind/client";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import {
   ADA_ID,

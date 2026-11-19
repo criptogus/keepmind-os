@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, spyOn, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { AiStatus } from "@agenteschat/client";
+import type { AiStatus } from "@keepmind/client";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { COMPACT_QUERY, DESKTOP_QUERY } from "@/components/NavDrawer";
 import { TABLET_QUERY } from "@/components/Sidebar";

@@ -1,1 +1,1 @@
-export { useNow } from "@agenteschat/ui";
+export { useNow } from "@keepmind/ui";

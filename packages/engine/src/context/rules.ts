@@ -1,4 +1,4 @@
-import { and, type Executor, eq, isNull, ne, or, schema } from "@agenteschat/db";
+import { and, type Executor, eq, isNull, ne, or, schema } from "@keepmind/db";
 import { decidesAgentApprovals } from "../approval-rules";
 import { type AuthorityRun, type RunAuthority, runAuthority } from "../authority";
 import { caches, rulesPresenceKey } from "../cache";

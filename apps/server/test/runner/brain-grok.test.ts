@@ -2,7 +2,7 @@ import { afterEach, expect, test } from "bun:test";
 import { spawn } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import type { MachineRequest } from "@agenteschat/adapters";
+import type { MachineRequest } from "@keepmind/adapters";
 import {
   AccountManager,
   accountEnv,

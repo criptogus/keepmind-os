@@ -1,4 +1,4 @@
-import { useChannels, useDms } from "@agenteschat/client";
+import { useChannels, useDms } from "@keepmind/client";
 import { useOrgId } from "../../shared/hooks";
 
 /** The channels this person sees, DMs aside (the web's `useVisibleChannels`): where an agent may be put. */

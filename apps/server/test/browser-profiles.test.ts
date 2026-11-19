@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, expect, test } from "bun:test";
-import { BROWSER_PROFILE_PROTOCOL, type MachineRequest } from "@agenteschat/adapters";
-import { and, eq, schema } from "@agenteschat/db";
-import { MachineRequestError } from "@agenteschat/engine";
+import { BROWSER_PROFILE_PROTOCOL, type MachineRequest } from "@keepmind/adapters";
+import { and, eq, schema } from "@keepmind/db";
+import { MachineRequestError } from "@keepmind/engine";
 import { parseBrowserClientFrame } from "../src/realtime/browser";
 import { browser, createTestServer, joinByInvitation, pairComputer, seedOrg, signUp, type TestServer } from "./harness";
 

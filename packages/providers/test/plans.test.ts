@@ -10,6 +10,7 @@ import {
   learnedPlanModels,
   learnPlanModels,
   modelLimitOf,
+  ownLimitsModel,
   PLAN_ALIASES,
   PLAN_FORBIDDEN_TEXT,
   PLAN_IDS,
@@ -412,4 +413,24 @@ test("before this process has read the plan's live list, no model counts as drop
 console.log(JSON.stringify([droppedPlanModel("opencode", "glm-9"), droppedPlanModel("opencode", "hy3")]));`;
   const run = Bun.spawnSync([process.execPath, "-e", code]);
   expect(run.stdout.toString().trim()).toBe("[null,null]");
+});
+
+test("ownLimitsModel: an OpenCode account's Go models (`opencode-go/`) are the Go plan's, per model", () => {
+  const go = planOf("opencode");
+  if (!go?.limitsPerModel) throw new Error("the opencode plan has per-model limits");
+  const glm = go.claudeCode.models.find((m) => m.id === "glm-5.3") ?? go.claudeCode.models[0];
+  if (!glm) throw new Error("the opencode plan has models");
+  // The OpenCode account's provider is `zen`; its Go models carry the `opencode-go/` prefix.
+  expect(ownLimitsModel("zen", `opencode-go/${glm.id}`)?.id).toBe(glm.id);
+  // Zen's and the free tier's `opencode/` models keep the account's scope: no model of their own.
+  for (const value of [
+    "opencode/big-pickle",
+    "opencode/glm-5.3-flash-free",
+    "opencode/big-pickle".replace("big-pickle", glm.id),
+  ])
+    expect(ownLimitsModel("zen", value)).toBeNull();
+  // Other plans and unprefixed values are untouched.
+  expect(ownLimitsModel("zen", glm.id)).toBeNull();
+  expect(ownLimitsModel("opencode", glm.id)?.id).toBe(glm.id);
+  expect(ownLimitsModel("zai", "glm-6")).toBeNull();
 });

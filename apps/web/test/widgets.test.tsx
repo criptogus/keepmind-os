@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { Dashboard, DashboardLayoutInput, Widget, WidgetSpec } from "@agenteschat/client";
-import { box, place } from "@agenteschat/ui/testing";
+import type { Dashboard, DashboardLayoutInput, Widget, WidgetSpec } from "@keepmind/client";
+import { box, place } from "@keepmind/ui/testing";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import {
   ADA_ID,

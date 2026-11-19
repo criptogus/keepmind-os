@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import { orgTopic, type RealtimeEvent, userTopic } from "@agenteschat/adapters";
+import { orgTopic, type RealtimeEvent, userTopic } from "@keepmind/adapters";
 import {
   createArtifact,
   createCalendarEvent,

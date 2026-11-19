@@ -1,4 +1,4 @@
-import { and, eq, inArray, schema, sql } from "@agenteschat/db";
+import { and, eq, inArray, schema, sql } from "@keepmind/db";
 import { sha256 } from "./crypto";
 import { applyImport, type ImportDeps, type MigrationBundle } from "./imports";
 import { mapLegacyPermissions, mapLegacyWorkflows } from "./keepmind-legacy-mapping";

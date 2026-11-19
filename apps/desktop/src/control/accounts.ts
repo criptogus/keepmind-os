@@ -5,8 +5,8 @@
  *
  * Pure TypeScript (no React, no DOM): the request function and the timers are injected, so tests use it.
  */
-import type { AccountKind, RunnerAccountInfo } from "@agenteschat/adapters/machine-protocol";
-import type { ControlReplies, ControlRequest } from "@agenteschat/adapters/runner-control";
+import type { AccountKind, RunnerAccountInfo } from "@keepmind/adapters/machine-protocol";
+import type { ControlReplies, ControlRequest } from "@keepmind/adapters/runner-control";
 import { type ClientErrorCode, ControlError } from "./client";
 
 export type AccountsRequest = <R extends ControlRequest>(req: R) => Promise<ControlReplies[R["type"]]>;

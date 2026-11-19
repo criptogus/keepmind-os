@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, setDefaultTimeout, test } from "bun:test";
-import { eq, schema } from "@agenteschat/db";
-import type { ModelRequest } from "@agenteschat/providers";
+import { eq, schema } from "@keepmind/db";
+import type { ModelRequest } from "@keepmind/providers";
 import {
   answerQuestion,
   continueRun,

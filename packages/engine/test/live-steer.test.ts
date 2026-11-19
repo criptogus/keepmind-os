@@ -6,8 +6,8 @@ import {
   MACHINE_PROTOCOL_VERSION,
   type MachineRequest,
   STEER_PROTOCOL,
-} from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
 import {
   type Brain,
   type BrainEvent,
@@ -54,7 +54,7 @@ const statusOf = (machineId: string): MachineStatus => ({
 });
 
 async function computerAgent(fx: Fixture) {
-  const deps = { db: fx.db, pubsub: fx.pubsub, publicUrl: "https://agentes.chat" };
+  const deps = { db: fx.db, pubsub: fx.pubsub, publicUrl: "https://keepmind.io" };
   const paired = await pairMachine(deps, fx.owner.id, fx.org.id, {
     name: "MacBook",
     hostname: "mac",

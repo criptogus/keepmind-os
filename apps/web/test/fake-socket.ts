@@ -1,4 +1,4 @@
-import type { SocketFactory, SocketLike } from "@agenteschat/client";
+import type { SocketFactory, SocketLike } from "@keepmind/client";
 
 /** A WebSocket stand-in: records what the client sends, lets tests push server frames. */
 export class FakeSocket implements SocketLike {

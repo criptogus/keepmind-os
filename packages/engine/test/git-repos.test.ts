@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { generateKeyPairSync } from "node:crypto";
-import { desc, eq, schema } from "@agenteschat/db";
+import { desc, eq, schema } from "@keepmind/db";
 import {
   agentMergeRepos,
   agentRepositoryList,

@@ -1,6 +1,6 @@
-import type { Machine } from "@agenteschat/client";
-import { commandInReason, machineReasonText, oneClickTerminal } from "@agenteschat/client/lib/machines";
-import { Card, CardHeader, Chip, Icon } from "@agenteschat/ui";
+import type { Machine } from "@keepmind/client";
+import { commandInReason, machineReasonText, oneClickTerminal } from "@keepmind/client/lib/machines";
+import { Card, CardHeader, Chip, Icon } from "@keepmind/ui";
 import { useTranslation } from "react-i18next";
 import { MachineToolButtons, useToolOneClick } from "../devices/ToolOneClick";
 import { CommandBlock, TerminalFallback } from "../machine-bits";

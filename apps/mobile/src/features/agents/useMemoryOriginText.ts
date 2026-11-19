@@ -1,4 +1,4 @@
-import type { Memory } from "@agenteschat/client";
+import type { Memory } from "@keepmind/client";
 import { useTranslation } from "react-i18next";
 import { useMeId, useWhen } from "../shared/hooks";
 import { dayWord, memoryOrigin } from "./logic";

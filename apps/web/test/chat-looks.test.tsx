@@ -1,13 +1,13 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { keys, type Message } from "@agenteschat/client";
-import type { ChatPrefs } from "@agenteschat/client/lib/chat-look";
-import { MessageLookContext, MessageText, Message as Row } from "@agenteschat/ui";
+import { keys, type Message } from "@keepmind/client";
+import type { ChatPrefs } from "@keepmind/client/lib/chat-look";
+import { MessageLookContext, MessageText, Message as Row } from "@keepmind/ui";
 import { act, cleanup, fireEvent, render, within } from "@testing-library/react";
 import { type ReactNode, useLayoutEffect } from "react";
 import { usePageTextSize } from "@/chat/look";

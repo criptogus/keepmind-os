@@ -1,7 +1,7 @@
-import type { Poll } from "@agenteschat/client";
-import { useArtifact, usePoll, useVote } from "@agenteschat/client";
-import { pollAnswered, pollIsOpen, pollTally, pollToggle } from "@agenteschat/client/lib/blocks";
-import { AvatarStack, Icon, Spinner } from "@agenteschat/ui";
+import type { Poll } from "@keepmind/client";
+import { useArtifact, usePoll, useVote } from "@keepmind/client";
+import { pollAnswered, pollIsOpen, pollTally, pollToggle } from "@keepmind/client/lib/blocks";
+import { AvatarStack, Icon, Spinner } from "@keepmind/ui";
 import { useTranslation } from "react-i18next";
 import { PersonAvatar } from "@/components/AgentAvatar";
 import { useOrg } from "@/components/org-context";

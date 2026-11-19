@@ -1,7 +1,7 @@
-import { type BlockChange, useArtifact, useBlockReply, useKeepBlock, useSharedBlock } from "@agenteschat/client";
-import { type BlockEvent, blockEvent, blockPage, DRAFT_SETTLE_MS } from "@agenteschat/client/lib/blocks";
-import { clockHour } from "@agenteschat/client/lib/format";
-import { chartRamp } from "@agenteschat/ui/sky/chart";
+import { type BlockChange, useArtifact, useBlockReply, useKeepBlock, useSharedBlock } from "@keepmind/client";
+import { type BlockEvent, blockEvent, blockPage, DRAFT_SETTLE_MS } from "@keepmind/client/lib/blocks";
+import { clockHour } from "@keepmind/client/lib/format";
+import { chartRamp } from "@keepmind/ui/sky/chart";
 import { randomUUID } from "expo-crypto";
 import { LinearGradient } from "expo-linear-gradient";
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";

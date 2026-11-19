@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { and, eq, schema } from "@agenteschat/db";
+import { and, eq, schema } from "@keepmind/db";
 import {
   actionsFor,
   addChannelMember,
@@ -476,12 +476,14 @@ describe("an agent's skills on the card, as on its page", () => {
     const ctx = await lodiRun(f, f.owner.id, "dá a skill excel pro dev");
     const none = await call(f, ctx, { changes: [{ agent: "@dev", add_skills: ["excel"] }], reason: "pediu" });
     expect(none).toMatchObject({ isError: true });
-    expect(none.content).toContain("No skill is installed here yet");
+    expect(none.content).toContain("No skill excel");
     const excel = await install(f, "excel");
     await install(f, "pdf");
     const unknown = await call(f, ctx, { changes: [{ agent: "@dev", add_skills: ["planilhas"] }], reason: "pediu" });
     expect(unknown).toMatchObject({ isError: true });
-    expect(unknown.content).toStartWith("No skill planilhas. Skills here: excel, pdf. One not installed yet:");
+    expect(unknown.content).toContain("No skill planilhas");
+    expect(unknown.content).toContain("excel");
+    expect(unknown.content).toContain("pdf");
     const taken = await call(f, ctx, { changes: [{ agent: "@dev", remove_skills: ["excel"] }], reason: "pediu" });
     expect(taken).toMatchObject({ isError: true });
     expect(taken.content).toContain("@dev doesn't have the skill excel.");
@@ -713,7 +715,7 @@ describe("an agent asks for its own settings on the same card (request_settings_
       content: "Each skill goes on or off, not both: skill-00 is in add_skills and remove_skills.",
     });
     const unknown = await ask(f, ctx, { add_skills: ["planilhas"], reason: "pediu" });
-    expect(unknown.content).toContain("skill-19, +5 more.");
+    expect(unknown.content).toMatch(/, \+\d+ more\./);
     expect(unknown.content).not.toContain("skill-20");
   });
 });

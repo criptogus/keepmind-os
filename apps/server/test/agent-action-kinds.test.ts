@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { AGENT_ACTION_KINDS, WORKSPACE_ACTIONS } from "@agenteschat/engine";
+import { AGENT_ACTION_KINDS, WORKSPACE_ACTIONS } from "@keepmind/engine";
 import { AGENT_ACTION_KINDS as APP_KINDS, WORKSPACE_ACTION_IDS } from "../../../packages/client/src/api/types";
 import { AgentAction } from "../src/routes/app/schemas";
 

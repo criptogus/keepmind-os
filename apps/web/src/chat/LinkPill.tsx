@@ -1,5 +1,5 @@
-import { linkPillLabel, linkPillText, type LinkPill as Pill } from "@agenteschat/client/lib/link-pills";
-import { Icon, type IconName } from "@agenteschat/ui";
+import { linkPillLabel, linkPillText, type LinkPill as Pill } from "@keepmind/client/lib/link-pills";
+import { Icon, type IconName } from "@keepmind/ui";
 import type { CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 

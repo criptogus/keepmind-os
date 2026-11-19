@@ -1,9 +1,9 @@
-import type { Message } from "@agenteschat/client";
-import { type DeviceWait, waitEndedText, waitText } from "@agenteschat/client/lib/devices";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { clockAt } from "@agenteschat/client/lib/format";
-import { computerKind } from "@agenteschat/client/lib/machines";
-import { ComputerIcon, EventPillAction, Icon, Menu, MenuItem, MenuNote, ProviderLogo } from "@agenteschat/ui";
+import type { Message } from "@keepmind/client";
+import { type DeviceWait, waitEndedText, waitText } from "@keepmind/client/lib/devices";
+import { errorText } from "@keepmind/client/lib/errors";
+import { clockAt } from "@keepmind/client/lib/format";
+import { computerKind } from "@keepmind/client/lib/machines";
+import { ComputerIcon, EventPillAction, Icon, Menu, MenuItem, MenuNote, ProviderLogo } from "@keepmind/ui";
 import { useTranslation } from "react-i18next";
 import { useChannelActions } from "@/components/channel-actions";
 import { useOrg } from "@/components/org-context";

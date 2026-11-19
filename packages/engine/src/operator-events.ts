@@ -1,4 +1,4 @@
-import { and, asc, type Database, type Executor, eq, lt, rowsOf, type SQL, schema, sql } from "@agenteschat/db";
+import { and, asc, type Database, type Executor, eq, lt, rowsOf, type SQL, schema, sql } from "@keepmind/db";
 import { z } from "zod";
 import { decodeCursor, encodeCursor } from "./cursor";
 import { ValidationError } from "./errors";

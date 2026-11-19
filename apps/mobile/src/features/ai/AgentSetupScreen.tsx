@@ -1,4 +1,4 @@
-import { keys, useAgentBrain, useAiStatus, useApi, useModels, useSetupPreview } from "@agenteschat/client";
+import { keys, useAgentBrain, useAiStatus, useApi, useModels, useSetupPreview } from "@keepmind/client";
 import {
   autonomyName,
   changes,
@@ -7,11 +7,11 @@ import {
   setupResultLine,
   sortedResults,
   takers,
-} from "@agenteschat/client/lib/agent-setup";
-import { setupPlanOpens, setupPlanQuestion } from "@agenteschat/client/lib/audience";
-import { brainLine } from "@agenteschat/client/lib/brain";
-import { firstName } from "@agenteschat/client/lib/format";
-import { isAuto } from "@agenteschat/client/lib/providers";
+} from "@keepmind/client/lib/agent-setup";
+import { setupPlanOpens, setupPlanQuestion } from "@keepmind/client/lib/audience";
+import { brainLine } from "@keepmind/client/lib/brain";
+import { firstName } from "@keepmind/client/lib/format";
+import { isAuto } from "@keepmind/client/lib/providers";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

@@ -1,5 +1,5 @@
-import type { Routine } from "@agenteschat/client";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
+import type { Routine } from "@keepmind/client";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
 import {
   pausedFix,
   type RoutineFix,
@@ -8,7 +8,7 @@ import {
   runPixels,
   usageContinueBlock,
   usageContinueOffered,
-} from "@agenteschat/client/lib/routine-view";
+} from "@keepmind/client/lib/routine-view";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
 import { Pressable, StyleSheet, View } from "react-native";

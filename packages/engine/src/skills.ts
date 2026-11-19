@@ -1,6 +1,6 @@
-import type { BlobStoreResolver, PubSub } from "@agenteschat/adapters";
-import { and, asc, type Database, eq, gt, inArray, isNull, lte, or, type SQL, schema, sql } from "@agenteschat/db";
-import { SKILL_ASSET_BYTES, SKILL_TEXT_BYTES } from "@agenteschat/tokens/skills";
+import type { BlobStoreResolver, PubSub } from "@keepmind/adapters";
+import { and, asc, type Database, eq, gt, inArray, isNull, lte, or, type SQL, schema, sql } from "@keepmind/db";
+import { SKILL_ASSET_BYTES, SKILL_TEXT_BYTES } from "@keepmind/tokens/skills";
 import { getAgent } from "./agents";
 import { recordAudit } from "./audit";
 import { mapInBatches } from "./batches";
@@ -779,7 +779,7 @@ async function githubGet(
   for (let hop = 0; ; hop++) {
     const at = await assertPublicHttpsUrl(next, deps.resolveHost);
     if (!GITHUB_HOSTS.has(at.hostname)) throw new ValidationError("Only GitHub URLs can be imported for now");
-    const headers: Record<string, string> = { accept, "user-agent": "agentes.chat" };
+    const headers: Record<string, string> = { accept, "user-agent": "keepmind.io" };
     const authenticated = Boolean(token) && at.origin === GITHUB_API;
     if (authenticated) headers.authorization = `Bearer ${token}`;
     const res = await http(at.toString(), {

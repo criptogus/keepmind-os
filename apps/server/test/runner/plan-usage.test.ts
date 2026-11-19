@@ -8,7 +8,7 @@ import {
   type PlanUsage,
   parsePlanUsage,
   parseRunnerFrame,
-} from "@agenteschat/adapters/machine-protocol";
+} from "@keepmind/adapters/machine-protocol";
 import { AccountManager, type AccountManagerOptions } from "../../runner/accounts";
 import {
   CLAUDE_PROBE_ARGS,

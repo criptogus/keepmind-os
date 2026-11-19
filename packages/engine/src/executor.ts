@@ -5,7 +5,7 @@ import {
   type PlanUsage,
   type ProviderFailureCause,
   type PubSub,
-} from "@agenteschat/adapters";
+} from "@keepmind/adapters";
 import {
   and,
   count,
@@ -20,11 +20,12 @@ import {
   queryTrace,
   schema,
   sql,
-} from "@agenteschat/db";
+} from "@keepmind/db";
 import {
   type ContentBlock,
   ensureOpenRouterModels,
   isAutoModel,
+  isCustomModel,
   type ModelMessage,
   type ModelResult,
   PROVIDERS,
@@ -33,9 +34,9 @@ import {
   type SystemBlock,
   type ToolImage,
   textOf,
-} from "@agenteschat/providers";
-import { autoPlanModel, droppedPlanModel, ownLimitsModel, planModel, planOf } from "@agenteschat/providers/plans";
-import { PLAN_NOTICE, PLAN_PAUSE } from "@agenteschat/ui/plan-state";
+} from "@keepmind/providers";
+import { autoPlanModel, droppedPlanModel, ownLimitsModel, planModel, planOf } from "@keepmind/providers/plans";
+import { PLAN_NOTICE, PLAN_PAUSE } from "@keepmind/ui/plan-state";
 import { pendingConnectors } from "./access";
 import { linkRunActions, publishMessageActions } from "./agent-actions";
 import { withTimeout } from "./agent-media";
@@ -160,7 +161,7 @@ import { recordContextUse } from "./context/feedback";
 import { afterTurnDone, learnTags, reportLearnFailure } from "./context/learn";
 import { rulesForRun } from "./context/rules";
 import { memoryArmOf } from "./context/scorecard";
-import { type ContextDeps, ensureThreadSummary } from "./context/summaries";
+import { type ContextDeps, ensureDmSummary, ensureThreadSummary } from "./context/summaries";
 import { EXPAND_TOOL, itemLabel, retrieveForRun } from "./context/tools";
 import { compactToolResults, cutOldToolSteps, cutResultIds, dropOldImages, fitContextWindow } from "./context-budget";
 import {
@@ -184,6 +185,7 @@ import { WIDGET_FAILURES } from "./dashboards/types";
 import { publishDelivery } from "./delivery";
 import { kickParkedWakes } from "./dispatch";
 import { isAgentOnlyDm } from "./dms";
+import { noteEndpointModelFailure } from "./endpoints";
 import {
   BudgetExceededError,
   codedErrorMessage,
@@ -334,7 +336,7 @@ import { isStuck, noteStep, STUCK_END_NOTE, STUCK_END_REPLY_NOTE, STUCK_NOTE, ty
 import { archivedAgentsPrompt, FIND_AGENT_TOOL, renamedAgentsPrompt, teammateMeans } from "./team";
 import { linkRunChecks, runChecksForReply } from "./team-actions";
 import { carriesCredential, cliErrorWords, maskCredentials, maskCredentialsExcept, scrubSignIns } from "./tool-detail";
-import { chooseToolGroups, keptToolGroups, recentForJudge, type ToolGroupChoice } from "./tool-loading";
+import { chooseSkills, chooseToolGroups, keptToolGroups, recentForJudge, type ToolGroupChoice } from "./tool-loading";
 import {
   EVERY_TOOL,
   isCore,
@@ -1818,6 +1820,8 @@ async function executeRunInner(
   if (!askingForRoom) await publishChannelEvent(deps.pubsub, event("running"));
   // Tools on demand (ADR 0043): a new run lists the core tools and the groups the judge expects it to need.
   let toolChoice = null as ToolGroupChoice | null;
+  // Skills the judge expects this message to need (shown under "# This turn" so `load_skill` goes straight to one).
+  let skillPicks: Promise<string[]> = Promise.resolve([]);
   const judge = deps.context?.judge;
   /** The latest messages where the run answers, read once for every judge that needs them. */
   let recentRead: Promise<string[]> | null = null;
@@ -1874,6 +1878,24 @@ async function executeRunInner(
           tools = presentTools(granted, isSensitive, ctx.loadedGroups);
           if (choice.groups.includes(toolGroupKey({ scope: BROWSER_SCOPE }))) {
             deps.warmBrowser?.({ orgId: run.orgId, agentId: agent.id, threadRootId: run.threadRootId });
+          }
+          // Same judge, one more cheap question: which skills this message needs (a `choice`, not per-skill nouls).
+          if (granted.some((t) => t.name === "load_skill")) {
+            skillPicks = enabledSkills(db, run.orgId, agent.id, run.id)
+              .then((list) =>
+                list.length
+                  ? chooseSkills(judge, {
+                      orgId: run.orgId,
+                      agentId: agent.id,
+                      runId: run.id,
+                      agent: { name: agent.name, role: agent.role, instructions: agent.instructions },
+                      message: trigger?.body ?? "",
+                      recent,
+                      skills: list,
+                    })
+                  : [],
+              )
+              .catch(() => [] as string[]);
           }
         })()
       : null;
@@ -2293,6 +2315,7 @@ async function executeRunInner(
             .join("\n\n"),
         ),
         skills: skillList,
+        skillPicks,
         // Granted: `find_agent` is on demand (token-trim B3), and "# Your team" stays.
         team: granted.some((t) => t.name === FIND_AGENT_TOOL),
         expand: tools.some((t) => t.name === EXPAND_TOOL),
@@ -2358,6 +2381,19 @@ async function executeRunInner(
         system.push({
           conversation: true,
           text: `# Earlier in this thread (summary)\n${itemLabel(summary)} ${summary.content}`,
+        });
+    }
+    if (contextDeps && context.dmOlder) {
+      // Agents' DM: the summary stands in for the exchanges the verbatim window cut, for this reader only.
+      const found = await ensureDmSummary(contextDeps, run.orgId, run.channelId, context.dmOlder).catch(() => null);
+      const dm = found
+        ? await agentsDmReads(db, run.orgId, run.channelId, () => readerOfRun(db, run.orgId, run.id))
+        : null;
+      const summary = found && (!dm || (await dm.item(found))) ? found : null;
+      if (summary)
+        system.push({
+          conversation: true,
+          text: `# Earlier in this agents' conversation (summary)\n${itemLabel(summary)} ${summary.content}`,
         });
     }
     // Per turn like memory: who the run acts for picks the rules, so they never move the cached prompt.
@@ -2520,6 +2556,11 @@ async function executeRunInner(
     const words = outageNote(error, plan.account, BRAIN_NAMES[brain]);
     await deferred;
     await addRunStep(db, run, "error", { reason: "provider_outage", message, parked: n + 1 });
+    // An endpoint model that can't be reached stops being Automático's pick (`noteEndpointModelFailure`): this run's
+    // retry ladder is unchanged, the choice for the next run isn't. Best-effort: never fails the park.
+    if (error instanceof ProviderError && isCustomModel(thinker.model)) {
+      await noteEndpointModelFailure(db, thinker.model, error).catch(() => {});
+    }
     // Said once where it answers, so the wait reads as the provider's or the computer's, not as a question to a person.
     // The computer's own names its code and no computer: the apps keep it a plain note, never the card that waits for
     // a computer to come back, which an online one would close at once as back.

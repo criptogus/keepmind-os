@@ -1,8 +1,8 @@
 /**
- * @agenteschat/client: what the web app and the phone app share (ADR 0035):
+ * @keepmind/client: what the web app and the phone app share (ADR 0035):
  * the API types and client, query keys, React Query options and hooks, and
  * realtime. DOM-free: platform effects come in as options. The helpers live
- * under `@agenteschat/client/lib/<name>`.
+ * under `@keepmind/client/lib/<name>`.
  */
 import type { ApiClient } from "./api/client";
 import type { FetchLike } from "./api/http";

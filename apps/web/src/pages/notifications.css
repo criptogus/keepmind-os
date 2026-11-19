@@ -2,7 +2,7 @@
  * Notificações: "Esperando você" on top (the
  * agents look up while they wait), then the rest by day, grouped by
  * conversation. Inline actions float on hover / focus (a row on phones),
- * the mini composer opens in place. Pixel pieces from @agenteschat/ui:
+ * the mini composer opens in place. Pixel pieces from @keepmind/ui:
  * ExpiryFuse (approvals), PlanStrip (mission and routine steps), SkyGlow
  * (all caught up).
  */

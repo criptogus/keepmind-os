@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { and, asc, eq, schema } from "@agenteschat/db";
+import { and, asc, eq, schema } from "@keepmind/db";
 import {
   AUTO_MODEL,
   customModelId,
@@ -7,8 +7,8 @@ import {
   modelForTier,
   parseOpenRouterModels,
   setOpenRouterModels,
-} from "@agenteschat/providers";
-import { CODING_PLANS, planModel } from "@agenteschat/providers/plans";
+} from "@keepmind/providers";
+import { CODING_PLANS, planModel } from "@keepmind/providers/plans";
 import fixture from "../../providers/test/fixtures/openrouter-models.json";
 import {
   agentBrainLines,
@@ -80,6 +80,15 @@ describe("chooseAutoModel", () => {
     });
     // Any judge answers (Jev, or the org's cheap model): only the choice is used, never a probability.
     expect(call?.calibrated).toBeUndefined();
+  });
+
+  test("a routine's high effort is capped at medium; a mission's is not", async () => {
+    const judge = createFakeJudge((_kind, id) => (id === "tier" ? "large" : "high"));
+    const routine = await chooseAutoModel(judge, { ...input, routine: true, mission: false });
+    expect(routine).toMatchObject({ tier: "large", effort: "medium", source: "judge" });
+    expect(routine.reason).toContain("(capped: routine)");
+    const mission = await chooseAutoModel(judge, { ...input, routine: true, mission: true });
+    expect(mission).toMatchObject({ tier: "large", effort: "high" });
   });
 
   test("acting for the person with tools is never the small tier: it only answers", async () => {

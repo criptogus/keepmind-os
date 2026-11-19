@@ -1,5 +1,5 @@
-import type { DesktopMode, PhoneDevice, SocketLike } from "@agenteschat/client";
-import { desktopRetryMs } from "@agenteschat/client";
+import type { DesktopMode, PhoneDevice, SocketLike } from "@keepmind/client";
+import { desktopRetryMs } from "@keepmind/client";
 import {
   controlRefusalText,
   mayTakePhone,
@@ -11,8 +11,8 @@ import {
   phoneScreenCover,
   phoneScreenUrl,
   screenGesture,
-} from "@agenteschat/client/lib/devices";
-import { firstName } from "@agenteschat/client/lib/format";
+} from "@keepmind/client/lib/devices";
+import { firstName } from "@keepmind/client/lib/format";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {

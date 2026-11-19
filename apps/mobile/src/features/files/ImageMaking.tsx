@@ -1,4 +1,4 @@
-import type { AgentColorName } from "@agenteschat/ui/agent/engine";
+import type { AgentColorName } from "@keepmind/ui/agent/engine";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";

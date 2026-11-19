@@ -1,4 +1,4 @@
-import { and, type Database, eq, inArray, isNotNull, isNull, schema } from "@agenteschat/db";
+import { and, type Database, eq, inArray, isNotNull, isNull, schema } from "@keepmind/db";
 import { type AiStatusDeps, agentAiStates, orgHasAi } from "./ai-status";
 import { seesAgentDetails } from "./audience";
 import { listChannels } from "./channels";
@@ -8,6 +8,7 @@ import type { RolePermission } from "./permissions";
 import { type LodiLane, type LodiSwitch, liveLodiSwitches, lodiPromptBlocks } from "./right-hand-lane";
 import type { SeatState } from "./right-hand-seats";
 import { accountInUse, isBillingHold, orgStanding } from "./standing";
+import { teamDrift } from "./team-drift";
 import { agentBudgetsThisMonth } from "./usage";
 import { isPersonalWorkspace } from "./workspace-mode";
 
@@ -314,6 +315,14 @@ export async function rightHandPrompt(
       ? firstThings
       : [...firstThings, ...laterThings, ...teamThings];
 
+  // Team drift (chief-of-staff gaps): an existing team that stopped fitting. Only in a DM, only for a workspace
+  // with a team, never while the first-run card is open or in a personal workspace — and `teamDrift` itself
+  // scopes every signal to `seen` and spends at most one dated key per person per day.
+  const drift =
+    input.inDm && !personal && !cardOpen && team.length > 0
+      ? await teamDrift(db, { orgId, personId, seen, channels: named })
+      : [];
+
   // Only a run with no computer hands on the work that needs one (`RIGHT_HAND_COMPUTER` says what it has).
   const noComputer = (input.computer ?? "none") === "none" ? " or needs a computer" : "";
   return [
@@ -346,8 +355,11 @@ export async function rightHandPrompt(
     checklist.length
       ? `# Not set up yet\nRaise only the first that fits, once what they asked is done, one per turn:\n${checklist.map((l) => `- ${l}`).join("\n")}`
       : "",
+    drift.length
+      ? `# Team drift\nThe team's work shows strain. Raise at most one of these, as an offer, once what they asked is done, one per turn:\n${drift.map((l) => `- ${l}`).join("\n")}`
+      : "",
     input.inDm ? (personal ? PERSONAL_INTERVIEW : TEAM_INTERVIEW) : "",
-    "# KeepMind capabilities\nFor knowledge, use the workspace Second Brain: search_context before answering from past work, remember for lasting facts, update_memory for corrections and forget when asked. Preserve source, audience and private/team boundaries. An external KeepMind vault is separate: only its connected tools prove access; never claim sync or import without executing and verifying it. For a CRM or custom actions, find list_plugins and propose_plugin. Use autonomous_crm when the goal is ongoing relationship management: its one-time approval permits internal record work in background for the chosen agents, not messages or commitments. Keep speech_crm for assisted-only operation. After activation, offer an existing native routine for periodic review when ongoing monitoring was requested; do not claim scheduling until the routine exists. Report completed internal work in a digest and surface only unresolved consequential exceptions. Review suggestions are not approval requests. Otherwise infer a minimal declarative record schema from the goal. Show one concrete activate_plugin approval for the selected agents; do not require the person to write JSON. After activation, find the generated tools, do the requested first task and read back the saved result. Keep records when disabling. External connectors use offer_connect_app with an actual endpoint; secrets go only in the protected dialog. Never replace a missing plugin capability with arbitrary generated code or silently give an agent extra access.",
+    "# KeepMind capabilities\nFor knowledge, use the workspace Second Brain: search_context before answering from past work, remember for lasting facts, update_memory for corrections and forget when asked. Preserve source, audience and private/team boundaries. An external KeepMind vault is separate: only its connected tools prove access; never claim sync or import without executing and verifying it. To bring a GitHub repository's notes into the wiki, use import_github_to_wiki with its github.com link (repo, folder or .md file); private repositories need the workspace's GitHub. For a CRM or custom actions, find list_plugins and propose_plugin. Use autonomous_crm when the goal is ongoing relationship management: its one-time approval permits internal record work in background for the chosen agents, not messages or commitments. Keep speech_crm for assisted-only operation. After activation, offer an existing native routine for periodic review when ongoing monitoring was requested; do not claim scheduling until the routine exists. Report completed internal work in a digest and surface only unresolved consequential exceptions. Review suggestions are not approval requests. Otherwise infer a minimal declarative record schema from the goal. Show one concrete activate_plugin approval for the selected agents; do not require the person to write JSON. After activation, find the generated tools, do the requested first task and read back the saved result. Keep records when disabling. External connectors use offer_connect_app with an actual endpoint; secrets go only in the protected dialog. Never replace a missing plugin capability with arbitrary generated code or silently give an agent extra access.",
     [
       "# Your cards",
       "- A change they asked for and may make applies at once with Undo, unless this turn read outside content. Any other waits on its card, for whoever may decide it. Say it is done only when the tool does.",

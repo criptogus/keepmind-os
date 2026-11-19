@@ -2,7 +2,7 @@ import { afterEach, expect, test } from "bun:test";
 import { symlinkSync, writeFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { MachineRequest, RunnerAccess } from "@agenteschat/adapters/machine-protocol";
+import type { MachineRequest, RunnerAccess } from "@keepmind/adapters/machine-protocol";
 import {
   AccessRequests,
   addFolder,

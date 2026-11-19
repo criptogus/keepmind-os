@@ -1,4 +1,4 @@
-import type { BrainPickOption } from "@agenteschat/client/lib/brain-picker";
+import type { BrainPickOption } from "@keepmind/client/lib/brain-picker";
 import { useTranslation } from "react-i18next";
 import { Sheet } from "@/ui";
 import { PickList } from "../shared/PickList";

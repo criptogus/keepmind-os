@@ -1,4 +1,4 @@
-import type { S3Input, StorageConfig, StoragePlatform, StorageTestResult } from "@agenteschat/client";
+import type { S3Input, StorageConfig, StoragePlatform, StorageTestResult } from "@keepmind/client";
 import {
   useSaveStorage,
   useStartMigration,
@@ -6,9 +6,9 @@ import {
   useStorageMigration,
   useTestStorage,
   useWorkspaceLimits,
-} from "@agenteschat/client";
-import { can } from "@agenteschat/client/lib/permissions";
-import { storageUsageLine } from "@agenteschat/client/lib/storage";
+} from "@keepmind/client";
+import { can } from "@keepmind/client/lib/permissions";
+import { storageUsageLine } from "@keepmind/client/lib/storage";
 import {
   Alert,
   Button,
@@ -27,7 +27,7 @@ import {
   Meter,
   RadioCard,
   RadioGroup,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { StorageMeter } from "@/components/Limits";

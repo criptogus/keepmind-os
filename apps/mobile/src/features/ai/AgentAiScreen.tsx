@@ -1,23 +1,23 @@
-import type { AgentBrain, AgentBrainInput, BrainScope, MachineAccount } from "@agenteschat/client";
-import { keys, useAgentBrain, useAiAccounts, useApi, useMachines, useModels } from "@agenteschat/client";
+import type { AgentBrain, AgentBrainInput, BrainScope, MachineAccount } from "@keepmind/client";
+import { keys, useAgentBrain, useAiAccounts, useApi, useMachines, useModels } from "@keepmind/client";
 import {
   accountChoices,
   offersSignInAgain,
   ownSignInListed,
   ownSignInName,
   signInOf,
-} from "@agenteschat/client/lib/ai-accounts";
-import { brainLine, thinksWith } from "@agenteschat/client/lib/brain";
-import { advancedContents, viewSpeedFits } from "@agenteschat/client/lib/brain-advanced";
-import { computerNameOf } from "@agenteschat/client/lib/computer";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { aiChoiceOf, planOfKind } from "@agenteschat/client/lib/no-ai";
-import { can } from "@agenteschat/client/lib/permissions";
-import { modelLimitText } from "@agenteschat/client/lib/plan-usage";
-import { brainPlan, geminiPersonal, isPlanId, planFreeHint, planOf } from "@agenteschat/client/lib/plans";
-import { apiProviderOf, isAuto, providerLabel } from "@agenteschat/client/lib/providers";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
-import { extraUsageOn, limitOffers, planState } from "@agenteschat/ui/plan-state";
+} from "@keepmind/client/lib/ai-accounts";
+import { brainLine, thinksWith } from "@keepmind/client/lib/brain";
+import { advancedContents, viewSpeedFits } from "@keepmind/client/lib/brain-advanced";
+import { computerNameOf } from "@keepmind/client/lib/computer";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { aiChoiceOf, planOfKind } from "@keepmind/client/lib/no-ai";
+import { can } from "@keepmind/client/lib/permissions";
+import { modelLimitText } from "@keepmind/client/lib/plan-usage";
+import { brainPlan, geminiPersonal, isPlanId, planFreeHint, planOf } from "@keepmind/client/lib/plans";
+import { apiProviderOf, isAuto, providerLabel } from "@keepmind/client/lib/providers";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
+import { extraUsageOn, limitOffers, planState } from "@keepmind/ui/plan-state";
 import { useQueryClient } from "@tanstack/react-query";
 import { Fragment, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";

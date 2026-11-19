@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { readdirSync } from "node:fs";
-import type { AppNotification } from "@agenteschat/client";
-import { opensConnectAi, openTarget } from "@agenteschat/client/lib/notifications";
+import type { AppNotification } from "@keepmind/client";
+import { opensConnectAi, openTarget } from "@keepmind/client/lib/notifications";
 import {
   dispatchPushOpen,
   fallbackTarget,

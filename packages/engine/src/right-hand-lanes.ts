@@ -1,4 +1,4 @@
-import type { Database } from "@agenteschat/db";
+import type { Database } from "@keepmind/db";
 import type { JobDeps } from "./jobs";
 import { type JobHandlers, PermanentJobError } from "./outbox";
 import { lodiLanes } from "./right-hand-lane";

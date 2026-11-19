@@ -44,5 +44,5 @@ export function useGrowFrom(open: boolean, card: RefObject<HTMLElement | null>, 
   };
 }
 
-/** The page's theme as drawn: it lives with the drawings in `@agenteschat/ui`. */
-export { useDarkTheme } from "@agenteschat/ui";
+/** The page's theme as drawn: it lives with the drawings in `@keepmind/ui`. */
+export { useDarkTheme } from "@keepmind/ui";

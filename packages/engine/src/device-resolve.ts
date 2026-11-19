@@ -1,5 +1,5 @@
-import type { PhoneReason, PubSub } from "@agenteschat/adapters";
-import { and, type Database, type Executor, eq, gt, inArray, isNull, rowsOf, schema, sql } from "@agenteschat/db";
+import type { PhoneReason, PubSub } from "@keepmind/adapters";
+import { and, type Database, type Executor, eq, gt, inArray, isNull, rowsOf, schema, sql } from "@keepmind/db";
 import { getAgentCached } from "./agents";
 import { accountablePerson, runAuthorityById } from "./authority";
 import { caches, cachesEnabled } from "./cache";

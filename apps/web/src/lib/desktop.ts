@@ -1,15 +1,15 @@
-import type { AppNotification, SignInProvider } from "@agenteschat/client";
-import { deviceNoticeOf } from "@agenteschat/client/lib/devices";
-import { firstName } from "@agenteschat/client/lib/format";
-import { noticeLine } from "@agenteschat/client/lib/island";
-import { mediaWord } from "@agenteschat/client/lib/media";
-import { openTarget, targetPath } from "@agenteschat/client/lib/notifications";
+import type { AppNotification, SignInProvider } from "@keepmind/client";
+import { deviceNoticeOf } from "@keepmind/client/lib/devices";
+import { firstName } from "@keepmind/client/lib/format";
+import { noticeLine } from "@keepmind/client/lib/island";
+import { mediaWord } from "@keepmind/client/lib/media";
+import { openTarget, targetPath } from "@keepmind/client/lib/notifications";
 import type { i18n as I18n, TFunction } from "i18next";
 import { useEffect } from "react";
 import type { DesktopServerWorkspaces } from "./workspaces";
 
 /**
- * The site inside the agentes.chat desktop app (ADR 0036, ADR 0066): the app's main window loads it and
+ * The site inside the KeepMind OS desktop app (ADR 0036, ADR 0066): the app's main window loads it and
  * sets `window.__agentesDesktop` before it starts. The site gets nothing of the computer but how it draws
  * (`renderer`, and on Linux `system`: distribution, session, WebKitGTK, graphics card). It draws its own
  * title bar and sends Google/Apple sign-in to the browser (`apps/desktop/src-tauri/src/main_window.rs`).
@@ -307,7 +307,7 @@ export const thisMac = {
    */
   openWorkspace: (server: string, orgId: string, account?: string) =>
     invoke<unknown>({ kind: "openWorkspace", server, orgId, ...(account ? { account } : {}) }),
-  /** The app's own window to add a workspace: a new one on agentes.chat, or the team's server. */
+  /** The app's own window to add a workspace: a new one on KeepMind OS, or the team's server. */
   addWorkspace: () => invoke<unknown>({ kind: "addWorkspace" }),
   /**
    * The window goes to a server of the app's list on its own first page (its sign-in when the app has no session

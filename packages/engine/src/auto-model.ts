@@ -1,4 +1,4 @@
-import { and, type Database, desc, type Executor, eq, isNull, schema } from "@agenteschat/db";
+import { and, type Database, desc, type Executor, eq, isNull, schema } from "@keepmind/db";
 import {
   endpointModelId,
   isAutoModel,
@@ -7,7 +7,7 @@ import {
   modelForTier,
   modelInfo,
   parseCustomModel,
-} from "@agenteschat/providers";
+} from "@keepmind/providers";
 import type { Agent } from "./agents";
 import { agentBrainSummaries, brainOf, CLAUDE_CODE_MODELS } from "./brain-settings";
 import type { BrainPlan } from "./brains/select";
@@ -168,8 +168,11 @@ export async function chooseAutoModel(
     }
     const tierP = percent(answers.tier?.probabilities?.[tier]);
     const effortP = percent(answers.effort?.probabilities?.[effort]);
-    const reason = `${TIER_REASON[tier]}${tierP}; ${effort} effort${effortP}.`;
-    return { tier, effort, reason: reason.charAt(0).toUpperCase() + reason.slice(1), source: "judge" };
+    // A routine nobody waits on never thinks at high effort outside a mission: the extra reasoning
+    // buys little on background work and costs the most time and tokens per turn.
+    const capped = input.routine && !input.mission && effort === "high" ? "medium" : effort;
+    const reason = `${TIER_REASON[tier]}${tierP}; ${capped} effort${effortP}${capped === effort ? "" : " (capped: routine)"}.`;
+    return { tier, effort: capped, reason: reason.charAt(0).toUpperCase() + reason.slice(1), source: "judge" };
   } catch {
     return fallbackChoice("error");
   } finally {

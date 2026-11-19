@@ -1,4 +1,4 @@
-"NSMicrophoneUsageDescription" = "O agentes.chat usa o microfone para gravar mensagens de voz.";
+"NSMicrophoneUsageDescription" = "O KeepMind OS usa o microfone para gravar mensagens de voz.";
 "NSDesktopFolderUsageDescription" = "Deixa os agentes que trabalham neste Mac abrirem arquivos na sua Mesa.";
 "NSDocumentsFolderUsageDescription" = "Deixa os agentes que trabalham neste Mac abrirem arquivos na sua pasta Documentos.";
 "NSDownloadsFolderUsageDescription" = "Deixa os agentes que trabalham neste Mac abrirem arquivos na sua pasta Downloads.";

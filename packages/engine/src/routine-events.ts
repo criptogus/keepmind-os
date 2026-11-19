@@ -1,4 +1,4 @@
-import { and, type Database, desc, type Executor, eq, inArray, isNull, or, schema, sql } from "@agenteschat/db";
+import { and, type Database, desc, type Executor, eq, inArray, isNull, or, schema, sql } from "@keepmind/db";
 import { cutText } from "./format";
 import { enqueue } from "./outbox";
 import { routineJobAlive } from "./routine-state";

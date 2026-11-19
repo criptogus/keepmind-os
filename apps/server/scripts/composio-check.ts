@@ -10,9 +10,9 @@
  * opened with `state` appended; both pending accounts are deleted after.
  */
 import { parseArgs } from "node:util";
-import { createComposioClient } from "@agenteschat/adapters";
-import { composioAuthConfigs, loadConfig } from "@agenteschat/config";
-import { composioToolName, MCP_PRESETS } from "@agenteschat/engine";
+import { createComposioClient } from "@keepmind/adapters";
+import { composioAuthConfigs, loadConfig } from "@keepmind/config";
+import { composioToolName, MCP_PRESETS } from "@keepmind/engine";
 
 const BASE = "https://backend.composio.dev/api/v3.1";
 const { values: args } = parseArgs({

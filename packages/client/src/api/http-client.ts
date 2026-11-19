@@ -199,6 +199,7 @@ import type {
   Poll,
   Proposal,
   ReactionCount,
+  ReaStatusView,
   Reminder,
   RemovalPreview,
   RightHandApprovals,
@@ -251,6 +252,8 @@ import type {
   UsageReport,
   WaitingList,
   WebhookSetup,
+  WhatsAppChatView,
+  WhatsAppSessionView,
   WifiIphones,
   WifiPairing,
   WikiGraph,
@@ -320,7 +323,7 @@ const artifactQuery = (f: ArtifactFilters) => ({
 export function createHttpApi(options: TransportOptions = {}): HttpApi {
   const request = createRequester(options);
   const files = createFileRequester(options);
-  // agentes.chat itself, for its public answers (the desktop app's newest build): another origin, no cookie.
+  // KeepMind OS itself, for its public answers (the desktop app's newest build): another origin, no cookie.
   const cloud = createRequester({ baseUrl: CLOUD_SERVER, ...(options.fetch ? { fetch: options.fetch } : {}) });
   /** Prefix for URLs the platform opens itself (file links); "" on the web. */
   const base = (options.baseUrl ?? "").replace(/\/+$/, "");
@@ -835,6 +838,7 @@ export function createHttpApi(options: TransportOptions = {}): HttpApi {
         request<{ previous: AgentLineChange[] }>(`${org(orgId)}/agent-lines`, { method: "PUT", json: { changes } }),
       proposeChannelMove: (orgId, input) => request(`${org(orgId)}/team/channel-move`, { json: input }),
       create: (orgId, input) => request<Agent>(`${org(orgId)}/agents`, { json: input }),
+      createBatch: (orgId, input) => request<{ agents: Agent[] }>(`${org(orgId)}/agents/batch`, { json: input }),
       proposal: (orgId, messageId) => request<AgentProposal>(`${org(orgId)}/agent-proposals/${enc(messageId)}`),
       denyProposal: (orgId, messageId) =>
         request<AgentProposal>(`${org(orgId)}/agent-proposals/${enc(messageId)}/deny`, { json: {} }),
@@ -1188,6 +1192,29 @@ export function createHttpApi(options: TransportOptions = {}): HttpApi {
       disconnect: (orgId, connectionId) =>
         request<void>(`${org(orgId)}/connectors/${enc(connectionId)}`, { method: "DELETE" }),
     },
+    whatsapp: {
+      session: (orgId) => request<{ session: WhatsAppSessionView | null }>(`${org(orgId)}/whatsapp`),
+      connect: (orgId) =>
+        request<{ session: WhatsAppSessionView | null }>(`${org(orgId)}/whatsapp/connect`, { method: "POST" }),
+      disconnect: (orgId) =>
+        request<{ session: WhatsAppSessionView | null }>(`${org(orgId)}/whatsapp/disconnect`, { method: "POST" }),
+      setAnswerAgent: (orgId, agentId) =>
+        request<{ session: WhatsAppSessionView | null }>(`${org(orgId)}/whatsapp/answer-agent`, {
+          method: "PUT",
+          json: { agentId },
+        }),
+      chats: (orgId) => request<{ chats: WhatsAppChatView[] }>(`${org(orgId)}/whatsapp/chats`),
+      setChatApproval: (orgId, chatId, approved) =>
+        request<{ chat: WhatsAppChatView | null }>(`${org(orgId)}/whatsapp/chats/${enc(chatId)}`, {
+          method: "PUT",
+          json: { approved },
+        }),
+    },
+    rea: {
+      status: (orgId) => request<{ rea: ReaStatusView | null }>(`${org(orgId)}/rea`),
+      connect: (orgId) => request<{ rea: ReaStatusView | null }>(`${org(orgId)}/rea/connect`, { method: "POST" }),
+      disconnect: (orgId) => request<{ rea: ReaStatusView | null }>(`${org(orgId)}/rea/disconnect`, { method: "POST" }),
+    },
     githubApp: {
       info: (orgId) => request<GitHubAppInfo>(`${org(orgId)}/github-app`),
       install: async (orgId, returnTo) =>
@@ -1350,7 +1377,7 @@ export function createHttpApi(options: TransportOptions = {}): HttpApi {
             { json: input === "resume" ? {} : input },
           )
         ).paused,
-      // A self-hosted server has no builds of its own (no `DESKTOP_RELEASES_TOKEN`): agentes.chat's, then.
+      // A self-hosted server has no builds of its own (no `DESKTOP_RELEASES_TOKEN`): KeepMind OS's, then.
       desktopLatest: async (target, arch) =>
         (await nullOn(404, () => request<DesktopRelease>("/api/desktop/latest", { query: { target, arch } }))) ??
         (await nullOn(404, () => cloud<DesktopRelease>("/api/desktop/latest", { query: { target, arch } }))),

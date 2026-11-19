@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import type { IssueColumn, IssueStatus } from "@agenteschat/client";
+import type { IssueColumn, IssueStatus } from "@keepmind/client";
 import { boardStages, columnIdOf, columnTitle, groupByColumn, isCustomBoard, rankAt } from "../src/lib/issues";
 
 const col = (id: string, stage: IssueStatus, position = 0, name: string | null = null): IssueColumn => ({

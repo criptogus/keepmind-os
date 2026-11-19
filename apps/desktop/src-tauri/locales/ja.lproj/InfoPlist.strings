@@ -1,4 +1,4 @@
-"NSMicrophoneUsageDescription" = "agentes.chatはボイスメッセージの録音にマイクを使用します。";
+"NSMicrophoneUsageDescription" = "KeepMind OSはボイスメッセージの録音にマイクを使用します。";
 "NSDesktopFolderUsageDescription" = "このMacで作業するエージェントが、デスクトップのファイルを開けるようにします。";
 "NSDocumentsFolderUsageDescription" = "このMacで作業するエージェントが、「書類」フォルダのファイルを開けるようにします。";
 "NSDownloadsFolderUsageDescription" = "このMacで作業するエージェントが、「ダウンロード」フォルダのファイルを開けるようにします。";

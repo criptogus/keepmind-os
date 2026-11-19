@@ -1,3 +1,4 @@
+import { dirname, join } from "node:path";
 import {
   type Adapters,
   type BrainTurnRequest,
@@ -5,9 +6,9 @@ import {
   type S3Fetch,
   type SpeechFetch,
   STREAM_CLOSE,
-} from "@agenteschat/adapters";
-import { type Config, connectorOAuthApps, githubAppConfig, mcpCallerIdentity } from "@agenteschat/config";
-import type { Database } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { type Config, connectorOAuthApps, githubAppConfig, mcpCallerIdentity } from "@keepmind/config";
+import type { Database } from "@keepmind/db";
 import {
   AntigravityBrain,
   APP_FAULT_HINT,
@@ -95,8 +96,9 @@ import {
   type GitProxyDeps,
   GrokBrain,
   getAgentCached,
+  handleInboundWhatsAppMessage,
   hubBrainLink,
-  isAgentesCloud,
+  isKeepMindCloud,
   isRightHand,
   type JobDeps,
   type Judge,
@@ -110,6 +112,7 @@ import {
   prepareAgentCode,
   publishUserEvent,
   queueBudgetEmail,
+  type ReaDeps,
   type ResolveHost,
   RIGHT_HAND_TURN,
   ROUTER_QUIET_MS,
@@ -131,11 +134,12 @@ import {
   type ToolSource,
   type VaultDeps,
   type VoiceDeps,
+  type WhatsAppDeps,
   warmAgentBrowser,
   withComposio,
   withJudgeFallback,
-} from "@agenteschat/engine";
-import { createOpenAIEmbeddings, createVoyageEmbeddings, type ModelProvider } from "@agenteschat/providers";
+} from "@keepmind/engine";
+import { createOpenAIEmbeddings, createVoyageEmbeddings, type ModelProvider } from "@keepmind/providers";
 import { type AppleTokenRevoker, appleTokenRevoker } from "./auth";
 import { hookConfig } from "./routes/app/context";
 import { version } from "./version";
@@ -189,6 +193,10 @@ export interface EngineOptions {
   };
   /** Error reports (ADR 0104) for failures nothing logs: learning's (`reportLearnFailure`). */
   errors?: ErrorReporter;
+  /** Tests: fake spawn/fetch/paths for the WhatsApp bridge supervisor. */
+  whatsapp?: Partial<WhatsAppDeps>;
+  /** Tests: fake spawn/fetch/paths for the REA sidecar supervisor. */
+  rea?: Partial<ReaDeps>;
 }
 
 /**
@@ -479,7 +487,20 @@ export function buildEngine(o: EngineOptions) {
         hooks: hookConfig(config),
         connectors: connectorDeps,
       }),
-      createWikiToolSource({ pubsub: adapters.pubsub, search: context }),
+      createWikiToolSource({
+        pubsub: adapters.pubsub,
+        search: context,
+        github: {
+          fetch: o.http,
+          resolveHost: o.resolveHost,
+          github: {
+            connectors: connectorDeps,
+            get app() {
+              return githubApp.current();
+            },
+          },
+        },
+      }),
       createSecondBrainToolSource(context),
       createPluginToolSource(),
       createConnectorToolSource({
@@ -594,7 +615,7 @@ export function buildEngine(o: EngineOptions) {
       }
     },
   });
-  // agentes.chat Cloud reads the screen's text while a person is in control (ADR 0076); a self-hosted server never.
+  // KeepMind OS Cloud reads the screen's text while a person is in control (ADR 0076); a self-hosted server never.
   const sessions = config.SESSION_SCREENING ? createSessionScreening({ db, hub: machineHub, log: o.log }) : null;
   // Agents' desktops and terminals (ADR 0058): each person's stream paired with the runner's data socket for it,
   // its access checked again while open; control changing hands closes the views it hides. Where sessions are
@@ -724,7 +745,7 @@ export function buildEngine(o: EngineOptions) {
     db,
     keyWrapper: adapters.keyWrapper,
     keyWrappers,
-    envOnly: isAgentesCloud(config.PUBLIC_URL),
+    envOnly: isKeepMindCloud(config.PUBLIC_URL),
     fetch: o.speechFetch,
     envEngines: envSpeechEngines(
       config.SPEECH_ENGINES,
@@ -755,7 +776,7 @@ export function buildEngine(o: EngineOptions) {
     judge: context.judge,
     retentionDays: config.VOICE_RETENTION_DAYS,
     // Fair use is for what we pay for: a self-hosted server has no limit.
-    limits: isAgentesCloud(config.PUBLIC_URL)
+    limits: isKeepMindCloud(config.PUBLIC_URL)
       ? {
           personMinutesPerDay: config.VOICE_LIMIT_PERSON_MINUTES_PER_DAY,
           orgMinutesPerMember: config.VOICE_LIMIT_ORG_MINUTES_PER_MEMBER,
@@ -856,6 +877,33 @@ export function buildEngine(o: EngineOptions) {
     publicUrl: config.PUBLIC_URL,
     resolveHost: o.resolveHost,
   };
+  // The WhatsApp QR bridge supervisor (unofficial session mode): sessions under
+  // WHATSAPP_DATA_DIR, defaulting next to FILES_DIR so docker volumes carry them.
+  const whatsapp: WhatsAppDeps = {
+    db,
+    keyWrappers,
+    pubsub: adapters.pubsub,
+    dataDir:
+      config.WHATSAPP_DATA_DIR ??
+      (config.FILES_DIR ? join(dirname(config.FILES_DIR), "whatsapp") : join(process.cwd(), "whatsapp-sessions")),
+    apiBaseUrl: `http://127.0.0.1:${config.PORT}`,
+    bridgeEntry: config.WHATSAPP_BRIDGE_ENTRY,
+    handleMessage: (orgId, msg) => handleInboundWhatsAppMessage({ db, whatsapp }, orgId, msg),
+    ...o.whatsapp,
+  };
+  // Agent replies in mirrored WhatsApp threads go back out through the bridge (job `message.posted`).
+  jobDeps.whatsapp = whatsapp;
+  // The REA reverse-engineering sidecar (`rea-agents mcp --http`): spawned per
+  // org on connect, workspaces under REA_DATA_DIR. Opt-in — an admin connects it.
+  const rea: ReaDeps = {
+    db,
+    pubsub: adapters.pubsub,
+    dataDir:
+      config.REA_DATA_DIR ??
+      (config.FILES_DIR ? join(dirname(config.FILES_DIR), "rea") : join(process.cwd(), "rea-workspaces")),
+    packageSpec: config.REA_PACKAGE ?? "rea-agents@6.9.0",
+    ...o.rea,
+  };
   return {
     gateway,
     /** The search index's vectors (undefined: words alone), for the boot backfill (`queueEmbeddingBackfill`). */
@@ -887,6 +935,10 @@ export function buildEngine(o: EngineOptions) {
     /** Likewise: the speech engines, read before the first voice message. */
     speech,
     voice,
+    /** The WhatsApp bridge supervisor deps (spawn/health/state), for its routes and boot. */
+    whatsapp,
+    /** The REA sidecar supervisor deps, for its routes and boot. */
+    rea,
   };
 }
 

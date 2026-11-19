@@ -1,12 +1,8 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { createHash, generateKeyPairSync, randomBytes } from "node:crypto";
 import { deflateSync, gzipSync } from "node:zlib";
-import {
-  DELETE_BRANCHES_POINTER,
-  NO_TERMINAL_COMMANDS,
-  otherBranchPointer,
-} from "@agenteschat/adapters/command-policy";
-import { and, eq, schema } from "@agenteschat/db";
+import { DELETE_BRANCHES_POINTER, NO_TERMINAL_COMMANDS, otherBranchPointer } from "@keepmind/adapters/command-policy";
+import { and, eq, schema } from "@keepmind/db";
 import {
   agentCommitEmail,
   type ConnectorDeps,
@@ -71,8 +67,8 @@ function commitObject(parents: string[], message: string, late: string[] = []) {
     [
       `tree ${"4b825dc642cb6eb9a060e54bf8d69288fbee4904"}`,
       ...parents.map((p) => `parent ${p}`),
-      "author Dev (agentes) <dev@agents.agentes.chat> 1760000000 +0000",
-      "committer Dev (agentes) <dev@agents.agentes.chat> 1760000000 +0000",
+      "author Dev (agentes) <contact@zeroagency.ai> 1760000000 +0000",
+      "committer Dev (agentes) <contact@zeroagency.ai> 1760000000 +0000",
       ...late.map((p) => `parent ${p}`),
       "",
       message,
@@ -932,9 +928,9 @@ describe("branches that aren't the agent's own", () => {
 });
 
 describe("the computer", () => {
-  test("agents commit as handle@agents.<our host>: theo@agents.agentes.chat on KeepMind OS", () => {
-    expect(agentCommitEmail("https://agentes.chat", "theo")).toBe("theo@agents.agentes.chat");
-    expect(agentCommitEmail("https://agentes.chat/api/git/o/c/", "theo")).toBe("theo@agents.agentes.chat");
+  test("agents commit as handle@agents.<our host>: theo@agents.keepmind.io on KeepMind OS", () => {
+    expect(agentCommitEmail("https://keepmind.io", "theo")).toBe("theo@agents.keepmind.io");
+    expect(agentCommitEmail("https://keepmind.io/api/git/o/c/", "theo")).toBe("theo@agents.keepmind.io");
     expect(agentCommitEmail("http://localhost:3000", "theo")).toBe("theo@agents.localhost");
   });
 

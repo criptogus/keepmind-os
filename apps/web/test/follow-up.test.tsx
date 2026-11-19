@@ -1,10 +1,10 @@
 import { afterEach, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { ApiError, type PendingReturn } from "@agenteschat/client";
-import { formatTime } from "@agenteschat/client/lib/format";
+import { ApiError, type PendingReturn } from "@keepmind/client";
+import { formatTime } from "@keepmind/client/lib/format";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { ADA_ID, ATLAS_ID, createFakeApi, ENG_ID, ORG_ID, seedState } from "./fake-api";
 import { renderApp, screen, settle } from "./render";

@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { Issue, IssueWork, Member } from "@agenteschat/client";
-import { ISSUES_VIEW_DEFAULT } from "@agenteschat/client/lib/issues-view";
+import type { Issue, IssueWork, Member } from "@keepmind/client";
+import { ISSUES_VIEW_DEFAULT } from "@keepmind/client/lib/issues-view";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { ADA_ID, ATLAS_ID, createFakeApi, ORG_ID, seedState } from "./fake-api";
 import { renderApp, screen, settle, showIn } from "./render";
@@ -100,7 +100,7 @@ function worst(base: Issue): Issue[] {
       dueDate: day(1),
       criteria: criteria(3, 12),
       pullRequests: [{ number: 10942, url: "https://github.com/agentes-chat/app/pull/10942", openedBy: null }],
-      githubUrl: "https://github.com/agentes-chat/agentes-chat/issues/4521",
+      githubUrl: "https://github.com/criptogus/keepmind-os/issues/4521",
       assignee: { type: "agent", id: ATLAS_ID },
       work: work(ATLAS_ID, "waiting_approval"),
       conversation: talk(1284),
@@ -207,7 +207,7 @@ describe("Tarefas at their worst", () => {
       "amanhã",
       "3/12",
       "PR #10942",
-      "agentes-chat#4521",
+      "keepmind-os#4521",
       "128412",
     ]);
     expect(all.querySelector(".issue-card__state")?.textContent).toBe("Pede aprovação");

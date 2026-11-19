@@ -13,7 +13,7 @@ import type {
   SecretRequest,
   ThreadInfo,
   VoiceDroppedEvent,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 import {
   ApiError,
   applyBrowserHandoff,
@@ -91,16 +91,16 @@ import {
   unmarkStopping,
   useIssueLive,
   useSendWaiting,
-} from "@agenteschat/client";
-import { type AgentUnavailableEvent, isAgentUnavailable } from "@agenteschat/client/lib/audience";
-import { newerBlockState } from "@agenteschat/client/lib/blocks";
-import { deviceWaitEventOf } from "@agenteschat/client/lib/devices";
-import { knownErrorText } from "@agenteschat/client/lib/errors";
-import { formatPercent } from "@agenteschat/client/lib/format";
-import { isReturnLine } from "@agenteschat/client/lib/notices";
-import { nextMonthIso, usageWhen } from "@agenteschat/client/lib/plan-usage";
-import { playSound, soundForNotification } from "@agenteschat/client/lib/sounds";
-import { playAgentReaction } from "@agenteschat/ui";
+} from "@keepmind/client";
+import { type AgentUnavailableEvent, isAgentUnavailable } from "@keepmind/client/lib/audience";
+import { newerBlockState } from "@keepmind/client/lib/blocks";
+import { deviceWaitEventOf } from "@keepmind/client/lib/devices";
+import { knownErrorText } from "@keepmind/client/lib/errors";
+import { formatPercent } from "@keepmind/client/lib/format";
+import { isReturnLine } from "@keepmind/client/lib/notices";
+import { nextMonthIso, usageWhen } from "@keepmind/client/lib/plan-usage";
+import { playSound, soundForNotification } from "@keepmind/client/lib/sounds";
+import { playAgentReaction } from "@keepmind/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import type { TFunction } from "i18next";
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";

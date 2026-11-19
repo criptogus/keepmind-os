@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import type { ModelRequest } from "@agenteschat/providers";
-import { systemText } from "@agenteschat/providers";
+import type { ModelRequest } from "@keepmind/providers";
+import { systemText } from "@keepmind/providers";
 import {
   CAPABILITIES_LIMIT,
   COMPUTER_TOOLS_NOTE,

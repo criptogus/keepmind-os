@@ -1,5 +1,5 @@
-import { newClientId } from "@agenteschat/client";
-import { VOICE_MAX_MS, VOICE_MIN_MS } from "@agenteschat/client/lib/voice";
+import { newClientId } from "@keepmind/client";
+import { VOICE_MAX_MS, VOICE_MIN_MS } from "@keepmind/client/lib/voice";
 import { Skia } from "@shopify/react-native-skia";
 import { useQueryClient } from "@tanstack/react-query";
 import {

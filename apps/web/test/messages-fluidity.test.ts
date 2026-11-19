@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import type { ChannelEvent, Message } from "@agenteschat/client";
-import { ApiError } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import type { TimelineItem } from "@agenteschat/client/lib/timeline";
+import type { ChannelEvent, Message } from "@keepmind/client";
+import { ApiError } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import type { TimelineItem } from "@keepmind/client/lib/timeline";
 import type { TFunction } from "i18next";
 import { failedOffline } from "@/chat/offline";
 import { dividerIsFar, earlierKey, firstNewKey, landedKey, pillParts, unseenOf } from "@/chat/unseen";

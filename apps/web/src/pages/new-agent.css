@@ -289,6 +289,96 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.18),
     0 8px 20px -8px rgba(4, 32, 63, 0.7);
 }
+/* Batch creation: the hint on the role step, the picked roles' drafts on Revisar, the created team on the done
+   moment. */
+.newag__batch-hint {
+  margin: 0 0 var(--space-3);
+}
+.newag__role:disabled {
+  cursor: not-allowed;
+}
+.newag__batch-list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.newag__batch-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+}
+.newag__batch-row + .newag__batch-row {
+  border-top: 1px solid var(--line);
+}
+.newag__batch-who {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  min-width: 0;
+}
+.newag__batch-who b {
+  font-family: var(--font-display);
+  font-weight: var(--font-display-weight, 300);
+  font-size: 20px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+.newag__batch-who > span {
+  color: var(--muted);
+  font-size: 13px;
+}
+.newag__batch-role {
+  min-width: 0;
+  margin-left: auto;
+  color: var(--ink2);
+  font-size: 13.5px;
+  text-align: right;
+}
+.newag__batch-done {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-height: 46dvh;
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  overflow: auto;
+  list-style: none;
+}
+.newag__batch-done-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: 14px;
+  background: var(--sky-glass);
+  box-shadow: 0 0 0 1px var(--sky-line);
+  color: var(--sky-ink);
+  text-decoration: none;
+}
+.newag__batch-done-row:hover {
+  box-shadow:
+    0 0 0 1px var(--sky-line),
+    var(--e1);
+}
+.newag__batch-done-who {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+.newag__batch-done-who b {
+  overflow: hidden;
+  font-size: 15px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.newag__batch-done-who > span {
+  color: var(--sky-ink2);
+  font-size: 12.5px;
+}
 /* Under 1100px the preview is a compact card above the form (details on demand). */
 @media (max-width: 1100px) {
   .newag__work {
@@ -392,6 +482,15 @@
   .newag__born-agent .ac-avatar {
     width: 108px;
     height: 108px;
+  }
+  /* A batch row: the role and its extra channel under the agent's name, never squeezed beside it. */
+  .newag__batch-row {
+    flex-wrap: wrap;
+  }
+  .newag__batch-role {
+    flex-basis: 100%;
+    margin-left: 0;
+    text-align: left;
   }
   .newag__pv-cover,
   .newag__pv[data-big] .newag__pv-cover {

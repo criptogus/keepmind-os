@@ -1,4 +1,4 @@
-import { BROWSER_DEVICE_SIZES, type BrowserViewport, isObject } from "@agenteschat/adapters/machine-protocol";
+import { BROWSER_DEVICE_SIZES, type BrowserViewport, isObject } from "@keepmind/adapters/machine-protocol";
 import type { StreamSocket } from "./browser";
 import { urlCarries } from "./vault";
 

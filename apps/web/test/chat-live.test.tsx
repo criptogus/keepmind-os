@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { ApiError } from "@agenteschat/client";
+import { ApiError } from "@keepmind/client";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { ADA_ID, ATLAS_ID, comfortable, createFakeApi, ENG_ID, GENERAL_ID, ORG_ID, seedState } from "./fake-api";
 import { renderApp, screen, settle } from "./render";
@@ -863,7 +863,7 @@ describe("receipts: who picked the agents for a message nobody mentioned", () =>
     ]);
     expect(within(pop).getByRole("button", { name: "Chamar um agente" })).toBeTruthy();
     expect(within(pop).getByRole("link", { name: "Como os agentes são escolhidos" }).getAttribute("href")).toBe(
-      "https://agentes.chat/pt/docs/who-answers",
+      "https://keepmind.io/pt/docs/who-answers",
     );
   });
 

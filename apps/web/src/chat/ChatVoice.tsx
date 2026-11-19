@@ -1,7 +1,7 @@
-import type { Message, MessageVoice } from "@agenteschat/client";
-import { VOICE_WAITING, voiceLocalUrl } from "@agenteschat/client";
-import { voiceAudioGone, voiceAudioUrl, voiceExpired } from "@agenteschat/client/lib/voice";
-import { Icon, VoicePlayer } from "@agenteschat/ui";
+import type { Message, MessageVoice } from "@keepmind/client";
+import { VOICE_WAITING, voiceLocalUrl } from "@keepmind/client";
+import { voiceAudioGone, voiceAudioUrl, voiceExpired } from "@keepmind/client/lib/voice";
+import { Icon, VoicePlayer } from "@keepmind/ui";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useOrg } from "@/components/org-context";

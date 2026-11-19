@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, spyOn, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { AppNotification } from "@agenteschat/client";
+import type { AppNotification } from "@keepmind/client";
 import { act, cleanup, fireEvent } from "@testing-library/react";
 import { createI18n } from "@/i18n";
 import { desktopNotice } from "@/lib/desktop";

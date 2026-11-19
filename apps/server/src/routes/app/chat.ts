@@ -1,3 +1,4 @@
+import { createRoute, z } from "@hono/zod-openapi";
 import {
   activeRunsIn,
   addChannelMember,
@@ -24,8 +25,7 @@ import {
   requireChannelAccess,
   STICKER_MOODS,
   ValidationError,
-} from "@agenteschat/engine";
-import { createRoute, z } from "@hono/zod-openapi";
+} from "@keepmind/engine";
 import { apiError, errorResponse } from "../../http/errors";
 import {
   type AppDeps,

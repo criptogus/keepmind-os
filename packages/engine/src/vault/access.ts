@@ -15,7 +15,7 @@
  * - Personal: that person is its owner.
  * - Team: that person is in its audience, or nobody is behind the run and it is shared with everyone.
  */
-import { and, type Executor, eq, inArray, isNull, schema } from "@agenteschat/db";
+import { and, type Executor, eq, inArray, isNull, schema } from "@keepmind/db";
 import { runAuthorityById, UUID } from "../authority";
 import { ValidationError } from "../errors";
 import { can, getMembership } from "../organizations";

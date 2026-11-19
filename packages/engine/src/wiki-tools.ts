@@ -19,6 +19,7 @@ import {
   wikiPageHeld,
 } from "./wiki";
 import { RESTRICTED_HERE, sendHeldToDm } from "./wiki-dm";
+import { type GithubWikiDeps, importGithubWiki } from "./wiki-github";
 import { inWorkspaceWords } from "./workspace-mode";
 
 /** `search_wiki` as a personal workspace's agents read it (ADR 0159). */
@@ -72,7 +73,7 @@ const heldRun = (ctx: ToolContext) => ({
  * routine's instructions: its creator's), and every version records
  * "by {agent}, at {person}'s request".
  */
-export function createWikiToolSource(deps: Omit<WikiDeps, "db">): ToolSource {
+export function createWikiToolSource(deps: Omit<WikiDeps, "db"> & { github?: Omit<GithubWikiDeps, "db"> }): ToolSource {
   const wiki = (ctx: ToolContext): WikiDeps => ({ ...deps, db: ctx.db });
   const pageRef = { type: "string", minLength: 1, maxLength: 200, description: "Page title or slug" };
 
@@ -273,6 +274,76 @@ export function createWikiToolSource(deps: Omit<WikiDeps, "db">): ToolSource {
           return {
             content: `Saved [[${p.title}]] as version ${p.version}.`,
             data: { wikiPageId: p.id, slug: p.slug, version: p.version },
+          };
+        } catch (error) {
+          return failed(error);
+        }
+      },
+    },
+    {
+      name: "import_github_to_wiki",
+      description:
+        "Import the Markdown notes of a GitHub repository, folder or file into the wiki — the team's second brain. Public repositories always; private ones through the workspace's GitHub connection or App, as the person who asked. Asking again adds only new notes; a note named like an existing page gets a \"(repo)\" suffix. Attachments aren't copied.",
+      scope: "wiki:write",
+      inputSchema: {
+        type: "object",
+        properties: {
+          url: {
+            type: "string",
+            minLength: 1,
+            maxLength: 500,
+            description: "github.com link: a repository, a folder (/tree/…) or a Markdown file (/blob/…)",
+          },
+          folder: {
+            type: "string",
+            maxLength: 200,
+            description: 'Put the notes under this folder, e.g. "GitHub/acme/docs"',
+          },
+        },
+        required: ["url"],
+        additionalProperties: false,
+      },
+      async execute(input, ctx) {
+        const actor = await writer(ctx);
+        const userId = actor?.type === "agent" ? actor.requestedByUserId : null;
+        if (!actor || !userId) return { content: WIKI_WRITE_REFUSAL, isError: true };
+        const g = deps.github;
+        try {
+          const r = await importGithubWiki(
+            {
+              db: ctx.db,
+              pubsub: deps.pubsub,
+              search: deps.search,
+              fetch: g?.fetch,
+              resolveHost: g?.resolveHost,
+              github: g?.github,
+            },
+            userId,
+            ctx.orgId,
+            str(input.url),
+            { folder: str(input.folder) || undefined },
+          );
+          const names = r.titles
+            .slice(0, 10)
+            .map((t) => `[[${t}]]`)
+            .join(", ");
+          const more = r.titles.length > 10 ? ` and ${r.titles.length - 10} more` : "";
+          return {
+            content: [
+              `Imported ${r.created} note${r.created === 1 ? "" : "s"} from ${r.source} into the wiki${names ? `: ${names}${more}` : "."}`,
+              r.alreadyIn ? `${r.alreadyIn} were already there from an earlier import.` : "",
+              r.skipped.length ? `${r.skipped.length} skipped (a page with that name exists).` : "",
+              r.failed.length
+                ? `${r.failed.length} couldn't be imported (${r.failed
+                    .map((x) => x.title)
+                    .slice(0, 5)
+                    .join(", ")}${r.failed.length > 5 ? "…" : ""}).`
+                : "",
+              "Tell the person; the pages are in the wiki, linked as [[Title]].",
+            ]
+              .filter(Boolean)
+              .join(" "),
+            data: { source: r.source, created: r.created, alreadyIn: r.alreadyIn },
           };
         } catch (error) {
           return failed(error);

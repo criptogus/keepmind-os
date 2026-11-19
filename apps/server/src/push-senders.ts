@@ -4,8 +4,8 @@ import {
   createFcmPushSender,
   createPhonePushSender,
   type PushSender,
-} from "@agenteschat/adapters";
-import type { Config } from "@agenteschat/config";
+} from "@keepmind/adapters";
+import type { Config } from "@keepmind/config";
 
 /** The config a server's own phone credentials come from. */
 type PushConfig = Pick<

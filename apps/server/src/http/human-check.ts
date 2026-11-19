@@ -1,5 +1,5 @@
-import { createTurnstileCheck, type HumanAction, type HumanCheck, type HumanCheckRefusal } from "@agenteschat/adapters";
-import { type Config, ConfigError } from "@agenteschat/config";
+import { createTurnstileCheck, type HumanAction, type HumanCheck, type HumanCheckRefusal } from "@keepmind/adapters";
+import { type Config, ConfigError } from "@keepmind/config";
 import type { Logger } from "../logger";
 import { requestIp, requestLimitIp } from "./client-ip";
 import { HUMAN_PASS_PREFIX, type HumanPasses } from "./human-pass";
@@ -8,7 +8,7 @@ import { HUMAN_PASS_PREFIX, type HumanPasses } from "./human-pass";
 export const HUMAN_CHECK_HEADER = "x-captcha-response";
 
 /**
- * agentes.chat Cloud's bot check (ADR 0075), only with both keys: without them nothing reaches Cloudflare. Tokens
+ * KeepMind OS Cloud's bot check (ADR 0075), only with both keys: without them nothing reaches Cloudflare. Tokens
  * count when made on `PUBLIC_URL`'s host, and for the waiting lists also on `LANDING_URL`'s.
  */
 export function createHumanCheck(

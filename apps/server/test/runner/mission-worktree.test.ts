@@ -9,7 +9,7 @@ import {
   parseRunnerFrame,
   type RunnerFrame,
   type TaskDone,
-} from "@agenteschat/adapters/machine-protocol";
+} from "@keepmind/adapters/machine-protocol";
 import { handleRequest } from "../../runner/handlers";
 import { copiedFiles, missionWorktree, readProjectConfig, setupCommandFor } from "../../runner/mission-worktree";
 import { agentWorkspace } from "../../runner/paths";
@@ -43,7 +43,7 @@ async function project() {
   const repo = path.join(folder, "repos", "app");
   mkdirSync(repo, { recursive: true });
   run(repo, "init", "-q", "-b", "main");
-  run(repo, "config", "user.email", "dev@agents.agentes.chat");
+  run(repo, "config", "user.email", "contact@zeroagency.ai");
   run(repo, "config", "user.name", "Dev (agentes)");
   writeFileSync(path.join(repo, "README.md"), "hi\n");
   writeFileSync(path.join(repo, ".gitignore"), ".env.local\nnode_modules/\n");
@@ -418,7 +418,7 @@ test.skipIf(!posix || !hasGit)(
     await tasks.init();
     const frames: RunnerFrame[] = [];
     tasks.attach((f) => frames.push(f));
-    const line = "Co-authored-by: Dev <noreply@agentes.chat>";
+    const line = "Co-authored-by: Dev <contact@zeroagency.ai>";
     await tasks.start(
       { ...AGENT, coAuthors: [line] },
       {

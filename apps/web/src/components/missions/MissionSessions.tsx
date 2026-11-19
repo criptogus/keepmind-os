@@ -1,6 +1,6 @@
-import type { MachineTask, Mission } from "@agenteschat/client";
-import { useTaskOutput } from "@agenteschat/client";
-import { formatTime } from "@agenteschat/client/lib/format";
+import type { MachineTask, Mission } from "@keepmind/client";
+import { useTaskOutput } from "@keepmind/client";
+import { formatTime } from "@keepmind/client/lib/format";
 import {
   appendOutputLine,
   formatSpan,
@@ -9,8 +9,8 @@ import {
   taskPr,
   taskRange,
   taskSeconds,
-} from "@agenteschat/client/lib/missions";
-import { Button, DetailsDialog, Icon, type IconName, Segmented } from "@agenteschat/ui";
+} from "@keepmind/client/lib/missions";
+import { Button, DetailsDialog, Icon, type IconName, Segmented } from "@keepmind/ui";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AgentSpinner } from "@/components/AgentAvatar";

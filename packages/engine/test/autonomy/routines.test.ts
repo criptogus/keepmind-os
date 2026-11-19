@@ -1,5 +1,5 @@
 import { afterEach, expect } from "bun:test";
-import { schema } from "@agenteschat/db";
+import { schema } from "@keepmind/db";
 import { createRoutine, DIGEST_AFTER_MS, executeRoutineRun, postAutonomyDigests, queueRoutineRun } from "../../src";
 import { routineDeps, routineRow, routineRunRow } from "../routine-fixtures";
 import { closeWorlds, type World, world } from "./harness";

@@ -1,5 +1,5 @@
-import type { AppLocale } from "@agenteschat/i18n/locale";
-import type { PlanModel } from "@agenteschat/providers/plans";
+import type { AppLocale } from "@keepmind/i18n/locale";
+import type { PlanModel } from "@keepmind/providers/plans";
 import type { DashboardsApi } from "../dashboards/api";
 import type { ChatPrefs } from "../lib/chat-look";
 import type { OnboardingStepId } from "../lib/onboarding";
@@ -36,6 +36,7 @@ import type {
   AgentAccess,
   AgentAction,
   AgentAudience,
+  AgentBatchInput,
   AgentBrain,
   AgentBrainInput,
   AgentBrowserSettings,
@@ -265,6 +266,7 @@ import type {
   PushDeviceInput,
   ReactionCount,
   ReadOnlyOrgSettings,
+  ReaStatusView,
   Reminder,
   ReminderInput,
   RemovalPreview,
@@ -343,6 +345,8 @@ import type {
   WaitingList,
   WebhookProvider,
   WebhookSetup,
+  WhatsAppChatView,
+  WhatsAppSessionView,
   WifiIphones,
   WifiPairing,
   WikiBulkFailed,
@@ -380,7 +384,7 @@ export interface ApiClient {
   system: {
     health(): Promise<Health>;
     instance(): Promise<Instance>;
-    /** `null` unless I am the installation's owner (and not on agentes.chat itself). */
+    /** `null` unless I am the installation's owner (and not on KeepMind OS itself). */
     telemetry(): Promise<ServerTelemetry | null>;
     setTelemetry(enabled: boolean): Promise<ServerTelemetry>;
     /** By email to whoever runs the server; only where it takes feedback (`AuthConfig.feedback`). */
@@ -412,7 +416,7 @@ export interface ApiClient {
   };
   /** Voice messages (ADR 0100). */
   voice: {
-    /** Whether I may record now: fair use, on agentes.chat's own servers. */
+    /** Whether I may record now: fair use, on KeepMind OS's own servers. */
     allowed(orgId: string): Promise<{ allowed: boolean }>;
     /** Stores a recording; its message arrives over the socket with this `clientId`. */
     send(
@@ -728,6 +732,8 @@ export interface ApiClient {
       input: { agentId: string; fromChannelId: string | null; toChannelId: string; reason: string },
     ): Promise<{ channelId: string; messageId: string; rightHandId: string }>;
     create(orgId: string, input: AgentInput): Promise<Agent>;
+    /** Several agents in one transaction, all or nothing (`POST …/agents/batch`): `shared` gives them all the same fields. */
+    createBatch(orgId: string, input: AgentBatchInput): Promise<{ agents: Agent[] }>;
     /** An agent's proposal of a new agent, by its card's message (ADR 0081). */
     proposal(orgId: string, messageId: string): Promise<AgentProposal>;
     /**
@@ -902,7 +908,7 @@ export interface ApiClient {
     /** This month's usage per agent; `null` without the `view_usage` permission. */
     usage(orgId: string): Promise<AgentUsage[] | null>;
   };
-  /** Bringing agents and what's around them from another app or another agentes.chat (ADR 0055); admins. */
+  /** Bringing agents and what's around them from another app or another KeepMind OS (ADR 0055); admins. */
   imports: {
     /** The plan of a bundle (`dryRun`), or the picked items applied: either way every item with its action. */
     apply(orgId: string, input: ImportInput): Promise<ImportPlan>;
@@ -1050,7 +1056,7 @@ export interface ApiClient {
     undoRightHand(orgId: string, decisionId: string): Promise<void>;
   };
   connectors: {
-    /** Connectors agentes.chat knows, with their scopes, plus the built-in scopes. */
+    /** Connectors KeepMind OS knows, with their scopes, plus the built-in scopes. */
     catalog(): Promise<ConnectorCatalog>;
     /** The organization's connections (no secrets). */
     list(orgId: string): Promise<Connection[]>;
@@ -1077,6 +1083,21 @@ export interface ApiClient {
     /** Renames a connection, any kind (admins); its tools keep their names. 409 `connector.label_taken`. */
     rename(orgId: string, connectionId: string, label: string): Promise<Connection>;
     disconnect(orgId: string, connectionId: string): Promise<void>;
+  };
+  /** The WhatsApp connector (QR pairing): status, connect, disconnect, answering agent. */
+  whatsapp: {
+    session(orgId: string): Promise<{ session: WhatsAppSessionView | null }>;
+    connect(orgId: string): Promise<{ session: WhatsAppSessionView | null }>;
+    disconnect(orgId: string): Promise<{ session: WhatsAppSessionView | null }>;
+    setAnswerAgent(orgId: string, agentId: string | null): Promise<{ session: WhatsAppSessionView | null }>;
+    chats(orgId: string): Promise<{ chats: WhatsAppChatView[] }>;
+    setChatApproval(orgId: string, chatId: string, approved: boolean): Promise<{ chat: WhatsAppChatView | null }>;
+  };
+  /** The REA connector (reverse engineering sidecar): status, connect, disconnect. */
+  rea: {
+    status(orgId: string): Promise<{ rea: ReaStatusView | null }>;
+    connect(orgId: string): Promise<{ rea: ReaStatusView | null }>;
+    disconnect(orgId: string): Promise<{ rea: ReaStatusView | null }>;
   };
   githubApp: {
     /** Whether this server can install the GitHub App, the organization's installations, and the server's app. */

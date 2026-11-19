@@ -1,4 +1,4 @@
-import type { OutboxStorage } from "@agenteschat/client";
+import type { OutboxStorage } from "@keepmind/client";
 import { File, Paths } from "expo-file-system";
 import { perServer } from "./server";
 

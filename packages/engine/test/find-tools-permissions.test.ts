@@ -1,7 +1,7 @@
 import { afterEach, expect, test } from "bun:test";
-import { createFakeMailConnector, createFakeMailPoller, createFakeMailTester } from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
-import type { ModelRequest } from "@agenteschat/providers";
+import { createFakeMailConnector, createFakeMailPoller, createFakeMailTester } from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
+import type { ModelRequest } from "@keepmind/providers";
 import { turnsWorld } from "../eval/turns";
 import {
   CONNECTOR_ALL,
@@ -402,11 +402,11 @@ test("an app this installation can't connect says whoever runs it turns it on; o
   );
 });
 
-test("an app whose maker hasn't approved agentes.chat says so, and how an admin connects it with a key instead", async () => {
+test("an app whose maker hasn't approved KeepMind OS says so, and how an admin connects it with a key instead", async () => {
   f = await setup({ issueTools: true, catalog: { oauthApps: {} } });
   const ctx = await nothingLoaded();
   expect(await findTools(ctx, "figma")).toEndWith(
-    `\n\n${TO_GET}\n- Figma: Figma designs, components and variables. Not open to agentes.chat yet: it only lets apps it approved connect in one click. If it gives an API key, an admin connects it with that by its address, in Settings › Connectors and MCPs › Add MCP (in Portuguese, Configurações › Conectores e MCPs › Adicionar MCP).`,
+    `\n\n${TO_GET}\n- Figma: Figma designs, components and variables. Not open to KeepMind OS yet: it only lets apps it approved connect in one click. If it gives an API key, an admin connects it with that by its address, in Settings › Connectors and MCPs › Add MCP (in Portuguese, Configurações › Conectores e MCPs › Adicionar MCP).`,
   );
 });
 

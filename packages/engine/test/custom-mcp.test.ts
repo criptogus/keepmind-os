@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { createHash } from "node:crypto";
-import { countQueries, eq, schema, sql } from "@agenteschat/db";
-import { runMigration } from "@agenteschat/db/testing";
+import { countQueries, eq, schema, sql } from "@keepmind/db";
+import { runMigration } from "@keepmind/db/testing";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
@@ -558,7 +558,7 @@ describe("custom MCP servers", () => {
     const input = { serverUrl, apiKey: "fake_intercom_key", label: "Intercom" };
     const cloud = depsOf(f, {
       connect: mcp.connect,
-      publicUrl: "https://agentes.chat",
+      publicUrl: "https://keepmind.io",
       resolveHost: async () => ["93.184.216.34"],
     });
     await expect(connectCustomServer(cloud, f.owner.id, f.org.id, input)).rejects.toMatchObject({
@@ -1358,4 +1358,42 @@ describe("custom MCP servers", () => {
       ValidationError,
     );
   });
+});
+
+test("Composio connection management stays approval-gated even if the server calls it read-only", async () => {
+  f = await setup();
+  const connect: McpConnect = async () => {
+    const server = new McpServer({ name: "composio", version: "1" });
+    server.registerTool(
+      "COMPOSIO_MANAGE_CONNECTIONS",
+      { inputSchema: {}, annotations: { readOnlyHint: true } },
+      async () => ({ content: [] }),
+    );
+    const [client, transport] = InMemoryTransport.createLinkedPair();
+    await server.connect(transport);
+    return mcpSessionOver(client);
+  };
+  const deps = depsOf(f, { connect });
+  const result = await connectCustomServer(deps, f.owner.id, f.org.id, {
+    serverUrl: SERVER,
+    apiKey: "test_key_12345",
+    label: "Composio",
+  });
+  if (result.status !== "connected") throw new Error("expected connection");
+  expect(result.server.tools.map((tool) => [tool.name, tool.suggestedAccess, tool.sensitive])).toEqual([
+    ["COMPOSIO_MANAGE_CONNECTIONS", "approval", true],
+  ]);
+  await acceptCustomSuggestion(deps, f.owner.id, f.org.id, result.server.id);
+  const offered = await createConnectorToolSource(deps).tools({
+    db: f.db,
+    orgId: f.org.id,
+    agentId: f.agent.id,
+    runId: "",
+    channelId: f.general.id,
+    threadRootId: "",
+    triggerMessageId: "",
+  });
+  expect(offered).toHaveLength(1);
+  expect(offered[0]?.sensitive).toBe(true);
+  expect(offered[0]?.ahead).toBe(false);
 });

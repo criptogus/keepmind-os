@@ -1,9 +1,9 @@
-import { requestLocale } from "@agenteschat/engine";
-import { serverText } from "@agenteschat/i18n";
-import { type AppLocale, appLocale } from "@agenteschat/i18n/locale";
-import { dark, light, type ThemeColors } from "@agenteschat/tokens";
-import { filePath } from "@agenteschat/tokens/message-links";
-import { bodyPath, bodySvg, eyeShapes } from "@agenteschat/ui/agent/engine";
+import { requestLocale } from "@keepmind/engine";
+import { serverText } from "@keepmind/i18n";
+import { type AppLocale, appLocale } from "@keepmind/i18n/locale";
+import { dark, light, type ThemeColors } from "@keepmind/tokens";
+import { filePath } from "@keepmind/tokens/message-links";
+import { bodyPath, bodySvg, eyeShapes } from "@keepmind/ui/agent/engine";
 import type { Context, MiddlewareHandler } from "hono";
 import { signInPage } from "../routes/app/context";
 

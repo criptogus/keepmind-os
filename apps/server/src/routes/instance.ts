@@ -1,5 +1,5 @@
-import { countUsers, isAgentesCloud } from "@agenteschat/engine";
 import { createRoute, type OpenAPIHono, z } from "@hono/zod-openapi";
+import { countUsers, isKeepMindCloud } from "@keepmind/engine";
 import { authUiConfig, signupOpen } from "../auth";
 import type { AppDeps } from "./app/context";
 
@@ -22,7 +22,7 @@ const InstanceResponse = z
       .openapi({ description: "This server's own address (`PUBLIC_URL`).", example: "https://chat.example.com" }),
     sourceUrl: z.string().openapi({
       description: "Where to get this server's source code (`SOURCE_URL`, AGPL-3.0 section 13).",
-      example: "https://github.com/agentes-chat/agentes-chat",
+      example: "https://github.com/criptogus/keepmind-os",
     }),
     signIn: z.object({ email: z.boolean(), google: z.boolean(), github: z.boolean(), apple: z.boolean() }),
     signup: z.enum(["open", "invite"]).openapi({ description: "`invite`: only people with an invitation sign up." }),
@@ -31,7 +31,7 @@ const InstanceResponse = z
     }),
     cloud: z.boolean().openapi({
       description:
-        "One of agentes.chat's own servers (`PUBLIC_URL` on agentes.chat): `/terms` and `/privacy` show agentes.chat Cloud's Terms and Privacy Policy.",
+        "One of KeepMind OS's own servers (`PUBLIC_URL` on KeepMind OS): `/terms` and `/privacy` show KeepMind OS Cloud's Terms and Privacy Policy.",
     }),
   })
   .openapi("Instance");
@@ -42,7 +42,7 @@ const route = createRoute({
   tags: ["System"],
   summary: "What this server is",
   description:
-    "Public, nothing secret. The phone and desktop apps check it before using a server: that it is agentes.chat, on an API they speak, and how people sign in.",
+    "Public, nothing secret. The phone and desktop apps check it before using a server: that it is KeepMind OS, on an API they speak, and how people sign in.",
   responses: { 200: { description: "OK", content: { "application/json": { schema: InstanceResponse } } } },
 });
 
@@ -68,7 +68,7 @@ export function registerInstance(api: OpenAPIHono, deps: AppDeps, version: strin
         signIn: { email: true, ...authUiConfig(config).socialProviders },
         signup: open ? ("open" as const) : ("invite" as const),
         ownerClaim: users === 0 && Boolean(config.OWNER_CLAIM_SHA256),
-        cloud: isAgentesCloud(config.PUBLIC_URL),
+        cloud: isKeepMindCloud(config.PUBLIC_URL),
       },
       200,
     );

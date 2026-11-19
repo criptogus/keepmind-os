@@ -12,7 +12,7 @@ import {
   writeFileSync,
 } from "node:fs";
 import path from "node:path";
-import { PUSH_ASK_RULES } from "@agenteschat/adapters/command-policy";
+import { PUSH_ASK_RULES } from "@keepmind/adapters/command-policy";
 import {
   BRAIN_PROFILES_PROTOCOL,
   BRAIN_PROTOCOL,
@@ -29,7 +29,7 @@ import {
   type RunnerFrame,
   STEER_PROTOCOL,
   type WireBrainEvent,
-} from "@agenteschat/adapters/machine-protocol";
+} from "@keepmind/adapters/machine-protocol";
 import { accountSettingsEnv } from "../../runner/accounts";
 import {
   BRAIN_BUILTIN_TOOLS,
@@ -1584,7 +1584,7 @@ test.if(posix)(
   "other lines for the agent's commits (turned off, the agent renamed) restart the process, resumed",
   async () => {
     const { spawns, turn } = setup();
-    const nick = { agent: { ...AGENT, coAuthors: ["Co-authored-by: Nick <noreply@agentes.chat>"] } };
+    const nick = { agent: { ...AGENT, coAuthors: ["Co-authored-by: Nick <contact@zeroagency.ai>"] } };
     await turn(1, "first", {}, undefined, nick);
     await turn(2, "second", {}, undefined, nick);
     expect(spawns()).toHaveLength(1);
@@ -3007,3 +3007,17 @@ test.if(posix)("turn.context: the worker's answer: the folder as the agent resol
   expect(said).toContain("?? CLAUDE.md");
   expect(said).toContain("first");
 });
+
+test.skipIf(process.platform !== "darwin")(
+  "macOS: sleep is held while a brain turn runs and released after",
+  async () => {
+    const { m, turn } = setup({ caffeinate: true });
+    const pending = turn(90, "SLOWKEY please");
+    await waitFor(() => m.holdingSleep, 5000);
+    expect(m.holdingSleep).toBe(true);
+    await pending;
+    await waitFor(() => !m.holdingSleep, 5000);
+    expect(m.holdingSleep).toBe(false);
+  },
+  20_000,
+);

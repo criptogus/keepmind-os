@@ -18,7 +18,7 @@ import type { ConfigContext, ExpoConfig } from "expo/config";
  */
 const variant = process.env.APP_VARIANT ?? "production";
 const suffix = variant === "production" ? "" : `.${variant}`;
-const apiUrl = process.env.EXPO_PUBLIC_API_URL ?? "https://app.agentes.chat";
+const apiUrl = process.env.EXPO_PUBLIC_API_URL ?? "https://keepmind.io";
 // Links to this host open the app (universal links / App Links); the server publishes the matching /.well-known
 // files (apps/server/src/app-links.ts).
 const linkHost = new URL(apiUrl).host;
@@ -163,7 +163,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ],
   },
   // Native permission texts (the OS shows them before the app's i18n runs). Only ready languages
-  // (@agenteschat/i18n/locale), here and in `supportedLocales`: the stores list these as the app's languages.
+  // (@keepmind/i18n/locale), here and in `supportedLocales`: the stores list these as the app's languages.
   locales: {
     en: "./assets/locales/en.json",
     "pt-BR": "./assets/locales/pt-BR.json",

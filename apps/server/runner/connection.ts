@@ -8,7 +8,7 @@ import {
   type RunnerFrame,
   type RunnerInfo,
   type ServerFrame,
-} from "@agenteschat/adapters/machine-protocol";
+} from "@keepmind/adapters/machine-protocol";
 import { type HandlerContext, handleRequest, type RequestObserver, RequestRunner } from "./handlers";
 import type { McpBridge } from "./mcp";
 

@@ -1,11 +1,11 @@
 import { afterEach, describe, expect, spyOn, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import type { Message } from "@agenteschat/client";
+import type { Message } from "@keepmind/client";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { messageLink } from "@/components/MessageMore";
 import { ADA_ID, ATLAS_ID, createFakeApi, ENG_ID, NOW, ORG_ID, seedState } from "./fake-api";
@@ -332,7 +332,7 @@ describe("message action bars", () => {
       const state = withoutAi();
       state.messages = [
         said("w1", "Mando os arquivos para a gráfica na sexta.", 20, noAi),
-        said("w2", "O briefing está em https://agentes.chat/help/who-answers, confere?", 19),
+        said("w2", "O briefing está em https://keepmind.io/help/who-answers, confere?", 19),
         said("w3", "Os rótulos ficam com o verde antigo?", 18),
       ];
       await renderApp(`/org/${ORG_ID}/c/${ENG_ID}`, { api: createFakeApi(state) });

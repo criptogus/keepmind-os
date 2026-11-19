@@ -1,5 +1,5 @@
-import type { SearchHit, SearchKind, SearchSort } from "@agenteschat/client";
-import { useChannels, useDms, useSearch } from "@agenteschat/client";
+import type { SearchHit, SearchKind, SearchSort } from "@keepmind/client";
+import { useChannels, useDms, useSearch } from "@keepmind/client";
 import {
   formatSearch,
   hasSearch,
@@ -11,7 +11,7 @@ import {
   searchFilterInput,
   searchSortFor,
   searchWords,
-} from "@agenteschat/client/lib/search-filters";
+} from "@keepmind/client/lib/search-filters";
 import { linkOptions } from "@tanstack/react-router";
 import { createContext, type ReactNode, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

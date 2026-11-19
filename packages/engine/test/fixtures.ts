@@ -10,11 +10,11 @@ import {
   noPlatformCredentials,
   type PlatformCredentials,
   type RealtimeEvent,
-} from "@agenteschat/adapters";
-import { and, arrayContains, type Database, eq, schema, sql } from "@agenteschat/db";
-import { createTestDatabase } from "@agenteschat/db/testing";
-import { PROVIDER_IDS } from "@agenteschat/providers";
-import { createFakeEmbeddings, createFakeProvider, type FakeProvider } from "@agenteschat/providers/testing";
+} from "@keepmind/adapters";
+import { and, arrayContains, type Database, eq, schema, sql } from "@keepmind/db";
+import { createTestDatabase } from "@keepmind/db/testing";
+import { PROVIDER_IDS } from "@keepmind/providers";
+import { createFakeEmbeddings, createFakeProvider, type FakeProvider } from "@keepmind/providers/testing";
 import {
   type AgentRun,
   type ArtifactDeps,

@@ -1,5 +1,5 @@
-import { ApiProvider, createSnapshot, outbox } from "@agenteschat/client";
-import { textSizeOf } from "@agenteschat/client/lib/chat-look";
+import { ApiProvider, createSnapshot, outbox } from "@keepmind/client";
+import { textSizeOf } from "@keepmind/client/lib/chat-look";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { type ReactNode, useEffect, useMemo } from "react";
 import { I18nextProvider } from "react-i18next";

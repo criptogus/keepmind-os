@@ -4,8 +4,8 @@ import {
   MailAuthError,
   type MailPoller,
   type MailSummary,
-} from "@agenteschat/adapters";
-import { and, type Database, eq, inArray, isNull, lt, or, schema, sql } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { and, type Database, eq, inArray, isNull, lt, or, schema, sql } from "@keepmind/db";
 import { countComposio } from "../connector-usage";
 import { markComposioAccountBroken } from "../connectors/composio";
 import { NotFoundError } from "../errors";

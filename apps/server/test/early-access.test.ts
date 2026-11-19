@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import { eq, schema, sql } from "@agenteschat/db";
-import { setSignupMode } from "@agenteschat/engine";
+import { eq, schema, sql } from "@keepmind/db";
+import { setSignupMode } from "@keepmind/engine";
 import { createLogger } from "../src/logger";
 import { createOperatorApp } from "../src/operator/app";
 import {
@@ -120,9 +120,9 @@ const shown = async (t: TestServer) => ({
   signup: ((await (await browser(t)("/api/instance")).json()) as { signup: string }).signup,
 });
 
-const CLOUD = "https://app.agentes.chat";
+const CLOUD = "https://keepmind.io";
 
-/** A browser at agentes.chat Cloud's address: sign-in and writes check the `Origin`. */
+/** A browser at KeepMind OS Cloud's address: sign-in and writes check the `Origin`. */
 function cloudBrowser(t: TestServer): Browser {
   const b = browser(t);
   return Object.assign((path: string, init: Parameters<Browser>[1] = {}) => b(path, { origin: CLOUD, ...init }), {
@@ -140,7 +140,7 @@ async function makeWorkspace(b: Browser, name: string) {
   return res;
 }
 
-test("an invitation's link: sign-up for its address, then workspaces (agentes.chat Cloud)", async () => {
+test("an invitation's link: sign-up for its address, then workspaces (KeepMind OS Cloud)", async () => {
   const t = await server({ MACHINE_PROVISIONING: "external", PUBLIC_URL: CLOUD });
   const owner = cloudBrowser(t);
   await signUp(owner, "owner@acme.test");
@@ -185,7 +185,7 @@ test("an invitation's link: sign-up for its address, then workspaces (agentes.ch
   expect((await me(ana)).canCreateWorkspace).toBe(true);
 });
 
-test("agentes.chat Cloud: a member makes no workspace until the address is allowed and confirmed, then as many as it likes, until revoked", async () => {
+test("KeepMind OS Cloud: a member makes no workspace until the address is allowed and confirmed, then as many as it likes, until revoked", async () => {
   const t = await server({ MACHINE_PROVISIONING: "external", PUBLIC_URL: CLOUD });
   const owner = cloudBrowser(t);
   await signUp(owner, "owner@acme.test");
@@ -318,7 +318,7 @@ test("ALLOW_SIGNUP forces it open; a server that is its agents' computer stays b
 });
 
 test("sign-ups that don't carry the link leave the invitation alone, and a self-hosted server never asks for one", async () => {
-  // A self-hosted server with a provisioner of its own isn't held to agentes.chat Cloud's rule.
+  // A self-hosted server with a provisioner of its own isn't held to KeepMind OS Cloud's rule.
   const t = await server({ MACHINE_PROVISIONING: "external" });
   const owner = browser(t);
   await signUp(owner, "owner@acme.test");

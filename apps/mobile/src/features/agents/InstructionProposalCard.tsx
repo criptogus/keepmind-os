@@ -1,4 +1,4 @@
-import { type Message, type Proposal, useCardProposals, useDecideProposals } from "@agenteschat/client";
+import { type Message, type Proposal, useCardProposals, useDecideProposals } from "@keepmind/client";
 import {
   appLabel,
   type ChangedLine,
@@ -15,7 +15,7 @@ import {
   proposerOf,
   rowStatus,
   staleCount,
-} from "@agenteschat/client/lib/proposals";
+} from "@keepmind/client/lib/proposals";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Pressable, StyleSheet, View } from "react-native";

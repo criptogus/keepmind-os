@@ -1,5 +1,5 @@
-import type { RateLimiter } from "@agenteschat/adapters";
-import { and, eq, schema } from "@agenteschat/db";
+import type { RateLimiter } from "@keepmind/adapters";
+import { and, eq, schema } from "@keepmind/db";
 import { namesLabel, namesOf } from "./approvals";
 import { FEEDBACK_MAX, FEEDBACK_PER_HOUR, isFeedbackRelay, queueFeedback } from "./feedback";
 import {
@@ -23,7 +23,7 @@ const NOBODY =
 
 /**
  * `send_feedback` (ADR 0160 §11): a person asks an agent to send their feedback, and it goes as the form's does, one
- * email to whoever runs the server (`to`: `FEEDBACK_EMAIL`, or the agentes.chat team's inbox, §13), in that person's
+ * email to whoever runs the server (`to`: `FEEDBACK_EMAIL`, or the KeepMind OS team's inbox, §13), in that person's
  * name and within their ten an hour. It leaves the workspace in their name, so they approve each one, reading its
  * text on the card; only they do. The email says an agent wrote it. Listed only where the server takes feedback; a
  * run nobody is behind (a routine's, an agent's own) sends none.
@@ -37,7 +37,7 @@ export function createFeedbackToolSource(deps: {
   rateLimiter?: RateLimiter;
 }): ToolSource {
   // Who reads it: the operator, or the people who make the app when it goes to their inbox (ADR 0160 §13).
-  const reader = isFeedbackRelay(deps.to) ? "the agentes.chat team, who make this app" : "whoever runs this server";
+  const reader = isFeedbackRelay(deps.to) ? "the KeepMind OS team, who make this app" : "whoever runs this server";
   const tool: ToolDefinition = {
     name: SEND_FEEDBACK_TOOL,
     description: `Send the person's feedback about this app itself (a bug, something confusing, an idea) to ${reader}, by email in their name, only when they ask you to ('manda um feedback dizendo…', 'report this bug for me'). \`text\`: what they want said, in their words and language, plus what you saw yourself that helps whoever reads it (what was being done, the error as it appeared). Nothing from the conversation they didn't ask to send. They read it on a card and approve it before it goes.`,

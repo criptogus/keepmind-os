@@ -1,8 +1,8 @@
-import { isWaitingHandoff, useBrowserHandoffMutations } from "@agenteschat/client";
-import { entryButton, entryLine, entryState } from "@agenteschat/client/lib/agent-computer";
-import { computerName } from "@agenteschat/client/lib/computer";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
-import { Button, Icon } from "@agenteschat/ui";
+import { isWaitingHandoff, useBrowserHandoffMutations } from "@keepmind/client";
+import { entryButton, entryLine, entryState } from "@keepmind/client/lib/agent-computer";
+import { computerName } from "@keepmind/client/lib/computer";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
+import { Button, Icon } from "@keepmind/ui";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { stepText } from "@/components/browser/BrowserCard";

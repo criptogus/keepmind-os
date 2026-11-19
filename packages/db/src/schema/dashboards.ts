@@ -101,7 +101,7 @@ export const dashboards = pgTable(
 );
 
 /**
- * A widget (ADR 0135): what it shows (`spec`, a `WidgetSpec` from `@agenteschat/ui/widgets/spec`), the agent that
+ * A widget (ADR 0135): what it shows (`spec`, a `WidgetSpec` from `@keepmind/ui/widgets/spec`), the agent that
  * looks after it and how it is redone. A scheduled one has a routine (`routine_id`, its target `{ type: "widget" }`)
  * whose background run redoes it in place through `update_widget`, posting nothing in chat. `status`: `building`
  * (its first run), `ok`, `updating` (a run is redoing it; the last data stays), `failed` (`failure_code`, and the

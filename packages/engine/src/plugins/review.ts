@@ -1,4 +1,4 @@
-import type { schema } from "@agenteschat/db";
+import type { schema } from "@keepmind/db";
 
 type PluginRecord = schema.PluginRecord;
 

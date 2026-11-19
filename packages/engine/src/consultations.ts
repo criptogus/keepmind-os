@@ -1,4 +1,4 @@
-import type { PubSub } from "@agenteschat/adapters";
+import type { PubSub } from "@keepmind/adapters";
 import {
   and,
   type Database,
@@ -15,7 +15,7 @@ import {
   type SQL,
   schema,
   sql,
-} from "@agenteschat/db";
+} from "@keepmind/db";
 import { waitSinceIn } from "./agent-work";
 import { currentHandles } from "./agents";
 import { type AiStatusDeps, agentAiState } from "./ai-status";

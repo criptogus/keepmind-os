@@ -1,4 +1,4 @@
-import { GIF_ID_PATTERN, type GifProvider, type PubSub } from "@agenteschat/adapters";
+import { GIF_ID_PATTERN, type GifProvider, type PubSub } from "@keepmind/adapters";
 import {
   and,
   asc,
@@ -15,10 +15,10 @@ import {
   type SQL,
   schema,
   sql,
-} from "@agenteschat/db";
-import { mentionsEveryone } from "@agenteschat/i18n/everyone";
-import { CHANNEL_REF } from "@agenteschat/ui/channel-refs";
-import { plainLine } from "@agenteschat/ui/markdown";
+} from "@keepmind/db";
+import { mentionsEveryone } from "@keepmind/i18n/everyone";
+import { CHANNEL_REF } from "@keepmind/ui/channel-refs";
+import { plainLine } from "@keepmind/ui/markdown";
 import { type AgentActionView, actionsFor } from "./agent-actions";
 import { currentHandles } from "./agents";
 import { withDeletedArtifacts } from "./artifacts";

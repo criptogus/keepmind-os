@@ -1,4 +1,4 @@
-import { grantedTo, SHARED_COMPUTER_PROTOCOL, sharedFolderOf } from "@agenteschat/adapters";
+import { grantedTo, SHARED_COMPUTER_PROTOCOL, sharedFolderOf } from "@keepmind/adapters";
 import {
   and,
   asc,
@@ -13,9 +13,9 @@ import {
   rowsOf,
   schema,
   sql,
-} from "@agenteschat/db";
-import { isAppLocale, localeInfo } from "@agenteschat/i18n/locale";
-import type { ModelMessage, SystemBlock } from "@agenteschat/providers";
+} from "@keepmind/db";
+import { isAppLocale, localeInfo } from "@keepmind/i18n/locale";
+import type { ModelMessage, SystemBlock } from "@keepmind/providers";
 import { agentStyleLine, agentStyleOf, isAgentStyle } from "./agent-style";
 import type { Agent } from "./agents";
 import { readerOf, readerOfMessage } from "./agents-dm-reads";
@@ -531,6 +531,8 @@ export interface RunContext {
   system: ContextBlock[];
   messages: ModelMessage[];
   stats: { historyMessages: number; systemChars: number; truncated: boolean };
+  /** Agents' DM only: the same-reader messages the verbatim window cut, for `ensureDmSummary` to summarize. */
+  dmOlder?: { reader: string | null; messages: Message[] } | null;
   /** The issue this run works on: its thread is this agent's work on it, or its trigger starts that work. */
   issueId: string | null;
   /**
@@ -578,6 +580,11 @@ export async function buildRunContext(
     capabilities?: string | Promise<string>;
     /** Skills enabled for the agent (name and description; the body loads on demand). */
     skills?: { name: string; description: string }[];
+    /**
+     * The skills the judge expects this message to need (per run, resolved while the context is built): named
+     * under "# This turn" so `load_skill` goes straight to one instead of trying several.
+     */
+    skillPicks?: Promise<string[]>;
     /** `find_agent` is available: name the other agents in "# Your team". */
     team?: boolean;
     /** `expand` is available: long old messages come cut short, reopened with it (token-trim B9). */
@@ -687,6 +694,10 @@ export async function buildRunContext(
   const rootTime = rootIsTrigger
     ? sql`${trigger.createdAt.toISOString()}::timestamptz`
     : sql`(select ${messages.createdAt} from ${messages} where ${messages.id} = ${run.threadRootId} and ${messages.orgId} = ${run.orgId})`;
+  // The agents' DM (ADR 0053 §9): a run reads only the exchanges made for the same person. Its window is wider
+  // than a channel's: the newest `DM_VERBATIM` stay whole and the rest is summarized (`ensureDmSummary`).
+  const agentsDm = !background && isAgentOnlyDm(channel) && !isRoutineRoomKey(channel.dmKey);
+  const historyWindow = agentsDm ? DM_SUMMARY_FETCH : options.maxMessages;
   const [rootRows, thread, before] = await Promise.all([
     rootIsTrigger || background
       ? Promise.resolve([trigger])
@@ -701,7 +712,7 @@ export async function buildRunContext(
           .from(messages)
           .where(and(scope, eq(messages.threadId, run.threadRootId), upToTrigger))
           .orderBy(desc(messages.createdAt), desc(messages.id))
-          .limit(options.maxMessages),
+          .limit(historyWindow),
     background
       ? Promise.resolve([] as Message[])
       : range
@@ -726,7 +737,7 @@ export async function buildRunContext(
               ),
             )
             .orderBy(desc(messages.createdAt), desc(messages.id))
-            .limit(Math.max(1, options.maxMessages - 1))
+            .limit(Math.max(1, historyWindow - 1))
         : // The channel as people see it: top-level messages and the replies shown under them
           // (agents answer in a thread per message), minus this thread (read above).
           db
@@ -741,7 +752,7 @@ export async function buildRunContext(
               ),
             )
             .orderBy(desc(messages.createdAt), desc(messages.id))
-            .limit(Math.max(1, options.maxMessages - 1)),
+            .limit(Math.max(1, historyWindow - 1)),
   ]);
   const root = rootRows[0];
   // Other agents waiting (their plan, budget or computer) on what it answers, its thread's root included: it may let
@@ -754,21 +765,23 @@ export async function buildRunContext(
   // A range longer than that loses its oldest messages (the thread summary, when the
   // thread itself is long, covers the thread, not the range).
   const fetched = before.length;
-  before.splice(Math.max(0, options.maxMessages - thread.length - 1));
+  before.splice(Math.max(0, historyWindow - thread.length - 1));
   // Older messages were left out: start at an anchor, so the history's start (and its cached prefix) stays the same
   // for several runs instead of moving by one message every time (token-trim B8).
-  if (!range && fetched >= Math.max(1, options.maxMessages - 1)) {
+  if (!range && fetched >= Math.max(1, historyWindow - 1)) {
     before.splice(before.length - historyStart([...before].reverse().map((m) => m.id)));
   }
-  const rangeCut = range !== null && (before.length < fetched || fetched >= Math.max(1, options.maxMessages - 1));
+  const rangeCut = range !== null && (before.length < fetched || fetched >= Math.max(1, historyWindow - 1));
   const fullHistory: Message[] = background
     ? [trigger]
     : [...before.reverse(), ...(root ? [rangeRoot(root, range !== null)] : []), ...thread.reverse()];
   if (!fullHistory.some((m) => m.id === trigger.id)) fullHistory.push(trigger);
-  // The agents' DM (ADR 0053 §9): a run reads only the exchanges made for the same person.
-  const agentsDm = !background && isAgentOnlyDm(channel) && !isRoutineRoomKey(channel.dmKey);
   const samePerson = agentsDm ? await forSamePerson(db, run, fullHistory, trigger.id) : null;
-  const history = samePerson ? samePerson.history : fullHistory;
+  const filtered = samePerson ? samePerson.history : fullHistory;
+  // Past `DM_VERBATIM` the older exchanges are not sent: the executor summarizes them (`ensureDmSummary`) and the
+  // summary stands in, so a long agents' DM costs a summary instead of its whole length on every run.
+  const dmOlder = agentsDm && filtered.length > DM_VERBATIM ? filtered.slice(0, filtered.length - DM_VERBATIM) : null;
+  const history = dmOlder ? filtered.slice(-DM_VERBATIM) : filtered;
 
   const [names, members, zone, talks, personLines, origins] = await Promise.all([
     authorNames(db, history),
@@ -1082,8 +1095,8 @@ export async function buildRunContext(
     {
       text: [
         personal
-          ? `You work in "${org.name}" on agentes.chat, a personal workspace: one person, and maybe their family, with the AI agents that help them with their life and work. The app shows its channels to them as group conversations.`
-          : `You work in "${org.name}" on agentes.chat, a workspace where people and AI agents work together.`,
+          ? `You work in "${org.name}" on KeepMind OS, a personal workspace: one person, and maybe their family, with the AI agents that help them with their life and work. The app shows its channels to them as group conversations.`
+          : `You work in "${org.name}" on KeepMind OS, a workspace where people and AI agents work together.`,
         org.context.trim() ? `# About ${personal ? "the person" : "the organization"}\n${org.context.trim()}` : "",
         teamMemory,
         options.workspaceComputer ? workspaceComputerText(options.workspaceComputer) : "",
@@ -1117,6 +1130,21 @@ export async function buildRunContext(
             ].join("\n"),
           },
         ]
+      : []),
+    ...(options.skillPicks
+      ? await options.skillPicks.then((picks) =>
+          picks.length > 0
+            ? [
+                {
+                  found: true as const,
+                  text: [
+                    "# Skills for this",
+                    `The judge expects this message to need: ${picks.map((p) => `\`${p}\``).join(", ")}. Load the matching one with \`load_skill\` before acting; if none fits once you read it, carry on without it.`,
+                  ].join("\n"),
+                },
+              ]
+            : [],
+        )
       : []),
     // Only when a person is behind the run: like the team, it follows the requester.
     // A heading of its own: on its own, the line would read as part of the section before it ("# Your team").
@@ -1292,6 +1320,7 @@ export async function buildRunContext(
       personal,
     }),
     stats: { historyMessages: history.length, systemChars, truncated: thread.length >= options.maxMessages },
+    dmOlder: dmOlder ? { reader: samePerson?.reader ?? null, messages: dmOlder } : null,
     issueId:
       workIssueId ??
       (taskAsked && taskHere ? taskHere.issueId : null) ??
@@ -1411,7 +1440,7 @@ function routineAsks(level: ApprovalsLevel, place: string): string {
   }
   const what =
     level === "always"
-      ? "You are set to always ask: every change asks a person first, inside agentes.chat too (an issue, a file, a post, a command)"
+      ? "You are set to always ask: every change asks a person first, inside KeepMind OS too (an issue, a file, a post, a command)"
       : "A send, a delete, a payment, an invite or another change in a connected app that its tool marks as asking asks a person first";
   return `${what}: an approval card in ${place}, with your reason.${level === "always" ? "" : " Merge, deploy and rollback always do."} When its instructions ask you to fix or resolve things and the fix is such a change, hand off your report first (saying what you're asking for), then call that tool with your reason: your run waits for the person's decision, so anything after it waits too.`;
 }
@@ -1531,7 +1560,7 @@ async function routineContext(
   const block = [
     `# This is a routine run\nYour routine «${name}» started this run: background work that nobody watches. Nobody waits for a reply here and nothing you write here is posted; your message reaches people only through hand_off, which posts it in ${place}.`,
     `Its instructions, set up by ${creator ?? "its creator"}:\n${(row?.prompt ?? trigger.body).trim()}`,
-    `What it may do: what you can do in any other run. Besides reading, you may change things inside agentes.chat that people can undo (issues, memory, wiki, Drive files) and work on your own branches (agentes/${agent.handle}/…) and their pull requests. ${routineAsks(agent.approvalsLevel, place)} You may also reach other agents and post where ${who} can: tell_agent leaves an agent a note (it wakes and works on it), ask_agent asks one something (the answer reaches you, or ${place} once this run ended), post_message posts in a channel ${who} can post in (an @mention there wakes that agent), and send_dm writes only to ${who}; only agents ${who} can talk to are reached. An @mention in your hand_off message also wakes an agent of ${place} to work on it, as asked by ${who} (one outside it hears nothing: use tell_agent): mention an agent there only when it should act, and not one you already handed it to with tell_agent. The web is yours to read (search, open pages, your browser) like anywhere else.`,
+    `What it may do: what you can do in any other run. Besides reading, you may change things inside KeepMind OS that people can undo (issues, memory, wiki, Drive files) and work on your own branches (agentes/${agent.handle}/…) and their pull requests. ${routineAsks(agent.approvalsLevel, place)} You may also reach other agents and post where ${who} can: tell_agent leaves an agent a note (it wakes and works on it), ask_agent asks one something (the answer reaches you, or ${place} once this run ended), post_message posts in a channel ${who} can post in (an @mention there wakes that agent), and send_dm writes only to ${who}; only agents ${who} can talk to are reached. An @mention in your hand_off message also wakes an agent of ${place} to work on it, as asked by ${who} (one outside it hears nothing: use tell_agent): mention an agent there only when it should act, and not one you already handed it to with tell_agent. The web is yours to read (search, open pages, your browser) like anywhere else.`,
     listed("approved")
       ? `Approved ahead for this run: a person already approved these exact actions for this time. Do each now with run_approved_action and its id: it goes out without asking. Don't do them any other way, then report how it went.\n${listed("approved")}`
       : "",
@@ -1730,6 +1759,7 @@ async function forSamePerson(db: Database, run: AgentRun, history: Message[], tr
   const kept = history.filter((m, i) => m.id === triggerId || readers[i] === reader);
   return {
     personId,
+    reader,
     history: kept,
     runIds: new Set(kept.flatMap((m) => (m.agentRunId ? [m.agentRunId] : []))),
   };
@@ -2165,7 +2195,7 @@ export function devicesText(devices: {
       devices.computers.some((c) => c.os === "windows") ? " Commands on Windows run in cmd.exe." : ""
     }`,
     devices.computers.some((c) => c.os === "darwin")
-      ? 'A screenshot of a person\'s Mac, when commands are on there: run `screencapture -x screen.png` in your folder there (run_code with `computer`), then upload_file it with the same `computer`. If it is refused or comes out blank, ask the person to allow Screen Recording in the agentes.chat app there (Preferences › General › Permissions). A file there refused with "Operation not permitted" or "Permission denied" needs Full Disk Access, turned on in the same place. Never suggest terminal flags, restarting programs or saving a file for you to read.'
+      ? 'A screenshot of a person\'s Mac, when commands are on there: run `screencapture -x screen.png` in your folder there (run_code with `computer`), then upload_file it with the same `computer`. If it is refused or comes out blank, ask the person to allow Screen Recording in the KeepMind OS app there (Preferences › General › Permissions). A file there refused with "Operation not permitted" or "Permission denied" needs Full Disk Access, turned on in the same place. Never suggest terminal flags, restarting programs or saving a file for you to read.'
       : "",
   ]
     .filter(Boolean)
@@ -2330,13 +2360,13 @@ export function taskNotice(m: Pick<Message, "body" | "meta">, current = false, p
 
 /**
  * A person's message sent from an AI app (ADR 0119, `meta.via`): the agent learns the person reads the reply there,
- * maybe not in agentes.chat. "" for anything else.
+ * maybe not in KeepMind OS. "" for anything else.
  */
 function viaLine(m: Message, who: string): string {
   const via = m.authorType === "person" ? (m.meta?.via as { kind?: unknown; name?: unknown } | undefined) : undefined;
   if (via?.kind !== "app" || typeof via.name !== "string") return "";
   const app = via.name.replace(/[\p{Cc}\p{Cf}]/gu, "").slice(0, 64);
-  return `\n(sent by ${who} through ${app}, an app connected to agentes.chat; the reply is read there)`;
+  return `\n(sent by ${who} through ${app}, an app connected to KeepMind OS; the reply is read there)`;
 }
 
 /** `meta.actionNotes` (undo/redo of the agent's changes) as one bracketed line each; "" when none. */
@@ -2384,6 +2414,10 @@ const isAnchor = (id: string) => Number.parseInt(id.replace(/-/g, "").slice(-6),
 
 /** Messages at the end of the history always read whole. */
 export const KEEP_WHOLE = 8;
+/** Agents' DM (ADR 0053 §9): the newest exchanges stay whole; older fetched ones are summarized instead. */
+export const DM_VERBATIM = 24;
+/** How far back an agents' DM run fetches for the summary (`DM_VERBATIM` of it stays verbatim). */
+const DM_SUMMARY_FETCH = 160;
 /** An older message longer than this reads as its start (`OLD_MESSAGE_START`) and the id `expand` reopens it by. */
 export const LONG_OLD_MESSAGE = 1500;
 const OLD_MESSAGE_START = 600;

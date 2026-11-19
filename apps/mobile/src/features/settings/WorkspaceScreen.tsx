@@ -8,10 +8,10 @@ import {
   useSkills,
   useStorage,
   useWorkspaceUsesApi,
-} from "@agenteschat/client";
-import { computerEdition } from "@agenteschat/client/lib/computer";
-import { can } from "@agenteschat/client/lib/permissions";
-import { settingsSectionNameKey } from "@agenteschat/client/lib/personal-view";
+} from "@keepmind/client";
+import { computerEdition } from "@keepmind/client/lib/computer";
+import { can } from "@keepmind/client/lib/permissions";
+import { settingsSectionNameKey } from "@keepmind/client/lib/personal-view";
 import { Fragment, type ReactElement } from "react";
 import { useTranslation } from "react-i18next";
 import { Alert } from "react-native";

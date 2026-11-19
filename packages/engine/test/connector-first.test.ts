@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import { eq, schema } from "@agenteschat/db";
+import { eq, schema } from "@keepmind/db";
 import {
   type ConnectorDeps,
   createApiKeyConnection,
@@ -185,7 +185,7 @@ test("a customer's site on a service's domain isn't the service", async () => {
 
 test("a service this server can't connect goes as today", async () => {
   const ctx = await world();
-  // Its vendor hasn't approved agentes.chat yet (`soon`): a key is the way in.
+  // Its vendor hasn't approved KeepMind OS yet (`soon`): a key is the way in.
   expect(await ask(ctx, { ...KEY, name: "ASANA_TOKEN", purpose: "Read the tasks" })).toBe(CARD);
 });
 

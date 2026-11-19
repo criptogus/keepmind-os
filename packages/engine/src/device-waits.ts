@@ -1,5 +1,5 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, type Database, type Executor, eq, schema, sql } from "@agenteschat/db";
+import type { PubSub } from "@keepmind/adapters";
+import { and, type Database, type Executor, eq, schema, sql } from "@keepmind/db";
 import { getAgentCached } from "./agents";
 import { type DeviceTarget, firstNames, targetMachineId, targetName, targetRule } from "./device-resolve";
 import type { MachinePhoneRow } from "./devices";

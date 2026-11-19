@@ -1,10 +1,11 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { generateKeyPairSync } from "node:crypto";
-import { orgTopic } from "@agenteschat/adapters";
-import { and, eq, schema } from "@agenteschat/db";
-import type { ModelRequest } from "@agenteschat/providers";
-import { systemText } from "@agenteschat/providers";
+import { orgTopic } from "@keepmind/adapters";
+import { and, eq, schema } from "@keepmind/db";
+import type { ModelRequest } from "@keepmind/providers";
+import { systemText } from "@keepmind/providers";
 import {
+  builtinSkills,
   createApiKeyConnection,
   createOrganization,
   deleteSkill,
@@ -59,6 +60,15 @@ allowed-tools:
 1. Junte as entregas da semana.
 2. Use o modelo em templates/relatorio.md.
 `;
+
+/** Team skills minus the built-ins every org is seeded with (covered in builtin-skills.test.ts). */
+const orgSkills = async () =>
+  (await listSkills(f.db, f.owner.id, f.org.id)).filter((s) => !(s.metadata as { builtin?: boolean } | null)?.builtin);
+
+const BUILTIN_NAMES = new Set(builtinSkills().map((s) => s.name));
+/** Enabled skills minus the built-ins every new agent gets (covered in builtin-skills.test.ts). */
+const userEnabled = async (agentId: string) =>
+  (await enabledSkills(f.db, f.org.id, agentId)).map((k) => k.name).filter((n) => !BUILTIN_NAMES.has(n));
 
 /**
  * A minimal zip writer (stored entries) for tests. `zip64`: the end record as git archive writes it past 65,535 files,
@@ -347,7 +357,7 @@ describe("import", () => {
         { path: "team/review", name: "review", description: "Revisa um pull request." },
       ],
     });
-    expect(await listSkills(f.db, f.owner.id, f.org.id)).toEqual([]);
+    expect(await orgSkills()).toEqual([]);
     expect(github.fetched).toEqual([
       "https://github.com/acme/skills/archive/HEAD.zip",
       "https://codeload.github.com/acme/skills/zip/0123abc",
@@ -359,7 +369,7 @@ describe("import", () => {
       ["relatorio-semanal", "https://github.com/acme/skills/tree/HEAD/relatorio-semanal"],
     ]);
     expect(installed[1]?.files.map((x) => x.path)).toContain("examples/inner/SKILL.md");
-    expect((await listSkills(f.db, f.owner.id, f.org.id)).map((s) => s.name)).toEqual(["deploy", "relatorio-semanal"]);
+    expect((await orgSkills()).map((s) => s.name)).toEqual(["deploy", "relatorio-semanal"]);
     await expect(importPickedSkills(deps, f.owner.id, f.org.id, url, ["docs"])).rejects.toThrow("no skill at docs");
     // A folder holding skills lists only its own.
     const team = await importSkillFromUrl(deps, f.owner.id, f.org.id, "https://github.com/acme/skills/tree/main/team");
@@ -374,7 +384,7 @@ describe("import", () => {
     f.pubsub.subscribe(orgTopic(f.org.id), (e) => {
       if (e.type === "org.broadcast") told.push((e.event as { type: string }).type);
     });
-    const on = async (agentId = f.agent.id) => (await enabledSkills(f.db, f.org.id, agentId)).map((k) => k.name);
+    const on = async (agentId = f.agent.id) => userEnabled(agentId);
     const forAgentId = f.agent.id;
     await importSkillFromUrl(deps, f.owner.id, f.org.id, "https://github.com/acme/skills/tree/main/team/deploy", {
       forAgentId,
@@ -410,7 +420,7 @@ describe("import", () => {
   test("from a link or a pick, a removed skill's name comes back on for none of its old agents; the list says so", async () => {
     f = await setup();
     const deps = { ...skillDeps(), fetch: fakeGithub().fetch };
-    const on = async () => (await enabledSkills(f.db, f.org.id, f.agent.id)).map((k) => k.name);
+    const on = async () => userEnabled(f.agent.id);
     const mine = (name: string) =>
       saveSkill(deps, f.owner.id, f.org.id, {
         name,
@@ -472,7 +482,7 @@ describe("import", () => {
     await expect(importPickedSkills(deps, f.owner.id, f.org.id, url, ["good", "long"])).rejects.toThrow(
       "long: description",
     );
-    expect(await listSkills(f.db, f.owner.id, f.org.id)).toEqual([]);
+    expect(await orgSkills()).toEqual([]);
   });
 
   test("a repository of 40,000 one-file skill folders is refused for holding too many in a moment", async () => {
@@ -543,7 +553,7 @@ describe("import", () => {
     await expect(
       importSkillFromUrl({ ...skillDeps(), fetch: fakeGithub({ archive }).fetch }, f.owner.id, f.org.id, url),
     ).rejects.toMatchObject({ code: "skill.repo_too_large", params: { max: 50 } });
-    expect(await listSkills(f.db, f.owner.id, f.org.id)).toEqual([]);
+    expect(await orgSkills()).toEqual([]);
   });
 
   test("a repository archive past 65,535 files is refused, never read in part", async () => {
@@ -555,7 +565,7 @@ describe("import", () => {
     const deps = { ...skillDeps(), fetch: fakeGithub({ archive: zip(files, { zip64: true }) }).fetch };
     const url = "https://github.com/acme/skills/tree/main/big";
     await expect(importSkillFromUrl(deps, f.owner.id, f.org.id, url)).rejects.toThrow("Too many files to read");
-    expect(await listSkills(f.db, f.owner.id, f.org.id)).toEqual([]);
+    expect(await orgSkills()).toEqual([]);
   });
 
   test("errors say what happened: a hidden repository, a missing ref, GitHub limiting us, no SKILL.md", async () => {
@@ -805,7 +815,7 @@ describe("private repositories", () => {
     const skill = (await importSkillFromUrl(deps, f.owner.id, f.org.id, url)) as SkillDetail;
     // The limit says nothing about who may read it: the skill stays one of a public repository.
     expect(skill).toMatchObject({ name: "relatorio-semanal", version: 1, sourceVia: null });
-    expect(await listSkills(f.db, f.owner.id, f.org.id)).toMatchObject([{ name: "relatorio-semanal", version: 1 }]);
+    expect(await orgSkills()).toMatchObject([{ name: "relatorio-semanal", version: 1 }]);
     // The public read first, limited; then the token, sent to the API only, and the archive from codeload.
     expect(github.requests).toEqual([
       { url: "https://github.com/acme/skills/archive/HEAD.zip", auth: null },
@@ -910,7 +920,7 @@ describe("private repositories", () => {
       choices: [{ path: "team/review", name: "review", description: "Revisa um pull request.", replaces: "installed" }],
       via: "github_app",
     });
-    expect(await listSkills(f.db, f.owner.id, f.org.id)).toMatchObject([{ name: "review", version: 1 }]);
+    expect(await orgSkills()).toMatchObject([{ name: "review", version: 1 }]);
 
     // A ref the repository lacks, told apart from a repository the token can't see.
     const v9 = "https://github.com/acme/private/tree/v9/team/review";
@@ -1260,13 +1270,13 @@ describe("files, counts and delete", () => {
   test("agentsCount; deleting keeps assignments and the same name again brings them back", async () => {
     f = await setup();
     const skill = await importSkillZip(skillDeps(), f.owner.id, f.org.id, zip(folder));
-    expect((await listSkills(f.db, f.owner.id, f.org.id))[0]).toMatchObject({ id: skill.id, agentsCount: 0 });
+    expect((await orgSkills())[0]).toMatchObject({ id: skill.id, agentsCount: 0 });
     await setAgentSkills(f.db, f.owner.id, f.org.id, f.agent.id, [{ skillId: skill.id, enabled: true }]);
-    expect((await listSkills(f.db, f.owner.id, f.org.id))[0]?.agentsCount).toBe(1);
+    expect((await orgSkills())[0]?.agentsCount).toBe(1);
 
     await deleteSkill(f.db, f.owner.id, f.org.id, skill.id);
-    expect(await listSkills(f.db, f.owner.id, f.org.id)).toEqual([]);
-    expect(await enabledSkills(f.db, f.org.id, f.agent.id)).toEqual([]);
+    expect(await orgSkills()).toEqual([]);
+    expect(await userEnabled(f.agent.id)).toEqual([]);
     await expect(getSkill(f.db, f.owner.id, f.org.id, skill.id)).rejects.toBeInstanceOf(NotFoundError);
     expect(await f.db.select().from(schema.agentSkills)).toHaveLength(1);
 
@@ -1275,8 +1285,9 @@ describe("files, counts and delete", () => {
       source: "manual",
     });
     expect(back).toMatchObject({ id: skill.id, version: 2 });
-    expect((await enabledSkills(f.db, f.org.id, f.agent.id)).map((s) => s.id)).toEqual([skill.id]);
-    expect((await listSkills(f.db, f.owner.id, f.org.id))[0]?.agentsCount).toBe(1);
+    expect((await enabledSkills(f.db, f.org.id, f.agent.id)).map((s) => s.id)).toContain(skill.id);
+    expect(await userEnabled(f.agent.id)).toEqual(["relatorio-semanal"]);
+    expect((await orgSkills())[0]?.agentsCount).toBe(1);
     const audit = await f.db.select().from(schema.auditLog);
     expect(audit.some((a) => a.action === "skill.restored")).toBe(true);
   });

@@ -1,10 +1,10 @@
-import { withoutRelayLine } from "@agenteschat/ui/agent-talk";
+import { withoutRelayLine } from "@keepmind/ui/agent-talk";
 import type { TFunction } from "i18next";
 import type { ConsultationStatus, MessageConsultation } from "../api/types";
 import { plainLine } from "./markdown";
 import { formatLineTime } from "./work";
 
-export { CONSULT_SUBJECT_CHARS, consultSubject, withoutRelayLine } from "@agenteschat/ui/agent-talk";
+export { CONSULT_SUBJECT_CHARS, consultSubject, withoutRelayLine } from "@keepmind/ui/agent-talk";
 
 /** How long an agent waits for another one's answer (the server's `CONSULTATION_TTL_MS`). */
 export const CONSULTATION_MINUTES = 15;

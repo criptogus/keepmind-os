@@ -1,4 +1,4 @@
-import { type CardInstall, cardInstallAgent } from "@agenteschat/client/lib/action-cards";
+import { type CardInstall, cardInstallAgent } from "@keepmind/client/lib/action-cards";
 
 /**
  * The install an agent's card on this phone opened last, in memory only: a link from outside the app to Instalar

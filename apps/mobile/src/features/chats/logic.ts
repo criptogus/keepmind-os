@@ -8,11 +8,11 @@ import type {
   PreviewMeta,
   ThreadActor,
   ThreadInfo,
-} from "@agenteschat/client";
-import { hiddenAgentIds, hiddenDm } from "@agenteschat/client/lib/audience";
-import { dmActivityAt } from "@agenteschat/client/lib/recent";
-import type { ServerCheck, ServerProblem } from "@agenteschat/client/lib/server";
-import { looksUnread, unreadTotal } from "@agenteschat/client/lib/unread";
+} from "@keepmind/client";
+import { hiddenAgentIds, hiddenDm } from "@keepmind/client/lib/audience";
+import { dmActivityAt } from "@keepmind/client/lib/recent";
+import type { ServerCheck, ServerProblem } from "@keepmind/client/lib/server";
+import { looksUnread, unreadTotal } from "@keepmind/client/lib/unread";
 import { previewOf } from "../shared/logic";
 
 /**

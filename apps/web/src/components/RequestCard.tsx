@@ -1,5 +1,5 @@
-import type { Agent } from "@agenteschat/client";
-import { askKindWords } from "@agenteschat/client/lib/approval-words";
+import type { Agent } from "@keepmind/client";
+import { askKindWords } from "@keepmind/client/lib/approval-words";
 import {
   cx,
   EventPill,
@@ -11,7 +11,7 @@ import {
   Locked,
   prefersReducedMotion,
   Spinner,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import {
   createContext,
   type FormEvent,

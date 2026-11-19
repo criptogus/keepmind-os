@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import type { ChannelEvent, LiveRun, Message } from "@agenteschat/client";
+import type { ChannelEvent, LiveRun, Message } from "@keepmind/client";
 import {
   applyConsultEvent,
   CONSULT_ASKING_MAX_MS,
@@ -7,7 +7,7 @@ import {
   type ConsultsState,
   consultsIn,
   elapsedClock,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 import {
   type ActivityEntry,
   activitySentence,
@@ -22,8 +22,8 @@ import {
   peopleGroups,
   someoneTypes,
   toolActivity,
-} from "@agenteschat/client/lib/activity";
-import { consultationsOf, previewOf } from "@agenteschat/client/lib/consultations";
+} from "@keepmind/client/lib/activity";
+import { consultationsOf, previewOf } from "@keepmind/client/lib/consultations";
 import type { TFunction } from "i18next";
 import { createI18n } from "@/i18n";
 

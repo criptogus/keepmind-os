@@ -1,4 +1,4 @@
-import { LEVELS, type Level } from "@agenteschat/client/lib/access-levels";
+import { LEVELS, type Level } from "@keepmind/client/lib/access-levels";
 import type { TFunction } from "i18next";
 import type { IconName } from "@/ui";
 import { pickOne } from "../shared/PickerSheet";

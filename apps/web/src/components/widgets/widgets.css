@@ -1,6 +1,6 @@
 /*
  * Widgets on the web (ADR 0135): the side panel of a widget and "Pin to a dashboard". The cards and the board grid
- * are the design system's (`@agenteschat/ui`, styles/widgets.css).
+ * are the design system's (`@keepmind/ui`, styles/widgets.css).
  */
 
 /* ── The side panel: from the right edge, the page still in view ───────── */

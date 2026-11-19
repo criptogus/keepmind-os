@@ -1,6 +1,6 @@
-import { type AdminAsk, type AppNotification, useAddChannelMember, useAskAdmins } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { Button, type ButtonProps } from "@agenteschat/ui";
+import { type AdminAsk, type AppNotification, useAddChannelMember, useAskAdmins } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { Button, type ButtonProps } from "@keepmind/ui";
 import { useTranslation } from "react-i18next";
 import { useOrg } from "@/components/org-context";
 import { useToast } from "@/lib/toast";

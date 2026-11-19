@@ -1,22 +1,24 @@
-import { OutboundAddressError } from "@agenteschat/adapters";
-import { and, type Database, type Executor, eq, isNull, schema } from "@agenteschat/db";
+import { OutboundAddressError } from "@keepmind/adapters";
+import { and, type Database, type Executor, eq, isNull, schema } from "@keepmind/db";
 import {
   customModelId,
   ENDPOINT_STYLES,
   type EndpointStyle,
   listEndpointModels,
   type ModelInfo,
+  type ProviderError,
   parseCustomModel,
+  providerCause,
   setCustomModels,
   type ToolSpec,
-} from "@agenteschat/providers";
+} from "@keepmind/providers";
 import { recordAudit } from "./audit";
 import { caches } from "./cache";
 import { NotFoundError, ValidationError } from "./errors";
 import type { ModelGateway } from "./gateway";
 import { assertPublicHttpsUrl, publicHttpsFetch, type ResolveHost } from "./net-guard";
 import { requirePermission } from "./organizations";
-import { isAgentesCloud } from "./telemetry";
+import { isKeepMindCloud } from "./telemetry";
 import { redactCredentials } from "./tool-detail";
 
 /**
@@ -51,7 +53,7 @@ export const allowsPrivateEndpoints = (config: {
   MODEL_ENDPOINTS_PRIVATE?: boolean;
   PUBLIC_URL: string;
   ALLOW_SIGNUP?: boolean;
-}) => config.MODEL_ENDPOINTS_PRIVATE ?? (!isAgentesCloud(config.PUBLIC_URL) && !config.ALLOW_SIGNUP);
+}) => config.MODEL_ENDPOINTS_PRIVATE ?? (!isKeepMindCloud(config.PUBLIC_URL) && !config.ALLOW_SIGNUP);
 
 /** The fetch endpoint calls go through: private addresses allowed or not, every request checked at connect time. */
 export const endpointFetch = (net: EndpointNet): typeof fetch =>
@@ -228,6 +230,42 @@ export async function checkEndpoint(
   caches.credentials.delete(`${orgId}:${credentialId}`);
   caches.credentials.delete(`${orgId}:endpoints`);
   return results;
+}
+
+/**
+ * A run's call to an endpoint model failed unreachable or down (`parkOutage` in the executor): the model's check becomes
+ * `failed`, so Automático stops preferring it (`CHECK_RANK` in the catalog) until a test says otherwise. A rate limit,
+ * a refused key or a missing model says nothing about reachability and changes nothing. Best-effort bookkeeping: the
+ * caller swallows a miss, it never fails the run.
+ */
+export async function noteEndpointModelFailure(db: Executor, model: string, error: ProviderError): Promise<void> {
+  const cause = providerCause(error);
+  if (cause !== "unreachable" && cause !== "down") return;
+  const ref = parseCustomModel(model);
+  if (!ref) return;
+  const [row] = await db
+    .select({
+      orgId: schema.providerCredentials.orgId,
+      options: schema.providerCredentials.options,
+    })
+    .from(schema.providerCredentials)
+    .where(
+      and(
+        eq(schema.providerCredentials.id, ref.credentialId),
+        eq(schema.providerCredentials.provider, "custom"),
+        isNull(schema.providerCredentials.revokedAt),
+      ),
+    );
+  const endpoint = row?.options.endpoint;
+  const hit = endpoint?.models.find((m) => m.id === ref.model);
+  if (!row || !endpoint || !hit || hit.check === "failed") return;
+  const models = endpoint.models.map((m) => (m.id === ref.model ? { ...m, check: "failed" as const } : m));
+  await db
+    .update(schema.providerCredentials)
+    .set({ options: { ...row.options, endpoint: { ...endpoint, models } } })
+    .where(eq(schema.providerCredentials.id, ref.credentialId));
+  caches.credentials.delete(`${row.orgId}:${ref.credentialId}`);
+  caches.credentials.delete(`${row.orgId}:endpoints`);
 }
 
 /** Changes which models an endpoint offers and their prices (admins); checks are run again by the caller. */

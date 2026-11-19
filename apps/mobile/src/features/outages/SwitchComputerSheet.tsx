@@ -1,9 +1,4 @@
-import {
-  moveErrorOf,
-  pickedTargetKey,
-  type TargetOption,
-  targetOptions,
-} from "@agenteschat/client/lib/machine-outages";
+import { moveErrorOf, pickedTargetKey, type TargetOption, targetOptions } from "@keepmind/client/lib/machine-outages";
 import { type ReactNode, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, StyleSheet, View } from "react-native";

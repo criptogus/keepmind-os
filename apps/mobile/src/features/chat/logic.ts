@@ -9,16 +9,16 @@ import type {
   MessagePin,
   ReactionCount,
   TypingWho,
-} from "@agenteschat/client";
-import { agentProposalOf, costlyProposalOf, stretchCardOf } from "@agenteschat/client/lib/action-cards";
-import { type ActivityEntry, barEntries, type barWords, markedPieces, markInk } from "@agenteschat/client/lib/activity";
-import { splitChannelRefs } from "@agenteschat/client/lib/channel-refs";
-import type { ChatStyle, ChatTextSize } from "@agenteschat/client/lib/chat-look";
-import { agentsByAnyHandle } from "@agenteschat/client/lib/directory";
-import { loneIdRef, splitIdRefs } from "@agenteschat/client/lib/id-refs";
-import { issueWorkOf } from "@agenteschat/client/lib/issues";
-import { detailsAt, MENTION, type TableAlign, tableAt } from "@agenteschat/client/lib/markdown";
-import { messageMediaOf } from "@agenteschat/client/lib/media";
+} from "@keepmind/client";
+import { agentProposalOf, costlyProposalOf, stretchCardOf } from "@keepmind/client/lib/action-cards";
+import { type ActivityEntry, barEntries, type barWords, markedPieces, markInk } from "@keepmind/client/lib/activity";
+import { splitChannelRefs } from "@keepmind/client/lib/channel-refs";
+import type { ChatStyle, ChatTextSize } from "@keepmind/client/lib/chat-look";
+import { agentsByAnyHandle } from "@keepmind/client/lib/directory";
+import { loneIdRef, splitIdRefs } from "@keepmind/client/lib/id-refs";
+import { issueWorkOf } from "@keepmind/client/lib/issues";
+import { detailsAt, MENTION, type TableAlign, tableAt } from "@keepmind/client/lib/markdown";
+import { messageMediaOf } from "@keepmind/client/lib/media";
 import {
   answeredNotices,
   isAgentOnlyNotice,
@@ -29,13 +29,13 @@ import {
   noticeOf,
   noticeView,
   settledNotices,
-} from "@agenteschat/client/lib/notices";
-import { replyOf } from "@agenteschat/client/lib/reply";
-import { isRoutineCall, routineReplyOf } from "@agenteschat/client/lib/routines";
-import { secretRequestOf } from "@agenteschat/client/lib/secret-requests";
-import { usagePauseCardOf } from "@agenteschat/client/lib/usage-pause";
-import { voiceOf } from "@agenteschat/client/lib/voice";
-import { type AgentColorName, gradientOf, mentionTone, mixHex } from "@agenteschat/ui/agent/engine";
+} from "@keepmind/client/lib/notices";
+import { replyOf } from "@keepmind/client/lib/reply";
+import { isRoutineCall, routineReplyOf } from "@keepmind/client/lib/routines";
+import { secretRequestOf } from "@keepmind/client/lib/secret-requests";
+import { usagePauseCardOf } from "@keepmind/client/lib/usage-pause";
+import { voiceOf } from "@keepmind/client/lib/voice";
+import { type AgentColorName, gradientOf, mentionTone, mixHex } from "@keepmind/ui/agent/engine";
 import type { TFunction } from "i18next";
 import { agentLook, previewOf } from "../shared/logic";
 import { continuesReply } from "./media";

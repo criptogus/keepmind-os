@@ -1,4 +1,4 @@
-import type { Me, OrgSummary } from "@agenteschat/client";
+import type { Me, OrgSummary } from "@keepmind/client";
 import { createContext, type ReactNode, useContext, useMemo } from "react";
 
 interface OrgContextValue {

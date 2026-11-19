@@ -1,5 +1,5 @@
-import { type Message, useAuthConfig, useFeedbackOffer, useSetChatPrefs } from "@agenteschat/client";
-import { feedbackOfferFor } from "@agenteschat/client/lib/feedback-offer";
+import { type Message, useAuthConfig, useFeedbackOffer, useSetChatPrefs } from "@keepmind/client";
+import { feedbackOfferFor } from "@keepmind/client/lib/feedback-offer";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
@@ -22,7 +22,7 @@ export function FeedbackOfferRow({ message: m }: { message: Message }) {
   const { orgId, org } = useOrg();
   const meId = useMeId();
   const auth = useAuthConfig().data;
-  // Read by the agentes.chat team: on its own servers, and from one whose operator gave no address.
+  // Read by the KeepMind OS team: on its own servers, and from one whose operator gave no address.
   const cloud = auth?.cloud === true || auth?.feedbackRelay === true;
   const offer = m.author.type === "agent" ? feedbackOfferFor(m.meta, meId) : null;
   const decide = useFeedbackOffer(orgId, { channelId: m.channelId, threadId: m.threadId, messageId: m.id });

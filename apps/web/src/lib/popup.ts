@@ -1,4 +1,4 @@
-import type { MachineAccountKind } from "@agenteschat/client";
+import type { MachineAccountKind } from "@keepmind/client";
 import { inDesktopApp } from "./desktop";
 
 /** A provider's sign-in or key page: its own window beside the app. */

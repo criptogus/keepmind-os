@@ -7,7 +7,7 @@ import {
   type CliInstall,
   type InstallableCli,
   isInstallableCli,
-} from "@agenteschat/adapters/machine-protocol";
+} from "@keepmind/adapters/machine-protocol";
 import { killTree } from "./exec";
 import { envValue, findOnWindowsPath, isFile } from "./executors";
 import { CLAUDE_INSTALL_PS1_URL, CLAUDE_INSTALL_URL, CODEX_RELEASES } from "./install-script";

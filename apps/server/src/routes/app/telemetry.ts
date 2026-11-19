@@ -1,12 +1,12 @@
+import { createRoute, z } from "@hono/zod-openapi";
 import {
   buildTelemetryReport,
-  isAgentesCloud,
+  isKeepMindCloud,
   NotFoundError,
   pinnedOwner,
   setTelemetryEnabled,
   telemetryState,
-} from "@agenteschat/engine";
-import { createRoute, z } from "@hono/zod-openapi";
+} from "@keepmind/engine";
 import { telemetryFacts } from "../../telemetry";
 import { type AppDeps, body, createAppRouter, errors, json, requireSession, security } from "./context";
 
@@ -103,14 +103,14 @@ const Telemetry = z
   })
   .openapi("ServerTelemetry");
 
-/** The usage report's switch (ADR 0060 §5): only the installation's pinned owner, never on agentes.chat itself. */
+/** The usage report's switch (ADR 0060 §5): only the installation's pinned owner, never on KeepMind OS itself. */
 export function telemetryRoutes(deps: AppDeps) {
   const { db, config } = deps;
   const app = createAppRouter(deps);
   app.use("/telemetry", requireSession(deps.auth));
 
   const requireOwner = async (userId: string) => {
-    if (isAgentesCloud(config.PUBLIC_URL) || (await pinnedOwner(db)) !== userId) throw new NotFoundError("Not found");
+    if (isKeepMindCloud(config.PUBLIC_URL) || (await pinnedOwner(db)) !== userId) throw new NotFoundError("Not found");
   };
   const view = async () => ({
     enabled: (await telemetryState(db)).enabled,
@@ -125,7 +125,7 @@ export function telemetryRoutes(deps: AppDeps) {
       tags,
       summary: "The usage report's switch, and the next report",
       description:
-        "404 for everyone but the installation's owner (its first account, kept once it is gone), and on agentes.chat itself.",
+        "404 for everyone but the installation's owner (its first account, kept once it is gone), and on KeepMind OS itself.",
       security,
       responses: { 200: json(Telemetry), 401: errors[401], 404: errors[404] },
     }),

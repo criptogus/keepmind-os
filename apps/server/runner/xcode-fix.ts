@@ -3,7 +3,7 @@ import type { EventEmitter } from "node:events";
 import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { XcodeBlocked, XcodeFix, XcodeFixKind } from "@agenteschat/adapters/machine-protocol";
+import type { XcodeBlocked, XcodeFix, XcodeFixKind } from "@keepmind/adapters/machine-protocol";
 import { killTree } from "./exec";
 import { shQuote } from "./install-script";
 import { pageLocale, XCODE_PROMPT } from "./page-words";

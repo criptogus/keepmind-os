@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { CHAT_RHYTHM } from "@agenteschat/client/lib/chat-look";
+import { CHAT_RHYTHM } from "@keepmind/client/lib/chat-look";
 import { atRule, builtCss, declarations, rules, topLevel } from "./built-css";
 
 const SHEETS = [

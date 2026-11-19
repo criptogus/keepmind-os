@@ -7,7 +7,7 @@ import net from "node:net";
 import os from "node:os";
 import path from "node:path";
 import { gunzipSync } from "node:zlib";
-import type { PhoneKind, PhoneReason, RunnerToolchains } from "@agenteschat/adapters/machine-protocol";
+import type { PhoneKind, PhoneReason, RunnerToolchains } from "@keepmind/adapters/machine-protocol";
 import { type AppleTunnels, type Tunnel, TunnelMissing, tunnelForward } from "./apple-tunnel";
 import { jpegSize } from "./browser";
 import { RunnerError } from "./errors";

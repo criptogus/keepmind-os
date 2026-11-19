@@ -1,4 +1,4 @@
-import { clippedHeight } from "@agenteschat/client/lib/message-length";
+import { clippedHeight } from "@keepmind/client/lib/message-length";
 import { LinearGradient } from "expo-linear-gradient";
 import { type ComponentRef, createContext, type ReactNode, useContext, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

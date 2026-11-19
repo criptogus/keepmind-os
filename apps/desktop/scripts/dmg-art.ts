@@ -14,7 +14,7 @@ import { spawnSync } from "node:child_process";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { agent, dither, dottedWordmark, Picture, type RGB, SKY, WHITE } from "./pixel-art";
+import { dottedWordmark, Picture, type RGB } from "./pixel-art";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -23,21 +23,6 @@ const W = 660;
 const H = 400;
 const APP = [180, 170] as const;
 const APPS = [480, 170] as const;
-
-const gauss = (x: number, y: number, cx: number, cy: number, sx: number, sy: number) =>
-  Math.exp(-(((x - cx) / sx) ** 2 + ((y - cy) / sy) ** 2));
-
-/** A pixel cloud with a lit top edge, `cell` points per block. */
-function cloud(p: Picture, x: number, y: number, cell: number, body: RGB, lit: RGB) {
-  const shape = ["....XXX.......", "..XXXXXXX.XX..", ".XXXXXXXXXXXXX", "XXXXXXXXXXXXXXX"];
-  shape.forEach((line, j) => {
-    [...line].forEach((c, i) => {
-      if (c !== "X") return;
-      const top = j === 0 || shape[j - 1]?.[i] !== "X";
-      p.box(x + i * cell, y + j * cell, cell, cell, top ? lit : body);
-    });
-  });
-}
 
 /** The hop from the app to Applications: a dotted pixel arc, growing and brighter, then a ">" head. */
 function hop(p: Picture, color: RGB, alpha: number, cell = 4) {
@@ -74,36 +59,12 @@ function hop(p: Picture, color: RGB, alpha: number, cell = 4) {
 
 function background(k: number): Picture {
   const p = new Picture(W * k, H * k, k);
-  // Deep at the top, two soft light patches, lighter toward the bottom; a mid blue around the icons.
-  dither(
-    p,
-    SKY,
-    (u, v) => {
-      const x = u * W;
-      const y = v * H;
-      return (
-        0.04 +
-        0.5 * v ** 1.25 +
-        0.05 * Math.sin(x / 70 + v * 3) +
-        0.3 * gauss(x, y, 120, 70, 160, 60) +
-        0.22 * gauss(x, y, 560, 330, 200, 80)
-      );
-    },
-    3,
-  );
-  const tone = (i: number) => SKY[i] as RGB;
-  cloud(p, 26, 92, 4, tone(4), tone(6));
-  cloud(p, 520, 54, 3, tone(3), tone(5));
-  cloud(p, 470, 318, 5, tone(5), tone(7));
-  cloud(p, -20, 330, 5, tone(5), tone(7));
-  cloud(p, 250, 352, 4, tone(6), tone(7));
-  // The team, far away.
-  agent(p, 96, 36, 18, false, "violet", 8);
-  agent(p, 590, 128, 16, false, "amber", 8);
-  agent(p, 612, 26, 14, false, "green", 8);
-  agent(p, 44, 262, 16, false, "rose", 8);
-  dottedWordmark(p, W / 2, 64, 34);
-  hop(p, WHITE, 0.95);
+  p.box(0, 0, W, H, [25, 27, 23]);
+  // Neutral icon wells preserve Finder labels in either system appearance.
+  p.box(118, 110, 124, 148, [142, 145, 138]);
+  p.box(418, 110, 124, 148, [142, 145, 138]);
+  dottedWordmark(p, W / 2, 92, 96);
+  hop(p, [196, 255, 61], 0.95);
   return p;
 }
 

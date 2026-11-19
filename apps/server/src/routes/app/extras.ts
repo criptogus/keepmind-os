@@ -1,4 +1,4 @@
-import type { PushSender } from "@agenteschat/adapters";
+import type { PushSender } from "@keepmind/adapters";
 import type {
   ArtifactDeps,
   BrowserLive,
@@ -9,6 +9,7 @@ import type {
   JevKey,
   McpConnect,
   ModelGateway,
+  ReaDeps,
   ResolveHost,
   RouterDeps,
   SandboxDeps,
@@ -17,7 +18,8 @@ import type {
   StreamBroker,
   Talker,
   VoiceDeps,
-} from "@agenteschat/engine";
+  WhatsAppDeps,
+} from "@keepmind/engine";
 
 /**
  * Backend services the app API needs beyond the core deps (owned by the
@@ -60,7 +62,7 @@ export interface AppExtras {
   /** The installation's Jev key, for its owner's routes (ADR 0073); absent = those routes answer 404. */
   jevKey?: JevKey;
   /**
-   * The installation's GIPHY key, for its owner's routes (ADR 0091, amended 2026-10-31); absent (agentes.chat's own
+   * The installation's GIPHY key, for its owner's routes (ADR 0091, amended 2026-10-31); absent (KeepMind OS's own
    * servers) = those routes answer 404.
    */
   gifKey?: GifKey;
@@ -69,4 +71,8 @@ export interface AppExtras {
   /** Speech engines and what voice messages need (ADR 0100); absent: no voice messages. */
   speech?: SpeechSettings;
   voice?: VoiceDeps;
+  /** The WhatsApp bridge supervisor deps; absent = the connector can't pair. */
+  whatsapp?: WhatsAppDeps;
+  /** The REA sidecar supervisor deps; absent = the connector can't start. */
+  rea?: ReaDeps;
 }

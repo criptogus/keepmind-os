@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { ApiError, type BrowserHandoff, heldRowsIn, resetHeldPlaces } from "@agenteschat/client";
+import { ApiError, type BrowserHandoff, heldRowsIn, resetHeldPlaces } from "@keepmind/client";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { ADA_ID, createFakeApi, ENG_ID, fakeBrowserOf, ORG_ID, seedState } from "./fake-api";
 import { onScreen, renderApp, settle } from "./render";
@@ -198,7 +198,7 @@ describe("where a held card goes when its run has no live block", () => {
   });
 
   test("a take over is held by its run only while it is open", async () => {
-    const { isHeldTakeover } = await import("@agenteschat/client");
+    const { isHeldTakeover } = await import("@keepmind/client");
     const h: BrowserHandoff = {
       id: "h1",
       agentId: ADA_ID,

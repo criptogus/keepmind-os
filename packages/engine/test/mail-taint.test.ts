@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import { schema } from "@agenteschat/db";
+import { schema } from "@keepmind/db";
 import { insertMessage, isSensitive, type RoutineAccess, type RoutineBrief, type ToolContext } from "../src";
 import { WHY_REFUSAL } from "../src/tools/run-policy";
 import { giveMail, imapAccount, type MailFixture, mailSetup, runContext } from "./mail-fixtures";

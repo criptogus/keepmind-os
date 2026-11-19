@@ -1,6 +1,6 @@
-import type { Me } from "@agenteschat/client";
-import { authConfigQuery, instanceQuery, meQuery } from "@agenteschat/client";
-import type { LegalKind } from "@agenteschat/i18n/legal";
+import type { Me } from "@keepmind/client";
+import { authConfigQuery, meQuery } from "@keepmind/client";
+import type { LegalKind } from "@keepmind/i18n/legal";
 import { redirect } from "@tanstack/react-router";
 import type { RouterContext } from "./router-context";
 
@@ -24,16 +24,11 @@ export async function requireUserIn(context: RouterContext, href: string, orgId:
   return fresh;
 }
 
-/**
- * `/terms` and `/privacy`: agentes.chat Cloud's documents where the server says it is the Cloud (true). Any other
- * server sends them to its own page (`TERMS_URL`, `PRIVACY_URL`), or has none (false).
- */
+/** Use operator-configured legal policies; never substitute upstream terms. */
 export async function legalPage(context: RouterContext, kind: LegalKind): Promise<boolean> {
-  const [instance, config] = await Promise.all([
-    context.queryClient.ensureQueryData(instanceQuery(context.api)),
-    context.queryClient.ensureQueryData(authConfigQuery(context.api)),
-  ]);
-  if (instance.cloud) return true;
+  const config = await context.queryClient.ensureQueryData(authConfigQuery(context.api));
+  // Upstream legal documents do not apply to the KeepMind service.
+  // Only an explicitly configured operator policy may be presented.
   const own = kind === "terms" ? config.termsUrl : config.privacyUrl;
   // A page at this same address is this app's, which would land back here.
   if (own && new URL(own, window.location.href).origin !== window.location.origin) throw redirect({ href: own });

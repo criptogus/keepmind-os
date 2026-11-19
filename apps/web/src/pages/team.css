@@ -688,3 +688,31 @@
   color: var(--muted);
   font-size: 13px;
 }
+
+/* "Agora": the live strip over the views — the Agora popover's rows, always on the page. */
+.team-agora {
+  gap: 8px;
+  padding: 12px 16px;
+}
+.team-agora__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.team-agora__title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.team-agora__section {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.team-agora__none {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}

@@ -2,8 +2,8 @@ import { afterEach, expect, test } from "bun:test";
 import { copyFileSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { eq, schema } from "@agenteschat/db";
-import { emailArtFor } from "@agenteschat/engine";
+import { eq, schema } from "@keepmind/db";
+import { emailArtFor } from "@keepmind/engine";
 import { createApp } from "../src/app";
 import { browser, createTestServer, ORIGIN, seedOrg, signUp, type TestServer } from "./harness";
 
@@ -32,7 +32,7 @@ test("emails go through the outbox: invitation (create, batch, resend) and passw
   expect(t.email.sent).toEqual([]); // never inline in the request
   await t.drain();
   expect(t.email.sent.map((m) => [m.to, m.subject])).toEqual([
-    [["ana@example.com"], "Você recebeu um convite para um workspace no agentes.chat"],
+    [["ana@example.com"], "Você recebeu um convite para um workspace no KeepMind OS"],
   ]);
   expect(t.email.sent[0]?.text).toContain(url);
 
@@ -52,7 +52,7 @@ test("emails go through the outbox: invitation (create, batch, resend) and passw
   await t.drain();
   expect(t.email.sent.at(-1)).toMatchObject({
     to: ["owner@example.com"],
-    subject: "Redefina sua senha do agentes.chat",
+    subject: "Redefina sua senha do KeepMind OS",
   });
 });
 
@@ -98,14 +98,14 @@ test("at most 3 reset and 3 confirmation emails an hour to one address: more go 
   // The sign-up's confirmation was the first of three. (Links are stamped to the second: within one, they're one email.)
   for (let i = 0; i < 2; i++) expect((await confirm()).status).toBe(200);
   await t.drain();
-  expect(sent("Redefina sua senha do agentes.chat").length).toBe(3);
-  const confirmations = sent("Confirme seu e-mail no agentes.chat").length;
+  expect(sent("Redefina sua senha do KeepMind OS").length).toBe(3);
+  const confirmations = sent("Confirme seu e-mail no KeepMind OS").length;
   expect(confirmations).toBeGreaterThanOrEqual(1);
   // A new second would make a new link: the fourth is dropped all the same.
   await Bun.sleep(1000 - (Date.now() % 1000));
   expect((await confirm()).status).toBe(200);
   await t.drain();
-  expect(sent("Confirme seu e-mail no agentes.chat").length).toBe(confirmations);
+  expect(sent("Confirme seu e-mail no KeepMind OS").length).toBe(confirmations);
 
   // Another address has its own count.
   await signUp(browser(t), "bia@example.com");
@@ -141,13 +141,13 @@ test("the sign-up's own language: the confirmation email and the account follow 
   const bia = await signUpIn("bia@example.com", "en");
   expect(t.email.sent.at(-1)).toMatchObject({
     to: ["bia@example.com"],
-    subject: "Confirm your email for agentes.chat",
+    subject: "Confirm your email for KeepMind OS",
   });
   expect(await localeOf("bia@example.com")).toBe("en");
   const ana = await signUpIn("ana@example.com", "sv-SE,pt-PT;q=0.9,en;q=0.8");
   expect(t.email.sent.at(-1)).toMatchObject({
     to: ["ana@example.com"],
-    subject: "Confirme seu e-mail no agentes.chat",
+    subject: "Confirme seu e-mail no KeepMind OS",
   });
   expect(await localeOf("ana@example.com")).toBe("pt-BR");
 
@@ -173,7 +173,7 @@ test("the sign-up's own language: the confirmation email and the account follow 
   expect(again.status).toBe(200);
   await t.drain();
   expect(t.email.sent.slice(sent)).toMatchObject([
-    { to: ["ana@example.com"], subject: "Confirme seu e-mail no agentes.chat" },
+    { to: ["ana@example.com"], subject: "Confirme seu e-mail no KeepMind OS" },
   ]);
   expect(linkTo("ana@example.com").searchParams.get("callbackURL")).toBe("/?email_confirmed=1");
   // A sign-up that names its own page keeps it.
@@ -189,7 +189,7 @@ test("the sign-up's own language: the confirmation email and the account follow 
     headers: { "accept-language": "en-US,en;q=0.9" },
   });
   await t.drain();
-  expect(t.email.sent.at(-1)).toMatchObject({ to: ["old@example.com"], subject: "Reset your agentes.chat password" });
+  expect(t.email.sent.at(-1)).toMatchObject({ to: ["old@example.com"], subject: "Reset your KeepMind OS password" });
 });
 
 test("a server people outside can't reach attaches the pictures to each email", async () => {
@@ -199,13 +199,11 @@ test("a server people outside can't reach attaches the pictures to each email", 
   await signUp(browser(t), "owner@example.com");
   await t.drain();
   const sent = t.email.sent.at(-1);
-  expect(sent?.subject).toBe("Confirme seu e-mail no agentes.chat");
-  expect(sent?.html).toContain('src="cid:logo-ink-tile@agentes.chat"');
+  expect(sent?.subject).toBe("Confirme seu e-mail no KeepMind OS");
+  expect(sent?.html).toContain('src="cid:sky-band@keepmind.io"');
   expect(sent?.html).not.toContain(`${ORIGIN}/email/`);
   expect(sent?.inline?.map((p) => [p.cid, p.filename, p.contentType])).toEqual([
-    ["logo-ink-tile@agentes.chat", "logo-ink-tile.png", "image/png"],
-    ["logo-bone@agentes.chat", "logo-bone.png", "image/png"],
-    ["sky-band@agentes.chat", "sky-band.png", "image/png"],
+    ["sky-band@keepmind.io", "sky-band.png", "image/png"],
   ]);
 });
 

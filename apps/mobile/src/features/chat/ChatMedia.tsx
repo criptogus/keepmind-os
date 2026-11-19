@@ -1,5 +1,5 @@
-import type { GifMedia, GifSize, MessageMedia, StickerMedia } from "@agenteschat/client";
-import { gifLabel, gifMediaUrl, stickerLabel } from "@agenteschat/client/lib/media";
+import type { GifMedia, GifSize, MessageMedia, StickerMedia } from "@keepmind/client";
+import { gifLabel, gifMediaUrl, stickerLabel } from "@keepmind/client/lib/media";
 import { Image } from "expo-image";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";

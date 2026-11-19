@@ -1,6 +1,6 @@
 /**
- * The look every agentes.chat command line shares: the logo, a line down the left with a mark per step,
- * spinners and questions. The setup uses it, and so does the runner (`@agenteschat/setup/src/term`); the
+ * The look every KeepMind OS command line shares: the logo, a line down the left with a mark per step,
+ * spinners and questions. The setup uses it, and so does the runner (`@keepmind/setup/src/term`); the
  * installers draw the same marks in POSIX sh (term-sh.ts).
  *
  * It degrades on its own: no color with NO_COLOR, FORCE_COLOR=0 or TERM=dumb (Node's and Bun's
@@ -111,44 +111,45 @@ const MARKS = {
  * white terminal and 4.7:1 on a black one; xterm 32 (#0087d7) in 256 colors; the theme's bright blue in 16.
  */
 const ACCENT: Record<Depth, string> = { 24: "38;2;43;116;230", 8: "38;5;32", 4: "94", 1: "" };
-/** The badge: white on the agent blue (#0063d1, 5.7:1), whatever the terminal's background. */
-const BADGE: Record<Depth, string> = { 24: "48;2;0;99;209;97", 8: "48;5;26;38;5;231", 4: "44;97", 1: "" };
+/**
+ * The badge: black on KeepMind's lime (#c4ff3d), whatever the terminal's background.
+ */
+const BADGE: Record<Depth, string> = { 24: "48;2;196;255;61;30", 8: "48;5;190;38;5;0", 4: "102;30", 1: "" };
 
 /**
- * The logo's mark: the agent of packages/ui/src/agent/engine.js on the 12×12 grid the web's LogoMark dithers
- * (`ditherUrl("sky", 12)`): 0–4 its body tones (bodyTones("sky"), deep to light), w its eyes, . outside it.
- * A literal, since this package is MIT and the engine isn't: packages/ui/test/logo-mark.test.ts rebuilds it
- * from the engine (inBody, toneAt, eyeShapes) and compares.
+ * The logo's mark: the KeepMind K on the 12×12 grid of the web's LogoMark — 0 the ink square
+ * (#111111, deep to light unused), w the lime K (#c4ff3d), . outside it.
  */
 export const LOGO_MARK = [
-  "..43434343..",
-  ".3333333332.",
-  "333333333233",
-  "232323232223",
-  "3232w23w3222",
-  "2222w22w2212",
-  "2222w22w2122",
-  "121212121112",
-  "212121212111",
-  "111111111101",
-  "11111111101.",
-  "0101010100..",
+  "..00000000..",
+  ".0000000000.",
+  "000w0000w000",
+  "000w000w0000",
+  "000w00w00000",
+  "000w0w000000",
+  "000ww0000000",
+  "000w0w000000",
+  "000w00w00000",
+  "000w000w0000",
+  ".0000000000.",
+  "..00000000..",
 ];
 
-/** The wordmark: "agentes" in pixels after Funnel Display Light at about 12 px (x-height 6, one-pixel strokes). */
+/** The wordmark: "keepmind" in pixels after Funnel Display Light at about 12 px (x-height 6, one-pixel strokes). */
 const GLYPHS: Record<string, string[]> = {
-  a: ["", "", "", ".###.", "....#", ".####", "#...#", "#...#", ".####", "", "", ""],
-  g: ["", "", "", ".####", "#...#", "#...#", "#...#", "#...#", ".####", "....#", ".###.", ""],
+  k: ["", "", "", "#...#", "#..#.", "#.#..", "##...", "#.#..", "#..#.", "", "", ""],
   e: ["", "", "", ".###.", "#...#", "#####", "#....", "#....", ".####", "", "", ""],
+  p: ["", "", "", "####.", "#...#", "#...#", "####.", "#....", "#....", "#....", "", ""],
+  m: ["", "", "", "#...#", "##.##", "#.#.#", "#.#.#", "#...#", "#...#", "", "", ""],
+  i: ["", "", "", ".#.", "...", ".#.", ".#.", ".#.", ".#.", "", "", ""],
   n: ["", "", "", "#.##.", "##..#", "#...#", "#...#", "#...#", "#...#", "", "", ""],
-  t: ["", ".#..", ".#..", "####", ".#..", ".#..", ".#..", ".#..", "..##", "", "", ""],
-  s: ["", "", "", ".####", "#....", ".###.", "....#", "....#", "####.", "", "", ""],
+  d: ["", "", "....#", "....#", ".####", "#...#", "#...#", "#...#", ".####", "", "", ""],
 };
 
-const TONE_RGB = ["0;61;130", "0;99;209", "70;147;232", "140;195;255", "198;225;255", "255;255;255"];
-const TONE_256 = [25, 26, 68, 111, 189, 231];
-/** 16 colors: blue for the deep tones, bright blue for the light ones, bright white for the eyes. */
-const TONE_16 = [4, 4, 12, 12, 12, 15];
+const TONE_RGB = ["17;17;17", "17;17;17", "17;17;17", "17;17;17", "17;17;17", "196;255;61"];
+const TONE_256 = [233, 233, 233, 233, 233, 190];
+/** 16 colors: black for the square, bright green for the K. */
+const TONE_16 = [0, 0, 0, 0, 0, 10];
 
 /** The SGR parameter for tone `t` (0–4, 5 the eyes) as foreground (38) or background (48). */
 function toneSgr(depth: Depth, t: number, layer: 38 | 48): string {
@@ -163,9 +164,9 @@ const toneOf = (pixel: string) => (pixel === "w" ? 5 : pixel === "." ? -1 : Numb
 /** Two pixels in one character: ▀ with the top as its color and the bottom as its background. */
 function halfBlock(depth: Depth, top: number, bottom: number): string {
   if (depth === 1) {
-    // One color: the body, with its eyes left out (the mono logo).
-    const t = top >= 0 && top < 5;
-    const b = bottom >= 0 && bottom < 5;
+    // One color: every pixel of the mark, the K included.
+    const t = top >= 0;
+    const b = bottom >= 0;
     return t && b ? "█" : t ? "▀" : b ? "▄" : " ";
   }
   if (top < 0 && bottom < 0) return " ";
@@ -185,9 +186,9 @@ function wordRows(word: string): string[] {
   return rows;
 }
 
-/** The logo's lines (63 columns): the mark in the sky's dither beside "agentes", ".chat" muted on the baseline. */
+/** The logo's lines (61 columns): the K mark beside "keepmind". */
 export function logoLines(depth: Depth): string[] {
-  const word = wordRows("agentes");
+  const word = wordRows("keepmind");
   const lines: string[] = [];
   for (let y = 0; y < 12; y += 2) {
     const top = LOGO_MARK[y] as string;
@@ -200,8 +201,8 @@ export function logoLines(depth: Depth): string[] {
     let letters = "";
     for (let x = 0; x < wt.length; x++) letters += halfBlock(1, wt[x] === "#" ? 0 : -1, wb[x] === "#" ? 0 : -1);
     const reset = depth === 1 ? "" : "\x1b[0m";
-    const tld = y === 8 ? (depth === 1 ? " .chat" : " \x1b[2m.chat\x1b[0m") : "";
-    lines.push(`  ${mark}${reset}   ${letters.trimEnd()}${tld}`.trimEnd());
+    const text = letters.trimEnd();
+    lines.push(`  ${mark}${reset}${text ? `   ${text}` : ""}`);
   }
   return lines;
 }
@@ -495,9 +496,9 @@ export function createTerm(o: TermOptions = {}) {
     /** The logo where it fits, then ┌ and the badge; nothing when the frame is the parent's. */
     intro(title: string, logo = true) {
       if (inherited) return;
-      if (!tty) return say([`agentes.chat ${title}`]);
+      if (!tty) return say([`KeepMind OS ${title}`]);
       if (logo && unicode && width >= LOGO_WIDTH + 1) say(["", ...logoLines(depth), ""]);
-      const badge = depth > 1 ? `\x1b[${BADGE[depth]}m agentes.chat \x1b[0m` : "agentes.chat";
+      const badge = depth > 1 ? `\x1b[${BADGE[depth]}m KeepMind OS \x1b[0m` : "KeepMind OS";
       say([...wrap(`${badge} ${title}`, width - 3).map((l, i) => lineOf(i === 0 ? dim(S.start) : bar(), l)), bar()]);
       gapped = true;
     },

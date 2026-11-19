@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, expect, test } from "bun:test";
-import { orgTopic } from "@agenteschat/adapters";
-import { schema } from "@agenteschat/db";
+import { orgTopic } from "@keepmind/adapters";
+import { schema } from "@keepmind/db";
 import {
   ConflictError,
   createChannel,

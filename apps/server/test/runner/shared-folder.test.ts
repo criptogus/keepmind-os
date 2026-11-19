@@ -1,7 +1,7 @@
 import { afterEach, expect, test } from "bun:test";
 import { existsSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { ACCESS_LIMITS, parseAccess, type RunnerAccess } from "@agenteschat/adapters/machine-protocol";
+import { ACCESS_LIMITS, parseAccess, type RunnerAccess } from "@keepmind/adapters/machine-protocol";
 import { allowedFor, foldersFor } from "../../runner/access";
 import { lookFiles } from "../../runner/desktop-look";
 import type { RunCommand } from "../../runner/service";

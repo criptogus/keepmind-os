@@ -1,5 +1,5 @@
-import { type ArtifactFilters, useArtifacts } from "@agenteschat/client";
-import { can } from "@agenteschat/client/lib/permissions";
+import { type ArtifactFilters, useArtifacts } from "@keepmind/client";
+import { can } from "@keepmind/client/lib/permissions";
 import { useDeferredValue, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { RefreshControl, StyleSheet, View } from "react-native";

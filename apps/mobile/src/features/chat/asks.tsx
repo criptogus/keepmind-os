@@ -11,14 +11,14 @@ import {
   useApproval,
   useBrowserHandoff,
   useCardProposals,
-} from "@agenteschat/client";
-import { agentProposalOf, proposalStatus } from "@agenteschat/client/lib/action-cards";
-import { questionWaitsOn } from "@agenteschat/client/lib/agent-questions";
-import { askKindWords } from "@agenteschat/client/lib/approval-words";
-import { timeLeft } from "@agenteschat/client/lib/format";
-import { can } from "@agenteschat/client/lib/permissions";
-import { isOpen, messageProposalCards, proposalTarget, proposerOf } from "@agenteschat/client/lib/proposals";
-import { secretLabel } from "@agenteschat/client/lib/secret-requests";
+} from "@keepmind/client";
+import { agentProposalOf, proposalStatus } from "@keepmind/client/lib/action-cards";
+import { questionWaitsOn } from "@keepmind/client/lib/agent-questions";
+import { askKindWords } from "@keepmind/client/lib/approval-words";
+import { timeLeft } from "@keepmind/client/lib/format";
+import { can } from "@keepmind/client/lib/permissions";
+import { isOpen, messageProposalCards, proposalTarget, proposerOf } from "@keepmind/client/lib/proposals";
+import { secretLabel } from "@keepmind/client/lib/secret-requests";
 import { LinearGradient } from "expo-linear-gradient";
 import {
   type ComponentRef,

@@ -3,7 +3,7 @@
  * rate limits or records where a request came from.
  */
 import { BlockList, isIP } from "node:net";
-import { limitIp } from "@agenteschat/adapters";
+import { limitIp } from "@keepmind/adapters";
 
 /**
  * Loopback, private, shared (CGNAT, 100.64.0.0/10) and link-local addresses:

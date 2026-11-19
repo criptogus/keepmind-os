@@ -1,4 +1,4 @@
-import { type Database, eq, like, schema } from "@agenteschat/db";
+import { type Database, eq, like, schema } from "@keepmind/db";
 import type { BlobStore } from "./blob";
 
 const { blobs } = schema;

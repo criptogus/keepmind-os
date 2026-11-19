@@ -1,16 +1,10 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { Agent, OrgSummary } from "@agenteschat/client";
-import {
-  audienceNotice,
-  audienceSummary,
-  canEditAudience,
-  canTalk,
-  listsAgent,
-} from "@agenteschat/client/lib/audience";
+import type { Agent, OrgSummary } from "@keepmind/client";
+import { audienceNotice, audienceSummary, canEditAudience, canTalk, listsAgent } from "@keepmind/client/lib/audience";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { createI18n } from "@/i18n";
 import { ADA_ID, ADMIN_ROLE_ID, createFakeApi, ENG_ID, ORG_ID, seedDm, seedRoles, seedState } from "./fake-api";

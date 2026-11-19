@@ -1,4 +1,4 @@
-import { opensDetails } from "@agenteschat/client/lib/audience";
+import { opensDetails } from "@keepmind/client/lib/audience";
 import { useNavigate } from "@tanstack/react-router";
 import type { MouseEvent, ReactNode } from "react";
 import { useTranslation } from "react-i18next";

@@ -153,7 +153,7 @@
     "lead": "Deine Agenten arbeiten dort, wo er ist. Du kannst es später ändern.",
     "recommended": "Empfohlen",
     "cloud": "In der Cloud von KeepMind OS",
-    "cloudText": "Immer an. Wir kümmern uns um alles, du nutzt ihn einfach.",
+    "cloudText": "Dein Team-Workspace auf keepmind.io.",
     "here": "Auf diesem {{device}}",
     "hereText": "Deine Agenten arbeiten, solange die App offen ist.",
     "box": "Auf einem Computer, der immer an ist",
@@ -231,7 +231,7 @@
     "approveStop": "Nicht mehr warten",
     "openTailscale": "Tailscale öffnen",
     "getTailscale": "Tailscale holen",
-    "usage": "Anonyme Nutzungsstatistiken an agentes.chat senden",
+    "usage": "Anonyme Nutzungsstatistiken an KeepMind OS senden",
     "usageText": "Zahlen wie Personen, Agenten, Maschinengrößen, genutzte KI-Tokens und wie viele Daten die Browser der Agenten senden und empfangen. Nie Nachrichten, Dateien, Namen oder Websites.",
     "start": "Los geht's",
     "setting": "Alles wird vorbereitet",
@@ -873,6 +873,7 @@
     "requests": "Zugriffsanfragen",
     "bringAllToFront": "Alle nach vorne bringen",
     "help": "Hilfe",
+    "feedback": "Feedback senden",
     "downloaded": "Download abgeschlossen"
   }
 }

@@ -1,4 +1,4 @@
-import { useAnswerChoices, useArtifact, useChoices } from "@agenteschat/client";
+import { useAnswerChoices, useArtifact, useChoices } from "@keepmind/client";
 import {
   answeredFirst,
   type ChoiceDraft,
@@ -8,8 +8,8 @@ import {
   moveStep,
   otherChoice,
   pickChoice,
-} from "@agenteschat/client/lib/choices";
-import { MAX_MESSAGE_LENGTH, tooLongRefusal } from "@agenteschat/client/lib/message-length";
+} from "@keepmind/client/lib/choices";
+import { MAX_MESSAGE_LENGTH, tooLongRefusal } from "@keepmind/client/lib/message-length";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Pressable, StyleSheet, View } from "react-native";

@@ -1,4 +1,4 @@
-import { type LinkPill, linkPillLabel, linkPillText } from "@agenteschat/client/lib/link-pills";
+import { type LinkPill, linkPillLabel, linkPillText } from "@keepmind/client/lib/link-pills";
 import { Image } from "expo-image";
 import { useTranslation } from "react-i18next";
 import { Text as RNText, StyleSheet } from "react-native";

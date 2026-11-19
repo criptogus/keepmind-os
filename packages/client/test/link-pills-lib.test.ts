@@ -6,17 +6,13 @@ const t = ((key: string) => key) as unknown as TFunction;
 
 describe("linkPill", () => {
   test.each([
-    ["https://github.com/agentes-chat/agentes.chat/pull/148", "agentes.chat #148", "github"],
-    ["https://github.com/agentes-chat/agentes.chat/pull/148/files#diff-1", "agentes.chat #148", "github"],
-    ["https://www.github.com/agentes-chat/agentes.chat/issues/7?x=1", "agentes.chat #7", "github"],
-    ["https://github.com/agentes-chat/agentes.chat/commit/a1b2c3d4e5f60718", "agentes.chat a1b2c3d", "github"],
-    ["https://github.com/agentes-chat/agentes.chat/releases/tag/v1.2.0", "agentes.chat v1.2.0", "github"],
-    [
-      "https://github.com/agentes-chat/agentes.chat/blob/main/apps/web/src/main.tsx#L10",
-      "agentes.chat main.tsx",
-      "github",
-    ],
-    ["https://github.com/agentes-chat/agentes.chat", "agentes-chat/agentes.chat", "github"],
+    ["https://github.com/criptogus/keepmind-os/pull/148", "keepmind-os #148", "github"],
+    ["https://github.com/criptogus/keepmind-os/pull/148/files#diff-1", "keepmind-os #148", "github"],
+    ["https://www.github.com/criptogus/keepmind-os/issues/7?x=1", "keepmind-os #7", "github"],
+    ["https://github.com/criptogus/keepmind-os/commit/a1b2c3d4e5f60718", "keepmind-os a1b2c3d", "github"],
+    ["https://github.com/criptogus/keepmind-os/releases/tag/v1.2.0", "keepmind-os v1.2.0", "github"],
+    ["https://github.com/criptogus/keepmind-os/blob/main/apps/web/src/main.tsx#L10", "keepmind-os main.tsx", "github"],
+    ["https://github.com/criptogus/keepmind-os", "criptogus/keepmind-os", "github"],
     ["https://gitlab.com/acme/tools/app/-/merge_requests/12", "app !12", "gitlab"],
     ["https://gitlab.com/acme/app/-/issues/3", "app #3", "gitlab"],
     ["https://gitlab.com/acme/app/-/commit/a1b2c3d4", "app a1b2c3d", "gitlab"],
@@ -42,11 +38,11 @@ describe("linkPill", () => {
 
   test.each([
     ["an unknown site", "https://example.com/a/b/pull/1"],
-    ["a service's page with no fixed shape", "https://github.com/agentes-chat/agentes.chat/actions/runs/1"],
-    ["github.com's own pages", "https://github.com/orgs/agentes-chat"],
+    ["a service's page with no fixed shape", "https://github.com/criptogus/keepmind-os/actions/runs/1"],
+    ["github.com's own pages", "https://github.com/orgs/criptogus"],
     ["github.com's own pages", "https://github.com/settings/profile"],
     ["github.com itself", "https://github.com/"],
-    ["an account", "https://github.com/agentes-chat"],
+    ["an account", "https://github.com/criptogus"],
     ["a project's own page on Vercel", "https://vercel.com/acme/site/settings"],
     ["a Notion page with no title", "https://www.notion.so/acme/0123456789abcdef0123456789abcdef"],
     ["a lookalike host", "https://github.com.evil.example/a/b/pull/1"],
@@ -64,7 +60,7 @@ describe("linkPill", () => {
     ["the same, with backslashes", "https://docs.google.com/document/d/x\\..\\..\\..\\url?q=https://evil.example"],
     ["the same, to another repository", "https://github.com/a/b/pull/1/../../../../c/d/pull/2"],
     ["dots for a repository", "https://github.com/../.."],
-    ["a clone address", "https://github.com/agentes-chat/agentes.chat.git"],
+    ["a clone address", "https://github.com/criptogus/keepmind-os.git"],
     ["github.com's own pages", "https://github.com/search/advanced"],
     ["github.com's own pages", "https://github.com/pulls/assigned"],
     ["mail", "mailto:ana@acme.com"],
@@ -95,7 +91,7 @@ describe("linkPill", () => {
   });
 
   test("a screen reader hears the service and what the icon shows", () => {
-    const pill = linkPill("https://github.com/agentes-chat/agentes.chat/pull/148");
-    expect(pill && linkPillLabel(t, pill)).toBe("GitHub linkPills.pull agentes.chat #148");
+    const pill = linkPill("https://github.com/criptogus/keepmind-os/pull/148");
+    expect(pill && linkPillLabel(t, pill)).toBe("GitHub linkPills.pull keepmind-os #148");
   });
 });

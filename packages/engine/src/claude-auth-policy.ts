@@ -3,8 +3,8 @@ import {
   CLAUDE_AUTH_PROTOCOL,
   type ClaudeLoginMethod,
   claudeLoginMethodsOf,
-} from "@agenteschat/adapters";
-import { and, asc, count, type Database, type Executor, eq, inArray, isNull, schema, sql } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { and, asc, count, type Database, type Executor, eq, inArray, isNull, schema, sql } from "@keepmind/db";
 import { z } from "zod";
 import { ValidationError } from "./errors";
 

@@ -10,21 +10,9 @@ import {
   MIN_RUNNER_PROTOCOL,
   type PubSub,
   REMOTE_PAUSE_PROTOCOL,
-} from "@agenteschat/adapters";
-import {
-  and,
-  type Database,
-  desc,
-  type Executor,
-  eq,
-  inArray,
-  isNotNull,
-  isNull,
-  or,
-  schema,
-  sql,
-} from "@agenteschat/db";
-import { appLocale } from "@agenteschat/i18n/locale";
+} from "@keepmind/adapters";
+import { and, type Database, desc, type Executor, eq, inArray, isNotNull, isNull, or, schema, sql } from "@keepmind/db";
+import { appLocale } from "@keepmind/i18n/locale";
 import { getAgent, workspaceHomeId } from "./agents";
 import { type AuditEntry, recordAudit } from "./audit";
 import { isSandboxedBrain } from "./brains/types";
@@ -940,7 +928,7 @@ export async function computerTarget(db: Database, orgId: string, agentId: strin
 let workspaceComputers = false;
 
 /**
- * With external provisioning (agentes.chat Cloud) the workspace's computer is every agent's home: a computer someone
+ * With external provisioning (KeepMind OS Cloud) the workspace's computer is every agent's home: a computer someone
  * brought is a target an agent names for a call or a task, never where it lives.
  */
 export function setWorkspaceComputers(on: boolean) {

@@ -1,4 +1,4 @@
-import { Diff, type DiffLine } from "@agenteschat/ui";
+import { Diff, type DiffLine } from "@keepmind/ui";
 import { useTranslation } from "react-i18next";
 import { Markdown } from "@/lib/markdown";
 

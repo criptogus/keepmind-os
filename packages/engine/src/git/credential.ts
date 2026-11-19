@@ -75,6 +75,6 @@ export const machineGitGen = (tokenHash: string) => Number.parseInt(tokenHash.sl
 export const gitProxyBase = (publicUrl: string, orgId: string, connectionId: string) =>
   `${publicUrl.replace(/\/$/, "")}/api/git/${orgId}/${connectionId}/`;
 
-/** An agent's commit email, on our host: `theo@agents.agentes.chat` for `https://agentes.chat` (or any URL under it). */
+/** An agent's commit email, on our host: `contact@zeroagency.ai` for `https://keepmind.io` (or any URL under it). */
 export const agentCommitEmail = (publicUrl: string, handle: string) =>
   `${handle}@agents.${new URL(publicUrl).hostname}`;

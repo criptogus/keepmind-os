@@ -1,7 +1,7 @@
-import { useArchivedChannels, useChannelCard, useChannels, useJoinChannel } from "@agenteschat/client";
-import { joinable } from "@agenteschat/client/lib/channel-access";
-import { channelCardFacts, resolveChannelRef } from "@agenteschat/client/lib/channel-refs";
-import { Button, Chip, Icon, movesByKeys, Popover, useHoverCard } from "@agenteschat/ui";
+import { useArchivedChannels, useChannelCard, useChannels, useJoinChannel } from "@keepmind/client";
+import { joinable } from "@keepmind/client/lib/channel-access";
+import { channelCardFacts, resolveChannelRef } from "@keepmind/client/lib/channel-refs";
+import { Button, Chip, Icon, movesByKeys, Popover, useHoverCard } from "@keepmind/ui";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { type FocusEvent, type KeyboardEvent, type MouseEvent, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

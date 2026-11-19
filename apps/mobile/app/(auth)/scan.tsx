@@ -1,5 +1,5 @@
-import { checkServer, parseConnectLink, serverHost } from "@agenteschat/client/lib/server";
-import { skyHourOf, workspaceInk } from "@agenteschat/ui/sky/workspace";
+import { checkServer, parseConnectLink, serverHost } from "@keepmind/client/lib/server";
+import { skyHourOf, workspaceInk } from "@keepmind/ui/sky/workspace";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

@@ -39,7 +39,7 @@
   flex: none;
   width: 20px;
   height: 20px;
-  color: var(--faint);
+  color: var(--action);
   translate: 0 calc(12px - var(--cap-mid) - 50%);
 }
 .channel__head-text .channel__topic {

@@ -1,6 +1,6 @@
-import { type ChatPrefs, chatLookOf, facesShown, textSizeOf } from "@agenteschat/client/lib/chat-look";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
-import { type AgentColor, agentGradient, MessageLookContext } from "@agenteschat/ui";
+import { type ChatPrefs, chatLookOf, facesShown, textSizeOf } from "@keepmind/client/lib/chat-look";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
+import { type AgentColor, agentGradient, MessageLookContext } from "@keepmind/ui";
 import { useContext, useLayoutEffect, useMemo } from "react";
 import { useOrg } from "@/components/org-context";
 

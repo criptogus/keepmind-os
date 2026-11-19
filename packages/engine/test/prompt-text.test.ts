@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import { laidOut, type ModelRequest } from "@agenteschat/providers";
+import { laidOut, type ModelRequest } from "@keepmind/providers";
 import { drainOutbox, grantScopes, postPersonMessage } from "../src";
 import { type Fixture, setup } from "./fixtures";
 

@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import { orgTopic } from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
+import { orgTopic } from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
 import {
   AGENT_AWAY_AFTER_MS,
   AGENT_HEARTBEAT_FRESH_MS,

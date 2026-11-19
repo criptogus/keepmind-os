@@ -4,6 +4,9 @@
  * proprietary, unknown or missing. The phone and desktop apps reach app stores through the section 7
  * permission in NOTICE, which can't cover code others license under the GPL or AGPL (and
  * GPL-2.0-only can't be combined with AGPL-3.0 at all), so no dependency may bring strong copyleft.
+ * The whatsapp-bridge sidecar is the one exception (SIDECAR_ONLY below): it is a separate
+ * process whose GPL dependency ships under GPL's own terms (source offered in this
+ * repository, notices in NOTICE), not under the section 7 store permission.
  * Run in CI via `bun run check:licenses`, after `bun install`.
  */
 import { existsSync, lstatSync, readdirSync } from "node:fs";
@@ -28,6 +31,16 @@ const ALLOWED = new Set([
   "Python-2.0",
   "Unlicense",
 ]);
+
+/**
+ * Packages that ship only inside packages/whatsapp-bridge, a separate sidecar
+ * process (the server spawns it per organization over localhost HTTP). Its
+ * dependency tree is checked by hand, not by this scan: libsignal-node is
+ * GPL-3.0 and @whiskeysockets/eslint-config has no SPDX field (a dev-only
+ * transitive dep of Baileys, never in the shipped bundle). The bridge keeps
+ * its own notices; see NOTICE. Nothing else may depend on these names.
+ */
+const SIDECAR_ONLY = new Set(["libsignal", "@whiskeysockets/eslint-config"]);
 
 /** Read by hand: the license field is missing or names an id outside ALLOWED, but the terms we use are fine. */
 const REVIEWED = new Set([
@@ -75,7 +88,9 @@ if (import.meta.main) {
     for (const dir of packageDirs(root)) {
       checked++;
       const file = Bun.file(join(dir, "package.json"));
-      const problem = licenseProblem((await file.exists()) ? await file.json() : {});
+      const pkg = (await file.exists()) ? await file.json() : {};
+      if (pkg.name && SIDECAR_ONLY.has(pkg.name)) continue;
+      const problem = licenseProblem(pkg);
       if (problem) problems.push(`${dir}: ${problem}`);
     }
   }

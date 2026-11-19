@@ -2,9 +2,9 @@ import { afterEach, expect, test } from "bun:test";
 import { spawn } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import type { MachineRequest } from "@agenteschat/adapters";
-import { accountCodeAad, OPENCODE_KEY_PROVIDER } from "@agenteschat/adapters/machine-protocol";
-import { sealSecret } from "@agenteschat/adapters/secret-box";
+import type { MachineRequest } from "@keepmind/adapters";
+import { accountCodeAad, OPENCODE_KEY_PROVIDER } from "@keepmind/adapters/machine-protocol";
+import { sealSecret } from "@keepmind/adapters/secret-box";
 import { setTool } from "../../runner/access";
 import { AccountManager, accountEnv, opencodeKeyOf } from "../../runner/accounts";
 import { AcpError } from "../../runner/acp";
@@ -75,6 +75,10 @@ test("the turn's config: each profile's rules allow or deny, never ask; the chat
   expect(chat).toMatchObject({ model: "opencode/glm-5.3", small_model: "opencode/glm-5.3" });
   const keyed = JSON.parse(opencodeConfig({ profile: "work", key: true }));
   expect(keyed.provider.opencode.options.apiKey).toBe("{env:OPENCODE_API_KEY}");
+  // A Go model's key goes to `opencode-go`; Zen's and the free tier's stay on `opencode`.
+  const go = JSON.parse(opencodeConfig({ profile: "work", key: true, go: true }));
+  expect(go.provider["opencode-go"].options.apiKey).toBe("{env:OPENCODE_API_KEY}");
+  expect(go.provider.opencode).toBeUndefined();
   expect(JSON.parse(opencodeConfig({ profile: "work", freeTier: true })).enabled_providers).toEqual(["opencode"]);
 });
 
@@ -556,6 +560,12 @@ for (const version of VERSIONS) {
         retryable: false,
       });
       expect(await final({ runId: run(6), prompt: "BADKEY" })).toMatchObject({ code: "not_logged_in" });
+      // A Go model's turn hands the key to `opencode-go`, not Zen's `opencode` provider.
+      expect(await final({ runId: run(8), model: "opencode-go/glm-5.3" })).toMatchObject({ type: "done" });
+      const goUsed = logOf(log)
+        .filter((l) => l.start)
+        .at(-1);
+      expect(JSON.parse(goUsed?.config ?? "{}").provider["opencode-go"].options.apiKey).toBe("{env:OPENCODE_API_KEY}");
       const limited = await runTurn(
         withAccounts(accountDir),
         turn({ account: ACCOUNT, runId: run(7), prompt: "LIMIT" }),

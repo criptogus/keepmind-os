@@ -1,4 +1,4 @@
-import { markTerms } from "@agenteschat/client/lib/search-filters";
+import { markTerms } from "@keepmind/client/lib/search-filters";
 import * as Clipboard from "expo-clipboard";
 import { type NativeStackNavigationOptions, Stack, useIsFocused } from "expo-router";
 import { type ReactNode, useLayoutEffect, useMemo, useRef } from "react";

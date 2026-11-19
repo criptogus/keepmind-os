@@ -1,4 +1,4 @@
-import type { Database } from "@agenteschat/db";
+import type { Database } from "@keepmind/db";
 import { activeConnections, type ConnectorDeps } from "../connectors/connections";
 import { NotFoundError } from "../errors";
 import { requirePermission } from "../organizations";
@@ -87,7 +87,7 @@ export async function listOrgRepositories(
         headers: {
           authorization: `Bearer ${token}`,
           accept: "application/vnd.github+json",
-          "user-agent": "agentes.chat",
+          "user-agent": "keepmind.io",
         },
       });
       if (!res.ok) return;
@@ -189,7 +189,7 @@ export async function githubOrgAccess(deps: RepoListingDeps, actorId: string, or
       headers: {
         authorization: `Bearer ${token}`,
         accept: "application/vnd.github+json",
-        "user-agent": "agentes.chat",
+        "user-agent": "keepmind.io",
       },
     })
     .catch(() => null);

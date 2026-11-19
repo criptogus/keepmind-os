@@ -7,7 +7,7 @@ import { handleRequest, type RequestScope } from "../../runner/handlers";
 import { agentSecrets } from "../../runner/secrets";
 import { hasGit, removeDirs, tempDir } from "./helpers";
 
-const NICK = "Co-authored-by: Nick <noreply@agentes.chat>";
+const NICK = "Co-authored-by: Nick <contact@zeroagency.ai>";
 const ANA = "Co-authored-by: Ana <583231+ana-gh@users.noreply.github.com>";
 const CLAUDE = "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>";
 
@@ -100,10 +100,10 @@ describe.skipIf(!hasGit)("git in the agent's processes", () => {
     r.git("commit", "-q", "--allow-empty", "-m", `Add c\n\nBody.\n\n${CLAUDE}`);
     expect(r.message()).toBe(`Add c\n\nBody.\n\n${CLAUDE}\n${NICK}\n${ANA}`);
     // The agent wrote one itself, in other capitals: it stays alone.
-    r.git("commit", "-q", "--allow-empty", "-m", "Add d\n\nCo-Authored-By: Nick <noreply@agentes.chat>");
-    expect(r.message()).toBe(`Add d\n\nCo-Authored-By: Nick <noreply@agentes.chat>\n${ANA}`);
+    r.git("commit", "-q", "--allow-empty", "-m", "Add d\n\nCo-Authored-By: Nick <contact@zeroagency.ai>");
+    expect(r.message()).toBe(`Add d\n\nCo-Authored-By: Nick <contact@zeroagency.ai>\n${ANA}`);
     r.git("commit", "-q", "--amend", "--allow-empty", "--no-edit");
-    expect(r.message()).toBe(`Add d\n\nCo-Authored-By: Nick <noreply@agentes.chat>\n${ANA}`);
+    expect(r.message()).toBe(`Add d\n\nCo-Authored-By: Nick <contact@zeroagency.ai>\n${ANA}`);
     // A merge commit is the agent's too.
     r.git("checkout", "-q", "-b", "side");
     r.git("commit", "-q", "--allow-empty", "-m", "side");

@@ -1,7 +1,7 @@
 /*
  * Page layout of the app's screens, as classes.
  * Only structure and spacing: colors, shapes and type come from tokens and
- * the @agenteschat/ui components.
+ * the @keepmind/ui components.
  */
 html,
 body,
@@ -840,7 +840,7 @@ html:not([data-pointer]) .sidebar__item:focus-visible {
   white-space: nowrap;
 }
 .sidebar__channel-icon {
-  color: var(--ink-muted);
+  color: var(--action);
 }
 /* The icon rail: a channel's initials stand in for its "#" (Sidebar.tsx, channelInitials), on a tile as big as the
    faces under it, so they read as its mark and not as a cut name. */
@@ -865,6 +865,18 @@ html:not([data-pointer]) .sidebar__item:focus-visible {
 }
 .sidebar[data-rail="true"] .sidebar__item:is([data-status="active"], [data-unread="true"]) .sidebar__channel-abbr {
   color: var(--ink);
+}
+.sidebar__powered {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+  text-decoration: none;
+}
+.sidebar__powered:hover {
+  color: var(--ink);
+  text-decoration: underline;
 }
 .sidebar__foot {
   margin-top: auto;
@@ -5802,8 +5814,8 @@ html:not([data-pointer]) .tr-ok:focus-visible {
 }
 .tr-done {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  column-gap: 20px;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: 12px;
   align-items: center;
   border-radius: 20px;
   background: var(--raised);
@@ -5864,10 +5876,6 @@ html:not([data-pointer]) .tr-ok:focus-visible {
   .tr-done {
     padding: 18px;
     column-gap: 14px;
-  }
-  .tr-done .ac-toolpx-agent {
-    width: 52px;
-    height: 52px;
   }
   .tr-done__title {
     font-size: 25px;
@@ -6213,7 +6221,7 @@ html:not([data-pointer]) .tr-ok:focus-visible {
   opacity: 0.8;
 }
 .sidebar .sidebar__item[data-kind="channel"]:is([data-unread="true"], [data-status="active"]) > .sidebar__channel-icon {
-  color: var(--ink2);
+  color: var(--action);
   opacity: 1;
 }
 .sidebar__item[data-kind="channel"][data-unread="true"] .sidebar__item-label {
@@ -9490,9 +9498,10 @@ html:not([data-pointer]) .newag__addrow:focus-visible {
 }
 /* A choice card's head: one name and its short line, centred on the tile beside it (not a chat row's face line). */
 .newag__role-head {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
-  gap: 12px;
+  gap: var(--space-2) 12px;
   /* Clear of the check in the card's corner. */
   padding-right: 28px;
 }
@@ -9505,18 +9514,25 @@ html:not([data-pointer]) .newag__addrow:focus-visible {
   height: 44px;
 }
 .newag__role-name {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
+  display: contents;
 }
 .newag__role-name b {
+  padding-top: 2px;
   font-family: var(--font-display);
   font-weight: var(--font-display-weight, 300);
   font-size: 26px;
   line-height: 1;
   letter-spacing: -0.02em;
 }
+/* Long template titles use the full card width below their companion. */
+.newag__role:not(.newag__role--blank) .newag__role-head {
+  padding-right: 0;
+}
+.newag__role:not(.newag__role--blank) .newag__role-name b {
+  grid-column: 1 / -1;
+}
 .newag__role-name span {
+  grid-column: 1 / -1;
   color: var(--faint);
   font-size: 12.5px;
 }
@@ -9555,9 +9571,11 @@ html:not([data-pointer]) .newag__addrow:focus-visible {
   box-shadow: var(--chosen-shadow);
 }
 .newag__role--blank .newag__role-name b {
+  padding-top: 2px;
   font-size: 22px;
 }
 .newag__role--blank .newag__role-name span {
+  grid-column: 1 / -1;
   color: var(--muted);
   font-size: 13.5px;
   text-wrap: pretty;
@@ -12406,7 +12424,7 @@ html[data-menu-overlay] .shell {
   width: 14px;
   height: 14px;
   margin: 0 1px;
-  color: var(--faint);
+  color: var(--action);
 }
 /*
  * The sidebar's faces as tokens, so New agent's empty face is always the agents' own (ADR 0164): on the rail a step up
@@ -14847,4 +14865,56 @@ html:not([data-pointer]) .rh-set__face-edit:focus-visible {
     width: auto;
     min-width: 0;
   }
+}
+
+/* WhatsApp connector card (Connectors): QR while pairing, status and actions. */
+.ac-whatsapp {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.ac-whatsapp__pair {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) 0;
+}
+.ac-whatsapp__pair svg {
+  width: 200px;
+  height: 200px;
+}
+.ac-whatsapp__actions {
+  display: flex;
+  gap: var(--space-2);
+}
+.ac-whatsapp-title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.ac-whatsapp__chats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.ac-whatsapp__chat-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.ac-whatsapp__chat {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.ac-whatsapp__chat-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

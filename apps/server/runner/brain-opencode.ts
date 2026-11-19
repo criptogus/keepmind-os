@@ -3,10 +3,10 @@ import type { EventEmitter } from "node:events";
 import { existsSync, mkdirSync, readdirSync, rmSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { CommandProfile } from "@agenteschat/adapters/command-policy";
-import type { AgentScope, BrainSteerReply } from "@agenteschat/adapters/machine-protocol";
-import { isAccountId } from "@agenteschat/adapters/machine-protocol";
-import { redactSecrets } from "@agenteschat/adapters/secret-box";
+import type { CommandProfile } from "@keepmind/adapters/command-policy";
+import type { AgentScope, BrainSteerReply } from "@keepmind/adapters/machine-protocol";
+import { isAccountId } from "@keepmind/adapters/machine-protocol";
+import { redactSecrets } from "@keepmind/adapters/secret-box";
 import { ACCOUNT_MISSING_MESSAGE, accountEnv, opencodeKeyOf, withoutSignIns } from "./accounts";
 import { ACP_METHOD_NOT_FOUND, ACP_PROTOCOL_VERSION, AcpConnection, AcpError } from "./acp";
 import {
@@ -164,8 +164,10 @@ export function opencodeConfig(input: {
    * chose that a key pays for.
    */
   model?: string;
-  /** The account has a key: the `opencode` provider reads it from `OPENCODE_API_KEY`. */
+  /** The account has a key: the model's provider reads it from `OPENCODE_API_KEY`. */
   key?: boolean;
+  /** A Go model (`opencode-go/<id>`): its provider is `opencode-go`, not Zen's `opencode`. */
+  go?: boolean;
   /** OpenCode's own provider alone. */
   freeTier?: boolean;
 }): string {
@@ -174,7 +176,9 @@ export function opencodeConfig(input: {
     ...(input.model ? { model: input.model, small_model: input.model } : {}),
     share: "disabled",
     autoupdate: false,
-    ...(input.key ? { provider: { opencode: { options: { apiKey: `{env:${OPENCODE_KEY_ENV}}` } } } } : {}),
+    ...(input.key
+      ? { provider: { [input.go ? "opencode-go" : "opencode"]: { options: { apiKey: `{env:${OPENCODE_KEY_ENV}}` } } } }
+      : {}),
     ...(input.freeTier ? { enabled_providers: ["opencode"] } : {}),
   });
 }
@@ -565,6 +569,7 @@ export async function runOpencodeTurn(input: OpencodeTurnInput, opts: OpencodeTu
       ...(input.chat ? { chat: true } : {}),
       ...(input.model ? { model: input.model } : {}),
       key: Boolean(key),
+      go: typeof input.model === "string" && input.model.startsWith("opencode-go/"),
       freeTier,
     }),
     ...(input.account ? { account: input.account } : {}),

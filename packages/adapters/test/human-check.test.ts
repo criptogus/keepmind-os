@@ -36,7 +36,7 @@ function setup(answer: Answer, script?: () => Response | Promise<Response>) {
   const check = createTurnstileCheck({
     siteKey: SITE_KEY,
     secretKey: SECRET,
-    hostnames: ["agentes.chat"],
+    hostnames: ["keepmind.io"],
     fetch: cf.fetch,
     now: () => at,
     log: { error: (message, data) => logs.push({ message, data }) },
@@ -62,10 +62,10 @@ test("Cloudflare's test keys pass on any host; a real answer passes only for its
   await check.verify(TOKEN, "sign-in", "unknown");
   expect(cf.verifies()[1]?.body).not.toHaveProperty("remoteip");
 
-  answer = { success: true, hostname: "agentes.chat", action: "sign-up" };
+  answer = { success: true, hostname: "keepmind.io", action: "sign-up" };
   expect(await check.verify(TOKEN, "sign-up", "203.0.113.7")).toBeNull();
   expect(await check.verify(TOKEN, "sign-in", "203.0.113.7")).toBe("human_check");
-  answer = { success: true, hostname: "agentes.chat.evil.example", action: "sign-up" };
+  answer = { success: true, hostname: "KeepMind OS.evil.example", action: "sign-up" };
   expect(await check.verify(TOKEN, "sign-up", "203.0.113.7")).toBe("human_check");
   // Three tokens passed. The last answers carry no test secret's mark, so `testing` is off.
   expect(check.status()).toMatchObject({ state: "ok", passed: 3, testing: false });

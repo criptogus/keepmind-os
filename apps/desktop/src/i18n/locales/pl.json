@@ -159,7 +159,7 @@
     "lead": "Twoi agenci pracują tam, gdzie on jest. Możesz to później zmienić.",
     "recommended": "Polecane",
     "cloud": "W chmurze KeepMind OS",
-    "cloudText": "Zawsze włączony. Zajmujemy się wszystkim, ty tylko korzystasz.",
+    "cloudText": "Przestrzeń robocza Twojego zespołu na keepmind.io.",
     "here": "Na tym urządzeniu ({{device}})",
     "hereText": "Twoi agenci pracują, dopóki aplikacja jest otwarta.",
     "box": "Na komputerze, który jest zawsze włączony",
@@ -237,7 +237,7 @@
     "approveStop": "Przestań czekać",
     "openTailscale": "Otwórz Tailscale",
     "getTailscale": "Pobierz Tailscale",
-    "usage": "Wysyłaj anonimowe statystyki użycia do agentes.chat",
+    "usage": "Wysyłaj anonimowe statystyki użycia do KeepMind OS",
     "usageText": "Liczby, takie jak liczba osób i agentów, rozmiary maszyn, zużyte tokeny AI oraz ile danych wysyłają i odbierają przeglądarki agentów. Nigdy wiadomości, pliki, nazwy ani strony.",
     "start": "Zacznij",
     "setting": "Przygotowujemy wszystko",
@@ -883,6 +883,7 @@
     "requests": "Prośby o dostęp",
     "bringAllToFront": "Przenieś wszystko na wierzch",
     "help": "Pomoc",
+    "feedback": "Wyślij opinię",
     "downloaded": "Pobieranie zakończone"
   }
 }

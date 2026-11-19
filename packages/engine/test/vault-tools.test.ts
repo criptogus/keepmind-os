@@ -9,8 +9,8 @@ import {
   VAULT_PASSWORD_PROTOCOL,
   VAULT_PROTOCOL,
   vaultAad,
-} from "@agenteschat/adapters";
-import { and, eq, schema } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { and, eq, schema } from "@keepmind/db";
 import {
   ASK_PERSON_TOOL,
   cancelSecretRequests,

@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { createMemoryRateLimiter } from "@agenteschat/adapters";
-import { and, countQueries, eq, schema } from "@agenteschat/db";
+import { createMemoryRateLimiter } from "@keepmind/adapters";
+import { and, countQueries, eq, schema } from "@keepmind/db";
 import {
   acceptInvitation,
   approveJoinRequest,
@@ -1009,7 +1009,7 @@ describe("words", () => {
     expect(answer("en", "denied").html).toContain("“Full &lt;b&gt;team&lt;/b&gt;”");
     expect(answer("en", "denied").html).not.toContain("https://a.test/x");
     expect(answer("en", "denied").html).toContain(
-      'this address asked to join Acme <span style="display:inline-block">on agentes.chat.</span>',
+      'this address asked to join Acme on <span style="display:inline-block">KeepMind OS.</span>',
     );
     expect(answer("pt-BR", "joined").html).toContain("este endereço pediu para entrar na Acme");
   });

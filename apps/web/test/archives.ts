@@ -1,4 +1,4 @@
-import { CP850_HIGH } from "@agenteschat/client/lib/zip";
+import { CP850_HIGH } from "@keepmind/client/lib/zip";
 
 /** Archives built in tests, as the tools people export with write them (`tar`, Python's `tarfile`, zip). */
 const enc = new TextEncoder();

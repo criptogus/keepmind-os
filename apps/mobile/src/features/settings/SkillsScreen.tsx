@@ -7,7 +7,7 @@ import type {
   SkillSkipped,
   SkillSourceUpdate,
   SkillVia,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 import {
   keys,
   useAgents,
@@ -20,17 +20,11 @@ import {
   useSkillSettings,
   useSkills,
   useSkillUsage,
-} from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import {
-  formatBytes,
-  SKILL_ASSET_MB,
-  SKILL_TEXT_MB,
-  SKILL_ZIP_BYTES,
-  SKILL_ZIP_MB,
-} from "@agenteschat/client/lib/files";
-import { formatPercent, relativeTime } from "@agenteschat/client/lib/format";
-import { can } from "@agenteschat/client/lib/permissions";
+} from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { formatBytes, SKILL_ASSET_MB, SKILL_TEXT_MB, SKILL_ZIP_BYTES, SKILL_ZIP_MB } from "@keepmind/client/lib/files";
+import { formatPercent, relativeTime } from "@keepmind/client/lib/format";
+import { can } from "@keepmind/client/lib/permissions";
 import {
   changedByText,
   changesSinceLink,
@@ -54,9 +48,9 @@ import {
   skillUpdateWords,
   skillViaText,
   skippedSkillText,
-} from "@agenteschat/client/lib/skills";
-import { modeKey } from "@agenteschat/client/lib/workspace-mode";
-import { diffLines } from "@agenteschat/ui/diff";
+} from "@keepmind/client/lib/skills";
+import { modeKey } from "@keepmind/client/lib/workspace-mode";
+import { diffLines } from "@keepmind/ui/diff";
 import { useQueryClient } from "@tanstack/react-query";
 import * as DocumentPicker from "expo-document-picker";
 import { File } from "expo-file-system";

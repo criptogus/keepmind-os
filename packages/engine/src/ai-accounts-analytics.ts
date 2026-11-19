@@ -1,6 +1,6 @@
-import type { AuthMethod } from "@agenteschat/adapters";
-import { and, type Database, desc, eq, gte, isNull, lt, schema, sql } from "@agenteschat/db";
-import { GEMINI_ENTERPRISE_PROVIDER, isPlanId } from "@agenteschat/providers/plans";
+import type { AuthMethod } from "@keepmind/adapters";
+import { and, type Database, desc, eq, gte, isNull, lt, schema, sql } from "@keepmind/db";
+import { GEMINI_ENTERPRISE_PROVIDER, isPlanId } from "@keepmind/providers/plans";
 import { z } from "zod";
 import { onLiveMachine } from "./claude-auth-policy";
 import { ANALYTICS_ROWS_MAX, analyticsRange, howMany } from "./connector-usage";

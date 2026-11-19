@@ -1,8 +1,8 @@
-import type { RoutineTarget } from "@agenteschat/client";
-import { useChannels } from "@agenteschat/client";
-import { type CalItem, type RsvpStatus, shortDay } from "@agenteschat/client/lib/calendar";
-import { formatTime } from "@agenteschat/client/lib/format";
-import { appearanceStyle, Button, cx, Icon, Popover } from "@agenteschat/ui";
+import type { RoutineTarget } from "@keepmind/client";
+import { useChannels } from "@keepmind/client";
+import { type CalItem, type RsvpStatus, shortDay } from "@keepmind/client/lib/calendar";
+import { formatTime } from "@keepmind/client/lib/format";
+import { appearanceStyle, Button, cx, Icon, Popover } from "@keepmind/ui";
 import { Link } from "@tanstack/react-router";
 import type { CSSProperties, ReactNode, PointerEvent as ReactPointerEvent } from "react";
 import { useTranslation } from "react-i18next";

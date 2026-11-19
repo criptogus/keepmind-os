@@ -6,8 +6,8 @@ import {
   STREAM_CLOSE,
   STREAM_LIMITS,
   type StreamRequest,
-} from "@agenteschat/adapters";
-import { and, eq, schema } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { and, eq, schema } from "@keepmind/db";
 import {
   AgentHeldError,
   auditStream,

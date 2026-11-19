@@ -13,8 +13,8 @@ import {
   or,
   schema,
   sql,
-} from "@agenteschat/db";
-import { setsCredential } from "@agenteschat/ui/names";
+} from "@keepmind/db";
+import { setsCredential } from "@keepmind/ui/names";
 import { getAgent } from "../agents";
 import { agentIdsSeen, isPlaybook, readsPlaybook, seesAgentDetails } from "../audience";
 import { caches, rulesPresenceKey } from "../cache";

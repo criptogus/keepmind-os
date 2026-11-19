@@ -1,4 +1,4 @@
-import type { Agent, Issue, Routine } from "@agenteschat/client";
+import type { Agent, Issue, Routine } from "@keepmind/client";
 import {
   agentStateIn,
   asksPicture,
@@ -9,7 +9,7 @@ import {
   useIssues,
   useRoutines,
   useUsage,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 import {
   entryButton,
   entryKind,
@@ -18,20 +18,20 @@ import {
   entryState,
   pictureWhen,
   surfaceOf,
-} from "@agenteschat/client/lib/agent-computer";
-import { seesDetails } from "@agenteschat/client/lib/audience";
-import { computerName } from "@agenteschat/client/lib/computer";
-import { ErrorBoundary } from "@agenteschat/client/lib/error-boundary";
-import { formatPercent, formatUsd, relativeTime } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { STATUS_ICON } from "@agenteschat/client/lib/issues";
-import { can } from "@agenteschat/client/lib/permissions";
-import { usageShown } from "@agenteschat/client/lib/plan-usage";
-import { agentFaceWord } from "@agenteschat/client/lib/presence";
-import { isRightHand } from "@agenteschat/client/lib/right-hand";
-import { siteHost } from "@agenteschat/client/lib/secret-requests";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
-import { Button, ComputerPortrait, GroupHeading, Icon, InfoHint, PresenceBadge, Switch } from "@agenteschat/ui";
+} from "@keepmind/client/lib/agent-computer";
+import { seesDetails } from "@keepmind/client/lib/audience";
+import { computerName } from "@keepmind/client/lib/computer";
+import { ErrorBoundary } from "@keepmind/client/lib/error-boundary";
+import { formatPercent, formatUsd, relativeTime } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { STATUS_ICON } from "@keepmind/client/lib/issues";
+import { can } from "@keepmind/client/lib/permissions";
+import { usageShown } from "@keepmind/client/lib/plan-usage";
+import { agentFaceWord } from "@keepmind/client/lib/presence";
+import { isRightHand } from "@keepmind/client/lib/right-hand";
+import { siteHost } from "@keepmind/client/lib/secret-requests";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
+import { Button, ComputerPortrait, GroupHeading, Icon, InfoHint, PresenceBadge, Switch } from "@keepmind/ui";
 import { Link, useNavigate } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";

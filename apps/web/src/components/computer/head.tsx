@@ -1,4 +1,4 @@
-import { Button } from "@agenteschat/ui";
+import { Button } from "@keepmind/ui";
 import { createContext, type ReactNode, useContext } from "react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";

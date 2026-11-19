@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { type AgentInput, ApiError, keys } from "@agenteschat/client";
-import { en, ptBR } from "@agenteschat/i18n";
+import { type AgentInput, ApiError, keys } from "@keepmind/client";
+import { en, ptBR } from "@keepmind/i18n";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import {
   freeHandle,
@@ -288,13 +288,41 @@ describe("Criar agente: steps", () => {
       within(step)
         .getAllByRole("heading", { level: 2 })
         .map((h) => h.textContent),
-    ).toEqual(["Produto e tecnologia", "Clientes", "Operação"]);
+    ).toEqual([
+      "Produto e tecnologia",
+      "Engenharia e design",
+      "Clientes",
+      "Operação",
+      "Consultoria e futuro",
+      "Executivos",
+      "Perfis inspirados",
+    ]);
     const names = (heading: string) =>
       within(within(step).getByRole("region", { name: heading }))
         .getAllByRole("button")
         .map((b) => b.querySelector(".newag__role-name b")?.textContent);
-    expect(names("Produto e tecnologia")).toEqual(["Dev", "Ops", "QA", "PM"]);
-    expect(names("Clientes")).toEqual(["Atendimento", "Vendas", "Marketing", "Conteúdo"]);
+    expect(names("Produto e tecnologia")).toEqual(["Dev", "Ops", "QA", "PM", "Cybersec"]);
+    expect(names("Engenharia e design")).toEqual([
+      "Design",
+      "UX",
+      "PR Manager",
+      "Frontend",
+      "iOS",
+      "Android",
+      "Software Factory",
+      "Migration Engineer",
+      "Performance",
+      "Plataforma",
+      "Ferramentas internas",
+      "Release",
+      "Code Reaper",
+      "Saúde do código",
+      "Anomalias",
+      "Documentação",
+      "Compliance",
+      "Chief of Staff",
+    ]);
+    expect(names("Clientes")).toEqual(["Atendimento", "Vendas", "Marketing", "Conteúdo", "SEO & GEO"]);
     expect(names("Operação")).toEqual(["Dados", "Financeiro", "Pessoas", "Pesquisa", "Assistente"]);
     expect(within(step).getAllByRole("button")[0]?.textContent).toContain("Do zero");
     // Every card, Do zero too, opens on its tile with the name and its line centred beside it (no cap-top rise).
@@ -305,7 +333,9 @@ describe("Criar agente: steps", () => {
     expect(firstRows).toEqual([...ROLE_IDS, "import"].map(() => "newag__role-head"));
     expect(step.querySelector(".newag__role .ac-captop, .newag__role .ac-faceline")).toBeNull();
     const css = await Bun.file(new URL("../src/layout.css", import.meta.url).pathname).text();
-    expect(css).toMatch(/\n\.newag__role-head \{\s*display: flex;\s*align-items: center;/);
+    expect(css).toMatch(
+      /\n\.newag__role-head \{\s*display: grid;\s*grid-template-columns: auto minmax\(0, 1fr\);\s*align-items: center;/,
+    );
     // Smaller tiles than a profile's 56px face, the + as big as a face.
     expect(css).toMatch(/\n\.newag__role-head > \.ac-avatar \{\s*width: 44px;\s*height: 44px;/);
     expect(css).toMatch(/\n\.newag__blank-icon \{[^}]*width: 44px;\s*height: 44px;/);
@@ -333,6 +363,17 @@ describe("Criar agente: steps", () => {
     expect((screen().getByLabelText("Instruções") as HTMLTextAreaElement).value).toContain(
       "Enviar mensagem ao cliente, reembolso e desconto só com aprovação.",
     );
+  });
+
+  test("batch creation: the route's 30-agent cap stops the next pick, said on a toast", async () => {
+    await open();
+    const cards = [...document.querySelectorAll<HTMLButtonElement>(".newag__role")].filter(
+      (b) => !b.className.includes("--blank"),
+    );
+    expect(cards.length).toBeGreaterThanOrEqual(31);
+    for (const card of cards.slice(0, 30)) await click(card);
+    await click(cards[30] as HTMLElement);
+    expect(document.body.textContent).toContain("30 agentes");
   });
 
   test("Trazer agentes de outro app: the import flow in place of the cards, Voltar (or Esc) back to them", async () => {
@@ -1770,10 +1811,10 @@ describe("Criar agente in a personal workspace (ADR 0159)", () => {
 
   test("alone: no owner and no who can talk on the screen; it is created mine, answering only me", async () => {
     const state = await open(personal(true));
-    // One person's starting points: the right hand's personal agents, not a company's roles (ADR 0159 §3).
+    // Personal starters remain available alongside the shared template library.
     expect(screen().getByRole("heading", { name: "Para o seu dia" })).toBeTruthy();
-    expect(screen().queryByRole("heading", { name: "Produto e tecnologia" })).toBeNull();
-    expect(screen().queryByRole("button", { name: /^QA/ })).toBeNull();
+    expect(screen().getByRole("heading", { name: "Produto e tecnologia" })).toBeTruthy();
+    expect(screen().getByRole("button", { name: /^QA/ })).toBeTruthy();
     await startAs("Clara");
     expect((screen().getByLabelText("Nome") as HTMLInputElement).value).toBe("Clara");
     // Its technical steps start filled in and are passed over (ADR 0159 §3): four steps, Instruções on to Revisar.

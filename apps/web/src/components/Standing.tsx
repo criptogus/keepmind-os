@@ -9,9 +9,9 @@ import {
   useComputerSetup,
   useRestoreAccount,
   useRestoreWorkspace,
-} from "@agenteschat/client";
-import { billingHoldOf } from "@agenteschat/client/lib/billing";
-import { computerEdition } from "@agenteschat/client/lib/computer";
+} from "@keepmind/client";
+import { billingHoldOf } from "@keepmind/client/lib/billing";
+import { computerEdition } from "@keepmind/client/lib/computer";
 import {
   accountDeletingText,
   accountOutOfReach,
@@ -22,15 +22,15 @@ import {
   workspaceLabel,
   workspaceNotes,
   workspaceOpens,
-} from "@agenteschat/client/lib/deletion";
-import { errorText, holdText, sessionEnded, supportLineOf, suspendedText } from "@agenteschat/client/lib/errors";
-import { stepPermissions } from "@agenteschat/client/lib/home";
-import { planHoldOf } from "@agenteschat/client/lib/no-ai";
-import { can } from "@agenteschat/client/lib/permissions";
-import { isRightHand, leadsWithPlan, rightHandOf } from "@agenteschat/client/lib/right-hand";
-import type { FirstRunPowers } from "@agenteschat/client/lib/setup-checklist";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
-import { Button, cx, Icon, InfoHint, Spinner } from "@agenteschat/ui";
+} from "@keepmind/client/lib/deletion";
+import { errorText, holdText, sessionEnded, supportLineOf, suspendedText } from "@keepmind/client/lib/errors";
+import { stepPermissions } from "@keepmind/client/lib/home";
+import { planHoldOf } from "@keepmind/client/lib/no-ai";
+import { can } from "@keepmind/client/lib/permissions";
+import { isRightHand, leadsWithPlan, rightHandOf } from "@keepmind/client/lib/right-hand";
+import type { FirstRunPowers } from "@keepmind/client/lib/setup-checklist";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
+import { Button, cx, Icon, InfoHint, Spinner } from "@keepmind/ui";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useMatchRoute, useNavigate } from "@tanstack/react-router";
 import type { ReactNode } from "react";
@@ -254,7 +254,7 @@ function ClosedScreen({
     <AuthShell languages={false}>
       <div className="auth__form">
         <header className="auth__ask">
-          <AgentAvatar name="agentes.chat" size="lg" />
+          <AgentAvatar name="keepmind.io" size="lg" />
           <div className="auth__bubble">
             <h1 className="auth__title">{title}</h1>
             <p className="auth__lead">

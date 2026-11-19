@@ -1,3 +1,4 @@
+import { createRoute, z } from "@hono/zod-openapi";
 import {
   askWidgetChange,
   confirmWidget,
@@ -22,8 +23,7 @@ import {
   updateDashboard,
   updateWidget,
   widgetSuggestions,
-} from "@agenteschat/engine";
-import { createRoute, z } from "@hono/zod-openapi";
+} from "@keepmind/engine";
 import {
   type AppDeps,
   aiCheckOf,

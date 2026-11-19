@@ -1,5 +1,5 @@
-import type { AgentColorName } from "@agenteschat/ui/agent/engine";
-import { skyHourOf, workspaceInk, workspaceTones } from "@agenteschat/ui/sky/workspace";
+import type { AgentColorName } from "@keepmind/ui/agent/engine";
+import { skyHourOf, workspaceInk, workspaceTones } from "@keepmind/ui/sky/workspace";
 import type { StyleProp, ViewStyle } from "react-native";
 import { useServer } from "@/lib/server";
 import { useTheme } from "@/ui/theme";
@@ -37,7 +37,7 @@ function hostOf(url: string): string {
 
 /**
  * The workspace's sky behind Conversas' title (as behind its header on the web): the Cloud's is day with pixel
- * clouds drifting by, a server of one's own the same sky at dusk with a few stars (`@agenteschat/ui` sky/workspace,
+ * clouds drifting by, a server of one's own the same sky at dusk with a few stars (`@keepmind/ui` sky/workspace,
  * drawn by the `workspace` shader). Tones 0..3 are the field's, 6 and 7 what is drawn over it.
  */
 export function WorkspaceSky({

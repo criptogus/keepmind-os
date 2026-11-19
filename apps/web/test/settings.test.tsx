@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import type { Credential } from "@agenteschat/client";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import type { Credential } from "@keepmind/client";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { localeInfo } from "@agenteschat/i18n/locale";
+import { localeInfo } from "@keepmind/i18n/locale";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { detectedLocale } from "@/i18n";
 import { setNavigateAway } from "@/lib/navigate";
@@ -87,7 +87,7 @@ describe("Configurações do workspace", () => {
       seedState({ telemetry: { enabled: true, envOff: false, report: { report: 1, people: { total: 3 } } } }),
     );
     const card = screen().getByRole("region", { name: "Estatísticas de uso" });
-    const toggle = within(card).getByRole("switch", { name: "Enviar estatísticas de uso anônimas ao agentes.chat" });
+    const toggle = within(card).getByRole("switch", { name: "Enviar estatísticas de uso anônimas ao KeepMind OS" });
     expect(toggle.getAttribute("aria-checked")).toBe("true");
     // What is counted is the ⓘ's; no line under the switch while it can be changed.
     expect(describedBy(toggle)).toEqual([
@@ -106,7 +106,7 @@ describe("Configurações do workspace", () => {
   test("usage statistics: with TELEMETRY=off the switch is off and the card says why; others never see it", async () => {
     await go(seedState({ telemetry: { enabled: true, envOff: true, report: { report: 1 } } }));
     const card = screen().getByRole("region", { name: "Estatísticas de uso" });
-    const toggle = within(card).getByRole("switch", { name: "Enviar estatísticas de uso anônimas ao agentes.chat" });
+    const toggle = within(card).getByRole("switch", { name: "Enviar estatísticas de uso anônimas ao KeepMind OS" });
     expect(toggle.getAttribute("aria-checked")).toBe("false");
     expect(toggle.hasAttribute("disabled")).toBe(true);
     // Locked: one line says where it was turned off.

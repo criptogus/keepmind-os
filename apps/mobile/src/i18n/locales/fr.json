@@ -29,7 +29,7 @@
     "server": {
       "line": "Serveur : {{host}} ·",
       "change": "Changer",
-      "title": "Où est votre agentes.chat ?",
+      "title": "Où est votre KeepMind OS ?",
       "subtitle": "L'adresse que votre équipe ouvre dans le navigateur.",
       "label": "Adresse du serveur",
       "placeholder": "agentes.votreequipe.ts.net",
@@ -41,7 +41,7 @@
       "footChoose": "Serveur et langue",
       "footServer": "Un autre serveur",
       "footLanguage": "Langue",
-      "footCloud": "Connexion à agentes.chat Cloud",
+      "footCloud": "Connexion à KeepMind OS Cloud",
       "footOn": "Connexion à {{host}}",
       "footSwitch": "Changer",
       "now": "Maintenant sur {{host}}",
@@ -49,7 +49,7 @@
       "unreachable": "Impossible de joindre {{host}}. Vérifiez l'adresse et votre connexion, puis réessayez.",
       "unreachableTailscale": "Impossible de joindre {{host}}. Il est sur Tailscale : ouvrez l'app Tailscale, connectez-vous et réessayez. Déjà connecté ? L'ordinateur du serveur est peut-être en veille, ou son app est fermée.",
       "certificate": "Le certificat de {{host}} n'est pas valide. Contactez la personne qui gère le serveur.",
-      "notAgentes": "{{host}} n'est pas un serveur agentes.chat. Vérifiez l'adresse.",
+      "notAgentes": "{{host}} n'est pas un serveur KeepMind OS. Vérifiez l'adresse.",
       "serverTooOld": "{{host}} doit être mis à jour pour fonctionner avec cette app.",
       "appTooOld": "Mettez à jour l'app agentes pour utiliser {{host}}.",
       "down": {
@@ -69,14 +69,14 @@
       "confirm": "Se connecter",
       "notNow": "Plus tard",
       "checking": "Vérification du serveur…",
-      "notALink": "Ce lien ne vient pas d'un serveur agentes.chat.",
+      "notALink": "Ce lien ne vient pas d'un serveur KeepMind OS.",
       "tokenFailed": "Le code a expiré ou a déjà été utilisé. Connectez-vous avec votre e-mail ou affichez un nouveau code sur l'ordinateur.",
       "signInSlow": "La connexion prend plus de temps que prévu. Connectez-vous avec votre e-mail ou affichez un nouveau code sur l'ordinateur."
     },
     "scan": {
       "hint": "Visez le QR code sur l'ordinateur",
       "typeAddress": "Saisir l'adresse",
-      "notOurs": "Ce QR code ne vient pas d'un serveur agentes.chat.",
+      "notOurs": "Ce QR code ne vient pas d'un serveur KeepMind OS.",
       "cameraTitle": "Utiliser l'appareil photo",
       "cameraText": "Il sert uniquement à lire le QR code.",
       "allow": "Autoriser l'appareil photo",

@@ -1,7 +1,7 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, asc, type Database, desc, type Executor, eq, gte, inArray, isNull, schema, sql } from "@agenteschat/db";
-import { serverText } from "@agenteschat/i18n";
-import type { AppLocale } from "@agenteschat/i18n/locale";
+import type { PubSub } from "@keepmind/adapters";
+import { and, asc, type Database, desc, type Executor, eq, gte, inArray, isNull, schema, sql } from "@keepmind/db";
+import { serverText } from "@keepmind/i18n";
+import type { AppLocale } from "@keepmind/i18n/locale";
 import { runAuthority } from "./authority";
 import { getChannelCached } from "./context";
 import type { ContextDeps } from "./context/summaries";

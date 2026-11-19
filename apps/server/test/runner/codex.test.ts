@@ -1,7 +1,7 @@
 import { afterEach, expect, test } from "bun:test";
 import { chmodSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import type { RunnerFrame } from "@agenteschat/adapters/machine-protocol";
+import type { RunnerFrame } from "@keepmind/adapters/machine-protocol";
 import { CODEX_MCP_SERVER, codexMcpOverrides, handleMcpMessage, missionExecutorArgs } from "../../runner/mcp";
 import { agentWorkspace } from "../../runner/paths";
 import { executorCommand, parseOutputLine, TaskManager } from "../../runner/tasks";

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { helpDocument } from "@agenteschat/i18n/help";
+import { helpDocument } from "@keepmind/i18n/help";
 import { APP_TOOL_NAMES } from "../src/apps/tools";
 
 describe("the AI apps help page (ADR 0119)", () => {

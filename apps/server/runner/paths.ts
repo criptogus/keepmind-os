@@ -1,8 +1,8 @@
 import { lstatSync } from "node:fs";
 import { lstat, mkdir, readdir, readlink, realpath, rename } from "node:fs/promises";
 import path from "node:path";
-import { isSecretRead } from "@agenteschat/adapters/command-policy";
-import type { AgentScope } from "@agenteschat/adapters/machine-protocol";
+import { isSecretRead } from "@keepmind/adapters/command-policy";
+import type { AgentScope } from "@keepmind/adapters/machine-protocol";
 import { expandHome } from "./config";
 import { errnoCode, RunnerError } from "./errors";
 

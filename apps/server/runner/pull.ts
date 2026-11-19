@@ -1,7 +1,7 @@
 import { createHash, randomUUID } from "node:crypto";
 import { open, rename, rm, stat } from "node:fs/promises";
 import path from "node:path";
-import type { MachineReplies } from "@agenteschat/adapters/machine-protocol";
+import type { MachineReplies } from "@keepmind/adapters/machine-protocol";
 import { errnoCode, RunnerError } from "./errors";
 import { type FetchLike, serverMessage, uploadUrl } from "./push";
 

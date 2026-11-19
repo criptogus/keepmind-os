@@ -1,4 +1,4 @@
-import { and, type Database, eq, inArray, like, schema } from "@agenteschat/db";
+import { and, type Database, eq, inArray, like, schema } from "@keepmind/db";
 import { type Agent, getAgent } from "../agents";
 import { audienceError, canTalkTo, speakerFor } from "../audience";
 import { recordAudit } from "../audit";

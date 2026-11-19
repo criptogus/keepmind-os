@@ -1,4 +1,4 @@
-import type { Agent, AgentAudience, AgentProposal } from "@agenteschat/client";
+import type { Agent, AgentAudience, AgentProposal } from "@keepmind/client";
 import {
   ApiError,
   useAgentProposal,
@@ -8,6 +8,7 @@ import {
   useCatalog,
   useChannels,
   useCreateAgent,
+  useCreateAgents,
   useCredentials,
   useDenyAgentProposal,
   useDms,
@@ -19,9 +20,9 @@ import {
   useRoles,
   useSettings,
   useSkills,
-} from "@agenteschat/client";
-import { LEVELS, type Level, saveLevels, sharedLevel } from "@agenteschat/client/lib/access-levels";
-import { draftLevels, draftMailLevels } from "@agenteschat/client/lib/action-cards";
+} from "@keepmind/client";
+import { LEVELS, type Level, saveLevels, sharedLevel } from "@keepmind/client/lib/access-levels";
+import { draftLevels, draftMailLevels } from "@keepmind/client/lib/action-cards";
 import {
   autonomyName,
   autonomyWords,
@@ -29,8 +30,8 @@ import {
   type NewAgentStart,
   newAgentStart,
   newAgentStartText,
-} from "@agenteschat/client/lib/agent-setup";
-import { thinksWith } from "@agenteschat/client/lib/brain";
+} from "@keepmind/client/lib/agent-setup";
+import { thinksWith } from "@keepmind/client/lib/brain";
 import {
   type BrainPickOption,
   brainPickInput,
@@ -39,19 +40,19 @@ import {
   needsOwnSignIn,
   newPlanAccountOption,
   planAccountOption,
-} from "@agenteschat/client/lib/brain-picker";
-import { type ConnectedItem, itemName } from "@agenteschat/client/lib/connected";
-import { errorText as failureText } from "@agenteschat/client/lib/errors";
-import { FIELD_LIMITS } from "@agenteschat/client/lib/field-limits";
-import { joinNames } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { choiceOf, defaultPolicy, MAIL_ACTIONS, toMailLevel } from "@agenteschat/client/lib/mail";
-import { type PlanChoice as AiPlan, planOfKind } from "@agenteschat/client/lib/no-ai";
-import { addsAgentsTo, can } from "@agenteschat/client/lib/permissions";
-import { keeperKey } from "@agenteschat/client/lib/personal-view";
-import { AUTO, apiProviderOf, isAuto, modelChoices, usableModels } from "@agenteschat/client/lib/providers";
-import { scopeText } from "@agenteschat/client/lib/scopes";
-import { isPersonal, modeKey } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client/lib/brain-picker";
+import { type ConnectedItem, itemName } from "@keepmind/client/lib/connected";
+import { errorText as failureText } from "@keepmind/client/lib/errors";
+import { FIELD_LIMITS } from "@keepmind/client/lib/field-limits";
+import { joinNames } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { choiceOf, defaultPolicy, MAIL_ACTIONS, toMailLevel } from "@keepmind/client/lib/mail";
+import { type PlanChoice as AiPlan, planOfKind } from "@keepmind/client/lib/no-ai";
+import { addsAgentsTo, can } from "@keepmind/client/lib/permissions";
+import { keeperKey } from "@keepmind/client/lib/personal-view";
+import { AUTO, apiProviderOf, isAuto, modelChoices, usableModels } from "@keepmind/client/lib/providers";
+import { scopeText } from "@keepmind/client/lib/scopes";
+import { isPersonal, modeKey } from "@keepmind/client/lib/workspace-mode";
 import {
   AffixInput,
   type AgentAppearance,
@@ -81,7 +82,7 @@ import {
   Spinner,
   Switch,
   Textarea,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { type ReactNode, type RefObject, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -122,7 +123,12 @@ import { useTextLimit } from "@/hooks/useTextLimit";
 import { flowReturn } from "@/lib/flow-return";
 import { CARD_MARK, IMPORT_CARDS } from "@/lib/import-flow";
 import {
+  AGENT_HANDLE,
+  BATCH_MAX,
+  BATCH_SKIPPED_STEPS,
+  type BatchDraft,
   BLANK_LOOK,
+  batchDrafts,
   cleanHandle,
   type DraftCheck,
   type DraftError,
@@ -154,7 +160,15 @@ import { useToast } from "@/lib/toast";
 import "./new-agent.css";
 
 /** The icon next to each group of roles on the first step. */
-const GROUP_ICON: Record<RoleGroupId, IconName> = { tech: "code", customers: "members", operations: "layers" };
+const GROUP_ICON: Record<RoleGroupId, IconName> = {
+  tech: "code",
+  engineering: "code",
+  customers: "members",
+  advisory: "layers",
+  exec: "layers",
+  inspired: "members",
+  operations: "layers",
+};
 
 /** How long the preview keeps writing after a keystroke. */
 const TYPING_MS = 700;
@@ -333,6 +347,7 @@ function NewAgentFlow({
   const settings = useSettings(org.id);
   const library = useSkills(org.id);
   const create = useCreateAgent(org.id);
+  const createAgents = useCreateAgents(org.id);
   const deny = useDenyAgentProposal(org.id);
   const connected = useConnectedById();
   const connectedList = useMemo(() => [...connected.values()], [connected]);
@@ -364,7 +379,7 @@ function NewAgentFlow({
   const [index, setIndex] = useState(was?.index ?? (draft ? review : 0));
   const [reached, setReached] = useState(was?.reached ?? (draft ? review : 0));
   const [tried, setTried] = useState<Set<NewAgentStep>>(new Set());
-  const [created, setCreated] = useState<Created | null>(null);
+  const [created, setCreated] = useState<Created[] | null>(null);
   const [previewOpen, setPreviewOpen] = useState(false);
   // Bringing agents from another app, in place of the role cards (the same flow as Configurações → Importar).
   const [importing, setImporting] = useState(false);
@@ -378,6 +393,8 @@ function NewAgentFlow({
   const [installing, setInstalling] = useState(Boolean(installLink));
   // The draft
   const [role, setRole] = useState<RoleId | null>(was ? was.role : draft ? "custom" : null);
+  // Batch creation: the ready-made roles picked on the role step, in order; 2+ of them make a batch.
+  const [picked, setPicked] = useState<RoleId[]>([]);
   // A personal workspace's starting point (one of its template agents), on top of "custom" (ADR 0159 §3).
   const [starter, setStarter] = useState<PersonalStarter["id"] | null>(was?.starter ?? null);
   const [roleText, setRoleText] = useState(was?.roleText ?? draft?.role ?? "");
@@ -407,6 +424,9 @@ function NewAgentFlow({
   // its agents; a team's answers everyone.
   // A personal workspace's agent starts with every app at write, custom ones too (ADR 0159 §3a).
   const personal = isPersonal(org);
+  // Batch creation is a team's flow: a personal workspace keeps its starters, a proposal keeps its draft.
+  const batchable = !personal && !from;
+  const batch = batchable && picked.length > 1;
   const audienceAtFirst = (): AgentAudience => ({ mode: personal ? "owner" : "everyone", userIds: [] });
   const [audience, setAudience] = useState<AgentAudience>(was?.audience ?? audienceAtFirst);
   // Alone in a personal workspace there is nobody else to own it or talk to it: its owner and who talks to it leave
@@ -432,8 +452,9 @@ function NewAgentFlow({
 
   const step = NEW_AGENT_STEPS[index] ?? "role";
   const total = NEW_AGENT_STEPS.length;
-  // A personal workspace passes over the technical steps, filled in; Revisar still opens them (ADR 0159 §3).
-  const skipped = personal ? PERSONAL_SKIPPED_STEPS : NO_SKIP;
+  // A personal workspace passes over the technical steps, filled in; Revisar still opens them (ADR 0159 §3). A batch
+  // walks role → where → model → review: each template fills its own identity, instructions and apps.
+  const skipped = batch ? BATCH_SKIPPED_STEPS : personal ? PERSONAL_SKIPPED_STEPS : NO_SKIP;
   const walked = NEW_AGENT_STEPS.filter((s) => !skipped.includes(s));
   const dmChannels = useMemo(() => new Set((dms.data ?? []).map((d) => d.channelId)), [dms.data]);
   // Mine, and the ones a proposal names: only where I may put an agent (in it and posting, or managing it).
@@ -596,7 +617,8 @@ function NewAgentFlow({
     setPlan({ kind: p.kind, machineId: p.machineId, accountId: p.accountId, label: p.account, model: AUTO });
   }, [ownPlan?.value, startsReady]);
   const check: DraftCheck = {
-    role,
+    // A batch's role step only needs one pick to count as filled; its names and @s come from the templates.
+    role: batch ? (picked[0] ?? null) : role,
     name,
     handle,
     taken,
@@ -679,8 +701,34 @@ function NewAgentFlow({
   const mailAsks = MAIL_ACTIONS.approval.map((a) => t(`mail.action.${a}.name`));
   const skills = (library.data ?? []).filter((s) => skillIds?.has(s.id));
   const joined = myChannels.filter((c) => channelIds.has(c.id));
+  const pending = create.isPending || createAgents.isPending;
   const asksOf = (item: ConnectedItem) =>
     (item.def?.scopes ?? []).filter((s) => s.sensitive).map((s) => scopeText(t, s).label);
+
+  /* ---------- Batch creation ---------- */
+
+  const joinedIds = new Set(joined.map((c) => c.id));
+  // Each agent's channels: the ones picked for everyone, plus the first channel its role's hints match.
+  const extraChannelFor = (d: BatchDraft) => {
+    const id = d.channels.find((cid) => !joinedIds.has(cid));
+    return id ? myChannels.find((c) => c.id === id) : undefined;
+  };
+  const channelsFor = (d: BatchDraft) => {
+    const extra = extraChannelFor(d);
+    return extra ? [...joined, extra] : joined;
+  };
+  // One draft per picked role, its @ free of the taken ones and of the drafts before it.
+  const batchItems = useMemo(() => {
+    if (!batch) return null;
+    const drafts = batchDrafts(picked, t, myChannels, [...connectedApps], personal);
+    const used = new Set(taken);
+    return drafts.map((draft) => {
+      const base = draft.handleBase || "agent";
+      const handle = AGENT_HANDLE.test(base) && !used.has(base) ? base : freeHandle(base, used);
+      used.add(handle);
+      return { draft, handle };
+    });
+  }, [batch, picked, t, myChannels, connectedApps, personal, taken]);
 
   const scrollTop = () => {
     try {
@@ -710,11 +758,18 @@ function NewAgentFlow({
     mood.react("surprised", 1100);
   };
   const submit = async () => {
-    const bad = firstInvalidStep(check);
+    // A batch checks only the steps it walks (role, where, model): the templates fill the skipped ones.
+    const bad = batch
+      ? NEW_AGENT_STEPS.findIndex((s) => !skipped.includes(s) && stepErrors(s, check).length > 0)
+      : firstInvalidStep(check);
     if (bad >= 0) {
       const s = NEW_AGENT_STEPS[bad] ?? "role";
       fail(s);
       goTo(bad);
+      return;
+    }
+    if (batch) {
+      await submitBatch();
       return;
     }
     const agent = await create.mutateAsync({
@@ -810,11 +865,13 @@ function NewAgentFlow({
       );
     }
     if (failures.length > 0) toast.show(t("newAgent.partly", { ...g, reason: failureText(t, failures[0]) }), "error");
-    setCreated({
-      agent,
-      look,
-      channels: inChannels.map((c) => ({ id: c.id, name: c.name })),
-    });
+    setCreated([
+      {
+        agent,
+        look,
+        channels: inChannels.map((c) => ({ id: c.id, name: c.name })),
+      },
+    ]);
     mood.react("happy", 2200);
     scrollTop();
     // The routine it came with, now that the agent is where it reports; the card says when it is made.
@@ -831,9 +888,116 @@ function NewAgentFlow({
     if (connectPlan) connect?.open({ agentId: agent.id, plan: connectPlan });
     if (connectAfter) connect?.open({ agentId: agent.id, agentIds: [agent.id] });
   };
+  /**
+   * A batch: one `createBatch` for every picked role's template, then the same saves the single flow makes, one
+   * agent at a time so a refused part doesn't keep the others (each failure is said on its own toast).
+   */
+  const submitBatch = async () => {
+    const items = batchItems ?? [];
+    const made = await createAgents.mutateAsync({
+      agents: items.map(({ draft: d, handle }) => ({
+        name: d.agentName,
+        handle,
+        role: d.name,
+        instructions: d.instructions,
+        appearance: d.look,
+        setup: { role: d.roleId },
+      })),
+      shared: {
+        model,
+        ownerUserId: ownerId,
+        audience: {
+          mode: audience.mode,
+          userIds: audience.mode === "people" ? audience.userIds : [],
+          roleIds: audience.mode === "people" ? (audience.roleIds ?? []) : [],
+          consultable: audience.consultable ?? true,
+        },
+        credentialId: key !== DEFAULT_KEY ? key : null,
+        monthlyBudgetUsd: amount,
+        ...(autonomy ? { autonomy } : {}),
+      },
+    });
+    const agents = made.agents;
+    const ids = agents.map((a) => a.id);
+    const libraryList = library.data ?? [];
+    // The plan's own sign-in is the person's, once, for every agent it thinks for (as the single flow's).
+    const planSignIn = plan !== null && ownerId === me.user.id && needsOwnSignIn(aiAccounts.data?.computers, plan);
+    const done: Created[] = [];
+    for (const [i, agent] of agents.entries()) {
+      const item = items[i];
+      if (!item) continue;
+      const d = item.draft;
+      const failures: unknown[] = [];
+      // Quem pensa: the shared plan on its computer, or the last setup's model, saved on each agent.
+      if (plan) {
+        await savePart(failures, async () => {
+          await api.sandbox.setTarget(org.id, agent.id, plan.machineId);
+          await api.agents.setBrain(
+            org.id,
+            agent.id,
+            start && start.brain !== "model" && onStart ? start.input : brainPickInput(plan),
+          );
+        });
+      } else if (start?.brain === "model" && onStart && start.contextTokens !== null) {
+        await savePart(failures, () =>
+          api.agents.setBrain(org.id, agent.id, { brain: "model", contextTokens: start.contextTokens }),
+        );
+      }
+      const agentChannels = channelsFor(d);
+      const inChannels =
+        agentChannels.length > 0 &&
+        (await savePart(failures, () =>
+          api.agents.setChannels(
+            org.id,
+            agent.id,
+            agentChannels.map((c) => ({ channelId: c.id })),
+          ),
+        ))
+          ? agentChannels
+          : [];
+      // The role's own app levels (presetLevels, as the single flow's), only for who may give access.
+      if (managesAgents) {
+        const roleLevels = presetLevels(d.roleId, connectedList, personal);
+        const chosen = Object.fromEntries(
+          connectedList
+            .filter((it) => (roleLevels[it.id] ?? "none") !== "none")
+            .map((it) => [`connector:${it.id}`, roleLevels[it.id] as Level]),
+        );
+        if (Object.keys(chosen).length > 0) await savePart(failures, () => saveLevels(api, org.id, agent.id, chosen));
+      }
+      if (libraryList.length > 0) {
+        await savePart(failures, () =>
+          api.skills.setForAgent(
+            org.id,
+            agent.id,
+            libraryList.map((s) => ({ skillId: s.id, enabled: skillIds?.has(s.id) ?? s.defaultForNewAgents })),
+          ),
+        );
+      }
+      if (failures.length > 0) {
+        toast.show(t("newAgent.partly", { ...agentGrammar(agent.name), reason: failureText(t, failures[0]) }), "error");
+      }
+      done.push({
+        agent,
+        look: ROLE_PRESETS[d.roleId].look,
+        channels: inChannels.map((c) => ({ id: c.id, name: c.name })),
+      });
+    }
+    setCreated(done);
+    mood.react("happy", 2200);
+    scrollTop();
+    // Reviewed over the conversation: it closes on it, as it was.
+    onClose?.();
+    // On a billing hold nothing connects before the plan.
+    if (held) return;
+    if (plan && planSignIn) connect?.open({ agentIds: ids, plan: planOfKind(plan.kind) });
+    if (connectPlan) connect?.open({ agentIds: ids, plan: connectPlan });
+    if (connectAfter) connect?.open({ agentIds: ids });
+  };
   const next = () => {
-    if (created || create.isPending || importing) return;
-    if (overLimit(instructions, instructionsLimit)) {
+    if (created || pending || importing) return;
+    // A batch's instructions come from the templates, never typed here.
+    if (!batch && overLimit(instructions, instructionsLimit)) {
       goTo(NEW_AGENT_STEPS.indexOf("instructions"));
       return;
     }
@@ -863,6 +1027,7 @@ function NewAgentFlow({
     setReached(0);
     setTried(new Set());
     setRole(null);
+    setPicked([]);
     setName("");
     setHandle("");
     setHandleTouched(false);
@@ -940,9 +1105,68 @@ function NewAgentFlow({
     startWith(startOf(ownerId));
     setAiPicked(false);
   };
+  /**
+   * A ready-made role's card: one pick is the single flow (`pickRole` fills the rest); a second pick turns the
+   * wizard into a batch, where the templates fill each agent and the shared steps apply to all. `custom` and a
+   * proposal's draft never batch.
+   */
+  const pickTemplate = (id: RoleId) => {
+    if (!batchable) {
+      pickRole(id);
+      return;
+    }
+    const clearTried = () =>
+      setTried((prev) => {
+        const nextTried = new Set(prev);
+        nextTried.delete("role");
+        return nextTried;
+      });
+    if (batch) {
+      if (!picked.includes(id) && picked.length >= BATCH_MAX) {
+        // The route takes at most BATCH_MAX: past it the pick is refused, said on a toast.
+        toast.show(t("newAgent.batch.limit", { max: BATCH_MAX }), "error");
+        return;
+      }
+      const nextPicked = picked.includes(id) ? picked.filter((p) => p !== id) : [...picked, id];
+      setPicked(nextPicked);
+      clearTried();
+      mood.react("happy", 900);
+      if (nextPicked.length === 1) {
+        // Back to one: the single flow resumes on the role left, its template filling the steps again.
+        const only = nextPicked[0];
+        if (only) pickRole(only);
+      } else if (nextPicked.length === 0) {
+        // None left: the blank draft, as before any role was picked.
+        setRole(null);
+        setStarter(null);
+        setRoleText("");
+        setName("");
+        setHandle("");
+        setHandleTouched(false);
+        setLook(BLANK_LOOK);
+        setInstructions("");
+        if (managesAgents) setLevels(presetLevels("custom", connectedList, personal));
+        setChannelIds(new Set(asked));
+        startWith(startOf(ownerId));
+        setAiPicked(false);
+      }
+      return;
+    }
+    const first = picked[0];
+    if (picked.length === 1 && first !== undefined && first !== id) {
+      // The second pick: batch mode. The shared steps keep their values; the templates fill the rest.
+      setPicked([first, id]);
+      clearTried();
+      mood.react("happy", 1400);
+      return;
+    }
+    setPicked([id]);
+    pickRole(id);
+  };
   /** A personal workspace's starting point: from scratch, with its template agent's name, look, role and line. */
   const pickStarter = (s: PersonalStarter) => {
     if (starter === s.id) return;
+    setPicked([]);
     setStarter(s.id);
     setRole("custom");
     setTried((prev) => {
@@ -1073,6 +1297,7 @@ function NewAgentFlow({
       return (
         <>
           {head(t("newAgent.steps.role.title"), t("newAgent.steps.role.lead"))}
+          {batchable && <p className="small muted newag__batch-hint">{t("newAgent.batch.hint")}</p>}
           {/* biome-ignore lint/a11y/useSemanticElements: pressable cards, not a native fieldset */}
           <div className="newag__role-groups" role="group" aria-label={t("newAgent.steps.role.name")}>
             <div className="newag__scratch">
@@ -1081,7 +1306,11 @@ function NewAgentFlow({
                   type="button"
                   className="newag__role newag__role--blank"
                   aria-pressed={role === "custom" && !starter}
-                  onClick={() => pickRole("custom")}
+                  disabled={batch}
+                  onClick={() => {
+                    setPicked([]);
+                    pickRole("custom");
+                  }}
                 >
                   <span className="newag__check" aria-hidden="true">
                     <Icon name="check" size={14} />
@@ -1091,7 +1320,7 @@ function NewAgentFlow({
                       <Icon name="plus" />
                     </span>,
                     t("newAgent.roles.custom.name"),
-                    t("newAgent.roles.custom.desc"),
+                    batch ? t("newAgent.batch.customLocked") : t("newAgent.roles.custom.desc"),
                   )}
                 </button>
                 {/* Not a choice of role: it opens the import in this step, so it is never pressed-in. */}
@@ -1156,7 +1385,7 @@ function NewAgentFlow({
                 </div>
               </section>
             )}
-            {(personal ? [] : ROLE_GROUPS).map((group) => (
+            {ROLE_GROUPS.map((group) => (
               <section key={group.id} className="newag__section" aria-labelledby={`ag-roles-${group.id}`}>
                 <div className="newag__sect">
                   <h2 id={`ag-roles-${group.id}`}>
@@ -1178,8 +1407,8 @@ function NewAgentFlow({
                         key={id}
                         type="button"
                         className="newag__role"
-                        aria-pressed={role === id}
-                        onClick={() => pickRole(id)}
+                        aria-pressed={batchable ? picked.includes(id) : role === id}
+                        onClick={() => pickTemplate(id)}
                       >
                         <span className="newag__check" aria-hidden="true">
                           <Icon name="check" size={14} />
@@ -1493,7 +1722,10 @@ function NewAgentFlow({
     ),
     where: () => (
       <>
-        {head(t("newAgent.steps.where.title"), t(modeKey(org, "newAgent.steps.where.lead"), g))}
+        {head(
+          t("newAgent.steps.where.title"),
+          batch ? t("newAgent.steps.where.leadBatch") : t(modeKey(org, "newAgent.steps.where.lead"), g),
+        )}
         <div className="newag__sect newag__sect--first">
           <div className="ac-hintline">
             <h2>
@@ -1713,6 +1945,66 @@ function NewAgentFlow({
       );
       const chips = (list: ReactNode[], empty: string) =>
         list.length ? <span className="newag__chips">{list}</span> : <span className="muted">{empty}</span>;
+      if (batch) {
+        // The batch's review: one row per template's agent, then the setup they all share.
+        return (
+          <>
+            {head(t("newAgent.batch.reviewTitle"))}
+            <Card as="div" className="newag__card">
+              <ul className="newag__batch-list">
+                {(batchItems ?? []).map(({ draft: d, handle }) => {
+                  const extra = extraChannelFor(d);
+                  return (
+                    <li key={d.roleId} className="newag__batch-row">
+                      <AgentAvatar name={d.agentName} appearance={ROLE_PRESETS[d.roleId].look} size="md" />
+                      <span className="newag__batch-who">
+                        <b>{d.agentName}</b>
+                        <span className="muted">@{handle}</span>
+                      </span>
+                      <span className="newag__batch-role">
+                        {d.name}
+                        {extra && <span className="muted"> · #{extra.name}</span>}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </Card>
+            <Card as="div" className="newag__card newag__review">
+              {row(
+                "where",
+                "channel",
+                t("newAgent.channels"),
+                chips(
+                  joined.map((c) => chip("channel", c.name, c.id)),
+                  t("newAgent.noChannelsReview"),
+                ),
+              )}
+              {!ownerHidden &&
+                row(
+                  "where",
+                  "members",
+                  t("newAgent.owner"),
+                  <span>{ownerMember?.name ?? t("newAgent.noOwnerAdmins")}</span>,
+                )}
+              {!audienceHidden && row("where", "message", t("audience.section"), <span>{audienceText()}</span>)}
+              {row(
+                "model",
+                "bolt",
+                t("newAgent.modelAndCost"),
+                <span>
+                  {modelLabel}
+                  {autonomy && ` · ${autonomyWords(t, autonomy)}`}{" "}
+                  <span className="muted">
+                    · {keyLabel}
+                    {budgetShown !== undefined && ` · ${t("newAgent.upTo", { amount: usd(t, locale, budgetShown) })}`}
+                  </span>
+                </span>,
+              )}
+            </Card>
+          </>
+        );
+      }
       return (
         <>
           {head(t("newAgent.steps.review.title", g))}
@@ -1826,23 +2118,21 @@ function NewAgentFlow({
   /* ---------- The created moment ---------- */
 
   if (created) {
+    const only = created.length === 1 ? created[0] : undefined;
+    // Another one starts empty, without the proposal (it is decided).
+    const again = from
+      ? () => void navigate({ to: "/org/$orgId/agents/new", params: { orgId: org.id }, search: {} })
+      : reset;
     return (
       <div className="onb newag newag--done" ref={root}>
         <NewAgentRail index={total} reached={total} total={total} onGo={() => {}} done />
         <main className="newag__main">
           <div className="newag__content newag__content--done">
-            <CreatedMoment
-              created={created}
-              phone={phone}
-              face={mood.face}
-              // Another one starts empty, without the proposal (it is decided).
-              onAgain={
-                from
-                  ? () => void navigate({ to: "/org/$orgId/agents/new", params: { orgId: org.id }, search: {} })
-                  : reset
-              }
-              heading={heading}
-            />
+            {only ? (
+              <CreatedMoment created={only} phone={phone} face={mood.face} onAgain={again} heading={heading} />
+            ) : (
+              <CreatedBatch created={created} onAgain={again} heading={heading} />
+            )}
           </div>
         </main>
       </div>
@@ -1858,11 +2148,13 @@ function NewAgentFlow({
     ((role !== null && role !== "custom") || Boolean(roleText.trim() || name.trim() || instructions.trim()));
   const footErrors = errors.map(errorText);
   const hint: Record<NewAgentStep, ReactNode> = {
-    role: role
-      ? role === "custom"
-        ? t("newAgent.roles.custom.name")
-        : t("newAgent.startsAs", { name: t(`newAgent.roles.${role}.agent`) })
-      : t("newAgent.hints.role"),
+    role: batch
+      ? t("newAgent.batch.hint")
+      : role
+        ? role === "custom"
+          ? t("newAgent.roles.custom.name")
+          : t("newAgent.startsAs", { name: t(`newAgent.roles.${role}.agent`) })
+        : t("newAgent.hints.role"),
     identity: handle ? t("newAgent.hints.identity", { handle }) : "",
     instructions: (
       <>
@@ -1893,7 +2185,7 @@ function NewAgentFlow({
       />
       <div className="newag__work">
         <main className="newag__main">
-          <Locked when={create.isPending || deny.isPending}>
+          <Locked when={pending || deny.isPending}>
             <div className="newag__content" key={step}>
               {views[step]()}
             </div>
@@ -1910,13 +2202,7 @@ function NewAgentFlow({
               )}
             </span>
             {index > 0 || importing ? (
-              <Button
-                variant="ghost"
-                size="lg"
-                icon="chevronLeft"
-                disabled={create.isPending || deny.isPending}
-                onClick={back}
-              >
+              <Button variant="ghost" size="lg" icon="chevronLeft" disabled={pending || deny.isPending} onClick={back}>
                 {t("common.back")}
               </Button>
             ) : onClose ? (
@@ -1953,11 +2239,15 @@ function NewAgentFlow({
                 variant="primary"
                 size="lg"
                 kbd={["↵"]}
-                loading={create.isPending}
+                loading={pending}
                 aria-disabled={footErrors.length > 0 || undefined}
                 onClick={next}
               >
-                {last ? t("newAgent.create", { name: displayName }) : t("common.continue")}
+                {last
+                  ? batch
+                    ? t("newAgent.batch.create", { count: batchItems?.length ?? picked.length })
+                    : t("newAgent.create", { name: displayName })
+                  : t("common.continue")}
               </Button>
             )}
           </div>
@@ -2259,6 +2549,55 @@ function CreatedMoment({
               {t("newAgent.openProfile")}
             </Link>
           </Button>
+          <Button icon="plus" className="newag__on-sky" onClick={onAgain}>
+            {t("newAgent.createAnother")}
+          </Button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/** The batch's created moment: every agent made, each row a link to its page, and a way to make more. */
+function CreatedBatch({
+  created,
+  onAgain,
+  heading,
+}: {
+  created: Created[];
+  onAgain: () => void;
+  heading: RefObject<HTMLHeadingElement | null>;
+}) {
+  const { t } = useTranslation();
+  const { org } = useOrg();
+  const first = created[0];
+  return (
+    <section className="newag__born" aria-labelledby="ag-born">
+      <AgentBornSky color={first?.look.color ?? "sky"} at={[0.5, 0.45]} calm={() => []} />
+      <div className="newag__born-text">
+        <p className="onb__eyebrow onb__eyebrow--sky">{t(modeKey(org, "newAgent.newOnTeam"))}</p>
+        <h1 id="ag-born" className="newag__born-title" ref={heading} tabIndex={-1}>
+          {t("newAgent.batch.created", { count: created.length })}
+        </h1>
+        <ul className="newag__batch-done">
+          {created.map((c) => (
+            <li key={c.agent.id}>
+              <Link
+                to="/org/$orgId/agents/$agentId"
+                params={{ orgId: org.id, agentId: c.agent.id }}
+                className="newag__batch-done-row"
+              >
+                <AgentAvatar name={c.agent.name} appearance={c.look} size="md" />
+                <span className="newag__batch-done-who">
+                  <b>{c.agent.name}</b>
+                  <span>@{c.agent.handle}</span>
+                </span>
+                <Icon name="arrowRight" size={16} />
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <div className="newag__born-actions">
           <Button icon="plus" className="newag__on-sky" onClick={onAgain}>
             {t("newAgent.createAnother")}
           </Button>

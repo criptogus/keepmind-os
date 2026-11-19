@@ -1,4 +1,4 @@
-import { type DeletionProofInput, useAccountDeletionPlan, useApi, useAuthConfig, useMe } from "@agenteschat/client";
+import { type DeletionProofInput, useAccountDeletionPlan, useApi, useAuthConfig, useMe } from "@keepmind/client";
 import {
   type AccountDeletionLine,
   accountDeletionLines,
@@ -6,11 +6,11 @@ import {
   deletionDueFrom,
   workspaceLabel,
   workspaceNotes,
-} from "@agenteschat/client/lib/deletion";
-import { errorCode, errorText } from "@agenteschat/client/lib/errors";
-import { formatShortDate } from "@agenteschat/client/lib/format";
-import { settingUp } from "@agenteschat/client/lib/guards";
-import { Alert, Button, Dialog, DialogBody, DialogFooter, Icon, type IconName, Locked } from "@agenteschat/ui";
+} from "@keepmind/client/lib/deletion";
+import { errorCode, errorText } from "@keepmind/client/lib/errors";
+import { formatShortDate } from "@keepmind/client/lib/format";
+import { settingUp } from "@keepmind/client/lib/guards";
+import { Alert, Button, Dialog, DialogBody, DialogFooter, Icon, type IconName, Locked } from "@keepmind/ui";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { type ReactNode, useEffect } from "react";

@@ -1,7 +1,7 @@
 import { afterEach, expect, test } from "bun:test";
 import { createHmac, generateKeyPairSync } from "node:crypto";
-import { createFakeErrorReporter } from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
+import { createFakeErrorReporter } from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
 import { browser, createTestServer, joinByInvitation, seedOrg, signUp, type TestServer } from "./harness";
 
 let t: TestServer;
@@ -528,7 +528,7 @@ test("the server's own app: its owner creates it on GitHub with the manifest, th
   expect(((await (await owner(`/api/app/organizations/${orgId}/github-app`)).json()) as Info).installable).toBe(false);
 });
 
-test("the server's app is the environment's when set (409), and nobody's on agentes.chat (404)", async () => {
+test("the server's app is the environment's when set (409), and nobody's on KeepMind OS (404)", async () => {
   t = await createTestServer({ http, env });
   const owner = browser(t);
   await signUp(owner, "owner@example.com");
@@ -537,7 +537,7 @@ test("the server's app is the environment's when set (409), and nobody's on agen
   expect(((await started.json()) as { error: { code: string } }).error.code).toBe("github_app_env");
   await t.close();
 
-  const origin = "https://app.agentes.chat";
+  const origin = "https://keepmind.io";
   t = await createTestServer({ http, env: { ...env, ALLOW_SIGNUP: "true", PUBLIC_URL: origin } });
   const first = browser(t);
   const signedUp = await first("/api/auth/sign-up/email", {

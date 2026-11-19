@@ -1,8 +1,8 @@
-import type { DeviceAudience, DeviceJoinRequest } from "@agenteschat/client";
-import { defaultLinkAudience, joinFacts } from "@agenteschat/client/lib/devices";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { computerKind } from "@agenteschat/client/lib/machines";
-import { Button, ComputerPortrait, Dialog, DialogBody, DialogFooter, Field, Input, Locked } from "@agenteschat/ui";
+import type { DeviceAudience, DeviceJoinRequest } from "@keepmind/client";
+import { defaultLinkAudience, joinFacts } from "@keepmind/client/lib/devices";
+import { errorText } from "@keepmind/client/lib/errors";
+import { computerKind } from "@keepmind/client/lib/machines";
+import { Button, ComputerPortrait, Dialog, DialogBody, DialogFooter, Field, Input, Locked } from "@keepmind/ui";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useOrg } from "@/components/org-context";

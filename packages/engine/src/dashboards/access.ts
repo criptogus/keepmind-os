@@ -1,4 +1,4 @@
-import { and, type Database, type Executor, eq, isNull, rowsOf, type SQL, schema, sql } from "@agenteschat/db";
+import { and, type Database, type Executor, eq, isNull, rowsOf, type SQL, schema, sql } from "@keepmind/db";
 import { ForbiddenError, NotFoundError } from "../errors";
 import { can, type Membership, requireActiveMembership } from "../organizations";
 import { maySql } from "../permissions";

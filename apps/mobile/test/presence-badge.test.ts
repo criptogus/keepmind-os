@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { badgeCells } from "@agenteschat/ui/presence/badge";
+import { badgeCells } from "@keepmind/ui/presence/badge";
 import { badgeCell, badgeFills, badgeOverhang, badgePaths } from "../src/ui/presence-badge";
 
 /** The cells a path covers ("x,y"), read back from its runs (`M{x} {y}h{w}v1h-{w}z`). */

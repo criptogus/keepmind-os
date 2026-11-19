@@ -1,4 +1,4 @@
-import { type ImportItemResult, keys, type MigrationBundle, useAgents, useApi } from "@agenteschat/client";
+import { type ImportItemResult, keys, type MigrationBundle, useAgents, useApi } from "@keepmind/client";
 import {
   agentsSince,
   applyInChunks,
@@ -13,9 +13,9 @@ import {
   itemId,
   NOT_GITHUB,
   picksOf,
-} from "@agenteschat/client/lib/import/flow";
-import { type ImportFile, parseImport } from "@agenteschat/client/lib/import/index";
-import { PASTED } from "@agenteschat/client/lib/import/shared";
+} from "@keepmind/client/lib/import/flow";
+import { type ImportFile, parseImport } from "@keepmind/client/lib/import/index";
+import { PASTED } from "@keepmind/client/lib/import/shared";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useMeId } from "../shared/hooks";

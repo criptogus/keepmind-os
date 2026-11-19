@@ -1,7 +1,7 @@
 import { existsSync, readdirSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { RunnerToolchains } from "@agenteschat/adapters/machine-protocol";
+import type { RunnerToolchains } from "@keepmind/adapters/machine-protocol";
 import { findAdb, findSdk } from "./adb";
 import { readJson, writeJson } from "./json-file";
 import { extraToolDirs, runTool, which } from "./phones";

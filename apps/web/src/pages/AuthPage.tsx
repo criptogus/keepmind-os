@@ -7,17 +7,17 @@ import {
   type SignInProvider,
   useApi,
   useAuthConfig,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 import {
   ACCOUNT_NOT_LINKED,
   authErrorText,
   EARLY_ACCESS_OTHER_EMAIL,
   errorText,
   signInRefusalText,
-} from "@agenteschat/client/lib/errors";
-import { signInFor } from "@agenteschat/client/lib/guards";
-import { type HumanAction, isHumanCheckRefusal, withHumanCheck } from "@agenteschat/client/lib/human-check";
-import { serverHost } from "@agenteschat/client/lib/server";
+} from "@keepmind/client/lib/errors";
+import { signInFor } from "@keepmind/client/lib/guards";
+import { type HumanAction, isHumanCheckRefusal, withHumanCheck } from "@keepmind/client/lib/human-check";
+import { serverHost } from "@keepmind/client/lib/server";
 import {
   emailTypoFix,
   isEmail,
@@ -25,8 +25,8 @@ import {
   nameIsPassword,
   passwordState,
   webmailOf,
-} from "@agenteschat/client/lib/text";
-import { Button, Icon, Input, Locked } from "@agenteschat/ui";
+} from "@keepmind/client/lib/text";
+import { Button, Icon, Input, Locked } from "@keepmind/ui";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import type { TFunction } from "i18next";

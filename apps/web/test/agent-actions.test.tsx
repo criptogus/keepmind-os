@@ -1,11 +1,11 @@
 import { afterEach, describe, expect, spyOn, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { Agent, AgentAction, Message, MissionPlan } from "@agenteschat/client";
-import { AGENT_ACTION_KINDS, keys } from "@agenteschat/client";
-import { en, ptBR } from "@agenteschat/i18n";
+import type { Agent, AgentAction, Message, MissionPlan } from "@keepmind/client";
+import { AGENT_ACTION_KINDS, keys } from "@keepmind/client";
+import { en, ptBR } from "@keepmind/i18n";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { RECEIPT_ICONS } from "@/components/AgentActions";
 import { ADA_ID, ATLAS_ID, createFakeApi, ENG_ID, type FakeState, ORG_ID, seedDm, seedState } from "./fake-api";

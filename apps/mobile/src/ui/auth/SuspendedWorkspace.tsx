@@ -1,6 +1,6 @@
-import { useAuthConfig } from "@agenteschat/client";
-import { workspaceLabel, workspaceNotes, workspaceOpens } from "@agenteschat/client/lib/deletion";
-import { supportLineOf, suspendedText } from "@agenteschat/client/lib/errors";
+import { useAuthConfig } from "@keepmind/client";
+import { workspaceLabel, workspaceNotes, workspaceOpens } from "@keepmind/client/lib/deletion";
+import { supportLineOf, suspendedText } from "@keepmind/client/lib/errors";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Linking, StyleSheet, View } from "react-native";

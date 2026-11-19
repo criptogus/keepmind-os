@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import { asc, eq, schema } from "@agenteschat/db";
+import { asc, eq, schema } from "@keepmind/db";
 import { approvalTarget, decideApproval, drainOutbox, postPersonMessage, type ToolSource } from "../src";
 import { type Fixture, setup } from "./fixtures";
 

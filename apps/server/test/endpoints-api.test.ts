@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import { customModelId } from "@agenteschat/providers";
+import { customModelId } from "@keepmind/providers";
 import { browser, createTestServer, joinByInvitation, seedOrg, signUp, type TestServer } from "./harness";
 
 let t: TestServer;

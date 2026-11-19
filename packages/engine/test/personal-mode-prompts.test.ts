@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { and, eq, schema } from "@agenteschat/db";
-import { systemText } from "@agenteschat/providers";
+import { and, eq, schema } from "@keepmind/db";
+import { systemText } from "@keepmind/providers";
 import {
   buildRunContext,
   type HandOff,
@@ -120,7 +120,7 @@ describe("the rules every agent reads", () => {
     expect(team.personal).toBe(false);
     const teamText = systemText(team.system);
     expect(teamText).toContain(
-      'You work in "Acme" on agentes.chat, a workspace where people and AI agents work together.',
+      'You work in "Acme" on KeepMind OS, a workspace where people and AI agents work together.',
     );
     expect(teamText).toContain("# About the organization\nAcme builds rockets.");
     expect(teamText).toContain("an AI agent of this organization.");
@@ -131,7 +131,7 @@ describe("the rules every agent reads", () => {
     expect(personal.personal).toBe(true);
     const text = systemText(personal.system);
     expect(text).toContain(
-      'You work in "Acme" on agentes.chat, a personal workspace: one person, and maybe their family',
+      'You work in "Acme" on KeepMind OS, a personal workspace: one person, and maybe their family',
     );
     expect(text).toContain("# About the person\nAcme builds rockets.");
     expect(text).toContain("one of this person's AI agents.");

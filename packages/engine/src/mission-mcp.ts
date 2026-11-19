@@ -7,9 +7,9 @@ import {
   PERMISSION_TOOL,
   type RunnerFrame,
   workspacePath,
-} from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
-import type { ToolImage } from "@agenteschat/providers";
+} from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
+import type { ToolImage } from "@keepmind/providers";
 import { getAgentCached } from "./agents";
 import { recordAudit } from "./audit";
 import { getContextItems, personMayRead } from "./context/items";

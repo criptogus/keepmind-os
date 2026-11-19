@@ -21,9 +21,9 @@ import {
   SHARED_CODEX_PROTOCOL,
   SHARED_GEMINI_PROTOCOL,
   sealSecret,
-} from "@agenteschat/adapters";
-import { and, eq, schema } from "@agenteschat/db";
-import { runMigration } from "@agenteschat/db/testing";
+} from "@keepmind/adapters";
+import { and, eq, schema } from "@keepmind/db";
+import { runMigration } from "@keepmind/db/testing";
 import {
   accountLoginStatus,
   beginAccountLogin,

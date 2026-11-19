@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { and, eq, schema, sql } from "@agenteschat/db";
+import { and, eq, schema, sql } from "@keepmind/db";
 import {
   addChannelMember,
   answerNow,

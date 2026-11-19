@@ -1,4 +1,4 @@
-import { SKILL_ASSET_BYTES, SKILL_TEXT_BYTES, SKILL_ZIP_BYTES } from "@agenteschat/tokens/skills";
+import { SKILL_ASSET_BYTES, SKILL_TEXT_BYTES, SKILL_ZIP_BYTES } from "@keepmind/tokens/skills";
 
 /** Same limit as the server (`ARTIFACT_LIMITS.fileBytes`): 50 MB per file version. */
 export const MAX_UPLOAD_BYTES = 50 * 1024 * 1024;
@@ -69,7 +69,7 @@ export const isPreviewImage = (content: { contentType: string; size: number }) =
 /** The clean MIME type for a preview blob (never what the browser would sniff). */
 export const previewType = (contentType: string) => contentType.split(";")[0]?.trim().toLowerCase() ?? "";
 
-/** The design system icons a file can show (all exist in `@agenteschat/ui`'s `IconName`). */
+/** The design system icons a file can show (all exist in `@keepmind/ui`'s `IconName`). */
 export type FileIconName = "image" | "video" | "document" | "table" | "archive" | "code" | "page" | "file";
 
 const BY_EXTENSION: Record<string, FileIconName> = {

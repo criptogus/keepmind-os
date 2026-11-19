@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import type { schema } from "@agenteschat/db";
+import type { schema } from "@keepmind/db";
 import { reviewRecords } from "../src/plugins/review";
 
 const record = (id: string, values: schema.PluginRecord["values"]): schema.PluginRecord => ({

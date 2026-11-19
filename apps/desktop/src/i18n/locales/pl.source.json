@@ -168,7 +168,7 @@
     "value": "switching tabs"
   },
   "tray.label": {
-    "value": "agentes.chat"
+    "value": "keepmind.io"
   },
   "tray.now": {
     "value": "Now"
@@ -231,13 +231,13 @@
     "value": "Resume the agents"
   },
   "tray.open": {
-    "value": "Open agentes.chat"
+    "value": "Open KeepMind OS"
   },
   "tray.prefs": {
     "value": "Preferences…"
   },
   "tray.quit": {
-    "value": "Quit agentes.chat"
+    "value": "Quit KeepMind OS"
   },
   "tray.pausedFor1h": {
     "value": "Paused for 1 hour"
@@ -321,7 +321,7 @@
     "value": "Install the app again"
   },
   "tray.incompatibleBody": {
-    "value": "One part of the app doesn't match the other. Download the latest version at agentes.chat."
+    "value": "One part of the app doesn't match the other. Download the latest version at KeepMind OS."
   },
   "tray.requests": {
     "value": "Requests"
@@ -357,7 +357,7 @@
     "value": "{{agent}} wants to use the folder {{folder}}"
   },
   "tray.allowedTitle": {
-    "value": "{{name}} turned on {{tool}} from agentes.chat"
+    "value": "{{name}} turned on {{tool}} from KeepMind OS"
   },
   "tray.allowedBody": {
     "value": "If it wasn't you, undo it here."
@@ -372,13 +372,13 @@
     "value": "Off again: {{tool}}"
   },
   "tray.quitTitle": {
-    "value": "Quit agentes.chat?"
+    "value": "Quit KeepMind OS?"
   },
   "tray.quitBody": {
     "value": "Agents can't use this {{device}} while the app is closed. What is already running finishes and sends the result when you open it again."
   },
   "tray.quitHereBody": {
-    "value": "agentes.chat stops on this {{device}}: nobody can use it, here, on your phone or your teammates', until you open the app again."
+    "value": "KeepMind OS stops on this {{device}}: nobody can use it, here, on your phone or your teammates', until you open the app again."
   },
   "tray.quitConfirm": {
     "value": "Quit"
@@ -390,7 +390,7 @@
     "value": "The ones you have stay here, each with its own sign-in."
   },
   "first.addCloud": {
-    "value": "Create a workspace on agentes.chat"
+    "value": "Create a workspace on KeepMind OS"
   },
   "first.addNew": {
     "value": "Want a new workspace?"
@@ -408,7 +408,7 @@
     "value": "Recommended"
   },
   "place.cloud": {
-    "value": "In the agentes.chat cloud"
+    "value": "In the KeepMind OS cloud"
   },
   "place.cloudText": {
     "value": "Always on. We take care of everything, you just use it."
@@ -465,7 +465,7 @@
     "value": "Instructions copied"
   },
   "install.text": {
-    "value": "To install agentes.chat on a computer that stays on (a Mac mini, an office computer or a server):\n\n1. On that computer, open the Terminal and paste this:\n{{command}}\n\n2. At the end a link shows up. Send it to me: it opens the workspace in the app."
+    "value": "To install KeepMind OS on a computer that stays on (a Mac mini, an office computer or a server):\n\n1. On that computer, open the Terminal and paste this:\n{{command}}\n\n2. At the end a link shows up. Send it to me: it opens the workspace in the app."
   },
   "connect.title": {
     "value": "Sign in to a workspace that already exists"
@@ -495,7 +495,7 @@
     "value": "On your team's network"
   },
   "connect.foundHere": {
-    "value": "agentes.chat is running here"
+    "value": "KeepMind OS is running here"
   },
   "connect.foundNoOwner": {
     "value": "Waiting for its owner account"
@@ -540,13 +540,13 @@
     "value": "We can't reach {{host}}, which is on your Tailscale network. Open Tailscale on this {{device}}, connect and try again."
   },
   "connect.unreachableHere": {
-    "value": "Nothing answers at {{host}} on this {{device}}. Start agentes.chat here, then try again."
+    "value": "Nothing answers at {{host}} on this {{device}}. Start KeepMind OS here, then try again."
   },
   "connect.certificate": {
     "value": "The certificate of {{host}} isn't valid. Talk to whoever runs the server."
   },
   "connect.notAgentes": {
-    "value": "{{host}} isn't an agentes.chat server. Check the address."
+    "value": "{{host}} isn't an KeepMind OS server. Check the address."
   },
   "connect.serverTooOld": {
     "value": "{{host}} needs an update to work with this app."
@@ -579,7 +579,7 @@
     "value": "Reach it from your phone and teammates"
   },
   "here.reachText": {
-    "value": "With Tailscale, a private network for your devices: your phone and the people you invite join it, and nobody else can reach agentes.chat."
+    "value": "With Tailscale, a private network for your devices: your phone and the people you invite join it, and nobody else can reach KeepMind OS."
   },
   "here.reachOff": {
     "value": "Tailscale isn't connected."
@@ -603,7 +603,7 @@
     "value": "Tailscale asks for HTTPS to be turned on in your network. Turn it on in its page: the rest goes on by itself."
   },
   "here.reachStage.restarting": {
-    "value": "Restarting agentes.chat at its new address…"
+    "value": "Restarting KeepMind OS at its new address…"
   },
   "here.reachStage.signingIn": {
     "value": "Signing in again at the new address…"
@@ -621,7 +621,7 @@
     "value": "Get Tailscale"
   },
   "here.usage": {
-    "value": "Send anonymous usage statistics to agentes.chat"
+    "value": "Send anonymous usage statistics to KeepMind OS"
   },
   "here.usageText": {
     "value": "Counts such as people, agents, machine sizes, AI tokens used and how much data the agents' browsers send and receive. Never messages, files, names or sites."
@@ -642,7 +642,7 @@
     "value": "first time only"
   },
   "here.step.start": {
-    "value": "Turning agentes.chat on"
+    "value": "Turning KeepMind OS on"
   },
   "here.step.account": {
     "value": "Creating your account"
@@ -666,7 +666,7 @@
     "value": "needs your attention"
   },
   "here.fail.start": {
-    "value": "agentes.chat didn't start on this {{device}}."
+    "value": "KeepMind OS didn't start on this {{device}}."
   },
   "here.fail.database": {
     "value": "The database wasn't prepared."
@@ -690,13 +690,13 @@
     "value": "you stopped waiting for HTTPS to be turned on"
   },
   "here.reason.start": {
-    "value": "agentes.chat didn't answer again at its new address"
+    "value": "KeepMind OS didn't answer again at its new address"
   },
   "here.reason.notConnected": {
     "value": "Tailscale isn't connected on this {{device}}"
   },
   "here.reason.back": {
-    "value": "agentes.chat didn't answer again on this {{device}} after access from your devices was turned off."
+    "value": "KeepMind OS didn't answer again on this {{device}} after access from your devices was turned off."
   },
   "here.serveFix": {
     "value": "Install Tailscale from tailscale.com."
@@ -717,13 +717,13 @@
     "value": "Taking a little longer than expected"
   },
   "here.notifyFailed": {
-    "value": "Setting up agentes.chat on this {{device}} didn't finish"
+    "value": "Setting up KeepMind OS on this {{device}} didn't finish"
   },
   "here.notifyFailedBody": {
-    "value": "Open agentes.chat to see what happened."
+    "value": "Open KeepMind OS to see what happened."
   },
   "here.already": {
-    "value": "agentes.chat is already installed on this {{device}}"
+    "value": "KeepMind OS is already installed on this {{device}}"
   },
   "here.alreadyText": {
     "value": "It runs on its own, installed from the terminal. Use it in this app."
@@ -735,13 +735,13 @@
     "value": "Use it"
   },
   "here.notRunning": {
-    "value": "agentes.chat is installed on this {{device}}, but it isn't running"
+    "value": "KeepMind OS is installed on this {{device}}, but it isn't running"
   },
   "here.notRunningText": {
     "value": "It was installed from the terminal, in {{path}}. To start it, run this in the terminal, then try again:"
   },
   "here.running": {
-    "value": "agentes.chat already runs on this {{device}}"
+    "value": "KeepMind OS already runs on this {{device}}"
   },
   "here.runningText": {
     "value": "This app runs it. Open it to sign in."
@@ -777,7 +777,7 @@
     "value": "Checking the server…"
   },
   "link.notALink": {
-    "value": "This link isn't from an agentes.chat server."
+    "value": "This link isn't from an KeepMind OS server."
   },
   "link.chipTailnet": {
     "value": "Tailscale"
@@ -786,7 +786,7 @@
     "value": "This {{device}}"
   },
   "link.thisServer": {
-    "value": "agentes.chat on this {{device}}"
+    "value": "KeepMind OS on this {{device}}"
   },
   "link.tailnetHelp": {
     "value": "It's on a Tailscale network: it only opens on devices connected to Tailscale with the same account."
@@ -795,10 +795,10 @@
     "value": "Servers"
   },
   "servers.lead": {
-    "value": "Where this app opens agentes.chat."
+    "value": "Where this app opens KeepMind OS."
   },
   "servers.cloud": {
-    "value": "agentes.chat"
+    "value": "keepmind.io"
   },
   "servers.cloudSub": {
     "value": "Cloud"
@@ -882,7 +882,7 @@
     "value": "{{n}} new notifications"
   },
   "server.title": {
-    "value": "agentes.chat on this {{device}}"
+    "value": "KeepMind OS on this {{device}}"
   },
   "server.running": {
     "value": "Running"
@@ -927,7 +927,7 @@
     "value": "Show QR code"
   },
   "server.usageRestart": {
-    "value": "Changing it restarts agentes.chat for a moment."
+    "value": "Changing it restarts KeepMind OS for a moment."
   },
   "server.jev": {
     "value": "Jev"
@@ -963,7 +963,7 @@
     "value": "Stop running it here…"
   },
   "server.stopHereTitle": {
-    "value": "Stop agentes.chat on this {{device}}?"
+    "value": "Stop KeepMind OS on this {{device}}?"
   },
   "server.stopHereBody": {
     "value": "It stops now and no longer starts with the app. Its data stays in {{path}}."
@@ -987,7 +987,7 @@
     "value": "Stopping cuts everyone off, the phone included."
   },
   "server.stopTitle": {
-    "value": "Stop agentes.chat on this {{device}}?"
+    "value": "Stop KeepMind OS on this {{device}}?"
   },
   "server.stopBody": {
     "value": "The phone and the team lose access until it's back."
@@ -999,7 +999,7 @@
     "value": "Stopped until you start it"
   },
   "server.reachRestart": {
-    "value": "Turning it on or off restarts agentes.chat for a moment."
+    "value": "Turning it on or off restarts KeepMind OS for a moment."
   },
   "server.reachOffTitle": {
     "value": "Turn off access from your devices?"
@@ -1029,19 +1029,19 @@
     "value": "Start it here"
   },
   "server.stoppedBanner": {
-    "value": "agentes.chat stopped on this {{device}}"
+    "value": "KeepMind OS stopped on this {{device}}"
   },
   "server.stoppedBody": {
     "value": "Nobody can use it until it starts again."
   },
   "server.failingBanner": {
-    "value": "agentes.chat isn't starting on this {{device}}"
+    "value": "KeepMind OS isn't starting on this {{device}}"
   },
   "server.failingBody": {
     "value": "Open the app to see what happened and try again."
   },
   "server.restartedBanner": {
-    "value": "agentes.chat restarted 3 times on this {{device}}"
+    "value": "KeepMind OS restarted 3 times on this {{device}}"
   },
   "server.restartedBody": {
     "value": "It comes back by itself. If it keeps happening, open the app to see why."
@@ -1050,10 +1050,10 @@
     "value": "Version {{version}}, updated with the app"
   },
   "server.updatesWithApp": {
-    "value": "Updating the app updates agentes.chat on this {{device}} too."
+    "value": "Updating the app updates KeepMind OS on this {{device}} too."
   },
   "server.updateBack": {
-    "value": "The update didn't start. agentes.chat is back on {{version}}."
+    "value": "The update didn't start. KeepMind OS is back on {{version}}."
   },
   "server.updateBackBody": {
     "value": "The new version is tried again with the app's next update."
@@ -1107,7 +1107,7 @@
     "value": "Restore a backup?"
   },
   "server.restoreBody": {
-    "value": "agentes.chat on this {{device}} goes back to that backup: messages, files and settings. It stops for a minute. What's there now is kept in the backups folder."
+    "value": "KeepMind OS on this {{device}} goes back to that backup: messages, files and settings. It stops for a minute. What's there now is kept in the backups folder."
   },
   "server.restoreWhich": {
     "value": "Backup to restore"
@@ -1122,7 +1122,7 @@
     "value": "Restored the backup from {{time}}"
   },
   "server.restoreFailed": {
-    "value": "That backup didn't start, so agentes.chat is back as it was. Try the other backup."
+    "value": "That backup didn't start, so KeepMind OS is back as it was. Try the other backup."
   },
   "server.restoreUnreadable": {
     "value": "That backup can't be opened. Try the other one."
@@ -1146,7 +1146,7 @@
     "value": "Signs in by itself after a restart"
   },
   "server.keepAutoLoginText": {
-    "value": "After a restart, this {{device}} waits at its sign-in screen and agentes.chat doesn't open. Turn on automatic login in Users & Groups."
+    "value": "After a restart, this {{device}} waits at its sign-in screen and KeepMind OS doesn't open. Turn on automatic login in Users & Groups."
   },
   "server.keepAutoLoginOpen": {
     "value": "Open Users & Groups"
@@ -1164,7 +1164,7 @@
     "value": "Doesn't sleep while serving"
   },
   "server.keepAwakeText": {
-    "value": "This {{device}} stays awake while agentes.chat runs here. Start agentes.chat to keep it awake."
+    "value": "This {{device}} stays awake while KeepMind OS runs here. Start KeepMind OS to keep it awake."
   },
   "server.keepOn": {
     "value": "Done"
@@ -1188,7 +1188,7 @@
     "value": "Let {{org}}'s agents use this {{device}}?"
   },
   "pair.keepReady": {
-    "value": "Keep it ready: open agentes.chat at login"
+    "value": "Keep it ready: open KeepMind OS at login"
   },
   "pair.offerOnlyIf": {
     "value": "Only if you want this {{device}} to do agents' work too. With Not now you still use {{org}} here as usual."
@@ -1260,7 +1260,7 @@
     "value": "Lets agents open your files without macOS asking for each folder."
   },
   "prepare.diskHow": {
-    "value": "In Settings, turn on agentes.chat in the list, or add it with +."
+    "value": "In Settings, turn on KeepMind OS in the list, or add it with +."
   },
   "prepare.network": {
     "value": "Local network (phones over Wi-Fi)"
@@ -1284,10 +1284,10 @@
     "value": "Open Settings"
   },
   "prepare.reopen": {
-    "value": "When macOS asks to Quit & Reopen, choose it. agentes.chat opens again right here."
+    "value": "When macOS asks to Quit & Reopen, choose it. KeepMind OS opens again right here."
   },
   "prepare.tookEffect": {
-    "value": "agentes.chat opened again with your changes."
+    "value": "KeepMind OS opened again with your changes."
   },
   "prepare.skip": {
     "value": "Skip for now"
@@ -1356,16 +1356,16 @@
     "value": "Commands can reach the rest of this {{device}}, other workspaces' folders included."
   },
   "tools.commandsWarnHere": {
-    "value": "Commands run as you and can reach the rest of this {{device}}, agentes.chat's own data included."
+    "value": "Commands run as you and can reach the rest of this {{device}}, KeepMind OS's own data included."
   },
   "tools.commandsSome": {
     "value": "On only for {{orgs}}. Turn it on for every workspace here."
   },
   "tools.commandsAbout": {
-    "value": "Tests, builds and other Terminal commands. Each one shows in Activity. Commands run as you. They can read anything you can on this {{device}}, agentes.chat's database and keys included. Turn them on only for workspaces you trust with all of it."
+    "value": "Tests, builds and other Terminal commands. Each one shows in Activity. Commands run as you. They can read anything you can on this {{device}}, KeepMind OS's database and keys included. Turn them on only for workspaces you trust with all of it."
   },
   "tools.commandsReach": {
-    "value": "Commands run as you. They can read anything you can on this {{device}}, agentes.chat's database and keys included. Turn them on only for workspaces you trust with all of it."
+    "value": "Commands run as you. They can read anything you can on this {{device}}, KeepMind OS's database and keys included. Turn them on only for workspaces you trust with all of it."
   },
   "tools.commandsAsk": {
     "value": "Turn on Commands for {{org}}?"
@@ -1377,10 +1377,10 @@
     "value": "Check again"
   },
   "tools.lookPath": {
-    "value": "agentes.chat looks in your login shell's PATH."
+    "value": "KeepMind OS looks in your login shell's PATH."
   },
   "tools.lookPathWindows": {
-    "value": "agentes.chat looks in PATH."
+    "value": "KeepMind OS looks in PATH."
   },
   "tools.stillMissing": {
     "value": "{{tool}} still isn't found. Run the command above, then check again."
@@ -1449,7 +1449,7 @@
     "value": "Open"
   },
   "notch.openApp": {
-    "value": "Open agentes.chat"
+    "value": "Open KeepMind OS"
   },
   "notch.someAgent": {
     "value": "An agent"
@@ -1536,7 +1536,7 @@
     "value": "Agents only use this {{device}} while the app is open."
   },
   "prefs.general.launchHere": {
-    "value": "agentes.chat on this {{device}} runs only while the app is open."
+    "value": "KeepMind OS on this {{device}} runs only while the app is open."
   },
   "prefs.general.launchWork": {
     "value": "Agents work only while the app is open."
@@ -1644,7 +1644,7 @@
     "value": "On this {{device}}"
   },
   "prefs.thisMac.placeCloud": {
-    "value": "agentes.chat Cloud"
+    "value": "KeepMind OS Cloud"
   },
   "prefs.thisMac.more": {
     "value": "More for {{org}}"
@@ -1653,7 +1653,7 @@
     "value": "Another workspace"
   },
   "prefs.thisMac.otherWorkspaceDesc": {
-    "value": "Let a workspace on agentes.chat Cloud or on another server use this {{device}} too. Each one keeps its own sign-in."
+    "value": "Let a workspace on KeepMind OS Cloud or on another server use this {{device}} too. Each one keeps its own sign-in."
   },
   "prefs.thisMac.addWorkspace": {
     "value": "Add a workspace…"
@@ -1890,13 +1890,13 @@
     "value": "Update by hand"
   },
   "prefs.updates.step1": {
-    "value": "Quit agentes.chat (⌘Q)."
+    "value": "Quit KeepMind OS (⌘Q)."
   },
   "prefs.updates.step2": {
-    "value": "Delete the old agentes.chat from the Applications folder."
+    "value": "Delete the old KeepMind OS from the Applications folder."
   },
   "prefs.updates.step3": {
-    "value": "Open the downloaded file and drag the new agentes.chat into Applications."
+    "value": "Open the downloaded file and drag the new KeepMind OS into Applications."
   },
   "prefs.updates.installerNote": {
     "value": "Open the downloaded file: it installs the new version over the old one."
@@ -2112,7 +2112,7 @@
     "value": "Looking at this {{device}}…"
   },
   "iphone.checkingStall": {
-    "value": "This {{device}} isn't answering yet. Quit agentes.chat from its menu bar icon and open it again."
+    "value": "This {{device}} isn't answering yet. Quit KeepMind OS from its menu bar icon and open it again."
   },
   "iphone.xcodeText": {
     "value": "Install Xcode from the App Store. This step goes on by itself when it's there."
@@ -2181,19 +2181,19 @@
     "value": "Is Tailscale connected on this {{device}}?"
   },
   "cover.starting": {
-    "value": "Starting agentes.chat on this {{device}}…"
+    "value": "Starting KeepMind OS on this {{device}}…"
   },
   "cover.migrating": {
-    "value": "Updating agentes.chat on this {{device}}. This can take a minute."
+    "value": "Updating KeepMind OS on this {{device}}. This can take a minute."
   },
   "cover.stopped": {
-    "value": "agentes.chat stopped on this {{device}}"
+    "value": "KeepMind OS stopped on this {{device}}"
   },
   "cover.failing": {
-    "value": "agentes.chat isn't starting on this {{device}}"
+    "value": "KeepMind OS isn't starting on this {{device}}"
   },
   "cover.tailnetOff": {
-    "value": "Connect Tailscale on this {{device}} to open agentes.chat."
+    "value": "Connect Tailscale on this {{device}} to open KeepMind OS."
   },
   "cover.tailnetUp": {
     "value": "In the terminal: sudo tailscale up"
@@ -2223,7 +2223,7 @@
     "value": "Use another server"
   },
   "cover.stuck": {
-    "value": "agentes.chat didn't open. Try again, or see the page as it is."
+    "value": "KeepMind OS didn't open. Try again, or see the page as it is."
   },
   "cover.showAnyway": {
     "value": "Show it anyway"
@@ -2232,10 +2232,10 @@
     "value": "Couldn't copy"
   },
   "cover.held": {
-    "value": "agentes.chat is stopped on this {{device}} until you start it."
+    "value": "KeepMind OS is stopped on this {{device}} until you start it."
   },
   "cover.heldUntil": {
-    "value": "agentes.chat is stopped on this {{device}}. It comes back by itself at {{time}}."
+    "value": "KeepMind OS is stopped on this {{device}}. It comes back by itself at {{time}}."
   },
   "cover.startNow": {
     "value": "Start now"
@@ -2250,7 +2250,7 @@
     "value": "Couldn't turn off access from your devices."
   },
   "menu.about": {
-    "value": "About agentes.chat"
+    "value": "About KeepMind OS"
   },
   "menu.updates": {
     "value": "Check for updates…"
@@ -2265,7 +2265,7 @@
     "value": "Services"
   },
   "menu.hide": {
-    "value": "Hide agentes.chat"
+    "value": "Hide KeepMind OS"
   },
   "menu.hideOthers": {
     "value": "Hide others"
@@ -2274,7 +2274,7 @@
     "value": "Show all"
   },
   "menu.quit": {
-    "value": "Quit agentes.chat"
+    "value": "Quit KeepMind OS"
   },
   "menu.servers": {
     "value": "Servers"
@@ -2386,5 +2386,8 @@
   },
   "menu.downloaded": {
     "value": "Download complete"
+  },
+  "menu.feedback": {
+    "value": "Send feedback"
   }
 }

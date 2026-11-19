@@ -14,8 +14,8 @@ import {
   refreshProposals,
   type ThreadFollowEvent,
   type ThreadInfo,
-} from "@agenteschat/client";
-import { playSound, soundForNotification } from "@agenteschat/client/lib/sounds";
+} from "@keepmind/client";
+import { playSound, soundForNotification } from "@keepmind/client/lib/sounds";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { AppState } from "react-native";

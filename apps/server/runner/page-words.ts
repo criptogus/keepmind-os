@@ -1,4 +1,4 @@
-import { type AppLocale, appLocale } from "@agenteschat/i18n/locale";
+import { type AppLocale, appLocale } from "@keepmind/i18n/locale";
 
 /**
  * The words of the runner's own pages (the agent's start page, a crashed tab's notice, macOS's password window for
@@ -194,18 +194,18 @@ export const CRASH_WORDS: Record<AppLocale, CrashWords> = {
 
 /** The line macOS's password window shows when the Mac sets up Xcode for an iPhone. */
 export const XCODE_PROMPT: Record<AppLocale, string> = {
-  en: "agentes.chat wants to put Xcode in use to connect iPhones.",
-  "pt-BR": "O agentes.chat quer colocar o Xcode em uso para conectar iPhones.",
-  es: "agentes.chat quiere usar Xcode para conectar iPhones.",
-  fr: "agentes.chat veut utiliser Xcode pour connecter des iPhone.",
-  de: "agentes.chat möchte Xcode verwenden, um iPhones zu verbinden.",
-  it: "agentes.chat vuole usare Xcode per collegare gli iPhone.",
-  nl: "agentes.chat wil Xcode gebruiken om iPhones te verbinden.",
-  ja: "agentes.chat が iPhone を接続するために Xcode を使おうとしています。",
-  ko: "agentes.chat에서 iPhone을 연결하기 위해 Xcode를 사용하려고 해요.",
-  "zh-Hans": "agentes.chat 想要使用 Xcode 来连接 iPhone。",
-  id: "agentes.chat ingin memakai Xcode untuk menghubungkan iPhone.",
-  tr: "agentes.chat, iPhone'ları bağlamak için Xcode'u kullanmak istiyor.",
-  pl: "agentes.chat chce użyć Xcode, aby połączyć iPhone'y.",
-  ru: "agentes.chat хочет использовать Xcode, чтобы подключать iPhone.",
+  en: "KeepMind OS wants to put Xcode in use to connect iPhones.",
+  "pt-BR": "O KeepMind OS quer colocar o Xcode em uso para conectar iPhones.",
+  es: "KeepMind OS quiere usar Xcode para conectar iPhones.",
+  fr: "KeepMind OS veut utiliser Xcode pour connecter des iPhone.",
+  de: "KeepMind OS möchte Xcode verwenden, um iPhones zu verbinden.",
+  it: "KeepMind OS vuole usare Xcode per collegare gli iPhone.",
+  nl: "KeepMind OS wil Xcode gebruiken om iPhones te verbinden.",
+  ja: "KeepMind OS が iPhone を接続するために Xcode を使おうとしています。",
+  ko: "KeepMind OS에서 iPhone을 연결하기 위해 Xcode를 사용하려고 해요.",
+  "zh-Hans": "KeepMind OS 想要使用 Xcode 来连接 iPhone。",
+  id: "KeepMind OS ingin memakai Xcode untuk menghubungkan iPhone.",
+  tr: "KeepMind OS, iPhone'ları bağlamak için Xcode'u kullanmak istiyor.",
+  pl: "KeepMind OS chce użyć Xcode, aby połączyć iPhone'y.",
+  ru: "KeepMind OS хочет использовать Xcode, чтобы подключать iPhone.",
 };

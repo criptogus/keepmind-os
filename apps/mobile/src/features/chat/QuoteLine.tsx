@@ -1,5 +1,5 @@
-import type { ReplyRef } from "@agenteschat/client";
-import { quoteText } from "@agenteschat/client/lib/media";
+import type { ReplyRef } from "@keepmind/client";
+import { quoteText } from "@keepmind/client/lib/media";
 import { useTranslation } from "react-i18next";
 import { Pressable, StyleSheet, View } from "react-native";
 import { Icon, Text } from "@/ui";

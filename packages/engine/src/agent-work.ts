@@ -1,4 +1,4 @@
-import { type Executor, rowsOf, type SQL, schema, sql } from "@agenteschat/db";
+import { type Executor, rowsOf, type SQL, schema, sql } from "@keepmind/db";
 import { decidableBySql } from "./approvals";
 import { MAX_HANDOFF_LINKS } from "./stretch";
 import { channelReaderSql } from "./task-access";

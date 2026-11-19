@@ -1,4 +1,4 @@
-import { formatInt } from "@agenteschat/client/lib/format";
+import { formatInt } from "@keepmind/client/lib/format";
 import { useTranslation } from "react-i18next";
 import { Text as RNText, View } from "react-native";
 import { useTheme } from "./theme";

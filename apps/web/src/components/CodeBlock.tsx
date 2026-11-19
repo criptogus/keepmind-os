@@ -1,5 +1,5 @@
-import { type CodeToken, codeLabel, formatJson, highlightCode, isJsonLang } from "@agenteschat/client/lib/code";
-import { Button, Dialog, DialogBody } from "@agenteschat/ui";
+import { type CodeToken, codeLabel, formatJson, highlightCode, isJsonLang } from "@keepmind/client/lib/code";
+import { Button, Dialog, DialogBody } from "@keepmind/ui";
 import { type CSSProperties, type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useGrowFrom } from "@/lib/grow";
@@ -8,7 +8,7 @@ import { useGrowFrom } from "@/lib/grow";
  * Fenced code in a message or document: the language on top, copy
  * (the icon turns into "Copiado" for a moment) and full screen. Full screen grows out of the card itself
  * into a dialog with line numbers and an optional wrap; Esc closes. Colors from the shared highlighter
- * (`@agenteschat/client/lib/code`, the phone app uses the same one). `preview`: the block drawn (a diagram), shown
+ * (`@keepmind/client/lib/code`, the phone app uses the same one). `preview`: the block drawn (a diagram), shown
  * in place of the code until "Código" is pressed; full screen shows whichever is on. `action`: a button of the
  * block's own on top ("Ver diagrama"). JSON reads formatted (`formatJson`), its long lines wrapped under their own
  * indent, the text as written one press away ("Original"); copy takes what shows.

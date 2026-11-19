@@ -8,9 +8,9 @@ import {
   type PushMessage,
   type PushSender,
   type RelayCredentials,
-} from "@agenteschat/adapters";
-import { type Database, eq, schema } from "@agenteschat/db";
-import { createTestDatabase } from "@agenteschat/db/testing";
+} from "@keepmind/adapters";
+import { type Database, eq, schema } from "@keepmind/db";
+import { createTestDatabase } from "@keepmind/db/testing";
 import { pushRelayRoutes } from "../src/routes/push-relay";
 import { createTestServer, type TestServer } from "./harness";
 

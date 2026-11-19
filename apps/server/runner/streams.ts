@@ -3,7 +3,7 @@ import {
   STREAM_CLOSE,
   STREAM_LIMITS,
   type StreamControl,
-} from "@agenteschat/adapters/machine-protocol";
+} from "@keepmind/adapters/machine-protocol";
 import { RunnerError } from "./errors";
 import { writeJson } from "./json-file";
 

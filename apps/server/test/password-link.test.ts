@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, expect, test } from "bun:test";
-import { eq, schema } from "@agenteschat/db";
-import { passwordLinkByEmail } from "@agenteschat/engine";
+import { eq, schema } from "@keepmind/db";
+import { passwordLinkByEmail } from "@keepmind/engine";
 import { type Browser, browser, createTestServer, joinByInvitation, seedOrg, signUp, type TestServer } from "./harness";
 
 /** ADR 0158: a new-password link made by a workspace owner on a server that sends no email. */

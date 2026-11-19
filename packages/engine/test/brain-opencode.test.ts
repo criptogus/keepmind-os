@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
-import { OPENCODE_PROTOCOL } from "@agenteschat/adapters";
-import { isOpencodeFreeModel, loginPerAgent, OPENCODE_FREE_MODELS } from "@agenteschat/providers/plans";
+import { OPENCODE_PROTOCOL } from "@keepmind/adapters";
+import { isOpencodeFreeModel, loginPerAgent, OPENCODE_FREE_MODELS } from "@keepmind/providers/plans";
 import { brainOptions, defaultBrainModel, isBrainKind, normalizeBrainModel } from "../src/brain-settings";
 import { type BrainTurnRequest, type ComputerBrainLink, OpencodeBrain } from "../src/brains/codex";
 import { computerBrainUnavailable, NO_AI_CODES, runBrainOf, UNAVAILABLE_CODES } from "../src/brains/select";

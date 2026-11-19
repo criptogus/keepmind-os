@@ -1,5 +1,5 @@
-import { useGithubAccess } from "@agenteschat/client";
-import { orgAccessChange } from "@agenteschat/client/lib/connected";
+import { useGithubAccess } from "@keepmind/client";
+import { orgAccessChange } from "@keepmind/client/lib/connected";
 import * as WebBrowser from "expo-web-browser";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

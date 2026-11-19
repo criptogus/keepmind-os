@@ -8,11 +8,11 @@ import {
   widgetFailureText,
   widgetWaiting,
   widgetWaitText,
-} from "@agenteschat/client";
-import { relativeTime } from "@agenteschat/client/lib/format";
-import { maySetAgentAi, noAiLockedLine, planKeyIntent } from "@agenteschat/client/lib/no-ai";
-import { isEveryone, sortRoles } from "@agenteschat/client/lib/roles";
-import type { AgentColorName } from "@agenteschat/ui/agent/engine";
+} from "@keepmind/client";
+import { relativeTime } from "@keepmind/client/lib/format";
+import { maySetAgentAi, noAiLockedLine, planKeyIntent } from "@keepmind/client/lib/no-ai";
+import { isEveryone, sortRoles } from "@keepmind/client/lib/roles";
+import type { AgentColorName } from "@keepmind/ui/agent/engine";
 import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useOrg } from "@/providers/org";

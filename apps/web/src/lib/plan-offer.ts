@@ -1,5 +1,5 @@
-import { useAuthConfig } from "@agenteschat/client";
-import { planOfferOf } from "@agenteschat/client/lib/billing";
+import { useAuthConfig } from "@keepmind/client";
+import { planOfferOf } from "@keepmind/client/lib/billing";
 import { useQuery } from "@tanstack/react-query";
 
 /** How long the plan list may take: past it the onboarding names no plan rather than wait. */

@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import { MACHINE_PROTOCOL_VERSION, orgTopic } from "@agenteschat/adapters";
-import { and, eq, schema } from "@agenteschat/db";
+import { MACHINE_PROTOCOL_VERSION, orgTopic } from "@keepmind/adapters";
+import { and, eq, schema } from "@keepmind/db";
 import {
   type Brain,
   type BrainTurn,

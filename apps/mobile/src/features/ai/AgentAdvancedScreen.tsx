@@ -1,7 +1,7 @@
-import type { AgentBrain, AgentBrainInput, BrainSpeed } from "@agenteschat/client";
-import { keys, useAgentBrain, useAiAccounts, useAiStatus, useApi, useModels } from "@agenteschat/client";
-import { signInPlan } from "@agenteschat/client/lib/ai-accounts";
-import { EVERYONE_AUDIENCE } from "@agenteschat/client/lib/audience";
+import type { AgentBrain, AgentBrainInput, BrainSpeed } from "@keepmind/client";
+import { keys, useAgentBrain, useAiAccounts, useAiStatus, useApi, useModels } from "@keepmind/client";
+import { signInPlan } from "@keepmind/client/lib/ai-accounts";
+import { EVERYONE_AUDIENCE } from "@keepmind/client/lib/audience";
 import {
   type Advanced,
   advancedSummary,
@@ -9,19 +9,19 @@ import {
   isAdvancedDefault,
   SPEEDS,
   viewSpeedFits,
-} from "@agenteschat/client/lib/brain-advanced";
-import { computerNameOf } from "@agenteschat/client/lib/computer";
+} from "@keepmind/client/lib/brain-advanced";
+import { computerNameOf } from "@keepmind/client/lib/computer";
 import {
   autoContextLine,
   type ContextLimit,
   contextChoices,
   contextSize,
   isContextLimit,
-} from "@agenteschat/client/lib/context-limits";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { planOf } from "@agenteschat/client/lib/plans";
-import { isAuto } from "@agenteschat/client/lib/providers";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client/lib/context-limits";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { planOf } from "@keepmind/client/lib/plans";
+import { isAuto } from "@keepmind/client/lib/providers";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

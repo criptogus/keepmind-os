@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { and, type Database, type Executor, eq, gt, inArray, isNull, ne, schema } from "@agenteschat/db";
+import { and, type Database, type Executor, eq, gt, inArray, isNull, ne, schema } from "@keepmind/db";
 import { recordAudit } from "../audit";
 import { sha256 } from "../crypto";
 import { emailLocale, modeStamp, queueEmail } from "../email";

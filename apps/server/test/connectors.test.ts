@@ -1,9 +1,9 @@
 import { afterEach, expect, test } from "bun:test";
 import { createHash } from "node:crypto";
 import { existsSync } from "node:fs";
-import { createFakeComposioClient, createFakeErrorReporter, createFakeMailConnector } from "@agenteschat/adapters";
-import { and, eq, schema } from "@agenteschat/db";
-import { type McpConnect, mcpPreset } from "@agenteschat/engine";
+import { createFakeComposioClient, createFakeErrorReporter, createFakeMailConnector } from "@keepmind/adapters";
+import { and, eq, schema } from "@keepmind/db";
+import { type McpConnect, mcpPreset } from "@keepmind/engine";
 import { browser, createTestServer, seedOrg, signUp, type TestServer } from "./harness";
 
 let t: TestServer;
@@ -351,11 +351,11 @@ test("catalog: one list of our connectors and the one-click MCP servers, one ent
 });
 
 test("catalog on the Cloud: no API key for Intercom's servers (US and EU), whose terms forbid asking for one; the others keep it", async () => {
-  t = await createTestServer({ env: { PUBLIC_URL: "https://app.agentes.chat" } });
+  t = await createTestServer({ env: { PUBLIC_URL: "https://keepmind.io" } });
   const owner = browser(t);
   const signedUp = await owner("/api/auth/sign-up/email", {
     json: { email: "owner@example.com", password: "correct horse battery", name: "owner" },
-    origin: "https://app.agentes.chat",
+    origin: "https://keepmind.io",
   });
   expect(signedUp.status).toBe(200);
   const { connectors } = (await (await owner("/api/app/connectors/catalog")).json()) as {
@@ -365,7 +365,7 @@ test("catalog on the Cloud: no API key for Intercom's servers (US and EU), whose
   expect(["intercom", "intercom-eu", "linear"].map(auth)).toEqual([["oauth"], ["oauth"], ["oauth", "api_key"]]);
 });
 
-test("one-click servers that haven't approved agentes.chat: `soon`, refused by id; by address, they say why", async () => {
+test("one-click servers that haven't approved KeepMind OS: `soon`, refused by id; by address, they say why", async () => {
   const asked: string[] = [];
   // Asana's MCP OAuth, as it answered on 2026-10-31: its registration refuses our redirect URI.
   const http = (async (input: string | URL) => {

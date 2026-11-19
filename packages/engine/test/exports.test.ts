@@ -131,7 +131,9 @@ test("export: what everyone may see, never keys; imported into another workspace
       skills: [skill.id],
     },
   ]);
-  expect(parseSkillMarkdown(bundle.skills[0]?.markdown ?? "")).toEqual(parseSkillMarkdown(SKILL_MD));
+  expect(
+    parseSkillMarkdown(bundle.skills.find((s) => s.markdown.includes("relatorio-semanal"))?.markdown ?? ""),
+  ).toEqual(parseSkillMarkdown(SKILL_MD));
   expect(bundle.channels.map((c) => [c.name, c.agents])).toEqual([
     ["general", [{ key: agent.id, autoReply: true }]],
     ["ops", [{ key: agent.id, autoReply: false }]],
@@ -163,11 +165,16 @@ test("export: what everyone may see, never keys; imported into another workspace
       { model: "claude-haiku-5-5" },
     );
   const applied = await into();
-  expect(applied.items.filter((i) => i.action !== "create").map((i) => [i.kind, i.label, i.action, i.reason])).toEqual([
-    ["channel", "general", "update", "exists"],
-  ]);
+  // Built-ins are product-seeded, never exported, so the bundle carries none; #general is joined, not made.
+  const got = applied.items
+    .filter((i) => i.action !== "create")
+    .map((i) => [i.kind, i.label, i.action, i.reason])
+    .sort((a, b) => String(a[1]).localeCompare(String(b[1])));
+  expect(got).toEqual([["channel", "general", "update", "exists"]]);
   const copy = await exportBundle(db, other.id, orgB.id);
   expect(shape(copy)).toEqual(shape(bundle));
   expect(copy.channels[0]?.key).not.toBe(general.id);
-  expect((await into()).items.every((i) => i.action === "unchanged")).toBe(true);
+  expect(
+    (await into()).items.every((i) => i.action === "unchanged" || (i.kind === "skill" && i.action === "skip")),
+  ).toBe(true);
 });

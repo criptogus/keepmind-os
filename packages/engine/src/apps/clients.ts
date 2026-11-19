@@ -1,5 +1,5 @@
 import { isIP } from "node:net";
-import { and, type Database, eq, schema, sql } from "@agenteschat/db";
+import { and, type Database, eq, schema, sql } from "@keepmind/db";
 import { fetchPublicDocument, type PublicDocument } from "../net-guard";
 import { APP_LIMITS, DCR_CLIENT_PREFIX, randomBase62 } from "./urls";
 

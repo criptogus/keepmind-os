@@ -1,6 +1,6 @@
-import type { ArtifactDetail } from "@agenteschat/client";
-import { formatBytes, pictureRatio } from "@agenteschat/client/lib/files";
-import { keepWhole } from "@agenteschat/client/lib/format";
+import type { ArtifactDetail } from "@keepmind/client";
+import { formatBytes, pictureRatio } from "@keepmind/client/lib/files";
+import { keepWhole } from "@keepmind/client/lib/format";
 import { Image } from "expo-image";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";

@@ -1,4 +1,4 @@
-import { seenList } from "@agenteschat/client/lib/seen-list";
+import { seenList } from "@keepmind/client/lib/seen-list";
 import * as SecureStore from "expo-secure-store";
 import { STORAGE_PREFIX } from "@/config";
 
@@ -50,7 +50,7 @@ export const STORED = {
   pushAsked: "push-asked",
   /** The person turned notifications off in the app (no silent re-registration). */
   pushOff: "push-off",
-  /** How many times our notifications sheet opened by itself (@agenteschat/client/lib/push-offer). */
+  /** How many times our notifications sheet opened by itself (@keepmind/client/lib/push-offer). */
   pushOffers: "push-offers",
   /** The wiki pages last opened on this phone, per workspace (JSON: org id → slugs, newest first). */
   wikiRecent: "wiki-recent",

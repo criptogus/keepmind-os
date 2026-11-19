@@ -4,11 +4,11 @@ import type {
   MissionExecutor,
   MissionFileName,
   ThreadMissionSummary,
-} from "@agenteschat/client";
-import { engineOfExecutor } from "@agenteschat/client/lib/brain";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { executorOnText, type PlanCell, tickFor } from "@agenteschat/client/lib/missions";
-import { Chip, type IconName, PlanStrip, ProviderLogo, Select } from "@agenteschat/ui";
+} from "@keepmind/client";
+import { engineOfExecutor } from "@keepmind/client/lib/brain";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { executorOnText, type PlanCell, tickFor } from "@keepmind/client/lib/missions";
+import { Chip, type IconName, PlanStrip, ProviderLogo, Select } from "@keepmind/ui";
 import type { TFunction } from "i18next";
 import { createContext, type ReactNode, useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";

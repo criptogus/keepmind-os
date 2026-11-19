@@ -1,5 +1,5 @@
 /**
- * @agenteschat/ui — the agentes design system in React.
+ * @keepmind/ui — the agentes design system in React.
  * Visuals come from `styles.css` (tokens + `ac-*` classes, ported from
  * docs/design); keyboard, focus and screen-reader mechanics from Radix
  * primitives. Components take every user-facing string as a prop: the app
@@ -266,7 +266,7 @@ export {
   type PixelStopProps,
   pixelCell,
 } from "./components/PixelMarks";
-export { glowOptions, PixelSky, SkyGlow } from "./components/PixelSky";
+export { PixelSky, SkyGlow } from "./components/PixelSky";
 export {
   ORBIT_RING,
   ORBIT_STEP_MS,

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { and, eq, schema } from "@agenteschat/db";
+import { and, eq, ne, schema } from "@keepmind/db";
 import {
   actionsFor,
   addRunStep,
@@ -445,7 +445,12 @@ describe("agents installing and updating skills", () => {
       ],
     ]);
     // Nothing installed by the card itself.
-    expect(await f.db.select().from(schema.skills).where(eq(schema.skills.orgId, f.org.id))).toHaveLength(0);
+    expect(
+      await f.db
+        .select()
+        .from(schema.skills)
+        .where(and(eq(schema.skills.orgId, f.org.id), ne(schema.skills.source, "builtin"))),
+    ).toHaveLength(0);
 
     await importSkillFromUrl(deps, f.owner.id, f.org.id, LINK);
     const again = await call(deps, await runFor(f, f.owner.id), "offer_install_skill", { url: LINK, why: "x" });

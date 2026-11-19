@@ -8,8 +8,8 @@ import {
   MailAuthError,
   MailError,
   type PubSub,
-} from "@agenteschat/adapters";
-import { and, type Database, eq, isNotNull, isNull, schema, sql } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { and, type Database, eq, isNotNull, isNull, schema, sql } from "@keepmind/db";
 import { caches } from "../cache";
 import { randomToken, sha256 } from "../crypto";
 import { ConflictError, ValidationError } from "../errors";

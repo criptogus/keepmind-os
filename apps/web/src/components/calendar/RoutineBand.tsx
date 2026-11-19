@@ -1,5 +1,5 @@
-import type { CalItem } from "@agenteschat/client/lib/calendar";
-import { Popover, RunLane } from "@agenteschat/ui";
+import type { CalItem } from "@keepmind/client/lib/calendar";
+import { Popover, RunLane } from "@keepmind/ui";
 import type { CSSProperties, ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { useActors } from "@/components/actors";

@@ -1,10 +1,10 @@
-import type { ConnectorCategory, ConnectorDef } from "@agenteschat/client";
-import { composioOffText, hiddenWithoutComposio } from "@agenteschat/client/lib/composio";
-import { CONNECTOR_MARK, OWN_MARK, SERVER_ICON } from "@agenteschat/client/lib/connected";
-import type { MailChoice } from "@agenteschat/client/lib/mail";
-import { can } from "@agenteschat/client/lib/permissions";
-import { connectorDescription, connectorName, scopeText } from "@agenteschat/client/lib/scopes";
-import { modeKey } from "@agenteschat/client/lib/workspace-mode";
+import type { ConnectorCategory, ConnectorDef } from "@keepmind/client";
+import { composioOffText, hiddenWithoutComposio } from "@keepmind/client/lib/composio";
+import { CONNECTOR_MARK, OWN_MARK, SERVER_ICON } from "@keepmind/client/lib/connected";
+import type { MailChoice } from "@keepmind/client/lib/mail";
+import { can } from "@keepmind/client/lib/permissions";
+import { connectorDescription, connectorName, scopeText } from "@keepmind/client/lib/scopes";
+import { modeKey } from "@keepmind/client/lib/workspace-mode";
 import {
   AgentSearching,
   Button,
@@ -17,7 +17,7 @@ import {
   initialsOf,
   SearchField,
   Segmented,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import type { TFunction } from "i18next";
 import { type CSSProperties, type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -47,10 +47,11 @@ export function searchCatalog(list: ConnectorDef[], query: string, shown: (d: Co
 }
 
 /** How it connects, for the card: one click (OAuth), OAuth or a key, a key only, or through Composio. */
-export function authKind(d: ConnectorDef): "oneClick" | "oauthOrKey" | "key" | "composio" {
+export function authKind(d: ConnectorDef): "oneClick" | "oauthOrKey" | "oauthSetup" | "key" | "composio" {
   if (d.via === "composio") return "composio";
   if (d.kind === "remote_mcp" && d.oauthConfigured) return "oneClick";
-  return d.oauthConfigured && d.auth.includes("oauth") ? "oauthOrKey" : "key";
+  if (d.auth.includes("oauth")) return d.oauthConfigured ? "oauthOrKey" : "oauthSetup";
+  return "key";
 }
 
 /**
@@ -111,7 +112,7 @@ interface Entry {
   category: ConnectorCategory | "email";
   connected: boolean;
   available: boolean;
-  /** Not connected, and the vendor hasn't approved agentes.chat yet: greyed out with a lock, its tile opens nothing. */
+  /** Not connected, and the vendor hasn't approved KeepMind OS yet: greyed out with a lock, its tile opens nothing. */
   soon: boolean;
   icon: (size: "md" | "lg") => ReactNode;
   brandColor: string | null;
@@ -492,6 +493,7 @@ function TileIcon({ entry, size }: { entry: Entry; size: "md" | "lg" }) {
 const HOW_ICON: Record<HowKind, IconName> = {
   oneClick: "bolt",
   oauthOrKey: "bolt",
+  oauthSetup: "bolt",
   key: "key",
   composio: "plug",
   appPassword: "lock",

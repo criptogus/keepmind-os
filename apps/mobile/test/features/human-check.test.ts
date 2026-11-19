@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { ApiError } from "@agenteschat/client";
-import { createHumanCheck, withHumanCheck } from "@agenteschat/client/lib/human-check";
+import { ApiError } from "@keepmind/client";
+import { createHumanCheck, withHumanCheck } from "@keepmind/client/lib/human-check";
 import appConfig from "../../app.config";
 import {
   checkEvent,
@@ -25,14 +25,14 @@ import {
 import { signUpLinkTarget } from "../../src/features/auth/links";
 import { translator } from "./fixtures";
 
-const SERVER = "https://app.agentes.chat";
+const SERVER = "https://keepmind.io";
 const PAGE = `${SERVER}/human-check.html?k=a&a=sign-in`;
 const FRAME =
   "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/if/ov2/av0/rcv/x1y2z/0x4AAAAAAA/light/fbE/new/normal/auto/";
 const LOOK_ALIKES = [
   "https://challenges.cloudflare.com.evil.example/x",
-  "https://app.agentes.chat.evil.example/human-check.html",
-  "https://app.agentes.chat@evil.example/",
+  "https://keepmind.io.evil.example/human-check.html",
+  "https://keepmind.io@evil.example/",
 ];
 
 /**
@@ -53,7 +53,7 @@ describe("the check's WebView", () => {
     expect(whitelist).toEqual([
       "about:blank",
       "about:srcdoc",
-      "https://app.agentes.chat",
+      "https://keepmind.io",
       "https://challenges.cloudflare.com",
     ]);
     for (const url of [FRAME, PAGE, "about:srcdoc", "about:blank"]) {
@@ -77,13 +77,13 @@ describe("the check's WebView", () => {
   });
 
   test("opens the server's own page with the widget's site key, action, theme and language", () => {
-    const url = humanCheckUrl("https://app.agentes.chat", {
+    const url = humanCheckUrl("https://keepmind.io", {
       siteKey: "1x00000000000000000000AA",
       action: "ask-code",
       theme: "dark",
       language: "pt-BR",
     });
-    expect(url).toBe("https://app.agentes.chat/human-check.html?k=1x00000000000000000000AA&a=ask-code&t=dark&l=pt-BR");
+    expect(url).toBe("https://keepmind.io/human-check.html?k=1x00000000000000000000AA&a=ask-code&t=dark&l=pt-BR");
   });
 
   test("reads the server page's messages, and nothing else", () => {
@@ -192,12 +192,12 @@ describe("refusals in the phone's words", () => {
     expect(refusalText(en, { status: 429 })).toBe(en("auth.tooManyTries"));
     expect(refusalText(en, new ApiError(429, "join.code_limit", "x"))).toBe(en("errors.code.limit"));
     expect(refusalText(en, { status: 403, code: "ACCOUNT_BLOCKED" })).toBe(en("auth.accountBlocked"));
-    // On agentes.chat Cloud: the block's kind and how to contest it, never its reason.
+    // On KeepMind OS Cloud: the block's kind and how to contest it, never its reason.
     expect(refusalText(en, { status: 403, code: "ACCOUNT_BLOCKED", kind: "abuse", cloud: true })).toBe(
-      "This account is blocked. Our checks linked it to an account closed for abuse (Terms, section 5). To contest it, write to legal@agentes.chat.",
+      "This account is blocked. Our checks linked it to an account closed for abuse (Terms, section 5). To contest it, write to contact@zeroagency.ai.",
     );
     expect(refusalText(en, { status: 403, code: "ACCOUNT_BLOCKED", kind: "legal", cloud: true })).toBe(
-      "This account is blocked while we keep its data for a legal matter. To ask about it, write to legal@agentes.chat.",
+      "This account is blocked while we keep its data for a legal matter. To ask about it, write to contact@zeroagency.ai.",
     );
     expect(refusalText(en, { status: 500, code: "internal" })).toBe("Something went wrong. Try again.");
     expect(failureText(en, new TypeError("Network request failed"))).toBe(en("mobile.auth.errors.network"));
@@ -215,15 +215,15 @@ describe("refusals in the phone's words", () => {
     expect(lookUpFailureText(en, new TypeError("Network request failed"))).toBe(en("mobile.auth.errors.network"));
   });
 
-  test("a social sign-in refused: a blocked account's line, with its kind on agentes.chat Cloud, else it failed", async () => {
+  test("a social sign-in refused: a blocked account's line, with its kind on KeepMind OS Cloud, else it failed", async () => {
     const en = await translator("en");
     // Apple's native sign-in gets the server's answer itself.
     const blocked = "ACCOUNT_BLOCKED";
     expect(socialRefusalText(en, { code: blocked, kind: "abuse", cloud: true }, true)).toBe(
-      "This account is blocked. Our checks linked it to an account closed for abuse (Terms, section 5). To contest it, write to legal@agentes.chat.",
+      "This account is blocked. Our checks linked it to an account closed for abuse (Terms, section 5). To contest it, write to contact@zeroagency.ai.",
     );
     expect(socialRefusalText(en, { code: blocked, kind: "other", cloud: true }, true)).toBe(
-      "This account can't sign in. To contest it, write to legal@agentes.chat.",
+      "This account can't sign in. To contest it, write to contact@zeroagency.ai.",
     );
     expect(socialRefusalText(en, { code: blocked }, true)).toBe(en("auth.accountBlocked"));
     expect(socialRefusalText(en, { code: "INVALID_TOKEN" }, true)).toBe("Couldn't sign you in right now. Try again.");

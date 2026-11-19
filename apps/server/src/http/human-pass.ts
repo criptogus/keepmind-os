@@ -1,5 +1,5 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
-import type { HumanAction } from "@agenteschat/adapters";
+import type { HumanAction } from "@keepmind/adapters";
 
 /**
  * One bot check for one sign-in (ADR 0075's addendum on passes). The e-mail lookup that passed the check answers with

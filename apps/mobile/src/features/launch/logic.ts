@@ -1,4 +1,4 @@
-import { idlePose, mixHex, type Pose } from "@agenteschat/ui/agent/engine";
+import { idlePose, mixHex, type Pose } from "@keepmind/ui/agent/engine";
 
 /**
  * The launch splash: pure pieces the screen and the tests share. No React

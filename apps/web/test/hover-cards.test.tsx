@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, jest, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { HOVER_CLOSE_MS, HOVER_SWITCH_MS } from "@agenteschat/ui";
-import { box, mouse, place, step, tick } from "@agenteschat/ui/testing";
+import { HOVER_CLOSE_MS, HOVER_SWITCH_MS } from "@keepmind/ui";
+import { box, mouse, place, step, tick } from "@keepmind/ui/testing";
 import { cleanup, fireEvent, within } from "@testing-library/react";
 import { HOVER_OPEN_MS } from "@/components/ProfileCard";
 import { createFakeApi, ENG_ID, ORG_ID, seedState } from "./fake-api";

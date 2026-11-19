@@ -1,5 +1,5 @@
-import type { DesktopMode, PhoneDevice, SocketLike } from "@agenteschat/client";
-import { desktopRetryMs } from "@agenteschat/client";
+import type { DesktopMode, PhoneDevice, SocketLike } from "@keepmind/client";
+import { desktopRetryMs } from "@keepmind/client";
 import {
   controlRefusalText,
   mayTakePhone,
@@ -11,9 +11,9 @@ import {
   phoneScreenCover,
   phoneScreenUrl,
   screenGesture,
-} from "@agenteschat/client/lib/devices";
-import { firstName } from "@agenteschat/client/lib/format";
-import { Button, Card, CardHeader, PixelSpinner } from "@agenteschat/ui";
+} from "@keepmind/client/lib/devices";
+import { firstName } from "@keepmind/client/lib/format";
+import { Button, Card, CardHeader, PixelSpinner } from "@keepmind/ui";
 import {
   type CSSProperties,
   type KeyboardEvent,

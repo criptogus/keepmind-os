@@ -1,4 +1,4 @@
-import type { MachineTask, Mission, MissionDecision, MissionReview, PlanItem } from "@agenteschat/client";
+import type { MachineTask, Mission, MissionDecision, MissionReview, PlanItem } from "@keepmind/client";
 import type { TFunction } from "i18next";
 
 /**

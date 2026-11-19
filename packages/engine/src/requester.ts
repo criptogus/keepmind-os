@@ -1,5 +1,5 @@
-import { and, type Executor, eq, schema } from "@agenteschat/db";
-import { appLocale } from "@agenteschat/i18n/locale";
+import { and, type Executor, eq, schema } from "@keepmind/db";
+import { appLocale } from "@keepmind/i18n/locale";
 import {
   accountablePerson,
   fedByRoutine,

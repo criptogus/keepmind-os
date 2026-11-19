@@ -1,4 +1,4 @@
-import { mixHex } from "@agenteschat/ui/agent/engine";
+import { mixHex } from "@keepmind/ui/agent/engine";
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";

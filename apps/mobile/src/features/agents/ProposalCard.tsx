@@ -12,7 +12,7 @@ import {
   useDenyAgentProposal,
   useMembers,
   useRoles,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 import {
   agentProposalEnd,
   agentProposalOf,
@@ -21,13 +21,13 @@ import {
   proposalStatus,
   routineLeft,
   suggestedAiText,
-} from "@agenteschat/client/lib/action-cards";
-import { delegateLine, delegateUndoLine } from "@agenteschat/client/lib/approval-words";
-import { connectedItems, itemName } from "@agenteschat/client/lib/connected";
-import { can } from "@agenteschat/client/lib/permissions";
-import { sentToText } from "@agenteschat/client/lib/proposals";
-import { isRightHand } from "@agenteschat/client/lib/right-hand";
-import { holdersOf } from "@agenteschat/client/lib/roles";
+} from "@keepmind/client/lib/action-cards";
+import { delegateLine, delegateUndoLine } from "@keepmind/client/lib/approval-words";
+import { connectedItems, itemName } from "@keepmind/client/lib/connected";
+import { can } from "@keepmind/client/lib/permissions";
+import { sentToText } from "@keepmind/client/lib/proposals";
+import { isRightHand } from "@keepmind/client/lib/right-hand";
+import { holdersOf } from "@keepmind/client/lib/roles";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";

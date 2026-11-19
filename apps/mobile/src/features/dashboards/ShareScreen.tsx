@@ -5,7 +5,7 @@ import {
   useMembers,
   useRoles,
   useShareDashboard,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, ScrollView, StyleSheet, View } from "react-native";

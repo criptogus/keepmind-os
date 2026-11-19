@@ -18,7 +18,7 @@ import type {
   ScreenKind,
   SecretRequest,
   ThreadInfo,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 import {
   ApiError,
   agentStateOfRun,
@@ -77,8 +77,8 @@ import {
   useWaitingOnMe,
   useWikiTree,
   type WaitingItem,
-} from "@agenteschat/client";
-import { actionCardOf } from "@agenteschat/client/lib/action-cards";
+} from "@keepmind/client";
+import { actionCardOf } from "@keepmind/client/lib/action-cards";
 import {
   barConsultTime,
   barElapsed,
@@ -90,16 +90,16 @@ import {
   runElapsed,
   someoneTypes,
   waitsForWords,
-} from "@agenteschat/client/lib/activity";
-import type { AgentTab } from "@agenteschat/client/lib/agent-edit";
-import { foldTalk, TALK_LINE_CHARS, talksToAgent } from "@agenteschat/client/lib/agent-talk";
-import { returnsHere } from "@agenteschat/client/lib/agent-work";
-import { looksLikeApiKey } from "@agenteschat/client/lib/api-key-text";
-import { approvalCardItems, asOfNow, cardDeadline } from "@agenteschat/client/lib/approval-card";
-import { artifactRefs } from "@agenteschat/client/lib/artifacts";
-import { canTalk, unavailableNotice } from "@agenteschat/client/lib/audience";
-import { accessInput, accessOf, accessValid, type ChannelAccess } from "@agenteschat/client/lib/channel-access";
-import { channelRefsOf } from "@agenteschat/client/lib/channel-refs";
+} from "@keepmind/client/lib/activity";
+import type { AgentTab } from "@keepmind/client/lib/agent-edit";
+import { foldTalk, TALK_LINE_CHARS, talksToAgent } from "@keepmind/client/lib/agent-talk";
+import { returnsHere } from "@keepmind/client/lib/agent-work";
+import { looksLikeApiKey } from "@keepmind/client/lib/api-key-text";
+import { approvalCardItems, asOfNow, cardDeadline } from "@keepmind/client/lib/approval-card";
+import { artifactRefs } from "@keepmind/client/lib/artifacts";
+import { canTalk, unavailableNotice } from "@keepmind/client/lib/audience";
+import { accessInput, accessOf, accessValid, type ChannelAccess } from "@keepmind/client/lib/channel-access";
+import { channelRefsOf } from "@keepmind/client/lib/channel-refs";
 import {
   entersWithMotion,
   greetingSuggestions,
@@ -110,15 +110,15 @@ import {
   runPosition,
   screenAboveEnd,
   usageLine,
-} from "@agenteschat/client/lib/chat";
-import { firstUnreadId, opensAtLastRead, unreadThreadRootId } from "@agenteschat/client/lib/chat-look";
-import { choiceReplyLine } from "@agenteschat/client/lib/choices";
-import { draftKeyOf } from "@agenteschat/client/lib/composer-drafts";
-import { consultsForLine } from "@agenteschat/client/lib/consult-group";
-import { consultationsOf } from "@agenteschat/client/lib/consultations";
-import { deviceWaitOf } from "@agenteschat/client/lib/devices";
-import { clearDraft, peekDraft } from "@agenteschat/client/lib/drafts";
-import { ErrorBoundary } from "@agenteschat/client/lib/error-boundary";
+} from "@keepmind/client/lib/chat";
+import { firstUnreadId, opensAtLastRead, unreadThreadRootId } from "@keepmind/client/lib/chat-look";
+import { choiceReplyLine } from "@keepmind/client/lib/choices";
+import { draftKeyOf } from "@keepmind/client/lib/composer-drafts";
+import { consultsForLine } from "@keepmind/client/lib/consult-group";
+import { consultationsOf } from "@keepmind/client/lib/consultations";
+import { deviceWaitOf } from "@keepmind/client/lib/devices";
+import { clearDraft, peekDraft } from "@keepmind/client/lib/drafts";
+import { ErrorBoundary } from "@keepmind/client/lib/error-boundary";
 import {
   errorCode,
   errorText,
@@ -129,19 +129,19 @@ import {
   runFailureLine,
   sendFailureText,
   sendNeedsEdit,
-} from "@agenteschat/client/lib/errors";
-import { everyoneWord, isEveryoneMention, mentionsReader, offersEveryone } from "@agenteschat/client/lib/everyone";
-import { fileIcon, fitsUpload, formatBytes, MAX_UPLOAD_MB, previewKind } from "@agenteschat/client/lib/files";
-import { dayLabel, formatFullDate, formatTime } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { useHeldWhile } from "@agenteschat/client/lib/hold";
-import { issueTakenOf, issueWorkOf, taskConversationOf } from "@agenteschat/client/lib/issues";
-import { workAnchorBody, workContinuable, workIsOver } from "@agenteschat/client/lib/long-work";
-import { supersededBrainNotices } from "@agenteschat/client/lib/machine-outages";
-import { hasWideBlock, plainLine } from "@agenteschat/client/lib/markdown";
-import { isMediaAfterReply, isMediaAlone, messageMediaOf, quoteText, textOrMedia } from "@agenteschat/client/lib/media";
-import { serverBody } from "@agenteschat/client/lib/message-body";
-import { joinDrafts, tooLongToSend } from "@agenteschat/client/lib/message-length";
+} from "@keepmind/client/lib/errors";
+import { everyoneWord, isEveryoneMention, mentionsReader, offersEveryone } from "@keepmind/client/lib/everyone";
+import { fileIcon, fitsUpload, formatBytes, MAX_UPLOAD_MB, previewKind } from "@keepmind/client/lib/files";
+import { dayLabel, formatFullDate, formatTime } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { useHeldWhile } from "@keepmind/client/lib/hold";
+import { issueTakenOf, issueWorkOf, taskConversationOf } from "@keepmind/client/lib/issues";
+import { workAnchorBody, workContinuable, workIsOver } from "@keepmind/client/lib/long-work";
+import { supersededBrainNotices } from "@keepmind/client/lib/machine-outages";
+import { hasWideBlock, plainLine } from "@keepmind/client/lib/markdown";
+import { isMediaAfterReply, isMediaAlone, messageMediaOf, quoteText, textOrMedia } from "@keepmind/client/lib/media";
+import { serverBody } from "@keepmind/client/lib/message-body";
+import { joinDrafts, tooLongToSend } from "@keepmind/client/lib/message-length";
 import {
   isOpenMission,
   missionCommandOf,
@@ -153,27 +153,27 @@ import {
   missionSuggestionOf,
   parseMissionCommand,
   taskNoticeOf,
-} from "@agenteschat/client/lib/missions";
-import { noAiCardOf } from "@agenteschat/client/lib/no-ai";
-import { isTalkerReply, noticeOf, routineReportText, talkerWaited } from "@agenteschat/client/lib/notices";
-import { brainUnavailableOf, isOfflineNotice } from "@agenteschat/client/lib/outages";
-import { can, leavesChannel, makesAgents, managesChannel, setsAutoReply } from "@agenteschat/client/lib/permissions";
-import { modelStandInText } from "@agenteschat/client/lib/plan-usage";
-import { reachHandoffs } from "@agenteschat/client/lib/reach";
-import { localMeta, replyOf } from "@agenteschat/client/lib/reply";
-import { isRightHand } from "@agenteschat/client/lib/right-hand";
-import { isReminderMessage, reminderBody, routineReplyOf } from "@agenteschat/client/lib/routines";
-import { picksForMe, replyAloneKey } from "@agenteschat/client/lib/routing";
-import { ConversationSeat } from "@agenteschat/client/lib/seat-context";
-import { seenMessageId } from "@agenteschat/client/lib/seen";
-import { hiddenCount, tasksOf, todayStart } from "@agenteschat/client/lib/task-manager";
-import { contextMarks, hiddenByThreads, rangeCandidates, threadStartOf } from "@agenteschat/client/lib/threads";
-import { buildTimeline, lastPostedId, mergeTimeline, type TimelineItem } from "@agenteschat/client/lib/timeline";
-import { usageWaitOf } from "@agenteschat/client/lib/usage-pause";
-import { appVia } from "@agenteschat/client/lib/via";
-import { voiceOf } from "@agenteschat/client/lib/voice";
-import { waitingAway, waitingNotification } from "@agenteschat/client/lib/waiting";
-import { barStep, makingImage, showsActivity, splitCanceled } from "@agenteschat/client/lib/work";
+} from "@keepmind/client/lib/missions";
+import { noAiCardOf } from "@keepmind/client/lib/no-ai";
+import { isTalkerReply, noticeOf, routineReportText, talkerWaited } from "@keepmind/client/lib/notices";
+import { brainUnavailableOf, isOfflineNotice } from "@keepmind/client/lib/outages";
+import { can, leavesChannel, makesAgents, managesChannel, setsAutoReply } from "@keepmind/client/lib/permissions";
+import { modelStandInText } from "@keepmind/client/lib/plan-usage";
+import { reachHandoffs } from "@keepmind/client/lib/reach";
+import { localMeta, replyOf } from "@keepmind/client/lib/reply";
+import { isRightHand } from "@keepmind/client/lib/right-hand";
+import { isReminderMessage, reminderBody, routineReplyOf } from "@keepmind/client/lib/routines";
+import { picksForMe, replyAloneKey } from "@keepmind/client/lib/routing";
+import { ConversationSeat } from "@keepmind/client/lib/seat-context";
+import { seenMessageId } from "@keepmind/client/lib/seen";
+import { hiddenCount, tasksOf, todayStart } from "@keepmind/client/lib/task-manager";
+import { contextMarks, hiddenByThreads, rangeCandidates, threadStartOf } from "@keepmind/client/lib/threads";
+import { buildTimeline, lastPostedId, mergeTimeline, type TimelineItem } from "@keepmind/client/lib/timeline";
+import { usageWaitOf } from "@keepmind/client/lib/usage-pause";
+import { appVia } from "@keepmind/client/lib/via";
+import { voiceOf } from "@keepmind/client/lib/voice";
+import { waitingAway, waitingNotification } from "@keepmind/client/lib/waiting";
+import { barStep, makingImage, showsActivity, splitCanceled } from "@keepmind/client/lib/work";
 import {
   AffixInput,
   Avatar,
@@ -218,7 +218,7 @@ import {
   Spinner,
   skeletonOnScreen,
   type VoiceNotice,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, Navigate, useNavigate, useRouter } from "@tanstack/react-router";
 import {
@@ -622,6 +622,7 @@ export function ChannelPage({
   focusMessageId,
   adjustThreadId,
   thread,
+  sayOnce,
 }: {
   channelId: string;
   chrome?: ChannelChrome;
@@ -633,6 +634,8 @@ export function ChannelPage({
   focusMessageId?: string;
   /** DMs may not be in the channel list: the page still works with this. */
   fallback?: Channel;
+  /** A message to send once, as if typed (the Team page's "tell the right hand" lands here via `?say=`). */
+  sayOnce?: string;
 }) {
   const { t } = useTranslation();
   const { org } = useOrg();
@@ -689,6 +692,7 @@ export function ChannelPage({
           focusMessageId={focusMessageId}
           adjustThreadId={adjustThreadId}
           thread={thread}
+          sayOnce={sayOnce}
         />
       </InPlaceProvider>
     </MissionPanelProvider>
@@ -800,12 +804,14 @@ function ChannelView({
   focusMessageId,
   adjustThreadId,
   thread,
+  sayOnce,
 }: {
   channel: Channel;
   chrome?: ChannelChrome;
   focusMessageId?: string;
   adjustThreadId?: string;
   thread?: ThreadInfo;
+  sayOnce?: string;
 }) {
   const { t, i18n } = useTranslation();
   const { org, me } = useOrg();
@@ -1187,6 +1193,15 @@ function ChannelView({
     },
   });
   const { send, retry } = sendHelpers(post);
+  // `?say=` (the Team page's way into the right hand's interview): send once, only where writing is allowed —
+  // a locked DM or a read-only channel keeps the param for nothing.
+  const saySent = useRef(false);
+  useEffect(() => {
+    if (!sayOnce || saySent.current) return;
+    if (chrome?.locked || chrome?.composerReplacement || channel.can?.post === false || org.deletion) return;
+    saySent.current = true;
+    send(sayOnce, thread ? thread.id : null);
+  }, [sayOnce, chrome?.locked, chrome?.composerReplacement, channel.can?.post, org.deletion, thread, send]);
   const sendVoice = useSendVoice(org.id, channel.id, {
     me: { id: me.user.id },
     onRefused: (error) =>

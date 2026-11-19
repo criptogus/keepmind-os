@@ -1,4 +1,4 @@
-import { and, desc, type Executor, eq, rowsOf, schema, sql } from "@agenteschat/db";
+import { and, desc, type Executor, eq, rowsOf, schema, sql } from "@keepmind/db";
 import { recordAudit } from "./audit";
 import { ConflictError, NotFoundError, ValidationError } from "./errors";
 import { publishMessageCreated, publishUserEvent } from "./events";

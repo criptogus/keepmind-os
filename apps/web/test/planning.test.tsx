@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, spyOn, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { ApiError, type Issue, type IssueWork } from "@agenteschat/client";
-import { toYmd } from "@agenteschat/client/lib/format";
+import { ApiError, type Issue, type IssueWork } from "@keepmind/client";
+import { toYmd } from "@keepmind/client/lib/format";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { mondayOf } from "@/pages/CalendarPage";
 import { splitCriteria } from "@/pages/IssuesPage";

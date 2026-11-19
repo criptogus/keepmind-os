@@ -1,4 +1,4 @@
-//! The server here ("Run agentes.chat on this computer", ADR 0066): agentes.chat's native server (ADR 0060 §2,
+//! The server here ("Run KeepMind OS on this computer", ADR 0066): KeepMind OS's native server (ADR 0060 §2,
 //! one program with its database built in) as a child of the app, in `~/.agentes`. The app carries the
 //! server's files (`server/` and `web/` among its resources) and runs them with its own runner binary acting as
 //! Bun (`BUN_BE_BUN=1`), so nothing downloads and the server moves with the app's updates: on the first start
@@ -226,8 +226,8 @@ fn write_env(folder: &Folder, entries: &[(&str, String)]) -> io::Result<()> {
     write_private(&folder.env(), next.as_bytes(), true)
 }
 
-const ENV_HEADER: &str = "# agentes.chat on this computer, run by the agentes.chat app. Help:\n\
-# https://agentes.chat/docs/run-on-your-computer. AGENTES_SECRET encrypts the keys stored in the database: it\n\
+const ENV_HEADER: &str = "# KeepMind OS on this computer, run by the KeepMind OS app. Help:\n\
+# https://keepmind.io/docs/run-on-your-computer. AGENTES_SECRET encrypts the keys stored in the database: it\n\
 # travels with the folder in a backup, and changing it makes them unreadable.\n";
 
 /// The port the server takes and the address it answers at.
@@ -283,7 +283,7 @@ fn write_private(path: &Path, bytes: &[u8], replace: bool) -> io::Result<()> {
     }
 }
 
-/// What the person chose in "Run agentes.chat on this computer".
+/// What the person chose in "Run KeepMind OS on this computer".
 #[derive(Clone, Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Choice {
@@ -2377,7 +2377,7 @@ fn diagnostics(app: &AppHandle) -> String {
         })
         .unwrap_or_default();
     format!(
-        "agentes.chat app {} ({} {})\nserver here: {:?}, version {}, at {}, reach {}, usage statistics {}\n\n{}\n\n{}",
+        "KeepMind OS app {} ({} {})\nserver here: {:?}, version {}, at {}, reach {}, usage statistics {}\n\n{}\n\n{}",
         app.package_info().version,
         std::env::consts::OS,
         std::env::consts::ARCH,
@@ -3095,7 +3095,7 @@ mod tests {
             moved_page(page("http://127.0.0.1:4310/org/o1/c/c2?m=1#x"), local, public).as_str(),
             "https://ana-mac.tail1234.ts.net/org/o1/c/c2?m=1#x"
         );
-        assert_eq!(moved_page(page("https://app.agentes.chat/org/o1"), local, public).as_str(), "https://app.agentes.chat/org/o1");
+        assert_eq!(moved_page(page("https://keepmind.io/org/o1"), local, public).as_str(), "https://keepmind.io/org/o1");
         assert_eq!(moved_page(page("http://127.0.0.1:4310/x"), local, local).as_str(), "http://127.0.0.1:4310/x");
     }
 

@@ -1,6 +1,6 @@
-import type { ApiClient, SocketFactory } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { domWindow } from "@agenteschat/ui/testing/dom";
+import type { ApiClient, SocketFactory } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { domWindow } from "@keepmind/ui/testing/dom";
 import {
   createMemoryHistory,
   createRootRouteWithContext,

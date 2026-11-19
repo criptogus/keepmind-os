@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { chatActivityTopic, type RealtimeEvent, userTopic } from "@agenteschat/adapters";
+import { chatActivityTopic, type RealtimeEvent, userTopic } from "@keepmind/adapters";
 import {
   activityAudience,
   addChannelMember,

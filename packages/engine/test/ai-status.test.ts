@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { envPlatformCredentials, noPlatformCredentials, ROUTE_PROTOCOL } from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
+import { envPlatformCredentials, noPlatformCredentials, ROUTE_PROTOCOL } from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
 import {
   type AiRouting,
   agentAiState,
@@ -319,7 +319,7 @@ describe("who picks the agents (ADR 0074)", () => {
     const cloud = routingOf({
       plans: {
         hub: { status: async () => null, call: async () => null } as never,
-        publicUrl: "https://app.agentes.chat",
+        publicUrl: "https://keepmind.io",
       },
     });
     expect((await who(cloud)).routing.by).toBe("rules");

@@ -1,5 +1,5 @@
 import { describe, expect, setSystemTime, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
@@ -138,8 +138,8 @@ describe("Run KeepMind OS on this Mac", () => {
           line: null,
         },
         {
-          label: "Send anonymous usage statistics to agentes.chat",
-          about: "About Send anonymous usage statistics to agentes.chat",
+          label: "Send anonymous usage statistics to KeepMind OS",
+          about: "About Send anonymous usage statistics to KeepMind OS",
           hint: USAGE_TEXT,
           same: true,
           line: null,
@@ -356,11 +356,11 @@ describe("Install on a computer that's always on", () => {
           "On the computer that stays on, open the Terminal and paste this",
           "At the end a link shows up. Open it here and that's it.",
         ]);
-        expect(el.querySelector(".dk-fr__ways code")?.textContent).toBe("curl -fsSL https://agentes.chat/install | sh");
+        expect(el.querySelector(".dk-fr__ways code")?.textContent).toBe("curl -fsSL https://keepmind.io/install | sh");
         await press("Copy the instructions");
         await until(() => button("Instructions copied"));
         expect(copied).toHaveLength(1);
-        expect(copied[0]).toContain("curl -fsSL https://agentes.chat/install | sh");
+        expect(copied[0]).toContain("curl -fsSL https://keepmind.io/install | sh");
         expect(copied[0]).toContain("At the end a link shows up.");
         await press("Sign in by its address");
         expect(el.querySelector("h1")?.textContent).toBe("Sign in to a workspace that already exists");
@@ -787,7 +787,7 @@ describe("Add a workspace", () => {
   /** The welcome window opened by the site's "Add workspace", with KeepMind OS signed in here or not. */
   const adding = (cloud: boolean, chosen: (string | undefined)[]) => (host: FakeHost) => {
     host.welcomeMode = async () => "add";
-    host.workspaces = async () => [{ server: "https://app.agentes.chat", signedIn: cloud, orgs: [] }];
+    host.workspaces = async () => [{ server: "https://keepmind.io", signedIn: cloud, orgs: [] }];
     host.chooseServer = async (_server, page) => {
       chosen.push(page);
     };

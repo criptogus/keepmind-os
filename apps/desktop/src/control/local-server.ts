@@ -1,10 +1,10 @@
 /**
- * The server here ("Run agentes.chat on this computer") as the windows see it: `local_server.rs` keeps it and
+ * The server here ("Run KeepMind OS on this computer") as the windows see it: `local_server.rs` keeps it and
  * says how it is; this decides what each window shows (the first run's steps and screens, the popover's
  * banners, the cover's line, Preferences' words). Pure, so it is tested without the app.
  */
 
-import { CLOUD_SERVER } from "@agenteschat/client/lib/server";
+import { CLOUD_SERVER } from "@keepmind/client/lib/server";
 import type { Platform } from "./platform";
 
 /** `restarting`: it stopped by itself and starts again in a moment (nobody has to start it). */
@@ -188,7 +188,7 @@ export const FAIL_TEXT: Record<SetupStep, string> = {
   reach: "desktop.common.error",
 };
 
-/** What "Run agentes.chat on this computer" shows. */
+/** What "Run KeepMind OS on this computer" shows. */
 export type HereView =
   /** The form; `ask`: the owner's name and email (no owner yet). */
   | { kind: "form"; ask: boolean }
@@ -200,7 +200,7 @@ export type HereView =
   | { kind: "stopped" };
 
 /**
- * `answering`: an agentes.chat server that answered on this computer's loopback (Connect's discovery), when the
+ * `answering`: an KeepMind OS server that answered on this computer's loopback (Connect's discovery), when the
  * app doesn't run one itself.
  */
 export function hereView(status: LocalServerStatus, answering: string | null): HereView {
@@ -261,7 +261,7 @@ export const filesFolder = (dir: string) => `${dir}${dir.includes("\\") ? "\\" :
 export const isHereServer = (status: LocalServerStatus, server: string | null) =>
   status.run && !!server && (server === status.url || server === status.publicUrl);
 
-/** Where a workspace's server runs: on this computer, on agentes.chat's Cloud, or elsewhere. */
+/** Where a workspace's server runs: on this computer, on KeepMind OS's Cloud, or elsewhere. */
 export const serverPlace = (status: LocalServerStatus, server: string | null): "here" | "cloud" | "other" =>
   isHereServer(status, server) ? "here" : server === CLOUD_SERVER ? "cloud" : "other";
 

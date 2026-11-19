@@ -1,5 +1,5 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, type Database, eq, schema } from "@agenteschat/db";
+import type { PubSub } from "@keepmind/adapters";
+import { and, type Database, eq, schema } from "@keepmind/db";
 import { type Agent, getAgent } from "./agents";
 import { recordAudit } from "./audit";
 import { caches } from "./cache";

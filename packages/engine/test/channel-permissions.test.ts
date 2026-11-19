@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { orgTopic } from "@agenteschat/adapters";
-import { and, eq, rowsOf, schema, sql } from "@agenteschat/db";
+import { orgTopic } from "@keepmind/adapters";
+import { and, eq, rowsOf, schema, sql } from "@keepmind/db";
 import {
   addChannelMember,
   CHANNEL_KEYS,

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { ConflictError, ForbiddenError, NotFoundError } from "@agenteschat/engine";
+import { ConflictError, ForbiddenError, NotFoundError } from "@keepmind/engine";
 import { oauthFailure } from "../src/routes/app/context";
 import { createTestServer, ORIGIN, type TestServer } from "./harness";
 

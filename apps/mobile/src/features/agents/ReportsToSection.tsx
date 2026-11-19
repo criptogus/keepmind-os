@@ -1,7 +1,7 @@
-import { type AgentLineChange, useSetAgentLines, useTeam } from "@agenteschat/client";
-import { can } from "@agenteschat/client/lib/permissions";
-import { rightHandOf } from "@agenteschat/client/lib/right-hand";
-import { mayReportTo, reportsOf, supervisorOf } from "@agenteschat/client/lib/team-views";
+import { type AgentLineChange, useSetAgentLines, useTeam } from "@keepmind/client";
+import { can } from "@keepmind/client/lib/permissions";
+import { rightHandOf } from "@keepmind/client/lib/right-hand";
+import { mayReportTo, reportsOf, supervisorOf } from "@keepmind/client/lib/team-views";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useOrg } from "@/providers/org";

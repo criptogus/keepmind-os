@@ -8,15 +8,15 @@ import {
   type SpeechFetch,
   type SpeechProviderId,
   silentWav,
-} from "@agenteschat/adapters";
-import { type Database, eq, schema } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { type Database, eq, schema } from "@keepmind/db";
 import { openSecret, sealSecret } from "./crypto";
 import { ValidationError } from "./errors";
 
 const { instanceSecrets } = schema;
 
 /**
- * Which engines turn voice into text on this server (ADR 0100). The environment sets them on agentes.chat's servers
+ * Which engines turn voice into text on this server (ADR 0100). The environment sets them on KeepMind OS's servers
  * and may on any other; there, the installation's owner can also pick a provider and paste its key in Settings, kept
  * like the Jev key (ADR 0073): sealed, tried before it is kept, never returned. Read again behind a call once a minute
  * old, so a second replica sees a change, as the GIF key does.
@@ -67,7 +67,7 @@ export function createSpeechSettings(deps: {
   keyWrapper: KeyWrapper;
   keyWrappers: KeyWrapper[];
   envEngines: SpeechEngine[];
-  /** agentes.chat's own servers read only the environment. */
+  /** KeepMind OS's own servers read only the environment. */
   envOnly?: boolean;
   fetch?: SpeechFetch;
   now?: () => number;

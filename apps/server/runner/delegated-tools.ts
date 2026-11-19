@@ -17,14 +17,14 @@ import {
   SECRET_READ_DENY_RULES,
   simpleCommands,
   unaskedMessage,
-} from "@agenteschat/adapters/command-policy";
+} from "@keepmind/adapters/command-policy";
 import {
   type AgentScope,
   allowedBy,
   type McpToolInfo,
   ruleMatches,
   type ToolNotice,
-} from "@agenteschat/adapters/machine-protocol";
+} from "@keepmind/adapters/machine-protocol";
 import { exitCodeOf, formatBytes, killTree, runCommand } from "./exec";
 import { isExecutable, resolveCommand } from "./executors";
 import { touchesGitInternals } from "./git-guard";

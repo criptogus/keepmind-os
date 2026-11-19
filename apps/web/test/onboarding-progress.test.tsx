@@ -1,5 +1,5 @@
 import { describe, expect, spyOn, test } from "bun:test";
-import { canvasPage, setupDom } from "@agenteschat/ui/testing";
+import { canvasPage, setupDom } from "@keepmind/ui/testing";
 
 setupDom();
 
@@ -34,10 +34,11 @@ async function progressBar(progress: number, reduced: boolean) {
       if (!shown) return 0;
       const { data, width, height } = shown;
       const row = Math.floor(height / 2) * width;
-      let sky = 0;
-      // The empty strip is grey; the sky (and the agent's dark blue body) is far bluer than red.
-      for (let x = 0; x < width; x++) if ((data[(row + x) * 4 + 2] ?? 0) - (data[(row + x) * 4] ?? 0) > 50) sky++;
-      return sky / width;
+      let edge = 0;
+      // Measure the lime edge, not its area: the graphite companion can cover pixels inside the fill.
+      for (let x = 0; x < width; x++)
+        if ((data[(row + x) * 4 + 1] ?? 0) - (data[(row + x) * 4 + 2] ?? 0) > 50) edge = x + 1;
+      return edge / width;
     },
     async step(next: number) {
       await act(async () => view.rerender(<OnboardingProgress progress={next} />));

@@ -1,4 +1,4 @@
-import { checkServer, normalizeServer, type ServerCheck, serverHost } from "@agenteschat/client/lib/server";
+import { checkServer, normalizeServer, type ServerCheck, serverHost } from "@keepmind/client/lib/server";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";

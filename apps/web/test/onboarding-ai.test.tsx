@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { keys } from "@agenteschat/client";
+import { keys } from "@keepmind/client";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { connectRequest } from "@/pages/onboarding/AiStep";
 import { createFakeApi, type FakeState, GENERAL_ID, LODI_ID, ORG_ID, seedState, withRightHand } from "./fake-api";
@@ -50,7 +50,7 @@ const arrivals = (router: Router) => {
 
 /**
  * Acme being set up, its name and what it does saved and its team made, none of its agents with an AI yet;
- * `held`: agentes.chat Cloud, waiting for its first plan.
+ * `held`: KeepMind OS Cloud, waiting for its first plan.
  */
 const madeTeam = (opts: { held?: boolean } = {}) => {
   const state = withRightHand(seedState());
@@ -219,7 +219,7 @@ describe("Connect an AI, the rail's last step", () => {
     expect(document.querySelector(".onb-ai__connected .ac-option__title")?.textContent).toBe("Chave de API");
   });
 
-  test("on agentes.chat Cloud, a plan left for later skips the step: Lodi's DM, the beta notice alone", async () => {
+  test("on KeepMind OS Cloud, a plan left for later skips the step: Lodi's DM, the beta notice alone", async () => {
     const state = madeTeam({ held: true });
     // The billing service's plan list can't be read: the plan step names a plan generically.
     globalThis.fetch = (async () => new Response("", { status: 404 })) as unknown as typeof fetch;

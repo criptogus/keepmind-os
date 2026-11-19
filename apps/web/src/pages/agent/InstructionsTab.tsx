@@ -1,7 +1,7 @@
-import { useProposals } from "@agenteschat/client";
-import { FIELD_LIMITS } from "@agenteschat/client/lib/field-limits";
-import { modeKey } from "@agenteschat/client/lib/workspace-mode";
-import { Button, Card, diffLines, Icon, Textarea } from "@agenteschat/ui";
+import { useProposals } from "@keepmind/client";
+import { FIELD_LIMITS } from "@keepmind/client/lib/field-limits";
+import { modeKey } from "@keepmind/client/lib/workspace-mode";
+import { Button, Card, diffLines, Icon, Textarea } from "@keepmind/ui";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { InstructionTips } from "@/components/AgentFields";

@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, setSystemTime, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { connectLink } from "@agenteschat/client/lib/server";
+import { connectLink } from "@keepmind/client/lib/server";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { encode } from "uqr";
 import { createFakeApi, ORG_ID, seedState } from "./fake-api";
@@ -33,7 +33,7 @@ describe("Abrir no celular", () => {
     expect(state.calls.filter((c) => c.method === "account.phoneSignIn")).toHaveLength(1);
 
     const qr = within(dialog).getByRole("img", { name: "QR code para entrar no app agentes" });
-    const expected = encode(connectLink("https://app.agentes.chat", { token: "tok-1" }), { ecc: "M", border: 2 });
+    const expected = encode(connectLink("https://keepmind.io", { token: "tok-1" }), { ecc: "M", border: 2 });
     expect(qr.getAttribute("viewBox")).toBe(`0 0 ${expected.size} ${expected.size}`);
     const modules = qr.querySelector("path")?.getAttribute("d")?.match(/M/g)?.length;
     expect(modules).toBe(expected.data.flat().filter(Boolean).length);

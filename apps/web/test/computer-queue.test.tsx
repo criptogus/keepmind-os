@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { ActiveRun, Agent, ComputerQueue, Message } from "@agenteschat/client";
+import type { ActiveRun, Agent, ComputerQueue, Message } from "@keepmind/client";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { STORAGE_KEYS } from "@/lib/storage";
 import { atRule, builtCss, declarations, topLevel } from "./built-css";

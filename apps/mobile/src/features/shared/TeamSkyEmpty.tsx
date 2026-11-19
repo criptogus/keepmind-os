@@ -1,4 +1,4 @@
-import { rightHandOf } from "@agenteschat/client/lib/right-hand";
+import { rightHandOf } from "@keepmind/client/lib/right-hand";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { Pressable, StyleSheet, View } from "react-native";

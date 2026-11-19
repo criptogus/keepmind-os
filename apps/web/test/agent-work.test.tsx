@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, spyOn, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { AgentStatus, AgentWork, Message, ThreadInfo } from "@agenteschat/client";
-import { formatTime } from "@agenteschat/client/lib/format";
+import type { AgentStatus, AgentWork, Message, ThreadInfo } from "@keepmind/client";
+import { formatTime } from "@keepmind/client/lib/format";
 import { act, cleanup, within } from "@testing-library/react";
 import { DESKTOP_QUERY } from "@/components/NavDrawer";
 import {

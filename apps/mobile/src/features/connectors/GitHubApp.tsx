@@ -6,17 +6,17 @@ import {
   useGitHubApp,
   useInstallGitHubApp,
   useRemoveGitHubApp,
-} from "@agenteschat/client";
-import { GITHUB_APP_AUTH } from "@agenteschat/client/lib/connected";
-import { knownErrorText, oauthReturnText } from "@agenteschat/client/lib/errors";
+} from "@keepmind/client";
+import { GITHUB_APP_AUTH } from "@keepmind/client/lib/connected";
+import { knownErrorText, oauthReturnText } from "@keepmind/client/lib/errors";
 import {
   githubAppPanel,
   installationReach,
   missingEventsText,
   removedText,
   removeInstallationText,
-} from "@agenteschat/client/lib/github-app";
-import { can } from "@agenteschat/client/lib/permissions";
+} from "@keepmind/client/lib/github-app";
+import { can } from "@keepmind/client/lib/permissions";
 import * as WebBrowser from "expo-web-browser";
 import { useTranslation } from "react-i18next";
 import { serverUrl } from "@/lib/server";
@@ -29,7 +29,7 @@ import { errorHaptic, successHaptic } from "../shared/parts";
 import { APP_RETURN_URL, authAnswerOf, doneFinishing, markFinishing, stateOf } from "./logic";
 
 /**
- * Installing the agentes.chat GitHub app from the phone (ADR 0156): GitHub's page in the browser, back to the app with
+ * Installing the KeepMind OS GitHub app from the phone (ADR 0156): GitHub's page in the browser, back to the app with
  * what GitHub sent, finished with the app's own session. `run` says whether it installed, and why not when that was a
  * failure (`error` null: the page was closed, or the account's owner was asked to install, which a toast says).
  */

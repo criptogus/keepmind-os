@@ -6,14 +6,14 @@ import {
   useNotificationAction,
   useNotifications,
   useRoutines,
-} from "@agenteschat/client";
-import { approvalDetail, approvalSummary, approvalTitle } from "@agenteschat/client/lib/approval-words";
-import { restrictionLine } from "@agenteschat/client/lib/errors";
-import { timeLeft, upperFirst } from "@agenteschat/client/lib/format";
-import { mediaWord } from "@agenteschat/client/lib/media";
-import { latestText } from "@agenteschat/client/lib/message-body";
-import { teamWatchOf } from "@agenteschat/client/lib/notifications";
-import { usageLimitLine } from "@agenteschat/client/lib/person-usage";
+} from "@keepmind/client";
+import { approvalDetail, approvalSummary, approvalTitle } from "@keepmind/client/lib/approval-words";
+import { restrictionLine } from "@keepmind/client/lib/errors";
+import { timeLeft, upperFirst } from "@keepmind/client/lib/format";
+import { mediaWord } from "@keepmind/client/lib/media";
+import { latestText } from "@keepmind/client/lib/message-body";
+import { teamWatchOf } from "@keepmind/client/lib/notifications";
+import { usageLimitLine } from "@keepmind/client/lib/person-usage";
 import { useLocalSearchParams } from "expo-router";
 import type { TFunction } from "i18next";
 import { memo, useEffect, useMemo, useState } from "react";

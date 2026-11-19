@@ -8,10 +8,9 @@
  * expected. A server out of reach offers another one.
  */
 
-import { CLOUD_SERVER, isTailnet, serverHost } from "@agenteschat/client/lib/server";
-import { drawAgent, idlePose } from "@agenteschat/ui/agent/engine";
-import { startSky } from "@agenteschat/ui/sky/engine";
-import { SKY_TONES } from "@agenteschat/ui/sky/math";
+import { CLOUD_SERVER, isTailnet, serverHost } from "@keepmind/client/lib/server";
+import { drawCompanion as drawAgent, loadCompanions } from "@keepmind/ui/agent/companion";
+import { idlePose } from "@keepmind/ui/agent/engine";
 import { invoke } from "@tauri-apps/api/core";
 import "@fontsource-variable/onest/index.css";
 import "../fonts.css";
@@ -42,7 +41,6 @@ const device = strings.device[platform];
 const root = document.querySelector<HTMLElement>(".cover");
 const line = document.querySelector<HTMLElement>(".cover__line");
 const time = document.querySelector<HTMLElement>(".cover__time");
-const sky = document.querySelector<HTMLCanvasElement>(".cover__sky");
 const agent = document.querySelector<HTMLCanvasElement>(".cover__agent");
 const acts = document.querySelector<HTMLElement>(".cover__acts");
 document.documentElement.lang = systemLocale();
@@ -66,21 +64,6 @@ function sayAside(text: string) {
   tick();
 }
 
-if (sky) {
-  // The same sky as the site's BootSplash (apps/web Sky.tsx), so the hand-over doesn't show.
-  startSky(sky, () => ({
-    pixel: 4,
-    palette: SKY_TONES,
-    sprites: { area: 700, max: 40 },
-    rise: 2.2,
-    light: 0.12,
-    base: (u, v, t) => {
-      const fill = Math.min(1, (performance.now() - shownAt) / 1800) * (unreachable ? 0.55 : 1);
-      return -0.3 + 1.15 * fill * (0.35 + 0.65 * v) + 0.05 * Math.sin(u * 6 + t);
-    },
-  }));
-}
-
 if (agent) {
   const dpr = Math.min(2, window.devicePixelRatio || 1);
   const size = 72;
@@ -96,7 +79,7 @@ if (agent) {
       ctx.clearRect(0, 0, s, s);
       const pose = idlePose(now / 1000, seed, { every: 10 });
       drawAgent(ctx, (s - inner) / 2, s - inner + s * 0.04, inner, {
-        color: "sky",
+        color: "graphite",
         eyes: "round",
         cells: 12,
         pose: unreachable ? { ...pose, blink: false, expression: "closed" } : pose,
@@ -104,6 +87,9 @@ if (agent) {
     }
     if (!still) requestAnimationFrame(frame);
   };
+  loadCompanions(() => {
+    if (still) frame(performance.now());
+  });
   requestAnimationFrame(frame);
 }
 
@@ -171,7 +157,7 @@ const w = window as { __coverShown?: () => void; __coverFade?: () => void };
 w.__coverShown = shown;
 w.__coverFade = fade;
 
-/** The server the main window opens (servers.json, through Rust); agentes.chat before one is chosen. */
+/** The server the main window opens (servers.json, through Rust); KeepMind OS before one is chosen. */
 const currentServer = () =>
   invoke<string | null>("cover_server").then(
     (s) => s ?? SITE_URL,
@@ -216,7 +202,7 @@ async function otherServer(status: LocalServerStatus | null): Promise<string | n
   if (!list) return null;
   return list.servers.find((s) => s !== list.current && !(status && isHereServer(status, s))) ?? null;
 }
-const serverName = (server: string) => (server === CLOUD_SERVER ? "agentes.chat" : serverHost(server));
+const serverName = (server: string) => (server === CLOUD_SERVER ? "keepmind.io" : serverHost(server));
 const openServer = (server: string) => void invoke("server_choose", { server }).catch(() => {});
 
 /** "Use only on this Mac": reach off, said while it takes and when it didn't work. */

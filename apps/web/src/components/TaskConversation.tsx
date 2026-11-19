@@ -1,8 +1,8 @@
-import type { Issue } from "@agenteschat/client";
-import { runsInChannel, useTaskConversation, useTaskUnread } from "@agenteschat/client";
-import { conversationLine } from "@agenteschat/client/lib/issues";
-import { badgeCount } from "@agenteschat/client/lib/unread";
-import { Button, CountBadge, CountChip, Icon } from "@agenteschat/ui";
+import type { Issue } from "@keepmind/client";
+import { runsInChannel, useTaskConversation, useTaskUnread } from "@keepmind/client";
+import { conversationLine } from "@keepmind/client/lib/issues";
+import { badgeCount } from "@keepmind/client/lib/unread";
+import { Button, CountBadge, CountChip, Icon } from "@keepmind/ui";
 import { useTranslation } from "react-i18next";
 import { useOrg } from "@/components/org-context";
 import { ThreadLineBody } from "@/components/threads/ThreadLines";

@@ -1,4 +1,4 @@
-import { type ComposerDraft, readDraftBook, withDraft } from "@agenteschat/client/lib/composer-drafts";
+import { type ComposerDraft, readDraftBook, withDraft } from "@keepmind/client/lib/composer-drafts";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { AuthClient } from "@/auth/client";
 import { STORAGE_KEYS, storage } from "@/lib/storage";

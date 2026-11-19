@@ -1,11 +1,11 @@
 import { afterAll, afterEach, beforeAll, describe, expect, spyOn, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { keys } from "@agenteschat/client";
-import { formatBytes } from "@agenteschat/client/lib/files";
-import { keepWhole } from "@agenteschat/client/lib/format";
+import { keys } from "@keepmind/client";
+import { formatBytes } from "@keepmind/client/lib/files";
+import { keepWhole } from "@keepmind/client/lib/format";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { fileSaver } from "@/components/artifacts/ArtifactViewer";
 import { objectUrls } from "@/components/artifacts/FileView";

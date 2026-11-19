@@ -7,7 +7,7 @@ import {
   useTasksUnread,
   useThreadList,
   useWorkingRuns,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 import * as Notifications from "expo-notifications";
 import { useEffect, useMemo } from "react";
 import { useOrg } from "@/providers/org";

@@ -29,9 +29,9 @@ import {
   createPostgresBlobStore,
   createPostgresSearchResolver,
   envPlatformCredentials,
-} from "@agenteschat/adapters";
-import { loadConfig } from "@agenteschat/config";
-import { createDatabase, type Database, ensureMessagePartitions, eq, schema } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { loadConfig } from "@keepmind/config";
+import { createDatabase, type Database, ensureMessagePartitions, eq, schema } from "@keepmind/db";
 import {
   APP_SCOPES,
   addChannelMember,
@@ -43,8 +43,8 @@ import {
   drainOutbox,
   enableCaches,
   postPersonMessage,
-} from "@agenteschat/engine";
-import { createAnthropicProvider } from "@agenteschat/providers";
+} from "@keepmind/engine";
+import { createAnthropicProvider } from "@keepmind/providers";
 import { createAuth } from "../src/auth";
 import { buildEngine } from "../src/engine";
 import { createLogger } from "../src/logger";
@@ -105,7 +105,7 @@ async function modelSmoke(db: Database) {
   await db.insert(schema.users).values({ id: userId, name: "Smoke", email: `${userId}@smoke.invalid` });
   const { organization, general } = await createOrganization(db, userId, {
     name: `smoke ${new Date().toISOString()}`,
-    context: "This is an automated smoke test of agentes.chat.",
+    context: "This is an automated smoke test of KeepMind OS.",
   });
   orgId = organization.id;
   const credential = orgKey

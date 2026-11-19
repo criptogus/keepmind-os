@@ -15,23 +15,23 @@ import {
   useModels,
   useRemoveApprovalRule,
   useUsage,
-} from "@agenteschat/client";
-import { approvalRuleServer, approvalRuleWords, approvalTitle } from "@agenteschat/client/lib/approval-words";
-import { listsAgent, seesDetails } from "@agenteschat/client/lib/audience";
-import { brainLine } from "@agenteschat/client/lib/brain";
-import { effortLevel } from "@agenteschat/client/lib/brain-advanced";
-import { modelUnpriced } from "@agenteschat/client/lib/endpoints";
-import { FIELD_LIMITS } from "@agenteschat/client/lib/field-limits";
-import { formatPercent, lowerFirst, timeLeft } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { agentPlan, aiStateOf, planLabel, planOfAccount } from "@agenteschat/client/lib/no-ai";
-import { can } from "@agenteschat/client/lib/permissions";
-import { planMeterText, usageShown } from "@agenteschat/client/lib/plan-usage";
-import { memoryLine } from "@agenteschat/client/lib/proposals";
-import { apiModelName, autoMakerOf, isAuto } from "@agenteschat/client/lib/providers";
-import { isRightHand, tellsNameStory } from "@agenteschat/client/lib/right-hand";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
-import { planLine } from "@agenteschat/ui/plan-state";
+} from "@keepmind/client";
+import { approvalRuleServer, approvalRuleWords, approvalTitle } from "@keepmind/client/lib/approval-words";
+import { listsAgent, seesDetails } from "@keepmind/client/lib/audience";
+import { brainLine } from "@keepmind/client/lib/brain";
+import { effortLevel } from "@keepmind/client/lib/brain-advanced";
+import { modelUnpriced } from "@keepmind/client/lib/endpoints";
+import { FIELD_LIMITS } from "@keepmind/client/lib/field-limits";
+import { formatPercent, lowerFirst, timeLeft } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { agentPlan, aiStateOf, planLabel, planOfAccount } from "@keepmind/client/lib/no-ai";
+import { can } from "@keepmind/client/lib/permissions";
+import { planMeterText, usageShown } from "@keepmind/client/lib/plan-usage";
+import { memoryLine } from "@keepmind/client/lib/proposals";
+import { apiModelName, autoMakerOf, isAuto } from "@keepmind/client/lib/providers";
+import { isRightHand, tellsNameStory } from "@keepmind/client/lib/right-hand";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
+import { planLine } from "@keepmind/ui/plan-state";
 import { useQueryClient } from "@tanstack/react-query";
 import { Fragment, type ReactNode, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";

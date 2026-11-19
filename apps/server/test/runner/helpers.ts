@@ -4,7 +4,7 @@ import { mkdtempSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import net from "node:net";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import type { StreamControl } from "@agenteschat/adapters/machine-protocol";
+import type { StreamControl } from "@keepmind/adapters/machine-protocol";
 import { RunnerError } from "../../runner/errors";
 import { vncAuthResponse } from "../../runner/rfb";
 import type { DataListener, DataSocket } from "../../runner/streams";

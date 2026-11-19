@@ -4,7 +4,7 @@
  * control protocol's events.
  * A tiny external store (`useSyncExternalStore`), no framework.
  */
-import type { RunnerAccess, RunnerTools } from "@agenteschat/adapters/machine-protocol";
+import type { RunnerAccess, RunnerTools } from "@keepmind/adapters/machine-protocol";
 import {
   CONTROL_PROTOCOL_VERSION,
   type ControlAccessRequest,
@@ -13,7 +13,7 @@ import {
   type ControlReplies,
   type ControlRequest,
   type ControlStatus,
-} from "@agenteschat/adapters/runner-control";
+} from "@keepmind/adapters/runner-control";
 import type { Host, RunnerInfo } from "../host/types";
 import { ControlClient, type HelloLine } from "./client";
 

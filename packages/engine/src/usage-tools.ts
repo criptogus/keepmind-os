@@ -1,4 +1,4 @@
-import { planState, planWindows } from "@agenteschat/ui/plan-state";
+import { planState, planWindows } from "@keepmind/ui/plan-state";
 import { ago, zoneOf } from "./context";
 import { defaultAccountLabel } from "./machine-accounts";
 import { type AgentPlanUsageView, type ApiAgentUsage, agentUsageFor, type PlanAccountUsage } from "./plan-usage";

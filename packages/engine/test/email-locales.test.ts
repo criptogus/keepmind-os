@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { LOCALE_CODES } from "@agenteschat/i18n/locale";
-import { deepMerge } from "@agenteschat/i18n/tree";
+import { LOCALE_CODES } from "@keepmind/i18n/locale";
+import { deepMerge } from "@keepmind/i18n/tree";
 import { type EmailTemplate, emailLocale, renderEmail } from "../src";
 import { wordsFor } from "../src/email/words";
 import { en } from "../src/email/words/en";

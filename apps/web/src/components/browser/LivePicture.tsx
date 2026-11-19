@@ -1,4 +1,4 @@
-import { type BrowserFrame, browserFrameDataUrl } from "@agenteschat/client";
+import { type BrowserFrame, browserFrameDataUrl } from "@keepmind/client";
 import { memo, type RefObject, useEffect, useLayoutEffect, useRef } from "react";
 
 /** A frame's picture as an image address: its bytes as a new `blob:` URL (freed by whoever made it), else `data:`. */

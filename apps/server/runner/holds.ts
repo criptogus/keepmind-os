@@ -9,7 +9,7 @@ import {
   type MachineReplies,
   type MachineRequest,
   type RunnerHolds,
-} from "@agenteschat/adapters/machine-protocol";
+} from "@keepmind/adapters/machine-protocol";
 import type { AgentUser } from "./agent-users";
 import { RunnerError } from "./errors";
 import { readJson, writeJson } from "./json-file";
@@ -180,7 +180,7 @@ export function lockCommand(
           `/sys/fs/cgroup${browserCgroup(hold.uid)}/cgroup.events`,
         ]
       : ["/bin/sleep", String(Math.max(1, Math.ceil((Date.parse(hold.until ?? "") - now) / 1000)))];
-  return [inhibit, "--what=idle", "--mode=block", "--who=agentes.chat", "--why=keep_running", ...wait];
+  return [inhibit, "--what=idle", "--mode=block", "--who=KeepMind OS", "--why=keep_running", ...wait];
 }
 
 /** Root's scope for a lock: in the agent's slice, named after the hold, which is how a guard ties the two. */

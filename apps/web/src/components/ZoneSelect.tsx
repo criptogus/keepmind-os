@@ -1,6 +1,6 @@
-import { useSettings } from "@agenteschat/client";
-import { browserTimezone, zoneDisplayName } from "@agenteschat/client/lib/routines";
-import { TimezoneSelect } from "@agenteschat/ui";
+import { useSettings } from "@keepmind/client";
+import { browserTimezone, zoneDisplayName } from "@keepmind/client/lib/routines";
+import { TimezoneSelect } from "@keepmind/ui";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useOrg } from "@/components/org-context";

@@ -1,6 +1,6 @@
-import type { DeviceAudience } from "@agenteschat/client";
-import { narrowsAudience } from "@agenteschat/client/lib/devices";
-import { Icon, Select } from "@agenteschat/ui";
+import type { DeviceAudience } from "@keepmind/client";
+import { narrowsAudience } from "@keepmind/client/lib/devices";
+import { Icon, Select } from "@keepmind/ui";
 import { useTranslation } from "react-i18next";
 import { AudiencePeoplePicker } from "@/components/AgentAudience";
 import { PrefRow } from "@/components/NoticePrefs";

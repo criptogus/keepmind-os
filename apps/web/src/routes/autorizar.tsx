@@ -1,4 +1,4 @@
-import { consentErrorParam } from "@agenteschat/client/lib/apps";
+import { consentErrorParam } from "@keepmind/client/lib/apps";
 import { createFileRoute } from "@tanstack/react-router";
 import { requireUser } from "@/app/guards";
 import { AuthorizePage } from "@/pages/AuthorizePage";

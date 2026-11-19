@@ -1,4 +1,4 @@
-import { and, type Database, desc, eq, inArray, isNull, schema } from "@agenteschat/db";
+import { and, type Database, desc, eq, inArray, isNull, schema } from "@keepmind/db";
 import { cutText } from "./format";
 import { MISSION_RULES } from "./mission-rules";
 import { missionCwd, onlyReadsWhileWriting, shortSha } from "./mission-worktree";

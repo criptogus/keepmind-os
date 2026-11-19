@@ -8,8 +8,8 @@ import type {
   SearchIndexResolver,
   SearchKind,
   WebPushSender,
-} from "@agenteschat/adapters";
-import { and, count, eq, inArray, isNull, ne, queryTrace, schema, sql } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { and, count, eq, inArray, isNull, ne, queryTrace, schema, sql } from "@keepmind/db";
 import { ACCOUNT_CONTACT_JOB, saveAccountContact } from "./account-contacts";
 import { AGENT_MEDIA_JOB, enqueueAgentMedia, maybeSendAgentMedia } from "./agent-media";
 import { aiConnectIntent, type ConnectIntent } from "./ai-intent";
@@ -26,6 +26,7 @@ import { typingLogFor } from "./burst";
 import { CHANNEL_DELETE_JOB, purgeChannel } from "./channel-deletion";
 import { crowdedAgents, publishQueueChanged } from "./computer-queue";
 import type { ConnectorDeps } from "./connectors/connections";
+import { CONNECTOR_PROBE_JOB, probeConnectionById } from "./connectors/probe";
 import { startNoteRun } from "./consultations";
 import { getChannelCached } from "./context";
 import { consolidateOrg } from "./context/consolidate";
@@ -129,11 +130,13 @@ import { purgeOrgFiles, purgeUserFiles, runMigration, type StorageDeps } from ".
 import { postStretchCard, STRETCH_JOB, type StretchHold } from "./stretch";
 import { sayTeamHello } from "./team-templates";
 import { postTeamWeek, TEAM_DAY_JOB, TEAM_WEEK_JOB } from "./team-week";
-import { isAgentesCloud } from "./telemetry";
+import { isKeepMindCloud } from "./telemetry";
 import { assessThread } from "./thread-assess";
 import { runVaultSync, VAULT_SYNC_JOB, type VaultDeps } from "./vault";
 import { transcribeVoiceClip, VOICE_JOB, type VoiceDeps } from "./voice";
 import { saveWaitlistContact } from "./waitlist";
+import { maybeDeliverWhatsAppReply } from "./whatsapp/inbound";
+import type { WhatsAppDeps } from "./whatsapp/supervisor";
 import { checkInWork, followUpWork, WORK_CHECK_IN_JOB, WORK_FOLLOW_UP_JOB } from "./works";
 import {
   ACCOUNT_DELETE_JOB,
@@ -170,7 +173,7 @@ export interface JobDeps extends RunExecutorDeps {
   email?: EmailSender;
   /** Where feedback's pictures and videos are kept (jobs `feedback.send`, `feedback.file.purge`). */
   feedbackBlobs?: BlobStore;
-  /** How a feedback reaches the agentes.chat team's inbox (ADR 0160 §13); the network's own by default. */
+  /** How a feedback reaches the KeepMind OS team's inbox (ADR 0160 §13); the network's own by default. */
   feedbackFetch?: typeof fetch;
   /** Where emails get their pictures (`emailArtFor`); absent: from each link's own server. */
   emailArt?: EmailArt;
@@ -196,6 +199,8 @@ export interface JobDeps extends RunExecutorDeps {
   voice?: VoiceDeps;
   /** The Vault's sources (job `vault.sync`, ADR 0144); absent: connections aren't read again. */
   vault?: VaultDeps;
+  /** WhatsApp bridge (job `message.posted` delivers agent replies in mirrored threads). */
+  whatsapp?: WhatsAppDeps;
   /** Connectors: job `org.delete` revokes a workspace's GitHub OAuth grants at GitHub before its rows go. */
   connectors?: ConnectorDeps;
   /** The server's GitHub App: job `org.delete` uninstalls it from the workspace's GitHub accounts (ADR 0156). */
@@ -229,7 +234,7 @@ export interface JobDeps extends RunExecutorDeps {
     jev?: { key: JevKeySource; timeoutMs?: number; fetch?: typeof fetch; baseURL?: string };
     /**
      * The author's own plan as a step (ADR 0074 §3): the computers it picks on, and this server's address. Off
-     * on the Cloud (`isAgentesCloud`), where Jev is ours. Absent: no plan step.
+     * on the Cloud (`isKeepMindCloud`), where Jev is ours. Absent: no plan step.
      */
     plans?: { hub: Pick<MachineCaller, "call" | "status">; publicUrl: string };
     /** How long a person's message waits for their next one (`ROUTER_QUIET_MS` on a server); absent: no wait. */
@@ -256,7 +261,7 @@ export function messageRouter(deps: JobDeps): RouterDeps | null {
   const perProvider = { anthropic: router.model, ...router.cheapModels };
   const smallModel = (orgId: string) => smallModelFor(deps, orgId, perProvider);
   const jev = router.jev;
-  const plans = router.plans && !isAgentesCloud(router.plans.publicUrl) ? router.plans.hub : null;
+  const plans = router.plans && !isKeepMindCloud(router.plans.publicUrl) ? router.plans.hub : null;
   const steps = [
     ...(jev
       ? [
@@ -562,6 +567,11 @@ export function createJobHandlers(deps: JobDeps): JobHandlers {
       await advanceLegacyWorkflow(deps.db, orgOf(job), String(job.payload.runId));
     },
     // A wake the brakes deferred (its agent at its cap of unrequested work, or its computer full) looks again.
+    // A connector's scheduled sign-in check (connectors/probe.ts): best-effort, one attempt.
+    [CONNECTOR_PROBE_JOB]: async (job) => {
+      if (!deps.connectors) return;
+      await probeConnectionById(deps.connectors, orgOf(job), String(job.payload.connectionId ?? ""));
+    },
     [LATER_JOB]: async (job) => {
       const orgId = orgOf(job);
       const message = await getMessage(deps.db, orgId, String(job.payload.messageId));
@@ -585,6 +595,12 @@ export function createJobHandlers(deps: JobDeps): JobHandlers {
       const input = { orgId: orgOf(job), messageId: String(job.payload.messageId) };
       const message = await getMessage(deps.db, input.orgId, input.messageId);
       if (!message) return;
+      // An agent reply in a WhatsApp-mirrored thread goes back out through the bridge.
+      if (deps.whatsapp) {
+        await maybeDeliverWhatsAppReply({ db: deps.db, whatsapp: deps.whatsapp }, message).catch((error: unknown) =>
+          deps.log?.warn("whatsapp reply delivery failed", { messageId: message.id, error: String(error) }),
+        );
+      }
       if (deps.context && message.threadId) await maybeEnqueueReflection(deps, message.orgId, message.threadId);
       // An issue's work card, its start (the run is already started) and the "took issue #N" line route to nobody.
       // A task conversation's root (ADR 0145) stands for the task: nobody is routed either.
@@ -656,7 +672,10 @@ export function createJobHandlers(deps: JobDeps): JobHandlers {
           message.meta.noAi ||
           message.meta.actionCard ||
           message.meta.autonomyNote ||
-          message.meta.movedOn
+          message.meta.movedOn ||
+          // A WhatsApp mirror's inbound message: external text never routes or
+          // mention-wakes; the answer agent's run was started by the mirror.
+          message.meta.external
         )
           return;
         // A routine's own message (hand_off, no run behind it, ADR 0053 addendum 2026-11-01): its mentions wake

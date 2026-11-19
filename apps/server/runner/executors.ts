@@ -9,8 +9,8 @@ import {
   parseExecutors,
   type RunnerExecutorInfo,
   type RunnerInfo,
-} from "@agenteschat/adapters/machine-protocol";
-import { isOpencodeFreeModel, OPENCODE_FREE_MODELS } from "@agenteschat/providers/plans";
+} from "@keepmind/adapters/machine-protocol";
+import { isOpencodeFreeModel, OPENCODE_FREE_MODELS } from "@keepmind/providers/plans";
 import { readSmallJson, writeJson } from "./json-file";
 import { SHARED_BIN_ENV } from "./shared-folder";
 

@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { noPlatformCredentials } from "@agenteschat/adapters";
-import { and, eq, schema } from "@agenteschat/db";
+import { noPlatformCredentials } from "@keepmind/adapters";
+import { and, eq, schema } from "@keepmind/db";
 import {
   acceptInvitation,
   addChannelMember,

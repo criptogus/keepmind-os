@@ -1,5 +1,5 @@
-import { type GitProxyDeps, handleGitProxy } from "@agenteschat/engine";
 import type { OpenAPIHono } from "@hono/zod-openapi";
+import { type GitProxyDeps, handleGitProxy } from "@keepmind/engine";
 
 /**
  * The git proxy for agents' computers (docs/adr/0024-git-proxy.md):

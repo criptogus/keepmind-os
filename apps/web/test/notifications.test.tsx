@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { AgentQuestion, AppNotification } from "@agenteschat/client";
+import type { AgentQuestion, AppNotification } from "@keepmind/client";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { dispatchPushOpen, pushOpenPath } from "../src/lib/push-open";
 import { ADA_ID, ATLAS_ID, createFakeApi, ENG_ID, type FakeState, fakeMachinesOf, ORG_ID, seedState } from "./fake-api";
@@ -693,7 +693,7 @@ describe("what the workspace itself tells: nobody's face, its own", () => {
     expect(css).toMatch(/\.nt-item:not\(\.is-unread\) \.nt-what:not\(:has\(b\)\) \{[^}]*font-weight: 500/);
   });
 
-  test("an agent held on agentes.chat Cloud: its name, then the hold's whole line, never its reason", async () => {
+  test("an agent held on KeepMind OS Cloud: its name, then the hold's whole line, never its reason", async () => {
     const held = notification({
       id: "n-held",
       kind: "org_standing",
@@ -706,7 +706,7 @@ describe("what the workspace itself tells: nobody's face, its own", () => {
     expect(row.querySelector(".nt-what")?.textContent).toBe("Ada está em pausa");
     const line = row.querySelector(".nt-snip");
     expect(line?.textContent).toBe(
-      "Este agente está pausado. As nossas regras de rede viram sinais de abuso no tráfego dele (Termos, seção 5). Para contestar, escreva para legal@agentes.chat.",
+      "Este agente está pausado. As nossas regras de rede viram sinais de abuso no tráfego dele (Termos, seção 5). Para contestar, escreva para contact@zeroagency.ai.",
     );
     // How to contest it is never cut off.
     expect(line?.classList.contains("nt-snip--whole")).toBe(true);
@@ -714,8 +714,8 @@ describe("what the workspace itself tells: nobody's face, its own", () => {
     expect(row.getAttribute("aria-label")).toBe("Ada está em pausa, não lida");
   });
 
-  test("the workspace held or suspended on agentes.chat Cloud reads as the restriction, never 'review'", async () => {
-    const contest = "Para contestar, escreva para legal@agentes.chat.";
+  test("the workspace held or suspended on KeepMind OS Cloud reads as the restriction, never 'review'", async () => {
+    const contest = "Para contestar, escreva para contact@zeroagency.ai.";
     const standing = (id: string, latest: AppNotification["latest"]) =>
       notification({ id, kind: "org_standing", latest, updatedAt: ago(2) });
     await go(

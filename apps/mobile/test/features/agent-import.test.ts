@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
-import type { ImportItemResult, MigrationBundle } from "@agenteschat/client";
-import { cardName, defaultMethod, IMPORT_CARDS, mcpClient } from "@agenteschat/client/lib/import/flow";
-import { parseImport } from "@agenteschat/client/lib/import/index";
+import type { ImportItemResult, MigrationBundle } from "@keepmind/client";
+import { cardName, defaultMethod, IMPORT_CARDS, mcpClient } from "@keepmind/client/lib/import/flow";
+import { parseImport } from "@keepmind/client/lib/import/index";
 import {
   agentRows,
   arrivedAgents,

@@ -1,4 +1,4 @@
-import { and, type Database, desc, eq, gt, isNull, lt, or, schema, sql } from "@agenteschat/db";
+import { and, type Database, desc, eq, gt, isNull, lt, or, schema, sql } from "@keepmind/db";
 import { recordAudit } from "../audit";
 import { sha256 } from "../crypto";
 import { ConflictError, ForbiddenError, NotFoundError } from "../errors";
@@ -73,7 +73,7 @@ export async function appPrincipal(
   const { grant } = row;
   let refusal: string | null = null;
   if (!row.open) {
-    refusal = "This agentes.chat account can't be used right now.";
+    refusal = "This KeepMind OS account can't be used right now.";
   } else {
     const membership = await getMembership(db, grant.userId, grant.orgId);
     if (!membership) {
@@ -81,7 +81,7 @@ export async function appPrincipal(
       return null;
     }
     if (workRefusal(membership.standing))
-      refusal = "This workspace is paused in agentes.chat. Nothing can be read or sent through this app now.";
+      refusal = "This workspace is paused in KeepMind OS. Nothing can be read or sent through this app now.";
   }
   const [org] = await db
     .select({ name: organizations.name })

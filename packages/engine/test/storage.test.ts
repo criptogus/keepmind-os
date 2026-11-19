@@ -8,8 +8,8 @@ import {
   createPostgresBlobStore,
   createS3BlobStore,
   StorageError,
-} from "@agenteschat/adapters";
-import { eq, rowsOf, schema, sql } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { eq, rowsOf, schema, sql } from "@keepmind/db";
 import {
   type ArtifactDeps,
   acceptVoiceClip,

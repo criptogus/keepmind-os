@@ -1,5 +1,5 @@
-import type { OrgSummary } from "@agenteschat/client";
-import { CLOUD_SERVER, serverHost } from "@agenteschat/client/lib/server";
+import type { OrgSummary } from "@keepmind/client";
+import { CLOUD_SERVER, serverHost } from "@keepmind/client/lib/server";
 
 /** A server's workspaces in Workspaces (ADR 0154), or one of its accounts' (ADR 0183), each with its unread count. */
 export interface ServerWorkspaces {
@@ -11,7 +11,7 @@ export interface ServerWorkspaces {
   email: string | null;
   /** The phone is signed in to this server with more than one account: each group says whose it is. */
   several: boolean;
-  /** Its header: "agentes.chat" for the Cloud, the address for any other. */
+  /** Its header: "keepmind.io" for the Cloud, the address for any other. */
   host: string;
   /** The server the app is on now. */
   current: boolean;
@@ -44,7 +44,7 @@ export function workspacesOf(input: {
     server: input.server,
     email: input.email ?? null,
     several: input.several === true,
-    host: input.server === CLOUD_SERVER ? "agentes.chat" : serverHost(input.server),
+    host: input.server === CLOUD_SERVER ? "keepmind.io" : serverHost(input.server),
     current: input.current,
     orgs: input.orgs.map((o) => ({ ...o, unread: counts.get(o.id) ?? 0 })),
     failed: input.failed && input.orgs.length === 0,

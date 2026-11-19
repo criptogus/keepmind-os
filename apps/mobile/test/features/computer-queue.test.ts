@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import type { ComputerQueue, QueueWaiting } from "@agenteschat/client";
+import type { ComputerQueue, QueueWaiting } from "@keepmind/client";
 import {
   queueCauseText,
   queueLiveText,
@@ -7,8 +7,8 @@ import {
   queueStopText,
   queueWhereText,
   waitingFor,
-} from "@agenteschat/client/lib/computer-queue";
-import { devicePlanName } from "@agenteschat/client/lib/no-ai";
+} from "@keepmind/client/lib/computer-queue";
+import { devicePlanName } from "@keepmind/client/lib/no-ai";
 import { machineOfAgents, queuePlace } from "../../src/features/queue/logic";
 import { translator } from "./fixtures";
 

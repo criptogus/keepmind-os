@@ -1,7 +1,7 @@
 import { afterAll, afterEach, describe, expect, setDefaultTimeout, spyOn, test } from "bun:test";
-import { MACHINE_PROTOCOL_VERSION } from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
-import type { ModelRequest } from "@agenteschat/providers";
+import { MACHINE_PROTOCOL_VERSION } from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
+import type { ModelRequest } from "@keepmind/providers";
 import {
   addChannelMember,
   addRunStep,
@@ -195,7 +195,7 @@ const statusOf = (machineId: string, over: Partial<MachineStatus> = {}): Machine
 
 /** Pairs a computer and makes it the agent's, thinking with Claude Code. */
 async function computerAgent() {
-  const deps = { db: f.db, pubsub: f.pubsub, publicUrl: "https://agentes.chat" };
+  const deps = { db: f.db, pubsub: f.pubsub, publicUrl: "https://keepmind.io" };
   const paired = await pairMachine(deps, f.owner.id, f.org.id, { name: "MacBook", ...RUNNER, exec: true });
   await f.db
     .update(schema.agents)

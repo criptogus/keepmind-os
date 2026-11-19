@@ -1,4 +1,4 @@
-import { INLINE, type MdRangedBlock, parseMarkdown, parseWikiToken, SAFE_URL } from "@agenteschat/client/lib/markdown";
+import { INLINE, type MdRangedBlock, parseMarkdown, parseWikiToken, SAFE_URL } from "@keepmind/client/lib/markdown";
 
 /**
  * The wiki's visual editor works on the page as it reads (the same `.md` elements) and saves Markdown, the format

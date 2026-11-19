@@ -19,7 +19,7 @@ import {
 } from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { ASK_AGAIN, MISSION_DENY_RULES, PUSH_ASK_RULES } from "@agenteschat/adapters/command-policy";
+import { ASK_AGAIN, MISSION_DENY_RULES, PUSH_ASK_RULES } from "@keepmind/adapters/command-policy";
 import {
   type AccountKind,
   type AgentScope,
@@ -37,8 +37,8 @@ import {
   type TaskDone,
   type TaskExecutor,
   type TaskStart,
-} from "@agenteschat/adapters/machine-protocol";
-import { claudeCodeModel, planForTurn, planOf } from "@agenteschat/providers/plans";
+} from "@keepmind/adapters/machine-protocol";
+import { claudeCodeModel, planForTurn, planOf } from "@keepmind/providers/plans";
 import {
   ACCOUNT_MISSING_MESSAGE,
   ACCOUNT_SIGNED_OUT,

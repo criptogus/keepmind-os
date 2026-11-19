@@ -152,6 +152,10 @@
 .mp__search {
   margin-top: var(--space-3);
 }
+/* The free-only pill under the search (a plan with free models, OpenCode Go's). */
+.mp__filters {
+  margin-top: var(--space-2);
+}
 
 /* The models: the kit's menu rows (`.ac-menu__item`), Automático first with "padrão", the one it runs checked, a
    refused one dimmed. */

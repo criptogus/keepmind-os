@@ -1,4 +1,4 @@
-import { type AppLocale, localeInfo } from "@agenteschat/i18n/locale";
+import { type AppLocale, localeInfo } from "@keepmind/i18n/locale";
 /**
  * At most `max` UTF-16 units of `text`, never half of a pair (an emoji) at the end: Postgres refuses jsonb that
  * holds a lone surrogate.

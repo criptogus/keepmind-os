@@ -1,16 +1,10 @@
-import type { Machine, MachineTool } from "@agenteschat/client";
-import { useAllowMachineTool, useMachines } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { firstName } from "@agenteschat/client/lib/format";
-import { messageToolOff } from "@agenteschat/client/lib/machine-outages";
-import {
-  allowsInApp,
-  type ToolOneClick,
-  toolOnCommand,
-  toolOneClick,
-  toolWords,
-} from "@agenteschat/client/lib/machines";
-import { Button, type ButtonProps, SettingNote } from "@agenteschat/ui";
+import type { Machine, MachineTool } from "@keepmind/client";
+import { useAllowMachineTool, useMachines } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { firstName } from "@keepmind/client/lib/format";
+import { messageToolOff } from "@keepmind/client/lib/machine-outages";
+import { allowsInApp, type ToolOneClick, toolOnCommand, toolOneClick, toolWords } from "@keepmind/client/lib/machines";
+import { Button, type ButtonProps, SettingNote } from "@keepmind/ui";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { TerminalFallback } from "@/components/machine-bits";

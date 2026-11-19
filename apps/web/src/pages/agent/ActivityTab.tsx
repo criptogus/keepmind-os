@@ -1,7 +1,7 @@
-import type { Run } from "@agenteschat/client";
-import { useAgentDetail, useChannels, useRoutines, useRuns, useUsage } from "@agenteschat/client";
-import type { BrainScreen } from "@agenteschat/client/lib/agent-edit";
-import { FIX_BRAIN_SCREEN, failedRunFix, runErrorText, runErrorWords } from "@agenteschat/client/lib/errors";
+import type { Run } from "@keepmind/client";
+import { useAgentDetail, useChannels, useRoutines, useRuns, useUsage } from "@keepmind/client";
+import type { BrainScreen } from "@keepmind/client/lib/agent-edit";
+import { FIX_BRAIN_SCREEN, failedRunFix, runErrorText, runErrorWords } from "@keepmind/client/lib/errors";
 import {
   capitalize,
   dayLabel,
@@ -11,9 +11,9 @@ import {
   formatTime,
   formatTokensShort,
   formatUsd,
-} from "@agenteschat/client/lib/format";
-import { covers } from "@agenteschat/client/lib/repos";
-import { excerpt } from "@agenteschat/client/lib/text";
+} from "@keepmind/client/lib/format";
+import { covers } from "@keepmind/client/lib/repos";
+import { excerpt } from "@keepmind/client/lib/text";
 import {
   type AgentColor,
   Button,
@@ -29,7 +29,7 @@ import {
   SearchField,
   Segmented,
   Toolbar,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import type { TFunction } from "i18next";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";

@@ -18,8 +18,8 @@ import {
   VAULT_PROTOCOL,
   vaultAad,
   workspacePath,
-} from "@agenteschat/adapters";
-import { and, eq, schema } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { and, eq, schema } from "@keepmind/db";
 import { getAgentCached } from "./agents";
 import { fileLanded, SHARED_DRIVE_INPUT } from "./artifact-tools";
 import {

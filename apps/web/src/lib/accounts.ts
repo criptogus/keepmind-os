@@ -1,4 +1,4 @@
-import type { ApiClient } from "@agenteschat/client";
+import type { ApiClient } from "@keepmind/client";
 import { STORAGE_KEYS, sessionStore, storage } from "./storage";
 
 /**

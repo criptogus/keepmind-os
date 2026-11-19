@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { createMemoryPubSub, orgTopic, userTopic } from "@agenteschat/adapters";
+import { createMemoryPubSub, orgTopic, userTopic } from "@keepmind/adapters";
 import { publishDashboardChanged, publishWidgetChanged } from "../src/dashboards/events";
 
 const ORG = "00000000-0000-4000-8000-000000000001";

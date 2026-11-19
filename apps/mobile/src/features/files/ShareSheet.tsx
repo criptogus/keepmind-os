@@ -1,9 +1,9 @@
-import { type ArtifactSharing, useArtifact, useRoles, useSetArtifactSharing } from "@agenteschat/client";
-import { CONVERSATION_ONLY, isPrivateArtifact, toggledSharing } from "@agenteschat/client/lib/drive";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { joinNames } from "@agenteschat/client/lib/format";
-import { filePath } from "@agenteschat/client/lib/message-links";
-import { isEveryone, sortRoles } from "@agenteschat/client/lib/roles";
+import { type ArtifactSharing, useArtifact, useRoles, useSetArtifactSharing } from "@keepmind/client";
+import { CONVERSATION_ONLY, isPrivateArtifact, toggledSharing } from "@keepmind/client/lib/drive";
+import { errorText } from "@keepmind/client/lib/errors";
+import { joinNames } from "@keepmind/client/lib/format";
+import { filePath } from "@keepmind/client/lib/message-links";
+import { isEveryone, sortRoles } from "@keepmind/client/lib/roles";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, StyleSheet, View } from "react-native";

@@ -1,4 +1,4 @@
-import { and, desc, type Executor, eq, inArray, isNull, or, schema, sql } from "@agenteschat/db";
+import { and, desc, type Executor, eq, inArray, isNull, or, schema, sql } from "@keepmind/db";
 import { type AuthorityRun, fedByRoutine, type RunAuthority, runAuthority } from "./authority";
 import { caches, cachesEnabled } from "./cache";
 import { postedBySql } from "./message-place";

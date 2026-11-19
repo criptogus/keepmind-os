@@ -3,10 +3,10 @@ import {
   CONTEXT_LIMITS,
   type ContextLimit,
   contextLimitsFor,
-} from "@agenteschat/providers/context-limits";
+} from "@keepmind/providers/context-limits";
 import type { TFunction } from "i18next";
 
-export * from "@agenteschat/providers/context-limits";
+export * from "@keepmind/providers/context-limits";
 
 /** A context size as the apps write it, in every language: `200K`, `400K`, `1M`. */
 export const contextSize = (tokens: number) =>

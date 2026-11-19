@@ -1,4 +1,4 @@
-import type { DecidedBy, Message, SteerState } from "@agenteschat/client";
+import type { DecidedBy, Message, SteerState } from "@keepmind/client";
 import {
   type MessageReceipt,
   type ReceiptPhase,
@@ -10,14 +10,14 @@ import {
   useApi,
   useReactions,
   useSteerState,
-} from "@agenteschat/client";
-import { errorText, runFailureLine } from "@agenteschat/client/lib/errors";
-import { joinNames, sentAtLine } from "@agenteschat/client/lib/format";
-import { mayConnectAi, plansNotYoursOf } from "@agenteschat/client/lib/no-ai";
-import { can } from "@agenteschat/client/lib/permissions";
-import { retryAnswer } from "@agenteschat/client/lib/retry-answer";
-import { deciderOf, everyoneLineOf } from "@agenteschat/client/lib/routing";
-import { AvatarStack, HintLine, Icon, type IconName, PixelSpinner, Popover } from "@agenteschat/ui";
+} from "@keepmind/client";
+import { errorText, runFailureLine } from "@keepmind/client/lib/errors";
+import { joinNames, sentAtLine } from "@keepmind/client/lib/format";
+import { mayConnectAi, plansNotYoursOf } from "@keepmind/client/lib/no-ai";
+import { can } from "@keepmind/client/lib/permissions";
+import { retryAnswer } from "@keepmind/client/lib/retry-answer";
+import { deciderOf, everyoneLineOf } from "@keepmind/client/lib/routing";
+import { AvatarStack, HintLine, Icon, type IconName, PixelSpinner, Popover } from "@keepmind/ui";
 import { type ReactNode, useEffect, useId, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActorAvatar, AgentAvatar } from "@/components/AgentAvatar";

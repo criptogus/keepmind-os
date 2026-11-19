@@ -1,4 +1,4 @@
-import { normalizeServer, originOf } from "@agenteschat/client/lib/server";
+import { normalizeServer, originOf } from "@keepmind/client/lib/server";
 
 /**
  * A place is one account's sign-in on a server (ADR 0183): the server's address for the first account there, as

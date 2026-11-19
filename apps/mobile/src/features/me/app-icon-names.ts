@@ -6,7 +6,7 @@ import {
   madeIconId,
   madeIconOf,
   madeIcons,
-} from "@agenteschat/client/lib/app-icons";
+} from "@keepmind/client/lib/app-icons";
 
 /** An icon the phone can show: one of the ready ones, or one the person made. */
 export type PhoneIcon = AppIconId | MadeIcon;

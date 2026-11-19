@@ -1,4 +1,4 @@
-import { bodyPath, EYE_STYLES, EYE_X } from "@agenteschat/ui/agent/engine";
+import { bodyPath, EYE_STYLES, EYE_X } from "@keepmind/ui/agent/engine";
 import { ICONS } from "./icons.data";
 
 /**

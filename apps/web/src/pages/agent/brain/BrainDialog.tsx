@@ -1,10 +1,10 @@
-import type { AgentBrain, AgentBrainInput, AgentSetup, BrainKind, MachineAccount } from "@agenteschat/client";
-import { keys, useAgents, useApi, useSetComputerTarget, useUpdateAgent } from "@agenteschat/client";
-import type { BrainScreen } from "@agenteschat/client/lib/agent-edit";
-import { autonomyWords, setupOutcome } from "@agenteschat/client/lib/agent-setup";
-import { signInPlan } from "@agenteschat/client/lib/ai-accounts";
-import { EVERYONE_AUDIENCE, setupPlanQuestion } from "@agenteschat/client/lib/audience";
-import { thinksWith } from "@agenteschat/client/lib/brain";
+import type { AgentBrain, AgentBrainInput, AgentSetup, BrainKind, MachineAccount } from "@keepmind/client";
+import { keys, useAgents, useApi, useSetComputerTarget, useUpdateAgent } from "@keepmind/client";
+import type { BrainScreen } from "@keepmind/client/lib/agent-edit";
+import { autonomyWords, setupOutcome } from "@keepmind/client/lib/agent-setup";
+import { signInPlan } from "@keepmind/client/lib/ai-accounts";
+import { EVERYONE_AUDIENCE, setupPlanQuestion } from "@keepmind/client/lib/audience";
+import { thinksWith } from "@keepmind/client/lib/brain";
 import {
   type Advanced,
   advancedDefaults,
@@ -12,17 +12,17 @@ import {
   effortLevelsOf,
   effortTextOf,
   isAdvancedDefault,
-} from "@agenteschat/client/lib/brain-advanced";
-import { brainModelLine, brainPickText } from "@agenteschat/client/lib/brain-picker";
-import { contextSize } from "@agenteschat/client/lib/context-limits";
-import { keyRefusal } from "@agenteschat/client/lib/errors";
-import { namesText, rosterText } from "@agenteschat/client/lib/format";
-import { brainTool, installableCli } from "@agenteschat/client/lib/machines";
-import { type AiChoice, planMark } from "@agenteschat/client/lib/no-ai";
-import { usageWhen } from "@agenteschat/client/lib/plan-usage";
-import { geminiPersonal, isPlanId, planFreeHint, signInProviderOf } from "@agenteschat/client/lib/plans";
-import { AUTO, isAuto, modelOnKey, providerLabel } from "@agenteschat/client/lib/providers";
-import { sceneTeam } from "@agenteschat/client/lib/right-hand";
+} from "@keepmind/client/lib/brain-advanced";
+import { brainModelLine, brainPickText } from "@keepmind/client/lib/brain-picker";
+import { contextSize } from "@keepmind/client/lib/context-limits";
+import { keyRefusal } from "@keepmind/client/lib/errors";
+import { namesText, rosterText } from "@keepmind/client/lib/format";
+import { brainTool, installableCli } from "@keepmind/client/lib/machines";
+import { type AiChoice, planMark } from "@keepmind/client/lib/no-ai";
+import { usageWhen } from "@keepmind/client/lib/plan-usage";
+import { geminiPersonal, isPlanId, planFreeHint, signInProviderOf } from "@keepmind/client/lib/plans";
+import { AUTO, isAuto, modelOnKey, providerLabel } from "@keepmind/client/lib/providers";
+import { sceneTeam } from "@keepmind/client/lib/right-hand";
 import {
   AvatarStack,
   Button,
@@ -36,8 +36,8 @@ import {
   ProviderLogo,
   planState,
   SettingNote,
-} from "@agenteschat/ui";
-import { extraUsageOn } from "@agenteschat/ui/plan-state";
+} from "@keepmind/ui";
+import { extraUsageOn } from "@keepmind/ui/plan-state";
 import { useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { type CSSProperties, type ReactNode, useEffect, useRef, useState } from "react";

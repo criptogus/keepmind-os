@@ -5,7 +5,7 @@ import {
   type ShadowName,
   type ThemeColors,
   shadows as tokenShadows,
-} from "@agenteschat/tokens";
+} from "@keepmind/tokens";
 
 /**
  * The phone app's colors (pure: no React Native import, so it is unit-tested). The design system's tokens,

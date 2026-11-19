@@ -1,5 +1,5 @@
-import type { AppLocale } from "@agenteschat/i18n/locale";
-import { deepMerge } from "@agenteschat/i18n/tree";
+import type { AppLocale } from "@keepmind/i18n/locale";
+import { deepMerge } from "@keepmind/i18n/tree";
 import { words as de } from "./de";
 import { en, type Words } from "./en";
 import { words as es } from "./es";

@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, expect, test } from "bun:test";
-import { schema } from "@agenteschat/db";
+import { schema } from "@keepmind/db";
 import { browser, createTestServer, fakeCloudflare, type TestServer, tokenMadeOn, turnstileCheck } from "./harness";
 
 /** The landing page's own site. */

@@ -4,7 +4,7 @@ import {
   AGENT_EYES,
   type AgentAppearance,
   type AgentColor,
-} from "@agenteschat/tokens/look";
+} from "@keepmind/tokens/look";
 import type { CSSProperties } from "react";
 import { gradientOf } from "../agent/engine.js";
 
@@ -17,7 +17,7 @@ export {
   type AgentColor,
   type AgentEyes,
   normalizeAppearance,
-} from "@agenteschat/tokens/look";
+} from "@keepmind/tokens/look";
 
 /** A random look ("Aleatório"), different from `current` when possible. */
 export function randomAppearance(current: AgentAppearance = {}, rand: () => number = Math.random): AgentAppearance {

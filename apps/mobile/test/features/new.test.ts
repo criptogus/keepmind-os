@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import type { DirectMessage } from "@agenteschat/client";
+import type { DirectMessage } from "@keepmind/client";
 import { buildConversations } from "../../src/features/chats/logic";
 import { AGENT_NAMES, askTargets, chatMatches, createItems, suggestAgentName } from "../../src/features/new/logic";
 import { agent, at } from "./fixtures";

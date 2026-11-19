@@ -1,4 +1,4 @@
-import type { OrgPlanUsage, PlanAccountUsage, PlanServes } from "@agenteschat/client";
+import type { OrgPlanUsage, PlanAccountUsage, PlanServes } from "@keepmind/client";
 import {
   keys,
   useAiAccounts,
@@ -9,11 +9,11 @@ import {
   useUpdateSettings,
   useUsageReport,
   useWorkspaceUsesApi,
-} from "@agenteschat/client";
-import { composioUsageText, showsComposioUsage } from "@agenteschat/client/lib/composio";
-import { computerNameOf } from "@agenteschat/client/lib/computer";
-import { formatPercent, formatShortDate, formatTokensShort, formatUsd } from "@agenteschat/client/lib/format";
-import { can } from "@agenteschat/client/lib/permissions";
+} from "@keepmind/client";
+import { composioUsageText, showsComposioUsage } from "@keepmind/client/lib/composio";
+import { computerNameOf } from "@keepmind/client/lib/computer";
+import { formatPercent, formatShortDate, formatTokensShort, formatUsd } from "@keepmind/client/lib/format";
+import { can } from "@keepmind/client/lib/permissions";
 import {
   accountName,
   accountOwner,
@@ -27,12 +27,12 @@ import {
   servesText,
   shareFacts,
   splitUsage,
-} from "@agenteschat/client/lib/plan-usage";
-import { planName } from "@agenteschat/client/lib/plans";
-import { parseAmount } from "@agenteschat/client/lib/text";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
-import { gradientOf } from "@agenteschat/ui/agent/engine";
-import { PLAN_ALMOST, PLAN_TONE, planLevel, planLine } from "@agenteschat/ui/plan-state";
+} from "@keepmind/client/lib/plan-usage";
+import { planName } from "@keepmind/client/lib/plans";
+import { parseAmount } from "@keepmind/client/lib/text";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
+import { gradientOf } from "@keepmind/ui/agent/engine";
+import { PLAN_ALMOST, PLAN_TONE, planLevel, planLine } from "@keepmind/ui/plan-state";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";

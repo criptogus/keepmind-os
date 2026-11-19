@@ -1,20 +1,20 @@
-import type { AppNotification, NotificationActor } from "@agenteschat/client";
-import { appCreatedLine } from "@agenteschat/client/lib/apps";
-import { WORKSPACE_COMPUTER_KIND } from "@agenteschat/client/lib/computer";
-import { deviceNoticeOf } from "@agenteschat/client/lib/devices";
-import { formatUsd, namesText } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
+import type { AppNotification, NotificationActor } from "@keepmind/client";
+import { appCreatedLine } from "@keepmind/client/lib/apps";
+import { WORKSPACE_COMPUTER_KIND } from "@keepmind/client/lib/computer";
+import { deviceNoticeOf } from "@keepmind/client/lib/devices";
+import { formatUsd, namesText } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
 import {
   askersOf,
   channelOf,
   runFailedGroupOf,
   widgetNoticeOf,
   workspaceHeadline,
-} from "@agenteschat/client/lib/notifications";
-import type { Words } from "@agenteschat/client/lib/routine-view";
-import { teamWatchLine } from "@agenteschat/client/lib/team-watch";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
-import { Avatar, ComputerIcon, cx, Icon } from "@agenteschat/ui";
+} from "@keepmind/client/lib/notifications";
+import type { Words } from "@keepmind/client/lib/routine-view";
+import { teamWatchLine } from "@keepmind/client/lib/team-watch";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
+import { Avatar, ComputerIcon, cx, Icon } from "@keepmind/ui";
 import type { TFunction } from "i18next";
 import { Trans, useTranslation } from "react-i18next";
 import { ActorAvatar, AgentAvatar } from "@/components/AgentAvatar";

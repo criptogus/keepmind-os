@@ -1,4 +1,4 @@
-import { type AgentColorName, bodyTones, mixHex } from "@agenteschat/ui/agent/engine";
+import { type AgentColorName, bodyTones, mixHex } from "@keepmind/ui/agent/engine";
 
 /** The 3×3 ring the orbit walks, clockwise from the top-left. */
 export const RING: readonly (readonly [number, number])[] = [

@@ -1,12 +1,12 @@
-import { type SoundName, setSoundPlayer } from "@agenteschat/client/lib/sounds";
-import { DEFAULT_SOUND_STYLE, isSoundStyle, renderSound, SOUNDS, type SoundStyle, wavBytes } from "@agenteschat/ui/sfx";
+import { type SoundName, setSoundPlayer } from "@keepmind/client/lib/sounds";
+import { DEFAULT_SOUND_STYLE, isSoundStyle, renderSound, SOUNDS, type SoundStyle, wavBytes } from "@keepmind/ui/sfx";
 import { type AudioPlayer, createAudioPlayer, setAudioModeAsync } from "expo-audio";
 import { File, Paths } from "expo-file-system";
 import { useEffect, useSyncExternalStore } from "react";
 import { readValueSync, STORED, writeValue } from "./storage";
 
 /**
- * The app's sounds on the phone (ADR 0070): synthesized by `@agenteschat/ui/sfx` into WAV files in the cache
+ * The app's sounds on the phone (ADR 0070): synthesized by `@keepmind/ui/sfx` into WAV files in the cache
  * (made once per style, again only if the system clears them), played low, mixed with the person's music and
  * silent in silent mode. The choice (a style, or off) belongs to this phone.
  */

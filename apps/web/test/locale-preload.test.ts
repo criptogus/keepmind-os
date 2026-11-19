@@ -1,12 +1,12 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { loadStrings } from "@agenteschat/i18n/load";
-import { type AppLocale, LOCALE_CODES } from "@agenteschat/i18n/locale";
+import { loadStrings } from "@keepmind/i18n/load";
+import { type AppLocale, LOCALE_CODES } from "@keepmind/i18n/locale";
 import { loadI18n, savedLocale } from "../src/i18n";
 import { LOCALE_FILES, localeOfModule, preloadLocale } from "../vite-locale-preload";
 
@@ -22,7 +22,7 @@ function preloaded(env: { stored?: string; cookie?: string; languages: string[] 
   const globals = {
     window: {},
     document: doc,
-    location: { href: "https://app.agentes.chat/", reload: () => {} },
+    location: { href: "https://keepmind.io/", reload: () => {} },
     navigator: { languages: env.languages, language: env.languages[0] },
     localStorage: { getItem: (key: string) => (key === "agentes.locale" ? (env.stored ?? null) : null) },
     sessionStorage: { getItem: () => null, setItem: () => {} },

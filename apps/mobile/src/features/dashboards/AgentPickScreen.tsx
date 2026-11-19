@@ -1,6 +1,6 @@
-import { type Agent, useAgentAccess } from "@agenteschat/client";
-import { levelOf, resourcesOf } from "@agenteschat/client/lib/access-levels";
-import { canTalk } from "@agenteschat/client/lib/audience";
+import { type Agent, useAgentAccess } from "@keepmind/client";
+import { levelOf, resourcesOf } from "@keepmind/client/lib/access-levels";
+import { canTalk } from "@keepmind/client/lib/audience";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, StyleSheet, View } from "react-native";

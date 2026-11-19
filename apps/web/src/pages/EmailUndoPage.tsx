@@ -1,6 +1,6 @@
-import { ApiError } from "@agenteschat/client";
-import { errorCode, errorText } from "@agenteschat/client/lib/errors";
-import { Button, Icon, Locked } from "@agenteschat/ui";
+import { ApiError } from "@keepmind/client";
+import { errorCode, errorText } from "@keepmind/client/lib/errors";
+import { Button, Icon, Locked } from "@keepmind/ui";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import type { FormEvent } from "react";
@@ -46,7 +46,7 @@ export function EmailUndoPage({ token }: { token?: string }) {
       <form className="auth__form" onSubmit={submit} noValidate>
         <header className="auth__ask">
           <AgentAvatar
-            name="agentes.chat"
+            name="keepmind.io"
             size="lg"
             state={undo.isPending ? "writing" : undefined}
             expression={back ? "happy" : undefined}

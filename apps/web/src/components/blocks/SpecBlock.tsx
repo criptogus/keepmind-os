@@ -1,7 +1,7 @@
-import { type BlockChange, useBlockReply, useBlockValues } from "@agenteschat/client";
-import type { ChartSpec } from "@agenteschat/client/lib/chart";
-import { formatTime } from "@agenteschat/client/lib/format";
-import { Button, Field, Input, Segmented, Switch, Textarea } from "@agenteschat/ui";
+import { type BlockChange, useBlockReply, useBlockValues } from "@keepmind/client";
+import type { ChartSpec } from "@keepmind/client/lib/chart";
+import { formatTime } from "@keepmind/client/lib/format";
+import { Button, Field, Input, Segmented, Switch, Textarea } from "@keepmind/ui";
 import {
   type BlockViewPart,
   type BlockWords,
@@ -9,7 +9,7 @@ import {
   inputValue,
   parseBlockSpec,
   viewBlock,
-} from "@agenteschat/ui/blocks/spec";
+} from "@keepmind/ui/blocks/spec";
 import { type CSSProperties, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ChartAccent, ChartView } from "@/components/ChartBlock";
@@ -38,7 +38,7 @@ const keptOf = (key: string) => {
 /**
  * A live block drawn by the app itself (ADR 0113): the parts the agent described, with the app's own controls, over
  * the state everyone in the conversation shares. Nothing the agent wrote runs here: its words reach the screen only
- * as text, and its formulas are read by our interpreter (`@agenteschat/ui/blocks/spec`).
+ * as text, and its formulas are read by our interpreter (`@keepmind/ui/blocks/spec`).
  */
 export function SpecBlock({
   id,

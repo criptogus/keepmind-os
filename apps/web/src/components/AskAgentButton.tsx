@@ -1,9 +1,9 @@
-import type { Agent } from "@agenteschat/client";
-import { mayAsk } from "@agenteschat/client/lib/audience";
-import { setDraftFor } from "@agenteschat/client/lib/drafts";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { rightHandOf } from "@agenteschat/client/lib/right-hand";
-import { Button, type ButtonProps } from "@agenteschat/ui";
+import type { Agent } from "@keepmind/client";
+import { mayAsk } from "@keepmind/client/lib/audience";
+import { setDraftFor } from "@keepmind/client/lib/drafts";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { rightHandOf } from "@keepmind/client/lib/right-hand";
+import { Button, type ButtonProps } from "@keepmind/ui";
 import { useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { useOrg } from "@/components/org-context";

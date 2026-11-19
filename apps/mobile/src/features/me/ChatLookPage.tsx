@@ -1,4 +1,4 @@
-import { useSetChatPrefs } from "@agenteschat/client";
+import { useSetChatPrefs } from "@keepmind/client";
 import {
   CHAT_RHYTHM,
   CHAT_STYLES,
@@ -13,9 +13,9 @@ import {
   mineOnRight,
   openAtOf,
   textSizeOf,
-} from "@agenteschat/client/lib/chat-look";
-import { isPersonal, modeKey } from "@agenteschat/client/lib/workspace-mode";
-import type { AgentColorName } from "@agenteschat/ui/agent/engine";
+} from "@keepmind/client/lib/chat-look";
+import { isPersonal, modeKey } from "@keepmind/client/lib/workspace-mode";
+import type { AgentColorName } from "@keepmind/ui/agent/engine";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Pressable, StyleSheet, View } from "react-native";

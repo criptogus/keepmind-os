@@ -140,7 +140,7 @@ export function endpointHeaders(baseURL: string, session: string, version = "dev
     return null;
   }
   return host === "opencode.ai" || host.endsWith(".opencode.ai")
-    ? { "user-agent": `agentes.chat/${version}`, "x-opencode-session": session }
+    ? { "user-agent": `KeepMind OS/${version}`, "x-opencode-session": session }
     : null;
 }
 

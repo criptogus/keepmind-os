@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import { MACHINE_PROTOCOL_VERSION, type ServerFrame } from "@agenteschat/adapters";
-import { completeMission, getMissionRow, startSessionTask } from "@agenteschat/engine";
+import { MACHINE_PROTOCOL_VERSION, type ServerFrame } from "@keepmind/adapters";
+import { completeMission, getMissionRow, startSessionTask } from "@keepmind/engine";
 import { browser, createTestServer, pairComputer, seedOrg, signUp, type TestServer } from "./harness";
 
 let t: TestServer;

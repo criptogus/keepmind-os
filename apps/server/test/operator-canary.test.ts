@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, expect, test } from "bun:test";
-import { type Database, eq, rowsOf, schema, sql, tracingLogger } from "@agenteschat/db";
+import { type Database, eq, rowsOf, schema, sql, tracingLogger } from "@keepmind/db";
 import {
   addRunStep,
   countComposio,
@@ -7,7 +7,7 @@ import {
   enableOperatorEvents,
   grantScopes,
   type ToolSource,
-} from "@agenteschat/engine";
+} from "@keepmind/engine";
 import { createLogger } from "../src/logger";
 import { createOperatorApp } from "../src/operator/app";
 import { type Browser, browser, createTestServer, joinByInvitation, seedOrg, signUp, type TestServer } from "./harness";

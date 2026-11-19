@@ -11,8 +11,8 @@ import {
   type RunnerPhone,
   STREAM_CLOSE,
   STREAM_LIMITS,
-} from "@agenteschat/adapters";
-import { and, type Database, type Executor, eq, gt, inArray, isNull, lt, schema, sql } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { and, type Database, type Executor, eq, gt, inArray, isNull, lt, schema, sql } from "@keepmind/db";
 import { AUDIENCE_MODES, type AudienceMode } from "./audience";
 import { recordAudit } from "./audit";
 import { ForbiddenError, NotFoundError, ValidationError } from "./errors";

@@ -42,7 +42,7 @@ import {
   TabPanel,
   Tabs,
   Toolbar,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AgentAvatar } from "@/components/AgentAvatar";
@@ -344,7 +344,7 @@ export function GalleryPage() {
           }
           statusLabel="Aguardando você"
           title="Fazer merge do PR #42 em main"
-          detail="github.merge · agentes-chat/app · PR 42 · testes passando · expira em 23 h"
+          detail="github.merge · keepmind/app · PR 42 · testes passando · expira em 23 h"
           actions={
             <>
               <Button variant="primary" size="sm">

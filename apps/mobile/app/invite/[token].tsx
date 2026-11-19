@@ -1,10 +1,10 @@
-import { INVITATION_MAIL_PARAM, invitationMailProof } from "@agenteschat/client/lib/guards";
+import { INVITATION_MAIL_PARAM, invitationMailProof } from "@keepmind/client/lib/guards";
 import { useLocalSearchParams } from "expo-router";
 import { InviteScreen } from "@/features/auth/InviteScreen";
 import { isInviteToken } from "@/features/auth/links";
 import { ResetPasswordScreen } from "@/features/auth/ResetPasswordScreen";
 
-/** `https://app.agentes.chat/invite/{token}` opened in the app, signed in or not. */
+/** `https://keepmind.io/invite/{token}` opened in the app, signed in or not. */
 export default function InviteRoute() {
   const params = useLocalSearchParams<{ token?: string; [INVITATION_MAIL_PARAM]?: string }>();
   const { token } = params;

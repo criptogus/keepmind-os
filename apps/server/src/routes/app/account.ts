@@ -1,5 +1,6 @@
-import { isLoopback } from "@agenteschat/client/lib/server";
-import { isWorkAreaAnswer, WORK_AREA_ANSWERS } from "@agenteschat/client/lib/work-area";
+import { createRoute, z } from "@hono/zod-openapi";
+import { isLoopback } from "@keepmind/client/lib/server";
+import { isWorkAreaAnswer, WORK_AREA_ANSWERS } from "@keepmind/client/lib/work-area";
 import {
   acceptInvitation,
   accountDeletionPlan,
@@ -23,8 +24,8 @@ import {
   INVITE_CHOICES_MAX,
   invitationLogoFile,
   invitationState,
-  isAgentesCloud,
   isEmailVerified,
+  isKeepMindCloud,
   isValidTimeZone,
   joinStatus,
   listInvitations,
@@ -75,8 +76,7 @@ import {
   workspaceContents,
   workspaceDeletions,
   workspaceMode,
-} from "@agenteschat/engine";
-import { createRoute, z } from "@hono/zod-openapi";
+} from "@keepmind/engine";
 import {
   authUiConfig,
   changeAccountEmail,
@@ -171,7 +171,7 @@ const Me = z
       }),
       canCreateWorkspace: z.boolean().openapi({
         description:
-          "`POST /organizations` would make a workspace for them. False on agentes.chat Cloud while sign-up is by invitation, unless early access allowed their account and its address is confirmed (ADR 0078). `org.create_refused` and `org.create_unpaid` (ADR 0079) can still refuse it.",
+          "`POST /organizations` would make a workspace for them. False on KeepMind OS Cloud while sign-up is by invitation, unless early access allowed their account and its address is confirmed (ADR 0078). `org.create_refused` and `org.create_unpaid` (ADR 0079) can still refuse it.",
       }),
       deletion: z
         .object({
@@ -354,7 +354,7 @@ export function accountRoutes(deps: AppDeps) {
             }),
             feedbackRelay: z.boolean().openapi({
               description:
-                "Feedback goes to the agentes.chat team rather than to whoever runs this server (no FEEDBACK_EMAIL): the form says so and takes pictures only.",
+                "Feedback goes to the KeepMind OS team rather than to whoever runs this server (no FEEDBACK_EMAIL): the form says so and takes pictures only.",
             }),
             workspaceComputer: z.boolean().openapi({
               description:
@@ -366,7 +366,7 @@ export function accountRoutes(deps: AppDeps) {
             }),
             cloud: z.boolean().openapi({
               description:
-                "One of agentes.chat's own servers (`cloud` in `GET /api/instance`): the apps show no About screen there, which every other server shows.",
+                "One of KeepMind OS's own servers (`cloud` in `GET /api/instance`): the apps show no About screen there, which every other server shows.",
             }),
             turnstileSiteKey: z.string().nullable().openapi({
               description:
@@ -405,7 +405,7 @@ export function accountRoutes(deps: AppDeps) {
           passwordReset: deps.adapters.email.delivers === true,
           workspaceComputer: config.MACHINE_PROVISIONING === "external",
           billingUrl: config.BILLING_URL ?? null,
-          cloud: isAgentesCloud(config.PUBLIC_URL),
+          cloud: isKeepMindCloud(config.PUBLIC_URL),
           turnstileSiteKey: deps.adapters.humanCheck?.siteKey ?? null,
           errorReports: reportsTo(config.SENTRY_WEB_DSN),
           mobileErrorReports: reportsTo(config.SENTRY_MOBILE_DSN ?? config.SENTRY_WEB_DSN),
@@ -1316,7 +1316,7 @@ export function accountRoutes(deps: AppDeps) {
       security,
       summary: "Create an organization (you become its owner)",
       description:
-        "Its owner sets it up in the onboarding, already past its first step (`onboarding` in `GET /me` until `PATCH …/onboarding` says it's finished, or `finished` here). While they have one they haven't finished, that one comes back (200) instead of a new one, so a stale tab or a second press makes no other, even one waiting for its first plan; `timezone`, `memberTimezone` and `finished` apply to it as they would to a new one. The answer says where it opens (`rightHandId`) and carries `GET /me` as it is now, so an app opens it without asking again. 403 `org.create_refused` while your account is blocked or you are in a workspace suspended or on a hold the billing service didn't set; 403 `org.create_unpaid` (`params.orgId`) while you own a workspace waiting for its first plan; 403 `org.create_invite_only` on agentes.chat Cloud while sign-up is by invitation, unless early access allowed the person's account and its address is confirmed (ADR 0078). With BILLING_HOLD_NEW_WORKSPACES it starts on the `payment` hold (ADR 0079). 429 after 10 tries in a day; 401 once your account is deleted.",
+        "Its owner sets it up in the onboarding, already past its first step (`onboarding` in `GET /me` until `PATCH …/onboarding` says it's finished, or `finished` here). While they have one they haven't finished, that one comes back (200) instead of a new one, so a stale tab or a second press makes no other, even one waiting for its first plan; `timezone`, `memberTimezone` and `finished` apply to it as they would to a new one. The answer says where it opens (`rightHandId`) and carries `GET /me` as it is now, so an app opens it without asking again. 403 `org.create_refused` while your account is blocked or you are in a workspace suspended or on a hold the billing service didn't set; 403 `org.create_unpaid` (`params.orgId`) while you own a workspace waiting for its first plan; 403 `org.create_invite_only` on KeepMind OS Cloud while sign-up is by invitation, unless early access allowed the person's account and its address is confirmed (ADR 0078). With BILLING_HOLD_NEW_WORKSPACES it starts on the `payment` hold (ADR 0079). 429 after 10 tries in a day; 401 once your account is deleted.",
       request: {
         body: body(
           z.object({

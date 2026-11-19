@@ -1,4 +1,4 @@
-import { and, eq, inArray, isNull, like, ne, or, schema, sql } from "@agenteschat/db";
+import { and, eq, inArray, isNull, like, ne, or, schema, sql } from "@keepmind/db";
 import { deletedHandle } from "./agents";
 import { recordAudit } from "./audit";
 import { invalidateOrg } from "./cache";

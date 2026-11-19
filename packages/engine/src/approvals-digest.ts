@@ -1,5 +1,5 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, asc, type Database, type Executor, eq, gt, rowsOf, schema, sql } from "@agenteschat/db";
+import type { PubSub } from "@keepmind/adapters";
+import { and, asc, type Database, type Executor, eq, gt, rowsOf, schema, sql } from "@keepmind/db";
 import { activeCoversTo } from "./approval-covers";
 import { adminsDecide, decidableBySql, decidingKeys, notifiedIds } from "./approvals";
 import { personAgentDmKey } from "./dms";

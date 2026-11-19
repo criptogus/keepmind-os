@@ -1,8 +1,8 @@
-import type { ConnectedApp, PersonalToken } from "@agenteschat/client";
-import { useAppActions, useApps } from "@agenteschat/client";
-import { appFacts, appMark, appsSettingsUrl, isAppsEmpty, tokenFacts } from "@agenteschat/client/lib/apps";
-import { settingsFrozen } from "@agenteschat/client/lib/deletion";
-import { errorText } from "@agenteschat/client/lib/errors";
+import type { ConnectedApp, PersonalToken } from "@keepmind/client";
+import { useAppActions, useApps } from "@keepmind/client";
+import { appFacts, appMark, appsSettingsUrl, isAppsEmpty, tokenFacts } from "@keepmind/client/lib/apps";
+import { settingsFrozen } from "@keepmind/client/lib/deletion";
+import { errorText } from "@keepmind/client/lib/errors";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { serverUrl } from "@/lib/server";

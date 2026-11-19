@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { and, eq, schema } from "@agenteschat/db";
+import { and, eq, schema } from "@keepmind/db";
 import {
   actionsFor,
   addChannelMember,
@@ -153,7 +153,7 @@ describe("propose_remove_agents", () => {
 
   test("the prompts: never sign in to our own app, and the right hand proposes removals too", async () => {
     expect(BROWSER_GUIDANCE).toContain(
-      "never to agentes.chat itself, the app you work in, nor ask a person to: change the workspace with your own tools and cards",
+      "never to KeepMind OS itself, the app you work in, nor ask a person to: change the workspace with your own tools and cards",
     );
     f = await setup({ rightHand: true });
     const [lodi] = await f.db.select().from(schema.agents).where(eq(schema.agents.builtin, RIGHT_HAND));

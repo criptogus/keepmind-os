@@ -1,8 +1,8 @@
-import type { Agent, AgentMediaLevel, GifRating, OrgSettings } from "@agenteschat/client";
-import { useAgents, useSettings, useUpdateAgent, useUpdateSettings } from "@agenteschat/client";
-import { settingsFrozen } from "@agenteschat/client/lib/deletion";
-import { shownMediaSettings } from "@agenteschat/client/lib/media";
-import { can } from "@agenteschat/client/lib/permissions";
+import type { Agent, AgentMediaLevel, GifRating, OrgSettings } from "@keepmind/client";
+import { useAgents, useSettings, useUpdateAgent, useUpdateSettings } from "@keepmind/client";
+import { settingsFrozen } from "@keepmind/client/lib/deletion";
+import { shownMediaSettings } from "@keepmind/client/lib/media";
+import { can } from "@keepmind/client/lib/permissions";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { useOrg } from "@/providers/org";

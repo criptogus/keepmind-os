@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import { and, eq, schema, sql } from "@agenteschat/db";
-import { customModelId, ProviderError } from "@agenteschat/providers";
+import { and, eq, schema, sql } from "@keepmind/db";
+import { customModelId, ProviderError } from "@keepmind/providers";
 import {
   KEY_LINE_LOOK_MS,
   KEY_LINE_PERSON_MINUTES,

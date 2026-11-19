@@ -1,6 +1,6 @@
-import type { EmailSender } from "@agenteschat/adapters";
-import { and, type Database, type Executor, eq, isNull, lt, ne, or, schema, sql } from "@agenteschat/db";
-import { type AppLocale, appLocale, LOCALE_CODES } from "@agenteschat/i18n/locale";
+import type { EmailSender } from "@keepmind/adapters";
+import { and, type Database, type Executor, eq, isNull, lt, ne, or, schema, sql } from "@keepmind/db";
+import { type AppLocale, appLocale, LOCALE_CODES } from "@keepmind/i18n/locale";
 import { randomToken, sha256 } from "./crypto";
 import { emailLocale, queueEmail, rethrowEmailError } from "./email";
 import { ValidationError } from "./errors";

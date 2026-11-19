@@ -1,4 +1,4 @@
-import { type DesktopBuild, desktopCpu, desktopTargetOf } from "@agenteschat/client/lib/machines";
+import { type DesktopBuild, desktopCpu, desktopTargetOf } from "@keepmind/client/lib/machines";
 import { useEffect, useMemo, useState } from "react";
 
 /**

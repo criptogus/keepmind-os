@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { Agent, InvitationWithStatus, InviteLink, OrgRole } from "@agenteschat/client";
-import { ApiError, NetworkError } from "@agenteschat/client";
+import type { Agent, InvitationWithStatus, InviteLink, OrgRole } from "@keepmind/client";
+import { ApiError, NetworkError } from "@keepmind/client";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { createI18n } from "@/i18n";
 import { undoWindow } from "@/pages/InvitesPage";

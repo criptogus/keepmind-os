@@ -324,8 +324,9 @@ jobs:
       # About 3 minutes on a runner (2026-10-20).
       - name: Test (web and design system)
         if: env.SHARED == 'true' || env.WEB == 'true'
-        # The whole suite takes about 10 minutes on one runner now (3320 tests, 612 s on 2026-11-06).
-        timeout-minutes: 15
+        # The suite now covers about 4,900 cases; the full three-worker run took 26 minutes locally.
+        # Keep every case and allow enough time for the geometry capture preload on shared runners.
+        timeout-minutes: 35
         # The preload saves every screen the tests reach, for the geometry check below. It costs a few percent.
         env:
           GEOMETRY_OUT: ${{ runner.temp }}/geometry
@@ -610,7 +611,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
-      - uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+      - uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -689,7 +690,7 @@ jobs:
           pattern: digests-*
           merge-multiple: true
       - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
-      - uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+      - uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}

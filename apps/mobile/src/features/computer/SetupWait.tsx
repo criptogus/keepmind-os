@@ -1,4 +1,4 @@
-import { useComputerSetup, useMachines, useMe } from "@agenteschat/client";
+import { useComputerSetup, useMachines, useMe } from "@keepmind/client";
 import {
   etaLine,
   promisesEmail,
@@ -12,8 +12,8 @@ import {
   statusRestatesChip,
   useEtaNow,
   WORKSPACE_COMPUTER_KIND,
-} from "@agenteschat/client/lib/computer";
-import { modeKey, workspaceModeOf } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client/lib/computer";
+import { modeKey, workspaceModeOf } from "@keepmind/client/lib/workspace-mode";
 import { useTranslation } from "react-i18next";
 import { Pressable, StyleSheet, View } from "react-native";
 import { ComputerIcon, ComputerPortrait } from "@/computer/ComputerPortrait";

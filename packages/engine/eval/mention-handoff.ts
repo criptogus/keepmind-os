@@ -27,7 +27,7 @@
  * Needs `TYPESAFE_API_KEY` (Jev, as in production) or `ANTHROPIC_API_KEY` for
  * the LLM fallback (`EVAL_LLM_MODEL`, default claude-haiku-5-5).
  */
-import { createAnthropicProvider } from "@agenteschat/providers";
+import { createAnthropicProvider } from "@keepmind/providers";
 import { noteReplyMatters } from "../src/consultations";
 import { followThroughVerdict } from "../src/follow-through";
 import { createJevJudge, createLlmJudge, type Judge, MENTION_WAKE_THRESHOLD, mentionNeedsNothing } from "../src/judge";

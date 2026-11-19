@@ -15,8 +15,8 @@ import {
 } from "node:fs";
 import path from "node:path";
 import { PassThrough } from "node:stream";
-import type { AgentScope, MachineRequest, RunnerFrame, ServerFrame } from "@agenteschat/adapters/machine-protocol";
-import { sealSecret, secretAad, vaultAad } from "@agenteschat/adapters/secret-box";
+import type { AgentScope, MachineRequest, RunnerFrame, ServerFrame } from "@keepmind/adapters/machine-protocol";
+import { sealSecret, secretAad, vaultAad } from "@keepmind/adapters/secret-box";
 import { AccountBrains, type AccountBrainsOptions, SHARED_LOGIN_OFF } from "../../runner/account-brains";
 import { AccountManager } from "../../runner/accounts";
 import { AGENT_USERS_FILE, type AgentUser, systemLauncher } from "../../runner/agent-users";

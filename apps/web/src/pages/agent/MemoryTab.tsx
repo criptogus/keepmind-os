@@ -1,4 +1,4 @@
-import type { LearnedSkill, Memory, Proposal } from "@agenteschat/client";
+import type { LearnedSkill, Memory, Proposal } from "@keepmind/client";
 import {
   ApiError,
   useDecideProposal,
@@ -7,14 +7,14 @@ import {
   useMemoryAction,
   useProposals,
   useSkillAction,
-} from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { FIELD_LIMITS } from "@agenteschat/client/lib/field-limits";
-import { formatShortDate } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { can } from "@agenteschat/client/lib/permissions";
-import { memoryLine, pendingOnAgent, proposalTitle, proposalWhy } from "@agenteschat/client/lib/proposals";
-import { isRightHand } from "@agenteschat/client/lib/right-hand";
+} from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { FIELD_LIMITS } from "@keepmind/client/lib/field-limits";
+import { formatShortDate } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { can } from "@keepmind/client/lib/permissions";
+import { memoryLine, pendingOnAgent, proposalTitle, proposalWhy } from "@keepmind/client/lib/proposals";
+import { isRightHand } from "@keepmind/client/lib/right-hand";
 import {
   Alert,
   Button,
@@ -35,7 +35,7 @@ import {
   Segmented,
   Textarea,
   Toolbar,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { Link } from "@tanstack/react-router";
 import { type ReactNode, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

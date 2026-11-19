@@ -1,17 +1,10 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import {
-  type ApiClient,
-  keys,
-  type Mission,
-  type Routine,
-  type StartChoice,
-  type WorkingRun,
-} from "@agenteschat/client";
-import { WORKING_POLL_MS } from "@agenteschat/client/lib/working";
+import { type ApiClient, keys, type Mission, type Routine, type StartChoice, type WorkingRun } from "@keepmind/client";
+import { WORKING_POLL_MS } from "@keepmind/client/lib/working";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { showWorkspace } from "@/lib/start";
 import {

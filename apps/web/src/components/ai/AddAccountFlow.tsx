@@ -1,7 +1,7 @@
-import type { AccountLoginStart, AccountLoginStatus, MachineAccount, MachineAccountKind } from "@agenteschat/client";
-import { keys, useAccountLogin, useAiAccounts, useApi } from "@agenteschat/client";
-import { accountTitle, reusableAccount, signInOf } from "@agenteschat/client/lib/ai-accounts";
-import { knownErrorText } from "@agenteschat/client/lib/errors";
+import type { AccountLoginStart, AccountLoginStatus, MachineAccount, MachineAccountKind } from "@keepmind/client";
+import { keys, useAccountLogin, useAiAccounts, useApi } from "@keepmind/client";
+import { accountTitle, reusableAccount, signInOf } from "@keepmind/client/lib/ai-accounts";
+import { knownErrorText } from "@keepmind/client/lib/errors";
 import {
   beginLogin,
   freeDuplicate,
@@ -13,10 +13,10 @@ import {
   loginRead,
   loginReadPasses,
   otherThanHint,
-} from "@agenteschat/client/lib/machines";
-import { GEMINI_ENTERPRISE_PROVIDER, planKeyFits, signInKey } from "@agenteschat/client/lib/plans";
-import { accountCodeAad, sealSecret } from "@agenteschat/client/lib/secret-box";
-import { AffixInput, Button, cx, Icon, InfoHint, Locked, ProviderLogo, SettingNote, SwapLabel } from "@agenteschat/ui";
+} from "@keepmind/client/lib/machines";
+import { GEMINI_ENTERPRISE_PROVIDER, planKeyFits, signInKey } from "@keepmind/client/lib/plans";
+import { accountCodeAad, sealSecret } from "@keepmind/client/lib/secret-box";
+import { AffixInput, Button, cx, Icon, InfoHint, Locked, ProviderLogo, SettingNote, SwapLabel } from "@keepmind/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { type ReactNode, useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
@@ -908,16 +908,21 @@ function AddAccountFlow({
   } else if (kind === "codex") {
     steps = (
       <>
-        <Step n={1} side={<OpenPage href={CHATGPT_SECURITY}>{t("connectAi.chatgptCode.open")}</OpenPage>}>
-          <b>{t("connectAi.chatgptCode.title")}</b>
-          <span>{t("connectAi.chatgptCode.text")}</span>
-        </Step>
         {firstStep(
           signInLabel ?? t("agentPage.work.brain.add.open.codex"),
           <StepTitle title={t("agentPage.work.brain.add.stepOne.codex")} hint={signInHint} />,
-          2,
+          1,
         )}
-        {login?.userCode && deviceCode(after(3), t("agentPage.work.brain.add.deviceCode"), login.userCode)}
+        {login?.userCode && deviceCode(after(2), t("agentPage.work.brain.add.deviceCode"), login.userCode)}
+        <div className="ai-panel__row">
+          <details>
+            <summary>{t("connectAi.chatgptCode.title")}</summary>
+            <Step side={<OpenPage href={CHATGPT_SECURITY}>{t("connectAi.chatgptCode.open")}</OpenPage>}>
+              <b>{t("connectAi.chatgptCode.title")}</b>
+              <span>{t("connectAi.chatgptCode.text")}</span>
+            </Step>
+          </details>
+        </div>
       </>
     );
   } else {

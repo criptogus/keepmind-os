@@ -1,18 +1,4 @@
-import {
-  and,
-  count,
-  type Database,
-  desc,
-  eq,
-  gt,
-  gte,
-  inArray,
-  isNull,
-  lt,
-  type SQL,
-  schema,
-  sql,
-} from "@agenteschat/db";
+import { and, count, type Database, desc, eq, gt, gte, inArray, isNull, lt, type SQL, schema, sql } from "@keepmind/db";
 import { connectorKeyOf } from "./connector-usage";
 import { CUSTOM_PREFIX } from "./connectors/custom";
 import { decodeCursor, encodeCursor } from "./cursor";

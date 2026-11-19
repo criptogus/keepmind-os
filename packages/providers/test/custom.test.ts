@@ -151,7 +151,7 @@ describe("calls", () => {
     expect(result.usage.inputTokens).toBe(10);
     // Any other endpoint: no session of ours, the SDK's own User-Agent.
     expect(req?.headers.get("x-opencode-session")).toBeNull();
-    expect(req?.headers.get("user-agent")).not.toStartWith("agentes.chat/");
+    expect(req?.headers.get("user-agent")).not.toStartWith("KeepMind OS/");
   });
 
   test("OpenCode (its Go plan): our User-Agent and the conversation's session on every call, both APIs", async () => {
@@ -181,10 +181,10 @@ describe("calls", () => {
     const [first, second] = go.requests;
     expect(first?.url).toBe("https://opencode.ai/zen/go/v1/chat/completions");
     expect(first?.headers.get("x-opencode-session")).toBe("5f0c2c1e-0000-5000-8000-000000000001");
-    expect(first?.headers.get("user-agent")).toBe("agentes.chat/2026.11.07.9");
+    expect(first?.headers.get("user-agent")).toBe("KeepMind OS/2026.11.07.9");
     // A call of no conversation (the connect dialog's test of each model) is a session of its own.
     expect(second?.headers.get("x-opencode-session")).toMatch(/^[0-9a-f-]{36}$/);
-    expect(second?.headers.get("user-agent")).toBe("agentes.chat/2026.11.07.9");
+    expect(second?.headers.get("user-agent")).toBe("KeepMind OS/2026.11.07.9");
     const messages = scripted(
       sse([
         {
@@ -218,7 +218,7 @@ describe("calls", () => {
       },
     );
     expect(messages.requests[0]?.headers.get("x-opencode-session")).toBe("conversation-1");
-    expect(messages.requests[0]?.headers.get("user-agent")).toBe("agentes.chat/dev");
+    expect(messages.requests[0]?.headers.get("user-agent")).toBe("KeepMind OS/dev");
   });
 
   test("Anthropic Messages in its compatible mode; a refusal keeps the server's words", async () => {

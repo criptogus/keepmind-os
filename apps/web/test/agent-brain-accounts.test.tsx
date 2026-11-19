@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import type { AgentBrain, AiComputer, MachineAccount, PlanUsage } from "@agenteschat/client";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import type { AgentBrain, AiComputer, MachineAccount, PlanUsage } from "@keepmind/client";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 

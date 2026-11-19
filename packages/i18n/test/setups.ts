@@ -117,7 +117,7 @@ export const SHOWN_ONLY: Record<Condition, readonly string[]> = {
     "computers.hostMissing",
     "connectAi.wait.connecting",
     "errors.mission.unavailable",
-    // The feedback form's line on who reads it, where the server isn't one of agentes.chat's own (`auth-config.cloud`).
+    // The feedback form's line on who reads it, where the server isn't one of KeepMind OS's own (`auth-config.cloud`).
     "feedback.goesServer",
     "feedback.offer.goesServer",
     "feedback.offer.sentServer",
@@ -177,8 +177,8 @@ export const SHOWN_ONLY: Record<Condition, readonly string[]> = {
     // The catalog's line for a server without Composio (`composioOffText`): the Cloud always has its key.
     "connectors.composio.off_one",
     "connectors.composio.off_other",
-    // The server's own GitHub App card goes only to its pinned owner off agentes.chat (`setup` is null elsewhere), and
-    // the admins' line about it only where `ownerCreates` (false on agentes.chat, ADR 0156).
+    // The server's own GitHub App card goes only to its pinned owner off KeepMind OS (`setup` is null elsewhere), and
+    // the admins' line about it only where `ownerCreates` (false on KeepMind OS, ADR 0156).
     "githubApp.server.",
     "githubApp.ownerHint",
   ],
@@ -275,7 +275,7 @@ export const ANYWHERE: readonly string[] = [
   "desktop.connect.",
   "desktop.link.",
   "desktop.servers.",
-  // The desktop app's workspaces by server: the line under a server that isn't agentes.chat, whichever server this is.
+  // The desktop app's workspaces by server: the line under a server that isn't KeepMind OS, whichever server this is.
   "shell.yourServer",
   // "Onde fica o seu workspace?": the Cloud and one's own server compared side by side, each named, whichever this is.
   "hosting.",

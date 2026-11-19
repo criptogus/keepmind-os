@@ -1182,7 +1182,7 @@
     "notificationsOnHint": "Elles arrivent aussi dans le navigateur et l'app de bureau, si elles y sont activées.",
     "notificationsOffHint": "Activez-les pour recevoir les notifications ici. Les types ci-dessous s'appliquent à tous vos appareils.",
     "notificationsKindsHint": "L'activité garde tout. Ceci s'applique à cet espace de travail, sur tous vos appareils.",
-    "version": "agentes.chat · version {{version}}",
+    "version": "KeepMind OS · version {{version}}",
     "edit": "Modifier",
     "status": "Statut",
     "workspace": "Espace de travail",
@@ -1202,11 +1202,11 @@
     "workspacesUnreachable": "Pas de réponse pour l’instant",
     "addWorkspace": "Ajouter un workspace",
     "addWorkspaceCreate": "Créer un nouveau workspace",
-    "addWorkspaceCreateSub": "Sur agentes.chat",
+    "addWorkspaceCreateSub": "Sur KeepMind OS",
     "addWorkspaceTeam": "Rejoindre le serveur de votre équipe",
     "addWorkspaceTeamSub": "Par son adresse ou le QR code affiché sur l’ordinateur",
     "teamServer": "Serveur de l’équipe",
-    "teamServerLead": "L’adresse agentes.chat de votre équipe, la même que dans le navigateur.",
+    "teamServerLead": "L’adresse KeepMind OS de votre équipe, la même que dans le navigateur.",
     "teamServerFoot": "Vous ne quittez aucun workspace : le serveur de votre équipe rejoint votre liste, avec votre compte là-bas.",
     "workspacesHoldHint": "Maintenez pour changer d'espace de travail",
     "workspacesSheetFoot": "Vous restez connecté à tous. Les notifications de chacun vous arrivent ici.",
@@ -1983,8 +1983,8 @@
       "serverText": "Une ligne à coller dans son terminal",
       "computer": "Un autre ordinateur",
       "computerText": "Installez l'app dessus",
-      "appNote": "Sur un Mac ou un PC que vous utilisez, l'app de bureau agentes.chat le connecte aussi.",
-      "appStep1": "Installez l'app agentes.chat dessus",
+      "appNote": "Sur un Mac ou un PC que vous utilisez, l'app de bureau KeepMind OS le connecte aussi.",
+      "appStep1": "Installez l'app KeepMind OS dessus",
       "appStep2": "Ouvrez-la et connectez-vous avec votre compte",
       "appStep3": "Cliquez sur Autoriser quand elle demande de laisser les agents de {{org}} l'utiliser",
       "appShows": "Il apparaît ici tout seul, pour vous seul jusqu'à ce que vous le partagiez.",
@@ -2007,7 +2007,7 @@
       "connecting": "Connexion à {{host}}",
       "computer": "Ordinateur",
       "noHost": "Ce téléphone fonctionne via l'un de vos ordinateurs. Connectez-en un d'abord.",
-      "hostOffline": "{{host}} est hors ligne. Allumez-le et ouvrez agentes.chat dessus.",
+      "hostOffline": "{{host}} est hors ligne. Allumez-le et ouvrez KeepMind OS dessus.",
       "step1": "Activez les Options pour les développeurs",
       "step1Text": "Touchez 7 fois Numéro de build, puis saisissez votre code PIN. Sur Samsung : Informations sur le logiciel › Numéro de version.",
       "openAbout": "Ouvrir À propos du téléphone",
@@ -2032,9 +2032,9 @@
       "wifi1Text": "Cochez Toujours autoriser sur ce réseau, puis touchez Autoriser.",
       "wifi2": "Scannez le code sur un ordinateur",
       "wifi2Text": "Depuis Débogage sans fil › Associer l'appareil avec un code QR. N'utilisez pas l'appareil photo : il lit le code comme un réseau Wi-Fi et sort le téléphone de votre Wi-Fi.",
-      "wifi2Hint": "Dans agentes.chat sur un ordinateur, ouvrez Connecter un appareil › Téléphone Android › Par Wi-Fi et choisissez {{host}}.",
+      "wifi2Hint": "Dans KeepMind OS sur un ordinateur, ouvrez Connecter un appareil › Téléphone Android › Par Wi-Fi et choisissez {{host}}.",
       "codeHead": "Associer avec un code d'association",
-      "codeNote": "Depuis Débogage sans fil › Associer l'appareil avec un code d'association. Ouvrez Paramètres et agentes.chat côte à côte pour garder le code à l'écran.",
+      "codeNote": "Depuis Débogage sans fil › Associer l'appareil avec un code d'association. Ouvrez Paramètres et KeepMind OS côte à côte pour garder le code à l'écran.",
       "wifiNote": "Le Wi-Fi peut se couper après un redémarrage. Un câble est plus fiable.",
       "done": "{{name}} est connecté",
       "openFailed": "Ce téléphone n'a pas ouvert cet écran. Cherchez-le dans Paramètres."
@@ -2091,7 +2091,7 @@
         "openXcode": "Ouvrir Xcode",
         "opened": "Xcode s'est ouvert sur {{host}}. Regardez à nouveau dans Réglages, puis fermez Xcode là-bas.",
         "unlock": "Vous l'avez activé et il a redémarré ? L'alerte avec Activer apparaît une fois cet iPhone déverrouillé.",
-        "outdated": "L'app agentes.chat sur {{host}} n'est pas à jour. Mettez-la à jour sur ce Mac."
+        "outdated": "L'app KeepMind OS sur {{host}} n'est pas à jour. Mettez-la à jour sur ce Mac."
       }
     },
     "notice": {
@@ -2187,7 +2187,7 @@
     "usedBy_other": "{{names}} l'utilisent",
     "fromAgent": "Connecter un service",
     "githubApp": {
-      "useApp": "Utiliser l'app agentes.chat",
+      "useApp": "Utiliser l'app KeepMind OS",
       "useAccount": "Utiliser un compte GitHub",
       "createInBrowser": "Créer dans le navigateur"
     },
@@ -2282,11 +2282,11 @@
     "zoneTitle": "Fuseau horaire",
     "anotherTitle": "Comment s'appelle le nouvel espace de travail ?",
     "anotherPurpose": "À quoi servira le nouvel espace de travail ?",
-    "anotherLead": "Sur agentes.chat. Vous restez dans {{org}} et pouvez changer à tout moment.",
+    "anotherLead": "Sur KeepMind OS. Vous restez dans {{org}} et pouvez changer à tout moment.",
     "suggested": "D'après votre e-mail {{domain}}, j'ai suggéré {{org}}.",
     "create": "Créer",
     "enter": "Entrer dans l'espace de travail",
-    "shareMessage": "Rejoignez {{org}} sur agentes.chat : {{url}}",
+    "shareMessage": "Rejoignez {{org}} sur KeepMind OS : {{url}}",
     "failed": "Impossible d'enregistrer. Réessayez."
   },
   "ai": {

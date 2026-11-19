@@ -34,7 +34,7 @@ test("the kit and the app's base sheets share one cascade layer, so a page sheet
   }));
   const layered = imports.filter((i) => i.layer).map((i) => `${i.file} ${i.layer}`);
   expect(layered).toEqual([
-    "@agenteschat/ui/styles.css base",
+    "@keepmind/ui/styles.css base",
     "./layout.css base",
     "./responsive.css base",
     "./chat/looks.css base",

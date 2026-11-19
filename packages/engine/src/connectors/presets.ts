@@ -2,11 +2,12 @@ import type { ConnectorCategory } from "./catalog";
 import { canonicalResource } from "./oauth-mcp";
 
 /**
- * One-click connectors: vendors' official remote MCP servers that speak MCP
- * OAuth with Dynamic Client Registration (no app of ours to register). Each
+ * One-click connectors: vendors' official remote MCP servers. Most speak MCP
+ * OAuth with Dynamic Client Registration (no app of ours to register); each
  * was checked (2026-10-15, and 2026-10-28 from GitLab on): the server
  * answers 401 with OAuth, its authorization server publishes a
- * `registration_endpoint` and PKCE S256.
+ * `registration_endpoint` and PKCE S256. A few answer openly (Context7): the
+ * probe connects them with no sign-in.
  * They connect like any custom MCP server; after the OAuth, our suggested
  * classification (read tools free, writes approved, destructive ones need
  * approval) is applied at once, and admins can change it.
@@ -47,7 +48,7 @@ export interface McpPreset {
    * Postgres user). Every other tool keeps our usual suggestion.
    */
   readTools?: readonly string[];
-  /** The vendor hasn't approved agentes.chat yet: listed greyed out ("Em breve"), not connectable in one click. */
+  /** The vendor hasn't approved KeepMind OS yet: listed greyed out ("Em breve"), not connectable in one click. */
   soon?: true;
   /**
    * The Cloud offers OAuth only, no API key: the vendor's terms forbid an app asking its users for their token
@@ -98,6 +99,15 @@ export const composioToolkitOf = (serverUrl: string | null | undefined) =>
   COMPOSIO_TOOLKIT_URL.exec(serverUrl ?? "")?.[1]?.toLowerCase() ?? null;
 
 export const MCP_PRESETS: readonly McpPreset[] = [
+  {
+    id: "composio-connect",
+    label: "Composio Connect",
+    description: "Connect apps through your Composio account with browser authorization.",
+    category: "automation",
+    icon: "composio-connect",
+    serverUrl: "https://connect.composio.dev/mcp",
+    auth: ["oauth"],
+  },
   {
     id: "superagentskill",
     label: "SuperAgentSkill",
@@ -1276,6 +1286,16 @@ export const MCP_PRESETS: readonly McpPreset[] = [
         "WHATSAPP_SEND_LOCATION",
       ],
     },
+  },
+  {
+    id: "context7",
+    category: "docs",
+    label: "Context7",
+    description: "Up-to-date, version-specific library documentation for coding agents.",
+    icon: "context7",
+    serverUrl: "https://mcp.context7.com/mcp",
+    // Answers openly (checked 2026-11-18): connects with no sign-in. Its API key only raises the rate limit, so the
+    // listing keeps both ways and the probe connects it without one.
   },
 ];
 

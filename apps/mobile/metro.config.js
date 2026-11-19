@@ -1,7 +1,7 @@
 /**
  * Metro for a Bun workspace (apps/*, packages/*).
  *
- * - Watches the repo root so the workspace packages (`@agenteschat/client`, `i18n`, `tokens`, `ui`) are
+ * - Watches the repo root so the workspace packages (`@keepmind/client`, `i18n`, `tokens`, `ui`) are
  *   bundled from their TypeScript sources (Bun links them into node_modules; Metro follows the links).
  * - Looks for modules in this app's node_modules first, then the root's.
  * - Hierarchical lookup stays ON: Bun's hoisted layout nests conflicting versions under the package that

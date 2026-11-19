@@ -1,4 +1,4 @@
-//! The main window: the server open now, inside the app (agentes.chat, or a server of the person's own,
+//! The main window: the server open now, inside the app (KeepMind OS, or a server of the person's own,
 //! `servers.rs`). It loads the server's pages itself, so every change to the web shows here at once, and
 //! gets no access to this computer: no app command, only dragging the window by its title bar and `this_mac`
 //! (capabilities/main.json, and the same one added at runtime for another server's origin). Links to
@@ -59,7 +59,7 @@ pub const PLATFORM: &str = if cfg!(target_os = "macos") {
     "linux"
 };
 
-/// Whether agents may work on this computer for `origin`: any server elsewhere, agentes.chat included (people bring
+/// Whether agents may work on this computer for `origin`: any server elsewhere, KeepMind OS included (people bring
 /// their own computers there too), never a server on this computer itself, the server here included at its
 /// Tailscale address (`server_here`: its own computer is set up with it).
 /// Another server on this computer at its address for people is `discover::served_here`, which asks it.
@@ -205,7 +205,7 @@ pub fn open(app: &AppHandle, url: Option<Url>) -> Result<(), String> {
         .and_then(|w| w.theme().ok())
         .unwrap_or(Theme::Light);
     let builder = WebviewWindowBuilder::new(app, LABEL, WebviewUrl::External(url.unwrap_or_else(|| site.clone())))
-        .title("agentes.chat")
+        .title("KeepMind OS")
         .min_inner_size(960.0, 600.0)
         // As the person left it (window_state.rs), on a screen that is still there.
         .inner_size(saved.width.unwrap_or(1240.0), saved.height.unwrap_or(800.0))
@@ -338,8 +338,8 @@ pub fn open(app: &AppHandle, url: Option<Url>) -> Result<(), String> {
 /// The window's name for the page's title: the site's own long title (sign-in, the landing) is just the app's.
 fn window_title(title: &str) -> &str {
     let title = title.trim();
-    if title.is_empty() || title.starts_with("agentes.chat ·") {
-        "agentes.chat"
+    if title.is_empty() || title.starts_with("KeepMind OS ·") || title.starts_with("KeepMind OS ·") {
+        "KeepMind OS"
     } else {
         title
     }
@@ -689,7 +689,7 @@ fn quarantine(path: &Path) {
         .map(|d| d.as_secs())
         .unwrap_or(0);
     let _ = std::process::Command::new("/usr/bin/xattr")
-        .args(["-w", "com.apple.quarantine", &format!("0081;{now:x};agentes.chat;")])
+        .args(["-w", "com.apple.quarantine", &format!("0081;{now:x};KeepMind OS;")])
         .arg(path)
         .status();
 }
@@ -1290,8 +1290,8 @@ mod tests {
     fn only_a_click_opens_a_notice_page() {
         // The click opens the page the notification was shown with.
         assert_eq!(
-            tapped_page(Some(&json!("https://app.agentes.chat/org/o1/dm/agent/a1?m=9"))).map(|u| u.to_string()),
-            Some("https://app.agentes.chat/org/o1/dm/agent/a1?m=9".to_string())
+            tapped_page(Some(&json!("https://keepmind.io/org/o1/dm/agent/a1?m=9"))).map(|u| u.to_string()),
+            Some("https://keepmind.io/org/o1/dm/agent/a1?m=9".to_string())
         );
         assert_eq!(tapped_page(None), None);
         assert_eq!(tapped_page(Some(&json!("not a page"))), None);
@@ -1300,14 +1300,15 @@ mod tests {
     #[test]
     fn in_page_moves_and_titles() {
         let go = |u: &str| go_in_page(&u.parse().unwrap());
-        assert_eq!(go("https://app.agentes.chat/"), None);
+        assert_eq!(go("https://keepmind.io/"), None);
         assert_eq!(
-            go("https://app.agentes.chat/org/o1/c/c1?m=9#x").as_deref(),
+            go("https://keepmind.io/org/o1/c/c1?m=9#x").as_deref(),
             Some(r#"(window.__agentesNavigate || ((p) => location.assign(p)))("/org/o1/c/c1?m=9#x")"#)
         );
         assert_eq!(window_title("#loja · Acme"), "#loja · Acme");
-        assert_eq!(window_title("agentes.chat · Your team and your agents"), "agentes.chat");
-        assert_eq!(window_title("  "), "agentes.chat");
+        assert_eq!(window_title("KeepMind OS · Your team and your agents"), "KeepMind OS");
+        assert_eq!(window_title("  "), "KeepMind OS");
+        assert_eq!(window_title("KeepMind OS · Seu time"), "KeepMind OS");
     }
 
     #[test]
@@ -1326,7 +1327,7 @@ mod tests {
 
     #[test]
     fn routes_follow_the_server_open_now() {
-        for site in ["https://app.agentes.chat", "https://agentes.tail1234.ts.net", "http://127.0.0.1:4310"] {
+        for site in ["https://keepmind.io", "https://agentes.tail1234.ts.net", "http://127.0.0.1:4310"] {
             assert_eq!(r(&format!("{site}/org/x/c/y"), site), Route::Stay);
             assert_eq!(r(&format!("{site}/desktop/sign-in?provider=google&challenge=a"), site), Route::Outside);
             assert_eq!(r(&format!("{site}/desktop/signed-in?to=%2F"), site), Route::Front);
@@ -1334,7 +1335,7 @@ mod tests {
             assert_eq!(r(&format!("blob:{site}/abc"), site), Route::Stay);
         }
         let own = "https://agentes.tail1234.ts.net";
-        assert_eq!(r("https://app.agentes.chat/org/x", own), Route::Outside);
+        assert_eq!(r("https://keepmind.io/org/x", own), Route::Outside);
         assert_eq!(r("https://accounts.google.com/o/oauth2", own), Route::Outside);
         assert_eq!(r("http://agentes.tail1234.ts.net/", own), Route::Outside);
         assert_eq!(r("https://agentes.tail1234.ts.net.evil.com/", own), Route::Outside);
@@ -1344,14 +1345,14 @@ mod tests {
         for other in ["file:///etc/passwd", "smb://host/share", "tel:+5511", "vscode://file/x", "javascript:alert(1)"] {
             assert_eq!(r(other, own), Route::Drop, "{other}");
         }
-        let cloud = "https://app.agentes.chat";
-        assert_eq!(r("https://app.agentes.chat/help/memory?lang=en#learns", cloud), Route::Outside);
-        assert_eq!(r("https://app.agentes.chat/org/x", cloud), Route::Stay);
+        let cloud = "https://keepmind.io";
+        assert_eq!(r("https://keepmind.io/help/memory?lang=en#learns", cloud), Route::Outside);
+        assert_eq!(r("https://keepmind.io/org/x", cloud), Route::Stay);
     }
 
     #[test]
     fn the_bot_check_s_frame_stays_in_the_window_and_nothing_else_of_its_host() {
-        for site in ["https://app.agentes.chat", "https://agentes.tail1234.ts.net", "http://127.0.0.1:4310"] {
+        for site in ["https://keepmind.io", "https://agentes.tail1234.ts.net", "http://127.0.0.1:4310"] {
             let frame = "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/b/turnstile/if/ov2/av0/rcv/x";
             assert_eq!(r(frame, site), Route::Stay);
             assert_eq!(r("https://challenges.cloudflare.com:443/turnstile/v0/api.js", site), Route::Stay);
@@ -1365,7 +1366,7 @@ mod tests {
 
     #[test]
     fn agents_work_here_only_for_a_server_elsewhere() {
-        assert!(agents_here("https://app.agentes.chat", false), "agentes.chat too");
+        assert!(agents_here("https://keepmind.io", false), "KeepMind OS too");
         assert!(!agents_here("http://127.0.0.1:4310", false));
         assert!(!agents_here("http://localhost:3000", false));
         assert!(agents_here("https://agentes.tail1234.ts.net", false));

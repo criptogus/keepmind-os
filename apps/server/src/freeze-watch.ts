@@ -1,4 +1,4 @@
-import { beatInFlight, inFlightMemory } from "@agenteschat/adapters/in-flight";
+import { beatInFlight, inFlightMemory } from "@keepmind/adapters/in-flight";
 import type { Logger } from "./logger";
 
 /** How often this thread's event loop beats for the watch. */

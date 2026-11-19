@@ -1251,7 +1251,7 @@
     "value": "Free · open source"
   },
   "hosting.cloud.name": {
-    "value": "agentes.chat Cloud"
+    "value": "KeepMind OS Cloud"
   },
   "hosting.cloud.short": {
     "value": "Always on, nothing to install."
@@ -1704,7 +1704,7 @@
     "value": "Signing in to the KeepMind OS <b>on this {{device}}</b>"
   },
   "auth.server.intoCloud": {
-    "value": "Signing in to <b>agentes.chat Cloud</b>"
+    "value": "Signing in to <b>KeepMind OS Cloud</b>"
   },
   "auth.server.change": {
     "value": "Change server"
@@ -39344,7 +39344,7 @@
     "value": "Component gallery"
   },
   "gallery.subtitle": {
-    "value": "Development only: the @agenteschat/ui components."
+    "value": "Development only: the @keepmind/ui components."
   },
   "format.list": {
     "value": "{{names, list}}"
@@ -46440,7 +46440,7 @@
     "value": "Tell us what was missing or got in your way. We read everything."
   },
   "arrival.beta.where": {
-    "value": "To write to us, use Send feedback, at the bottom of the sidebar."
+    "value": "Open Help in your account menu and choose Send feedback."
   },
   "arrival.stage.ready": {
     "value": "Your team is ready"
@@ -46477,9 +46477,6 @@
   },
   "arrival.connect.later": {
     "value": "Not now"
-  },
-  "feedback.mark": {
-    "value": "Beta"
   },
   "feedback.open": {
     "value": "Send feedback"
@@ -46603,5 +46600,56 @@
   },
   "feedback.offer.askFirst": {
     "value": "Ask before sending"
+  },
+  "shell.help": {
+    "value": "Help"
+  },
+  "connectors.can.context7.1": {
+    "value": "Fetch up-to-date library documentation"
+  },
+  "connectors.descriptions.context7": {
+    "value": "Up-to-date, version-specific library documentation."
+  },
+  "newAgent.batch.hint": {
+    "value": "Pick more ready-made roles to create them together, or go on with this one"
+  },
+  "newAgent.batch.create": {
+    "value": "Create {{count}} agents"
+  },
+  "newAgent.batch.created": {
+    "value": "{{count}} agents created"
+  },
+  "newAgent.batch.customLocked": {
+    "value": "From scratch stays a single agent"
+  },
+  "newAgent.batch.limit": {
+    "value": "You can pick up to {{max}} agents at once"
+  },
+  "newAgent.batch.reviewTitle": {
+    "value": "Your new team"
+  },
+  "newAgent.steps.where.leadBatch": {
+    "value": "Each one joins the channels you check and has an owner on the team."
+  },
+  "team.askKivo": {
+    "value": "Tell {{name}} what you need"
+  },
+  "team.now.title": {
+    "value": "Now"
+  },
+  "team.now.empty": {
+    "value": "No one is working right now."
+  },
+  "wiki.import.github.short": {
+    "value": "Connect GitHub"
+  },
+  "brain.picker.freeOnly": {
+    "value": "Free only"
+  },
+  "teamPlan.templates.describeSend": {
+    "value": "I want to set up my team. Can you interview me?"
+  },
+  "teamPlan.templates.describeSendPersonal": {
+    "value": "I want to set up my agents. Can you interview me?"
   }
 }

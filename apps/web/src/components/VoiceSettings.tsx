@@ -1,13 +1,7 @@
-import type { SpeechKey, SpeechProvider } from "@agenteschat/client";
-import {
-  useRemoveSpeechKey,
-  useSaveSpeechKey,
-  useSettings,
-  useSpeechKey,
-  useUpdateSettings,
-} from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { can } from "@agenteschat/client/lib/permissions";
+import type { SpeechKey, SpeechProvider } from "@keepmind/client";
+import { useRemoveSpeechKey, useSaveSpeechKey, useSettings, useSpeechKey, useUpdateSettings } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { can } from "@keepmind/client/lib/permissions";
 import {
   Button,
   Card,
@@ -20,7 +14,7 @@ import {
   RadioGroup,
   SettingNote,
   Switch,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useId, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ErrorState, LoadingList } from "@/components/Loading";
@@ -64,7 +58,7 @@ export function VoiceSettingsSection() {
 }
 
 /**
- * The card of Configurações › Voz (ADR 0100): the workspace's switch, and on a server that isn't agentes.chat's own, for
+ * The card of Configurações › Voz (ADR 0100): the workspace's switch, and on a server that isn't KeepMind OS's own, for
  * its owner, who turns voice into text (the API answers null to everyone else). A key is tried with the provider
  * before it is kept, sealed on the server and never shown again.
  */

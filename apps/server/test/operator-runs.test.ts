@@ -1,12 +1,12 @@
 import { afterAll, beforeAll, expect, test } from "bun:test";
-import { eq, schema, tracingLogger } from "@agenteschat/db";
+import { eq, schema, tracingLogger } from "@keepmind/db";
 import {
   addRunStep,
   DEFAULT_AGENT_BUDGET_NANO_USD,
   grantScopes,
   monthStartUtc,
   type ToolSource,
-} from "@agenteschat/engine";
+} from "@keepmind/engine";
 import { createLogger } from "../src/logger";
 import { createOperatorApp } from "../src/operator/app";
 import {

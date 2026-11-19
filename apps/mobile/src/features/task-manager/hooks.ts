@@ -1,6 +1,6 @@
-import { type ManagedTask, useStopTasks, useTaskManager } from "@agenteschat/client";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { todayStart } from "@agenteschat/client/lib/task-manager";
+import { type ManagedTask, useStopTasks, useTaskManager } from "@keepmind/client";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { todayStart } from "@keepmind/client/lib/task-manager";
 import { useIsFocused } from "expo-router";
 import type { TFunction } from "i18next";
 import { useCallback, useMemo, useState } from "react";

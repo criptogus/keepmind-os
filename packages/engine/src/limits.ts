@@ -1,4 +1,4 @@
-import { and, count, type Database, type Executor, eq, gt, gte, isNotNull, isNull, schema, sql } from "@agenteschat/db";
+import { and, count, type Database, type Executor, eq, gt, gte, isNotNull, isNull, schema, sql } from "@keepmind/db";
 import { caches } from "./cache";
 import { ConflictError } from "./errors";
 import { formatBytes } from "./format";

@@ -6,7 +6,7 @@ import {
   CHROME_FAILURES,
   type MachineRequest,
   type RunnerAccess,
-} from "@agenteschat/adapters/machine-protocol";
+} from "@keepmind/adapters/machine-protocol";
 import {
   BrowserManager,
   type BrowserManagerOptions,

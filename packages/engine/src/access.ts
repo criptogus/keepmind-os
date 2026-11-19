@@ -1,4 +1,4 @@
-import { and, asc, type Database, type Executor, eq, inArray, isNull, schema } from "@agenteschat/db";
+import { and, asc, type Database, type Executor, eq, inArray, isNull, schema } from "@keepmind/db";
 import { getAgent } from "./agents";
 import { recordAudit } from "./audit";
 import { BROWSER_SCOPE, BROWSER_TOOL_INFO, BROWSER_TOOLS, DESKTOP_SCOPE, DESKTOP_TOOL_INFO } from "./browser/types";

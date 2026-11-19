@@ -1,5 +1,5 @@
-import type { Database, schema } from "@agenteschat/db";
-import type { ToolImage } from "@agenteschat/providers";
+import type { Database, schema } from "@keepmind/db";
+import type { ToolImage } from "@keepmind/providers";
 import type { OutcomeKind } from "../context/outcomes";
 import type { JsonSchema } from "./json-schema";
 

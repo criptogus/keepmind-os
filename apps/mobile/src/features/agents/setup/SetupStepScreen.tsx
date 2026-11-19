@@ -1,4 +1,4 @@
-import type { Agent, AgentAudience, AudienceMode, SetupStep } from "@agenteschat/client";
+import type { Agent, AgentAudience, AudienceMode, SetupStep } from "@keepmind/client";
 import {
   keys,
   useAgentAccess,
@@ -14,7 +14,7 @@ import {
   useUpdateAgent,
   useUpdateSettings,
   useWidenAudience,
-} from "@agenteschat/client";
+} from "@keepmind/client";
 import {
   type AccessResource,
   asksAt,
@@ -23,32 +23,27 @@ import {
   levelOf,
   nextLevel,
   resourcesOf,
-} from "@agenteschat/client/lib/access-levels";
-import { channelsAfter, sameAudience } from "@agenteschat/client/lib/agent-edit";
-import { audienceOf, audiencePatch } from "@agenteschat/client/lib/audience";
-import { firstName } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { addsAgentsTo, can } from "@agenteschat/client/lib/permissions";
-import { rolePicksInSight } from "@agenteschat/client/lib/personal-view";
-import { planOf } from "@agenteschat/client/lib/plans";
-import { AUTO } from "@agenteschat/client/lib/providers";
-import { isRightHand } from "@agenteschat/client/lib/right-hand";
-import { isEveryone, sortRoles } from "@agenteschat/client/lib/roles";
-import { connectorName } from "@agenteschat/client/lib/scopes";
-import {
-  firstRunAppList,
-  setupRole,
-  suggestedChannels,
-  suggestedLevels,
-} from "@agenteschat/client/lib/setup-checklist";
+} from "@keepmind/client/lib/access-levels";
+import { channelsAfter, sameAudience } from "@keepmind/client/lib/agent-edit";
+import { audienceOf, audiencePatch } from "@keepmind/client/lib/audience";
+import { firstName } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { addsAgentsTo, can } from "@keepmind/client/lib/permissions";
+import { rolePicksInSight } from "@keepmind/client/lib/personal-view";
+import { planOf } from "@keepmind/client/lib/plans";
+import { AUTO } from "@keepmind/client/lib/providers";
+import { isRightHand } from "@keepmind/client/lib/right-hand";
+import { isEveryone, sortRoles } from "@keepmind/client/lib/roles";
+import { connectorName } from "@keepmind/client/lib/scopes";
+import { firstRunAppList, setupRole, suggestedChannels, suggestedLevels } from "@keepmind/client/lib/setup-checklist";
 import {
   aboutYouContext,
   LIFE_AREAS,
   type LifeArea,
   lifeAreaTemplate,
   readAboutYou,
-} from "@agenteschat/client/lib/team-plan";
-import { isPersonal, modeKey } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client/lib/team-plan";
+import { isPersonal, modeKey } from "@keepmind/client/lib/workspace-mode";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

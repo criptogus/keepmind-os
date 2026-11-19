@@ -1,11 +1,12 @@
-import type { DmTarget } from "@agenteschat/client";
-import { addDm } from "@agenteschat/client";
-import { audienceNotice, canTalk, seesDetails } from "@agenteschat/client/lib/audience";
-import { greetingSuggestions } from "@agenteschat/client/lib/chat";
-import { isGone } from "@agenteschat/client/lib/errors";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { isRightHand, rightHandSeenKey } from "@agenteschat/client/lib/right-hand";
-import { Avatar, Button, EmptyState } from "@agenteschat/ui";
+import type { DmTarget } from "@keepmind/client";
+import { addDm } from "@keepmind/client";
+import { audienceNotice, canTalk, seesDetails } from "@keepmind/client/lib/audience";
+import { greetingSuggestions } from "@keepmind/client/lib/chat";
+import { isGone } from "@keepmind/client/lib/errors";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { isRightHand, rightHandSeenKey } from "@keepmind/client/lib/right-hand";
+import { modeKey } from "@keepmind/client/lib/workspace-mode";
+import { Avatar, Button, EmptyState } from "@keepmind/ui";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { type ReactNode, useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -29,7 +30,16 @@ import { rightHandSeen } from "@/lib/storage";
 import { ChannelPage, ChannelSkeleton, type DmSideControl } from "./ChannelPage";
 
 /** A direct message with an agent or a person: the channel layout with its own header and empty state. */
-export function DmPage({ target, focusMessageId }: { target: DmTarget; focusMessageId?: string }) {
+export function DmPage({
+  target,
+  focusMessageId,
+  say,
+}: {
+  target: DmTarget;
+  focusMessageId?: string;
+  /** `?say=team`: send the team interview's starter once, as if the person typed it (the right hand's DM only). */
+  say?: "team";
+}) {
   const { t } = useTranslation();
   const { org, me } = useOrg();
   const api = useApi();
@@ -52,6 +62,8 @@ export function DmPage({ target, focusMessageId }: { target: DmTarget; focusMess
   const person = "userId" in target ? dir.memberById.get(target.userId) : undefined;
   const name = agent?.name ?? person?.name ?? "";
   const rightHand = isRightHand(agent);
+  // `?say=team` only means something in the right hand's DM: anywhere else the param is ignored.
+  const sayOnce = say === "team" && rightHand ? t(modeKey(org, "teamPlan.templates.describeSend")) : undefined;
   // A new agent's setup checklist (ADR 0155 §2) for whoever sets it up: its greeting and the checklist on top.
   const setup = useSetupSteps(agent).length > 0;
   // Its DM is open, from its row or any other way in: its row's "Novo" goes.
@@ -140,6 +152,7 @@ export function DmPage({ target, focusMessageId }: { target: DmTarget; focusMess
     <ChannelPage
       channelId={dm.data.channelId}
       focusMessageId={focusMessageId}
+      sayOnce={sayOnce}
       fallback={{
         id: dm.data.channelId,
         name,

@@ -1,17 +1,11 @@
-import type {
-  BundleTodo,
-  ImportItemKind,
-  ImportItemResult,
-  ImportSkipReason,
-  MigrationBundle,
-} from "@agenteschat/client";
-import { keys, useAgents, useApps, useMe } from "@agenteschat/client";
-import { aiAppImport } from "@agenteschat/client/lib/apps";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { formatBytes, MAX_UPLOAD_MB } from "@agenteschat/client/lib/files";
-import { joinNames } from "@agenteschat/client/lib/format";
-import { frontmatter, PASTED } from "@agenteschat/client/lib/import/shared";
-import { can, makesAgents } from "@agenteschat/client/lib/permissions";
+import type { BundleTodo, ImportItemKind, ImportItemResult, ImportSkipReason, MigrationBundle } from "@keepmind/client";
+import { keys, useAgents, useApps, useMe } from "@keepmind/client";
+import { aiAppImport } from "@keepmind/client/lib/apps";
+import { errorText } from "@keepmind/client/lib/errors";
+import { formatBytes, MAX_UPLOAD_MB } from "@keepmind/client/lib/files";
+import { joinNames } from "@keepmind/client/lib/format";
+import { frontmatter, PASTED } from "@keepmind/client/lib/import/shared";
+import { can, makesAgents } from "@keepmind/client/lib/permissions";
 import {
   AffixInput,
   Alert,
@@ -36,7 +30,7 @@ import {
   SwapLabel,
   Switch,
   Textarea,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import type { TFunction } from "i18next";

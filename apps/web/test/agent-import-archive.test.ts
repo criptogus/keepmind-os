@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
-import { MAX_UPLOAD_BYTES } from "@agenteschat/client/lib/files";
-import { CP850_HIGH, readZip } from "@agenteschat/client/lib/zip";
+import { MAX_UPLOAD_BYTES } from "@keepmind/client/lib/files";
+import { CP850_HIGH, readZip } from "@keepmind/client/lib/zip";
 import { ImportError, parseImport, parsePackage, readImportFiles } from "@/lib/import";
 import { ARCHIVE_LIMITS } from "@/lib/import/archive";
 import { paxPath, type TarEntry, tar, zip } from "./archives";

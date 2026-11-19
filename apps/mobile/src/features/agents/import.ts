@@ -1,24 +1,18 @@
-import type {
-  BundleTodo,
-  ImportItemKind,
-  ImportItemResult,
-  ImportSkipReason,
-  MigrationBundle,
-} from "@agenteschat/client";
-import { choosable, IMPORT_KINDS, type ImportCard, itemId } from "@agenteschat/client/lib/import/flow";
-import { ARCHIVE_PATH, importFileCap, isSecretPath, TEXT_PATH } from "@agenteschat/client/lib/import/shared";
-import { isIdHandle } from "@agenteschat/tokens/names";
+import type { BundleTodo, ImportItemKind, ImportItemResult, ImportSkipReason, MigrationBundle } from "@keepmind/client";
+import { choosable, IMPORT_KINDS, type ImportCard, itemId } from "@keepmind/client/lib/import/flow";
+import { ARCHIVE_PATH, importFileCap, isSecretPath, TEXT_PATH } from "@keepmind/client/lib/import/shared";
+import { isIdHandle } from "@keepmind/tokens/names";
 
 /**
  * Bringing agents from another app on the phone, the pure part: which picked files are read, the preview's rows
  * (agents one by one, the rest by kind), and where the person lands once they arrive. The reading, the plan and the
- * apply are the web's (`@agenteschat/client/lib/import`).
+ * apply are the web's (`@keepmind/client/lib/import`).
  */
 
 /** Criar agente opened on bringing agents from another app. */
 export const IMPORT_AGENTS_HREF = "/new-agent?import=1";
 
-export { isRequestCard } from "@agenteschat/client/lib/import/flow";
+export { isRequestCard } from "@keepmind/client/lib/import/flow";
 
 /** Whether "Choose files" applies: not for Grok Bot, which only answers in chat (ChatGPT dots hands back a file). */
 export const takesFiles = (card: ImportCard | null) => card !== "grok-bot";

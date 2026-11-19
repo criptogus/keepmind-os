@@ -1,6 +1,6 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
-import type { KeyWrapper } from "@agenteschat/adapters";
-import { and, asc, type Database, eq, isNull, schema } from "@agenteschat/db";
+import type { KeyWrapper } from "@keepmind/adapters";
+import { and, asc, type Database, eq, isNull, schema } from "@keepmind/db";
 import { type AuditEntry, recordAudit } from "../audit";
 import { clientRefused, OAUTH_STATE_TTL_MS, type OAuthApps, syncGitHubAppConnection } from "../connectors/connections";
 import { desktopReturnPath, isDesktopReturn, oauthReturnTo } from "../connectors/oauth-return";
@@ -125,7 +125,7 @@ interface UserInstallation {
 const userHeaders = (token: string) => ({
   authorization: `Bearer ${token}`,
   accept: "application/vnd.github+json",
-  "user-agent": "agentes.chat",
+  "user-agent": "keepmind.io",
 });
 
 /** Installations of our app the person can see on GitHub (their user token). */
@@ -285,7 +285,7 @@ export async function completeGitHubAppInstall(
     if (!existing && boundHere) throw new ValidationError("This installation changed meanwhile: install it again");
     const madeHere = origin.createdAt.getTime() >= row.createdAt.getTime() - CLOCK_SKEW_MS;
     if (!existing && (input.setupAction === "update" || !madeHere)) {
-      throw new ForbiddenError("This installation was made outside agentes.chat", "github_app.installed_outside");
+      throw new ForbiddenError("This installation was made outside KeepMind OS", "github_app.installed_outside");
     }
     const [saved] = existing
       ? await tx

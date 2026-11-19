@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import { createFakeDatabaseDriver, DatabaseError } from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
+import { createFakeDatabaseDriver, DatabaseError } from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
 import {
   createDatabaseConnection,
   DATABASES_SQL,

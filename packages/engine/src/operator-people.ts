@@ -1,4 +1,4 @@
-import { and, asc, type Database, desc, eq, gte, inArray, lt, schema, sql } from "@agenteschat/db";
+import { and, asc, type Database, desc, eq, gte, inArray, lt, schema, sql } from "@keepmind/db";
 import { canTalkTo, speakerOf } from "./audience";
 import { decodeCursor } from "./cursor";
 import { audienceAllows, machineRule, mayUseDevice } from "./devices";

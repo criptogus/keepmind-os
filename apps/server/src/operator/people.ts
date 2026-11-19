@@ -1,11 +1,11 @@
+import { createRoute, type OpenAPIHono, z } from "@hono/zod-openapi";
 import {
   MAX_ACTORS,
   OPERATOR_ACCESS_RULES,
   OPERATOR_ACCESS_TARGETS,
   operatorAccess,
   operatorNotifications,
-} from "@agenteschat/engine";
-import { createRoute, type OpenAPIHono, z } from "@hono/zod-openapi";
+} from "@keepmind/engine";
 import { apiError, errorResponse } from "../http/errors";
 import { iso, json, OrgParams } from "../routes/app/context";
 import type { OperatorDeps } from "./app";

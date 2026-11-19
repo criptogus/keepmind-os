@@ -74,7 +74,15 @@ export function stickerSeed(key: string): number {
  * One frame of a sticker: the agent in its mood (pose and face), its shadow on the floor and the mood's pixel props
  * in the agent's tones. `S` is the square's side in canvas pixels; `t` seconds (a seed added keeps neighbors apart).
  */
-export function drawSticker(ctx: Ctx2D, look: StickerLook, mood: StickerMood, t: number, S: number): void {
+export function drawSticker(
+  ctx: Ctx2D,
+  look: StickerLook,
+  mood: StickerMood,
+  t: number,
+  S: number,
+  renderBody: typeof drawAgent = drawAgent,
+  decorations = true,
+): void {
   const [c1, c2] = gradientOf(look.color);
   const s = Math.round(S * 0.56);
   const cell = S / 64;
@@ -119,12 +127,13 @@ export function drawSticker(ctx: Ctx2D, look: StickerLook, mood: StickerMood, t:
   ctx.ellipse(S / 2, S - S * 0.055, s * 0.42 * (1 - bounce / S), S * 0.025, 0, 0, Math.PI * 2);
   ctx.fill();
   const accessory = look.accessory && look.accessory !== "none" ? look.accessory : undefined;
-  drawAgent(ctx, x0, y0, s, {
+  renderBody(ctx, x0, y0, s, {
     color: look.color as AgentColorName | undefined,
     eyes: look.eyes as EyeStyle | undefined,
     pose,
     after: accessory ? (g, side, frame) => drawAccessory(g, side, accessory, frame, t) : undefined,
   });
+  if (!decorations) return;
   switch (mood) {
     case "celebrate":
       // Confetti of its two tones going round.

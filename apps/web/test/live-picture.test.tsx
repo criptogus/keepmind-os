@@ -1,9 +1,9 @@
 import { afterEach, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { BrowserFrame } from "@agenteschat/client";
+import type { BrowserFrame } from "@keepmind/client";
 import { act, cleanup, render } from "@testing-library/react";
 import { createRef, StrictMode } from "react";
 import { LivePicture } from "@/components/browser/LivePicture";

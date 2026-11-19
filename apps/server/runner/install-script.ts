@@ -5,8 +5,8 @@ import {
   CHROME_NEEDED,
   CHROMIUM_LINUX,
   CHROMIUM_NEEDED,
-} from "@agenteschat/adapters/machine-protocol";
-import { TERM_SH } from "@agenteschat/setup/src/term-sh";
+} from "@keepmind/adapters/machine-protocol";
+import { TERM_SH } from "@keepmind/setup/src/term-sh";
 import { DEFAULT_AGENT_UID_RANGE, SYSTEM_RUNNER_HOME } from "./config";
 import { WINDOWS_TASK } from "./service";
 
@@ -208,7 +208,7 @@ export function installScript(publicUrl: string, options: { link?: string } = {}
     .map(([target, sha]) => `    ${target}) BUN_SHA256=${shQuote(sha)} ;;`)
     .join("\n");
   return `#!/bin/sh
-# agentes.chat runner installer: connects this computer to your organization.
+# KeepMind OS runner installer: connects this computer to your organization.
 # Usage: curl -fsSL <server>/api/machines/install.sh | sh -s -- [--dir DIR] [--no-exec] [--name NAME] [--no-service] [--enroll-file FILE | --link CODE]
 # With a link made under Settings › Devices (the link's maker lets this computer join): curl -fsSL <server>/i/<code> | sh
 # On a Linux server, as root, the runner for the whole computer with each agent as its own user:
@@ -810,7 +810,7 @@ forget_testing_chrome() { rm -rf "$BROWSER_DIR"/chrome-* "$BROWSER_DIR"/.chrome-
 # or the launchd agent's label), which would leave that connection's server without this computer.
 not_connected_for_host() {
   if [ -n "$HOST_TOKEN_FILE" ] && [ -f "$RUNNER_HOME/config.json" ] && grep -q '"token"' "$RUNNER_HOME/config.json" 2>/dev/null; then
-    die "this computer is already connected to agentes.chat as a computer, so it can't also be this server's own"
+    die "this computer is already connected to KeepMind OS as a computer, so it can't also be this server's own"
   fi
 }
 
@@ -1112,7 +1112,7 @@ export const RUNNER_BUN_WINDOWS_SHA256 = {
 export function installScriptPowerShell(publicUrl: string, options: { link?: string } = {}): string {
   const server = psQuote(publicUrl.trim().replace(/\/+$/, ""));
   const sha = RUNNER_BUN_WINDOWS_SHA256;
-  return `# agentes.chat runner installer for Windows: connects this computer to your organization.
+  return `# KeepMind OS runner installer for Windows: connects this computer to your organization.
 # Usage, with a link made under Settings > Devices: irm <server>/i/<code>/ps | iex
 
 function Install-AgentesRunner {
@@ -1146,7 +1146,7 @@ function Install-AgentesRunner {
     throw 'This computer is connected by the agentes app, so manage it there.'
   }
   Write-Host ''
-  Write-Host "$([char]0x250C)  agentes.chat: connect this computer" -ForegroundColor White
+  Write-Host "$([char]0x250C)  KeepMind OS: connect this computer" -ForegroundColor White
   Gap
   $Runtime = Join-Path $RunnerHome 'runtime'
   $Bin = Join-Path $RunnerHome 'bin'

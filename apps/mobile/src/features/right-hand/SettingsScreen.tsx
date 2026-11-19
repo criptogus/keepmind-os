@@ -14,16 +14,16 @@ import {
   useUpdateAgent,
   useUpdateSettings,
   useWorkspaceUsesApi,
-} from "@agenteschat/client";
-import { agentsReach, audienceOf, audiencePatch } from "@agenteschat/client/lib/audience";
-import { modelRows } from "@agenteschat/client/lib/brain-picker";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { can } from "@agenteschat/client/lib/permissions";
-import { brainPlan } from "@agenteschat/client/lib/plans";
-import { AUTO } from "@agenteschat/client/lib/providers";
-import { mineStatus, RIGHT_HAND_POWERS, rightHandNoComputer, rightHandOf } from "@agenteschat/client/lib/right-hand";
-import { type LodiPrefsPatch, type LodiSwitch, teamWeekOn } from "@agenteschat/client/lib/right-hand-prefs";
-import { dayText, hourText } from "@agenteschat/client/lib/team-week";
+} from "@keepmind/client";
+import { agentsReach, audienceOf, audiencePatch } from "@keepmind/client/lib/audience";
+import { modelRows } from "@keepmind/client/lib/brain-picker";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { can } from "@keepmind/client/lib/permissions";
+import { brainPlan } from "@keepmind/client/lib/plans";
+import { AUTO } from "@keepmind/client/lib/providers";
+import { mineStatus, RIGHT_HAND_POWERS, rightHandNoComputer, rightHandOf } from "@keepmind/client/lib/right-hand";
+import { type LodiPrefsPatch, type LodiSwitch, teamWeekOn } from "@keepmind/client/lib/right-hand-prefs";
+import { dayText, hourText } from "@keepmind/client/lib/team-week";
 import { useQueryClient } from "@tanstack/react-query";
 import type { TFunction } from "i18next";
 import { useState } from "react";

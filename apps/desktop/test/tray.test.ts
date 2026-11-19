@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import type { ControlJob, ControlStatus } from "@agenteschat/adapters/runner-control";
+import type { ControlJob, ControlStatus } from "@keepmind/adapters/runner-control";
 import { combinedPause, extendPause, pauseUntil } from "../src/control/pause";
 import { macStateOf, type TrayInput, trayStateOf } from "../src/control/tray";
 

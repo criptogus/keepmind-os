@@ -1,19 +1,19 @@
-import { ApiError, type SignInOptions, type SignInProvider } from "@agenteschat/client";
+import { ApiError, type SignInOptions, type SignInProvider } from "@keepmind/client";
 import {
   EARLY_ACCESS_OTHER_EMAIL,
   knownErrorText,
   providerRefusalText,
   type RestrictionFacts,
   restrictionLine,
-} from "@agenteschat/client/lib/errors";
-import { earlyAccessHeaders, earlyAccessState } from "@agenteschat/client/lib/guards";
+} from "@keepmind/client/lib/errors";
+import { earlyAccessHeaders, earlyAccessState } from "@keepmind/client/lib/guards";
 import {
   type createHumanCheck,
   HUMAN_CHECK_BLOCKED,
   type HumanAction,
   isHumanCheckRefusal,
-} from "@agenteschat/client/lib/human-check";
-import { originOf } from "@agenteschat/client/lib/server";
+} from "@keepmind/client/lib/human-check";
+import { originOf } from "@keepmind/client/lib/server";
 import type { TFunction } from "i18next";
 
 /** Where Turnstile's script and its frame come from. */
@@ -30,8 +30,8 @@ export function humanCheckOrigins(server: string): string[] {
 
 /**
  * Whether an address the whitelist let through loads in the check's WebView (`onShouldStartLoadWithRequest`). The
- * library reads each entry as the start of an origin, so `https://app.agentes.chat.evil.example` and
- * `https://app.agentes.chat@evil.example` pass it: only its exact documents and origins load.
+ * library reads each entry as the start of an origin, so `https://keepmind.io.evil.example` and
+ * `https://keepmind.io@evil.example` pass it: only its exact documents and origins load.
  */
 export function humanCheckStays(server: string, url: string): boolean {
   const allowed = humanCheckOrigins(server);
@@ -134,7 +134,7 @@ export class CheckCancelled extends Error {}
 
 /**
  * A refused request in the phone's words: the bot check's blocked line names no browser (the app has none to
- * switch to), then a known code (a blocked account's, with its kind on agentes.chat Cloud), too many tries, else the
+ * switch to), then a known code (a blocked account's, with its kind on KeepMind OS Cloud), too many tries, else the
  * generic line. Never the server's text.
  */
 export function refusalText(
@@ -164,7 +164,7 @@ export const refusalOf = ({ error }: { error: ({ status: number; code?: string }
 
 /**
  * A social sign-in Better Auth refused, as Apple's native sign-in gets the server's answer itself: a blocked account's
- * line (its kind on agentes.chat Cloud), a refusal the web's sign-in says too, else that it didn't work. Better Auth
+ * line (its kind on KeepMind OS Cloud), a refusal the web's sign-in says too, else that it didn't work. Better Auth
  * names a provider's own refusal in an `OAUTH_LINK_ERROR`'s message ("account not linked" is the web's
  * `account_not_linked`). `emails`: the server sends email.
  */

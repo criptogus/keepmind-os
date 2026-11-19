@@ -8,9 +8,9 @@ import type {
   VaultItem,
   VaultSourceInfo,
   VaultUse,
-} from "@agenteschat/client";
-import { webSettingsUrl } from "@agenteschat/client/lib/server";
-import { vaultNoAgents } from "@agenteschat/client/lib/vault";
+} from "@keepmind/client";
+import { webSettingsUrl } from "@keepmind/client/lib/server";
+import { vaultNoAgents } from "@keepmind/client/lib/vault";
 import type { TFunction } from "i18next";
 import {
   accessProblem,

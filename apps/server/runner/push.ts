@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
-import type { MachineReplies } from "@agenteschat/adapters/machine-protocol";
+import type { MachineReplies } from "@keepmind/adapters/machine-protocol";
 import { RunnerError } from "./errors";
 import { hiddenIn, type Resolved, resolveInWorkspace } from "./paths";
 import { zipFolder } from "./zip";

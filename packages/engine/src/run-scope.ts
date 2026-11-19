@@ -1,4 +1,4 @@
-import { type SQL, sql } from "@agenteschat/db";
+import { type SQL, sql } from "@keepmind/db";
 
 /**
  * SQL: the run `r` answers in the channel itself (it was asked there), not in

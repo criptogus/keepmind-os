@@ -1,5 +1,5 @@
-import type { AiStatus, AppNotification, NotificationKind, NotificationSource } from "@agenteschat/client";
-import { openTarget, ROUTINE_TROUBLE, targetPath } from "@agenteschat/client/lib/notifications";
+import type { AiStatus, AppNotification, NotificationKind, NotificationSource } from "@keepmind/client";
+import { openTarget, ROUTINE_TROUBLE, targetPath } from "@keepmind/client/lib/notifications";
 import { deviceHref, deviceNoticeOf } from "../devices/logic";
 import { isSafeId } from "../shared/logic";
 
@@ -283,7 +283,7 @@ export function notificationHref(
   // A device's notice (someone's agent on it, asking for it, waiting for it, a computer asking to join): the device.
   const device = deviceNoticeOf(n);
   if (device) return deviceHref(device);
-  // An agent held on agentes.chat Cloud: its page, where the hold shows. The workspace's own hold: the web's.
+  // An agent held on KeepMind OS Cloud: its page, where the hold shows. The workspace's own hold: the web's.
   if (n.kind === "org_standing") return isSafeId(s.agentId) ? `/agent/${s.agentId}` : null;
   // The month's Composio calls are counted in Uso.
   if (n.kind === "composio_limit") return "/usage";

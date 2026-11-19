@@ -24,7 +24,7 @@ import { WORDS } from "../packages/engine/src/email/words";
 import { PUSH } from "../packages/engine/src/push/messages";
 import { HELP } from "../packages/i18n/src/help";
 import { en, ptBR } from "../packages/i18n/src/index";
-import { legalDocuments } from "../packages/i18n/src/legal";
+
 import { type AppLocale, isAppLocale, LOCALES, localeInfo } from "../packages/i18n/src/locale";
 import type { LocaleStrings } from "../packages/i18n/src/plurals";
 import { checkLocale, flatten, missingKeys, splitKey } from "../packages/i18n/test/check-locale";
@@ -331,10 +331,9 @@ function status() {
       share(leaves(WORDS[code]), leaves(WORDS.en)),
       share(Object.keys(PUSH[code]).length, Object.keys(PUSH.en).length),
       share(Object.keys(HELP[code]).length, Object.keys(HELP.en).length),
-      share([legalDocuments.terms[code], legalDocuments.privacy[code]].filter(Boolean).length, 2),
     ];
   });
-  const head = ["", ...Object.keys(SURFACES), "email", "push", "help", "legal"];
+  const head = ["", ...Object.keys(SURFACES), "email", "push", "help"];
   const widths = head.map((h, i) => Math.max(h.length, ...rows.map((r) => (r[i] ?? "").length)));
   for (const r of [head, ...rows]) console.log(r.map((c, i) => (c ?? "").padEnd(widths[i] ?? 0)).join("  "));
 }

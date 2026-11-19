@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import { formatUserCode, locationText, normalizeUserCode } from "@agenteschat/client/lib/machines";
+import { formatUserCode, locationText, normalizeUserCode } from "@keepmind/client/lib/machines";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { createFakeApi, fakeMachinesOf, ORG_ID, seedState } from "./fake-api";
 import { renderApp, screen, settle } from "./render";

@@ -1,4 +1,4 @@
-import type { DashboardAudience } from "@agenteschat/client";
+import type { DashboardAudience } from "@keepmind/client";
 import { useSyncExternalStore } from "react";
 
 /**

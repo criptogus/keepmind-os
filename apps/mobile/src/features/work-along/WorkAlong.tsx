@@ -1,7 +1,7 @@
-import { useTaskManager } from "@agenteschat/client";
-import { markedPieces, markInk } from "@agenteschat/client/lib/activity";
-import { taskTitle, todayStart } from "@agenteschat/client/lib/task-manager";
-import type { WorkItem } from "@agenteschat/client/lib/working";
+import { useTaskManager } from "@keepmind/client";
+import { markedPieces, markInk } from "@keepmind/client/lib/activity";
+import { taskTitle, todayStart } from "@keepmind/client/lib/task-manager";
+import type { WorkItem } from "@keepmind/client/lib/working";
 import { NativeTabs } from "expo-router/native-tabs";
 import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";

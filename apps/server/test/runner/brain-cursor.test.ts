@@ -2,9 +2,9 @@ import { afterEach, expect, test } from "bun:test";
 import { spawn } from "node:child_process";
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import type { MachineRequest } from "@agenteschat/adapters";
-import { accountCodeAad, CURSOR_KEY_PROVIDER } from "@agenteschat/adapters/machine-protocol";
-import { sealSecret } from "@agenteschat/adapters/secret-box";
+import type { MachineRequest } from "@keepmind/adapters";
+import { accountCodeAad, CURSOR_KEY_PROVIDER } from "@keepmind/adapters/machine-protocol";
+import { sealSecret } from "@keepmind/adapters/secret-box";
 import { AccountManager, accountEnv, cursorKeyOf, parseCursorLoginUrl, parseCursorStatus } from "../../runner/accounts";
 import { type CodexBrainEvent, chatFolder } from "../../runner/brain-codex";
 import {

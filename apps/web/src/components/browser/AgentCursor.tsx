@@ -1,5 +1,5 @@
-import type { BrowserPointer } from "@agenteschat/client";
-import { gradientOf } from "@agenteschat/ui";
+import type { BrowserPointer } from "@keepmind/client";
+import { gradientOf } from "@keepmind/ui";
 import { type CSSProperties, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";

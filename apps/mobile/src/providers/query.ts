@@ -1,4 +1,4 @@
-import { LiveQueryClient } from "@agenteschat/client/lib/live-query-client";
+import { LiveQueryClient } from "@keepmind/client/lib/live-query-client";
 import { focusManager } from "@tanstack/react-query";
 import { AppState, type AppStateStatus } from "react-native";
 

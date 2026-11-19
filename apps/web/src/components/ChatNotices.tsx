@@ -1,11 +1,11 @@
-import type { Agent, Message } from "@agenteschat/client";
-import { keys } from "@agenteschat/client";
-import { APP_BRANDS } from "@agenteschat/client/lib/apps";
-import { seesDetails } from "@agenteschat/client/lib/audience";
-import { pairItemOf } from "@agenteschat/client/lib/consult-group";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { formatTime } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
+import type { Agent, Message } from "@keepmind/client";
+import { keys } from "@keepmind/client";
+import { APP_BRANDS } from "@keepmind/client/lib/apps";
+import { seesDetails } from "@keepmind/client/lib/audience";
+import { pairItemOf } from "@keepmind/client/lib/consult-group";
+import { errorText } from "@keepmind/client/lib/errors";
+import { formatTime } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
 import {
   consultationOfNotice,
   type NoticeView,
@@ -13,10 +13,10 @@ import {
   noticeView,
   type StoppedNotice,
   stoppedNoticeOf,
-} from "@agenteschat/client/lib/notices";
-import type { RoutineReply } from "@agenteschat/client/lib/routines";
-import type { AppVia } from "@agenteschat/client/lib/via";
-import { stopsMovedOn } from "@agenteschat/client/lib/work";
+} from "@keepmind/client/lib/notices";
+import type { RoutineReply } from "@keepmind/client/lib/routines";
+import type { AppVia } from "@keepmind/client/lib/via";
+import { stopsMovedOn } from "@keepmind/client/lib/work";
 import {
   cx,
   EventPill,
@@ -26,7 +26,7 @@ import {
   type IconName,
   PixelStop,
   ProviderLogo,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { createContext, type ReactNode, useContext, useState } from "react";
 import { useTranslation } from "react-i18next";

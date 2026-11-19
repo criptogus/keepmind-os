@@ -1,7 +1,7 @@
-import type { ConnectorDef, CustomServer, ToolDecision } from "@agenteschat/client";
-import { catalogToolClass } from "@agenteschat/client/lib/access-levels";
-import { type ConnectedItem, connectedSummary } from "@agenteschat/client/lib/connected";
-import { humanize, toolsToReview } from "@agenteschat/client/lib/custom-tools";
+import type { ConnectorDef, CustomServer, ToolDecision } from "@keepmind/client";
+import { catalogToolClass } from "@keepmind/client/lib/access-levels";
+import { type ConnectedItem, connectedSummary } from "@keepmind/client/lib/connected";
+import { humanize, toolsToReview } from "@keepmind/client/lib/custom-tools";
 import {
   bySubject,
   matchTool,
@@ -10,7 +10,7 @@ import {
   type ReviewTool,
   SENSITIVE_LEVELS,
   toolName,
-} from "@agenteschat/client/lib/tool-review";
+} from "@keepmind/client/lib/tool-review";
 import type { TFunction } from "i18next";
 
 /**

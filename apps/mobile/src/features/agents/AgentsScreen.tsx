@@ -8,17 +8,17 @@ import {
   useFormerAgents,
   useUnarchiveAgent,
   useWorkingRuns,
-} from "@agenteschat/client";
-import { workLineText } from "@agenteschat/client/lib/agent-work";
-import { listsAgent } from "@agenteschat/client/lib/audience";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { waitingComputerByAgent } from "@agenteschat/client/lib/machine-outages";
-import { previewBody } from "@agenteschat/client/lib/message-body";
-import { aiStateOf } from "@agenteschat/client/lib/no-ai";
-import { can } from "@agenteschat/client/lib/permissions";
-import { isOutOfOffice } from "@agenteschat/client/lib/presence";
-import { isPersonal, modeKey } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client";
+import { workLineText } from "@keepmind/client/lib/agent-work";
+import { listsAgent } from "@keepmind/client/lib/audience";
+import { errorText } from "@keepmind/client/lib/errors";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { waitingComputerByAgent } from "@keepmind/client/lib/machine-outages";
+import { previewBody } from "@keepmind/client/lib/message-body";
+import { aiStateOf } from "@keepmind/client/lib/no-ai";
+import { can } from "@keepmind/client/lib/permissions";
+import { isOutOfOffice } from "@keepmind/client/lib/presence";
+import { isPersonal, modeKey } from "@keepmind/client/lib/workspace-mode";
 import { useIsFocused } from "expo-router";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";

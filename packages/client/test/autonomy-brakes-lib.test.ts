@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
-import { resources } from "@agenteschat/i18n";
-import { LOCALE_CODES } from "@agenteschat/i18n/locale";
+import { resources } from "@keepmind/i18n";
+import { LOCALE_CODES } from "@keepmind/i18n/locale";
 import i18next, { type TFunction } from "i18next";
 import { actionCardOf, costlyProposalOf, mayDecideCostly, mayRememberCostly } from "../src/lib/action-cards";
 import { serverBody } from "../src/lib/message-body";

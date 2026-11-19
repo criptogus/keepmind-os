@@ -7,13 +7,13 @@ import {
   planModel,
   planModelValue,
   planOf,
-} from "@agenteschat/providers/plans";
+} from "@keepmind/providers/plans";
 import type { TFunction } from "i18next";
 import type { AgentBrain } from "../api/types";
 import { agentGrammar } from "./grammar";
 import { isAuto } from "./providers";
 
-export * from "@agenteschat/providers/plans";
+export * from "@keepmind/providers/plans";
 
 export interface BrainModelChoice extends Pick<PlanModel, "label" | "tag" | "needs" | "free" | "maker" | "images"> {
   value: string;

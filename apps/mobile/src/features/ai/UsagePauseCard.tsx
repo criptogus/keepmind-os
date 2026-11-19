@@ -1,6 +1,6 @@
-import { type CatchUpClosed, keys, type Message, useApi, useUsageQueue } from "@agenteschat/client";
-import { clockAt } from "@agenteschat/client/lib/format";
-import { can } from "@agenteschat/client/lib/permissions";
+import { type CatchUpClosed, keys, type Message, useApi, useUsageQueue } from "@keepmind/client";
+import { clockAt } from "@keepmind/client/lib/format";
+import { can } from "@keepmind/client/lib/permissions";
 import {
   answerAnywayOpen,
   mayAnswerAnyway,
@@ -11,7 +11,7 @@ import {
   usagePauseText,
   usageWaitFix,
   usageWaitOf,
-} from "@agenteschat/client/lib/usage-pause";
+} from "@keepmind/client/lib/usage-pause";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

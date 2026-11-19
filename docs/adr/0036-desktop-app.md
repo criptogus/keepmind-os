@@ -14,7 +14,7 @@ That works for developers and servers. It does not work for the people the produ
 
 ### 1. A Tauri 2 app in `apps/desktop`, living in the menu bar / tray
 
-- Tauri 2 shell with a React + Vite web view. The UI imports `@agenteschat/ui` (components, the agent engine, the sky), `@agenteschat/i18n`, the tokens (`tokens.css`) and, when it talks to the server, `@agenteschat/client`. Same rules as the web: no DOM-free constraint, no `ee/` imports, no keys in the client.
+- Tauri 2 shell with a React + Vite web view. The UI imports `@keepmind/ui` (components, the agent engine, the sky), `@keepmind/i18n`, the tokens (`tokens.css`) and, when it talks to the server, `@keepmind/client`. Same rules as the web: no DOM-free constraint, no `ee/` imports, no keys in the client.
 - Not React Native for desktop: `react-native-macos`/`-windows` are not Expo, lack the modules the phone app uses (blur, SecureStore, notifications), have weak tray support and no Linux, and would not reuse the DOM design system. Not Electron: the runner as a child process gives us what an in-process Node would, at a tenth of the size and memory for an app that is always open.
 - The app is a tray icon plus small windows: the popover (now, pause, open site, preferences, quit), first run, Preferences (General, Folders, Tools, Updates, Activity, Advanced). The UI never says "runner", "MCP" or "protocol"; the app is called "agentes".
 - Rust stays thin: tray and window positioning, spawning the runner, single instance, autostart, updater, native dialogs and notifications. Product logic lives in the runner (TypeScript) so the CLI gets it too.

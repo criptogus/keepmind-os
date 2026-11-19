@@ -1,5 +1,5 @@
 {
-  "name": "@agenteschat/engine",
+  "name": "@keepmind/engine",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -12,12 +12,12 @@
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@agenteschat/adapters": "workspace:*",
-    "@agenteschat/db": "workspace:*",
-    "@agenteschat/i18n": "workspace:*",
-    "@agenteschat/providers": "workspace:*",
-    "@agenteschat/tokens": "workspace:*",
-    "@agenteschat/ui": "workspace:*",
+    "@keepmind/adapters": "workspace:*",
+    "@keepmind/db": "workspace:*",
+    "@keepmind/i18n": "workspace:*",
+    "@keepmind/providers": "workspace:*",
+    "@keepmind/tokens": "workspace:*",
+    "@keepmind/ui": "workspace:*",
     "@modelcontextprotocol/sdk": "^1.32.1",
     "@modelcontextprotocol/server": "2.3.1",
     "libpg-query": "17",

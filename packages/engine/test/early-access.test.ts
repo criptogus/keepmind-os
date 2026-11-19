@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
-import { createFakeEmailSender } from "@agenteschat/adapters";
-import { countQueries, type Database, eq, schema } from "@agenteschat/db";
-import { createTestDatabase } from "@agenteschat/db/testing";
+import { createFakeEmailSender } from "@keepmind/adapters";
+import { countQueries, type Database, eq, schema } from "@keepmind/db";
+import { createTestDatabase } from "@keepmind/db/testing";
 import {
   canCreateWorkspace,
   createInvitation,

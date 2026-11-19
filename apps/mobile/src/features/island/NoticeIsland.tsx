@@ -1,8 +1,8 @@
-import type { AppNotification } from "@agenteschat/client";
-import { useNotificationAction, useNotificationReply } from "@agenteschat/client";
-import { type IslandItem, islandLead, noticeLine } from "@agenteschat/client/lib/island";
-import { mediaWord } from "@agenteschat/client/lib/media";
-import { quickReply, waitingCardOf } from "@agenteschat/client/lib/notifications";
+import type { AppNotification } from "@keepmind/client";
+import { useNotificationAction, useNotificationReply } from "@keepmind/client";
+import { type IslandItem, islandLead, noticeLine } from "@keepmind/client/lib/island";
+import { mediaWord } from "@keepmind/client/lib/media";
+import { quickReply, waitingCardOf } from "@keepmind/client/lib/notifications";
 import { StatusBar } from "expo-status-bar";
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { useTranslation } from "react-i18next";

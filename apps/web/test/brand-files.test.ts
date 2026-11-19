@@ -1,11 +1,11 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
 import { existsSync, readdirSync } from "node:fs";
-import { POSTGRES_MARK } from "@agenteschat/client/lib/databases";
-import { PROVIDER_MARKS } from "@agenteschat/ui/brand/marks";
+import { POSTGRES_MARK } from "@keepmind/client/lib/databases";
+import { PROVIDER_MARKS } from "@keepmind/ui/brand/marks";
 import { cleanup, render } from "@testing-library/react";
 import { createElement } from "react";
 import { I18nextProvider } from "react-i18next";

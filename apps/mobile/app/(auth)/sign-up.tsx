@@ -1,4 +1,4 @@
-import { earlyAccessToken } from "@agenteschat/client/lib/guards";
+import { earlyAccessToken } from "@keepmind/client/lib/guards";
 import { useLocalSearchParams } from "expo-router";
 import { AuthFlow } from "@/features/auth/AuthFlow";
 

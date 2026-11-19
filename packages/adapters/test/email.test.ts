@@ -10,9 +10,9 @@ import {
 } from "../src";
 
 const msg = { to: ["ana@example.com"], subject: "Oi", html: "<p>Oi</p>", text: "Oi", idempotencyKey: "invite:1" };
-/** A picture the HTML shows as `cid:logo-ink@agentes.chat`. */
+/** A picture the HTML shows as `cid:contact@zeroagency.ai`. */
 const logo = {
-  cid: "logo-ink@agentes.chat",
+  cid: "contact@zeroagency.ai",
   filename: "logo-ink.png",
   contentType: "image/png",
   content: new Uint8Array([0x89, 0x50, 0x4e, 0x47]),
@@ -23,8 +23,8 @@ describe("MillionSend sender", () => {
     const calls: { url: string; init: RequestInit }[] = [];
     const sender = createMillionSendSender({
       apiKey: "ms_test",
-      from: "agentes <ping@agentes.chat>",
-      replyTo: "suporte@agentes.chat",
+      from: "agentes <contact@zeroagency.ai>",
+      replyTo: "contact@zeroagency.ai",
       fetch: (async (url: string, init: RequestInit) => {
         calls.push({ url, init });
         return Response.json({ id: "0b6f…" });
@@ -36,12 +36,12 @@ describe("MillionSend sender", () => {
     expect(headers.get("authorization")).toBe("Bearer ms_test");
     expect(headers.get("idempotency-key")).toBe("invite:1");
     expect(JSON.parse(String(calls[0]?.init.body))).toEqual({
-      from: "agentes <ping@agentes.chat>",
+      from: "agentes <contact@zeroagency.ai>",
       to: ["ana@example.com"],
       subject: "Oi",
       html: "<p>Oi</p>",
       text: "Oi",
-      reply_to: "suporte@agentes.chat",
+      reply_to: "contact@zeroagency.ai",
       tags: [{ name: "kind", value: "invitation" }],
     });
   });
@@ -63,7 +63,7 @@ describe("MillionSend sender", () => {
           filename: "logo-ink.png",
           content: "iVBORw==",
           content_type: "image/png",
-          content_id: "logo-ink@agentes.chat",
+          content_id: "contact@zeroagency.ai",
         },
       ],
     });
@@ -228,7 +228,7 @@ describe("SMTP sender", () => {
     await sender.send({ ...msg, inline: [logo] });
     const message = JSON.parse(built[0] ?? "{}") as { attachments?: Record<string, unknown>[] };
     expect(message.attachments).toEqual([
-      expect.objectContaining({ filename: "logo-ink.png", contentType: "image/png", cid: "logo-ink@agentes.chat" }),
+      expect.objectContaining({ filename: "logo-ink.png", contentType: "image/png", cid: "contact@zeroagency.ai" }),
     ]);
   });
 

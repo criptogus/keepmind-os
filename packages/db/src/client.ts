@@ -35,7 +35,7 @@ export interface DatabaseOptions {
 
 export interface DatabaseHandle {
   db: Database;
-  /** The postgres.js client, for LISTEN/NOTIFY (see `@agenteschat/adapters`); null on PGlite (one process). */
+  /** The postgres.js client, for LISTEN/NOTIFY (see `@keepmind/adapters`); null on PGlite (one process). */
   client: postgres.Sql | null;
   /**
    * Applies pending migrations, after checking that the applied ones are

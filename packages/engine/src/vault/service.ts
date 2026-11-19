@@ -7,10 +7,10 @@
  * (§2): agents get one only through `releaseVaultLogin`/`releaseVaultKeys`, on their way into a box sealed for their
  * own computer.
  */
-import type { KeyWrapper, PubSub, VaultMatch, VaultOriginRule, VaultSources } from "@agenteschat/adapters";
-import type { Database } from "@agenteschat/db";
+import type { KeyWrapper, PubSub, VaultMatch, VaultOriginRule, VaultSources } from "@keepmind/adapters";
+import type { Database } from "@keepmind/db";
 
-export type { VaultMatch, VaultOriginRule } from "@agenteschat/adapters";
+export type { VaultMatch, VaultOriginRule } from "@keepmind/adapters";
 
 export interface VaultDeps {
   db: Database;

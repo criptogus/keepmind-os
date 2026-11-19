@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import { eq, schema } from "@agenteschat/db";
-import { MODEL_CATALOG } from "@agenteschat/providers";
+import { eq, schema } from "@keepmind/db";
+import { MODEL_CATALOG } from "@keepmind/providers";
 import { updateAgent } from "../src";
 import { addMember, type Fixture, setup } from "./fixtures";
 

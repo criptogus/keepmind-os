@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, expect, test } from "bun:test";
-import { ROLE_PERMISSIONS } from "@agenteschat/engine";
+import { ROLE_PERMISSIONS } from "@keepmind/engine";
 import { type Browser, browser, createTestServer, joinByInvitation, seedOrg, signUp, type TestServer } from "./harness";
 
 let t: TestServer;

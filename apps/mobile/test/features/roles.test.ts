@@ -1,9 +1,9 @@
 import { describe, expect, test } from "bun:test";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import type { Channel, OrgRole, OrgRoles, Person } from "@agenteschat/client";
-import { audiencePatch } from "@agenteschat/client/lib/audience";
-import { COMPUTERS_ROW, giveRole, newRoleInput, roleLock } from "@agenteschat/client/lib/roles";
+import type { Channel, OrgRole, OrgRoles, Person } from "@keepmind/client";
+import { audiencePatch } from "@keepmind/client/lib/audience";
+import { COMPUTERS_ROW, giveRole, newRoleInput, roleLock } from "@keepmind/client/lib/roles";
 import { memberActions, withAddresses } from "../../src/features/members/logic";
 import {
   ADVANCED,
@@ -614,7 +614,7 @@ describe("The order (P2's Ordenar), people and new cargos", () => {
     expect(newRoleInput("Moderação", "mod", [])).toEqual({
       name: "Moderação",
       icon: "flag",
-      color: "teal",
+      color: "violet",
       permissions: ["create_channels", "manage_channels"],
     });
     expect(newRoleInput("Cópia", "copy:fin", [fin])).toMatchObject({ icon: "wallet", permissions: fin.permissions });

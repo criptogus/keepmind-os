@@ -1,5 +1,5 @@
-import type { AiStatus, Message } from "@agenteschat/client";
-import { aiStateOf, noAiCardOf } from "@agenteschat/client/lib/no-ai";
+import type { AiStatus, Message } from "@keepmind/client";
+import { aiStateOf, noAiCardOf } from "@keepmind/client/lib/no-ai";
 
 /**
  * Which "no AI" banner the box shows, as the web's `NoAiBanner` (ADR 0061): in an agent's DM, that agent

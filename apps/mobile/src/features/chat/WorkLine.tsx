@@ -1,7 +1,7 @@
-import { type Issue, type Message, useApi, useChannels, type WorkView } from "@agenteschat/client";
-import { heldBack } from "@agenteschat/client/lib/issues";
-import { blockedText, workLine, workPlanProgress, workWaitsOnPerson } from "@agenteschat/client/lib/long-work";
-import { can } from "@agenteschat/client/lib/permissions";
+import { type Issue, type Message, useApi, useChannels, type WorkView } from "@keepmind/client";
+import { heldBack } from "@keepmind/client/lib/issues";
+import { blockedText, workLine, workPlanProgress, workWaitsOnPerson } from "@keepmind/client/lib/long-work";
+import { can } from "@keepmind/client/lib/permissions";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { createContext, type ReactNode, useContext, useEffect, useState } from "react";

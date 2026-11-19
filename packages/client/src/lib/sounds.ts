@@ -1,11 +1,11 @@
 /**
  * The app's sounds (ADR 0070): which one an event plays. The shared code only names the sound; each app plays
- * it (web: Web Audio; phone: a WAV in its cache, both synthesized by `@agenteschat/ui/sfx`), after the person's
+ * it (web: Web Audio; phone: a WAV in its cache, both synthesized by `@keepmind/ui/sfx`), after the person's
  * choice on that device (off, or a style).
  */
 import type { AppNotification, NotificationKind } from "../api/types";
 
-/** Same names as `SOUNDS` in `@agenteschat/ui/sfx`. */
+/** Same names as `SOUNDS` in `@keepmind/ui/sfx`. */
 export type SoundName = "send" | "reply" | "done" | "attention" | "approved" | "error" | "stop" | "mention";
 
 let player: ((name: SoundName) => void) | null = null;

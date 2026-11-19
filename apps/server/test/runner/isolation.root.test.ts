@@ -923,7 +923,7 @@ describe.if(ROOT)("the agents' isolation on this computer, as root", () => {
       );
       if (r.status !== 0) return null;
       const out = JSON.parse(r.stdout) as { data: [[string, string, string, string, number, number][]] };
-      return out.data[0].filter(([, who]) => who === "agentes.chat");
+      return out.data[0].filter(([, who]) => who === "KeepMind OS");
     };
     if (!has("/usr/bin/systemd-inhibit") || ours() === null) {
       console.log("no logind here");
@@ -950,9 +950,11 @@ describe.if(ROOT)("the agents' isolation on this computer, as root", () => {
       const pid = await program();
       const id = "c0000000-0000-4000-8000-0000000000a1";
       expect(await holds.start(agent, A, { op: "keep.start", holdId: id, pid })).toEqual({ held: true });
+      // Starting systemd-inhibit and registering its lock with logind are asynchronous.
+      await until(() => ours()?.length === 1, 10_000);
       const [lock] = ours() ?? [];
       console.log(`a program's hold: ${JSON.stringify(lock)}`);
-      expect(lock?.slice(0, 5)).toEqual(["idle", "agentes.chat", "keep_running", "block", 0]);
+      expect(lock?.slice(0, 5)).toEqual(["idle", "KeepMind OS", "keep_running", "block", 0]);
       const scope = `/sys/fs/cgroup/agents.slice/${agentSlice(A.uid)}/agentes-keep-${id}.scope`;
       expect(readFileSync(`/proc/${lock?.[5]}/cgroup`, "utf8")).toContain(scope.slice("/sys/fs/cgroup".length));
       // systemd-inhibit and its wait are root's: nothing of the agent's uid runs outside its own view.

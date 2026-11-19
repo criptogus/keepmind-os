@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, expect, test } from "bun:test";
-import { ARTIFACT_LIMITS } from "@agenteschat/engine";
+import { ARTIFACT_LIMITS } from "@keepmind/engine";
 import { type Browser, browser, createTestServer, ORIGIN, seedOrg, signUp, type TestServer } from "./harness";
 
 let t: TestServer;

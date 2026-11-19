@@ -1,11 +1,10 @@
-import { ApiError, useAiStatus, useApi, useAuthConfig } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { formatBytes } from "@agenteschat/client/lib/files";
-import { aiStateOf } from "@agenteschat/client/lib/no-ai";
-import { rightHandOf } from "@agenteschat/client/lib/right-hand";
+import { ApiError, useAiStatus, useApi, useAuthConfig } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
+import { formatBytes } from "@keepmind/client/lib/files";
+import { aiStateOf } from "@keepmind/client/lib/no-ai";
+import { rightHandOf } from "@keepmind/client/lib/right-hand";
 import {
   Button,
-  Chip,
   Dialog,
   DialogBody,
   DialogFooter,
@@ -15,7 +14,7 @@ import {
   overLimit,
   PixelSpinner,
   Textarea,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useMutation } from "@tanstack/react-query";
 import { useRouterState } from "@tanstack/react-router";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
@@ -110,7 +109,7 @@ export function FeedbackDialog({ reported, onClose }: { reported: Reported | nul
   const status = useAiStatus(org.id);
   const connection = useConnectionStatus();
   const config = useAuthConfig().data;
-  // Read by the agentes.chat team: on its own servers, and from one whose operator gave no address (pictures only).
+  // Read by the KeepMind OS team: on its own servers, and from one whose operator gave no address (pictures only).
   const relay = config?.feedbackRelay === true;
   const team = config?.cloud === true || relay;
   const where = useRouterState({ select: (s) => s.location.pathname });
@@ -480,22 +479,4 @@ export function FeedbackHost() {
   useEffect(() => closeFeedback, []);
   if (!on || !open) return null;
   return <FeedbackDialog key={open.n} reported={open.reported} onClose={closeFeedback} />;
-}
-
-/**
- * The way to the feedback form: a quiet row at the bottom of the sidebar, marked Beta. Only where the server takes
- * feedback (`FEEDBACK_EMAIL`): elsewhere there is no row.
- */
-export function FeedbackMark() {
-  const { t } = useTranslation();
-  if (useAuthConfig().data?.feedback !== true) return null;
-  return (
-    <div className="sidebar__feedback">
-      <button type="button" className="sidebar__item" aria-label={t("feedback.open")} onClick={() => openFeedback()}>
-        <Icon name="message" />
-        <span className="sidebar__item-label">{t("feedback.open")}</span>
-        <Chip>{t("feedback.mark")}</Chip>
-      </button>
-    </div>
-  );
 }

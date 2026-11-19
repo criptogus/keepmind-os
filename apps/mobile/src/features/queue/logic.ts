@@ -1,5 +1,5 @@
-import type { Channel, DirectMessage, Machine, QueueWhere } from "@agenteschat/client";
-import type { QueuePlace } from "@agenteschat/client/lib/computer-queue";
+import type { Channel, DirectMessage, Machine, QueueWhere } from "@keepmind/client";
+import type { QueuePlace } from "@keepmind/client/lib/computer-queue";
 
 /**
  * A shared computer's line on the phone (ADR 0032, "Calm waits"): which computer a conversation's agents share and

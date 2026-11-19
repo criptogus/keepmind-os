@@ -13,7 +13,10 @@ import type { JsonSchema } from "./json-schema";
  * - a top-level `oneOf`/`anyOf` becomes one object: the union of the
  *   variants' properties, required only what every variant requires, the
  *   variants' descriptions kept in the description;
- * - the root always has `type: "object"` and `properties`.
+ * - the root always has `type: "object"` and `properties`;
+ * - every schema node gets a `type` when one is implied (`enum`, `const`,
+ *   `properties`, `items`): strict readers such as Moonshot's tool-schema
+ *   check refuse a property whose `type` is not defined.
  *
  * The Tool Gateway still validates the call against the tool's real schema.
  */
@@ -27,7 +30,64 @@ export function toBrainSchema(schema: JsonSchema): JsonSchema {
   const { $defs: _d, definitions: _defs, $schema: _s, $id: _i, ...rest } = root;
   const out: JsonSchema = { ...rest, type: "object" };
   if (!isObject(out.properties)) out.properties = {};
-  return out;
+  return ensureTypes(out);
+}
+
+/**
+ * Adds `type` where the schema implies exactly one and a strict provider
+ * requires it (an `enum` of strings is a string, `properties` an object,
+ * `items` an array). Nodes that imply nothing — a bare `{}` — stay as they
+ * are: the Tool Gateway validates calls against the tool's real schema.
+ */
+function ensureTypes(schema: JsonSchema): JsonSchema {
+  const walk = (node: unknown): unknown => {
+    if (Array.isArray(node)) return node.map(walk);
+    if (!isObject(node)) return node;
+    const out: Record<string, unknown> = {};
+    for (const [key, value] of Object.entries(node)) {
+      if (key === "properties" && isObject(value)) {
+        out[key] = Object.fromEntries(Object.entries(value).map(([name, sub]) => [name, walk(sub)]));
+      } else if ((key === "items" || key === "additionalProperties") && isObject(value)) {
+        out[key] = walk(value);
+      } else if ((key === "oneOf" || key === "anyOf" || key === "allOf") && Array.isArray(value)) {
+        out[key] = value.map(walk);
+      } else {
+        out[key] = value;
+      }
+    }
+    if (out.type === undefined) {
+      const type = impliedType(out);
+      if (type) out.type = type;
+    }
+    return out;
+  };
+  return walk(schema) as JsonSchema;
+}
+
+function impliedType(node: Record<string, unknown>): string | null {
+  const of = (value: unknown): string | null => {
+    if (value === null) return "null";
+    switch (typeof value) {
+      case "string":
+        return "string";
+      case "number":
+        return Number.isInteger(value) ? "integer" : "number";
+      case "boolean":
+        return "boolean";
+      case "object":
+        return "object";
+      default:
+        return null;
+    }
+  };
+  if (Array.isArray(node.enum) && node.enum.length > 0) {
+    const types = new Set(node.enum.map(of));
+    return types.size === 1 ? ([...types][0] ?? null) : null;
+  }
+  if ("const" in node) return of(node.const);
+  if (isObject(node.properties)) return "object";
+  if (node.items !== undefined) return "array";
+  return null;
 }
 
 const MAX_DEPTH = 32;

@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import type { AgentBrain, AiAccounts, AiComputer, BrainOption, ComputerSetup, OrgStanding } from "@agenteschat/client";
-import { PLAN_CHOICES, type PlanChoice, planLabel, planTitle } from "@agenteschat/client/lib/no-ai";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import type { AgentBrain, AiAccounts, AiComputer, BrainOption, ComputerSetup, OrgStanding } from "@keepmind/client";
+import { PLAN_CHOICES, type PlanChoice, planLabel, planTitle } from "@keepmind/client/lib/no-ai";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 

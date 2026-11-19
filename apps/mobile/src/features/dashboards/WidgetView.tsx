@@ -10,10 +10,10 @@ import type {
   WidgetSpec,
   WidgetStatus,
   WidgetWait,
-} from "@agenteschat/client";
-import { widgetCardStatus } from "@agenteschat/client";
-import type { ChartSpec } from "@agenteschat/client/lib/chart";
-import type { AgentColorName } from "@agenteschat/ui/agent/engine";
+} from "@keepmind/client";
+import { widgetCardStatus } from "@keepmind/client";
+import type { ChartSpec } from "@keepmind/client/lib/chart";
+import type { AgentColorName } from "@keepmind/ui/agent/engine";
 import {
   areaCells,
   CHART_CELL,
@@ -22,7 +22,7 @@ import {
   chartInk,
   lineTops,
   smoothPath,
-} from "@agenteschat/ui/sky/chart";
+} from "@keepmind/ui/sky/chart";
 import { Canvas, Path, Rect, Skia } from "@shopify/react-native-skia";
 import { type ComponentRef, memo, type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

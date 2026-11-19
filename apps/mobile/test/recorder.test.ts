@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { drawAccessory, drawAgent } from "@agenteschat/ui/agent/engine";
+import { drawAccessory, drawAgent } from "@keepmind/ui/agent/engine";
 import { arcSweep, asCtx, compile, cornerRadii, RecordingContext, rectsToSvg } from "../src/agent/recorder";
 
 describe("arcSweep (canvas ellipse → Skia arc)", () => {

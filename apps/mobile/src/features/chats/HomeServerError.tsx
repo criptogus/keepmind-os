@@ -1,4 +1,4 @@
-import { checkServer, isTailnet, type ServerCheck, serverHost } from "@agenteschat/client/lib/server";
+import { checkServer, isTailnet, type ServerCheck, serverHost } from "@keepmind/client/lib/server";
 import { useNetworkState } from "expo-network";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

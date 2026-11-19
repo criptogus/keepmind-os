@@ -37,15 +37,15 @@ import {
   type MailAdapters,
   postgresJsNotifier,
   type WebPushSender,
-} from "@agenteschat/adapters";
-import { type Config, ConfigError, composioAuthConfigs, loadConfig, redactConfig } from "@agenteschat/config";
+} from "@keepmind/adapters";
+import { type Config, ConfigError, composioAuthConfigs, loadConfig, redactConfig } from "@keepmind/config";
 import {
   createDatabase,
   type Database,
   type DatabaseHandle,
   ensureMessagePartitions,
   MigrationMismatchError,
-} from "@agenteschat/db";
+} from "@keepmind/db";
 import {
   APP_JOB_KINDS,
   adoptRestoredOperatorEvents,
@@ -62,10 +62,13 @@ import {
   enableAccountContacts,
   enableCaches,
   enableOperatorEvents,
+  ensureBuiltinSkills,
+  ensureReaOnBoot,
   ensureRightHands,
+  ensureWhatsAppBridgesOnBoot,
   type GifKey,
-  isAgentesCloud,
   isBlockedAddress,
+  isKeepMindCloud,
   laneLimits,
   memoryBudget,
   meterComposio,
@@ -84,9 +87,9 @@ import {
   vapidKeys,
   vapidSubject,
   widenDmHowTos,
-} from "@agenteschat/engine";
-import { type AgentesModule, type Edition, type ModuleContext, resolveAdapters } from "@agenteschat/modules";
-import { createModelProviders, enableOpenRouterModels } from "@agenteschat/providers";
+} from "@keepmind/engine";
+import { type AgentesModule, type Edition, type ModuleContext, resolveAdapters } from "@keepmind/modules";
+import { createModelProviders, enableOpenRouterModels } from "@keepmind/providers";
 import { createApp } from "./app";
 import { createAuth } from "./auth";
 import { buildEngine } from "./engine";
@@ -130,7 +133,7 @@ export interface StartOptions {
  * test that boots like a given setup (the Cloud) sets them the same way.
  */
 export function applyBootSwitches(config: Config) {
-  // On agentes.chat Cloud a restriction names its kind and how to contest it, elsewhere it reads as before.
+  // On KeepMind OS Cloud a restriction names its kind and how to contest it, elsewhere it reads as before.
   setRestrictionNotices(config.PUBLIC_URL);
   // The links to messages that agents write and their tools return.
   setMessageLinkBase(config.PUBLIC_URL);
@@ -141,7 +144,7 @@ export function applyBootSwitches(config: Config) {
 }
 
 /**
- * Boots an agentes.chat server: config → database → migrations → adapters
+ * Boots an KeepMind OS server: config → database → migrations → adapters
  * (core defaults, then module overrides) → HTTP + WebSocket → workers.
  * Shared by the self-hosted entrypoint (`src/main.ts`) and any entrypoint
  * that adds public modules (ADR 0002); only `modules` differ.
@@ -194,7 +197,7 @@ async function boot(
   release: string,
   errors: ErrorReporter,
 ) {
-  log.info("starting agentes.chat", { version: release, edition, config: redactConfig(config) });
+  log.info("starting KeepMind OS", { version: release, edition, config: redactConfig(config) });
   log.info(
     "error reports",
     config.SENTRY_DSN
@@ -331,7 +334,7 @@ async function boot(
     modules,
     base,
     defaults,
-    // A workspace's own model endpoint (ADR 0146): on agentes.chat Cloud every call connects only to public addresses.
+    // A workspace's own model endpoint (ADR 0146): on KeepMind OS Cloud every call connects only to public addresses.
     createModelProviders({
       endpointFetch: allowsPrivateEndpoints(config) ? undefined : publicHttpsFetch(),
       version: release,
@@ -339,7 +342,7 @@ async function boot(
   );
   if (overridden.length > 0) log.info("adapters overridden by modules", { overridden });
   resolved = adapters;
-  if (!isAgentesCloud(config.PUBLIC_URL)) {
+  if (!isKeepMindCloud(config.PUBLIC_URL)) {
     // Sealed with the installation's key wrappers, like the Jev key (ADR 0073), and read before anything serves.
     gifKey = createGifKey({
       db: database.db,
@@ -425,6 +428,12 @@ async function boot(
       if (made > 0) log.info("right hands created", { made });
     })
     .catch((error: unknown) => log.warn("right hands backfill failed", { error: String(error) }));
+  // Off the boot path: workspaces get the built-in skills they lack (vendored methodology, `metadata.builtin`).
+  void ensureBuiltinSkills(database.db)
+    .then((made) => {
+      if (made > 0) log.info("built-in skills seeded", { made });
+    })
+    .catch((error: unknown) => log.warn("built-in skills backfill failed", { error: String(error) }));
   // Off the boot path, once (ADR 0167): untrusted memories saved from a person's own words are trusted again, and
   // how-tos agents worked out between themselves that name nobody reach their other work.
   void backfillMemoryTrust(database.db)
@@ -464,6 +473,16 @@ async function boot(
   // A worker (`SERVER_ROLE=worker`) runs jobs only: no app, API, sockets or usage report, its health check alone. Its
   // runs reach computers through the process that holds their socket (`machine_rpc`).
   const worker = config.SERVER_ROLE === "worker";
+  // WhatsApp bridges live in the app process: it is the one answering the
+  // bridge's internal event route. Off the boot path — spawning is slow.
+  if (!worker) {
+    void ensureWhatsAppBridgesOnBoot(engine.whatsapp).catch((error: unknown) =>
+      log.warn("whatsapp bridges failed to resume", { error: String(error) }),
+    );
+    void ensureReaOnBoot(engine.rea).catch((error: unknown) =>
+      log.warn("rea sidecars failed to resume", { error: String(error) }),
+    );
+  }
   const slots = { quick: config.OUTBOX_QUICK_SLOTS, long: config.OUTBOX_MAX_IN_FLIGHT - config.OUTBOX_QUICK_SLOTS };
   const memoryBytes = memoryBudget({
     limitBytes: process.constrainedMemory() || totalmem(),
@@ -547,6 +566,8 @@ async function boot(
         voice: engine.voice,
         gitProxy: engine.gitProxy,
         pushRelaySender: relayServeSender(direct),
+        whatsapp: engine.whatsapp,
+        rea: engine.rea,
       },
     },
     log,
@@ -793,11 +814,11 @@ function webPushSender(config: Config, db: Database, wrappers: () => KeyWrapper[
 }
 
 /**
- * GIF search (ADR 0091): on agentes.chat's own servers GIPHY only with `GIPHY_API_KEY`; elsewhere a provider that
+ * GIF search (ADR 0091): on KeepMind OS's own servers GIPHY only with `GIPHY_API_KEY`; elsewhere a provider that
  * follows the installation's key (`GIPHY_API_KEY`, or the one its owner adds in Settings), there while it has one.
  */
 function gifProvider(config: Config, key: () => string | null): GifProvider | null {
-  if (!isAgentesCloud(config.PUBLIC_URL)) return createKeyedGifs({ key });
+  if (!isKeepMindCloud(config.PUBLIC_URL)) return createKeyedGifs({ key });
   return config.GIPHY_API_KEY ? createGiphyGifs({ apiKey: config.GIPHY_API_KEY }) : null;
 }
 

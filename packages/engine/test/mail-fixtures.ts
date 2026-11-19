@@ -5,8 +5,8 @@ import {
   createFakeMailTester,
   type MailAdapters,
   type MailPreset,
-} from "@agenteschat/adapters";
-import { schema } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { schema } from "@keepmind/db";
 import {
   createImapAccount,
   createLocalKeyWrapper,

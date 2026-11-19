@@ -1,4 +1,4 @@
-import type { Widen } from "@agenteschat/i18n/widen";
+import type { Widen } from "@keepmind/i18n/widen";
 
 /** The desktop app's own strings in English, the source: every other language follows this shape. */
 export const desktopEn = {
@@ -249,7 +249,7 @@ export const desktopEn = {
     approveStop: "Stop waiting",
     openTailscale: "Open Tailscale",
     getTailscale: "Get Tailscale",
-    usage: "Send anonymous usage statistics to agentes.chat",
+    usage: "Send anonymous usage statistics to KeepMind OS",
     usageText:
       "Counts such as people, agents, machine sizes, AI tokens used and how much data the agents' browsers send and receive. Never messages, files, names or sites.",
     start: "Start",
@@ -947,6 +947,7 @@ export const desktopEn = {
     requests: "Access requests",
     bringAllToFront: "Bring all to front",
     help: "Help",
+    feedback: "Send feedback",
     downloaded: "Download complete",
   },
 };

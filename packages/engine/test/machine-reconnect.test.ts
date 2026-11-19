@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { MACHINE_PROTOCOL_VERSION } from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
+import { MACHINE_PROTOCOL_VERSION } from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
 import {
   authenticateMachine,
   computerTarget,
@@ -46,7 +46,7 @@ let ipSeq = 0;
 /** A code asking to come back as `previousMachineId`, proved with `previousToken` (the token that computer had). */
 const start = (previousMachineId?: string, previousToken?: string) =>
   startDeviceCode(
-    { db: f.db, publicUrl: "https://agentes.chat" },
+    { db: f.db, publicUrl: "https://keepmind.io" },
     { ...COMPUTER, ...(previousMachineId ? { previousMachineId } : {}), ...(previousToken ? { previousToken } : {}) },
     { ip: `203.0.113.${++ipSeq}` },
   );

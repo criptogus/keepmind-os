@@ -1,5 +1,5 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, type Database, eq, gte, isNull, schema, sql } from "@agenteschat/db";
+import type { PubSub } from "@keepmind/adapters";
+import { and, type Database, eq, gte, isNull, schema, sql } from "@keepmind/db";
 import { getAgent } from "../agents";
 import { audienceError, canTalkTo, speakerOf } from "../audience";
 import { UUID } from "../authority";
@@ -253,9 +253,9 @@ function eventLine(e: GitHubAppEvent, who: string) {
           ? `${who} asked for changes on ${item} on GitHub`
           : `${who} reviewed ${item} on GitHub`;
     case "review_requested":
-      return `${who} asked the agentes.chat app to review ${item} on GitHub`;
+      return `${who} asked the KeepMind OS app to review ${item} on GitHub`;
     case "opened":
-      return `${who} opened ${item} on GitHub, naming the agentes.chat app`;
+      return `${who} opened ${item} on GitHub, naming the KeepMind OS app`;
     case "merged":
       return `${who} merged ${item} on GitHub`;
     case "closed":

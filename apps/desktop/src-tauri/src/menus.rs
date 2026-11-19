@@ -28,6 +28,7 @@ const SITE_ACTIONS: &[(&str, Option<&str>)] = &[
     ("goWiki", Some("CmdOrCtrl+4")),
     ("goDrive", Some("CmdOrCtrl+5")),
     ("orgSettings", Some("CmdOrCtrl+Shift+,")),
+    ("feedback", None),
 ];
 
 /// Zoom steps of the main window (⌘+ / ⌘− / ⌘0).
@@ -288,8 +289,8 @@ fn build_app_menu(
         window = window.item(&own("thisMac", None)?).item(&own("requests", None)?).item(&sep()?);
     }
     let window = window.bring_all_to_front_with_text(l("bringAllToFront")).build()?;
-    // Empty on purpose: the Mac puts its search of every menu item there.
-    let help = SubmenuBuilder::new(app, l("help")).build()?;
+    // The feedback form (where the server takes it; the page decides): the way to it left the sidebar.
+    let help = SubmenuBuilder::new(app, l("help")).item(&site("feedback")?).build()?;
     #[cfg(target_os = "macos")]
     {
         let _ = window.set_as_windows_menu_for_nsapp();
@@ -309,9 +310,9 @@ pub fn servers_menu(
     let file = crate::servers::get(app);
     let mut menu = SubmenuBuilder::new(app, l("servers"));
     for (n, server) in file.servers.iter().enumerate() {
-        // Named as everywhere else in the app: agentes.chat, the server here by what it is, any other by its host.
+        // Named as everywhere else in the app: KeepMind OS, the server here by what it is, any other by its host.
         let here = crate::local_server::is_here(app, server).then(|| l("serverTitle"));
-        let name = crate::workspaces::server_name(server, "agentes.chat", here.as_deref());
+        let name = crate::workspaces::server_name(server, "keepmind.io", here.as_deref());
         let current = file.current.as_deref() == Some(server.as_str());
         if here.is_some() {
             menu = menu.item(&here_menu(app, l, &name, n, current)?);
@@ -339,7 +340,7 @@ pub fn here_state(phase: crate::local_server::Phase) -> (&'static str, bool) {
     }
 }
 
-/// "Servers › O agentes.chat neste Mac ›" (ADR 0158): its state, Open (✓ when the window is on it), then Restart,
+/// "Servers › O KeepMind OS neste Mac ›" (ADR 0158): its state, Open (✓ when the window is on it), then Restart,
 /// Stop for an hour and Stop until Start, or Start now.
 fn here_menu(
     app: &AppHandle,

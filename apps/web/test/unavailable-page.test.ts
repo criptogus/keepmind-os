@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { LOCALE_CODES } from "@agenteschat/i18n/locale";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { LOCALE_CODES } from "@keepmind/i18n/locale";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
@@ -27,7 +27,7 @@ const flush = async () => {
 
 /** The page opened at `env.url`, its scripts run against fakes: fetch, timers, frames, storage, location. */
 function open(env: Env = {}) {
-  const url = new URL(env.url ?? "/org/acme/c/general?tab=files#m-1", "https://app.agentes.chat");
+  const url = new URL(env.url ?? "/org/acme/c/general?tab=files#m-1", "https://keepmind.io");
   const doc = new DOMParser().parseFromString(PAGE, "text/html");
   let visibility = "visible";
   Object.defineProperty(doc, "cookie", { get: () => env.cookie ?? "" });

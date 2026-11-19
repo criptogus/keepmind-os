@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { createMemoryRateLimiter } from "@agenteschat/adapters";
-import { eq, like, schema } from "@agenteschat/db";
+import { createMemoryRateLimiter } from "@keepmind/adapters";
+import { eq, like, schema } from "@keepmind/db";
 import { CODE_TTL_MS, createOrganization, renderEmail, sendDeletionCode, spendDeletionCode } from "../src";
 import { addUser, type Fixture, setup } from "./fixtures";
 
@@ -154,14 +154,14 @@ describe("the code that proves it's you before deleting (ADR 0088 §2)", () => {
       code: "482913",
       email: "ana@souzabakery.com",
       orgName: "Souza Bakery",
-      support: "help@agentes.chat",
+      support: "contact@zeroagency.ai",
       url: "https://chat.example.com",
     });
     expect(workspace.subject).toBe("482913 is your code to delete a workspace");
     expect(workspace.text).toContain(
       "Type this code to delete the workspace Souza Bakery. It turns read-only for everyone at once and is deleted for good 7 days later.",
     );
-    expect(workspace.text).toContain("If it wasn't you, don't share it and write to help@agentes.chat.");
+    expect(workspace.text).toContain("If it wasn't you, don't share it and write to contact@zeroagency.ai.");
     const account = renderEmail({
       kind: "deletion_code",
       locale: "pt-BR",

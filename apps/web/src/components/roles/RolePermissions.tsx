@@ -1,7 +1,7 @@
-import type { OrgRole, OrgRoles, Person } from "@agenteschat/client";
-import { keys, useUpdateRole } from "@agenteschat/client";
-import { errorCode, errorText } from "@agenteschat/client/lib/errors";
-import type { RolePermission } from "@agenteschat/client/lib/permissions";
+import type { OrgRole, OrgRoles, Person } from "@keepmind/client";
+import { keys, useUpdateRole } from "@keepmind/client";
+import { errorCode, errorText } from "@keepmind/client/lib/errors";
+import type { RolePermission } from "@keepmind/client/lib/permissions";
 import {
   areaRows,
   COMPUTER_KEYS,
@@ -18,7 +18,7 @@ import {
   sortRoles,
   whoStart,
   withRow,
-} from "@agenteschat/client/lib/roles";
+} from "@keepmind/client/lib/roles";
 import {
   Button,
   Card,
@@ -37,7 +37,7 @@ import {
   Switch,
   Tip,
   Toolbar,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

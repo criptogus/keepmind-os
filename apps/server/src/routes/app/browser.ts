@@ -1,4 +1,5 @@
-import { SCREEN_KINDS } from "@agenteschat/adapters";
+import { createRoute, z } from "@hono/zod-openapi";
+import { SCREEN_KINDS } from "@keepmind/adapters";
 import {
   cancelHandoff,
   claimHandoff,
@@ -17,8 +18,7 @@ import {
   stopAgentBrowser,
   ValidationError,
   viewerSeat,
-} from "@agenteschat/engine";
-import { createRoute, z } from "@hono/zod-openapi";
+} from "@keepmind/engine";
 import { type AppDeps, body, createAppRouter, errors, json, OrgParams, requireSession, security } from "./context";
 
 const tags = ["Agent browser"];

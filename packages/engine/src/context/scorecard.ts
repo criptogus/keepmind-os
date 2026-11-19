@@ -1,4 +1,4 @@
-import { and, type Database, eq, gt, inArray, rowsOf, schema, sql } from "@agenteschat/db";
+import { and, type Database, eq, gt, inArray, rowsOf, schema, sql } from "@keepmind/db";
 import { itemWords } from "./items";
 
 const { contextItems } = schema;

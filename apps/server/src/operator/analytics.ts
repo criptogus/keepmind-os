@@ -1,4 +1,5 @@
-import { ACCOUNT_KINDS, PROVIDER_FAILURE_CAUSES } from "@agenteschat/adapters";
+import { createRoute, type OpenAPIHono, z } from "@hono/zod-openapi";
+import { ACCOUNT_KINDS, PROVIDER_FAILURE_CAUSES } from "@keepmind/adapters";
 import {
   AI_ACCOUNT_STATUSES,
   AI_ACCOUNTS_RECENT_FAILURES,
@@ -14,8 +15,7 @@ import {
   operatorWorkAnalytics,
   WORK_ANALYTICS_HOURLY_DAYS,
   WORK_ANALYTICS_MAX_DAYS,
-} from "@agenteschat/engine";
-import { createRoute, type OpenAPIHono, z } from "@hono/zod-openapi";
+} from "@keepmind/engine";
 import { errorResponse } from "../http/errors";
 import { iso, json, OrgParams } from "../routes/app/context";
 import type { OperatorDeps } from "./app";

@@ -1,5 +1,5 @@
-import { useImportVaultKeys, useVault, type VaultAccess, type VaultScope } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
+import { useImportVaultKeys, useVault, type VaultAccess, type VaultScope } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
 import {
   ENV_MAX_BYTES,
   ENV_MAX_KEYS,
@@ -9,7 +9,7 @@ import {
   envReview,
   parseEnvFile,
   savedKeyNames,
-} from "@agenteschat/client/lib/vault";
+} from "@keepmind/client/lib/vault";
 import * as DocumentPicker from "expo-document-picker";
 import { File } from "expo-file-system";
 import { useState } from "react";

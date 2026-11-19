@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import type { MachineRequest } from "@agenteschat/adapters/machine-protocol";
-import { sealSecret, secretAad } from "@agenteschat/adapters/secret-box";
-import { observeSnapshot } from "@agenteschat/engine";
+import type { MachineRequest } from "@keepmind/adapters/machine-protocol";
+import { sealSecret, secretAad } from "@keepmind/adapters/secret-box";
+import { observeSnapshot } from "@keepmind/engine";
 import type { HelperNode, HelperSnapshot, HelperWindow } from "../../runner/desktop-helper";
 import { type DesktopLook, desktopLook, desktopRefs } from "../../runner/desktop-tree";
 import { handleRequest } from "../../runner/handlers";
@@ -80,7 +80,7 @@ describe("the desktop as screen text", () => {
     expect(Object.keys(l.targets).sort()).toEqual(o.elements.map((e) => e.ref).sort());
   });
 
-  test("the agentes.chat dock (ADR 0058 §15): the mark's menu, the pinned apps, then a button for each window", () => {
+  test("the KeepMind OS dock (ADR 0058 §15): the mark's menu, the pinned apps, then a button for each window", () => {
     // On the 1280×900 desktop with the look: Chrome in front, a terminal and Thunar behind, the mark's menu open.
     const snap = fixture("dock");
     const chrome = snap.windows.find((w) => w.class[1] === "Chromium-browser");
@@ -354,11 +354,11 @@ describe("the desktop as screen text", () => {
     });
     const l = look(snap);
     expect(l.snapshot).toContain(
-      '- window "agentes.chat · Your team and your agents, in the same conversation - Chromium" [agent browser: use browser_do]',
+      '- window "KeepMind OS · Your team and your agents, in the same conversation - Chromium" [agent browser: use browser_do]',
     );
     expect(l.snapshot).not.toContain("Pay now");
     expect(l.address).toBe("desktop://chromium/main");
-    expect(observe(l).elements.some((e) => e.name.includes("agentes.chat"))).toBe(false);
+    expect(observe(l).elements.some((e) => e.name.includes("keepmind.io"))).toBe(false);
   });
 
   test("a dialog in front is the address's dialog; a window in front with nothing readable says so", () => {

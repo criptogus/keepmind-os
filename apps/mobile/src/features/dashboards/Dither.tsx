@@ -1,4 +1,4 @@
-import { cellPaths } from "@agenteschat/ui/sky/chart";
+import { cellPaths } from "@keepmind/ui/sky/chart";
 import { Group, Path, Skia } from "@shopify/react-native-skia";
 import { useMemo } from "react";
 import { ditherCells, WIDGET_CELL } from "./logic";

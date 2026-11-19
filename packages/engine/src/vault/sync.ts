@@ -18,8 +18,8 @@ import {
   VaultSourceError,
   type VaultSourceItem,
   vaultOrigin,
-} from "@agenteschat/adapters";
-import { and, type Database, type Executor, eq, inArray, isNull, lt, not, or, schema, sql } from "@agenteschat/db";
+} from "@keepmind/adapters";
+import { and, type Database, type Executor, eq, inArray, isNull, lt, not, or, schema, sql } from "@keepmind/db";
 import { UUID } from "../authority";
 import { SealedValueError } from "../crypto";
 import { publishVaultChanged } from "../events";

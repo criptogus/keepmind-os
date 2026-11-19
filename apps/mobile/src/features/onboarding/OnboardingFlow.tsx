@@ -1,12 +1,12 @@
-import { addDm, keys, meQuery, useApi, useAuthConfig, useTeamTemplates, type WorkspaceMode } from "@agenteschat/client";
-import { firstName } from "@agenteschat/client/lib/format";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { settingUp } from "@agenteschat/client/lib/guards";
-import { landingOf, type RailStep, railState } from "@agenteschat/client/lib/onboarding";
-import { can } from "@agenteschat/client/lib/permissions";
-import { finishOnboarding, isRightHand, RIGHT_HAND_DEFAULT } from "@agenteschat/client/lib/right-hand";
-import { aboutOf, type BusinessType, templateFor } from "@agenteschat/client/lib/team-plan";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+import { addDm, keys, meQuery, useApi, useAuthConfig, useTeamTemplates, type WorkspaceMode } from "@keepmind/client";
+import { firstName } from "@keepmind/client/lib/format";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { settingUp } from "@keepmind/client/lib/guards";
+import { landingOf, type RailStep, railState } from "@keepmind/client/lib/onboarding";
+import { can } from "@keepmind/client/lib/permissions";
+import { finishOnboarding, isRightHand, RIGHT_HAND_DEFAULT } from "@keepmind/client/lib/right-hand";
+import { aboutOf, type BusinessType, templateFor } from "@keepmind/client/lib/team-plan";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import { useIsMutating, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -38,7 +38,7 @@ import { BusinessStep, PlanStep, TeamStep } from "./steps";
  * once, named in the person's language with the phone's time zone, and opens it in its right hand's DM, where its card
  * holds the rest. A company or team goes on: the workspace's name (its time zone from the phone, said in one line; its
  * logo later, in Configurações), the keyboard's return key as the action; what it does; its team, made from a
- * template; and, on agentes.chat Cloud, the plan it waits for, in words only. Its right hand stands on the sky and says
+ * template; and, on KeepMind OS Cloud, the plan it waits for, in words only. Its right hand stands on the sky and says
  * one line per step, the team joining it there once picked. The step is read from the workspace's data, so one left at
  * any step (here or on the web) resumes there, never a second one. It opens in #general, or in the right hand's DM
  * when the plan was left for the web.

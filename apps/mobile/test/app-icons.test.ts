@@ -10,7 +10,7 @@ import {
   madeIconId,
   madeIconOf,
   madeIcons,
-} from "@agenteschat/client/lib/app-icons";
+} from "@keepmind/client/lib/app-icons";
 import { iconOfNativeName, nativeIconName, phoneIcons } from "../src/features/me/app-icon-names";
 
 interface Node {

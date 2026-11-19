@@ -1,4 +1,4 @@
-import { type SQL, sql } from "@agenteschat/db";
+import { type SQL, sql } from "@keepmind/db";
 
 /**
  * What a role may grant in a workspace (ADR 0085), in five areas. Every member may also `read` (see the workspace,

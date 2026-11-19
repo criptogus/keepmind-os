@@ -1,7 +1,7 @@
-import { type PendingReturn, useCancelFollowUp, useFollowUps } from "@agenteschat/client";
-import { returnClock, returnFaces, returnSentence, returnsHere, returnWhen } from "@agenteschat/client/lib/agent-work";
-import { errorText } from "@agenteschat/client/lib/errors";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
+import { type PendingReturn, useCancelFollowUp, useFollowUps } from "@keepmind/client";
+import { returnClock, returnFaces, returnSentence, returnsHere, returnWhen } from "@keepmind/client/lib/agent-work";
+import { errorText } from "@keepmind/client/lib/errors";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Pressable, Text as RNText, StyleSheet, View } from "react-native";

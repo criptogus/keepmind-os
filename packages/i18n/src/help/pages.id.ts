@@ -4,30 +4,30 @@ import type { HelpDocument } from "./types";
 /** The help pages in id: a page not here shows in English. */
 export const helpId: Partial<Record<HelpSlug, HelpDocument>> = {
   "run-on-your-computer": {
-    title: "Jalankan agentes.chat di komputermu",
+    title: "Jalankan KeepMind OS di komputermu",
     summary:
-      "Aplikasi agentes.chat juga bisa menjalankan agentes.chat sendiri, di Mac, PC, atau komputer Linux, untukmu atau tim kecil.",
+      "Aplikasi KeepMind OS juga bisa menjalankan KeepMind OS sendiri, di Mac, PC, atau komputer Linux, untukmu atau tim kecil.",
     sections: [
       {
         id: "download",
         heading: "Unduh aplikasinya",
         blocks: [
-          "[Unduh aplikasi agentes.chat](/download) untuk Mac, PC, atau komputer Linux-mu, lalu buka. Pilih **Di server sendiri**, tekan **Lanjut di server saya**, lalu **Jalankan agentes.chat di komputer ini**.",
+          "[Unduh aplikasi KeepMind OS](/download) untuk Mac, PC, atau komputer Linux-mu, lalu buka. Pilih **Di server sendiri**, tekan **Lanjut di server saya**, lalu **Jalankan KeepMind OS di komputer ini**.",
         ],
       },
       {
         id: "how",
         heading: "Cara kerjanya",
         blocks: [
-          "agentes.chat berjalan di dalam aplikasi, dengan database bawaannya sendiri, dan menyimpan semuanya di satu folder di komputer ini, `.agentes` di folder pribadimu. Tidak ada lagi yang perlu dipasang: tanpa Docker, tanpa database yang perlu disiapkan.",
-          "agentes.chat menyala bersama aplikasi dan berhenti saat kamu menutupnya. Aplikasi bertanya dulu sebelum ditutup, karena tidak ada yang bisa memakai agentes.chat sampai aplikasinya dibuka lagi. Untuk menghentikannya sebentar tanpa menutup aplikasi, klik ikon agentes.chat di dekat jam dan pilih **Hentikan** di menu **⋯** pada kartunya.",
+          "KeepMind OS berjalan di dalam aplikasi, dengan database bawaannya sendiri, dan menyimpan semuanya di satu folder di komputer ini, `.agentes` di folder pribadimu. Tidak ada lagi yang perlu dipasang: tanpa Docker, tanpa database yang perlu disiapkan.",
+          "KeepMind OS menyala bersama aplikasi dan berhenti saat kamu menutupnya. Aplikasi bertanya dulu sebelum ditutup, karena tidak ada yang bisa memakai KeepMind OS sampai aplikasinya dibuka lagi. Untuk menghentikannya sebentar tanpa menutup aplikasi, klik ikon KeepMind OS di dekat jam dan pilih **Hentikan** di menu **⋯** pada kartunya.",
         ],
       },
       {
         id: "who",
         heading: "Untuk siapa",
         blocks: [
-          "Kamu atau tim kecil. Mac mini, PC cadangan, atau laptop yang tetap menyala cocok jadi rumahnya: siapkan seperti di [Biarkan tetap menyala](#keep-on). Di Mac atau PC, aplikasi inilah cara menjalankan agentes.chat tanpa Docker.",
+          "Kamu atau tim kecil. Mac mini, PC cadangan, atau laptop yang tetap menyala cocok jadi rumahnya: siapkan seperti di [Biarkan tetap menyala](#keep-on). Di Mac atau PC, aplikasi inilah cara menjalankan KeepMind OS tanpa Docker.",
           "Untuk tim yang lebih besar, lihat [Pilih cara penyiapan](/help/install-on-a-server#choose). Datamu bisa dipindahkan ke server nanti.",
         ],
       },
@@ -58,7 +58,7 @@ export const helpId: Partial<Record<HelpSlug, HelpDocument>> = {
         id: "another-workspace",
         heading: "Pinjamkan juga ke ruang kerja lain",
         blocks: [
-          "Ruang kerja dari server yang kamu jalankan di sini memakai komputer ini dengan sendirinya. Supaya ruang kerja di tempat lain juga bisa memakainya, misalnya ruang kerja di agentes.chat Cloud, tekan **Tambah ruang kerja…** di bagian bawah kartu pertama di **Preferensi\u00a0›\u00a0Umum**, atau **Tambah server…** di **Preferensi\u00a0›\u00a0Server**. Masuk ke ruang kerja itu, lalu tekan **Izinkan** saat aplikasi bertanya.",
+          "Ruang kerja dari server yang kamu jalankan di sini memakai komputer ini dengan sendirinya. Supaya ruang kerja di tempat lain juga bisa memakainya, misalnya ruang kerja di KeepMind OS Cloud, tekan **Tambah ruang kerja…** di bagian bawah kartu pertama di **Preferensi\u00a0›\u00a0Umum**, atau **Tambah server…** di **Preferensi\u00a0›\u00a0Server**. Masuk ke ruang kerja itu, lalu tekan **Izinkan** saat aplikasi bertanya.",
           "Tiap ruang kerja punya agen dan foldernya sendiri di sini. **Perintah** juga menyala sejak awal untuknya. Matikan di pertanyaan aplikasi sebelum menekan **Izinkan**, atau nanti di **Preferensi\u00a0›\u00a0Alat**, tempat tiap ruang kerja punya sakelarnya sendiri dan aplikasi bertanya dulu sebelum menyalakannya lagi.",
         ],
       },
@@ -66,8 +66,8 @@ export const helpId: Partial<Record<HelpSlug, HelpDocument>> = {
         id: "reach",
         heading: "Dari ponselmu dan timmu",
         blocks: [
-          "**Akses dari ponselmu dan rekan tim** menaruh agentes.chat di Tailscale, jaringan pribadi untuk perangkatmu: ponselmu dan orang yang kamu undang bergabung ke jaringan itu, dan tidak ada orang lain yang bisa menjangkau agentes.chat. Tailscale gratis: https://tailscale.com/download. Kalau dimatikan, agentes.chat hanya bisa dipakai di komputer ini.",
-          "Kalau komputer ini sudah membagikan hal lain di port 443 Tailscale, agentes.chat memakai port 8443, dan alamatnya diakhiri `:8443`.",
+          "**Akses dari ponselmu dan rekan tim** menaruh KeepMind OS di Tailscale, jaringan pribadi untuk perangkatmu: ponselmu dan orang yang kamu undang bergabung ke jaringan itu, dan tidak ada orang lain yang bisa menjangkau KeepMind OS. Tailscale gratis: https://tailscale.com/download. Kalau dimatikan, KeepMind OS hanya bisa dipakai di komputer ini.",
+          "Kalau komputer ini sudah membagikan hal lain di port 443 Tailscale, KeepMind OS memakai port 8443, dan alamatnya diakhiri `:8443`.",
         ],
       },
       {
@@ -89,7 +89,7 @@ export const helpId: Partial<Record<HelpSlug, HelpDocument>> = {
         heading: "Cadangan",
         blocks: [
           "Kalau **Cadangkan setiap malam** menyala (aplikasi 0.8.1 ke atas), di **Preferensi\u00a0›\u00a0Server**, aplikasi menyimpan database, file, dan `.env` di `.agentes/backups`, di folder pribadimu, setiap malam pukul 3:00. Komputer yang sedang tidur saat itu mencadangkan begitu bangun. **Cadangkan sekarang** melakukan hal yang sama saat itu juga. Setiap pencadangan menghentikan server sebentar, dan dua cadangan terbaru yang disimpan.",
-          "**Salin ke** juga menaruh setiap cadangan baru di folder pilihanmu, seperti flashdisk atau iCloud Drive, tempat dua cadangan terbaru disimpan. Isinya kunci-kuncimu: jaga kerahasiaannya. **Pulihkan…** mengembalikan agentes.chat ke sebuah cadangan: pesan, file, dan pengaturan. agentes.chat berhenti selama semenit, dan isi sebelumnya tetap disimpan di folder cadangan.",
+          "**Salin ke** juga menaruh setiap cadangan baru di folder pilihanmu, seperti flashdisk atau iCloud Drive, tempat dua cadangan terbaru disimpan. Isinya kunci-kuncimu: jaga kerahasiaannya. **Pulihkan…** mengembalikan KeepMind OS ke sebuah cadangan: pesan, file, dan pengaturan. KeepMind OS berhenti selama semenit, dan isi sebelumnya tetap disimpan di folder cadangan.",
         ],
       },
       {
@@ -111,7 +111,7 @@ export const helpId: Partial<Record<HelpSlug, HelpDocument>> = {
           },
           {
             list: [
-              "[Pasang agentes.chat di server](/help/install-on-a-server), tapi jangan dijalankan dulu. Di `.env`-nya, isi `AGENTES_SECRET` dari `~/.agentes/.env`, lalu jalankan databasenya saja: `docker compose up -d postgres`.",
+              "[Pasang KeepMind OS di server](/help/install-on-a-server), tapi jangan dijalankan dulu. Di `.env`-nya, isi `AGENTES_SECRET` dari `~/.agentes/.env`, lalu jalankan databasenya saja: `docker compose up -d postgres`.",
               "Muat dump-nya: `docker compose exec -T postgres psql -U agentes -d agentes -v ON_ERROR_STOP=1 < agentes.sql`.",
               "Jalankan dengan `docker compose up -d`, salin `~/.agentes/files` ke dalamnya seperti di panduan lengkap, lalu masuk seperti sebelumnya.",
             ],
@@ -123,11 +123,11 @@ export const helpId: Partial<Record<HelpSlug, HelpDocument>> = {
   computers: {
     title: "Komputer dan ponselmu",
     summary:
-      "Bawa Mac, PC, komputer Linux, server, atau ponsel, dan agen-agenmu bekerja di sana. Sama saja di agentes.chat Cloud maupun di server milikmu sendiri.",
+      "Bawa Mac, PC, komputer Linux, server, atau ponsel, dan agen-agenmu bekerja di sana. Sama saja di KeepMind OS Cloud maupun di server milikmu sendiri.",
     sections: [
       {
         id: "app",
-        heading: "Dari aplikasi agentes.chat",
+        heading: "Dari aplikasi KeepMind OS",
         blocks: [
           "Pasang aplikasi di komputer itu, buka, lalu masuk ke ruang kerjamu. Aplikasi bertanya **Izinkan agen <workspace> memakai Mac ini?** (PC ini di Windows, komputer ini di Linux). Pilih siapa yang boleh memakainya lalu tekan **Izinkan**. Selesai.",
           "Sudah masuk? Buka **Preferensi\u00a0›\u00a0Umum** dan tekan **Izinkan** di baris ruang kerjanya, di kartu pertama. Tidak ada? Tekan **Tambah ruang kerja…** di bagian bawah kartu itu lalu masuk.",
@@ -166,14 +166,14 @@ export const helpId: Partial<Record<HelpSlug, HelpDocument>> = {
         id: "open",
         heading: "Selama aplikasinya terbuka",
         blocks: [
-          "Agen bekerja di komputer hanya selama aplikasi berjalan di sana dan komputernya tidak tidur. Saat aplikasi bertanya, biarkan **Tetap siap: buka agentes.chat saat login** tercentang. Komputer yang mati atau tidur tampil **Offline**, dan agen menunggu sampai komputernya kembali.",
+          "Agen bekerja di komputer hanya selama aplikasi berjalan di sana dan komputernya tidak tidur. Saat aplikasi bertanya, biarkan **Tetap siap: buka KeepMind OS saat login** tercentang. Komputer yang mati atau tidur tampil **Offline**, dan agen menunggu sampai komputernya kembali.",
         ],
       },
       {
         id: "pausing",
         heading: "Menjeda dan memutuskan",
         blocks: [
-          "Di komputer itu, ikon agentes.chat di dekat jam menjeda agen dari semua ruang kerja, atau dari satu ruang kerja saja. Di **Preferensi\u00a0›\u00a0Umum**, sakelar tiap ruang kerja hanya menjeda ruang kerja itu, dan **Keluar**, di menu **⋯**-nya, memutuskannya. Selama dijeda tidak ada yang baru dimulai, dan yang sedang berjalan tetap diselesaikan. Folder agen tetap tersimpan di disk setelah diputuskan.",
+          "Di komputer itu, ikon KeepMind OS di dekat jam menjeda agen dari semua ruang kerja, atau dari satu ruang kerja saja. Di **Preferensi\u00a0›\u00a0Umum**, sakelar tiap ruang kerja hanya menjeda ruang kerja itu, dan **Keluar**, di menu **⋯**-nya, memutuskannya. Selama dijeda tidak ada yang baru dimulai, dan yang sedang berjalan tetap diselesaikan. Folder agen tetap tersimpan di disk setelah diputuskan.",
           "Dari situs, **Hapus** di halaman perangkat memutuskannya.",
         ],
       },
@@ -181,7 +181,7 @@ export const helpId: Partial<Record<HelpSlug, HelpDocument>> = {
         id: "organizations",
         heading: "Beberapa ruang kerja, satu komputer",
         blocks: [
-          "Masuk ke tiap ruang kerja di aplikasi yang sama lalu tekan **Izinkan** untuk masing-masing. Ruang kerja di agentes.chat Cloud dan di server milikmu sendiri bisa berbagi satu komputer (aplikasi 0.6.1 ke atas). Masing-masing punya agen dan foldernya sendiri di sana, dan memutuskan satu ruang kerja tidak memengaruhi yang lain.",
+          "Masuk ke tiap ruang kerja di aplikasi yang sama lalu tekan **Izinkan** untuk masing-masing. Ruang kerja di KeepMind OS Cloud dan di server milikmu sendiri bisa berbagi satu komputer (aplikasi 0.6.1 ke atas). Masing-masing punya agen dan foldernya sendiri di sana, dan memutuskan satu ruang kerja tidak memengaruhi yang lain.",
           "Server yang dijalankan aplikasi di komputer ini sudah terhubung dan tidak perlu apa-apa. Untuk meminjamkan komputer itu juga ke ruang kerja di tempat lain, lihat [Pinjamkan juga ke ruang kerja lain](/help/run-on-your-computer#another-workspace).",
           "Memakai aplikasi di laptop hanya sebagai jendela ke ruang kerjamu? Saat aplikasi meminta izin agar agen memakai laptop itu, **Nanti saja** membuatnya tetap jadi jendela biasa.",
           "Server yang dihubungkan dengan baris terminal bekerja untuk satu workspace. Menghubungkannya dari workspace lain memindahkan server ke workspace itu, dan workspace pertama tidak lagi menjangkaunya. Untuk beberapa workspace di satu komputer, gunakan aplikasi.",
@@ -212,10 +212,10 @@ export const helpId: Partial<Record<HelpSlug, HelpDocument>> = {
               "file dan akun-akun yang kamu masuki",
               "folder agen lain, termasuk milik ruang kerja lain, dan login yang disimpan browser mereka",
               "token yang menghubungkan komputer ini",
-              "di komputer yang juga menjalankan agentes.chat, database dan kuncinya di `.agentes`",
+              "di komputer yang juga menjalankan KeepMind OS, database dan kuncinya di `.agentes`",
             ],
           },
-          "agentes.chat menolak perintah yang menyebut kunci, token, dan data login, tapi itu aturan, bukan tembok. **Perintah** menyala sejak awal. Matikan di pertanyaan aplikasi sebelum menekan **Izinkan**, atau nanti di **Preferensi\u00a0›\u00a0Alat**, tempat tiap ruang kerja punya sakelarnya sendiri (aplikasi 0.8.1 ke atas) dan aplikasi bertanya dulu sebelum menyalakannya lagi. Claude Code dan Codex menjalankan perintahnya sendiri di folder agen, dengan aturannya sendiri, bahkan saat Perintah mati.",
+          "KeepMind OS menolak perintah yang menyebut kunci, token, dan data login, tapi itu aturan, bukan tembok. **Perintah** menyala sejak awal. Matikan di pertanyaan aplikasi sebelum menekan **Izinkan**, atau nanti di **Preferensi\u00a0›\u00a0Alat**, tempat tiap ruang kerja punya sakelarnya sendiri (aplikasi 0.8.1 ke atas) dan aplikasi bertanya dulu sebelum menyalakannya lagi. Claude Code dan Codex menjalankan perintahnya sendiri di folder agen, dengan aturannya sendiri, bahkan saat Perintah mati.",
           "Untuk tembok sungguhan, pakai server Linux. Di Debian 13, kalau dipasang dengan `--system`, tiap agen jadi pengguna tersendiri. Di Ubuntu, agen berbagi satu pengguna, `agentes`: mereka bisa melihat folder satu sama lain, tapi bukan foldermu atau folder server. Atau beri agen komputer milik mereka sendiri.",
         ],
       },
@@ -236,14 +236,14 @@ export const helpId: Partial<Record<HelpSlug, HelpDocument>> = {
         id: "own",
         heading: "Komputer dan ponselmu sendiri",
         blocks: [
-          "Agen juga bisa bekerja di komputer dan ponsel yang kamu bawa: Mac atau PC dengan aplikasi agentes.chat, server, ponsel Android, atau iPhone. Lihat [Komputer dan ponsel yang kamu bawa](/help/computers).",
+          "Agen juga bisa bekerja di komputer dan ponsel yang kamu bawa: Mac atau PC dengan aplikasi KeepMind OS, server, ponsel Android, atau iPhone. Lihat [Komputer dan ponsel yang kamu bawa](/help/computers).",
         ],
       },
       {
         id: "plans",
         heading: "Paket AI kamu",
         blocks: [
-          "Agen-agenmu bisa berpikir dengan paket AI milikmu, seperti Claude, ChatGPT, GLM, atau Kimi, yang masuk di komputer ini: tanpa perlu kunci API. Akunnya tetap di komputer ini, dan agentes.chat tidak pernah melihat kata sandi atau aksesnya.",
+          "Agen-agenmu bisa berpikir dengan paket AI milikmu, seperti Claude, ChatGPT, GLM, atau Kimi, yang masuk di komputer ini: tanpa perlu kunci API. Akunnya tetap di komputer ini, dan KeepMind OS tidak pernah melihat kata sandi atau aksesnya.",
           "Paket AI Pro dan Ultra dari Google tidak bisa dipakai di sini: ketentuan Google tidak mengizinkannya di produk lain. Kunci API Gemini bisa.",
         ],
       },
@@ -264,7 +264,7 @@ export const helpId: Partial<Record<HelpSlug, HelpDocument>> = {
   import: {
     title: "Bawa agen-agenmu",
     summary:
-      "Bawa agen dari aplikasi lain, atau dari ruang kerja agentes.chat lain, lengkap dengan instruksi, skill, rutinitas, dan memorinya.",
+      "Bawa agen dari aplikasi lain, atau dari ruang kerja KeepMind OS lain, lengkap dengan instruksi, skill, rutinitas, dan memorinya.",
     sections: [
       {
         id: "comes",
@@ -433,7 +433,7 @@ export const helpId: Partial<Record<HelpSlug, HelpDocument>> = {
             ],
           },
           "Tindakan di kotak surat milik seseorang hanya menunggu orang itu. Akses baru untuk agen menunggu orang yang mengelola agen.",
-          "Lodi, tangan kananmu, juga bisa menyetujui untukmu agen baru yang diusulkan agen lain dan perubahan model, anggaran, serta kanal sebuah agen, hanya kalau kamu yang memintanya. Siapa yang menggantikanmu dan apa yang disetujui Lodi dipilih di **Pengaturan\u00a0›\u00a0Kamu\u00a0›\u00a0Persetujuan**.",
+          "Kivo, tangan kananmu, juga bisa menyetujui untukmu agen baru yang diusulkan agen lain dan perubahan model, anggaran, serta kanal sebuah agen, hanya kalau kamu yang memintanya. Siapa yang menggantikanmu dan apa yang disetujui Kivo dipilih di **Pengaturan\u00a0›\u00a0Kamu\u00a0›\u00a0Persetujuan**.",
         ],
       },
       {
@@ -452,7 +452,7 @@ export const helpId: Partial<Record<HelpSlug, HelpDocument>> = {
   },
   "who-answers": {
     title: "Siapa yang menjawab pesan",
-    summary: "Sebutan memilih agennya. Tanpa sebutan, agentes.chat memilihkan untukmu, dengan urutan ini.",
+    summary: "Sebutan memilih agennya. Tanpa sebutan, KeepMind OS memilihkan untukmu, dengan urutan ini.",
     sections: [
       {
         id: "order",
@@ -474,7 +474,7 @@ export const helpId: Partial<Record<HelpSlug, HelpDocument>> = {
         id: "jev",
         heading: "Jev",
         blocks: [
-          "Saat agentes.chat menjadi host ruang kerjamu, Jev sudah termasuk. Di server yang kamu jalankan sendiri, Jev memakai kunci TypeSafe milik pemilik, sekitar US$ 0,0001 per pesan: [Siapkan Jev](/help/jev#setup).",
+          "Saat KeepMind OS menjadi host ruang kerjamu, Jev sudah termasuk. Di server yang kamu jalankan sendiri, Jev memakai kunci TypeSafe milik pemilik, sekitar US$ 0,0001 per pesan: [Siapkan Jev](/help/jev#setup).",
         ],
       },
       {
@@ -531,7 +531,7 @@ export const helpId: Partial<Record<HelpSlug, HelpDocument>> = {
               "Buka https://console.typesafe.ai lalu masuk dengan Google atau emailmu. Akun baru dibuat dengan cara yang sama.",
               "Tambahkan saldo di konsol. Jev memakai sistem prabayar.",
               "Buka https://console.typesafe.ai/keys, buat kunci, lalu langsung salin.",
-              "Di agentes.chat, buka **Pengaturan › AI dan pemakaian** lalu tempel di bawah **Jev**. Hanya orang yang menyiapkan server ini yang bisa melihatnya.",
+              "Di KeepMind OS, buka **Pengaturan › AI dan pemakaian** lalu tempel di bawah **Jev**. Hanya orang yang menyiapkan server ini yang bisa melihatnya.",
             ],
           },
           "Di server yang kamu jalankan dengan Docker, kamu juga bisa menaruh kuncinya di `.env` sebagai `TYPESAFE_API_KEY`. Kunci itu lebih diutamakan daripada yang ada di Pengaturan.",
@@ -589,14 +589,14 @@ export const helpId: Partial<Record<HelpSlug, HelpDocument>> = {
   "apps-de-ia": {
     title: "Aplikasi AI",
     summary:
-      "Minta tugas ke agen-agen agentes.chat dari Claude, Cursor, atau aplikasi MCP lain, tanpa meninggalkannya, dan dapatkan jawabannya di sana.",
+      "Minta tugas ke agen-agen KeepMind OS dari Claude, Cursor, atau aplikasi MCP lain, tanpa meninggalkannya, dan dapatkan jawabannya di sana.",
     sections: [
       {
         id: "what",
         heading: "Cara kerjanya",
         blocks: [
-          "agentes.chat adalah server MCP. Kamu menempel alamatnya di aplikasi AI kamu, masuk dengan akunmu, dan memilih ruang kerja. Sejak itu, aplikasinya bisa melihat daftar agen dan kanal, mengirim tugas ke agen atas namamu, menunggu balasannya, dan membaca tugas terbaru.",
-          'Misalnya, di tengah mengerjakan adegan di Unity atau Blender, minta ke Claude: "Minta agen marketing membuat teks peluncuran". Pesannya muncul di agentes.chat sebagai pesanmu, bertanda **via Claude**, dan balasan agennya kembali ke Claude.',
+          "KeepMind OS adalah server MCP. Kamu menempel alamatnya di aplikasi AI kamu, masuk dengan akunmu, dan memilih ruang kerja. Sejak itu, aplikasinya bisa melihat daftar agen dan kanal, mengirim tugas ke agen atas namamu, menunggu balasannya, dan membaca tugas terbaru.",
+          'Misalnya, di tengah mengerjakan adegan di Unity atau Blender, minta ke Claude: "Minta agen marketing membuat teks peluncuran". Pesannya muncul di KeepMind OS sebagai pesanmu, bertanda **via Claude**, dan balasan agennya kembali ke Claude.',
           "Alamatnya ada di **Pengaturan › Aplikasi AI**. Alamat itu diakhiri `/mcp`.",
         ],
       },
@@ -606,14 +606,14 @@ export const helpId: Partial<Record<HelpSlug, HelpDocument>> = {
         blocks: [
           {
             list: [
-              "**Claude** (claude.ai, Claude Desktop, dan ponsel): di **Sesuaikan › Konektor**, klik **+ Tambah**, lalu **Tambahkan konektor kustom**, beri nama agentes.chat, tempel alamatnya, lalu klik **Lanjutkan**. Pilih **Masuk sekarang**, klik **Tambah**, lalu beri izin. Di paket Team dan Enterprise, Pemilik organisasi Claude menambahkan konektornya di Pengaturan organisasi › Konektor, dan tiap orang mengklik **Hubungkan** di Sesuaikan › Konektor. Paket gratis Claude punya tempat untuk satu konektor kustom.",
+              "**Claude** (claude.ai, Claude Desktop, dan ponsel): di **Sesuaikan › Konektor**, klik **+ Tambah**, lalu **Tambahkan konektor kustom**, beri nama KeepMind OS, tempel alamatnya, lalu klik **Lanjutkan**. Pilih **Masuk sekarang**, klik **Tambah**, lalu beri izin. Di paket Team dan Enterprise, Pemilik organisasi Claude menambahkan konektornya di Pengaturan organisasi › Konektor, dan tiap orang mengklik **Hubungkan** di Sesuaikan › Konektor. Paket gratis Claude punya tempat untuk satu konektor kustom.",
               "**Claude Code:** jalankan `claude mcp add --transport http --scope user agentes <address>`, lalu ketik `/mcp`, pilih agentes dan **Authenticate**. Untuk folder saat ini saja, hapus `--scope user`.",
               "**Cursor:** **Tambahkan ke Cursor** di **Pengaturan › Aplikasi AI**, atau tulis alamatnya di `~/.cursor/mcp.json`. Cursor memintamu masuk saat pertama kali dipakai.",
               '**VS Code:** **Tambahkan ke VS Code**, atau tulis alamatnya di `.vscode/mcp.json` dengan `"type": "http"`.',
               "**Aplikasi lain:** ChatGPT, Gemini, Grok, Perplexity, Codex, Zed, JetBrains, dan lainnya punya langkah masing-masing di **Hubungkan aplikasi**, dengan alamatmu sudah terisi.",
             ],
           },
-          "Saat kamu masuk, agentes.chat menampilkan aplikasi mana yang meminta akses dan ke mana aplikasi itu kembali. Lanjutkan hanya kalau kamu baru saja memulai koneksinya.",
+          "Saat kamu masuk, KeepMind OS menampilkan aplikasi mana yang meminta akses dan ke mana aplikasi itu kembali. Lanjutkan hanya kalau kamu baru saja memulai koneksinya.",
         ],
       },
       {
@@ -630,7 +630,7 @@ export const helpId: Partial<Record<HelpSlug, HelpDocument>> = {
               "`list_recent_tasks`: tugas yang kamu kirim dari aplikasi dan apa yang sedang dikerjakan agen.",
             ],
           },
-          "Aplikasi bertindak atas namamu dan hanya melihat apa yang kamu lihat. Aplikasi tidak pernah menyetujui tindakan agen: saat agen berhenti untuk meminta persetujuan, balasannya memberi tahu hal itu dengan tautan, dan orang yang memutuskan di agentes.chat. Aplikasi juga tidak mengubah pengaturan, anggota, atau izin.",
+          "Aplikasi bertindak atas namamu dan hanya melihat apa yang kamu lihat. Aplikasi tidak pernah menyetujui tindakan agen: saat agen berhenti untuk meminta persetujuan, balasannya memberi tahu hal itu dengan tautan, dan orang yang memutuskan di KeepMind OS. Aplikasi juga tidak mengubah pengaturan, anggota, atau izin.",
         ],
       },
       {
@@ -666,7 +666,7 @@ export const helpId: Partial<Record<HelpSlug, HelpDocument>> = {
         id: "safety",
         heading: "Teks dari orang lain",
         blocks: [
-          "Balasan berisi teks yang ditulis agen dan orang di agentes.chat. Aplikasi menerima teks itu bertanda sebagai konten, bukan instruksi, tetapi sebuah teks tetap bisa mencoba membujuk aplikasi melakukan hal lain. Periksa apa yang akan dilakukan aplikasimu sebelum kamu mengonfirmasi.",
+          "Balasan berisi teks yang ditulis agen dan orang di KeepMind OS. Aplikasi menerima teks itu bertanda sebagai konten, bukan instruksi, tetapi sebuah teks tetap bisa mencoba membujuk aplikasi melakukan hal lain. Periksa apa yang akan dilakukan aplikasimu sebelum kamu mengonfirmasi.",
         ],
       },
       {
@@ -685,9 +685,9 @@ export const helpId: Partial<Record<HelpSlug, HelpDocument>> = {
     ],
   },
   "install-on-a-server": {
-    title: "Pasang agentes.chat di server",
+    title: "Pasang KeepMind OS di server",
     summary:
-      "Jalankan agentes.chat di servermu sendiri, gratis, untuk seluruh timmu. Satu perintah menyiapkan semuanya.",
+      "Jalankan KeepMind OS di servermu sendiri, gratis, untuk seluruh timmu. Satu perintah menyiapkan semuanya.",
     sections: [
       {
         id: "choose",
@@ -695,7 +695,7 @@ export const helpId: Partial<Record<HelpSlug, HelpDocument>> = {
         blocks: [
           {
             list: [
-              "**agentes.chat Cloud**: untuk tim mana pun, bisa diakses dari mana saja. Kami yang menjalankan, memperbarui, dan mencadangkannya. Tiap ruang kerja mendapat komputernya sendiri, dan di sana tiap agen jadi pengguna tersendiri.",
+              "**KeepMind OS Cloud**: untuk tim mana pun, bisa diakses dari mana saja. Kami yang menjalankan, memperbarui, dan mencadangkannya. Tiap ruang kerja mendapat komputernya sendiri, dan di sana tiap agen jadi pengguna tersendiri.",
               "**Komputermu, dengan aplikasinya**: untukmu atau tim kecil, bisa diakses selama komputer itu menyala. Mac mini yang tetap menyala cocok sekali. Kamu memperbaruinya dengan satu klik dan mencadangkannya secara manual. Agen berjalan sebagai kamu di komputer itu.",
               "**Server**: untuk tim yang lebih besar, menyala terus. Kamu memperbaruinya dengan tiga perintah, dan server bisa mencadangkan dirinya sendiri setiap hari. Di Debian 13, tiap agen jadi pengguna tersendiri.",
             ],
@@ -709,7 +709,7 @@ export const helpId: Partial<Record<HelpSlug, HelpDocument>> = {
         blocks: [
           {
             list: [
-              "Server atau VPS dengan Linux 64-bit, di x64 atau arm64. Untuk tim kecil, 2 CPU, memori 4 GB, dan disk 20 GB sudah cukup untuk mulai. Di Mac atau PC, [aplikasinya menjalankan agentes.chat](/help/run-on-your-computer) tanpa Docker.",
+              "Server atau VPS dengan Linux 64-bit, di x64 atau arm64. Untuk tim kecil, 2 CPU, memori 4 GB, dan disk 20 GB sudah cukup untuk mulai. Di Mac atau PC, [aplikasinya menjalankan KeepMind OS](/help/run-on-your-computer) tanpa Docker.",
               "Docker dengan Compose. Di Linux, pemasang menambahkannya kalau belum ada, setelah bertanya dulu.",
               "Cara masuk: akun Tailscale gratis (bawaan, privat, tanpa domain dan tanpa port terbuka), atau domain yang mengarah ke server, dengan port 80 dan 443 terbuka.",
             ],
@@ -722,11 +722,11 @@ export const helpId: Partial<Record<HelpSlug, HelpDocument>> = {
         blocks: [
           "Di server, jalankan:",
           {
-            code: "curl -fsSL https://agentes.chat/install | sh",
+            code: "curl -fsSL https://keepmind.io/install | sh",
           },
           "Pemasang memasang yang belum ada, lalu menanyakan beberapa hal: cara orang masuk, email, apakah server ini juga jadi komputer agenmu, dan apakah mengirim statistik pemakaian anonim. Tekan Enter untuk jawaban yang disarankan. Semuanya dipasang di `/opt/agentes` (`~/agentes` untuk pengguna yang sudah bisa memakai Docker), dan pertama kali ia mengunduh sekitar 2 GB.",
           "Di akhir, ia menampilkan alamat servermu dan kode QR untuk ponselmu. Menjalankannya lagi aman: pengaturanmu tetap, dan hanya yang kurang yang dilengkapi.",
-          "Dengan Node.js 18 atau lebih baru, `npx @agenteschat/setup` di folder kosong adalah penyiapan yang sama. Tanpa Node, ia berjalan dari image aplikasi, di folder saat ini, dan diakhiri dengan perintah yang menyalakan sisanya:",
+          "Dengan Node.js 18 atau lebih baru, `npx @keepmind/setup` di folder kosong adalah penyiapan yang sama. Tanpa Node, ia berjalan dari image aplikasi, di folder saat ini, dan diakhiri dengan perintah yang menyalakan sisanya:",
           {
             code: 'docker run --rm -it --user "$(id -u):$(id -g)" -v "$PWD":/work -w /work ghcr.io/agentes-chat/agentes:latest setup',
           },
@@ -752,14 +752,14 @@ export const helpId: Partial<Record<HelpSlug, HelpDocument>> = {
         heading: "Akunmu",
         blocks: [
           "Buka alamat servermu dan daftar: akun pertama menjadi pemilik. Setelah itu pendaftaran ditutup, dan orang masuk lewat undangan, dari **Pengaturan\u00a0›\u00a0Anggota dan undangan**.",
-          "Di Tailscale, orang yang kamu undang juga perlu masuk ke tailnet-mu. Undang mereka dulu di https://console.tailscale.com/admin/users lalu di agentes.chat.",
+          "Di Tailscale, orang yang kamu undang juga perlu masuk ke tailnet-mu. Undang mereka dulu di https://console.tailscale.com/admin/users lalu di KeepMind OS.",
         ],
       },
       {
         id: "email",
         heading: "Email",
         blocks: [
-          "Tanpa email, agentes.chat menulis setiap email ke log-nya alih-alih mengirimnya, jadi tautan undangan tetap bisa disalin dari sana. Atur ulang kata sandi tetap mati, dan email baru untuk sebuah akun langsung berlaku, tanpa kode atau tautan.",
+          "Tanpa email, KeepMind OS menulis setiap email ke log-nya alih-alih mengirimnya, jadi tautan undangan tetap bisa disalin dari sana. Atur ulang kata sandi tetap mati, dan email baru untuk sebuah akun langsung berlaku, tanpa kode atau tautan.",
           {
             code: "docker compose logs agentes | grep 'email (not sent'",
           },
@@ -773,7 +773,7 @@ export const helpId: Partial<Record<HelpSlug, HelpDocument>> = {
           {
             list: [
               "Di Tailscale, pasang aplikasi Tailscale di ponselmu dan masuk ke tailnet yang sama.",
-              "Pasang aplikasi agentes.chat.",
+              "Pasang aplikasi KeepMind OS.",
               "Pindai kode QR yang ditampilkan penyiapan, atau yang ada di **Pengaturan\u00a0›\u00a0Akunmu\u00a0›\u00a0Buka di ponselmu**, yang juga langsung memasukkanmu.",
             ],
           },
@@ -785,9 +785,9 @@ export const helpId: Partial<Record<HelpSlug, HelpDocument>> = {
         blocks: [
           "Penyiapan bisa menjadikan server ini juga komputer agenmu, tempat mereka menjalankan perintah, memakai browser, dan menyimpan file. Ia bertanya, dan menyarankan ya kalau server sanggup. Di Debian 13, setiap agen mendapat pengguna sendiri, dengan layar. Di Ubuntu, agen berbagi satu pengguna, `agentes`. Kalau kamu menjawab tidak, jalankan pemasangan lagi dengan `--computer yes`:",
           {
-            code: "curl -fsSL https://agentes.chat/install | sh -s -- --computer yes",
+            code: "curl -fsSL https://keepmind.io/install | sh -s -- --computer yes",
           },
-          "Komputer lain, seperti Mac dengan aplikasi agentes.chat atau server lain, terhubung dari **Pengaturan\u00a0›\u00a0Perangkat**, seperti di [Komputer dan ponselmu](/help/computers). Di Tailscale, komputer itu masuk ke tailnet-mu lebih dulu.",
+          "Komputer lain, seperti Mac dengan aplikasi KeepMind OS atau server lain, terhubung dari **Pengaturan\u00a0›\u00a0Perangkat**, seperti di [Komputer dan ponselmu](/help/computers). Di Tailscale, komputer itu masuk ke tailnet-mu lebih dulu.",
         ],
       },
       {
@@ -813,7 +813,7 @@ export const helpId: Partial<Record<HelpSlug, HelpDocument>> = {
         blocks: [
           "Di folder pemasangan, jalankan:",
           {
-            code: "curl -fsSLO https://agentes.chat/install/docker-compose.yml\ndocker compose pull\ndocker compose up -d",
+            code: "curl -fsSLO https://keepmind.io/install/docker-compose.yml\ndocker compose pull\ndocker compose up -d",
           },
           "Database memperbarui dirinya sendiri saat versi baru menyala. Simpan pengaturanmu di `.env` dan jangan pernah mengubah `docker-compose.yml`, karena setiap pembaruan menggantinya. Buat cadangan sebelum lompatan besar: database yang diperbarui versi lebih baru tidak bisa dibuka di versi lebih lama.",
         ],
@@ -822,7 +822,7 @@ export const helpId: Partial<Record<HelpSlug, HelpDocument>> = {
         id: "data",
         heading: "Yang dikirim",
         blocks: [
-          "Sekali sehari server mengirim statistik pemakaian anonim ke agentes.chat: hitungan seperti jumlah orang, agen, ukuran mesin, token AI yang dipakai, dan berapa banyak data yang dikirim dan diterima browser para agen. Tidak pernah pesan, file, nama, atau situs. `docker compose run --rm agentes telemetry` menampilkan persis apa yang akan dikirim. Pemilik mematikannya di **Pengaturan\u00a0›\u00a0Umum**, atau dengan `TELEMETRY=off` di `.env`.",
+          "Sekali sehari server mengirim statistik pemakaian anonim ke KeepMind OS: hitungan seperti jumlah orang, agen, ukuran mesin, token AI yang dipakai, dan berapa banyak data yang dikirim dan diterima browser para agen. Tidak pernah pesan, file, nama, atau situs. `docker compose run --rm agentes telemetry` menampilkan persis apa yang akan dikirim. Pemilik mematikannya di **Pengaturan\u00a0›\u00a0Umum**, atau dengan `TELEMETRY=off` di `.env`.",
           "Laporan galat tidak dikirim ke mana pun kecuali kamu mengatur `SENTRY_DSN` ke server yang kompatibel dengan Sentry pilihanmu. Laporan berisi galat dan tempat terjadinya, tidak pernah pesan, email, alamat IP, cookie, atau token.",
         ],
       },
@@ -830,7 +830,7 @@ export const helpId: Partial<Record<HelpSlug, HelpDocument>> = {
         id: "reference",
         heading: "Panduan lengkap",
         blocks: [
-          "Semua pengaturan, proxy milikmu sendiri seperti nginx, menjalankan tanpa Docker, langkah-langkah untuk agen AI yang memasangnya sendiri, dan apa yang dilakukan saat ada yang gagal ada di `SELF_HOSTING.md`, di repositori agentes.chat.",
+          "Semua pengaturan, proxy milikmu sendiri seperti nginx, menjalankan tanpa Docker, langkah-langkah untuk agen AI yang memasangnya sendiri, dan apa yang dilakukan saat ada yang gagal ada di `SELF_HOSTING.md`, di repositori KeepMind OS.",
         ],
       },
     ],

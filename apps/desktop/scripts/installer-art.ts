@@ -14,7 +14,7 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { agent, cloud, dither, Picture, type RGB, SKY, WHITE, wordmark } from "./pixel-art";
+import { Picture, wordmark } from "./pixel-art";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -24,16 +24,12 @@ const K = 2;
 /* ---------- The three pictures ---------- */
 
 /** The welcome and finish pages' side (164×314): the whole sky, the agent and the wordmark in the middle. */
-function side(done: boolean): Picture {
+function side(_done: boolean): Picture {
   const W = 164;
   const H = 314;
   const p = new Picture(W * K, H * K, K);
-  const run = SKY.slice(0, 6);
-  dither(p, run, (u, v) => 0.05 + 0.95 * v * v + 0.04 * Math.sin(u * 5));
-  cloud(p, 18, 46, 3, run[3] as RGB);
-  cloud(p, 112, 92, 2, run[3] as RGB);
-  agent(p, (W - 64) / 2, 104, 64, done);
-  wordmark(p, W / 2, 200, 21);
+  p.box(0, 0, W, H, [17, 17, 17]);
+  wordmark(p, W / 2, 190, 128);
   return p;
 }
 
@@ -42,9 +38,8 @@ function header(): Picture {
   const W = 150;
   const H = 57;
   const p = new Picture(W * K, H * K, K);
-  const run = [WHITE, ...SKY.slice(0, 6).reverse()];
-  dither(p, run, (u, v) => Math.max(0, (u - 0.18) / 0.82) * 0.85 + 0.06 * (v - 0.5));
-  agent(p, W - 50, 11, 36);
+  p.box(0, 0, W, H, [17, 17, 17]);
+  wordmark(p, W - 28, 50, 48);
   return p;
 }
 

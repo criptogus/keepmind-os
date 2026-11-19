@@ -14,9 +14,9 @@ import type {
   VaultScope,
   VaultSourceInfo,
   VaultUse,
-} from "@agenteschat/client";
-import { joinNames, namesText, relativeTime } from "@agenteschat/client/lib/format";
-import { isReservedKeyName, VAULT_KEY_NAME } from "@agenteschat/client/lib/vault";
+} from "@keepmind/client";
+import { joinNames, namesText, relativeTime } from "@keepmind/client/lib/format";
+import { isReservedKeyName, VAULT_KEY_NAME } from "@keepmind/client/lib/vault";
 import type { TFunction } from "i18next";
 import type { IconName } from "@/ui";
 

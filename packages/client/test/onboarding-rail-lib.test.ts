@@ -307,7 +307,7 @@ describe("the onboarding's rail (ADR 0162)", () => {
       personal: true,
       funnel,
     };
-    // Before it exists, "For me" already shows its path; self-hosted 4 steps, agentes.chat Cloud 5.
+    // Before it exists, "For me" already shows its path; self-hosted 4 steps, KeepMind OS Cloud 5.
     expect(railState({ ...base, orgId: null }).steps).toEqual(["name", "you", "team", "ai"]);
     expect(railState({ ...base, orgId: null, billingUrl: "https://billing.example.com" })).toMatchObject({
       steps: ["name", "you", "team", "plan", "ai"],

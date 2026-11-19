@@ -1,6 +1,6 @@
-import type { InviteLinkTtl } from "@agenteschat/client";
-import { INVITE_LINK_TTL, type InviteStart } from "@agenteschat/client/lib/invite-start";
-import { INVITE_NOTE_MAX } from "@agenteschat/client/lib/join-requests";
+import type { InviteLinkTtl } from "@keepmind/client";
+import { INVITE_LINK_TTL, type InviteStart } from "@keepmind/client/lib/invite-start";
+import { INVITE_NOTE_MAX } from "@keepmind/client/lib/join-requests";
 import { useEffect, useRef, useSyncExternalStore } from "react";
 import type { InviteAddress } from "./logic";
 

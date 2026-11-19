@@ -28,7 +28,7 @@ never sent to browsers.
   Without Docker, it also runs as one program with its database built in (On this computer, without
   Docker).
 - Nothing else: the installer fetches the Bun it runs the setup on. With Node.js 18 or newer,
-  `npx @agenteschat/setup` is the same setup, and it also runs from the app's image.
+  `npx @keepmind/setup` is the same setup, and it also runs from the app's image.
 - Sizing has not been measured yet. As a starting point for a small team: 2 vCPUs, 4 GB of RAM and
   20 GB of disk. The image is large (about 2 GB of dependencies), and the database and the files
   volume grow with use.
@@ -126,7 +126,7 @@ it at its first question (Ctrl-C), then run the setup command the installer prin
 Without a terminal (cloud-init, a CI job) nothing is asked: the setup takes its defaults and the
 options given, and Docker is installed only with `--yes`.
 
-Without the installer, the same setup runs with `npx @agenteschat/setup` in an empty directory
+Without the installer, the same setup runs with `npx @keepmind/setup` in an empty directory
 (Node.js 18 or newer), or from the app's image, on the current directory:
 
 ```sh
@@ -273,7 +273,7 @@ tailnet policy file limits who reaches what, let your people reach `tag:agentes`
 **The command**, in an empty directory on the server:
 
 ```sh
-AGENTES_SETUP_TAILSCALE_KEY='tskey-client-…' npx -y @agenteschat/setup --network tailscale --email skip --json
+AGENTES_SETUP_TAILSCALE_KEY='tskey-client-…' npx -y @keepmind/setup --network tailscale --email skip --json
 ```
 
 No Node.js or Docker on the server? As root, the installer gets what's missing and then runs the
@@ -787,6 +787,10 @@ ones a self-hosted instance usually touches:
 | `TYPESAFE_API_KEY` | | Your TypeSafe key for Jev (AI: plans and keys). Wins over the key added in Settings → AI and usage. |
 | `COMPOSIO_API_KEY`, `COMPOSIO_WEBHOOK_SECRET` | | Your Composio project: Gmail and Outlook mailboxes and the services connected through Composio (below). |
 | `COMPOSIO_AUTH_CONFIGS`, `COMPOSIO_CALLS_PER_MONTH` | `0` for the cap (none) | Auth configs of your own per toolkit (`googledrive=ac_…`), and the Composio calls a workspace may make per month. |
+| `WHATSAPP_DATA_DIR` | `whatsapp` next to `FILES_DIR`, else `./whatsapp-sessions` | Folder for WhatsApp session credentials, one subfolder per organization. Put it on a persistent volume: losing it unlinks the paired number. |
+| `WHATSAPP_BRIDGE_ENTRY` | the bundled `server/whatsapp-bridge.mjs` in native packages, the bridge's `bin/` in a source checkout | The whatsapp-bridge program the server spawns per organization. |
+| `REA_DATA_DIR` | `rea` next to `FILES_DIR`, else `./rea-workspaces` | Per-organization working directories for the REA sidecar (analysis output). REA reads host files: only where agents may see this filesystem. |
+| `REA_PACKAGE` | `rea-agents@6.9.0` | npm spec the REA sidecar runs via `npx -y`; needs Node.js 22+ on `PATH`. |
 
 **Model keys.** Each organization adds its own keys (Claude, OpenAI, Gemini, DeepSeek, Kimi, Z.ai,
 MiniMax, Command Code or OpenRouter) in **Settings → AI and usage**, and each agent uses one of them. Usage and cost are recorded per agent.
@@ -880,6 +884,39 @@ deletes the account at Composio, without revoking it at the service. Instagram c
 creator accounts only, and WhatsApp a WhatsApp Business account, whose id Composio's page asks for.
 Composio's own LinkedIn and YouTube apps share their rate limits and daily quota with all of Composio's
 customers: with heavy use, give them OAuth apps of your own in `COMPOSIO_AUTH_CONFIGS`.
+
+**WhatsApp by QR code (optional, unofficial).** A workspace can pair a WhatsApp number from
+**Settings → Connectors → WhatsApp**: the server spawns one small `whatsapp-bridge` process per
+organization (Baileys, the WhatsApp Web protocol), shows a QR code, and the number's direct chats
+mirror into a private `whatsapp` channel as threads — one thread per chat, the sender marked as an
+external contact with no workspace authority. The agent picked in the card (the right hand by
+default) answers; its replies go back to WhatsApp, and connector writes still ask for approval.
+This is **not** the official WhatsApp Business API: it uses the consumer protocol, WhatsApp may ban
+the number for automated use, keep volume low and human-paced, and sessions can drop (the card then
+asks to pair again). Session credentials live under `WHATSAPP_DATA_DIR` (default: a `whatsapp`
+folder next to `FILES_DIR`); keep it on a persistent volume or the pairing is lost on restart.
+Inbound media arrives as a `[media]` placeholder; agents read and send text (and can send media
+through the connector's tools where the bridge supports it). Agents reach WhatsApp through the
+`whatsapp` connector's tools (`list_chats`, `read_messages`, `search_messages` as reads;
+`send_message`, `send_media`, `mark_read` and friends as writes that ask approval) — grant them per
+agent like any connector.
+
+**REA reverse engineering (optional).** A workspace can connect **REA**
+([rea.tools](https://rea.tools/), the `rea-agents` npm package) from
+**Settings → Connectors → REA**: the server spawns one `rea-agents mcp --http`
+process per organization on a loopback port and registers it as a first-party
+connector, so agents get its analysis tools (inspect apps, JavaScript/ASAR
+bundles, native binaries, .NET assemblies and sites) under the same per-agent
+scopes, tool classification and approvals as any connector. **REA reads files on
+this server's filesystem** — its tools inspect whatever path an agent names — so
+grant it only to agents you trust with that access, and prefer it on self-hosted
+or single-tenant deployments. It needs **Node.js 22+** on `PATH` (the sidecar runs
+through `npx`; `REA_PACKAGE` pins the package spec, default `rea-agents@6.9.0`).
+Native-binary depth needs a Hopper, Ghidra, IDA or Kuna installation on the host;
+JavaScript/Electron and static analysis work without one. Per-org working
+directories live under `REA_DATA_DIR` (default: a `rea` folder next to
+`FILES_DIR`). The HTTP endpoint is loopback-only with no auth of its own, by
+upstream design — do not expose the port.
 
 **Your own MCP servers know who is calling (optional).** An MCP server you run for your own workspace
 (an internal tool your agents use) gets nothing with a call but its key, and a key that leaks works from
@@ -1754,7 +1791,7 @@ package.json names the version):
 git clone https://github.com/agentes-chat/agentes-chat.git
 cd agentes-chat
 bun install
-bun run --filter '@agenteschat/setup' build
+bun run --filter '@keepmind/setup' build
 docker build -t ghcr.io/agentes-chat/agentes:latest .
 mkdir -p ~/agentes && cp docker-compose.yml ~/agentes/
 AGENTES_INSTALL_SETUP=$PWD/packages/setup/dist/index.js sh install.sh --dir ~/agentes

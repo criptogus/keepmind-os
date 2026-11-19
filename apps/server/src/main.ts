@@ -2,20 +2,20 @@
  * The image's entrypoint. `main.ts migrate` (`docker compose run --rm agentes migrate`)
  * only prepares the database the way boot does, then exits: an upgrade can
  * migrate while the previous version still serves. `main.ts setup` is the
- * self-host setup (`npx @agenteschat/setup`) for servers without Node, run in
+ * self-host setup (`npx @keepmind/setup`) for servers without Node, run in
  * the directory mounted as the working directory. `main.ts telemetry`
  * (`docker compose run --rm agentes telemetry`) prints the next usage report
  * and sends nothing.
  */
-import { loadConfig } from "@agenteschat/config";
-import { createDatabase } from "@agenteschat/db";
-import { passwordLinkByEmail } from "@agenteschat/engine";
+import { loadConfig } from "@keepmind/config";
+import { createDatabase } from "@keepmind/db";
+import { passwordLinkByEmail } from "@keepmind/engine";
 import { createLogger } from "./logger";
 import { prepareDatabase, startServer } from "./start";
 import { printTelemetry } from "./telemetry";
 
 if (process.argv[2] === "setup") {
-  const { main } = await import("@agenteschat/setup/src/cli");
+  const { main } = await import("@keepmind/setup/src/cli");
   const code = await main(process.argv.slice(3), { image: true });
   // Once stdout has drained: a piped `--json` result arrives whole.
   await new Promise((resolve) => process.stdout.write("", resolve));

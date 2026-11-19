@@ -1,5 +1,5 @@
-import type { BrainEffort } from "@agenteschat/adapters";
-import { type ModelMessage, modelProvider, type SystemBlock, type ToolSpec } from "@agenteschat/providers";
+import type { BrainEffort } from "@keepmind/adapters";
+import { type ModelMessage, modelProvider, type SystemBlock, type ToolSpec } from "@keepmind/providers";
 import type { Agent } from "../agents";
 import { turnNotes } from "../context";
 import { cutOldToolSteps } from "../context-budget";

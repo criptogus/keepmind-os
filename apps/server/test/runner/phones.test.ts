@@ -1,7 +1,7 @@
 import { afterEach, expect, setDefaultTimeout, test } from "bun:test";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { type PhonePairing, pairAddress, type RunnerPhone } from "@agenteschat/adapters/machine-protocol";
+import { type PhonePairing, pairAddress, type RunnerPhone } from "@keepmind/adapters/machine-protocol";
 import {
   adbStateOf,
   androidKind,

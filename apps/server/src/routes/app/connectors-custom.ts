@@ -1,4 +1,5 @@
-import { connectorOAuthApps } from "@agenteschat/config";
+import { createRoute, z } from "@hono/zod-openapi";
+import { connectorOAuthApps } from "@keepmind/config";
 import {
   acceptCustomSuggestion,
   CONNECTOR_EVENTS,
@@ -18,8 +19,7 @@ import {
   saveCustomTools,
   ValidationError,
   withComposio,
-} from "@agenteschat/engine";
-import { createRoute, z } from "@hono/zod-openapi";
+} from "@keepmind/engine";
 import { imageFile } from "../../http/image-file";
 import {
   type AppDeps,
@@ -108,7 +108,7 @@ const ConnectStart = z.union([
   z.object({
     status: z.literal("needs_key"),
     reason: z.literal("not_approved").optional().openapi({
-      description: "It has OAuth but only lets in apps it approved, and agentes.chat isn't one yet.",
+      description: "It has OAuth but only lets in apps it approved, and KeepMind OS isn't one yet.",
     }),
     detail: z.string().optional().openapi({
       description:
@@ -127,13 +127,11 @@ const ReconnectId = z.uuid().optional().openapi({
  * until an admin classifies each as read, write or approval. Agents get
  * `custom:{serverId}:read` / `:write` scopes.
  */
-export function customConnectorRoutes(deps: AppDeps) {
+/** The deps every custom/MCP connector flow shares (also the WhatsApp connector's). */
+export function customConnectorDeps(deps: AppDeps): CustomDeps {
   const { db, config, adapters } = deps;
-  const app = createAppRouter(deps);
-  app.use("/organizations/*", requireSession(deps.auth));
-  app.use("/connector-icons/*", requireSession(deps.auth));
   const composio = composioConnectorsOf(adapters.mail);
-  const custom: CustomDeps = {
+  return {
     db,
     keyWrappers: [adapters.keyWrapper, ...adapters.legacyKeyWrappers],
     oauthApps: connectorOAuthApps(config),
@@ -146,12 +144,20 @@ export function customConnectorRoutes(deps: AppDeps) {
     blobs: adapters.platformBlobs,
     log: deps.log,
   };
+}
+
+export function customConnectorRoutes(deps: AppDeps) {
+  const { db } = deps;
+  const app = createAppRouter(deps);
+  app.use("/organizations/*", requireSession(deps.auth));
+  app.use("/connector-icons/*", requireSession(deps.auth));
+  const custom = customConnectorDeps(deps);
 
   // A server's icon, for the org's members.
   app.get("/connector-icons/:orgId/:connectionId/:file", async (c) =>
     imageFile(
       await connectorIconFile(
-        { db, blobs: adapters.platformBlobs },
+        { db, blobs: deps.adapters.platformBlobs },
         c.get("user").id,
         c.req.param("orgId"),
         c.req.param("connectionId"),
@@ -214,7 +220,7 @@ export function customConnectorRoutes(deps: AppDeps) {
       description: z.string(),
       icon: z.string(),
       serverUrl: z.string(),
-      soon: z.boolean().openapi({ description: "The vendor hasn't approved agentes.chat yet: it can't be connected." }),
+      soon: z.boolean().openapi({ description: "The vendor hasn't approved KeepMind OS yet: it can't be connected." }),
     })
     .openapi("McpPreset");
   app.openapi(
@@ -249,7 +255,7 @@ export function customConnectorRoutes(deps: AppDeps) {
       security,
       summary: "Connect a one-click connector (admins): returns the OAuth URL to open",
       description:
-        "After the OAuth, our suggested classification is applied to its tools (admins can change it). No app registration needed. Accounts and `connectionId` as in `POST …/connectors/custom`. It connects by the way the catalog lists for it (the vendor's server, or Composio, ADR 0107). A `soon` one Composio doesn't serve here is refused (400 `connector.not_approved`): its vendor hasn't approved agentes.chat yet.",
+        "After the OAuth, our suggested classification is applied to its tools (admins can change it). No app registration needed. Accounts and `connectionId` as in `POST …/connectors/custom`. It connects by the way the catalog lists for it (the vendor's server, or Composio, ADR 0107). A `soon` one Composio doesn't serve here is refused (400 `connector.not_approved`): its vendor hasn't approved KeepMind OS yet.",
       request: {
         params: OrgParams.extend({ presetId: z.string().max(60) }),
         body: body(z.object({ returnTo: z.string().max(500).optional(), connectionId: ReconnectId })),
@@ -260,9 +266,11 @@ export function customConnectorRoutes(deps: AppDeps) {
       const { orgId, presetId } = c.req.valid("param");
       const preset = mcpPreset(presetId);
       if (!preset) throw new NotFoundError("Unknown connector");
-      const way = connectorListing({ oauthApps: custom.oauthApps ?? {}, composio }).find((e) => e.id === preset.id);
+      const way = connectorListing({ oauthApps: custom.oauthApps ?? {}, composio: custom.composio }).find(
+        (e) => e.id === preset.id,
+      );
       if (way?.soon) {
-        throw new ValidationError(`${preset.label} hasn't approved agentes.chat yet`, "connector.not_approved", {
+        throw new ValidationError(`${preset.label} hasn't approved KeepMind OS yet`, "connector.not_approved", {
           connector: preset.id,
         });
       }
@@ -365,7 +373,7 @@ export function customConnectorRoutes(deps: AppDeps) {
     }),
     async (c) => {
       const { orgId, serverId } = c.req.valid("param");
-      await revokeConnection(db, c.get("user").id, orgId, serverId, composio);
+      await revokeConnection(db, c.get("user").id, orgId, serverId, custom.composio);
       return c.body(null, 204);
     },
   );

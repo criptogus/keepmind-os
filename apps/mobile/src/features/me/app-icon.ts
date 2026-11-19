@@ -1,4 +1,4 @@
-import { type AppIconId, DEFAULT_APP_ICON, type MadeIconSky } from "@agenteschat/client/lib/app-icons";
+import { type AppIconId, DEFAULT_APP_ICON, type MadeIconSky } from "@keepmind/client/lib/app-icons";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { requireOptionalNativeModule } from "expo";
 import { Platform } from "react-native";

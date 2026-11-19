@@ -1,5 +1,5 @@
-import type { Agent, Memory, WikiAgentReads, WikiGraph } from "@agenteschat/client";
-import { layoutGraph } from "@agenteschat/client/lib/wiki";
+import type { Agent, Memory, WikiAgentReads, WikiGraph } from "@keepmind/client";
+import { layoutGraph } from "@keepmind/client/lib/wiki";
 
 /** A sky of what the team knows: agents, the pages they read, what they learned, and the real links between them. */
 export type StarKind = "agent" | "page" | "memory";

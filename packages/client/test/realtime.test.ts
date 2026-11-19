@@ -52,15 +52,15 @@ function manualTimers() {
 
 describe("RealtimeConnection", () => {
   test("url uses ws/wss and the org id", () => {
-    expect(realtimeUrl({ protocol: "https:", host: "agentes.chat" }, "o 1")).toBe(
-      "wss://agentes.chat/api/ws?orgId=o%201",
+    expect(realtimeUrl({ protocol: "https:", host: "keepmind.io" }, "o 1")).toBe(
+      "wss://keepmind.io/api/ws?orgId=o%201",
     );
     expect(realtimeUrl({ protocol: "http:", host: "localhost:5173" }, "o1")).toBe(
       "ws://localhost:5173/api/ws?orgId=o1",
     );
-    expect(realtimeUrl("https://app.agentes.chat/", "o1")).toBe("wss://app.agentes.chat/api/ws?orgId=o1");
+    expect(realtimeUrl("https://keepmind.io/", "o1")).toBe("wss://keepmind.io/api/ws?orgId=o1");
     expect(realtimeUrl("http://192.168.0.2:3000", "o1")).toBe("ws://192.168.0.2:3000/api/ws?orgId=o1");
-    expect(() => realtimeUrl("agentes.chat", "o1")).toThrow();
+    expect(() => realtimeUrl("keepmind.io", "o1")).toThrow();
   });
 
   test("watches agents' browsers answering frames: on the realtime socket, then on their own frame socket", async () => {

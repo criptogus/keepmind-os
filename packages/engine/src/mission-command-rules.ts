@@ -1,5 +1,5 @@
-import { isSafeRule, PERMISSION_WAIT_MS, TASK_LIMITS, type TaskDenial } from "@agenteschat/adapters";
-import { type Executor, rowsOf, type SQL, schema, sql } from "@agenteschat/db";
+import { isSafeRule, PERMISSION_WAIT_MS, TASK_LIMITS, type TaskDenial } from "@keepmind/adapters";
+import { type Executor, rowsOf, type SQL, schema, sql } from "@keepmind/db";
 
 const { missionEvents, missions } = schema;
 

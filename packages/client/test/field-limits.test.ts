@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { resources } from "@agenteschat/i18n";
+import { resources } from "@keepmind/i18n";
 import i18next from "i18next";
 import { ApiError } from "../src/index";
 import { APPROVAL_REASON_MAX } from "../src/lib/approval-card";

@@ -4,7 +4,7 @@
  * Wi-Fi it could use, the people and roles of "Specific people or roles", and confirming a runner's code. Writes
  * change it; `calls` keeps every request.
  */
-import type { ComputerDevice, DeviceAudience, PhoneDevice, WifiIphone } from "@agenteschat/client";
+import type { ComputerDevice, DeviceAudience, PhoneDevice, WifiIphone } from "@keepmind/client";
 import type { SiteAnswer } from "../host/types";
 
 const json = (status: number, body: unknown): SiteAnswer => ({ status, body: JSON.stringify(body) });

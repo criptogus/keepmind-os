@@ -1,9 +1,9 @@
 import { expect, spyOn, test } from "bun:test";
-import { canvasPage, setupDom } from "@agenteschat/ui/testing";
+import { canvasPage, setupDom } from "@keepmind/ui/testing";
 
 setupDom();
 
-import { agentTones, EYE, pixelOf, SKY_TONES, softTones, spriteTone } from "@agenteschat/ui";
+import { agentTones, pixelOf, SKY_TONES, softTones, spriteTone } from "@keepmind/ui";
 import { act, render } from "@testing-library/react";
 import { ComputerSky } from "../src/components/Sky";
 
@@ -40,7 +40,7 @@ async function colorsOn(surface: string) {
 }
 
 const subset = (drawn: Set<number>, tones: readonly string[]) => {
-  const allowed = new Set([...tones, spriteTone("sky"), EYE].map(pixelOf));
+  const allowed = new Set([...tones, spriteTone("sky"), "#c4ff3d"].map(pixelOf));
   return [...drawn].every((p) => allowed.has(p));
 };
 

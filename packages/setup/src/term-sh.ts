@@ -1,9 +1,9 @@
 /**
- * The agentes.chat look in POSIX sh, for the two installers: install.sh carries this text between its
+ * The KeepMind OS look in POSIX sh, for the two installers: install.sh carries this text between its
  * `# --- term.sh` lines, and the runner's installer (apps/server/runner/install-script.ts) inlines it. Tests keep
  * both copies equal, and its logo equal to term.ts's in every color depth.
  */
-export const TERM_SH = `# The agentes.chat look for the POSIX installers, as packages/setup/src/term.ts draws it: plain where a
+export const TERM_SH = `# The KeepMind OS look for the POSIX installers, as packages/setup/src/term.ts draws it: plain where a
 # terminal can't take it (no color with NO_COLOR or TERM=dumb, ASCII marks and no logo on the Linux console), and
 # no line, logo or animation when the output isn't a terminal (cloud-init, CI, the setup reading it). Only
 # function definitions, so a download cut short runs nothing.
@@ -44,9 +44,9 @@ t_style() {
   if [ "$T_DEPTH" != 0 ]; then
     C_BOLD="\${E}[1m" C_DIM="\${E}[2m" C_OK="\${E}[32m" C_WARN="\${E}[33m" C_FAIL="\${E}[31m" C_OFF="\${E}[0m"
     case $T_DEPTH in
-      24) C_ACC="\${E}[38;2;43;116;230m" C_BADGE="\${E}[48;2;0;99;209;97m" ;;
-      256) C_ACC="\${E}[38;5;32m" C_BADGE="\${E}[48;5;26;38;5;231m" ;;
-      *) C_ACC="\${E}[94m" C_BADGE="\${E}[44;97m" ;;
+      24) C_ACC="\${E}[38;2;43;116;230m" C_BADGE="\${E}[48;2;196;255;61;30m" ;;
+      256) C_ACC="\${E}[38;5;32m" C_BADGE="\${E}[48;5;190;38;5;0m" ;;
+      *) C_ACC="\${E}[94m" C_BADGE="\${E}[102;30m" ;;
     esac
   fi
   T_B=' '
@@ -114,12 +114,12 @@ t_end() {
 # t_intro TITLE: the logo where it fits, then ┌ and the badge, and the line from here on. A log gets the title.
 t_intro() {
   if [ "$T_FRAME" = 0 ]; then
-    printf 'agentes.chat %s\\n' "$1" >&"$T_FD"
+    printf 'KeepMind OS %s\\n' "$1" >&"$T_FD"
     return 0
   fi
   if [ "$T_UNI" = 1 ] && [ "$T_COLS" -ge 64 ]; then t_logo; fi
-  t_b=agentes.chat
-  if [ "$T_DEPTH" != 0 ]; then t_b="$C_BADGE agentes.chat $C_OFF"; fi
+  t_b="KeepMind OS"
+  if [ "$T_DEPTH" != 0 ]; then t_b="$C_BADGE KeepMind OS $C_OFF"; fi
   T_OPEN=1
   t_style
   # The title beside the badge's columns, its wrap under the line.
@@ -131,18 +131,17 @@ t_intro() {
   printf '%s\\n' "$T_B" >&"$T_FD"
 }
 
-# The logo. The mark: the agent of packages/ui/src/agent/engine.js on the 12×12 grid of the web's LogoMark,
-# rows of pixels where 0-4 are its body's tones (deep to light), w its eyes and . nothing. Beside it,
-# "agentes" in pixels after Funnel Display Light. Two rows of pixels make one line of ▀▄█.
+# The logo. The mark: the KeepMind K on the 12×12 grid of the web's LogoMark — 0 the ink square,
+# w the lime K, . outside it. Beside it, "keepmind" in pixels after Funnel Display Light. Two rows of
+# pixels make one line of ▀▄█; the word carries its leading gap so an empty row leaves no trailing space.
 t_logo() {
   printf '\\n' >&"$T_FD"
-  t_row=0
-  set -- ..43434343.. .3333333332. '                         ▄' \\
-    333333333233 232323232223 ' ▄▄▄   ▄▄▄▄  ▄▄▄  ▄ ▄▄  ▄█▄▄  ▄▄▄   ▄▄▄▄' \\
-    3232w23w3222 2222w22w2212 ' ▄▄▄█ █   █ █▄▄▄█ █▀  █  █   █▄▄▄█ ▀▄▄▄' \\
-    2222w22w2122 121212121112 '█   █ █   █ █     █   █  █   █         █' \\
-    212121212111 111111111101 ' ▀▀▀▀  ▀▀▀█  ▀▀▀▀ ▀   ▀   ▀▀  ▀▀▀▀ ▀▀▀▀' \\
-    11111111101. 0101010100.. '       ▀▀▀'
+  set -- ..00000000.. .0000000000. '' \\
+    000w0000w000 000w000w0000 '   ▄   ▄  ▄▄▄   ▄▄▄  ▄▄▄▄  ▄   ▄  ▄  ▄ ▄▄      █' \\
+    000w00w00000 000w0w000000 '   █ ▄▀  █▄▄▄█ █▄▄▄█ █   █ █▀▄▀█  ▄  █▀  █ ▄▀▀▀█' \\
+    000ww0000000 000w0w000000 '   █▀▄   █     █     █▀▀▀  █ ▀ █  █  █   █ █   █' \\
+    000w00w00000 000w000w0000 '   ▀  ▀   ▀▀▀▀  ▀▀▀▀ █     ▀   ▀  ▀  ▀   ▀  ▀▀▀▀' \\
+    .0000000000. ..00000000.. ''
   while [ $# -ge 3 ]; do
     t_top=$1 t_bot=$2 t_word=$3
     shift 3
@@ -152,9 +151,7 @@ t_logo() {
       t_line=$t_line$t_c
       t_top=\${t_top#?} t_bot=\${t_bot#?}
     done
-    t_row=$((t_row + 1))
-    if [ "$t_row" = 5 ]; then t_word="$t_word $C_DIM.chat$C_OFF"; fi
-    printf '  %s%s   %s\\n' "$t_line" "$C_OFF" "$t_word" >&"$T_FD"
+    printf '  %s%s%s\\n' "$t_line" "$C_OFF" "$t_word" >&"$T_FD"
   done
   printf '\\n' >&"$T_FD"
 }
@@ -162,11 +159,11 @@ t_logo() {
 # t_cell TOP BOTTOM: two pixels as one character, in $t_c.
 t_cell() {
   if [ "$T_DEPTH" = 0 ]; then
-    # One color: the body, its eyes left out (the mono logo).
+    # One color: every pixel of the mark, the K included.
     case $1$2 in
-      [0-4][0-4]) t_c='█' ;;
-      [0-4]?) t_c='▀' ;;
-      ?[0-4]) t_c='▄' ;;
+      [0-4w][0-4w]) t_c='█' ;;
+      [0-4w].) t_c='▀' ;;
+      .[0-4w]) t_c='▄' ;;
       *) t_c=' ' ;;
     esac
     return 0
@@ -194,19 +191,18 @@ t_tone() {
   case $T_DEPTH in
     24)
       case $2 in
-        0) t_n='0;61;130' ;; 1) t_n='0;99;209' ;; 2) t_n='70;147;232' ;; 3) t_n='140;195;255' ;;
-        4) t_n='198;225;255' ;; *) t_n='255;255;255' ;;
+        w) t_n='196;255;61' ;; *) t_n='17;17;17' ;;
       esac
       t_n="$1;2;$t_n"
       ;;
     256)
-      case $2 in 0) t_n=25 ;; 1) t_n=26 ;; 2) t_n=68 ;; 3) t_n=111 ;; 4) t_n=189 ;; *) t_n=231 ;; esac
+      case $2 in w) t_n=190 ;; *) t_n=233 ;; esac
       t_n="$1;5;$t_n"
       ;;
     *)
-      # Blue for the deep tones, bright blue for the light ones, bright white for the eyes.
+      # Black for the square, bright green for the K.
       case $1$2 in
-        380 | 381) t_n=34 ;; 38w) t_n=97 ;; 38?) t_n=94 ;; 480 | 481) t_n=44 ;; 48w) t_n=107 ;; *) t_n=104 ;;
+        38w) t_n=92 ;; 48w) t_n=102 ;; 38*) t_n=30 ;; 48*) t_n=40 ;;
       esac
       ;;
   esac

@@ -1,5 +1,5 @@
-import { instanceQuery } from "@agenteschat/client";
-import { type ServerPlace, serverPlace } from "@agenteschat/client/lib/server";
+import { instanceQuery } from "@keepmind/client";
+import { type ServerPlace, serverPlace } from "@keepmind/client/lib/server";
 import { useQuery } from "@tanstack/react-query";
 import { useApi } from "@/api/context";
 import { inDesktopApp, thisMac } from "@/lib/desktop";

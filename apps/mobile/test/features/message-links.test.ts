@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { linkPill } from "@agenteschat/client/lib/link-pills";
-import { messagePath, parseMessageLink } from "@agenteschat/client/lib/message-links";
+import { linkPill } from "@keepmind/client/lib/link-pills";
+import { messagePath, parseMessageLink } from "@keepmind/client/lib/message-links";
 import { messageRefWords, parseInline } from "../../src/features/chat/logic";
 import { messageRefHref } from "../../src/features/links/app-links";
 import { chatHref } from "../../src/features/links/logic";
@@ -51,7 +51,7 @@ describe("a message link in the phone's chat", () => {
 });
 
 describe("a link pill on the phone (`Spans`: a link whose words are its address)", () => {
-  const PR = "https://github.com/agentes-chat/agentes.chat/pull/148";
+  const PR = "https://github.com/agentes-chat/keepmind-os/pull/148";
   const bare = (text: string) =>
     parseInline(text).flatMap((s) => (s.kind === "link" && s.text === s.href ? [linkPill(s.href)?.ref] : []));
 

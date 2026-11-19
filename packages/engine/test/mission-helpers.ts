@@ -1,4 +1,4 @@
-import { MACHINE_PROTOCOL_VERSION, type ServerFrame } from "@agenteschat/adapters";
+import { MACHINE_PROTOCOL_VERSION, type ServerFrame } from "@keepmind/adapters";
 import { grantScopes, insertMessageWithRuns, type MachineHub, setAgentComputerTarget } from "../src";
 import type { Fixture } from "./fixtures";
 import { pairMachine } from "./machine-fixtures";
@@ -101,7 +101,7 @@ export function missionRunner(hub: MachineHub, hello: Record<string, unknown> = 
 }
 
 export async function pairedMachine(f: Fixture) {
-  const deps = { db: f.db, pubsub: f.pubsub, publicUrl: "https://agentes.chat" };
+  const deps = { db: f.db, pubsub: f.pubsub, publicUrl: "https://keepmind.io" };
   const paired = await pairMachine(deps, f.owner.id, f.org.id, { name: "MacBook", ...RUNNER, exec: true });
   await grantScopes(f.db, f.org.id, f.agent.id, SANDBOX);
   await setAgentComputerTarget(deps, f.owner.id, f.org.id, f.agent.id, paired.machineId);

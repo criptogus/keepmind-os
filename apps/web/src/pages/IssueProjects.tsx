@@ -1,12 +1,12 @@
-import type { IssueProject, IssueProjectRef, IssueProjects } from "@agenteschat/client";
-import { useIssueProjectAction, useIssueProjects } from "@agenteschat/client";
+import type { IssueProject, IssueProjectRef, IssueProjects } from "@keepmind/client";
+import { useIssueProjectAction, useIssueProjects } from "@keepmind/client";
 import {
   NO_PROJECT,
   PROJECT_COLORS,
   PROJECT_NAME_MAX,
   pickableProjects,
   projectFilterRows,
-} from "@agenteschat/client/lib/issue-projects";
+} from "@keepmind/client/lib/issue-projects";
 import {
   Button,
   ColorDot,
@@ -19,7 +19,7 @@ import {
   type FilterOption,
   Input,
   Locked,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useFilterCopy } from "@/components/filters";

@@ -1,5 +1,5 @@
-import { type AuditRow, useAudit } from "@agenteschat/client";
-import { auditUnasked } from "@agenteschat/client/lib/approvals-level";
+import { type AuditRow, useAudit } from "@keepmind/client";
+import { auditUnasked } from "@keepmind/client/lib/approvals-level";
 import {
   AUDIT_HIDDEN,
   AUDIT_SHOWS,
@@ -23,9 +23,9 @@ import {
   auditValueText,
   auditWhere,
   TOOL_CALL,
-} from "@agenteschat/client/lib/audit";
-import { humanize } from "@agenteschat/client/lib/custom-tools";
-import { dayLabel, formatTime, whenAt } from "@agenteschat/client/lib/format";
+} from "@keepmind/client/lib/audit";
+import { humanize } from "@keepmind/client/lib/custom-tools";
+import { dayLabel, formatTime, whenAt } from "@keepmind/client/lib/format";
 import {
   Button,
   Chip,
@@ -38,7 +38,7 @@ import {
   Segmented,
   Select,
   Toolbar,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { Link } from "@tanstack/react-router";
 import { type ReactNode, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -56,7 +56,7 @@ import "./audit.css";
 
 /**
  * Configurações › Auditoria: the org's audit log as one list by day, a sentence per row (who, what, how it
- * ended; words in `@agenteschat/client/lib/audit`), shortcuts on top; a row opens the same panel as a thread
+ * ended; words in `@keepmind/client/lib/audit`), shortcuts on top; a row opens the same panel as a thread
  * in the chat, with what was sent (secrets masked), why it was refused, the approval and the secret.
  */
 

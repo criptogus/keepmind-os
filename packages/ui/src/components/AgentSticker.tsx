@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef, useState } from "react";
+import { loadCompanions } from "../agent/companion";
 import { addLiveSticker, drawLiveSticker, type LiveSticker, stickerNow } from "../agent/sticker-live";
 import { type StickerMood, stickerSeed } from "../agent/stickers";
 import { cx } from "../cx";
@@ -41,8 +42,12 @@ export function AgentSticker({ appearance, mood, playFor, size = 120, seed, labe
     if (!el) return;
     live.current = { canvas: el, spec: () => spec.current };
     const stop = addLiveSticker(live.current);
+    const unload = loadCompanions(() => {
+      if (live.current) drawLiveSticker(live.current, stickerNow());
+    });
     return () => {
       live.current = null;
+      unload();
       stop();
     };
   }, []);

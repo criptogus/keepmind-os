@@ -1,5 +1,5 @@
-import { type PurposeKind, SCENE_ACTIVITIES, SCENE_FACES } from "@agenteschat/client/lib/purpose-scene";
-import { playAgentReaction, prefersReducedMotion } from "@agenteschat/ui";
+import { type PurposeKind, SCENE_ACTIVITIES, SCENE_FACES } from "@keepmind/client/lib/purpose-scene";
+import { playAgentReaction, prefersReducedMotion } from "@keepmind/ui";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 /** The wake's step from one agent to the next (ADR 0162). */

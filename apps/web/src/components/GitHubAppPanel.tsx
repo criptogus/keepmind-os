@@ -1,4 +1,4 @@
-import type { GitHubAppInstallation } from "@agenteschat/client";
+import type { GitHubAppInstallation } from "@keepmind/client";
 import {
   useConnections,
   useGitHubApp,
@@ -6,28 +6,17 @@ import {
   useRemoveGitHubApp,
   useRemoveGitHubAppSettings,
   useStartGitHubAppManifest,
-} from "@agenteschat/client";
-import { GITHUB_APP_AUTH } from "@agenteschat/client/lib/connected";
+} from "@keepmind/client";
+import { GITHUB_APP_AUTH } from "@keepmind/client/lib/connected";
 import {
   githubAppPanel,
   installationReach,
   missingEventsText,
   removedText,
   removeInstallationText,
-} from "@agenteschat/client/lib/github-app";
-import { can } from "@agenteschat/client/lib/permissions";
-import {
-  Button,
-  Card,
-  CardHeader,
-  Chip,
-  Dialog,
-  DialogFooter,
-  Icon,
-  InfoHint,
-  List,
-  SettingNote,
-} from "@agenteschat/ui";
+} from "@keepmind/client/lib/github-app";
+import { can } from "@keepmind/client/lib/permissions";
+import { Button, Card, CardHeader, Chip, Dialog, DialogFooter, Icon, InfoHint, List, SettingNote } from "@keepmind/ui";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { KEY_STATE_CHIP } from "@/components/GifKeyCard";
@@ -39,7 +28,7 @@ import { useToast } from "@/lib/toast";
 const connectorsPath = (orgId: string) => `/org/${orgId}/settings/connectors`;
 
 /**
- * Settings → Conectores: the GitHub accounts where the organization installed the agentes.chat app (ADR 0033, 0156).
+ * Settings → Conectores: the GitHub accounts where the organization installed the KeepMind OS app (ADR 0033, 0156).
  * Where it is installed, agents act on GitHub as the app. Each account opens its page on GitHub (Gerenciar no GitHub,
  * where its repositories are picked), and Remover uninstalls it there too. Only installations made from here count
  * for this organization. Hidden when the server has no app and nothing is installed, except for the admins whose
@@ -196,7 +185,7 @@ function RemoveInstallationDialog({
 
 /**
  * Settings → Conectores, for the server's pinned owner only (the API answers `setup: null` to everyone else and on
- * agentes.chat): this server's GitHub App. None yet: Criar o app no GitHub sends GitHub the manifest, which makes the
+ * KeepMind OS): this server's GitHub App. None yet: Criar o app no GitHub sends GitHub the manifest, which makes the
  * app under their account and comes back here. Made here: its name, its page and Remover o app. From `GITHUB_APP_*`:
  * read-only, and it says where it is set.
  */

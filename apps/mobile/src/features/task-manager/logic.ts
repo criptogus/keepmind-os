@@ -1,4 +1,4 @@
-import type { EndedTask, ManagedTask } from "@agenteschat/client";
+import type { EndedTask, ManagedTask } from "@keepmind/client";
 import {
   type AgentTasks,
   delegationText,
@@ -9,13 +9,13 @@ import {
   taskWhere,
   waitsFor,
   waitsOnPerson,
-} from "@agenteschat/client/lib/task-manager";
+} from "@keepmind/client/lib/task-manager";
 import type { TFunction } from "i18next";
 import { type AppHref, chatHref } from "../links/logic";
 
 /**
  * What the phone's task manager says (ADR 0128): its list, a task's screen, an agent's tasks screen and the count in
- * its DM's header, from the shared model (`@agenteschat/client/lib/task-manager`).
+ * its DM's header, from the shared model (`@keepmind/client/lib/task-manager`).
  */
 
 /** A conversation: a channel's (or a DM's) main timeline, or one of its threads. */

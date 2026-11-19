@@ -3,9 +3,9 @@ import { accessSync, constants, readdirSync, readFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
-import { machineSize } from "@agenteschat/adapters/host-stats";
-import type { RunnerInfo, RunnerPhone, RunnerToolchains } from "@agenteschat/adapters/machine-protocol";
-import type { Term } from "@agenteschat/setup/src/term";
+import { machineSize } from "@keepmind/adapters/host-stats";
+import type { RunnerInfo, RunnerPhone, RunnerToolchains } from "@keepmind/adapters/machine-protocol";
+import type { Term } from "@keepmind/setup/src/term";
 import { TOOL_LABELS } from "./access";
 import { effectiveAccess, readStoredConfig } from "./config";
 import { shortTime } from "./daemon";
@@ -91,7 +91,7 @@ function connectionChecks(s: DoctorSources): Check[] {
         status: "needs",
         title: `This ${word} isn't connected to a workspace`,
         detail: [s.system],
-        fix: "Connect it in agentes.chat, under Settings › Devices.",
+        fix: "Connect it in KeepMind OS, under Settings › Devices.",
       },
     ];
   }
@@ -112,7 +112,7 @@ function connectionChecks(s: DoctorSources): Check[] {
       detail: facts,
       waitFor: `${c.name} to start`,
       ...(c.managedBy === "desktop"
-        ? { fix: "Open the agentes.chat app." }
+        ? { fix: "Open the KeepMind OS app." }
         : c.managedBy === "host"
           ? { fix: "This server's own computer keeps it: check that its service runs." }
           : { fix: "Run it in the background:", command: "agentes-runner service install" }),

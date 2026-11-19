@@ -1,4 +1,4 @@
-import { accountOutOfReach } from "@agenteschat/client/lib/deletion";
+import { accountOutOfReach } from "@keepmind/client/lib/deletion";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
 import { Button } from "../Button";

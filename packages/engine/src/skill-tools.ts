@@ -1,5 +1,5 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, asc, eq, isNotNull, isNull, schema, sql } from "@agenteschat/db";
+import type { PubSub } from "@keepmind/adapters";
+import { and, asc, eq, isNotNull, isNull, schema, sql } from "@keepmind/db";
 import { recordAgentActions } from "./agent-actions";
 import { sniffModelImage } from "./avatars";
 import { readsOrMayJoin } from "./channels";

@@ -1,4 +1,4 @@
-import type { Actor, Issue, IssueColumn, IssuePriority, IssueStatus, IssuesView } from "@agenteschat/client";
+import type { Actor, Issue, IssueColumn, IssuePriority, IssueStatus, IssuesView } from "@keepmind/client";
 import {
   keys,
   useIssue,
@@ -9,13 +9,13 @@ import {
   useIssuesView,
   useSetIssuesView,
   useTaskUnread,
-} from "@agenteschat/client";
-import { dueLabel, dueTone, namesText, stoppedLine } from "@agenteschat/client/lib/format";
-import { githubLinkLabel } from "@agenteschat/client/lib/github-link";
-import { NO_PROJECT, projectOfFilter } from "@agenteschat/client/lib/issue-projects";
-import { ISSUES_VIEW_DEFAULT, PRIORITY_ORDER, sortIssues } from "@agenteschat/client/lib/issues-view";
-import { can } from "@agenteschat/client/lib/permissions";
-import { shownSteps } from "@agenteschat/client/lib/work";
+} from "@keepmind/client";
+import { dueLabel, dueTone, namesText, stoppedLine } from "@keepmind/client/lib/format";
+import { githubLinkLabel } from "@keepmind/client/lib/github-link";
+import { NO_PROJECT, projectOfFilter } from "@keepmind/client/lib/issue-projects";
+import { ISSUES_VIEW_DEFAULT, PRIORITY_ORDER, sortIssues } from "@keepmind/client/lib/issues-view";
+import { can } from "@keepmind/client/lib/permissions";
+import { shownSteps } from "@keepmind/client/lib/work";
 import {
   AvatarStack,
   Button,
@@ -38,7 +38,7 @@ import {
   SearchField,
   Toolbar,
   WorkSweep,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { type CSSProperties, type ReactNode, useDeferredValue, useEffect, useId, useRef, useState } from "react";

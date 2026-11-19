@@ -1,4 +1,4 @@
-import { and, type Executor, eq, inArray, schema } from "@agenteschat/db";
+import { and, type Executor, eq, inArray, schema } from "@keepmind/db";
 import { taskRequester } from "./machine-tasks";
 import { getMessage } from "./messages";
 import type { ToolContext } from "./tools/types";

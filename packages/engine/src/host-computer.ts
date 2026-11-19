@@ -1,4 +1,4 @@
-import type { PubSub } from "@agenteschat/adapters";
+import type { PubSub } from "@keepmind/adapters";
 import {
   and,
   asc,
@@ -12,7 +12,7 @@ import {
   notInArray,
   or,
   schema,
-} from "@agenteschat/db";
+} from "@keepmind/db";
 import { recordAudit } from "./audit";
 import { caches } from "./cache";
 import { ForbiddenError, NotFoundError } from "./errors";

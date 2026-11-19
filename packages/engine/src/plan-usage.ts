@@ -4,10 +4,10 @@ import {
   type PlanUsage,
   type PlanWindow,
   type PlanWindowKind,
-} from "@agenteschat/adapters";
-import { and, type Database, eq, gte, inArray, isNull, or, schema, sql } from "@agenteschat/db";
-import { catalogModelOf, nanoUsdToUsd, summedCostNanoUsd } from "@agenteschat/providers";
-import { modelLimitOf } from "@agenteschat/providers/plans";
+} from "@keepmind/adapters";
+import { and, type Database, eq, gte, inArray, isNull, or, schema, sql } from "@keepmind/db";
+import { catalogModelOf, nanoUsdToUsd, summedCostNanoUsd } from "@keepmind/providers";
+import { modelLimitOf } from "@keepmind/providers/plans";
 import { agentIdsWithDetails } from "./audience";
 import { sha256 } from "./crypto";
 import { NotFoundError } from "./errors";

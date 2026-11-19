@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import { redactCommon } from "@agenteschat/adapters/redact";
-import type { ActivityEntry, ActivitySaid } from "@agenteschat/adapters/runner-control";
+import { redactCommon } from "@keepmind/adapters/redact";
+import type { ActivityEntry, ActivitySaid } from "@keepmind/adapters/runner-control";
 import { ROTATE_BYTES, ROTATE_KEEP, RotatingFile } from "./logfile";
 
 /**

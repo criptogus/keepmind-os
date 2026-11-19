@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
 import { createHmac, generateKeyPairSync } from "node:crypto";
-import { schema } from "@agenteschat/db";
+import { schema } from "@keepmind/db";
 import { browser, createTestServer, joinByInvitation, seedOrg, signUp, type TestServer } from "./harness";
 
 /** A GitHub or Sentry routine's webhook set up from the routine form: made, pasted, tested, or added in one click. */

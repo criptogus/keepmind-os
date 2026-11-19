@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test";
-import type { MachineRequest, ServerFrame } from "@agenteschat/adapters";
-import { and, eq, schema } from "@agenteschat/db";
+import type { MachineRequest, ServerFrame } from "@keepmind/adapters";
+import { and, eq, schema } from "@keepmind/db";
 import {
   authorizeStream,
   deletedAgentIds,
@@ -157,7 +157,7 @@ test("one seat per person, and two people's OS user names differ", async () => {
   const listed = await machineAgents(f.db, f.org.id, machineId);
   expect(listed.find((a) => a.id === hers)).toMatchObject({
     handle: lodi.handle,
-    name: "KeepMind (Bia)",
+    name: "Kivo (Bia)",
     containers: true,
   });
   expect(listed.some((a) => a.id === first?.id)).toBe(true);

@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { setupDom } from "@agenteschat/ui/testing/dom";
+import { setupDom } from "@keepmind/ui/testing/dom";
 
 setupDom();
 
-import type { AgentDraft, AgentInput, AgentProposalCard, MailAccount, Message } from "@agenteschat/client";
+import type { AgentDraft, AgentInput, AgentProposalCard, MailAccount, Message } from "@keepmind/client";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
 import { aiSelect } from "./ai-picker";
 import { ATLAS_ID, createFakeApi, ENG_ID, fakeMailOf, meWithRole, NOW, ORG_ID, seedState } from "./fake-api";

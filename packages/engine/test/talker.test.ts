@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { eq, schema } from "@agenteschat/db";
-import { type ModelRequest, systemText, textOf } from "@agenteschat/providers";
-import type { FakeReply } from "@agenteschat/providers/testing";
+import { eq, schema } from "@keepmind/db";
+import { type ModelRequest, systemText, textOf } from "@keepmind/providers";
+import type { FakeReply } from "@keepmind/providers/testing";
 import {
   answerQuestion,
   createTalker,

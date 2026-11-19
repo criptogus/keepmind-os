@@ -1,4 +1,4 @@
-import { and, type Database, type Executor, eq, gte, schema } from "@agenteschat/db";
+import { and, type Database, type Executor, eq, gte, schema } from "@keepmind/db";
 
 /** Applies to every native run of a migrated agent, including chat, schedules and retries. */
 export async function admitLegacyRun(db: Database, runId: string, now = new Date()): Promise<Date | null> {

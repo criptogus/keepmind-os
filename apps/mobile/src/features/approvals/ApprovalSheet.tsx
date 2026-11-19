@@ -1,15 +1,15 @@
-import { useApproval, useChannels, useDecideApproval } from "@agenteschat/client";
-import { aheadPhase } from "@agenteschat/client/lib/approval-kind";
-import { approvalEffects } from "@agenteschat/client/lib/approval-review";
+import { useApproval, useChannels, useDecideApproval } from "@keepmind/client";
+import { aheadPhase } from "@keepmind/client/lib/approval-kind";
+import { approvalEffects } from "@keepmind/client/lib/approval-review";
 import {
   aheadEndLine,
   alwaysRoutineName,
   approvalDetail,
   approvalWaitsFor,
   requesterDecidesLine,
-} from "@agenteschat/client/lib/approval-words";
-import { nextLabel } from "@agenteschat/client/lib/format";
-import { isPersonal } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client/lib/approval-words";
+import { nextLabel } from "@keepmind/client/lib/format";
+import { isPersonal } from "@keepmind/client/lib/workspace-mode";
 import { type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, StyleSheet, View } from "react-native";

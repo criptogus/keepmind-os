@@ -1,8 +1,8 @@
 import { afterEach, beforeEach, expect, spyOn, test } from "bun:test";
 import { createHmac } from "node:crypto";
-import { schema } from "@agenteschat/db";
-import { HOOK_LIMIT_PER_IP } from "@agenteschat/engine";
-import { systemText } from "@agenteschat/providers";
+import { schema } from "@keepmind/db";
+import { HOOK_LIMIT_PER_IP } from "@keepmind/engine";
+import { systemText } from "@keepmind/providers";
 import { browser, createTestServer, joinByInvitation, ORIGIN, seedOrg, signUp, type TestServer } from "./harness";
 
 /** ADR 0106: `POST /api/hooks/{token}`, a webhook routine's own address, and the routes that manage it. */

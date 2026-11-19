@@ -18,6 +18,15 @@ export type NewAgentStep = (typeof NEW_AGENT_STEPS)[number];
  */
 export const PERSONAL_SKIPPED_STEPS: readonly NewAgentStep[] = ["tools", "where", "model"];
 
+/**
+ * Batch creation's skipped steps: each picked role's template fills name, instructions and apps, so a batch walks
+ * role → where → model → review. `stepAfter` takes them the same way it takes a personal workspace's.
+ */
+export const BATCH_SKIPPED_STEPS: readonly NewAgentStep[] = ["identity", "instructions", "tools"];
+
+/** The most agents one batch create takes (`POST …/agents/batch`'s cap); the wizard stops picking past it. */
+export const BATCH_MAX = 30;
+
 /** The step after (`dir` 1) or before (-1) `index`, past the skipped ones; never past the first or the last. */
 export function stepAfter(index: number, dir: 1 | -1, skipped: readonly NewAgentStep[]): number {
   const last = NEW_AGENT_STEPS.length - 1;
@@ -35,26 +44,172 @@ export const ROLE_IDS = [
   "sales",
   "marketing",
   "content",
+  "seo",
   "data",
   "finance",
   "people",
   "research",
   "assistant",
+  "cybersec",
+  "consulting",
+  "strategy",
+  "trends",
+  "inspired_musk",
+  "inspired_gates",
+  "inspired_buffett",
+  "inspired_welch",
+  "inspired_jobs",
+  "inspired_ma",
+  "inspired_kawasaki",
+  "inspired_bezos",
+  "inspired_nadella",
+  "inspired_drucker",
+  "inspired_altman",
+  "inspired_hassabis",
+  "inspired_amodei",
+  "inspired_huang",
+  "inspired_christensen",
+  "inspired_thiel",
+  "inspired_blank",
+  "inspired_blakely",
+  "inspired_munger",
+  "inspired_dunford",
+  "inspired_godin",
+  "inspired_taleb",
+  "inspired_blount",
+  "exec_cfo",
+  "exec_cmo",
+  "exec_cto",
+  "exec_coo",
+  "exec_people",
+  "exec_research",
+  "designer",
+  "ux_expert",
+  "pr_manager",
+  "frontend_engineer",
+  "ios_engineer",
+  "android_engineer",
+  "software_factory",
+  "migration_engineer",
+  "latency_optimizer",
+  "platform_engineer",
+  "internal_tools",
+  "release_engineer",
+  "code_reaper",
+  "code_health",
+  "anomaly_watcher",
+  "technical_writer",
+  "compliance_engineer",
+  "chief_of_staff",
   "custom",
 ] as const;
 export type RoleId = (typeof ROLE_IDS)[number];
 
 /** The role step in groups, in order (titles in i18n: `newAgent.roleGroups.{id}`); "custom" stays apart, last. */
 export const ROLE_GROUPS = [
-  { id: "tech", roles: ["dev", "ops", "qa", "pm"] },
-  { id: "customers", roles: ["support", "sales", "marketing", "content"] },
+  { id: "tech", roles: ["dev", "ops", "qa", "pm", "cybersec"] },
+  {
+    id: "engineering",
+    roles: [
+      "designer",
+      "ux_expert",
+      "pr_manager",
+      "frontend_engineer",
+      "ios_engineer",
+      "android_engineer",
+      "software_factory",
+      "migration_engineer",
+      "latency_optimizer",
+      "platform_engineer",
+      "internal_tools",
+      "release_engineer",
+      "code_reaper",
+      "code_health",
+      "anomaly_watcher",
+      "technical_writer",
+      "compliance_engineer",
+      "chief_of_staff",
+    ],
+  },
+  { id: "customers", roles: ["support", "sales", "marketing", "content", "seo"] },
   { id: "operations", roles: ["data", "finance", "people", "research", "assistant"] },
+  { id: "advisory", roles: ["consulting", "strategy", "trends"] },
+  {
+    id: "exec",
+    roles: ["exec_cfo", "exec_cmo", "exec_cto", "exec_coo", "exec_people", "exec_research"],
+  },
+  {
+    id: "inspired",
+    roles: [
+      "inspired_musk",
+      "inspired_gates",
+      "inspired_buffett",
+      "inspired_welch",
+      "inspired_jobs",
+      "inspired_ma",
+      "inspired_kawasaki",
+      "inspired_bezos",
+      "inspired_nadella",
+      "inspired_drucker",
+      "inspired_altman",
+      "inspired_hassabis",
+      "inspired_amodei",
+      "inspired_huang",
+      "inspired_christensen",
+      "inspired_thiel",
+      "inspired_blank",
+      "inspired_blakely",
+      "inspired_munger",
+      "inspired_dunford",
+      "inspired_godin",
+      "inspired_taleb",
+      "inspired_blount",
+    ],
+  },
 ] as const satisfies readonly { id: string; roles: readonly Exclude<RoleId, "custom">[] }[];
 export type RoleGroupId = (typeof ROLE_GROUPS)[number]["id"];
 
+/** New specialist/advisor templates never grant connections implicitly, including personal workspaces. */
+export const RESTRICTED_ROLE_IDS: readonly RoleId[] = [
+  "cybersec",
+  "consulting",
+  "strategy",
+  "trends",
+  "inspired_musk",
+  "inspired_gates",
+  "inspired_buffett",
+  "inspired_welch",
+  "inspired_jobs",
+  "inspired_ma",
+  "inspired_kawasaki",
+  "inspired_bezos",
+  "inspired_nadella",
+  "inspired_drucker",
+  "inspired_altman",
+  "inspired_hassabis",
+  "inspired_amodei",
+  "inspired_huang",
+  "inspired_christensen",
+  "inspired_thiel",
+  "inspired_blank",
+  "inspired_blakely",
+  "inspired_munger",
+  "inspired_dunford",
+  "inspired_godin",
+  "inspired_taleb",
+  "inspired_blount",
+  "exec_cfo",
+  "exec_cmo",
+  "exec_cto",
+  "exec_coo",
+  "exec_people",
+  "exec_research",
+  "seo",
+];
+
 /* ---------- What a role starts with ---------- */
 
-/** A look as the agent engine draws it (names from `@agenteschat/ui`'s `AgentAppearance`). */
+/** A look as the agent engine draws it (names from `@keepmind/ui`'s `AgentAppearance`). */
 export interface RoleLook {
   color: string;
   eyes: string;
@@ -96,7 +251,7 @@ export const ROLE_DEFAULTS = {
   }),
   // Customers: reads where the customer already is; sending to them asks a person first.
   support: starts({
-    look: { color: "teal", eyes: "happy", accessory: "headset" },
+    look: { color: "violet", eyes: "happy", accessory: "headset" },
     levels: { intercom: "write", notion: "read", linear: "read", stripe: "read" },
     channels: ["suporte", "support", "atendimento", "clientes", "customers", "help"],
   }),
@@ -141,6 +296,191 @@ export const ROLE_DEFAULTS = {
     levels: { asana: "write", notion: "read", drive: "read" },
     channels: ["geral", "general", "agenda", "secretaria", "admin"],
   }),
+  cybersec: starts({ look: { color: "green", eyes: "round", accessory: "none" }, levels: {}, channels: [] }),
+  consulting: starts({ look: { color: "graphite", eyes: "wide", accessory: "antenna" }, levels: {}, channels: [] }),
+  strategy: starts({ look: { color: "indigo", eyes: "dots", accessory: "headphones" }, levels: {}, channels: [] }),
+  trends: starts({ look: { color: "sky", eyes: "round", accessory: "hat" }, levels: {}, channels: [] }),
+  inspired_musk: starts({ look: { color: "green", eyes: "wide", accessory: "none" }, levels: {}, channels: [] }),
+  inspired_gates: starts({ look: { color: "graphite", eyes: "dots", accessory: "antenna" }, levels: {}, channels: [] }),
+  inspired_buffett: starts({
+    look: { color: "indigo", eyes: "round", accessory: "headphones" },
+    levels: {},
+    channels: [],
+  }),
+  inspired_welch: starts({ look: { color: "sky", eyes: "wide", accessory: "hat" }, levels: {}, channels: [] }),
+  inspired_jobs: starts({ look: { color: "green", eyes: "dots", accessory: "none" }, levels: {}, channels: [] }),
+  inspired_ma: starts({ look: { color: "graphite", eyes: "round", accessory: "antenna" }, levels: {}, channels: [] }),
+  inspired_kawasaki: starts({
+    look: { color: "indigo", eyes: "wide", accessory: "headphones" },
+    levels: {},
+    channels: [],
+  }),
+  inspired_bezos: starts({ look: { color: "sky", eyes: "dots", accessory: "hat" }, levels: {}, channels: [] }),
+  inspired_nadella: starts({ look: { color: "green", eyes: "round", accessory: "none" }, levels: {}, channels: [] }),
+  inspired_drucker: starts({
+    look: { color: "graphite", eyes: "wide", accessory: "antenna" },
+    levels: {},
+    channels: [],
+  }),
+  inspired_altman: starts({ look: { color: "indigo", eyes: "dots", accessory: "antenna" }, levels: {}, channels: [] }),
+  inspired_hassabis: starts({ look: { color: "violet", eyes: "round", accessory: "none" }, levels: {}, channels: [] }),
+  inspired_amodei: starts({ look: { color: "sky", eyes: "dots", accessory: "none" }, levels: {}, channels: [] }),
+  inspired_huang: starts({ look: { color: "green", eyes: "wide", accessory: "none" }, levels: {}, channels: [] }),
+  inspired_christensen: starts({ look: { color: "amber", eyes: "round", accessory: "cap" }, levels: {}, channels: [] }),
+  inspired_thiel: starts({ look: { color: "graphite", eyes: "dots", accessory: "none" }, levels: {}, channels: [] }),
+  inspired_blank: starts({ look: { color: "rose", eyes: "round", accessory: "none" }, levels: {}, channels: [] }),
+  inspired_blakely: starts({ look: { color: "rose", eyes: "happy", accessory: "bow" }, levels: {}, channels: [] }),
+  inspired_munger: starts({ look: { color: "graphite", eyes: "round", accessory: "hat" }, levels: {}, channels: [] }),
+  inspired_dunford: starts({ look: { color: "indigo", eyes: "wide", accessory: "scarf" }, levels: {}, channels: [] }),
+  inspired_godin: starts({ look: { color: "amber", eyes: "happy", accessory: "party" }, levels: {}, channels: [] }),
+  inspired_taleb: starts({ look: { color: "sky", eyes: "sleepy", accessory: "scarf" }, levels: {}, channels: [] }),
+  inspired_blount: starts({
+    look: { color: "green", eyes: "wide", accessory: "headphones" },
+    levels: {},
+    channels: [],
+  }),
+  // Executives: they advise the C-suite; like every advisor, no connection is implicit.
+  exec_cfo: starts({
+    look: { color: "graphite", eyes: "dots", accessory: "hat" },
+    levels: {},
+    channels: ["financeiro", "finance", "financas", "cfo", "diretoria", "executive"],
+  }),
+  exec_cmo: starts({
+    look: { color: "rose", eyes: "wide", accessory: "scarf" },
+    levels: {},
+    channels: ["marketing", "cmo", "growth", "campanhas", "diretoria", "executive"],
+  }),
+  exec_cto: starts({
+    look: { color: "indigo", eyes: "dots", accessory: "antenna" },
+    levels: {},
+    channels: ["tech", "cto", "engenharia", "engineering", "diretoria", "executive"],
+  }),
+  exec_coo: starts({
+    look: { color: "amber", eyes: "round", accessory: "cap" },
+    levels: {},
+    channels: ["ops", "coo", "operacoes", "operations", "diretoria", "executive"],
+  }),
+  exec_people: starts({
+    look: { color: "violet", eyes: "happy", accessory: "bow" },
+    levels: {},
+    channels: ["rh", "people", "pessoas", "hr", "cpo", "diretoria", "executive"],
+  }),
+  exec_research: starts({
+    look: { color: "sky", eyes: "dots", accessory: "none" },
+    levels: {},
+    channels: ["pesquisa", "research", "insights", "estudos", "diretoria", "executive"],
+  }),
+  // SEO & GEO: like every specialist, no connection is implicit.
+  seo: starts({
+    look: { color: "teal", eyes: "round", accessory: "none" },
+    levels: {},
+    channels: ["seo", "marketing", "growth", "conteudo", "content", "blog"],
+  }),
+  // The engineering team (Devin Bots style): doers like dev, so presets grant like dev's.
+  designer: starts({
+    look: { color: "rose", eyes: "happy", accessory: "bow" },
+    levels: { figma: "write", canva: "write", notion: "read" },
+    channels: ["design", "ux", "produto", "product", "branding", "marca"],
+  }),
+  ux_expert: starts({
+    look: { color: "violet", eyes: "round", accessory: "none" },
+    levels: { figma: "read", notion: "read", drive: "read" },
+    channels: ["ux", "pesquisa", "research", "produto", "product", "design"],
+  }),
+  pr_manager: starts({
+    look: { color: "indigo", eyes: "dots", accessory: "antenna" },
+    levels: { github: "write", linear: "read" },
+    channels: ["eng", "pr", "code-review", "revisao", "review"],
+  }),
+  frontend_engineer: starts({
+    look: { color: "sky", eyes: "wide", accessory: "none" },
+    levels: { github: "write", vercel: "read", linear: "read" },
+    channels: ["frontend", "web", "eng", "engenharia", "engineering"],
+  }),
+  ios_engineer: starts({
+    look: { color: "graphite", eyes: "round", accessory: "none" },
+    levels: { github: "write", expo: "read", linear: "read" },
+    channels: ["ios", "mobile", "eng", "engenharia", "engineering"],
+  }),
+  android_engineer: starts({
+    look: { color: "green", eyes: "dots", accessory: "none" },
+    levels: { github: "write", expo: "read", linear: "read" },
+    channels: ["android", "mobile", "eng", "engenharia", "engineering"],
+  }),
+  software_factory: starts({
+    look: { color: "green", eyes: "wide", accessory: "headphones" },
+    levels: { github: "write", linear: "write", sentry: "read", notion: "read" },
+    channels: ["eng", "factory", "dev", "desenvolvimento", "engineering"],
+  }),
+  migration_engineer: starts({
+    look: { color: "amber", eyes: "round", accessory: "cap" },
+    levels: { github: "write", linear: "write", notion: "read", drive: "read" },
+    channels: ["migration", "migracao", "migrations", "eng", "engineering"],
+  }),
+  latency_optimizer: starts({
+    look: { color: "sky", eyes: "dots", accessory: "antenna" },
+    levels: { github: "write", sentry: "read", datadog: "read", grafana: "read", linear: "read" },
+    channels: ["performance", "latencia", "perf", "eng", "engineering"],
+  }),
+  platform_engineer: starts({
+    look: { color: "graphite", eyes: "wide", accessory: "headset" },
+    levels: {
+      github: "write",
+      sentry: "read",
+      railway: "read",
+      vercel: "read",
+      "cloudflare-observability": "read",
+      linear: "read",
+    },
+    channels: ["platform", "infra", "devops", "plataforma", "eng", "engineering"],
+  }),
+  internal_tools: starts({
+    look: { color: "violet", eyes: "round", accessory: "beanie" },
+    levels: { github: "write", notion: "write", asana: "read" },
+    channels: ["ferramentas", "internal-tools", "tools", "eng", "engineering"],
+  }),
+  release_engineer: starts({
+    look: { color: "amber", eyes: "dots", accessory: "hat" },
+    levels: { github: "write", linear: "read", notion: "read" },
+    channels: ["release", "releases", "lancamentos", "launches", "eng", "engineering"],
+  }),
+  code_reaper: starts({
+    look: { color: "green", eyes: "round", accessory: "none" },
+    levels: { github: "write", linear: "read" },
+    channels: ["tech-debt", "debito", "cleanup", "eng", "engineering"],
+  }),
+  code_health: starts({
+    look: { color: "teal", eyes: "round", accessory: "none" },
+    levels: { github: "write", linear: "read" },
+    channels: ["tech-debt", "debito", "saude", "eng", "engineering"],
+  }),
+  anomaly_watcher: starts({
+    look: { color: "sky", eyes: "sleepy", accessory: "antenna" },
+    levels: {
+      posthog: "read",
+      mixpanel: "read",
+      stripe: "read",
+      "supabase-readonly": "read",
+      sentry: "read",
+      notion: "read",
+    },
+    channels: ["dados", "data", "metricas", "metrics", "observabilidade", "analytics"],
+  }),
+  technical_writer: starts({
+    look: { color: "rose", eyes: "round", accessory: "scarf" },
+    levels: { notion: "write", drive: "write", github: "read" },
+    channels: ["docs", "documentacao", "documentation", "wiki", "tech-writer"],
+  }),
+  compliance_engineer: starts({
+    look: { color: "graphite", eyes: "dots", accessory: "none" },
+    levels: { github: "read", notion: "read", drive: "read" },
+    channels: ["compliance", "auditoria", "audit", "governanca", "eng", "engineering"],
+  }),
+  chief_of_staff: starts({
+    look: { color: "indigo", eyes: "happy", accessory: "none" },
+    levels: { asana: "write", linear: "write", notion: "write", drive: "read", todoist: "write" },
+    channels: ["geral", "general", "chief-of-staff", "comex", "executive", "diretoria"],
+  }),
   custom: starts({ look: { color: "sky", eyes: "round", accessory: "none" }, levels: {}, channels: [] }),
 } satisfies Record<RoleId, RoleDefaults>;
 
@@ -156,7 +496,7 @@ export const PERSONAL_STARTERS = [
   { id: "mel", name: "Mel", look: { color: "rose", eyes: "dots", accessory: "scarf" } },
   { id: "gabi", name: "Gabi", look: { color: "indigo", eyes: "wide", accessory: "antenna" } },
   { id: "lu", name: "Lu", look: { color: "violet", eyes: "sleepy", accessory: "beanie" } },
-  { id: "rosa", name: "Rosa", look: { color: "teal", eyes: "happy", accessory: "flower" } },
+  { id: "rosa", name: "Rosa", look: { color: "green", eyes: "happy", accessory: "flower" } },
   { id: "vic", name: "Vic", look: { color: "sky", eyes: "dots", accessory: "hat" } },
   { id: "rui", name: "Rui", look: { color: "graphite", eyes: "round", accessory: "headset" } },
 ] as const satisfies readonly { id: string; name: string; look: RoleLook }[];
@@ -206,6 +546,8 @@ export const BLANK_LOOK = { color: "sky", eyes: "round", accessory: "none" } as 
  */
 export function presetLevels(role: RoleId, items: { id: string; def: { id: string } | null }[], broad = false) {
   const levels: Record<string, Level> = ROLE_DEFAULTS[role].levels;
+  if (RESTRICTED_ROLE_IDS.includes(role))
+    return Object.fromEntries(items.map((i) => [i.id, levels[i.def?.id ?? ""] ?? "none"])) as Record<string, Level>;
   const level = (i: (typeof items)[number]): Level =>
     i.def ? (levels[i.def.id] ?? "write") : broad ? "write" : "none";
   return Object.fromEntries(items.map((i) => [i.id, level(i)])) as Record<string, Level>;
@@ -215,6 +557,54 @@ export function presetLevels(role: RoleId, items: { id: string; def: { id: strin
 export function presetChannels<C extends { id: string; name: string }>(role: RoleId, channels: C[]) {
   const wanted = new Set(ROLE_DEFAULTS[role].channels);
   return channels.filter((c) => wanted.has(foldName(c.name))).map((c) => c.id);
+}
+
+/**
+ * One picked role's starting point in batch mode ("Criar vários agentes"): the template's words and look, the @ its
+ * name suggests, the channels its hints match among `myChannels` (the submit picks the first) and its app levels,
+ * restricted to the connected catalog apps (`connectedIds`, as `connectedIds()` in connected.ts gives them).
+ * `personal` widens the levels like a personal workspace's (ADR 0159 §3a). `custom` and unknown ids leave.
+ */
+export interface BatchDraft {
+  roleId: RoleId;
+  /** The role's name (`newAgent.roles.{id}.name`), what `role` carries on create. */
+  name: string;
+  /** The agent's own name (`newAgent.roles.{id}.agent`), what `name` carries on create. */
+  agentName: string;
+  instructions: string;
+  look: RoleLook;
+  /** The @ the agent's name suggests (`handleForName`); collisions resolve server-side. */
+  handleBase: string;
+  /** The role's preset channel ids among `myChannels`, in `myChannels` order. */
+  channels: string[];
+  /** Levels by connected catalog connector id, as `presetLevels` gives them. */
+  levels: Record<string, Level>;
+}
+
+/** The drafts of a batch, one per role picked and in the order picked; `custom` and non-roles are dropped. */
+export function batchDrafts(
+  roles: readonly RoleId[],
+  t: TFunction,
+  myChannels: { id: string; name: string }[],
+  connectedIds: string[],
+  personal = false,
+): BatchDraft[] {
+  const items = connectedIds.map((id) => ({ id, def: { id } }));
+  return roles
+    .filter((r): r is Exclude<RoleId, "custom"> => r !== "custom" && (ROLE_IDS as readonly string[]).includes(r))
+    .map((roleId) => {
+      const agentName = t(`newAgent.roles.${roleId}.agent`);
+      return {
+        roleId,
+        name: t(`newAgent.roles.${roleId}.name`),
+        agentName,
+        instructions: t(`newAgent.roles.${roleId}.instructions`),
+        look: ROLE_DEFAULTS[roleId].look,
+        handleBase: handleForName(agentName),
+        channels: presetChannels(roleId, myChannels),
+        levels: presetLevels(roleId, items, personal),
+      };
+    });
 }
 
 const foldName = (s: string) =>

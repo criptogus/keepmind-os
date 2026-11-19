@@ -1,16 +1,16 @@
-import type { AppNotification } from "@agenteschat/client";
-import { useApprovals, useChannels, useNotificationAction, useNotificationReply } from "@agenteschat/client";
-import { approvalTitle } from "@agenteschat/client/lib/approval-words";
-import { type IslandItem, islandLead, noticeLine } from "@agenteschat/client/lib/island";
-import { mediaWord } from "@agenteschat/client/lib/media";
+import type { AppNotification } from "@keepmind/client";
+import { useApprovals, useChannels, useNotificationAction, useNotificationReply } from "@keepmind/client";
+import { approvalTitle } from "@keepmind/client/lib/approval-words";
+import { type IslandItem, islandLead, noticeLine } from "@keepmind/client/lib/island";
+import { mediaWord } from "@keepmind/client/lib/media";
 import {
   opensConnectAi,
   opensOnComputer,
   openTarget,
   quickReply,
   waitingCardOf,
-} from "@agenteschat/client/lib/notifications";
-import { Button, CountBadge, cx, Icon, Kbd, Locked, prefersReducedMotion } from "@agenteschat/ui";
+} from "@keepmind/client/lib/notifications";
+import { Button, CountBadge, cx, Icon, Kbd, Locked, prefersReducedMotion } from "@keepmind/ui";
 import { Link } from "@tanstack/react-router";
 import { type FormEvent, useCallback, useContext, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";

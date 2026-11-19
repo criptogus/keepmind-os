@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import type { ControlStatus } from "@agenteschat/adapters/runner-control";
+import type { ControlStatus } from "@keepmind/adapters/runner-control";
 import { type Home, isRefusedHome } from "../src/control/store";
 import { createDesktopI18n } from "../src/i18n";
 

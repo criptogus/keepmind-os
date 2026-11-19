@@ -1,5 +1,5 @@
-import type { PubSub } from "@agenteschat/adapters";
-import { and, type Database, eq, schema, sql } from "@agenteschat/db";
+import type { PubSub } from "@keepmind/adapters";
+import { and, type Database, eq, schema, sql } from "@keepmind/db";
 import { ForbiddenError, NotFoundError, ValidationError } from "./errors";
 import { publishOrgEvent } from "./events";
 import type { IssueStatus } from "./issues";

@@ -47,7 +47,7 @@ export const providerCredentials = pgTable(
     orgId: uuid()
       .notNull()
       .references(() => organizations.id, { onDelete: "cascade" }),
-    /** Provider id from `PROVIDERS` in `@agenteschat/providers` (text, so new providers need no migration). */
+    /** Provider id from `PROVIDERS` in `@keepmind/providers` (text, so new providers need no migration). */
     provider: text().notNull(),
     label: text().notNull(),
     /** `v1.<iv>.<ciphertext>.<tag>` of the API key, under the data key. */
@@ -130,7 +130,7 @@ export const agents = pgTable(
     role: text().notNull().default(""),
     /** Standing instructions, part of the system prompt. */
     instructions: text().notNull().default(""),
-    /** Model id from the catalog in `@agenteschat/providers`. */
+    /** Model id from the catalog in `@keepmind/providers`. */
     model: text().notNull(),
     /**
      * Provider credential this agent bills to. Null = the platform key, which
@@ -392,7 +392,7 @@ export const organizationSettings = pgTable("organization_settings", {
    */
   mode: text().$type<"team" | "personal">().notNull().default("team"),
   /**
-   * Agents' commits end with their own `Co-authored-by: <name> <noreply@agentes.chat>` (ADR 0156). On unless a person
+   * Agents' commits end with their own `Co-authored-by: <name> <contact@zeroagency.ai>` (ADR 0156). On unless a person
    * asks an agent to turn it off (`commit_co_author`); no screen has it.
    */
   agentCoAuthor: boolean().notNull().default(true),

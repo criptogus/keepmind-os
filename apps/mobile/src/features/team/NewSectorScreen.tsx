@@ -1,5 +1,5 @@
-import { useAgentGroupAction } from "@agenteschat/client";
-import { errorText } from "@agenteschat/client/lib/errors";
+import { useAgentGroupAction } from "@keepmind/client";
+import { errorText } from "@keepmind/client/lib/errors";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, TextInput } from "react-native";

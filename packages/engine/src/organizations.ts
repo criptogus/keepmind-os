@@ -1,4 +1,4 @@
-import type { PubSub } from "@agenteschat/adapters";
+import type { PubSub } from "@keepmind/adapters";
 import {
   and,
   arrayContains,
@@ -16,13 +16,14 @@ import {
   rowsOf,
   schema,
   sql,
-} from "@agenteschat/db";
-import { type AppLocale, appLocale, isAppLocale, LOCALE_CODES } from "@agenteschat/i18n/locale";
+} from "@keepmind/db";
+import { type AppLocale, appLocale, isAppLocale, LOCALE_CODES } from "@keepmind/i18n/locale";
 import { enqueueAccountContact } from "./account-contacts";
 import { type AgentStyle, isAgentStyle, saveAgentStyle } from "./agent-style";
 import { dropAgentRules } from "./approval-rules";
 import { revokeMemberApps } from "./apps/revoke";
 import { recordAudit } from "./audit";
+import { ensureBuiltinSkillsForOrg } from "./builtin-skills";
 import { caches } from "./cache";
 import { memberCardVia } from "./card-via";
 import { type ChatPrefs, chatPrefsOf, saveChatPrefs } from "./chat-prefs";
@@ -274,7 +275,7 @@ export function assertInviting(membership: Membership) {
 /**
  * Creates an organization owned by `userId`, with a `general` channel. Refused while their account is
  * blocked or they are in a workspace suspended or on any hold but a billing one: they don't carry on in a new
- * one (`org.create_refused`, the same words whatever the cause, and how to contest it on agentes.chat Cloud).
+ * one (`org.create_refused`, the same words whatever the cause, and how to contest it on KeepMind OS Cloud).
  * Billing holds refuse nobody, but one person
  * owns at most one workspace waiting for its first plan (`org.create_unpaid`, with that workspace's id); one being
  * deleted waits for none, so restoring it is what checks that.
@@ -347,6 +348,7 @@ export async function createOrganization(
     // The team's right hand comes with the workspace (ADR 0137), after the owner's handle so `@lodi` stays theirs if
     // it is their own.
     await ensureRightHand(tx, organization.id);
+    await ensureBuiltinSkillsForOrg(tx, organization.id);
     const [general] = await tx
       .insert(channels)
       .values({ orgId: organization.id, name: "general", createdByUserId: userId })
@@ -551,14 +553,14 @@ export async function isSignupAllowed(db: Database, email: string, policy: Signu
 
 /** What decides whether making a workspace needs early access (`needsWorkspaceAllowance`). */
 export interface WorkspacePolicy {
-  /** agentes.chat Cloud, whose provisioner gives every workspace a computer that costs money (ADR 0056 §10). */
+  /** KeepMind OS Cloud, whose provisioner gives every workspace a computer that costs money (ADR 0056 §10). */
   paidMachines: boolean;
   /** `ALLOW_SIGNUP`. */
   allowSignup: boolean;
 }
 
 /**
- * Whether making a workspace needs the account allowed by early access (ADR 0078 §4): on agentes.chat Cloud, where
+ * Whether making a workspace needs the account allowed by early access (ADR 0078 §4): on KeepMind OS Cloud, where
  * every workspace gets a paid computer, while sign-up is by invitation only, for everyone but the installation's owner.
  */
 export async function needsWorkspaceAllowance(db: Database, userId: string, policy: WorkspacePolicy) {

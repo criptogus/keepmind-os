@@ -1,4 +1,4 @@
-import { useIssue } from "@agenteschat/client";
+import { useIssue } from "@keepmind/client";
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useOrg } from "@/components/org-context";

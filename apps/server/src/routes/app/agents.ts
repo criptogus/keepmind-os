@@ -1,3 +1,4 @@
+import { createRoute, z } from "@hono/zod-openapi";
 import {
   type AgentBrainSummary,
   type Agent as AgentRow,
@@ -22,6 +23,7 @@ import {
   createAgent,
   createAgentFromProposal,
   createAgentGroup,
+  createAgents,
   createCredential,
   createProposedAgent,
   createProposedRoutine,
@@ -79,10 +81,9 @@ import {
   usageQueue,
   usageSummary,
   useTeamTemplate,
-} from "@agenteschat/engine";
-import { contextWindowOf, nanoUsdToUsd, pricesAt, usdToNanoUsd } from "@agenteschat/providers";
-import { learnedPlanModels } from "@agenteschat/providers/plans";
-import { createRoute, z } from "@hono/zod-openapi";
+} from "@keepmind/engine";
+import { contextWindowOf, nanoUsdToUsd, pricesAt, usdToNanoUsd } from "@keepmind/providers";
+import { learnedPlanModels } from "@keepmind/providers/plans";
 import {
   type AppDeps,
   aiStatusDeps,
@@ -209,6 +210,74 @@ const AgentFields = z.object({
 
 const budget = (usd: number | null | undefined) =>
   usd === undefined ? undefined : usd === null ? null : usdToNanoUsd(usd);
+
+/** What a new agent's card may say (ADR 0164): the ready-made role it starts from and the setup extras. */
+const AgentSetupInput = z.object({
+  role: z
+    .string()
+    .regex(/^[a-z][a-z_-]{0,31}$/)
+    .nullable(),
+  hello: z.string().max(500).optional().openapi({
+    description: "How it introduced itself on its card, in its own voice (ADR 0164): its first message.",
+  }),
+  starter: z
+    .string()
+    .regex(/^[a-z][a-z_-]{0,31}$/)
+    .optional()
+    .openapi({ description: "The personal starter it began as (`clara`, ADR 0159 §3)." }),
+  apps: z
+    .record(z.string().regex(/^[a-z0-9][a-z0-9-]{0,63}$/), z.enum(["read", "write"]))
+    .refine((apps) => Object.keys(apps).length <= 12, { message: "At most 12 apps" })
+    .optional()
+    .openapi({
+      description:
+        "The apps it was made to use (catalog connector ids) at their levels (ADR 0164): its checklist suggests them; the levels of the ones already connected are set by the app.",
+    }),
+});
+
+/**
+ * The batch item's look: `AgentAppearance`'s fields, with the custom color typed as the engine reads it
+ * (`#rrggbb`), so `createAgents` takes the parsed body as is.
+ */
+const BatchAppearance = AgentAppearance.extend({
+  color: z.union([
+    z.enum(["sky", "indigo", "violet", "rose", "amber", "green", "teal", "graphite"]),
+    z
+      .templateLiteral(["#", z.string().regex(/^[0-9a-fA-F]{6}$/)])
+      .openapi({ description: 'A custom color ("Personalizar"), stored lowercase.' }),
+  ]),
+});
+
+/** One agent of `POST …/agents/batch`: its name and what differs per agent (the handle is derived from the name when absent). */
+const BatchAgentFields = AgentFields.pick({
+  name: true,
+  role: true,
+  instructions: true,
+}).extend({
+  handle: z.string().min(2).max(32).optional(),
+  appearance: BatchAppearance.nullable().optional(),
+  setup: AgentSetupInput.optional(),
+});
+
+/**
+ * What every agent of a batch shares: the single create's fields minus the per-agent ones (name, role, instructions,
+ * appearance, setup) and `brakes`, which the single create drops too (changing autonomy brakes needs `manage_agents`,
+ * ADR 0131; a batch never carries them).
+ */
+const BatchSharedFields = AgentFields.pick({
+  ownerUserId: true,
+  audience: true,
+  credentialId: true,
+  monthlyBudgetUsd: true,
+  model: true,
+  mediaReplies: true,
+  approvalsLevel: true,
+}).extend({
+  autonomy: CommandApproval.optional().openapi({
+    description:
+      "The Autonomia they start with (ADR 0094, the last setup's). Default: low_risk_auto. Whoever may create them may set it: an admin, or their owner (without Manage agents, only your own agent).",
+  }),
+});
 
 const ProposalParams = OrgParams.extend({ messageId: z.uuid() });
 const AgentProposal = z
@@ -406,7 +475,7 @@ export function agentRoutes(deps: AppDeps) {
             defaultModel: z.string().openapi({ description: "What a new agent gets when no model is chosen: `auto`." }),
             planModels: z.record(z.string(), z.array(PlanModelOut)).openapi({
               description:
-                "The coding plans whose makers' public lists this server has read, by plan id: their models now. A plan not here goes by the table in `@agenteschat/providers/plans`.",
+                "The coding plans whose makers' public lists this server has read, by plan id: their models now. A plan not here goes by the table in `@keepmind/providers/plans`.",
             }),
           }),
         ),
@@ -514,7 +583,7 @@ export function agentRoutes(deps: AppDeps) {
       security,
       summary: "What a workspace's own endpoint lists (ADR 0146), before it is saved (admins)",
       description:
-        "Reads `GET {baseURL}/models` (Chat Completions) or `GET {baseURL}/v1/models` (Anthropic) with the key, which is not stored. On agentes.chat Cloud only public https addresses are reached (`url.https_required`, `url.internal`). A list the endpoint doesn't give comes back empty with `error`: the admin types ids instead.",
+        "Reads `GET {baseURL}/models` (Chat Completions) or `GET {baseURL}/v1/models` (Anthropic) with the key, which is not stored. On KeepMind OS Cloud only public https addresses are reached (`url.https_required`, `url.internal`). A list the endpoint doesn't give comes back empty with `error`: the admin types ids instead.",
       request: {
         params: OrgParams,
         body: body(
@@ -989,34 +1058,10 @@ export function agentRoutes(deps: AppDeps) {
               description:
                 "The Autonomia it starts with (ADR 0094, the last setup's). Default: low_risk_auto. Whoever may create it may set it: an admin, or its owner (without Manage agents, only your own agent).",
             }),
-            setup: z
-              .object({
-                role: z
-                  .string()
-                  .regex(/^[a-z][a-z_-]{0,31}$/)
-                  .nullable(),
-                hello: z.string().max(500).optional().openapi({
-                  description: "How it introduced itself on its card, in its own voice (ADR 0164): its first message.",
-                }),
-                starter: z
-                  .string()
-                  .regex(/^[a-z][a-z_-]{0,31}$/)
-                  .optional()
-                  .openapi({ description: "The personal starter it began as (`clara`, ADR 0159 §3)." }),
-                apps: z
-                  .record(z.string().regex(/^[a-z0-9][a-z0-9-]{0,63}$/), z.enum(["read", "write"]))
-                  .refine((apps) => Object.keys(apps).length <= 12, { message: "At most 12 apps" })
-                  .optional()
-                  .openapi({
-                    description:
-                      "The apps it was made to use (catalog connector ids) at their levels (ADR 0164): its checklist suggests them; the levels of the ones already connected are set by the app.",
-                  }),
-              })
-              .optional()
-              .openapi({
-                description:
-                  "The ready-made role it starts from (`support`), for its setup checklist's suggestions (ADR 0155 §2), and what its card said (ADR 0164). Every new agent gets the checklist; without it, no role.",
-              }),
+            setup: AgentSetupInput.optional().openapi({
+              description:
+                "The ready-made role it starts from (`support`), for its setup checklist's suggestions (ADR 0155 §2), and what its card said (ADR 0164). Every new agent gets the checklist; without it, no role.",
+            }),
           }),
         ),
       },
@@ -1057,6 +1102,53 @@ export function agentRoutes(deps: AppDeps) {
       const userId = c.get("user").id;
       const [seesCost, viewer] = await Promise.all([canViewCost(db, userId, orgId), getMembership(db, userId, orgId)]);
       return c.json(toAgent(agent, userId, seesCost, undefined, undefined, viewer), 201);
+    },
+  );
+
+  app.openapi(
+    createRoute({
+      method: "post",
+      path: "/organizations/{orgId}/agents/batch",
+      tags,
+      security,
+      summary: "Create several agents at once",
+      description:
+        "Up to 30 agents in one transaction, all or nothing: each with its name (the handle is derived from it when absent, `-2`, `-3`… on a clash) and optional role, instructions, look and setup; `shared` gives every one the same model, key, budget, audience and autonomy. Same rules as creating one.",
+      request: {
+        params: OrgParams,
+        body: body(
+          z.object({
+            agents: z.array(BatchAgentFields).min(1).max(30),
+            shared: BatchSharedFields.optional(),
+          }),
+        ),
+      },
+      responses: { 201: json(z.object({ agents: z.array(Agent) }), "Created"), ...errors },
+    }),
+    async (c) => {
+      const { agents: items, shared } = c.req.valid("json");
+      const { orgId } = c.req.valid("param");
+      const userId = c.get("user").id;
+      const { monthlyBudgetUsd, audience, ...fields } = shared ?? {};
+      // The shared audience is applied to each agent inside createAgents' transaction; `monthlyBudgetUsd` maps to
+      // nano-USD like the single create. `brakes` isn't a batch field (the single create drops it too).
+      const created = await createAgents(
+        db,
+        userId,
+        orgId,
+        items,
+        {
+          ...fields,
+          monthlyBudgetNanoUsd: budget(monthlyBudgetUsd),
+          // Older apps leave `roleIds` out: a new agent has none picked yet, so absent reads as [].
+          ...(audience ? { audience: { ...audience, roleIds: audience.roleIds ?? [] } } : {}),
+        },
+        NEW_AGENT_DEFAULTS,
+        // The person's Criar agente, as the single create: what they pick is what the next one starts with.
+        { remember: true, pubsub: adapters.pubsub },
+      );
+      const [seesCost, viewer] = await Promise.all([canViewCost(db, userId, orgId), getMembership(db, userId, orgId)]);
+      return c.json({ agents: created.map((a) => toAgent(a, userId, seesCost, undefined, undefined, viewer)) }, 201);
     },
   );
 
@@ -1932,7 +2024,7 @@ export function agentRoutes(deps: AppDeps) {
             brain: BrainKind.optional(),
             model: z.string().max(80).nullable().optional().openapi({
               description:
-                "Claude Code: `opus`, `sonnet`, `haiku`, a Claude model id or one of a coding plan's models by id (`@agenteschat/providers/plans`; another account runs `sonnet` for it); Codex: a model name; `auto` (each run picks the tier). Null = the brain's default; omitted = keep (reset when the brain changes).",
+                "Claude Code: `opus`, `sonnet`, `haiku`, a Claude model id or one of a coding plan's models by id (`@keepmind/providers/plans`; another account runs `sonnet` for it); Codex: a model name; `auto` (each run picks the tier). Null = the brain's default; omitted = keep (reset when the brain changes).",
             }),
             fallback: z.boolean().optional(),
             extraUsage: z.boolean().optional().openapi({

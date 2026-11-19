@@ -1,4 +1,4 @@
-import type { OrgSettings } from "@agenteschat/client";
+import type { OrgSettings } from "@keepmind/client";
 import {
   keys,
   type Memory,
@@ -8,12 +8,12 @@ import {
   useSettings,
   useTeamMemories,
   useUpdateSettings,
-} from "@agenteschat/client";
-import { settingsFrozen } from "@agenteschat/client/lib/deletion";
-import { FIELD_LIMITS } from "@agenteschat/client/lib/field-limits";
-import { can } from "@agenteschat/client/lib/permissions";
-import { memoryLine } from "@agenteschat/client/lib/proposals";
-import { isPersonal, modeKey } from "@agenteschat/client/lib/workspace-mode";
+} from "@keepmind/client";
+import { settingsFrozen } from "@keepmind/client/lib/deletion";
+import { FIELD_LIMITS } from "@keepmind/client/lib/field-limits";
+import { can } from "@keepmind/client/lib/permissions";
+import { memoryLine } from "@keepmind/client/lib/proposals";
+import { isPersonal, modeKey } from "@keepmind/client/lib/workspace-mode";
 import { useQueryClient } from "@tanstack/react-query";
 import * as ImagePicker from "expo-image-picker";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
@@ -511,7 +511,7 @@ function TeamMemoryList() {
 
 /**
  * The usage report's switch (ADR 0060 §5) and "Ver o que é enviado". Only the installation's owner gets it (the API
- * answers null to everyone else, and on agentes.chat itself).
+ * answers null to everyone else, and on KeepMind OS itself).
  */
 function UsageStatistics() {
   const { t } = useTranslation();

@@ -1,5 +1,5 @@
-import type { MachineReplies, MachineRequest, PubSub, RunnerFrame, RunnerHolds } from "@agenteschat/adapters";
-import { and, type Database, desc, eq, gt, inArray, isNotNull, isNull, lte, type SQL, schema } from "@agenteschat/db";
+import type { MachineReplies, MachineRequest, PubSub, RunnerFrame, RunnerHolds } from "@keepmind/adapters";
+import { and, type Database, desc, eq, gt, inArray, isNotNull, isNull, lte, type SQL, schema } from "@keepmind/db";
 import { getAgentCached } from "./agents";
 import { recordAudit } from "./audit";
 import { publishOrgEvent } from "./events";

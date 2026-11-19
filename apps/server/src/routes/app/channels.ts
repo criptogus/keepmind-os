@@ -1,3 +1,4 @@
+import { createRoute, z } from "@hono/zod-openapi";
 import {
   archiveChannel,
   CHANNEL_KEYS,
@@ -20,8 +21,7 @@ import {
   unarchiveChannel,
   unpinMessage,
   updateChannel,
-} from "@agenteschat/engine";
-import { createRoute, z } from "@hono/zod-openapi";
+} from "@keepmind/engine";
 import {
   type AppDeps,
   body,

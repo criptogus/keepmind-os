@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import type { ScreenKind } from "@agenteschat/adapters";
+import type { ScreenKind } from "@keepmind/adapters";
 import type { Judge, JudgeAnswer, JudgeBox, JudgeQuestion } from "../judge";
 import {
   describeElement,

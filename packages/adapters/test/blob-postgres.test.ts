@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, expect, test } from "bun:test";
-import { type Database, eq, schema } from "@agenteschat/db";
-import { createTestDatabase } from "@agenteschat/db/testing";
+import { type Database, eq, schema } from "@keepmind/db";
+import { createTestDatabase } from "@keepmind/db/testing";
 import { createPostgresBlobStore } from "../src";
 
 let db: Database;

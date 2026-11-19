@@ -5,7 +5,7 @@
   display: grid;
   place-items: center;
   overflow: hidden;
-  background: #0a3f9c;
+  background: #111111;
   color: #fff;
   font:
     500 13.5px / 1.5 "Onest Variable",
@@ -42,8 +42,8 @@
 }
 .cover__word {
   margin: 0;
-  font-family: "Funnel Display", "Onest Variable", sans-serif;
-  font-weight: 300;
+  font-family: "Onest Variable", sans-serif;
+  font-weight: 600;
   font-size: 30px;
   letter-spacing: -0.01em;
   text-shadow: 0 1px 8px rgba(4, 32, 63, 0.5);
@@ -81,8 +81,8 @@
 .cover__acts button {
   font: inherit;
   font-weight: 600;
-  color: #0a3f9c;
-  background: #fff;
+  color: #111111;
+  background: #c4ff3d;
   border: 0;
   border-radius: 10px;
   padding: 7px 14px;
@@ -97,6 +97,16 @@
 .cover__acts button:focus-visible {
   outline: 2px solid #fff;
   outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cover {
+    transition: none;
+  }
+}
+
+.cover__word span {
+  color: #c4ff3d;
+  opacity: 1;
 }
 @media (prefers-reduced-motion: reduce) {
   .cover {

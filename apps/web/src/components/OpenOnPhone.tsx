@@ -1,7 +1,7 @@
-import { ApiError, keys } from "@agenteschat/client";
-import { formatTimeLeft } from "@agenteschat/client/lib/actions";
-import { connectLink, isLoopback, isTailnet } from "@agenteschat/client/lib/server";
-import { Alert, Button, Chip, Dialog, DialogBody, PixelSpinner, QrCode } from "@agenteschat/ui";
+import { ApiError, keys } from "@keepmind/client";
+import { formatTimeLeft } from "@keepmind/client/lib/actions";
+import { connectLink, isLoopback, isTailnet } from "@keepmind/client/lib/server";
+import { Alert, Button, Chip, Dialog, DialogBody, PixelSpinner, QrCode } from "@keepmind/ui";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useApi } from "@/api/context";

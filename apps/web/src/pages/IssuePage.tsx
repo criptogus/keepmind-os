@@ -1,4 +1,4 @@
-import type { Issue, IssueActivity, IssuePatch, IssuePriority } from "@agenteschat/client";
+import type { Issue, IssueActivity, IssuePatch, IssuePriority } from "@keepmind/client";
 import {
   ApiError,
   keys,
@@ -7,17 +7,17 @@ import {
   useIssueAction,
   useIssueActivity,
   useIssueColumns,
-} from "@agenteschat/client";
-import { canTalk } from "@agenteschat/client/lib/audience";
-import { FIELD_LIMITS } from "@agenteschat/client/lib/field-limits";
-import { relativeTime, whenAt } from "@agenteschat/client/lib/format";
-import { githubLinkLabel, isGithubLink } from "@agenteschat/client/lib/github-link";
-import { agentGrammar } from "@agenteschat/client/lib/grammar";
-import { webUrl } from "@agenteschat/client/lib/guards";
-import { NO_PROJECT } from "@agenteschat/client/lib/issue-projects";
-import { issueEventText } from "@agenteschat/client/lib/issues";
-import { can } from "@agenteschat/client/lib/permissions";
-import { foldSteps, shownSteps } from "@agenteschat/client/lib/work";
+} from "@keepmind/client";
+import { canTalk } from "@keepmind/client/lib/audience";
+import { FIELD_LIMITS } from "@keepmind/client/lib/field-limits";
+import { relativeTime, whenAt } from "@keepmind/client/lib/format";
+import { githubLinkLabel, isGithubLink } from "@keepmind/client/lib/github-link";
+import { agentGrammar } from "@keepmind/client/lib/grammar";
+import { webUrl } from "@keepmind/client/lib/guards";
+import { NO_PROJECT } from "@keepmind/client/lib/issue-projects";
+import { issueEventText } from "@keepmind/client/lib/issues";
+import { can } from "@keepmind/client/lib/permissions";
+import { foldSteps, shownSteps } from "@keepmind/client/lib/work";
 import {
   Alert,
   Button,
@@ -45,7 +45,7 @@ import {
   Tabs,
   useAutoGrow,
   WorkSweep,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { type ReactNode, useState } from "react";

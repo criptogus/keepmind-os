@@ -1,4 +1,4 @@
-import { normalizeUserCode } from "@agenteschat/client/lib/machines";
+import { normalizeUserCode } from "@keepmind/client/lib/machines";
 import { createFileRoute } from "@tanstack/react-router";
 import { requireUser } from "@/app/guards";
 import { ConnectPage } from "@/pages/ConnectPage";

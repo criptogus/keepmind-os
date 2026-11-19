@@ -1,8 +1,8 @@
-import type { Artifact, ArtifactContent, ArtifactFileContent } from "@agenteschat/client";
-import { useArtifact } from "@agenteschat/client";
-import { documentPreview, parsePatch, patchCounts } from "@agenteschat/client/lib/artifacts";
-import { previewKind } from "@agenteschat/client/lib/files";
-import { cx } from "@agenteschat/ui";
+import type { Artifact, ArtifactContent, ArtifactFileContent } from "@keepmind/client";
+import { useArtifact } from "@keepmind/client";
+import { documentPreview, parsePatch, patchCounts } from "@keepmind/client/lib/artifacts";
+import { previewKind } from "@keepmind/client/lib/files";
+import { cx } from "@keepmind/ui";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { MAX_THUMB_BYTES, usePreviewUrl } from "@/components/artifacts/FileView";

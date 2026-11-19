@@ -1,5 +1,5 @@
-import { vaultRule, vaultRuleLabel } from "@agenteschat/adapters";
-import { eq, schema } from "@agenteschat/db";
+import { vaultRule, vaultRuleLabel } from "@keepmind/adapters";
+import { eq, schema } from "@keepmind/db";
 import { cutText } from "../format";
 import { VAULT_LIST_TOOL, VAULT_READ_SCOPE, VAULT_SAVE_TOOL, VAULT_WRITE_SCOPE } from "../tools/scopes";
 import type { ToolContext, ToolDefinition, ToolOutput, ToolSource } from "../tools/types";

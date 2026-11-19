@@ -24,7 +24,7 @@ import { readValue, STORED, writeValue } from "./storage";
 
 /**
  * Push notifications (ADR 0035 §4, ADR 0152, ADR 0178). The system's prompt comes only after our sheet on Conversas
- * (`features/push`, `@agenteschat/client/lib/push-offer`) or the switch in Você; the app registers its push token
+ * (`features/push`, `@keepmind/client/lib/push-offer`) or the switch in Você; the app registers its push token
  * with the server, and removes it on sign-out. The token is the system's own: Android's FCM token (the server
  * sends to Firebase) and the iPhone's APNs token (the server sends to Apple), with the iPhone app's id and whether
  * the build gets its pushes from Apple's sandbox.

@@ -1,4 +1,4 @@
-import type { MachineErrorCode } from "@agenteschat/adapters/machine-protocol";
+import type { MachineErrorCode } from "@keepmind/adapters/machine-protocol";
 
 /** The runner's own version, sent in `hello` and at pairing. */
 export const RUNNER_VERSION = "0.13.0";

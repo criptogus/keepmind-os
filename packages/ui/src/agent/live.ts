@@ -7,13 +7,12 @@
  * pointer): avatars inside an element marked `data-gaze` turn their heads
  * toward it.
  */
-import { avatarSky } from "../sky/avatar";
+import { drawCompanion as drawAgent, loadCompanions } from "./companion";
 import {
   ACCESSORY_REACH,
   bodyTones,
   type DrawAgentOptions,
   drawAccessory,
-  drawAgent,
   drawSleep,
   EYE_COLOR,
   idlePose,
@@ -253,14 +252,11 @@ function drawFramed(agent: LiveAgent, ctx: CanvasRenderingContext2D, size: numbe
   }
   ctx.clearRect(0, 0, s, s);
   const look = agent.look();
-  const sky = avatarSky(look.color, s, isDark(box));
-  if (sky) {
-    ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(sky, 0, 0, s, s);
-  }
-  const inner = s * (look.accessory ? 0.6 : 0.66);
+  ctx.fillStyle = isDark(box) ? "#22251f" : "#e9ece4";
+  ctx.fillRect(0, 0, s, s);
+  const inner = s * (look.accessory ? 0.82 : 0.96);
   const x = (s - inner) / 2;
-  const y = s - inner - s * (look.accessory ? 0.1 : 0.14);
+  const y = (s - inner) / 2;
   const { pose, hop } = livePose(agent, t);
   drawAgent(ctx, x, y - hop * inner, inner, {
     color: look.color,
@@ -329,6 +325,7 @@ function tick(now: number) {
 /** Starts drawing an agent; returns the cleanup. */
 export function addLiveAgent(agent: LiveAgent): () => void {
   agents.add(agent);
+  const stopLoading = loadCompanions(() => drawLive(agent, clock() / 1000));
   watchTheme();
   if (typeof IntersectionObserver === "function") {
     observer ??= new IntersectionObserver((entries) => {
@@ -353,6 +350,7 @@ export function addLiveAgent(agent: LiveAgent): () => void {
   drawLive(agent, typeof performance === "object" ? performance.now() / 1000 : 0);
   if (!raf && !reduced() && typeof requestAnimationFrame === "function") raf = requestAnimationFrame(tick);
   return () => {
+    stopLoading();
     agents.delete(agent);
     observer?.unobserve(agent.box);
     resizes?.unobserve(agent.box);

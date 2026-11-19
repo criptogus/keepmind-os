@@ -1,4 +1,4 @@
-import type { Expression } from "@agenteschat/ui/agent/engine";
+import type { Expression } from "@keepmind/ui/agent/engine";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { Platform, ScrollView, View } from "react-native";

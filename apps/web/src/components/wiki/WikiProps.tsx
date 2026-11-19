@@ -1,4 +1,4 @@
-import { Button, Icon, Popover, SearchField } from "@agenteschat/ui";
+import { Button, Icon, Popover, SearchField } from "@keepmind/ui";
 import { type KeyboardEvent, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 

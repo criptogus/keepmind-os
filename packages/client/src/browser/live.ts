@@ -101,7 +101,7 @@ export type BrowserInputEvent =
   /** Whole text into the focused field: accents, paste, the app's own text field. */
   | { kind: "text"; text: string };
 
-/** What the agent's pointer does where it arrives (mirror of `AGENT_POINTER_ACTS` in `@agenteschat/adapters`). */
+/** What the agent's pointer does where it arrives (mirror of `AGENT_POINTER_ACTS` in `@keepmind/adapters`). */
 export const BROWSER_POINTER_ACTS = ["move", "click", "double", "type"] as const;
 
 /**
@@ -148,7 +148,7 @@ export function inputProblem(code: string | null) {
   return code === "input_failed" || code === "not_in_control" ? ("browser.inCard.inputLost" as const) : null;
 }
 
-/** The most text one `text` event carries (mirror of `BROWSER_LIMITS.inputText` in `@agenteschat/adapters`). */
+/** The most text one `text` event carries (mirror of `BROWSER_LIMITS.inputText` in `@keepmind/adapters`). */
 export const TEXT_EVENT_MAX = 10_000;
 /** Most events in one `browser.input` frame (the server's limit). */
 export const BROWSER_INPUT_BATCH = 100;

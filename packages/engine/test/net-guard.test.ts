@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test";
 import { EventEmitter } from "node:events";
 import type { request as httpsRequest } from "node:https";
-import { OutboundAddressError } from "@agenteschat/adapters";
+import { OutboundAddressError } from "@keepmind/adapters";
 import {
   allowPrivateOutbound,
   assertPublicHttpsUrl,

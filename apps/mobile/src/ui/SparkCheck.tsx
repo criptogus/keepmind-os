@@ -1,4 +1,4 @@
-import { gradientOf } from "@agenteschat/ui/agent/engine";
+import { gradientOf } from "@keepmind/ui/agent/engine";
 import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated, {

@@ -1,7 +1,7 @@
 /**
  * The welcome window: how the app finds its server. "Onde fica o seu workspace?" first, the Cloud chosen and one's
  * own server beside it; one's own server leads to Connect (an address, or one found on this computer or the Tailscale
- * network, and the one-command setup for a server that has none yet) or to running agentes.chat on this
+ * network, and the one-command setup for a server that has none yet) or to running KeepMind OS on this
  * computer. A connect link (`agenteschat://connect`) opens here
  * too: the server in large type, nothing changes before Connect. Choosing a server opens the main window there
  * and closes this one. A pair link (`agenteschat://pair`) asks to connect this computer instead (`PairLinkSheet`).
@@ -13,8 +13,8 @@ import {
   isLoopback,
   parseConnectLink,
   type ServerCheck,
-} from "@agenteschat/client/lib/server";
-import { isEmail } from "@agenteschat/client/lib/text";
+} from "@keepmind/client/lib/server";
+import { isEmail } from "@keepmind/client/lib/text";
 import {
   Avatar,
   Button,
@@ -29,7 +29,7 @@ import {
   PlaceScene,
   Switch,
   useNow,
-} from "@agenteschat/ui";
+} from "@keepmind/ui";
 import { type FormEvent, type ReactNode, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHost } from "../app";
@@ -79,7 +79,7 @@ export function FirstRun() {
   const [screen, setScreen] = useState<FirstScreen>("choose");
   // Opened by the site's "Add a workspace" (ADR 0154): its first screen says so.
   const [adding, setAdding] = useState(false);
-  // Adding a workspace with agentes.chat already signed in here: making one is the big button, not signing in.
+  // Adding a workspace with KeepMind OS already signed in here: making one is the big button, not signing in.
   const [cloudSignedIn, setCloudSignedIn] = useState(false);
   const [trail, setTrail] = useState<FirstScreen[]>([]);
   // `typed`: the sheet confirms an address typed or picked in Connect, so Cancel goes back there with it.
@@ -88,7 +88,7 @@ export function FirstRun() {
   );
   // This build carries the server: "On this computer" is offered.
   const [canRunHere, setCanRunHere] = useState(false);
-  // The agentes.chat this computer runs (the app's, or one from the terminal): named as such, never by its address,
+  // The KeepMind OS this computer runs (the app's, or one from the terminal): named as such, never by its address,
   // and its owner page opened directly while it waits for one.
   const [local, setLocal] = useState<LocalServerStatus | null>(null);
   // Connect's address: it stays when a sheet about it is cancelled (the screen comes back new).
@@ -308,11 +308,11 @@ export function FirstRun() {
 
 /**
  * "Onde seu workspace vai ficar?" (ADR 0066 §1, amended 2026-11-14): the drawing on the left follows the place picked on
- * the right: the Cloud (recommended, the agentes.chat agent on a cloud), this computer (where the build carries the
+ * the right: the Cloud (recommended, the KeepMind OS agent on a cloud), this computer (where the build carries the
  * server: the agents work while the app is open) or a computer that's always on (the one-command install). Each says
  * what happens to the agents, never "server". One button goes on with the pick, and a line under it signs in to one
  * that exists already. `adding` (the site's "Add a workspace", ADR 0154): its own title, the Cloud's button signs in to
- * the workspaces an account has (a new workspace the line under it); with agentes.chat already signed in here, making
+ * the workspaces an account has (a new workspace the line under it); with KeepMind OS already signed in here, making
  * one is the button.
  */
 function Choose({
@@ -524,7 +524,7 @@ function Connect({
   onBack: () => void;
   /** "Don't have one yet?": the always-on install. */
   onInstall: () => void;
-  /** The agentes.chat this computer runs or has from the terminal (its owner claim, while it waits for one). */
+  /** The KeepMind OS this computer runs or has from the terminal (its owner claim, while it waits for one). */
   local: LocalServerStatus | null;
   /** Its addresses (`ownAddresses`). */
   own: readonly string[];
@@ -726,7 +726,7 @@ function Connect({
 }
 
 /**
- * agentes.chat on this computer, inside the app: the owner's name and email (until the owner exists), reach
+ * KeepMind OS on this computer, inside the app: the owner's name and email (until the owner exists), reach
  * through Tailscale (off), usage statistics (on; as they were, for one that ran here before), then Start, and the
  * steps as the app runs them, each problem on its own step. One installed from the terminal already runs here:
  * Use it (its owner page while it waits for one); installed but not running: it starts there. The app runs it
@@ -967,7 +967,7 @@ function RunHere({
         <p className="dk-fr__rest">
           <Avatar
             kind="agent"
-            name="agentes.chat"
+            name="keepmind.io"
             appearance={{ color: "sky" }}
             size="md"
             framed={false}
@@ -1157,7 +1157,7 @@ function HereSetup({
 }
 
 /**
- * L: a server in large type, asked about before anything changes. The agentes.chat this computer runs reads as such
+ * L: a server in large type, asked about before anything changes. The KeepMind OS this computer runs reads as such
  * (at its local or its Tailscale address alike), never as an address; one on a Tailscale network says what that means.
  */
 function LinkSheet({

@@ -1,6 +1,6 @@
-import { type CalItem, type DayEntry, dayEntries, sameDay } from "@agenteschat/client/lib/calendar";
-import { toYmd } from "@agenteschat/client/lib/format";
-import { Popover } from "@agenteschat/ui";
+import { type CalItem, type DayEntry, dayEntries, sameDay } from "@keepmind/client/lib/calendar";
+import { toYmd } from "@keepmind/client/lib/format";
+import { Popover } from "@keepmind/ui";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { dayLabel, EventChip } from "./EventChip";
