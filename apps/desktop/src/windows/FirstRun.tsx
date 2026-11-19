@@ -1,13 +1,13 @@
 /**
- * The welcome window: how the app finds its server. "Onde fica o seu workspace?" first, the Cloud chosen and one's
- * own server beside it; one's own server leads to Connect (an address, or one found on this computer or the Tailscale
- * network, and the one-command setup for a server that has none yet) or to running KeepMind OS on this
- * computer. A connect link (`agenteschat://connect`) opens here
- * too: the server in large type, nothing changes before Connect. Choosing a server opens the main window there
- * and closes this one. A pair link (`agenteschat://pair`) asks to connect this computer instead (`PairLinkSheet`).
+ * The welcome window: how the app finds its server. "Onde fica o seu workspace?" first: this computer (where the
+ * build carries the server) or a computer that's always on (the one-command install); one's own server leads to
+ * Connect (an address, or one found on this computer or the Tailscale network, and the one-command setup for a
+ * server that has none yet) or to running KeepMind OS on this computer. A connect link (`agenteschat://connect`)
+ * opens here too: the server in large type, nothing changes before Connect. Choosing a server opens the main
+ * window there and closes this one. A pair link (`agenteschat://pair`) asks to connect this computer instead
+ * (`PairLinkSheet`).
  */
 import {
-  CLOUD_SERVER,
   type ConnectLink,
   connectLink,
   isLoopback,
@@ -77,10 +77,6 @@ const PROBLEM_HOSTLESS: ReadonlySet<ConnectProblem> = new Set(["invalid"]);
 export function FirstRun() {
   const host = useHost();
   const [screen, setScreen] = useState<FirstScreen>("choose");
-  // Opened by the site's "Add a workspace" (ADR 0154): its first screen says so.
-  const [adding, setAdding] = useState(false);
-  // Adding a workspace with KeepMind OS already signed in here: making one is the big button, not signing in.
-  const [cloudSignedIn, setCloudSignedIn] = useState(false);
   const [trail, setTrail] = useState<FirstScreen[]>([]);
   // `typed`: the sheet confirms an address typed or picked in Connect, so Cancel goes back there with it.
   const [link, setLink] = useState<{ raw: string; parsed: ConnectLink | null; view: LinkView; typed?: boolean } | null>(
@@ -176,19 +172,6 @@ export function FirstRun() {
     [host, finish],
   );
 
-  // How it opened: taken when it's made, and each time it shows again.
-  const takeMode = useCallback(() => {
-    void host
-      .welcomeMode()
-      .then((mode) => setAdding(mode === "add"))
-      .catch(() => setAdding(false));
-    void host
-      .workspaces()
-      .then((list) => setCloudSignedIn(list.some((s) => s.server === CLOUD_SERVER && s.signedIn)))
-      .catch(() => setCloudSignedIn(false));
-  }, [host]);
-  useEffect(takeMode, [takeMode]);
-
   useEffect(() => {
     void host
       .localServer()
@@ -215,7 +198,6 @@ export function FirstRun() {
 
   // Opened again ("Add a server…"): from the start, unless a link or the setup is on screen.
   useOnShown("welcome", () => {
-    takeMode();
     // A link or pair screen whose sheet is gone has nothing to draw: it starts over too.
     if ((screen === "link" && link) || (screen === "pair" && pair) || settingUp.current) return;
     setTrail([]);
@@ -242,10 +224,7 @@ export function FirstRun() {
       <div className="dk-fr__body" key={screen}>
         {screen === "choose" && (
           <Choose
-            adding={adding}
-            cloudSignedIn={cloudSignedIn}
             canRunHere={canRunHere}
-            onCloud={(page) => void finish("https://keepmind.io", page)}
             onHere={() => go("here")}
             onBox={() => go("install")}
             onConnect={() => go("connect")}
@@ -307,41 +286,31 @@ export function FirstRun() {
 }
 
 /**
- * "Onde seu workspace vai ficar?" (ADR 0066 §1, amended 2026-11-14): the drawing on the left follows the place picked on
- * the right: the Cloud (recommended, the KeepMind OS agent on a cloud), this computer (where the build carries the
- * server: the agents work while the app is open) or a computer that's always on (the one-command install). Each says
- * what happens to the agents, never "server". One button goes on with the pick, and a line under it signs in to one
- * that exists already. `adding` (the site's "Add a workspace", ADR 0154): its own title, the Cloud's button signs in to
- * the workspaces an account has (a new workspace the line under it); with KeepMind OS already signed in here, making
- * one is the button.
+ * "Onde seu workspace vai ficar?" (ADR 0066 §1): the drawing on the left follows the place picked on the right:
+ * this computer (where the build carries the server: the agents work while the app is open) or a computer that's
+ * always on (the one-command install). Each says what happens to the agents, never "server". One button goes on
+ * with the pick, and a line under it connects to a server that already exists.
  */
 function Choose({
-  adding,
-  cloudSignedIn,
   canRunHere,
-  onCloud,
   onHere,
   onBox,
   onConnect,
 }: {
-  adding: boolean;
-  cloudSignedIn: boolean;
   /** This build carries the server: "On this computer" is offered. */
   canRunHere: boolean;
-  onCloud: (page: string) => void;
   onHere: () => void;
   onBox: () => void;
   onConnect: () => void;
 }) {
   const { t } = useTranslation();
   const host = useHost();
-  const [pick, setPick] = useState<Place>("cloud");
-  const makeFirst = adding && cloudSignedIn;
-  const places: Place[] = canRunHere ? ["cloud", "here", "box"] : ["cloud", "box"];
+  const places: Place[] = canRunHere ? ["here", "box"] : ["box"];
+  const [picked, setPicked] = useState<Place | null>(null);
+  const pick: Place = picked && places.includes(picked) ? picked : (places[0] ?? "box");
   const go = () => {
     if (pick === "here") return onHere();
-    if (pick === "box") return onBox();
-    onCloud(makeFirst ? "/onboarding" : "/login");
+    onBox();
   };
   return (
     <div className="dk-choose">
@@ -353,44 +322,23 @@ function Choose({
         </span>
       </div>
       <div className="dk-choose__main">
-        <h1>{t(adding ? "desktop.first.addTitle" : "desktop.place.title")}</h1>
-        <p className="dk-lead">{t(adding ? "desktop.first.addLead" : "desktop.place.lead")}</p>
+        <h1>{t("desktop.place.title")}</h1>
+        <p className="dk-lead">{t("desktop.place.lead")}</p>
         <OptionList<Place>
           className="dk-choose__list"
           aria-label={t("desktop.place.title")}
           value={pick}
-          onValueChange={setPick}
+          onValueChange={setPicked}
           options={places.map((p) => ({
             value: p,
-            title:
-              p === "cloud" ? (
-                <>
-                  {t("desktop.place.cloud")}
-                  <span className="dk-choose__rec">{t("desktop.place.recommended")}</span>
-                </>
-              ) : (
-                t(`desktop.place.${p}`)
-              ),
+            title: t(`desktop.place.${p}`),
             description: t(`desktop.place.${p}Text`),
           }))}
         />
         <Button variant="primary" className="dk-btn-lg dk-choose__go" autoFocus onClick={go}>
-          {pick === "here"
-            ? t("desktop.place.goHere")
-            : pick === "box"
-              ? t("desktop.place.goBox")
-              : t(makeFirst ? "desktop.first.addCloud" : "desktop.place.goCloud")}
+          {pick === "here" ? t("desktop.place.goHere") : t("desktop.place.goBox")}
           <Icon name="arrowRight" size={16} />
         </Button>
-        {/* Adding, not signed in to the Cloud here: a new workspace there is the line under it. */}
-        {adding && !makeFirst && pick === "cloud" && (
-          <span className="dk-help dk-choose__more">
-            {t("desktop.first.addNew")}{" "}
-            <button type="button" className="ac-link dk-link" onClick={() => onCloud("/onboarding")}>
-              {t("desktop.first.addNewLink")}
-            </button>
-          </span>
-        )}
         <span className="dk-help dk-choose__more">
           {t("desktop.place.haveOne")}{" "}
           <button type="button" className="ac-link dk-link" onClick={onConnect}>

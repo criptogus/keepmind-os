@@ -281,42 +281,23 @@ describe("Run here, while Tailscale is read", () => {
 });
 
 describe("Where will your workspace live?", () => {
-  test("the cloud chosen and recommended, this Mac and an always-on computer beside it; the drawing and the button follow the choice", () => {
-    const chosen: (string | undefined)[] = [];
-    return firstRun(
-      "first",
-      async ({ el, press, button }) => {
-        expect(el.querySelector("h1")?.textContent).toBe("Where will your workspace live?");
-        const options = [...el.querySelectorAll<HTMLElement>('[role="radio"]')];
-        expect(options.map((c) => c.getAttribute("aria-checked"))).toEqual(["true", "false", "false"]);
-        // Recommended in words after the cloud's name, never a pill; nothing says "free" or "server".
-        expect(options[0]?.querySelector(".dk-choose__rec")?.textContent).toBe("Recommended");
-        expect(el.querySelector(".ac-chip")).toBeNull();
-        expect(el.textContent).not.toContain("Free");
-        expect(el.textContent).not.toContain("server");
-        const place = () => el.querySelector(".ac-place")?.getAttribute("data-place");
-        expect(place()).toBe("cloud");
-        await press("On this Mac");
-        expect(place()).toBe("here");
-        expect(el.querySelector(".ac-place canvas.ac-computer")?.getAttribute("data-kind")).toBe("mac");
-        expect(button("Get this Mac ready")).toBeDefined();
-        await press("On a computer that's always on");
-        expect(place()).toBe("box");
-        expect(el.querySelector(".ac-place canvas.ac-computer")?.getAttribute("data-kind")).toBe("linux");
-        expect(button("See how to install")).toBeDefined();
-        await press("In the KeepMind OS cloud");
-        await press("Continue in the cloud");
-        expect(chosen).toEqual(["/login"]);
-      },
-      {
-        host: (host) => {
-          host.chooseServer = async (_server, page) => {
-            chosen.push(page);
-          };
-          host.hideWindow = async () => {};
-        },
-      },
-    );
+  test("this Mac and an always-on computer beside it; the drawing and the button follow the choice", () => {
+    return firstRun("first", async ({ el, press, button }) => {
+      expect(el.querySelector("h1")?.textContent).toBe("Where will your workspace live?");
+      const options = [...el.querySelectorAll<HTMLElement>('[role="radio"]')];
+      expect(options.map((c) => c.getAttribute("aria-checked"))).toEqual(["true", "false"]);
+      expect(el.querySelector(".ac-chip")).toBeNull();
+      expect(el.textContent).not.toContain("Free");
+      expect(el.textContent).not.toContain("server");
+      const place = () => el.querySelector(".ac-place")?.getAttribute("data-place");
+      expect(place()).toBe("here");
+      expect(el.querySelector(".ac-place canvas.ac-computer")?.getAttribute("data-kind")).toBe("mac");
+      expect(button("Get this Mac ready")).toBeDefined();
+      await press("On a computer that's always on");
+      expect(place()).toBe("box");
+      expect(el.querySelector(".ac-place canvas.ac-computer")?.getAttribute("data-kind")).toBe("linux");
+      expect(button("See how to install")).toBeDefined();
+    });
   });
 
   test("on Windows, this PC by its own words and drawing", () =>
@@ -783,43 +764,3 @@ describe("Setting it up here", () => {
   });
 });
 
-describe("Add a workspace", () => {
-  /** The welcome window opened by the site's "Add workspace", with KeepMind OS signed in here or not. */
-  const adding = (cloud: boolean, chosen: (string | undefined)[]) => (host: FakeHost) => {
-    host.welcomeMode = async () => "add";
-    host.workspaces = async () => [{ server: "https://keepmind.io", signedIn: cloud, orgs: [] }];
-    host.chooseServer = async (_server, page) => {
-      chosen.push(page);
-    };
-    host.hideWindow = async () => {};
-  };
-
-  test("not signed in to KeepMind OS: signing in (the workspaces you have) is the big one, a new one the line", () => {
-    const chosen: (string | undefined)[] = [];
-    return firstRun(
-      "first",
-      async ({ press, until, button }) => {
-        await until(() => button("Want a new workspace?") || button("Create one"));
-        await press("Continue in the cloud");
-        await press("Create one");
-        expect(chosen).toEqual(["/login", "/onboarding"]);
-        expect(button("Create an account")).toBeUndefined();
-      },
-      { host: adding(false, chosen) },
-    );
-  });
-
-  test("signed in to KeepMind OS here already: a new workspace is the big one", () => {
-    const chosen: (string | undefined)[] = [];
-    return firstRun(
-      "first",
-      async ({ press, until, button }) => {
-        await until(() => button("Create a workspace on KeepMind OS"));
-        expect(button("Create one")).toBeUndefined();
-        await press("Create a workspace on KeepMind OS");
-        expect(chosen).toEqual(["/onboarding"]);
-      },
-      { host: adding(true, chosen) },
-    );
-  });
-});
