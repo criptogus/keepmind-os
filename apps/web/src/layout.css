@@ -7941,6 +7941,7 @@ html:not([data-pointer]) .sky-welcome__close:focus-visible {
     var(--side-active);
 }
 .sidebar__foot {
+  position: relative;
   isolation: isolate;
 }
 .sidebar__horizon {

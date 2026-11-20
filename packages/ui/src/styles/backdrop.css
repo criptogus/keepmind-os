@@ -16,45 +16,67 @@
 }
 .km-agent-backdrop__flow {
   fill: none;
-  stroke: var(--km-backdrop-line, var(--line2));
+  stroke: var(--km-backdrop-accent, #c4ff3d);
   stroke-width: 1;
-  transform-origin: center;
-  animation: km-agent-current 18s ease-in-out infinite alternate paused;
+}
+.km-agent-backdrop__connection {
+  stroke-opacity: 0.16;
 }
 .km-agent-backdrop__accent {
   stroke: var(--km-backdrop-accent, #c4ff3d);
   stroke-width: 1.5;
-  stroke-opacity: 1;
-  stroke-dasharray: 56 660;
-  stroke-dashoffset: -220;
+  stroke-linecap: round;
+  stroke-dasharray: 7 93;
+  stroke-dashoffset: 100;
   opacity: 1;
+  animation: km-synapse-travel 9s linear infinite paused;
+  animation-delay: var(--km-synapse-delay, 0s);
 }
-.km-agent-backdrop[data-moving] .km-agent-backdrop__flow {
+.km-agent-backdrop__neuron-ring {
+  stroke-opacity: 0.18;
+}
+.km-agent-backdrop__neuron {
+  fill: var(--km-backdrop-accent, #c4ff3d);
+  stroke: none;
+  opacity: 0.8;
+  animation: km-neuron-signal 9s ease-in-out infinite paused;
+  animation-delay: var(--km-synapse-delay, 0s);
+}
+.km-agent-backdrop[data-moving] :is(.km-agent-backdrop__accent, .km-agent-backdrop__neuron) {
   animation-play-state: running;
 }
-.km-agent-backdrop[data-busy] .km-agent-backdrop__flow {
-  animation-duration: 10s;
+.km-agent-backdrop[data-busy] :is(.km-agent-backdrop__accent, .km-agent-backdrop__neuron) {
+  animation-duration: 6s;
 }
-@keyframes km-agent-current {
+@keyframes km-synapse-travel {
   from {
-    transform: translate(-14px, -5px) rotate(-3deg);
+    stroke-dashoffset: 100;
   }
   to {
-    transform: translate(14px, 5px) rotate(3deg);
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes km-neuron-signal {
+  0%,
+  100% {
+    opacity: 0.75;
+  }
+  45%,
+  60% {
+    opacity: 1;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .km-agent-backdrop__flow {
+  .km-agent-backdrop :is(.km-agent-backdrop__accent, .km-agent-backdrop__neuron) {
     animation: none;
   }
 }
 
 .km-agent-backdrop[data-tone="graphite"] {
   --km-backdrop-fold: #1c1c1c;
-  --km-backdrop-line: #454545;
   background: #111111;
 }
 
-[data-desktop-renderer="cpu"] .km-agent-backdrop__flow {
+[data-desktop-renderer="cpu"] .km-agent-backdrop :is(.km-agent-backdrop__accent, .km-agent-backdrop__neuron) {
   animation: none;
 }
