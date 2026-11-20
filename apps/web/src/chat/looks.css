@@ -312,7 +312,7 @@
 }
 @media (prefers-reduced-motion: no-preference) {
   .ac-msg--streaming[data-look="bubbles"] .ac-msg__text > .md:has(+ .ac-msg__stamp) > :last-child::after {
-    animation: ac-blink 1s steps(2) infinite;
+    animation: ac-caret 1.1s var(--out) infinite;
   }
 }
 /*

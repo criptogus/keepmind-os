@@ -24,6 +24,20 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
+/* A theme swap crossfades every painted surface at once — only while <html> wears
+   .ac-theme-animating (added by the app for ~300ms), so nothing pays for it otherwise. */
+html.ac-theme-animating,
+html.ac-theme-animating *,
+html.ac-theme-animating *::before,
+html.ac-theme-animating *::after {
+  transition:
+    background-color var(--dur-panel) var(--out),
+    color var(--dur-panel) var(--out),
+    border-color var(--dur-panel) var(--out),
+    box-shadow var(--dur-panel) var(--out),
+    fill var(--dur-panel) var(--out),
+    stroke var(--dur-panel) var(--out) !important;
+}
 
 /* Japanese and Chinese break lines by their own strict rules, Korean between words; none of the three slants a
    word for emphasis. */
@@ -1783,12 +1797,28 @@ html:not([data-pointer]) .ac-msg__time--details:focus-visible {
 @media (prefers-reduced-motion: no-preference) {
   .ac-msg--streaming .ac-msg__text::after,
   .ac-msg--streaming .ac-msg__text > .md:last-child > :last-child::after {
-    animation: ac-blink 1s steps(2) infinite;
+    animation: ac-caret 1.1s var(--out) infinite;
+  }
+  /* Each block the answer grows gets a soft arrival, like the words landing. */
+  .ac-msg--streaming .ac-msg__text > .md:last-child > :last-child {
+    animation: ac-arrive 0.24s var(--out);
   }
 }
-@keyframes ac-blink {
+@keyframes ac-caret {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 5px color-mix(in srgb, var(--agent) 55%, transparent);
+  }
   50% {
+    opacity: 0.45;
+    box-shadow: 0 0 0 color-mix(in srgb, var(--agent) 0%, transparent);
+  }
+}
+@keyframes ac-arrive {
+  from {
     opacity: 0;
+    transform: translateY(2px);
   }
 }
 /* Day divider */
@@ -5443,6 +5473,7 @@ html:not([data-pointer]) .ac-switch:focus-visible {
   --card-face-top: var(--surface-raised);
   --card-shadow: 0 0 0 1px rgba(23, 23, 22, 0.1);
   --card-shadow-hover: 0 0 0 1px rgba(23, 23, 22, 0.18);
+  --card-lift: 0 10px 28px -10px rgba(23, 23, 22, 0.16);
   --card-key-bottom: var(--surface-raised);
   --card-key: none;
   --card-well: #f6f6f3;
@@ -5458,6 +5489,7 @@ html:not([data-pointer]) .ac-switch:focus-visible {
   --card-face-top: var(--surface-raised);
   --card-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
   --card-shadow-hover: 0 0 0 1px rgba(255, 255, 255, 0.18);
+  --card-lift: 0 10px 28px -10px rgba(0, 0, 0, 0.55);
   --card-key-bottom: var(--surface-raised);
   --card-key: none;
   --card-well: #121211;
@@ -6187,12 +6219,12 @@ html:not([data-pointer]) .ac-seg__item:focus-visible {
 }
 .ac-card--interactive {
   transition:
-    box-shadow 0.2s var(--out),
-    transform 0.2s var(--spring);
+    box-shadow 0.24s var(--out),
+    transform 0.24s var(--out);
 }
 .ac-card--interactive:hover {
-  box-shadow: var(--card-shadow-hover);
-  transform: translateY(-1px);
+  box-shadow: var(--card-shadow-hover), var(--card-lift);
+  transform: translateY(-2px);
 }
 /* Head: the lead (a key with the icon, the title and an optional quiet line), the action on the right. The key (an
    `.ac-iconline` lead) stays on the title's first line when the title or the quiet line wraps; the action stays

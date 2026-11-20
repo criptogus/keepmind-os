@@ -1,4 +1,4 @@
-import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { STORAGE_KEYS, storage } from "./storage";
 
 export type ThemePreference = "light" | "dark" | "system";
@@ -32,8 +32,20 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const resolved = preference === "system" ? (systemDark ? "dark" : "light") : preference;
+  const firstTheme = useRef(true);
   useEffect(() => {
     document.documentElement.dataset.theme = resolved;
+    // Crossfade the swap (components.css .ac-theme-animating); the first paint and
+    // reduced-motion users get the instant change.
+    if (firstTheme.current) {
+      firstTheme.current = false;
+      return;
+    }
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    const root = document.documentElement;
+    root.classList.add("ac-theme-animating");
+    const timer = window.setTimeout(() => root.classList.remove("ac-theme-animating"), 320);
+    return () => window.clearTimeout(timer);
   }, [resolved]);
 
   const setPreference = useCallback((value: ThemePreference) => {
