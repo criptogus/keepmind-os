@@ -274,7 +274,12 @@ function ConnectStep({
   const canKey = !viaComposio && (listed === null || listed.auth.includes("api_key") || needsKey !== null);
   const serverUrl = fixed ?? (def?.kind === "remote_mcp" ? def.serverUrl : url.trim());
   const appOffered =
-    def?.id === "github" && !viaComposio && !mode && !accountOnly && githubApp.data?.installable === true;
+    def?.id === "github" &&
+    !viaComposio &&
+    githubApp.data?.installable === true &&
+    // Account OAuth is separate from the installed GitHub App. When it isn't configured,
+    // reconnect through the existing app instead of trapping the person in an API-key form.
+    ((!mode && !accountOnly) || !canOAuth);
   const viaApp = appOffered && how === "app";
   const missingOAuth = !viaComposio && !byAddress && !!listed?.auth.includes("oauth") && !canOAuth && !viaApp;
   const canPrepareGitHub = missingOAuth && def?.id === "github" && githubApp.data?.setup?.canCreate === true;

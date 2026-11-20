@@ -405,6 +405,28 @@ describe("an organization's installation links only for one of its owners on Git
     expect(await listGitHubAppInstallations(w.db, w.ana.id, w.orgA.id)).toEqual([]);
   });
 
+  test("explicit app reconnection recovers an expired account without replacing grants", async () => {
+    const w = await world();
+    await w.install(w.ana, w.orgA.id, 1);
+    const [before] = (await w.github(w.orgA.id)).live;
+    if (!before) throw new Error("missing connection");
+    const grants = await w.grantsOf(before.id);
+    await w.db
+      .update(schema.connectorConnections)
+      .set({ authType: "oauth", status: "needs_reconnect", lastError: "expired" })
+      .where(eq(schema.connectorConnections.id, before.id));
+    await reconcileGitHubAppInstallations(w.deps, w.orgA.id);
+    expect((await w.github(w.orgA.id)).live[0]?.status).toBe("needs_reconnect");
+    await w.install(w.ana, w.orgA.id, 1, [1], "update");
+    expect((await w.github(w.orgA.id)).live[0]).toMatchObject({
+      id: before.id,
+      authType: "github_app",
+      status: "active",
+      lastError: null,
+    });
+    expect(await w.grantsOf(before.id)).toEqual(grants);
+  });
+
   test("refreshing an installation already linked here asks no owner", async () => {
     const w = await world();
     await w.install(w.ana, w.orgA.id, 1);

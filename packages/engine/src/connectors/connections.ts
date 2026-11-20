@@ -523,6 +523,7 @@ export async function syncGitHubAppConnection(
   orgId: string,
   actor: AuditEntry["actor"],
   oauthApps?: OAuthApps,
+  recoverAccount = false,
 ) {
   const accounts = await installationAccounts(tx, orgId);
   const [current] = await tx
@@ -531,7 +532,25 @@ export async function syncGitHubAppConnection(
     .where(and(activeOf(orgId), eq(connectorConnections.connector, "github")))
     .for("update");
   const label = accounts.join(", ");
-  if (current && current.authType !== GITHUB_APP_AUTH) return;
+  if (current && current.authType !== GITHUB_APP_AUTH) {
+    // Only an explicit, verified installation flow may replace a broken personal sign-in.
+    // Background reconciliation never changes the identity agents use.
+    if (!recoverAccount || actor.type !== "person" || current.status !== "needs_reconnect" || !accounts.length) return;
+    await tx
+      .update(connectorConnections)
+      .set({ ...APP_ALONE, status: "active", lastError: null, accountLabel: label, updatedAt: new Date() })
+      .where(eq(connectorConnections.id, current.id));
+    await recordAudit(tx, {
+      orgId,
+      actor,
+      action: "connector.reconnected",
+      target: { type: "connector", id: current.id },
+      details: { connector: "github", auth: GITHUB_APP_AUTH },
+    });
+    caches.connections.delete(`${orgId}:active`);
+    caches.scopes.deletePrefix(`${orgId}:`);
+    return;
+  }
   if (current && accounts.length === 0) await dropConnection(tx, orgId, current, actor);
   else if (current && current.accountLabel !== label) {
     await tx

@@ -305,7 +305,7 @@ export async function completeGitHubAppInstall(
       target: { type: "github_app_installation", id: saved.id },
       details: { installationId: input.installationId, account: values.accountLogin },
     });
-    await syncGitHubAppConnection(tx, row.orgId, actor, deps.oauthApps);
+    await syncGitHubAppConnection(tx, row.orgId, actor, deps.oauthApps, true);
     return saved;
   });
   forgetInstallationTokens(input.installationId);
