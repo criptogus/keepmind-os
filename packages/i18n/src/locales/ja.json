@@ -1615,6 +1615,27 @@
     "set": "リマインダーを作成しました。",
     "cancelled": "リマインダーをキャンセルしました。"
   },
+  "schedule": {
+    "button": "メッセージを予約",
+    "title": "メッセージを予約",
+    "when": "日時",
+    "in1h": "1時間後",
+    "tonight": "今日 18:00",
+    "tomorrow9": "明日 9:00",
+    "nextMonday": "次の月曜 9:00",
+    "custom": "日時を選ぶ",
+    "date": "日付",
+    "time": "時刻",
+    "submit": "予約",
+    "scheduledFor": "{{when}}に予約済み",
+    "cancelled": "予約メッセージをキャンセルしました",
+    "failed": "予約できませんでした。もう一度お試しください",
+    "listTitle": "予約メッセージ",
+    "chip_other": "予約メッセージ {{count}} 件",
+    "empty": "予約はありません",
+    "cancel": "キャンセル",
+    "attachmentOnly": "添付ファイル"
+  },
   "install": {
     "frames": "{{system}}へのインストール方法",
     "step": "ステップ{{n}}",

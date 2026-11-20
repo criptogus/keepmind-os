@@ -1615,6 +1615,27 @@
     "set": "提醒已创建。",
     "cancelled": "提醒已取消。"
   },
+  "schedule": {
+    "button": "定时发送消息",
+    "title": "定时发送消息",
+    "when": "时间",
+    "in1h": "1 小时后",
+    "tonight": "今晚 18:00",
+    "tomorrow9": "明天 9:00",
+    "nextMonday": "下周一 9:00",
+    "custom": "选择日期和时间",
+    "date": "日期",
+    "time": "时间",
+    "submit": "定时发送",
+    "scheduledFor": "已定于 {{when}}",
+    "cancelled": "定时消息已取消",
+    "failed": "无法定时发送，请重试",
+    "listTitle": "定时消息",
+    "chip_other": "{{count}} 条定时消息",
+    "empty": "暂无定时消息",
+    "cancel": "取消",
+    "attachmentOnly": "附件"
+  },
   "install": {
     "frames": "如何在 {{system}} 上安装",
     "step": "第 {{n}} 步",

@@ -1665,6 +1665,28 @@
     "set": "Erinnerung erstellt.",
     "cancelled": "Erinnerung abgebrochen."
   },
+  "schedule": {
+    "button": "Nachricht planen",
+    "title": "Nachricht planen",
+    "when": "Wann",
+    "in1h": "In 1 Stunde",
+    "tonight": "Heute um 18:00",
+    "tomorrow9": "Morgen um 9:00",
+    "nextMonday": "Nächsten Montag um 9:00",
+    "custom": "Datum und Uhrzeit wählen",
+    "date": "Datum",
+    "time": "Uhrzeit",
+    "submit": "Planen",
+    "scheduledFor": "Geplant für {{when}}",
+    "cancelled": "Geplante Nachricht abgebrochen",
+    "failed": "Konnte nicht geplant werden. Erneut versuchen.",
+    "listTitle": "Geplante Nachrichten",
+    "chip_one": "{{count}} geplante Nachricht",
+    "chip_other": "{{count}} geplante Nachrichten",
+    "empty": "Nichts geplant.",
+    "cancel": "Abbrechen",
+    "attachmentOnly": "Anhang"
+  },
   "install": {
     "frames": "So installierst du es auf {{system}}",
     "step": "Schritt {{n}}",

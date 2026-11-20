@@ -1615,6 +1615,27 @@
     "set": "알림이 생성되었습니다.",
     "cancelled": "알림이 취소되었습니다."
   },
+  "schedule": {
+    "button": "메시지 예약",
+    "title": "메시지 예약",
+    "when": "시간",
+    "in1h": "1시간 후",
+    "tonight": "오늘 18:00",
+    "tomorrow9": "내일 9:00",
+    "nextMonday": "다음 월요일 9:00",
+    "custom": "날짜와 시간 선택",
+    "date": "날짜",
+    "time": "시간",
+    "submit": "예약",
+    "scheduledFor": "{{when}}에 예약됨",
+    "cancelled": "예약 메시지가 취소되었습니다",
+    "failed": "예약하지 못했습니다. 다시 시도하세요",
+    "listTitle": "예약된 메시지",
+    "chip_other": "예약된 메시지 {{count}}개",
+    "empty": "예약된 메시지가 없습니다",
+    "cancel": "취소",
+    "attachmentOnly": "첨부 파일"
+  },
   "install": {
     "frames": "{{system}}에 설치하는 방법",
     "step": "{{n}}단계",

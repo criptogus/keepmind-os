@@ -6281,6 +6281,7 @@ function part<
     | "working"
     | "reminders"
     | "messageReminders"
+    | "scheduledMessages"
     | "actions"
     | "actionCards"
     | "agentForYou"
@@ -6618,6 +6619,54 @@ export function useCancelMessageReminder(orgId: string) {
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: keys.messageReminders(orgId) });
       void qc.invalidateQueries({ queryKey: keys.messageReminders(orgId, true) });
+    },
+  });
+}
+
+/** My scheduled messages, soonest first (`sent`: the ones that went out). */
+export function useScheduledMessages(orgId: string, sent = false, enabled = true) {
+  const api = useApi();
+  return useQuery({
+    queryKey: keys.scheduledMessages(orgId, sent),
+    queryFn: () => part(api, "scheduledMessages").list(orgId, sent),
+    enabled: enabled && Boolean(api.scheduledMessages),
+    staleTime: 30_000,
+  });
+}
+
+/** Schedules a message to send at `sendAt`; the same `clientId` moves its send. */
+export function useScheduleMessage(orgId: string) {
+  const api = useApi();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      channelId,
+      ...input
+    }: {
+      channelId: string;
+      body: string;
+      threadId?: string | null;
+      replyTo?: string | null;
+      attachments?: string[];
+      sendAt: string;
+      clientId?: string;
+    }) => part(api, "scheduledMessages").schedule(orgId, channelId, input),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: keys.scheduledMessages(orgId) });
+      void qc.invalidateQueries({ queryKey: keys.scheduledMessages(orgId, true) });
+    },
+  });
+}
+
+/** Cancels one of my scheduled messages while it is pending. */
+export function useCancelScheduledMessage(orgId: string) {
+  const api = useApi();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (scheduledMessageId: string) => part(api, "scheduledMessages").cancel(orgId, scheduledMessageId),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: keys.scheduledMessages(orgId) });
+      void qc.invalidateQueries({ queryKey: keys.scheduledMessages(orgId, true) });
     },
   });
 }

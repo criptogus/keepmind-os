@@ -292,6 +292,7 @@ import type {
   S3Input,
   SandboxSettings,
   SandboxSettingsInput,
+  ScheduledMessage,
   ScheduleParse,
   ScopeGrant,
   ScreenKind,
@@ -2181,6 +2182,26 @@ export interface ApiClient {
     list(orgId: string, done?: boolean): Promise<MessageReminder[]>;
     /** Cancels one of yours (a no-op for anyone else's or an unknown id). */
     cancel(orgId: string, reminderId: string): Promise<void>;
+  };
+  /** Scheduled send: a message that goes out as you at `sendAt` (Slack's schedule send). */
+  scheduledMessages?: {
+    /** Schedules `input` in `channelId` at `sendAt` (ISO, ≥ ~30 s ahead). Same `clientId` moves its send. */
+    schedule(
+      orgId: string,
+      channelId: string,
+      input: {
+        body: string;
+        threadId?: string | null;
+        replyTo?: string | null;
+        attachments?: string[];
+        sendAt: string;
+        clientId?: string;
+      },
+    ): Promise<ScheduledMessage>;
+    /** Your scheduled messages, soonest first; `sent` picks the ones that went out. */
+    list(orgId: string, sent?: boolean): Promise<ScheduledMessage[]>;
+    /** Cancels one of yours while it is pending. */
+    cancel(orgId: string, scheduledMessageId: string): Promise<void>;
   };
 }
 

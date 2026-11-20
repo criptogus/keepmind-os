@@ -216,6 +216,7 @@ import type {
   RunConsultation,
   RunStep,
   SandboxSettings,
+  ScheduledMessage,
   ScheduleParse,
   ScopeGrant,
   SearchFilterInput,
@@ -572,10 +573,9 @@ export function createHttpApi(options: TransportOptions = {}): HttpApi {
     },
     messageReminders: {
       remind: (orgId, channelId, messageId, input) =>
-        request<MessageReminder>(
-          `${org(orgId)}/channels/${enc(channelId)}/messages/${enc(messageId)}/reminder`,
-          { json: input },
-        ),
+        request<MessageReminder>(`${org(orgId)}/channels/${enc(channelId)}/messages/${enc(messageId)}/reminder`, {
+          json: input,
+        }),
       list: async (orgId, done = false) =>
         (
           await request<{ reminders: MessageReminder[] }>(`${org(orgId)}/message-reminders`, {
@@ -584,6 +584,20 @@ export function createHttpApi(options: TransportOptions = {}): HttpApi {
         ).reminders,
       cancel: (orgId, reminderId) =>
         request<void>(`${org(orgId)}/message-reminders/${enc(reminderId)}`, { method: "DELETE" }),
+    },
+    scheduledMessages: {
+      schedule: (orgId, channelId, input) =>
+        request<ScheduledMessage>(`${org(orgId)}/channels/${enc(channelId)}/scheduled-messages`, {
+          json: input,
+        }),
+      list: async (orgId, sent = false) =>
+        (
+          await request<{ messages: ScheduledMessage[] }>(`${org(orgId)}/scheduled-messages`, {
+            query: sent ? { sent: "1" } : {},
+          })
+        ).messages,
+      cancel: (orgId, scheduledMessageId) =>
+        request<void>(`${org(orgId)}/scheduled-messages/${enc(scheduledMessageId)}`, { method: "DELETE" }),
     },
     system: {
       health: async () => {

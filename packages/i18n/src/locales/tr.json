@@ -1665,6 +1665,28 @@
     "set": "Hatırlatıcı oluşturuldu.",
     "cancelled": "Hatırlatıcı iptal edildi."
   },
+  "schedule": {
+    "button": "Mesajı zamanla",
+    "title": "Mesajı zamanla",
+    "when": "Ne zaman",
+    "in1h": "1 saat sonra",
+    "tonight": "Bu akşam 18:00",
+    "tomorrow9": "Yarın 09:00",
+    "nextMonday": "Gelecek Pazartesi 09:00",
+    "custom": "Tarih ve saat seç",
+    "date": "Tarih",
+    "time": "Saat",
+    "submit": "Zamanla",
+    "scheduledFor": "{{when}} için zamanlandı",
+    "cancelled": "Zamanlanmış mesaj iptal edildi",
+    "failed": "Zamanlanamadı. Tekrar deneyin.",
+    "listTitle": "Zamanlanmış mesajlar",
+    "chip_one": "{{count}} zamanlanmış mesaj",
+    "chip_other": "{{count}} zamanlanmış mesaj",
+    "empty": "Zamanlanmış bir şey yok.",
+    "cancel": "İptal",
+    "attachmentOnly": "Ek"
+  },
   "install": {
     "frames": "{{system}} için kurulum",
     "step": "Adım {{n}}",

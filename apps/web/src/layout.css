@@ -14960,3 +14960,98 @@ html:not([data-pointer]) .rh-set__face-edit:focus-visible {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* Scheduled send: the dialog's message preview and custom date/time, the pending list. */
+.schedule__preview {
+  margin: 0 0 var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--sunken);
+  color: var(--ink2);
+  font-size: var(--text-sm);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.schedule__custom {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3) var(--space-4);
+  padding-top: var(--space-1);
+}
+.schedule__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-6) var(--space-4);
+  color: var(--muted);
+  font-size: var(--text-sm);
+  text-align: center;
+}
+.schedule__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.schedule__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--line);
+}
+.schedule__row:last-child {
+  border-bottom: 0;
+}
+.schedule__row-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.schedule__row-when {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink);
+}
+.schedule__row-where {
+  font-size: var(--text-xs);
+  color: var(--muted);
+}
+.schedule__row-body {
+  font-size: var(--text-sm);
+  color: var(--ink2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@media (max-width: 480px) {
+  .schedule__custom {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* The chip over the composer naming this conversation's pending scheduled sends. */
+.channel__scheduled {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  align-self: flex-start;
+  margin: 0 0 var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--sunken);
+  color: var(--ink2);
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+.channel__scheduled:hover {
+  background: color-mix(in srgb, var(--ink) 8%, var(--sunken));
+  color: var(--ink);
+}

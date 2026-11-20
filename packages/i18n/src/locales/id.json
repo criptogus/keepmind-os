@@ -1615,6 +1615,27 @@
     "set": "Pengingat dibuat.",
     "cancelled": "Pengingat dibatalkan."
   },
+  "schedule": {
+    "button": "Jadwalkan pesan",
+    "title": "Jadwalkan pesan",
+    "when": "Kapan",
+    "in1h": "1 jam lagi",
+    "tonight": "Malam ini pukul 18.00",
+    "tomorrow9": "Besok pukul 09.00",
+    "nextMonday": "Senin depan pukul 09.00",
+    "custom": "Pilih tanggal dan jam",
+    "date": "Tanggal",
+    "time": "Jam",
+    "submit": "Jadwalkan",
+    "scheduledFor": "Dijadwalkan untuk {{when}}",
+    "cancelled": "Pesan terjadwal dibatalkan",
+    "failed": "Tidak bisa menjadwalkan. Coba lagi.",
+    "listTitle": "Pesan terjadwal",
+    "chip_other": "{{count}} pesan terjadwal",
+    "empty": "Tidak ada yang dijadwalkan.",
+    "cancel": "Batal",
+    "attachmentOnly": "Lampiran"
+  },
   "install": {
     "frames": "Cara memasang di {{system}}",
     "step": "Langkah {{n}}",

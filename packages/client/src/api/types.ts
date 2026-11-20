@@ -7411,6 +7411,24 @@ export interface MessageReminder {
   createdAt: string;
 }
 
+/**
+ * A message scheduled to send later (Slack's schedule send): at `sendAt` it posts as its person through the
+ * same path as a live send. `sentAt`/`sentMessageId` mark it went out; a pending one can be cancelled.
+ */
+export interface ScheduledMessage {
+  id: string;
+  orgId: string;
+  channelId: string;
+  threadId: string | null;
+  body: string;
+  replyTo: string | null;
+  attachments: string[];
+  sendAt: string;
+  sentAt: string | null;
+  sentMessageId: string | null;
+  createdAt: string;
+}
+
 // ── Mailboxes (ADR 0038) ────────────────────────────────────────────────────
 
 /** A preset for our IMAP/SMTP connector (iCloud, Locaweb, Hostinger, Zoho…). */

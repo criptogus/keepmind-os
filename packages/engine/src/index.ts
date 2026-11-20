@@ -268,6 +268,7 @@ export * from "./rea/connector";
 export * from "./rea/supervisor";
 export * from "./recovery";
 export * from "./message-reminders";
+export * from "./scheduled-messages";
 export * from "./reply-policy";
 export * from "./reporting";
 export * from "./right-hand";

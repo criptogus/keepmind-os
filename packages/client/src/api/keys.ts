@@ -236,7 +236,10 @@ export const keys = {
   wikiReads: (orgId: string) => ["org", orgId, "wiki", "reads"] as const,
   wikiTrash: (orgId: string) => ["org", orgId, "wiki", "trash"] as const,
   pins: (orgId: string, channelId: string) => ["org", orgId, "channel", channelId, "pins"] as const,
-  messageReminders: (orgId: string, done = false) => ["org", orgId, "message-reminders", done ? "done" : "upcoming"] as const,
+  messageReminders: (orgId: string, done = false) =>
+    ["org", orgId, "message-reminders", done ? "done" : "upcoming"] as const,
+  scheduledMessages: (orgId: string, sent = false) =>
+    ["org", orgId, "scheduled-messages", sent ? "sent" : "pending"] as const,
   followUps: (orgId: string, channelId: string) => ["org", orgId, "channel", channelId, "follow-ups"] as const,
   /** Every GIF search (prefix): the workspace's rating or its GIFs switch changing refreshes them all (ADR 0091). */
   gifs: (orgId: string) => ["org", orgId, "gifs"] as const,

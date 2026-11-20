@@ -1712,7 +1712,7 @@ export const fileIdsOf = (meta: Record<string, unknown> | undefined): string[] =
   );
 
 /** Files for a message: the person's own uploads or files of this channel, not deleted. */
-async function attachmentRefsFor(db: Database, userId: string, orgId: string, channelId: string, ids: string[]) {
+export async function attachmentRefsFor(db: Database, userId: string, orgId: string, channelId: string, ids: string[]) {
   const wanted = [...new Set(ids)];
   if (wanted.length > MAX_MESSAGE_ATTACHMENTS) {
     throw new ValidationError(`At most ${MAX_MESSAGE_ATTACHMENTS} files per message`, "message.too_many_attachments", {

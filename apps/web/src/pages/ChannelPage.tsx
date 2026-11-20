@@ -64,6 +64,7 @@ import {
   usePlaceChannel,
   usePostMessage,
   useRoster,
+  useScheduledMessages,
   useSendVoice,
   useSettings,
   usesBrowser,
@@ -373,6 +374,8 @@ import {
   WaitMark,
 } from "@/components/RequestCard";
 import { ReturnLine } from "@/components/ReturnLine";
+import { ScheduledMessagesDialog } from "@/components/ScheduledMessagesDialog";
+import { ScheduleMessageDialog } from "@/components/ScheduleMessageDialog";
 import { SidePanel } from "@/components/SidePanel";
 import { ActivitySky, ChannelWelcome, colorOf } from "@/components/Sky";
 import { isStoppable, StopButton, useContinueRun, useStopRun, useWasContinued } from "@/components/StopRun";
@@ -872,6 +875,11 @@ function ChannelView({
   // A first task handed with a blank at its end ("…para este cliente:"): a hint to finish it, gone at the first key.
   const [handed] = useState(() => (draftKey ? peekDraft(draftKey) : undefined));
   const finishing = handed !== undefined && /:\s*$/.test(handed) && draft === handed;
+  // "Agendar mensagem" (Slack's schedule send): the clock in the composer opens its dialog with this text;
+  // the chip above it lists this conversation's pending sends.
+  const [scheduleDraft, setScheduleDraft] = useState<string | null>(null);
+  const [scheduledOpen, setScheduledOpen] = useState(false);
+  const scheduledHere = useScheduledMessages(org.id).data?.filter((m) => m.channelId === channel.id) ?? [];
   // Stopping is immediate, nothing asked (what it did stays, "Continuar" picks it up): the composer's
   // button when the box is empty, or Esc anywhere on the page (composer empty, nothing open).
   const { canStop: mayStop, stop: stopRun } = useStopRun();
@@ -2781,6 +2789,16 @@ function ChannelView({
                             </p>
                           ) : (
                             <>
+                              {scheduledHere.length > 0 && (
+                                <button
+                                  type="button"
+                                  className="channel__scheduled"
+                                  onClick={() => setScheduledOpen(true)}
+                                >
+                                  <Icon name="clock" size={14} />
+                                  <span>{t("schedule.chip", { count: scheduledHere.length })}</span>
+                                </button>
+                              )}
                               <Composer
                                 header={
                                   quote ? (
@@ -2867,6 +2885,12 @@ function ChannelView({
                                 sendLabel={t("channel.send")}
                                 sendText={t("channel.send")}
                                 attachLabel={t("channel.attach")}
+                                onSchedule={
+                                  chrome?.locked || (!draft.trim() && attached.length === 0)
+                                    ? undefined
+                                    : (text) => setScheduleDraft(text)
+                                }
+                                scheduleLabel={t("schedule.button")}
                                 pills={composerPills}
                                 links={{
                                   listLabel: t("wiki.editor.suggest"),
@@ -2919,6 +2943,27 @@ function ChannelView({
                               />
                               {chrome?.composerNote && !chrome.locked && (
                                 <p className="ac-composer__hint">{chrome.composerNote}</p>
+                              )}
+                              {scheduleDraft !== null && (
+                                <ScheduleMessageDialog
+                                  channelId={channel.id}
+                                  threadId={thread?.id ?? null}
+                                  replyTo={quote?.id ?? null}
+                                  attachments={attached.map((a) => a.id)}
+                                  body={scheduleDraft}
+                                  onClose={() => setScheduleDraft(null)}
+                                  onDone={() => {
+                                    setDraft("");
+                                    setQuote(null);
+                                    dropFiles(() => false);
+                                  }}
+                                />
+                              )}
+                              {scheduledOpen && (
+                                <ScheduledMessagesDialog
+                                  channelId={channel.id}
+                                  onClose={() => setScheduledOpen(false)}
+                                />
                               )}
                               {chrome?.locked && (
                                 <p className="ac-composer__hint">

@@ -90,6 +90,7 @@ import {
   wakeConversationForTask,
 } from "./machine-tasks";
 import { isMediaAfterReply, isMediaOnly } from "./media";
+import { messageReminderDue } from "./message-reminders";
 import { getMessage, referencedOf } from "./messages";
 import { checkMissionDone } from "./mission-delivery";
 import { onMissionTaskEnded, syncMissionFiles } from "./mission-sync";
@@ -97,7 +98,6 @@ import { afterMachineTaskEnded, afterMissionRunEnded, startQueuedMissionTasks } 
 import { type MissionDeps, missionOfThread, missionRole, reactivateMission } from "./missions";
 import { KEEP_GOING_JOB, keepMissionGoing, type MissionEngine } from "./missions-engine";
 import { notifyMessage } from "./notification-producers";
-import { messageReminderDue } from "./message-reminders";
 import { ORG_FILES_PURGE_ATTEMPTS, ORG_FILES_PURGE_JOB, USER_FILES_PURGE_JOB } from "./organizations";
 import { outOfOfficeIds } from "./out-of-office";
 import { enqueue, type JobHandlers, type OutboxJob, PermanentJobError } from "./outbox";
@@ -122,6 +122,7 @@ import { createPlanRouterStrategy } from "./router-plan";
 import { executeRoutineRun } from "./routines";
 import { type AgentRun, NO_AI } from "./runs";
 import type { SandboxDeps } from "./sandbox";
+import { scheduledMessageSend } from "./scheduled-messages";
 import { indexSource, reindexOrg } from "./search";
 import { activateDeliveredSecret, discardClosedSecret } from "./secrets";
 import { runSkillUpdates, SKILL_UPDATES_JOB } from "./skill-updates";
@@ -1184,6 +1185,15 @@ export function createJobHandlers(deps: JobDeps): JobHandlers {
     // A "lembrar depois" reminder's time came: notify the person once (`reminders.ts`).
     "reminder.due": async (job) => {
       await messageReminderDue({ db: deps.db, pubsub: deps.pubsub }, job.payload as { reminderId?: string });
+    },
+    // A scheduled message's time came: post it as its person, like a live send (`scheduled-messages.ts`).
+    "scheduled.send": async (job) => {
+      const p = job.payload as { scheduledMessageId?: string; sendAt?: string };
+      await scheduledMessageSend(
+        { db: deps.db, pubsub: deps.pubsub, judge: deps.context ? judgeOf(deps.context) : undefined },
+        String(p.scheduledMessageId ?? ""),
+        p.sendAt,
+      );
     },
     // A request for help in an agent's browser nobody answered within the hour: the people asked hear it again, once.
     [HANDOFF_REMIND_JOB]: async (job) => {

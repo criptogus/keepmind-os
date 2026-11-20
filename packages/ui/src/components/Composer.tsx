@@ -211,6 +211,13 @@ export interface ComposerProps {
   agentBusy?: boolean;
   /** The microphone: absent, there is none. */
   voice?: ComposerVoice;
+  /**
+   * Schedule this text to send later (Slack's schedule send): a clock button in the tools row calls it with the
+   * box's text. Absent, there is no schedule affordance.
+   */
+  onSchedule?: (text: string) => void;
+  /** The schedule button's name ("Agendar mensagem"). */
+  scheduleLabel?: string;
 }
 
 /**
@@ -489,6 +496,8 @@ export function Composer({
   working,
   agentBusy,
   voice,
+  onSchedule,
+  scheduleLabel,
 }: ComposerProps) {
   const locked = useLocked();
   const disabled = off || locked;
@@ -1001,6 +1010,18 @@ export function Composer({
                 )}
               </div>
               <div className="ac-composer__tools">
+                {onSchedule && !disabled && (
+                  <Button
+                    variant="ghost"
+                    iconOnly
+                    size="sm"
+                    icon="clock"
+                    className="ac-composer__schedule"
+                    aria-label={scheduleLabel}
+                    title={scheduleLabel}
+                    onClick={() => onSchedule(value)}
+                  />
+                )}
                 {hasMic && (
                   <Button
                     variant="ghost"

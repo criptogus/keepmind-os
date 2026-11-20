@@ -399,6 +399,45 @@ export const messageReminders = pgTable(
 );
 
 /**
+ * Scheduled messages (Slack's schedule send): a person writes now, `scheduled.send` posts it as them at
+ * `sendAt`. One `scheduled.send` outbox job per row (`runAt`); a resend with the same `clientId` updates the
+ * pending row instead of queueing a second send. `sentAt`/`sentMessageId` mark it went out; cancel deletes
+ * the row while it is pending.
+ */
+export const scheduledMessages = pgTable(
+  "scheduled_messages",
+  {
+    id: uuid().primaryKey().defaultRandom(),
+    orgId: uuid()
+      .notNull()
+      .references(() => organizations.id, { onDelete: "cascade" }),
+    /** The person it goes out as (never an agent). */
+    userId: text()
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    channelId: uuid().notNull(),
+    threadId: uuid(),
+    body: text().notNull(),
+    /** Quote reply (`meta.replyTo`), same rules as a live send. */
+    replyTo: uuid(),
+    /** Artifact ids attached to it (`meta.artifacts`). */
+    attachments: text().array().notNull().default(sql`'{}'::text[]`),
+    sendAt: timestamp({ withTimezone: true }).notNull(),
+    /** The app's dedupe id: resending the same draft moves its send instead of queueing another. */
+    clientId: text(),
+    sentAt: timestamp({ withTimezone: true }),
+    sentMessageId: uuid(),
+    createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    unique().on(t.orgId, t.userId, t.clientId),
+    index().on(t.userId, t.sendAt),
+    index().on(t.orgId, t.sendAt),
+    foreignKey({ columns: [t.orgId, t.channelId], foreignColumns: [channels.orgId, channels.id] }).onDelete("cascade"),
+  ],
+);
+
+/**
  * Idempotent sends: the `clientId` a person's app gave a message it posted. A resend with the same
  * (org, person, clientId), e.g. a retry after the response was lost, gets the message already written
  * instead of a second one (and second runs). Claimed in the same statement that writes the message

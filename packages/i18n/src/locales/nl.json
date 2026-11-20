@@ -1665,6 +1665,28 @@
     "set": "Herinnering aangemaakt.",
     "cancelled": "Herinnering geannuleerd."
   },
+  "schedule": {
+    "button": "Bericht inplannen",
+    "title": "Bericht inplannen",
+    "when": "Wanneer",
+    "in1h": "Over 1 uur",
+    "tonight": "Vanavond om 18:00",
+    "tomorrow9": "Morgen om 9:00",
+    "nextMonday": "Volgende maandag om 9:00",
+    "custom": "Kies datum en tijd",
+    "date": "Datum",
+    "time": "Tijd",
+    "submit": "Inplannen",
+    "scheduledFor": "Ingepland voor {{when}}",
+    "cancelled": "Ingepland bericht geannuleerd",
+    "failed": "Kon niet inplannen. Probeer opnieuw.",
+    "listTitle": "Ingeplande berichten",
+    "chip_one": "{{count}} ingepland bericht",
+    "chip_other": "{{count}} ingeplande berichten",
+    "empty": "Niets ingepland.",
+    "cancel": "Annuleren",
+    "attachmentOnly": "Bijlage"
+  },
   "install": {
     "frames": "Zo installeer je het op {{system}}",
     "step": "Stap {{n}}",

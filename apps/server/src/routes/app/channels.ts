@@ -2,6 +2,8 @@ import { createRoute, z } from "@hono/zod-openapi";
 import {
   archiveChannel,
   CHANNEL_KEYS,
+  cancelMessageReminder,
+  cancelScheduledMessage,
   channelMembersDetail,
   createChannelCategory,
   deleteChannel,
@@ -9,16 +11,17 @@ import {
   listArchivedChannels,
   listChannelCategories,
   listChannelOverrides,
+  listMessageReminders,
   listPins,
+  listScheduledMessages,
   pinMessage,
   placeChannel,
   placeChannelCategory,
-  cancelMessageReminder,
-  listMessageReminders,
-  removeChannelMember,
   remindAboutMessage,
+  removeChannelMember,
   renameChannelCategory,
   requireChannelAccess,
+  scheduleMessage,
   setChannelAgentAutoReply,
   setChannelOverride,
   unarchiveChannel,
@@ -86,6 +89,34 @@ const ReminderIdParams = OrgParams.extend({ reminderId: z.uuid() });
 const RemindBody = z.object({
   remindAt: z.string().datetime({ offset: true }).openapi({ description: "When to be reminded (ISO 8601, future)." }),
   note: z.string().max(500).optional().openapi({ description: "An optional note shown with the reminder." }),
+});
+
+const ScheduledMessage = z
+  .object({
+    id: z.uuid(),
+    orgId: z.uuid(),
+    channelId: z.uuid(),
+    threadId: z.uuid().nullable(),
+    body: z.string(),
+    replyTo: z.uuid().nullable(),
+    attachments: z.array(z.uuid()),
+    sendAt: z.string(),
+    sentAt: z.string().nullable(),
+    sentMessageId: z.uuid().nullable(),
+    createdAt: z.string(),
+  })
+  .openapi("ScheduledMessage");
+const ScheduledIdParams = OrgParams.extend({ scheduledMessageId: z.uuid() });
+const ScheduleBody = z.object({
+  body: z
+    .string()
+    .max(400_000)
+    .openapi({ description: "Markdown, same limit as a live send. May be empty only with `attachments`." }),
+  threadId: z.uuid().nullable().optional(),
+  replyTo: z.uuid().nullable().optional(),
+  attachments: z.array(z.uuid()).max(10).optional(),
+  sendAt: z.string().datetime({ offset: true }).openapi({ description: "When it goes out (ISO 8601, ≥ ~30 s ahead)." }),
+  clientId: z.string().max(64).optional().openapi({ description: "Your id for the draft; a resend moves its send." }),
 });
 
 /** Channel management beyond chat (`chat.ts`): membership removal; open subscriptions are revoked at once. */
@@ -656,6 +687,72 @@ export function channelRoutes(deps: AppDeps) {
     async (c) => {
       const { orgId, reminderId } = c.req.valid("param");
       await cancelMessageReminder(db, c.get("user").id, orgId, reminderId);
+      return c.body(null, 204);
+    },
+  );
+
+  app.openapi(
+    createRoute({
+      method: "post",
+      path: "/organizations/{orgId}/channels/{channelId}/scheduled-messages",
+      tags,
+      security,
+      summary: "Schedule a message to send later (Slack's schedule send)",
+      description:
+        "Anyone who can post in the conversation. At `sendAt` it goes out as you, through the same path as a live send (mentions, threads, files). Resending the same `clientId` moves its send.",
+      request: { params: ChannelParams, body: body(ScheduleBody) },
+      responses: { 200: json(ScheduledMessage), ...errors },
+    }),
+    async (c) => {
+      const { orgId, channelId } = c.req.valid("param");
+      const input = c.req.valid("json");
+      return c.json(
+        await scheduleMessage(db, c.get("user").id, orgId, channelId, {
+          body: input.body,
+          threadId: input.threadId ?? null,
+          replyTo: input.replyTo ?? null,
+          attachments: input.attachments,
+          sendAt: new Date(input.sendAt),
+          clientId: input.clientId ?? null,
+        }),
+        200,
+      );
+    },
+  );
+
+  app.openapi(
+    createRoute({
+      method: "get",
+      path: "/organizations/{orgId}/scheduled-messages",
+      tags,
+      security,
+      summary: "My scheduled messages, soonest first (?sent=1 for the ones that went out)",
+      request: {
+        params: OrgParams,
+        query: z.object({ sent: z.enum(["0", "1"]).optional() }),
+      },
+      responses: { 200: json(z.object({ messages: z.array(ScheduledMessage) })), ...errors },
+    }),
+    async (c) => {
+      const { orgId } = c.req.valid("param");
+      const { sent } = c.req.valid("query");
+      return c.json({ messages: await listScheduledMessages(db, c.get("user").id, orgId, sent === "1") }, 200);
+    },
+  );
+
+  app.openapi(
+    createRoute({
+      method: "delete",
+      path: "/organizations/{orgId}/scheduled-messages/{scheduledMessageId}",
+      tags,
+      security,
+      summary: "Cancel one of my scheduled messages",
+      request: { params: ScheduledIdParams },
+      responses: { 204: noContent[204], ...errors },
+    }),
+    async (c) => {
+      const { orgId, scheduledMessageId } = c.req.valid("param");
+      await cancelScheduledMessage(db, c.get("user").id, orgId, scheduledMessageId);
       return c.body(null, 204);
     },
   );
