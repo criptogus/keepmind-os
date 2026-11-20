@@ -155,6 +155,15 @@ describe("the agent's identity as a card", () => {
       "Documentação",
       "Compliance",
       "Chief of Staff",
+      "Data Science",
+      "Data Engineering",
+      "Processos e eficiência",
+      "Eficiência energética",
+      "Robótica",
+      "Inovação",
+      "Arquitetura computacional",
+      "IA computacional",
+      "Banco de dados",
     ]);
     expect(options()[0]?.getAttribute("aria-selected")).toBe("true");
     expect(roleField().getAttribute("aria-activedescendant")).toBe(options()[0]?.id ?? "");

@@ -1,12 +1,5 @@
-import {
-  type PurposeKind,
-  SCENE_COLOR,
-  SCENE_FACES,
-  SCENE_H,
-  SCENE_LINES,
-  SCENE_W,
-} from "@keepmind/client/lib/purpose-scene";
-import { type AgentAppearance, Avatar, cx, horizonCrest, horizonTones, mix, PixelSky } from "@keepmind/ui";
+import { type PurposeKind, SCENE_FACES, SCENE_H, SCENE_LINES, SCENE_W } from "@keepmind/client/lib/purpose-scene";
+import { type AgentAppearance, Avatar, cx, KeepMindBackdrop } from "@keepmind/ui";
 import type { CSSProperties } from "react";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { type PurposeLife, sceneAgentKey, WAKE_STEP_MS } from "@/components/purpose-life";
@@ -40,31 +33,10 @@ export function PurposeScene({
   life: PurposeLife;
 }) {
   const faces = SCENE_FACES[kind];
-  const color = SCENE_COLOR[kind];
   return (
     <span className="onb-scene" data-kind={kind} data-chosen={chosen || undefined} data-gaze="" aria-hidden="true">
       <span className="onb-scene__sky">
-        <PixelSky
-          // A new sky when the choice changes: a sky reads its surface once, and the chosen card's is another.
-          key={chosen ? "chosen" : "resting"}
-          options={{
-            pixel: 4,
-            surface: "--scene-surface",
-            // The card's own ground paints nothing; `mix` spells it "#rrggbb" (a token may be "#fff").
-            seeThrough: true,
-            palette: (surface) =>
-              horizonTones(color, mix(surface, surface, 0), document.documentElement.dataset.theme === "dark"),
-            light: 0,
-            // The cards' horizon (`CardHorizon`) at the drawing's foot, where its last faces stand: a crest, then down
-            // into the color's light tones; resting, half as far.
-            base: (u, v) => {
-              const crest = horizonCrest(u * 0.85);
-              if (v < crest) return 0;
-              const f = Math.min(1, 0.2 + ((v - crest) / (1 - crest)) * 0.85);
-              return chosen ? f : f * 0.5;
-            },
-          }}
-        />
+        <KeepMindBackdrop strength={chosen ? 1 : 0.4} />
       </span>
       <span className="onb-scene__room">
         <span className="onb-scene__stage">

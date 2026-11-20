@@ -10,7 +10,6 @@ import { mentionsHandle } from "@keepmind/client/lib/markdown";
 import { apiProviderOf } from "@keepmind/client/lib/providers";
 import { splitAtNames, wordIndex } from "@keepmind/client/lib/text";
 import { act, cleanup, fireEvent, within } from "@testing-library/react";
-import type { ReactElement } from "react";
 import { ActorWho, withAgentFace, withAgentFaces } from "@/components/AgentAvatar";
 import { SidebarHorizon } from "@/components/Sky";
 import { boldNames } from "@/components/WorkingLine";
@@ -541,16 +540,29 @@ describe("agent faces in more lines", () => {
   });
 });
 
-describe("the sidebar's sky", () => {
-  test("no pixel agents drift behind the account row, however many agents work", async () => {
-    type Drawn = ReactElement<{ children: ReactElement<{ options: { sprites?: number } }> }>;
-    const seen: { drawn?: Drawn } = {};
-    function Probe() {
-      seen.drawn = SidebarHorizon({ working: 3, total: 3 }) as Drawn;
-      return seen.drawn;
+describe("the sidebar's KeepMind background", () => {
+  test("no extra agents behind the account row; the current is stronger while agents work", async () => {
+    await renderPage(
+      <div className="sidebar">
+        <div className="sidebar__foot">
+          <SidebarHorizon working={0} total={3} />
+          <SidebarHorizon working={3} total={3} />
+        </div>
+      </div>,
+      {
+        api: createFakeApi(seedState()),
+      },
+    );
+    const horizons = [...document.querySelectorAll(".sidebar__horizon")];
+    expect(horizons).toHaveLength(2);
+    for (const horizon of horizons) {
+      expect(horizon.getAttribute("aria-hidden")).toBe("true");
+      expect(horizon.querySelector("canvas, .ac-avatar, .ac-sticker")).toBeNull();
+      expect(horizon.querySelector(".km-agent-backdrop svg")).not.toBeNull();
     }
-    await renderPage(<Probe />, { api: createFakeApi(seedState()) });
-    expect(seen.drawn?.props.children.props.options.sprites).toBe(0);
+    const levels = horizons.map((h) => Number(h.querySelector<HTMLElement>(".km-agent-backdrop")?.style.opacity));
+    expect(levels[0]).toBeGreaterThan(0);
+    expect(levels[1]).toBeGreaterThan(levels[0] ?? 0);
   });
 });
 

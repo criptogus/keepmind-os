@@ -151,6 +151,46 @@ describe("Conectores › GitHub with the KeepMind OS app", () => {
     expect(flow.textContent).toContain("Substitui o login atual. Quem usa continua igual.");
   });
 
+  test("account reconnect without a separate OAuth client keeps the installed app's browser flow", async () => {
+    const left: string[] = [];
+    setNavigateAway((url) => left.push(url));
+    const state = seedState({
+      connections: [appOnly("acme")],
+      githubApp: { installable: true, installations: [ACME] },
+    });
+    await go(state, "", true);
+    await click(within(panel()).getByRole("button", { name: "Conectar uma conta do GitHub" }));
+    await settle(2);
+    const flow = screen().getByRole("dialog", { name: "Conectar GitHub" });
+    expect(within(flow).queryByLabelText("Chave de API")).toBeNull();
+    expect(flow.textContent).not.toContain("a conexão ainda não foi configurada");
+    await click(within(flow).getByRole("button", { name: "Instalar o app KeepMind OS" }));
+    await settle(4);
+    expect(state.calls.find((c) => c.method === "githubApp.install")?.args).toEqual([ORG_ID, CONNECTORS]);
+    expect(left[0]).toStartWith("https://github.com/apps/");
+    expect(state.calls.some((c) => c.method === "connectors.withKey" || c.method === "connectors.disconnect")).toBe(
+      false,
+    );
+    // Acting as a personal account with a token remains an explicit alternative.
+    await click(within(flow).getByRole("radio", { name: /Uma conta do GitHub/ }));
+    expect(within(flow).getByLabelText("Chave de API")).toBeTruthy();
+  });
+
+  test("expired account credentials still offer the configured app, preserving the connection", async () => {
+    const state = seedState({ githubApp: { installable: true, installations: [ACME] } });
+    const connection = state.connections[0];
+    if (!connection) throw new Error("missing GitHub fixture");
+    connection.status = "needs_reconnect";
+    await go(state, "", true);
+    await click(within(await rowMenu("GitHub")).getByRole("menuitem", { name: "Reconectar" }));
+    await settle(2);
+    const flow = screen().getByRole("dialog", { name: "Reconectar GitHub" });
+    expect(within(flow).getByRole("button", { name: "Instalar o app KeepMind OS" })).toBeTruthy();
+    expect(within(flow).queryByLabelText("Chave de API")).toBeNull();
+    expect(state.connections[0]?.id).toBe("conn-gh");
+    expect(state.calls.some((c) => c.method === "connectors.disconnect")).toBe(false);
+  });
+
   test("the last account of the app alone: removing it says agents lose GitHub", async () => {
     await go(seedState({ connections: [appOnly("acme")], githubApp: { installable: true, installations: [ACME] } }));
     await click(within(panel()).getByRole("button", { name: "Remover acme" }));

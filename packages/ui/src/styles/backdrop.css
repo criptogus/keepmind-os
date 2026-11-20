@@ -1,0 +1,83 @@
+.km-agent-backdrop {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: transparent;
+}
+.km-agent-backdrop svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.km-agent-backdrop__fold {
+  fill: var(--km-backdrop-fold, var(--raised-2));
+  opacity: 0.45;
+}
+.km-agent-backdrop__flow {
+  fill: none;
+  stroke: var(--km-backdrop-accent, #c4ff3d);
+  stroke-width: 1;
+}
+.km-agent-backdrop__connection {
+  stroke-opacity: 0.16;
+}
+.km-agent-backdrop__accent {
+  stroke: var(--km-backdrop-accent, #c4ff3d);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-dasharray: 7 93;
+  stroke-dashoffset: 100;
+  opacity: 1;
+  animation: km-synapse-travel 9s linear infinite paused;
+  animation-delay: var(--km-synapse-delay, 0s);
+}
+.km-agent-backdrop__neuron-ring {
+  stroke-opacity: 0.18;
+}
+.km-agent-backdrop__neuron {
+  fill: var(--km-backdrop-accent, #c4ff3d);
+  stroke: none;
+  opacity: 0.8;
+  animation: km-neuron-signal 9s ease-in-out infinite paused;
+  animation-delay: var(--km-synapse-delay, 0s);
+}
+.km-agent-backdrop[data-moving] :is(.km-agent-backdrop__accent, .km-agent-backdrop__neuron) {
+  animation-play-state: running;
+}
+.km-agent-backdrop[data-busy] :is(.km-agent-backdrop__accent, .km-agent-backdrop__neuron) {
+  animation-duration: 6s;
+}
+@keyframes km-synapse-travel {
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes km-neuron-signal {
+  0%,
+  100% {
+    opacity: 0.75;
+  }
+  45%,
+  60% {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .km-agent-backdrop__accent,
+  .km-agent-backdrop__neuron {
+    animation: none;
+  }
+}
+
+.km-agent-backdrop[data-tone="graphite"] {
+  --km-backdrop-fold: #1c1c1c;
+  background: #111111;
+}
+
+[data-desktop-renderer="cpu"] .km-agent-backdrop :is(.km-agent-backdrop__accent, .km-agent-backdrop__neuron) {
+  animation: none;
+}

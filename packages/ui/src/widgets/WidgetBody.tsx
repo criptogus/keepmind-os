@@ -1,8 +1,5 @@
-import { useEffect, useRef } from "react";
-import { useDarkTheme } from "../hooks/useDarkTheme";
+import { KeepMindBackdrop } from "../components/KeepMindBackdrop";
 import { Icon } from "../icons/Icon";
-import { prefersReducedMotion } from "../sky/engine";
-import { bayerAt, parseColor } from "../sky/math";
 import { DitherLine } from "./ChartPieces";
 import { formatWidgetNumber, formatWithUnit, isMarkUnit, useCountUp, widgetDigits } from "./format";
 import type {
@@ -15,7 +12,6 @@ import type {
   WidgetSpec,
   WidgetStatus,
 } from "./spec";
-import { WIDGET_CELL, widgetTones } from "./tiles";
 
 export interface WidgetBodyProps {
   spec: WidgetSpec | null;
@@ -221,58 +217,11 @@ function TextBody({ spec }: { spec: TextWidgetSpec }) {
   );
 }
 
-/**
- * A widget being built: the agent's dither with a wave walking across it (one frame, still, with reduced motion or
- * when nothing is being built).
- */
-export function BuildingDither({ color, still = false }: { color: string; still?: boolean }) {
-  const canvas = useRef<HTMLCanvasElement>(null);
-  const dark = useDarkTheme();
-  useEffect(() => {
-    const el = canvas.current;
-    if (!el) return;
-    const ctx = el.getContext("2d");
-    if (!ctx) return;
-    const [r, g, b] = parseColor(widgetTones(color, dark).fill);
-    const draw = (t: number) => {
-      const cols = Math.max(1, Math.round((el.clientWidth || 240) / WIDGET_CELL));
-      const rows = Math.max(1, Math.round((el.clientHeight || 64) / WIDGET_CELL));
-      if (el.width !== cols || el.height !== rows) {
-        el.width = cols;
-        el.height = rows;
-      }
-      const img = ctx.createImageData(cols, rows);
-      const phase = (t / 1400) % 1;
-      for (let y = 0; y < rows; y++)
-        for (let x = 0; x < cols; x++) {
-          const u = x / cols;
-          const near = Math.max(0, 0.55 - Math.abs(u - phase) * 2.2);
-          const v = 0.12 + near + 0.08 * Math.sin(u * 12 + y * 0.6 + t / 400);
-          if (v <= bayerAt(x, y)) continue;
-          const i = (y * cols + x) * 4;
-          img.data[i] = r;
-          img.data[i + 1] = g;
-          img.data[i + 2] = b;
-          img.data[i + 3] = 255;
-        }
-      ctx.putImageData(img, 0, 0);
-    };
-    if (still || prefersReducedMotion() || typeof requestAnimationFrame !== "function") {
-      draw(700);
-      return;
-    }
-    // About 20 frames a second: a slow wave, a light load beside a board of live widgets.
-    let frame = 0;
-    let drawn = -Infinity;
-    const tick = (t: number) => {
-      if (t - drawn >= 50) {
-        draw(t);
-        drawn = t;
-      }
-      frame = requestAnimationFrame(tick);
-    };
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [color, dark, still]);
-  return <canvas ref={canvas} className="wk-build__dither" />;
+/** A widget being built uses the shared KeepMind current, held still when idle. */
+export function BuildingDither({ still = false }: { color: string; still?: boolean }) {
+  return (
+    <span className="wk-build__dither" aria-hidden="true">
+      <KeepMindBackdrop busy still={still} />
+    </span>
+  );
 }

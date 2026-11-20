@@ -46651,5 +46651,38 @@
   },
   "teamPlan.templates.describeSendPersonal": {
     "value": "I want to set up my agents. Can you interview me?"
+  },
+  "skills.tab.local": {
+    "value": "This computer"
+  },
+  "skills.localHelp": {
+    "value": "Reads skill folders on the machine running KeepMind: ~/.claude/skills, ~/.codex/skills and ~/.agents/skills. Each folder with a SKILL.md installs like an uploaded .zip."
+  },
+  "skills.localCount": {
+    "value": {
+      "one": "1 skill",
+      "other": "{{count}} skills"
+    }
+  },
+  "skills.localInstalled": {
+    "value": "Installed: {{names}}"
+  },
+  "skills.localNone": {
+    "value": "No skills found in those folders."
+  },
+  "skills.localSkipDuplicate": {
+    "value": "A skill with this name is already installed."
+  },
+  "settings.quietHours": {
+    "value": "Quiet hours"
+  },
+  "settings.quietHoursHelp": {
+    "value": "Scheduled routines don't run inside this window: a routine whose time falls here fires once it ends."
+  },
+  "settings.quietHoursFrom": {
+    "value": "Quiet hours start"
+  },
+  "settings.quietHoursUntil": {
+    "value": "Quiet hours end"
   }
 }

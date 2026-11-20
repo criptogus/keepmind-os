@@ -52,7 +52,13 @@ export function ThreadPage({
   // "Responder" (a closed thread's line, a message in the channel): straight to the composer.
   useEffect(() => {
     if (!reply || !loaded) return;
-    const timer = setTimeout(() => document.getElementById(`composer-${threadId}`)?.focus(), 80);
+    const previousFocus = document.activeElement;
+    const timer = setTimeout(() => {
+      // A profile or another control opened meanwhile owns the focus now.
+      if (document.activeElement === previousFocus || document.activeElement === document.body) {
+        document.getElementById(`composer-${threadId}`)?.focus();
+      }
+    }, 80);
     return () => clearTimeout(timer);
   }, [reply, loaded, threadId]);
   const gone = info.error instanceof ApiError && (info.error.status === 404 || info.error.status === 403);

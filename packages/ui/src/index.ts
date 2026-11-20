@@ -216,6 +216,7 @@ export { GroupHeading } from "./components/GroupHeading";
 export { type Hosting, HostingScene, type Place, PlaceScene } from "./components/HostingScene";
 export { HintLine, type HintLineProps, InfoHint, type InfoHintProps } from "./components/InfoHint";
 export { isApple, Kbd, modKey, shortcut } from "./components/Kbd";
+export { KeepMindBackdrop } from "./components/KeepMindBackdrop";
 export { Logo, LogoMark, type LogoProps } from "./components/Logo";
 export {
   GifPicker,
