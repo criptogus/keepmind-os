@@ -541,3 +541,13 @@ html[data-desktop] .shell .newag:not(.newag-dialog > *) {
     border-radius: 0;
   }
 }
+
+/* The role step's search: one field over the card groups, never wider than a form's. */
+.newag__search {
+  width: 100%;
+  max-width: 420px;
+  margin-bottom: var(--space-3);
+}
+.newag__nohit {
+  margin: var(--space-2) 0 0;
+}

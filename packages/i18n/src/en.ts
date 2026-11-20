@@ -1,5 +1,6 @@
 import { libraryHelloEn, libraryRolesEn } from "./agent-library";
 import { engHelloEn, engRolesEn } from "./agent-library-eng";
+import { sciHelloEn, sciRolesEn } from "./agent-library-sci";
 import type { Widen } from "./widen";
 
 /**
@@ -7265,10 +7266,12 @@ export const en = {
       custom: { name: "From scratch", desc: "You write everything. No access until you grant it.", instructions: "" },
       ...libraryRolesEn,
       ...engRolesEn,
+      ...sciRolesEn,
     },
     roleGroups: {
       advisory: "Consulting and foresight",
       engineering: "Engineering and design",
+      science: "Science and data",
       exec: "Executives",
       inspired: "Inspired profiles",
       /** A personal workspace's one group: the right hand's personal agents (ADR 0159). */
@@ -7450,6 +7453,7 @@ export const en = {
     hello: {
       ...libraryHelloEn,
       ...engHelloEn,
+      ...sciHelloEn,
       clara: "I'll look after your calendar and remind you of what matters before it's too late.",
       duda: "I'll keep track of your bills and spending and warn you before anything is due.",
       leo: "I'll plan your workouts and keep you on pace, your way.",

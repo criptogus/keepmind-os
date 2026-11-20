@@ -84,6 +84,15 @@ const ROLE_ICON: Record<RoleId, IconName> = {
   technical_writer: "book",
   compliance_engineer: "lock",
   chief_of_staff: "crown",
+  data_scientist: "chart",
+  data_engineer: "database",
+  process_analyst: "bolt",
+  energy_specialist: "power",
+  robotics_specialist: "grid",
+  innovation_specialist: "bulb",
+  architecture_specialist: "diagram",
+  ai_specialist: "brainAgent",
+  database_specialist: "database",
   custom: "plus",
 };
 

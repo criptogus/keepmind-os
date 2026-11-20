@@ -1,3 +1,4 @@
+import { matchesWords } from "@keepmind/ui/search";
 import type { TFunction } from "i18next";
 import type { AgentAudience } from "../api/types";
 import type { Level } from "./access-levels";
@@ -101,6 +102,15 @@ export const ROLE_IDS = [
   "technical_writer",
   "compliance_engineer",
   "chief_of_staff",
+  "data_scientist",
+  "data_engineer",
+  "process_analyst",
+  "energy_specialist",
+  "robotics_specialist",
+  "innovation_specialist",
+  "architecture_specialist",
+  "ai_specialist",
+  "database_specialist",
   "custom",
 ] as const;
 export type RoleId = (typeof ROLE_IDS)[number];
@@ -129,6 +139,20 @@ export const ROLE_GROUPS = [
       "technical_writer",
       "compliance_engineer",
       "chief_of_staff",
+    ],
+  },
+  {
+    id: "science",
+    roles: [
+      "data_scientist",
+      "data_engineer",
+      "process_analyst",
+      "energy_specialist",
+      "robotics_specialist",
+      "innovation_specialist",
+      "architecture_specialist",
+      "ai_specialist",
+      "database_specialist",
     ],
   },
   { id: "customers", roles: ["support", "sales", "marketing", "content", "seo"] },
@@ -168,6 +192,63 @@ export const ROLE_GROUPS = [
   },
 ] as const satisfies readonly { id: string; roles: readonly Exclude<RoleId, "custom">[] }[];
 export type RoleGroupId = (typeof ROLE_GROUPS)[number]["id"];
+
+/**
+ * Extra words a role answers to in the pickers' search, beyond its name, description and hello: what people call
+ * the job ("p95", "tech debt", "UX"), in Portuguese and English where they differ.
+ */
+export const ROLE_SEARCH_ALIASES: Partial<Record<RoleId, string>> = {
+  dev: "desenvolvimento development software programação",
+  finance: "finanças finances financeiro",
+  cybersec: "cybersegurança cybersecurity segurança security",
+  exec_cfo: "cfo chief financial officer financeiro finanças treasurer",
+  exec_cmo: "cmo chief marketing officer marketing growth marca",
+  exec_cto: "cto chief technology officer tecnologia technology arquitetura",
+  exec_coo: "coo chief operating officer operações operations processos",
+  exec_people: "cpo chief people officer rh hr pessoas cultura",
+  exec_research: "head research pesquisa insights estudos",
+  seo: "seo geo search engine optimization google ai search aio buscador ranqueamento",
+  designer: "design ui ux figma canva interface visual produto",
+  ux_expert: "ux user experience pesquisa research usabilidade heurísticas jornada",
+  pr_manager: "pr pull request review code review merge revisor",
+  frontend_engineer: "frontend front-end web ui react javascript typescript css",
+  ios_engineer: "ios iphone ipad swift swiftui apple mobile",
+  android_engineer: "android kotlin mobile google",
+  software_factory: "factory fábrica bugs polish refactor improvements",
+  migration_engineer: "migration migração database schema upgrade",
+  latency_optimizer: "latency performance lentidão slow speed otimização p95",
+  platform_engineer: "platform plataforma infra infrastructure devops ci cd",
+  internal_tools: "internal tools ferramentas internas script automation",
+  release_engineer: "release versão deploy changelog versionamento",
+  code_reaper: "reaper dead code cleanup remoção código morto",
+  code_health: "health saúde débito técnico tech debt cve dependências",
+  anomaly_watcher: "anomaly anomalia watcher monitoramento métricas dados",
+  technical_writer: "writer documentação docs technical writing wiki",
+  compliance_engineer: "compliance auditoria audit controles governance",
+  chief_of_staff: "chief of staff cos coordenação orquestração time",
+  data_scientist: "data science cientista dados scientist estatística estatistica machine learning ml modelo predição",
+  data_engineer: "data engineer engenharia dados pipeline etl elt warehouse pipelines",
+  process_analyst: "processos efficiency eficiência analista processo otimização operacional lean six sigma",
+  energy_specialist: "energia energy eficiência energética sustainability sustentabilidade consumo eletricidade",
+  robotics_specialist: "robótica robotics robô robot cinemática atuadores automação",
+  innovation_specialist: "inovação innovation ideias startups pesquisa p&d",
+  architecture_specialist: "arquitetura architecture computacional sistemas distribuído microsserviços adr",
+  ai_specialist: "ia ai inteligência artificial llm ml machine learning modelos deep learning",
+  database_specialist: "banco de dados database db sql postgres postgresql índices queries dba",
+};
+
+/**
+ * Whether a role's card matches a picker's search: every word of the query appears in its id, aliases, agent
+ * name, role name, description or hello (case- and accent-folded, like every list's search). An empty query
+ * matches everything.
+ */
+export function roleMatchesQuery(id: RoleId, query: string, t: TFunction, agentName?: string): boolean {
+  if (!query.trim()) return true;
+  const text = `${id} ${ROLE_SEARCH_ALIASES[id] ?? ""} ${agentName ?? ""} ${t(`newAgent.roles.${id}.name` as never)} ${t(
+    `newAgent.roles.${id}.desc` as never,
+  )} ${t(`newAgent.hello.${id}` as never)}`;
+  return matchesWords(text, query);
+}
 
 /** New specialist/advisor templates never grant connections implicitly, including personal workspaces. */
 export const RESTRICTED_ROLE_IDS: readonly RoleId[] = [
@@ -480,6 +561,65 @@ export const ROLE_DEFAULTS = {
     look: { color: "indigo", eyes: "happy", accessory: "none" },
     levels: { asana: "write", linear: "write", notion: "write", drive: "read", todoist: "write" },
     channels: ["geral", "general", "chief-of-staff", "comex", "executive", "diretoria"],
+  }),
+  data_scientist: starts({
+    look: { color: "violet", eyes: "happy", accessory: "none" },
+    levels: {
+      posthog: "read",
+      mixpanel: "read",
+      amplitude: "read",
+      "google-sheets": "read",
+      drive: "read",
+      notion: "read",
+    },
+    channels: ["dados", "data", "analytics", "data-science", "metricas", "metrics"],
+  }),
+  data_engineer: starts({
+    look: { color: "teal", eyes: "wide", accessory: "none" },
+    levels: {
+      github: "write",
+      gitlab: "read",
+      neon: "read",
+      supabase: "read",
+      "google-sheets": "read",
+      linear: "read",
+    },
+    channels: ["data", "dados", "pipeline", "analytics", "data-engineering", "warehouse"],
+  }),
+  process_analyst: starts({
+    look: { color: "amber", eyes: "round", accessory: "none" },
+    levels: { asana: "read", todoist: "read", notion: "read", "google-sheets": "read", linear: "read" },
+    channels: ["processos", "operations", "eficiencia", "ops", "melhoria", "process-improvement"],
+  }),
+  energy_specialist: starts({
+    look: { color: "green", eyes: "dots", accessory: "none" },
+    levels: { "google-sheets": "read", drive: "read", notion: "read" },
+    channels: ["energia", "energy", "sustentabilidade", "sustainability", "eficiencia", "consumo"],
+  }),
+  robotics_specialist: starts({
+    look: { color: "graphite", eyes: "wide", accessory: "none" },
+    levels: { github: "write", context7: "read", linear: "read" },
+    channels: ["robotica", "robotics", "hardware", "automacao", "engenharia", "engineering"],
+  }),
+  innovation_specialist: starts({
+    look: { color: "rose", eyes: "happy", accessory: "none" },
+    levels: { notion: "write", drive: "read", linear: "read" },
+    channels: ["inovacao", "innovation", "pesquisa", "research", "ideias", "p&d"],
+  }),
+  architecture_specialist: starts({
+    look: { color: "indigo", eyes: "round", accessory: "none" },
+    levels: { github: "write", notion: "write", context7: "read", linear: "read" },
+    channels: ["arquitetura", "architecture", "tech", "sistemas", "engineering", "engenharia"],
+  }),
+  ai_specialist: starts({
+    look: { color: "violet", eyes: "dots", accessory: "none" },
+    levels: { github: "write", context7: "read", notion: "read", linear: "read" },
+    channels: ["ia", "ai", "ml", "machine-learning", "pesquisa", "research"],
+  }),
+  database_specialist: starts({
+    look: { color: "sky", eyes: "round", accessory: "none" },
+    levels: { github: "write", neon: "read", supabase: "read", context7: "read", linear: "read" },
+    channels: ["banco-de-dados", "database", "db", "dados", "data", "engineering", "engenharia"],
   }),
   custom: starts({ look: { color: "sky", eyes: "round", accessory: "none" }, levels: {}, channels: [] }),
 } satisfies Record<RoleId, RoleDefaults>;

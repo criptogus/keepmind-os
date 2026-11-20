@@ -1,5 +1,6 @@
 import { libraryHelloPt, libraryRolesPt } from "./agent-library";
 import { engHelloPt, engRolesPt } from "./agent-library-eng";
+import { sciHelloPt, sciRolesPt } from "./agent-library-sci";
 import type { LocaleStrings } from "./plurals";
 
 /**
@@ -7229,10 +7230,12 @@ export const ptBR = {
       custom: { name: "Do zero", desc: "Você escreve tudo. Sem acessos até você liberar.", instructions: "" },
       ...libraryRolesPt,
       ...engRolesPt,
+      ...sciRolesPt,
     },
     roleGroups: {
       advisory: "Consultoria e futuro",
       engineering: "Engenharia e design",
+      science: "Ciência e dados",
       exec: "Executivos",
       inspired: "Perfis inspirados",
       /** A personal workspace's one group: the right hand's personal agents (ADR 0159). */
@@ -7423,6 +7426,7 @@ export const ptBR = {
     hello: {
       ...libraryHelloPt,
       ...engHelloPt,
+      ...sciHelloPt,
       clara: "Vou cuidar da sua agenda e te lembrar do que importa antes que seja tarde.",
       duda: "Vou acompanhar as suas contas e gastos e te avisar antes de algo vencer.",
       leo: "Vou montar os seus treinos e te manter no ritmo, do seu jeito.",
