@@ -572,8 +572,13 @@
         if (!first || !last) continue;
         const b = el.getBoundingClientRect();
         const s = style(el);
-        const left = first.left - b.left - parseFloat(s.borderLeftWidth);
-        const right = b.right - parseFloat(s.borderRightWidth) - last.right;
+        // A wrapped toolbar's last control belongs to a different row. Compare its real padding,
+        // not the unused space after that shorter row; uneven padding remains a failure.
+        const wrappedToolbar = el.matches('[role="toolbar"]') && s.flexWrap === "wrap" && last.top > first.bottom;
+        const left = wrappedToolbar ? parseFloat(s.paddingLeft) : first.left - b.left - parseFloat(s.borderLeftWidth);
+        const right = wrappedToolbar
+          ? parseFloat(s.paddingRight)
+          : b.right - parseFloat(s.borderRightWidth) - last.right;
         if (left < 0 || right < 0) continue;
         if (Math.abs(left - right) > PAD_DIFF)
           out.push({

@@ -67,7 +67,8 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .km-agent-backdrop :is(.km-agent-backdrop__accent, .km-agent-backdrop__neuron) {
+  .km-agent-backdrop__accent,
+  .km-agent-backdrop__neuron {
     animation: none;
   }
 }
