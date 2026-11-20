@@ -152,6 +152,12 @@ export const auditLog = pgTable(
     onBehalfOfUserId: text(),
     /** A tool call's: `done`, `failed`, `refused` or `pending` (waiting for a person). Null for the rest. */
     outcome: text().$type<AuditOutcome>(),
+    /**
+     * Tamper-evident chain (one per org, in append order): sha256 over the row's canonical fields plus
+     * `prevHash`, the `chainHash` of the org's previous chained row. Null on rows written before the chain.
+     */
+    chainHash: text("chain_hash"),
+    prevHash: text("prev_hash"),
     createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
   },
   // The reader pages newest first by id (UUIDv7, so in time order): one index for the whole log, one per actor.

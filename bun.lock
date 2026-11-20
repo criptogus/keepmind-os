@@ -10,9 +10,16 @@
         "typescript": "^7.0.2",
       },
     },
+    "apps/cli": {
+      "name": "@keepmind/cli",
+      "version": "0.1.0",
+      "bin": {
+        "keepmind": "./src/index.ts",
+      },
+    },
     "apps/desktop": {
       "name": "@keepmind/desktop",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "dependencies": {
         "@fontsource-variable/martian-mono": "^5.3.0",
         "@fontsource-variable/onest": "^5.3.1",
@@ -756,6 +763,8 @@
     "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.31", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw=="],
 
     "@keepmind/adapters": ["@keepmind/adapters@workspace:packages/adapters"],
+
+    "@keepmind/cli": ["@keepmind/cli@workspace:apps/cli"],
 
     "@keepmind/client": ["@keepmind/client@workspace:packages/client"],
 
