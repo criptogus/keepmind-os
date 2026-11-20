@@ -166,6 +166,7 @@ import "./new-agent.css";
 const GROUP_ICON: Record<RoleGroupId, IconName> = {
   tech: "code",
   engineering: "code",
+  science: "chart",
   customers: "members",
   advisory: "layers",
   exec: "layers",

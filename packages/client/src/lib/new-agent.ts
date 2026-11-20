@@ -102,6 +102,15 @@ export const ROLE_IDS = [
   "technical_writer",
   "compliance_engineer",
   "chief_of_staff",
+  "data_scientist",
+  "data_engineer",
+  "process_analyst",
+  "energy_specialist",
+  "robotics_specialist",
+  "innovation_specialist",
+  "architecture_specialist",
+  "ai_specialist",
+  "database_specialist",
   "custom",
 ] as const;
 export type RoleId = (typeof ROLE_IDS)[number];
@@ -130,6 +139,20 @@ export const ROLE_GROUPS = [
       "technical_writer",
       "compliance_engineer",
       "chief_of_staff",
+    ],
+  },
+  {
+    id: "science",
+    roles: [
+      "data_scientist",
+      "data_engineer",
+      "process_analyst",
+      "energy_specialist",
+      "robotics_specialist",
+      "innovation_specialist",
+      "architecture_specialist",
+      "ai_specialist",
+      "database_specialist",
     ],
   },
   { id: "customers", roles: ["support", "sales", "marketing", "content", "seo"] },
@@ -203,6 +226,15 @@ export const ROLE_SEARCH_ALIASES: Partial<Record<RoleId, string>> = {
   technical_writer: "writer documentação docs technical writing wiki",
   compliance_engineer: "compliance auditoria audit controles governance",
   chief_of_staff: "chief of staff cos coordenação orquestração time",
+  data_scientist: "data science cientista dados scientist estatística estatistica machine learning ml modelo predição",
+  data_engineer: "data engineer engenharia dados pipeline etl elt warehouse pipelines",
+  process_analyst: "processos efficiency eficiência analista processo otimização operacional lean six sigma",
+  energy_specialist: "energia energy eficiência energética sustainability sustentabilidade consumo eletricidade",
+  robotics_specialist: "robótica robotics robô robot cinemática atuadores automação",
+  innovation_specialist: "inovação innovation ideias startups pesquisa p&d",
+  architecture_specialist: "arquitetura architecture computacional sistemas distribuído microsserviços adr",
+  ai_specialist: "ia ai inteligência artificial llm ml machine learning modelos deep learning",
+  database_specialist: "banco de dados database db sql postgres postgresql índices queries dba",
 };
 
 /**
@@ -529,6 +561,65 @@ export const ROLE_DEFAULTS = {
     look: { color: "indigo", eyes: "happy", accessory: "none" },
     levels: { asana: "write", linear: "write", notion: "write", drive: "read", todoist: "write" },
     channels: ["geral", "general", "chief-of-staff", "comex", "executive", "diretoria"],
+  }),
+  data_scientist: starts({
+    look: { color: "violet", eyes: "happy", accessory: "none" },
+    levels: {
+      posthog: "read",
+      mixpanel: "read",
+      amplitude: "read",
+      "google-sheets": "read",
+      drive: "read",
+      notion: "read",
+    },
+    channels: ["dados", "data", "analytics", "data-science", "metricas", "metrics"],
+  }),
+  data_engineer: starts({
+    look: { color: "teal", eyes: "wide", accessory: "none" },
+    levels: {
+      github: "write",
+      gitlab: "read",
+      neon: "read",
+      supabase: "read",
+      "google-sheets": "read",
+      linear: "read",
+    },
+    channels: ["data", "dados", "pipeline", "analytics", "data-engineering", "warehouse"],
+  }),
+  process_analyst: starts({
+    look: { color: "amber", eyes: "round", accessory: "none" },
+    levels: { asana: "read", todoist: "read", notion: "read", "google-sheets": "read", linear: "read" },
+    channels: ["processos", "operations", "eficiencia", "ops", "melhoria", "process-improvement"],
+  }),
+  energy_specialist: starts({
+    look: { color: "green", eyes: "dots", accessory: "none" },
+    levels: { "google-sheets": "read", drive: "read", notion: "read" },
+    channels: ["energia", "energy", "sustentabilidade", "sustainability", "eficiencia", "consumo"],
+  }),
+  robotics_specialist: starts({
+    look: { color: "graphite", eyes: "wide", accessory: "none" },
+    levels: { github: "write", context7: "read", linear: "read" },
+    channels: ["robotica", "robotics", "hardware", "automacao", "engenharia", "engineering"],
+  }),
+  innovation_specialist: starts({
+    look: { color: "rose", eyes: "happy", accessory: "none" },
+    levels: { notion: "write", drive: "read", linear: "read" },
+    channels: ["inovacao", "innovation", "pesquisa", "research", "ideias", "p&d"],
+  }),
+  architecture_specialist: starts({
+    look: { color: "indigo", eyes: "round", accessory: "none" },
+    levels: { github: "write", notion: "write", context7: "read", linear: "read" },
+    channels: ["arquitetura", "architecture", "tech", "sistemas", "engineering", "engenharia"],
+  }),
+  ai_specialist: starts({
+    look: { color: "violet", eyes: "dots", accessory: "none" },
+    levels: { github: "write", context7: "read", notion: "read", linear: "read" },
+    channels: ["ia", "ai", "ml", "machine-learning", "pesquisa", "research"],
+  }),
+  database_specialist: starts({
+    look: { color: "sky", eyes: "round", accessory: "none" },
+    levels: { github: "write", neon: "read", supabase: "read", context7: "read", linear: "read" },
+    channels: ["banco-de-dados", "database", "db", "dados", "data", "engineering", "engenharia"],
   }),
   custom: starts({ look: { color: "sky", eyes: "round", accessory: "none" }, levels: {}, channels: [] }),
 } satisfies Record<RoleId, RoleDefaults>;

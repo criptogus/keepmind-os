@@ -301,9 +301,10 @@ export const NEW_AGENT_EVENT = "agentes:new-agent";
 const isStarter = (pick: Pick): pick is PersonalStarter["id"] => PERSONAL_STARTERS.some((s) => s.id === pick);
 const starterOf = (pick: Pick) => PERSONAL_STARTERS.find((s) => s.id === pick);
 const roleOf = (pick: Pick): RoleId | null => (pick === "zero" || isStarter(pick) ? null : pick);
-const GROUP_ICON: Record<RoleGroupId, "code" | "members" | "layers"> = {
+const GROUP_ICON: Record<RoleGroupId, "code" | "members" | "layers" | "chart"> = {
   tech: "code",
   engineering: "code",
+  science: "chart",
   customers: "members",
   advisory: "layers",
   exec: "layers",

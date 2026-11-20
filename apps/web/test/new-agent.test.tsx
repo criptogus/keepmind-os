@@ -291,6 +291,7 @@ describe("Criar agente: steps", () => {
     ).toEqual([
       "Produto e tecnologia",
       "Engenharia e design",
+      "Ciência e dados",
       "Clientes",
       "Operação",
       "Consultoria e futuro",
@@ -321,6 +322,17 @@ describe("Criar agente: steps", () => {
       "Documentação",
       "Compliance",
       "Chief of Staff",
+    ]);
+    expect(names("Ciência e dados")).toEqual([
+      "Data Science",
+      "Data Engineering",
+      "Processos e eficiência",
+      "Eficiência energética",
+      "Robótica",
+      "Inovação",
+      "Arquitetura computacional",
+      "IA computacional",
+      "Banco de dados",
     ]);
     expect(names("Clientes")).toEqual(["Atendimento", "Vendas", "Marketing", "Conteúdo", "SEO & GEO"]);
     expect(names("Operação")).toEqual(["Dados", "Financeiro", "Pessoas", "Pesquisa", "Assistente"]);
