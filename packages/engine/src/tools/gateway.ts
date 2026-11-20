@@ -67,6 +67,7 @@ import { checkToolCall } from "./checks";
 import { connectorFirst } from "./connector-first";
 import { type BlockedTool, compactSchema, presentTools, resolveCall } from "./directory";
 import { canonicalJson, validateJson } from "./json-schema";
+import { compressToolOutput, smartCutToolOutput } from "./output-filter";
 import { missingPermissions, REQUEST_PERMISSION_TOOL } from "./permission";
 import {
   type ApprovalsLevel,
@@ -707,10 +708,12 @@ export function createToolGateway(deps: {
         }).catch(() => {});
       }
       // A NUL or a lone surrogate (a binary printed by a command) would make every save of this result fail.
-      const text = pgSafeText(output.content);
+      // Terminal noise goes first (ANSI, progress redraws, repeated lines), then the cap keeps
+      // head + failures + tail rather than a blind head slice (`output-filter.ts`).
+      const text = compressToolOutput(pgSafeText(output.content));
       const capped = {
         ...output,
-        content: text.length > MAX_RESULT_CHARS ? `${cutText(text, MAX_RESULT_CHARS)}\n[truncated]` : text,
+        content: text.length > MAX_RESULT_CHARS ? `${smartCutToolOutput(text, MAX_RESULT_CHARS)}\n[truncated]` : text,
       };
       return tool.external ? { ...capped, content: wrapExternal(tool.name, capped.content) } : capped;
     } catch (error) {
