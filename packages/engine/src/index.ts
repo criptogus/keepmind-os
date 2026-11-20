@@ -153,6 +153,7 @@ export * from "./git/repo-listing";
 export * from "./git/repos";
 export * from "./git/signature";
 export * from "./git/tools";
+export * from "./goals";
 export * from "./hand-off";
 export * from "./host-computer";
 export * from "./id-refs";
