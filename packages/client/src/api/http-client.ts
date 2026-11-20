@@ -1,4 +1,5 @@
 import { createDashboardsApi } from "../dashboards/api";
+import { createGoalsApi } from "../goals/api";
 import type { ChatPrefs } from "../lib/chat-look";
 import { humanCheckHeaders } from "../lib/human-check";
 import type { OnboardingStepId } from "../lib/onboarding";
@@ -1663,6 +1664,7 @@ export function createHttpApi(options: TransportOptions = {}): HttpApi {
         request<ThreadInfo>(`${org(orgId)}/threads/${enc(threadId)}/${action}`, { json: {} }),
     },
     dashboards: createDashboardsApi(request),
+    goals: createGoalsApi(request),
     missions: ((): HttpApi["missions"] => {
       const one = (orgId: string, missionId: string) => `${org(orgId)}/missions/${enc(missionId)}`;
       return {

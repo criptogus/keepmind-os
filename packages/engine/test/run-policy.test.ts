@@ -95,6 +95,11 @@ describe("run policy table", () => {
     expect(toolKind(builtIn("vault_list", "vault:read")).kind).toBe("read");
     expect(toolKind(builtIn("vault_save", "vault:write"))).toEqual({ kind: "internal", area: "vault" });
     expect(toolKind(builtIn("vault_delete", "vault:write"))).toEqual({ kind: "internal", area: "vault" });
+    // Goals (OKRs): listing is a read, a proposal lands as a card a person activates, moving an
+    // active goal's progress is an internal change.
+    expect(toolKind(builtIn("list_goals")).kind).toBe("read");
+    expect(toolKind(builtIn("propose_goal")).kind).toBe("here");
+    expect(toolKind(builtIn("update_goal"))).toEqual({ kind: "internal", area: "goals" });
   });
 
   test("routine stored as read (ADR 0109): the same as act, the web and the browser included", () => {
@@ -128,6 +133,10 @@ describe("run policy table", () => {
     expect(decide(r, app("mail_support_send", "mail:send"))).toBe("approve");
     for (const name of ["post_message", "send_dm", "ask_agent", "tell_agent"])
       expect(decide(r, builtIn(name))).toBe("allow");
+    // A routine's weekly check reads the goals and reports progress on them; proposing one is a person's run's.
+    expect(decide(r, builtIn("list_goals"))).toBe("allow");
+    expect(decide(r, builtIn("update_goal"))).toBe("allow");
+    expect(toolPolicy(r, builtIn("propose_goal"))).toEqual({ action: "refuse", reason: REFUSALS.routineHere });
     // A routine never starts or changes routines, so routines can't feed each other.
     const never = ["create_routine", "update_routine", "run_routine_now", "schedule_reminder"];
     for (const name of never)

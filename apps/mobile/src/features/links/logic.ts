@@ -48,6 +48,7 @@ export type AppHref =
   | "/usage"
   | "/proposals"
   | "/dashboards"
+  | "/goals"
   | "/ai-accounts"
   | `/board/${string}`
   | `/widget/${string}`;

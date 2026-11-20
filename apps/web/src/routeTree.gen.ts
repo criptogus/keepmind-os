@@ -36,6 +36,7 @@ import { Route as OrgOrgIdIndexRouteImport } from './routes/org.$orgId.index'
 import { Route as OrgOrgIdApprovalsRouteImport } from './routes/org.$orgId.approvals'
 import { Route as OrgOrgIdCalendarRouteImport } from './routes/org.$orgId.calendar'
 import { Route as OrgOrgIdDriveRouteImport } from './routes/org.$orgId.drive'
+import { Route as OrgOrgIdGoalsRouteImport } from './routes/org.$orgId.goals'
 import { Route as OrgOrgIdHomeRouteImport } from './routes/org.$orgId.home'
 import { Route as OrgOrgIdMembersRouteImport } from './routes/org.$orgId.members'
 import { Route as OrgOrgIdNotificationsRouteImport } from './routes/org.$orgId.notifications'
@@ -203,6 +204,11 @@ const OrgOrgIdCalendarRoute = OrgOrgIdCalendarRouteImport.update({
 const OrgOrgIdDriveRoute = OrgOrgIdDriveRouteImport.update({
   id: '/drive',
   path: '/drive',
+  getParentRoute: () => OrgOrgIdRoute,
+} as any)
+const OrgOrgIdGoalsRoute = OrgOrgIdGoalsRouteImport.update({
+  id: '/goals',
+  path: '/goals',
   getParentRoute: () => OrgOrgIdRoute,
 } as any)
 const OrgOrgIdHomeRoute = OrgOrgIdHomeRouteImport.update({
@@ -407,6 +413,7 @@ export interface FileRoutesByFullPath {
   '/org/$orgId/approvals': typeof OrgOrgIdApprovalsRoute
   '/org/$orgId/calendar': typeof OrgOrgIdCalendarRoute
   '/org/$orgId/drive': typeof OrgOrgIdDriveRoute
+  '/org/$orgId/goals': typeof OrgOrgIdGoalsRoute
   '/org/$orgId/home': typeof OrgOrgIdHomeRoute
   '/org/$orgId/members': typeof OrgOrgIdMembersRoute
   '/org/$orgId/notifications': typeof OrgOrgIdNotificationsRoute
@@ -468,6 +475,7 @@ export interface FileRoutesByTo {
   '/org/$orgId/approvals': typeof OrgOrgIdApprovalsRoute
   '/org/$orgId/calendar': typeof OrgOrgIdCalendarRoute
   '/org/$orgId/drive': typeof OrgOrgIdDriveRoute
+  '/org/$orgId/goals': typeof OrgOrgIdGoalsRoute
   '/org/$orgId/home': typeof OrgOrgIdHomeRoute
   '/org/$orgId/members': typeof OrgOrgIdMembersRoute
   '/org/$orgId/notifications': typeof OrgOrgIdNotificationsRoute
@@ -531,6 +539,7 @@ export interface FileRoutesById {
   '/org/$orgId/approvals': typeof OrgOrgIdApprovalsRoute
   '/org/$orgId/calendar': typeof OrgOrgIdCalendarRoute
   '/org/$orgId/drive': typeof OrgOrgIdDriveRoute
+  '/org/$orgId/goals': typeof OrgOrgIdGoalsRoute
   '/org/$orgId/home': typeof OrgOrgIdHomeRoute
   '/org/$orgId/members': typeof OrgOrgIdMembersRoute
   '/org/$orgId/notifications': typeof OrgOrgIdNotificationsRoute
@@ -595,6 +604,7 @@ export interface FileRouteTypes {
     | '/org/$orgId/approvals'
     | '/org/$orgId/calendar'
     | '/org/$orgId/drive'
+    | '/org/$orgId/goals'
     | '/org/$orgId/home'
     | '/org/$orgId/members'
     | '/org/$orgId/notifications'
@@ -656,6 +666,7 @@ export interface FileRouteTypes {
     | '/org/$orgId/approvals'
     | '/org/$orgId/calendar'
     | '/org/$orgId/drive'
+    | '/org/$orgId/goals'
     | '/org/$orgId/home'
     | '/org/$orgId/members'
     | '/org/$orgId/notifications'
@@ -718,6 +729,7 @@ export interface FileRouteTypes {
     | '/org/$orgId/approvals'
     | '/org/$orgId/calendar'
     | '/org/$orgId/drive'
+    | '/org/$orgId/goals'
     | '/org/$orgId/home'
     | '/org/$orgId/members'
     | '/org/$orgId/notifications'
@@ -971,6 +983,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgIdDriveRouteImport
       parentRoute: typeof OrgOrgIdRoute
     }
+    '/org/$orgId/goals': {
+      id: '/org/$orgId/goals'
+      path: '/goals'
+      fullPath: '/org/$orgId/goals'
+      preLoaderRoute: typeof OrgOrgIdGoalsRouteImport
+      parentRoute: typeof OrgOrgIdRoute
+    }
     '/org/$orgId/home': {
       id: '/org/$orgId/home'
       path: '/home'
@@ -1209,6 +1228,7 @@ interface OrgOrgIdRouteChildren {
   OrgOrgIdApprovalsRoute: typeof OrgOrgIdApprovalsRoute
   OrgOrgIdCalendarRoute: typeof OrgOrgIdCalendarRoute
   OrgOrgIdDriveRoute: typeof OrgOrgIdDriveRoute
+  OrgOrgIdGoalsRoute: typeof OrgOrgIdGoalsRoute
   OrgOrgIdHomeRoute: typeof OrgOrgIdHomeRoute
   OrgOrgIdMembersRoute: typeof OrgOrgIdMembersRoute
   OrgOrgIdNotificationsRoute: typeof OrgOrgIdNotificationsRoute
@@ -1249,6 +1269,7 @@ const OrgOrgIdRouteChildren: OrgOrgIdRouteChildren = {
   OrgOrgIdApprovalsRoute: OrgOrgIdApprovalsRoute,
   OrgOrgIdCalendarRoute: OrgOrgIdCalendarRoute,
   OrgOrgIdDriveRoute: OrgOrgIdDriveRoute,
+  OrgOrgIdGoalsRoute: OrgOrgIdGoalsRoute,
   OrgOrgIdHomeRoute: OrgOrgIdHomeRoute,
   OrgOrgIdMembersRoute: OrgOrgIdMembersRoute,
   OrgOrgIdNotificationsRoute: OrgOrgIdNotificationsRoute,

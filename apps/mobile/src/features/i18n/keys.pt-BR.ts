@@ -1163,6 +1163,7 @@ export const featureKeysPtBR = {
     allAgents: "Ver todos",
     work: "Trabalho",
     dashboards: "Painéis",
+    goals: "Metas",
     agentStyle: "Como os agentes falam",
     workspaces: "Workspaces",
     workspacesIn: "Você está em",

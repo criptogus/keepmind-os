@@ -7064,6 +7064,7 @@ export type SidebarItem =
   | "calendar"
   | "team"
   | "dashboards"
+  | "goals"
   | "taskManager";
 /** `always` in the list, `more` only in the More menu, `auto` in the list while its count is above zero. */
 export type SidebarPlace = "always" | "more" | "auto";

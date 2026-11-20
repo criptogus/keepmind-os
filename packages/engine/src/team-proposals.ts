@@ -78,7 +78,7 @@ export const TEAM_UNDO_MS = 24 * 3600_000;
 /** Lodi's weekly check (concept C) is one of the team's routines: Fridays at 17h in the person's time zone. */
 export const WEEKLY_CHECK_CRON = "0 17 * * 5";
 const WEEKLY_CHECK_PROMPT =
-  "Write this week's check of the team for the person in this conversation, in their language: four numbers (runs, failed runs, approvals waiting, questions nobody answered), what worked, then one fix per problem (an agent stuck or in no channel, a budget near its limit, a request made by hand more than once), each as one of your cards. When there is nothing to say, write one short line.";
+  "Write this week's check of the team for the person in this conversation, in their language: four numbers (runs, failed runs, approvals waiting, questions nobody answered), what worked, then one fix per problem (an agent stuck or in no channel, a budget near its limit, a request made by hand more than once), each as one of your cards. When the workspace has goals (list_goals), say in one line how each active one stands and, for one that lags, the fix you propose — a leader's routine carries it out. When there is nothing to say, write one short line.";
 /**
  * The same in a personal workspace (ADR 0159): how the person's own agents did. An agent there may live in its DM
  * with no channel, which is no problem to fix.

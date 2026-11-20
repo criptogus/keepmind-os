@@ -1190,6 +1190,7 @@ export const featureKeysEn = {
     /** The group of what you work on (tasks, routines, wiki, drive, dashboards, memory). */
     work: "Work",
     dashboards: "Dashboards",
+    goals: "Goals",
     agentStyle: "How agents talk",
     workspaces: "Workspaces",
     workspacesIn: "You're in",

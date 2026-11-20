@@ -364,6 +364,7 @@ export function presentTools(
 export function toolGroupKey(tool: Pick<ToolDefinition, "scope" | "connectionId"> & { name?: string }) {
   if (tool.name && RARE_TOOLS.has(tool.name)) return RARE_GROUP;
   if (tool.name && DASHBOARD_TOOLS.has(tool.name) && !tool.connectionId) return DASHBOARD_GROUP;
+  if (tool.name && GOAL_TOOLS.has(tool.name) && !tool.connectionId) return GOALS_GROUP;
   const prefix = tool.scope.split(":")[0] ?? "";
   return prefix.startsWith("custom") ? `custom:${tool.connectionId ?? prefix}` : prefix;
 }
@@ -418,6 +419,13 @@ export const DASHBOARD_TOOLS: ReadonlySet<string> = new Set([
 ]);
 const DASHBOARD_GROUP = "dashboards";
 
+/**
+ * Goals (OKRs, goals.ts): built-in for every agent (no scope), loaded when a run needs them, like a scope's
+ * group — the leadership proposes and tracks them, most runs never do.
+ */
+export const GOAL_TOOLS: ReadonlySet<string> = new Set(["list_goals", "propose_goal", "update_goal"]);
+const GOALS_GROUP = "goals";
+
 export const isCore = (tool: Pick<ToolDefinition, "name" | "scope" | "connectionId">) =>
   !RARE_TOOLS.has(tool.name) && (CORE_GROUPS.has(toolGroupKey(tool)) || CORE_TOOLS.has(tool.name));
 
@@ -434,6 +442,7 @@ const GROUP_LABELS: Record<string, string> = {
     "More of the conversation (reading a channel or a message by its link, stickers, your status, reply style, threads, adding agents to channels, the agents' directory, your usage, instruction changes, your own settings, the agents' line on commits, feedback on this app)",
   drive: "Files (Drive)",
   [DASHBOARD_GROUP]: "Dashboards and widgets (numbers and charts kept up to date, boards to share)",
+  [GOALS_GROUP]: "Goals (OKRs: the workspace's measurable targets, their progress and owners)",
   issues: "Issues",
   calendar: "Calendar",
   schedule: "Schedule, reminders and routines",

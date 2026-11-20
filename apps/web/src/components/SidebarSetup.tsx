@@ -49,6 +49,7 @@ export const SIDEBAR_TOOLS = {
   calendar: { to: "/org/$orgId/calendar", icon: "calendar" },
   team: { to: "/org/$orgId/team", icon: "agent" },
   dashboards: { to: "/org/$orgId/dashboards", icon: "chart" },
+  goals: { to: "/org/$orgId/goals", icon: "flag" },
   taskManager: { to: "/org/$orgId/task-manager", icon: "stageProgress" },
 } as const satisfies Record<SidebarItem, { to: string; icon: IconName }>;
 

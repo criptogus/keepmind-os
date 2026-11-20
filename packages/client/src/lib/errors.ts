@@ -318,6 +318,8 @@ const KNOWN = {
   "dashboard.title_required": "dashboards.errors.titleRequired",
   "dashboard.too_many": "dashboards.errors.tooMany",
   "dashboard.publish_forbidden": "dashboards.errors.publishForbidden",
+  // Goals (OKRs): a member without assign_work meets this on the API the page already hides.
+  "goal.forbidden": "goals.errors.forbidden",
   "dashboard.proposal_none": "dashboards.errors.proposalNone",
   "dashboard.proposal_not_yours": "dashboards.errors.proposalNotYours",
   "widget.not_found": "dashboards.errors.widgetNotFound",

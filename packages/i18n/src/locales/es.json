@@ -1984,6 +1984,7 @@
       "calendar": "Reuniones y plazos",
       "team": "Quién es quién: personas, agentes y sus grupos",
       "dashboards": "Números y gráficos que los agentes mantienen al día",
+      "goals": "The targets the agents work toward",
       "taskManager": "Lo que cada agente hace ahora, y detener lo que necesites",
       "approvalsPersonal": "Lo que tus agentes te piden permitir",
       "proposalsPersonal": "Lo que tus agentes proponen cambiar",
@@ -1993,6 +1994,7 @@
       "calendarPersonal": "Tus citas y plazos",
       "teamPersonal": "Tus agentes, y quién más está aquí",
       "dashboardsPersonal": "Números y gráficos que tus agentes mantienen al día",
+      "goalsPersonal": "The targets your agents work toward",
       "taskManagerPersonal": "Lo que hacen tus agentes ahora, y detener lo que necesites",
       "homePersonal": "Tu día: lo que te espera y lo que hacen tus agentes"
     },
@@ -2154,7 +2156,8 @@
     "unreadThreads_other": "Hilos: {{count}} con respuestas sin leer",
     "unreadNotifications_one": "{{count}} notificación sin leer",
     "unreadNotifications_many": "{{count}} notificaciones sin leer",
-    "unreadNotifications_other": "{{count}} notificaciones sin leer"
+    "unreadNotifications_other": "{{count}} notificaciones sin leer",
+    "goals": "Goals"
   },
   "agentGroups": {
     "group": "Departamento",
@@ -17791,7 +17794,10 @@
         "thinking": "Pensó",
         "typing": "Escribió",
         "recordingVoice": "Grabó un audio",
-        "writing": "Escribió"
+        "writing": "Escribió",
+        "checkingGoals": "Checked the goals",
+        "proposingGoal": "Proposed a goal",
+        "updatingGoal": "Updated a goal"
       }
     },
     "activity": {
@@ -17907,7 +17913,10 @@
       "updatingThread": "actualizando un hilo",
       "addingAgent": "agregando un agente a un canal",
       "readingConversation": "leyendo la conversación",
-      "usingTool": "usando una herramienta"
+      "usingTool": "usando una herramienta",
+      "checkingGoals": "checking the goals",
+      "proposingGoal": "proposing a goal",
+      "updatingGoal": "updating a goal"
     },
     "tokens": "{{value}} tokens",
     "sayHiAgent": "Saluda a {{name}}",
@@ -20065,6 +20074,56 @@
       "promptRequired": "Di qué debe mostrar el widget.",
       "notTested": "Pruébalo antes: el widget se crea cuando la prueba funciona.",
       "needsAi": "{{agentName}} todavía no puede actualizar este widget. El widget dice por qué."
+    }
+  },
+  "goals": {
+    "title": "Goals",
+    "subtitle": "The targets the agents work toward, and how far each one is.",
+    "of": "{{current}} of {{target}} {{unit}}",
+    "created": "Goal created.",
+    "activate": "Activate",
+    "pause": "Pause",
+    "resume": "Resume",
+    "achieved": "Mark achieved",
+    "drop": "Drop",
+    "period": {
+      "daily": "daily",
+      "weekly": "weekly",
+      "monthly": "monthly",
+      "quarterly": "quarterly",
+      "yearly": "yearly"
+    },
+    "status": {
+      "proposed": "Proposed",
+      "active": "Active",
+      "paused": "Paused",
+      "achieved": "Achieved",
+      "dropped": "Dropped"
+    },
+    "empty": {
+      "title": "No goals yet",
+      "text": "Set a target, like leads per month, uptime or hires, and the agents propose a plan, break it into tasks and report progress here."
+    },
+    "new": {
+      "open": "New goal",
+      "title": "New goal",
+      "subtitle": "A measurable target the team works toward.",
+      "name": "Goal",
+      "nameHint": "e.g. 100 qualified leads this month",
+      "metric": "How it's measured",
+      "metricHint": "what counts and where the number comes from",
+      "target": "Target",
+      "targetHint": "the number that means done",
+      "unit": "Unit",
+      "unitHint": "leads, %, hours…",
+      "period": "Period",
+      "owner": "Owner",
+      "ownerHint": "the leader accountable for it",
+      "noOwner": "No owner",
+      "create": "Create goal"
+    },
+    "errors": {
+      "forbidden": "Only people who can assign work can change goals."
     }
   },
   "teamPlan": {

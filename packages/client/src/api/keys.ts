@@ -286,6 +286,8 @@ export const keys = {
   agentDesktops: (orgId: string) => ["org", orgId, "desktop"] as const,
   /** Boards and widgets (ADR 0135): everything below (prefix); `dashboard.*` events refresh it. */
   dashboards: (orgId: string) => ["org", orgId, "dashboards"] as const,
+  /** The workspace's goals (OKRs). */
+  goals: (orgId: string) => ["org", orgId, "goals"] as const,
   dashboardList: (orgId: string) => ["org", orgId, "dashboards", "list"] as const,
   dashboard: (orgId: string, dashboardId: string) => ["org", orgId, "dashboards", "one", dashboardId] as const,
   /** My home board ("My Home", the Home mural). */

@@ -90,6 +90,7 @@ export type InternalArea =
   | "browser"
   | "desktop"
   | "dashboards"
+  | "goals"
   | "vault"
   | "skills";
 
@@ -172,6 +173,8 @@ const HERE = new Set([
   "propose_settings_change",
   "propose_remove_agents",
   "propose_team",
+  // A goal lands as `proposed`: a person activates it, like a team proposal (goals.ts).
+  "propose_goal",
   "offer_answers",
   "follow_up",
   "cancel_follow_up",
@@ -194,6 +197,7 @@ const READS = new Set([
   "web_search",
   "web_fetch",
   "list_dashboards",
+  "list_goals",
   "phone_screenshot",
   "phone_logs",
 ]);
@@ -265,6 +269,8 @@ const INTERNAL_BY_NAME: Readonly<Record<string, InternalArea>> = {
   create_dashboard: "dashboards",
   create_widget: "dashboards",
   share_dashboard: "dashboards",
+  // Progress on an active goal: current and the review note (goals.ts); status stays with people.
+  update_goal: "goals",
 };
 
 /** Built-in scopes of internal changes (`issues:write` → issues…). */

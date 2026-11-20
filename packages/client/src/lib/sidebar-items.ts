@@ -13,6 +13,7 @@ export const SIDEBAR_ITEMS: readonly SidebarItem[] = [
   "calendar",
   "team",
   "dashboards",
+  "goals",
   "taskManager",
 ];
 
@@ -29,6 +30,7 @@ export const SIDEBAR_DEFAULTS: Record<SidebarItem, SidebarPlace> = {
   calendar: "more",
   team: "always",
   dashboards: "more",
+  goals: "more",
   taskManager: "more",
 };
 
@@ -49,6 +51,7 @@ export const PERSONAL_SIDEBAR_DEFAULTS: Record<SidebarItem, SidebarPlace> = {
   calendar: "more",
   team: "more",
   dashboards: "more",
+  goals: "more",
   taskManager: "more",
 };
 
@@ -71,6 +74,7 @@ export const PERSONAL_SIDEBAR_ITEMS: readonly SidebarItem[] = [
   "team",
   "wiki",
   "dashboards",
+  "goals",
   "taskManager",
 ];
 

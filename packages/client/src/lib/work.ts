@@ -825,6 +825,7 @@ const QUIET_READS: ReadonlySet<ActivityKind> = new Set([
   "openingSkill",
   "readingConversation",
   "readingDashboards",
+  "checkingGoals",
 ]);
 
 /** The computer brain's own image tool (Codex's), as the runner names its call. */

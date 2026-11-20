@@ -1883,6 +1883,7 @@
       "calendar": "회의와 마감일",
       "team": "누가 누구인지: 사람, 에이전트, 그룹",
       "dashboards": "에이전트가 최신 상태로 유지하는 숫자와 차트",
+      "goals": "The targets the agents work toward",
       "taskManager": "에이전트마다 지금 하는 일과, 필요한 작업 중지",
       "approvalsPersonal": "내 에이전트가 허락을 구하는 일",
       "proposalsPersonal": "내 에이전트가 변경을 제안한 내용",
@@ -1892,6 +1893,7 @@
       "calendarPersonal": "내 일정과 마감일",
       "teamPersonal": "내 에이전트와 여기 있는 다른 사람",
       "dashboardsPersonal": "내 에이전트가 최신 상태로 유지하는 숫자와 차트",
+      "goalsPersonal": "The targets your agents work toward",
       "taskManagerPersonal": "내 에이전트가 지금 하는 일과, 필요한 작업 중지",
       "homePersonal": "오늘 하루: 나를 기다리는 일과 에이전트가 하고 있는 일"
     },
@@ -2037,7 +2039,8 @@
     "unreadMark": "읽지 않음",
     "unreadMentions_other": "나를 언급한 메시지 {{count}}개",
     "unreadThreads_other": "스레드: 읽지 않은 답글이 있는 스레드 {{count}}개",
-    "unreadNotifications_other": "읽지 않은 알림 {{count}}개"
+    "unreadNotifications_other": "읽지 않은 알림 {{count}}개",
+    "goals": "Goals"
   },
   "agentGroups": {
     "group": "부서",
@@ -16743,7 +16746,10 @@
         "thinking": "생각했어요",
         "typing": "작성했어요",
         "recordingVoice": "오디오를 녹음했어요",
-        "writing": "작성했어요"
+        "writing": "작성했어요",
+        "checkingGoals": "Checked the goals",
+        "proposingGoal": "Proposed a goal",
+        "updatingGoal": "Updated a goal"
       }
     },
     "activity": {
@@ -16859,7 +16865,10 @@
       "updatingThread": "스레드를 업데이트하는 중",
       "addingAgent": "에이전트를 채널에 추가하는 중",
       "readingConversation": "대화를 읽는 중",
-      "usingTool": "도구를 사용하는 중"
+      "usingTool": "도구를 사용하는 중",
+      "checkingGoals": "checking the goals",
+      "proposingGoal": "proposing a goal",
+      "updatingGoal": "updating a goal"
     },
     "tokens": "토큰 {{value}}개",
     "sayHiAgent": "{{name}}에게 인사하기",
@@ -18895,6 +18904,56 @@
       "promptRequired": "위젯에 무엇을 보여 줄지 말해 주세요.",
       "notTested": "먼저 테스트하세요. 테스트가 성공하면 위젯이 만들어져요.",
       "needsAi": "{{agentName}}이(가) 아직 이 위젯을 업데이트할 수 없어요. 이유는 위젯에 나와 있어요."
+    }
+  },
+  "goals": {
+    "title": "Goals",
+    "subtitle": "The targets the agents work toward, and how far each one is.",
+    "of": "{{current}} of {{target}} {{unit}}",
+    "created": "Goal created.",
+    "activate": "Activate",
+    "pause": "Pause",
+    "resume": "Resume",
+    "achieved": "Mark achieved",
+    "drop": "Drop",
+    "period": {
+      "daily": "daily",
+      "weekly": "weekly",
+      "monthly": "monthly",
+      "quarterly": "quarterly",
+      "yearly": "yearly"
+    },
+    "status": {
+      "proposed": "Proposed",
+      "active": "Active",
+      "paused": "Paused",
+      "achieved": "Achieved",
+      "dropped": "Dropped"
+    },
+    "empty": {
+      "title": "No goals yet",
+      "text": "Set a target, like leads per month, uptime or hires, and the agents propose a plan, break it into tasks and report progress here."
+    },
+    "new": {
+      "open": "New goal",
+      "title": "New goal",
+      "subtitle": "A measurable target the team works toward.",
+      "name": "Goal",
+      "nameHint": "e.g. 100 qualified leads this month",
+      "metric": "How it's measured",
+      "metricHint": "what counts and where the number comes from",
+      "target": "Target",
+      "targetHint": "the number that means done",
+      "unit": "Unit",
+      "unitHint": "leads, %, hours…",
+      "period": "Period",
+      "owner": "Owner",
+      "ownerHint": "the leader accountable for it",
+      "noOwner": "No owner",
+      "create": "Create goal"
+    },
+    "errors": {
+      "forbidden": "Only people who can assign work can change goals."
     }
   },
   "teamPlan": {

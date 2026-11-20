@@ -141,6 +141,8 @@ function AppStack() {
       <Stack.Screen name="routines/zone" options={{ ...pushed, ...scrollUnder }} />
       {/* Dashboards (ADR 0135): every screen pushed with back, never a sheet; the list opens from the home. */}
       <Stack.Screen name="dashboards" options={{ ...pushed, ...scrollUnder }} />
+      {/* Goals (OKRs): the workspace's targets, pushed from Você's Work group. */}
+      <Stack.Screen name="goals" options={{ ...pushed, ...scrollUnder }} />
       <Stack.Screen name="board/[id]" options={{ ...pushed, ...scrollUnder }} />
       <Stack.Screen name="board-new" options={{ ...pushed, ...scrollUnder }} />
       <Stack.Screen name="board-share/[id]" options={{ ...pushed, ...scrollUnder }} />

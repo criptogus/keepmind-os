@@ -121,6 +121,9 @@ export type ActivityKind =
   | "deletingRoutine"
   | "runningRoutine"
   | "proposingTeam"
+  | "checkingGoals"
+  | "proposingGoal"
+  | "updatingGoal"
   | "proposingChange"
   | "workingOnWorkspace"
   | "updatingThread"
@@ -235,6 +238,10 @@ const BUILTIN: Record<string, ActivityKind> = {
   // Another agent of the team (the consultation card says who and what it answered).
   ask_agent: "askingAgent",
   tell_agent: "tellingAgent",
+  // The workspace's goals (OKRs): list, propose, move current with a review note.
+  list_goals: "checkingGoals",
+  propose_goal: "proposingGoal",
+  update_goal: "updatingGoal",
   // Ours, though their first word reads like an app's name.
   git_clone: "cloningRepo",
   open_pull_request: "openingPullRequest",

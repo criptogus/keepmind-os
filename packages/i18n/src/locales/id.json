@@ -1883,6 +1883,7 @@
       "calendar": "Rapat dan tenggat",
       "team": "Siapa siapa: orang, agen, dan grupnya",
       "dashboards": "Angka dan grafik yang dijaga tetap terbaru oleh agen",
+      "goals": "The targets the agents work toward",
       "taskManager": "Apa yang dikerjakan tiap agen sekarang, dan hentikan yang perlu",
       "approvalsPersonal": "Yang diminta agenmu untuk kamu izinkan",
       "proposalsPersonal": "Yang diusulkan agenmu untuk diubah",
@@ -1892,6 +1893,7 @@
       "calendarPersonal": "Janji dan tenggatmu",
       "teamPersonal": "Agenmu, dan siapa lagi yang ada di sini",
       "dashboardsPersonal": "Angka dan grafik yang dijaga tetap terbaru oleh agenmu",
+      "goalsPersonal": "The targets your agents work toward",
       "taskManagerPersonal": "Apa yang dikerjakan agenmu sekarang, dan hentikan yang perlu",
       "homePersonal": "Harimu: apa yang menunggumu dan apa yang sedang dikerjakan agenmu"
     },
@@ -2037,7 +2039,8 @@
     "unreadMark": "Belum dibaca",
     "unreadMentions_other": "{{count}} sebutan untuk Anda",
     "unreadThreads_other": "Thread: {{count}} dengan balasan belum dibaca",
-    "unreadNotifications_other": "{{count}} notifikasi belum dibaca"
+    "unreadNotifications_other": "{{count}} notifikasi belum dibaca",
+    "goals": "Goals"
   },
   "agentGroups": {
     "group": "Departemen",
@@ -16805,7 +16808,10 @@
         "thinking": "Berpikir",
         "typing": "Menulis",
         "recordingVoice": "Merekam audio",
-        "writing": "Menulis"
+        "writing": "Menulis",
+        "checkingGoals": "Checked the goals",
+        "proposingGoal": "Proposed a goal",
+        "updatingGoal": "Updated a goal"
       }
     },
     "activity": {
@@ -16921,7 +16927,10 @@
       "updatingThread": "memperbarui utas",
       "addingAgent": "menambahkan agen ke kanal",
       "readingConversation": "membaca percakapan",
-      "usingTool": "memakai alat"
+      "usingTool": "memakai alat",
+      "checkingGoals": "checking the goals",
+      "proposingGoal": "proposing a goal",
+      "updatingGoal": "updating a goal"
     },
     "tokens": "{{value}} token",
     "sayHiAgent": "Sapa {{name}}",
@@ -19005,6 +19014,56 @@
       "promptRequired": "Sebutkan apa yang harus ditampilkan widget.",
       "notTested": "Uji dulu: widget dibuat setelah ujinya berhasil.",
       "needsAi": "{{agentName}} belum bisa memperbarui widget ini. Widget-nya menjelaskan alasannya."
+    }
+  },
+  "goals": {
+    "title": "Goals",
+    "subtitle": "The targets the agents work toward, and how far each one is.",
+    "of": "{{current}} of {{target}} {{unit}}",
+    "created": "Goal created.",
+    "activate": "Activate",
+    "pause": "Pause",
+    "resume": "Resume",
+    "achieved": "Mark achieved",
+    "drop": "Drop",
+    "period": {
+      "daily": "daily",
+      "weekly": "weekly",
+      "monthly": "monthly",
+      "quarterly": "quarterly",
+      "yearly": "yearly"
+    },
+    "status": {
+      "proposed": "Proposed",
+      "active": "Active",
+      "paused": "Paused",
+      "achieved": "Achieved",
+      "dropped": "Dropped"
+    },
+    "empty": {
+      "title": "No goals yet",
+      "text": "Set a target, like leads per month, uptime or hires, and the agents propose a plan, break it into tasks and report progress here."
+    },
+    "new": {
+      "open": "New goal",
+      "title": "New goal",
+      "subtitle": "A measurable target the team works toward.",
+      "name": "Goal",
+      "nameHint": "e.g. 100 qualified leads this month",
+      "metric": "How it's measured",
+      "metricHint": "what counts and where the number comes from",
+      "target": "Target",
+      "targetHint": "the number that means done",
+      "unit": "Unit",
+      "unitHint": "leads, %, hours…",
+      "period": "Period",
+      "owner": "Owner",
+      "ownerHint": "the leader accountable for it",
+      "noOwner": "No owner",
+      "create": "Create goal"
+    },
+    "errors": {
+      "forbidden": "Only people who can assign work can change goals."
     }
   },
   "teamPlan": {

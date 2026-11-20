@@ -1,0 +1,78 @@
+/*
+ * Goals (OKRs): the list of the workspace's measurable targets. A card is a title, its numbers line, the review
+ * note and the progress bar; a writer's actions sit at its end while they fit (`.ac-actrow` wraps under them).
+ */
+
+.goal-group {
+  display: flex;
+  flex-direction: column;
+}
+.goal-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.goal-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+.goal-card__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+  flex: 1;
+}
+.goal-card__title {
+  font-weight: 600;
+}
+.goal-card__meta {
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+.goal-card__note {
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+.goal-card__bar {
+  display: block;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--sunken);
+  overflow: hidden;
+  margin-top: var(--space-1);
+}
+.goal-card__fill {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  background: var(--agent);
+}
+.goal-card__acts {
+  flex: none;
+  display: flex;
+  gap: var(--space-2);
+}
+.goal-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.goal-dialog__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+@media (max-width: 640px) {
+  .goal-dialog__row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .goal-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .goal-card__acts {
+    justify-content: flex-end;
+  }
+}

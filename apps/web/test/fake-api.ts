@@ -43,6 +43,7 @@ import type {
   GifKey,
   GitHubAppInfo,
   GitHubRepositories,
+  Goal,
   HttpApi,
   IdRef,
   ImportedSource,
@@ -126,6 +127,7 @@ import { createMockCustomConnectors } from "./fakes/custom-connectors";
 import { createFakeDashboards, type FakeDashboards } from "./fakes/dashboards";
 import { createFakeDatabases, type FakeDatabases } from "./fakes/databases";
 import { createFakeDevices, type FakeDevices } from "./fakes/devices";
+import { createFakeGoals } from "./fakes/goals";
 import { createFakeMachines, type FakeMachines } from "./fakes/machines";
 import { createFakeMail, type FakeMail } from "./fakes/mail";
 import { createFakeMissions } from "./fakes/missions";
@@ -277,6 +279,8 @@ export interface FakeState {
   /** Agents' GitHub repositories, in order (`repositories.get`); unset = every repository. */
   agentRepos?: Record<string, string[]>;
   agentMergeRepos?: Record<string, string[]>;
+  /** The workspace's goals (`goals.*`); unset = none. */
+  goals?: Goal[];
   scopes: Record<string, ScopeGrant[]>;
   runs: Run[];
   /** A run's steps by id (`GET …/runs/{id}`, what an approval's review reads); unset = none. */
@@ -3877,6 +3881,7 @@ export function createFakeHttpApi(state: FakeState): Omit<HttpApi, FakedParts> {
         return structuredClone(repositories);
       },
     },
+    goals: createFakeGoals(state, log),
     scopes: {
       get: async (_orgId, agentId) => structuredClone(state.scopes[agentId] ?? []),
       set: async (orgId, agentId, grants) => {
@@ -4303,6 +4308,7 @@ export function createFakeApi(state: FakeState = seedState(), options: { seed?: 
     mail: mail.client,
     databases: databases.client,
     dashboards: dashboards.client,
+    goals: createFakeGoals(state, (method, ...args) => state.calls.push({ method, args })),
     browser: browser.client,
     desktop: browser.desktop,
     // "Trabalhando agora" and the task manager only for a test that gives the task manager (`state.taskManager`).

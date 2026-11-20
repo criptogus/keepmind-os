@@ -1933,6 +1933,7 @@
       "calendar": "Toplantılar ve son tarihler",
       "team": "Kim kimdir: kişiler, ajanlar ve grupları",
       "dashboards": "Ajanların güncel tuttuğu sayılar ve grafikler",
+      "goals": "The targets the agents work toward",
       "taskManager": "Her ajanın şu an ne yaptığı ve gerekeni durdurma",
       "approvalsPersonal": "Ajanlarınızın sizden izin istedikleri",
       "proposalsPersonal": "Ajanlarınızın değiştirmeyi önerdikleri",
@@ -1942,6 +1943,7 @@
       "calendarPersonal": "Randevularınız ve son tarihleriniz",
       "teamPersonal": "Ajanlarınız ve burada başka kimler var",
       "dashboardsPersonal": "Ajanlarınızın güncel tuttuğu sayılar ve grafikler",
+      "goalsPersonal": "The targets your agents work toward",
       "taskManagerPersonal": "Ajanlarınızın şu an ne yaptığı ve gerekeni durdurma",
       "homePersonal": "Günün: seni bekleyenler ve ajanlarının şu an yaptıkları"
     },
@@ -2095,7 +2097,8 @@
     "unreadThreads_one": "Konular: okunmamış yanıtı olan {{count}} konu",
     "unreadThreads_other": "Konular: okunmamış yanıtı olan {{count}} konu",
     "unreadNotifications_one": "{{count}} okunmamış bildirim",
-    "unreadNotifications_other": "{{count}} okunmamış bildirim"
+    "unreadNotifications_other": "{{count}} okunmamış bildirim",
+    "goals": "Goals"
   },
   "agentGroups": {
     "group": "Departman",
@@ -17255,7 +17258,10 @@
         "thinking": "Düşündü",
         "typing": "Yazdı",
         "recordingVoice": "Ses kaydetti",
-        "writing": "Yazdı"
+        "writing": "Yazdı",
+        "checkingGoals": "Checked the goals",
+        "proposingGoal": "Proposed a goal",
+        "updatingGoal": "Updated a goal"
       }
     },
     "activity": {
@@ -17371,7 +17377,10 @@
       "updatingThread": "bir ileti dizisini güncelliyor",
       "addingAgent": "bir kanala ajan ekliyor",
       "readingConversation": "sohbeti okuyor",
-      "usingTool": "bir araç kullanıyor"
+      "usingTool": "bir araç kullanıyor",
+      "checkingGoals": "checking the goals",
+      "proposingGoal": "proposing a goal",
+      "updatingGoal": "updating a goal"
     },
     "tokens": "{{value}} token",
     "sayHiAgent": "{{name}} ajanına merhaba deyin",
@@ -19444,6 +19453,56 @@
       "promptRequired": "Widget'ın ne göstermesi gerektiğini yazın.",
       "notTested": "Önce test edin: widget, testi başarılı olunca oluşturulur.",
       "needsAi": "{{agentName}} bu widget'ı henüz güncelleyemiyor. Nedeni widget'ta yazıyor."
+    }
+  },
+  "goals": {
+    "title": "Goals",
+    "subtitle": "The targets the agents work toward, and how far each one is.",
+    "of": "{{current}} of {{target}} {{unit}}",
+    "created": "Goal created.",
+    "activate": "Activate",
+    "pause": "Pause",
+    "resume": "Resume",
+    "achieved": "Mark achieved",
+    "drop": "Drop",
+    "period": {
+      "daily": "daily",
+      "weekly": "weekly",
+      "monthly": "monthly",
+      "quarterly": "quarterly",
+      "yearly": "yearly"
+    },
+    "status": {
+      "proposed": "Proposed",
+      "active": "Active",
+      "paused": "Paused",
+      "achieved": "Achieved",
+      "dropped": "Dropped"
+    },
+    "empty": {
+      "title": "No goals yet",
+      "text": "Set a target, like leads per month, uptime or hires, and the agents propose a plan, break it into tasks and report progress here."
+    },
+    "new": {
+      "open": "New goal",
+      "title": "New goal",
+      "subtitle": "A measurable target the team works toward.",
+      "name": "Goal",
+      "nameHint": "e.g. 100 qualified leads this month",
+      "metric": "How it's measured",
+      "metricHint": "what counts and where the number comes from",
+      "target": "Target",
+      "targetHint": "the number that means done",
+      "unit": "Unit",
+      "unitHint": "leads, %, hours…",
+      "period": "Period",
+      "owner": "Owner",
+      "ownerHint": "the leader accountable for it",
+      "noOwner": "No owner",
+      "create": "Create goal"
+    },
+    "errors": {
+      "forbidden": "Only people who can assign work can change goals."
     }
   },
   "teamPlan": {

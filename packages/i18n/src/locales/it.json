@@ -1985,6 +1985,7 @@
       "calendar": "Riunioni e scadenze",
       "team": "Chi è chi: persone, agenti e i loro gruppi",
       "dashboards": "Numeri e grafici che gli agenti tengono aggiornati",
+      "goals": "The targets the agents work toward",
       "taskManager": "Cosa fa ogni agente ora, e fermare ciò che serve",
       "approvalsPersonal": "Cosa ti chiedono di consentire i tuoi agenti",
       "proposalsPersonal": "Cosa propongono di cambiare i tuoi agenti",
@@ -1994,6 +1995,7 @@
       "calendarPersonal": "I tuoi appuntamenti e scadenze",
       "teamPersonal": "I tuoi agenti, e chi altro c'è",
       "dashboardsPersonal": "Numeri e grafici che i tuoi agenti tengono aggiornati",
+      "goalsPersonal": "The targets your agents work toward",
       "taskManagerPersonal": "Cosa fanno ora i tuoi agenti, e fermare ciò che serve",
       "homePersonal": "La tua giornata: cosa ti aspetta e cosa fanno i tuoi agenti"
     },
@@ -2155,7 +2157,8 @@
     "unreadThreads_other": "Thread: {{count}} con risposte non lette",
     "unreadNotifications_one": "{{count}} notifica non letta",
     "unreadNotifications_many": "{{count}} notifiche non lette",
-    "unreadNotifications_other": "{{count}} notifiche non lette"
+    "unreadNotifications_other": "{{count}} notifiche non lette",
+    "goals": "Goals"
   },
   "agentGroups": {
     "group": "Reparto",
@@ -17879,7 +17882,10 @@
         "thinking": "Ha pensato",
         "typing": "Ha scritto",
         "recordingVoice": "Ha registrato un audio",
-        "writing": "Ha scritto"
+        "writing": "Ha scritto",
+        "checkingGoals": "Checked the goals",
+        "proposingGoal": "Proposed a goal",
+        "updatingGoal": "Updated a goal"
       }
     },
     "activity": {
@@ -17995,7 +18001,10 @@
       "updatingThread": "aggiornando un thread",
       "addingAgent": "aggiungendo un agente a un canale",
       "readingConversation": "leggendo la conversazione",
-      "usingTool": "usando uno strumento"
+      "usingTool": "usando uno strumento",
+      "checkingGoals": "checking the goals",
+      "proposingGoal": "proposing a goal",
+      "updatingGoal": "updating a goal"
     },
     "tokens": "{{value}} token",
     "sayHiAgent": "Saluta {{name}}",
@@ -20215,6 +20224,56 @@
       "promptRequired": "Di' cosa deve mostrare il widget.",
       "notTested": "Provalo prima: il widget viene creato quando la prova va a buon fine.",
       "needsAi": "{{agentName}} non può ancora aggiornare questo widget. Il widget dice perché."
+    }
+  },
+  "goals": {
+    "title": "Goals",
+    "subtitle": "The targets the agents work toward, and how far each one is.",
+    "of": "{{current}} of {{target}} {{unit}}",
+    "created": "Goal created.",
+    "activate": "Activate",
+    "pause": "Pause",
+    "resume": "Resume",
+    "achieved": "Mark achieved",
+    "drop": "Drop",
+    "period": {
+      "daily": "daily",
+      "weekly": "weekly",
+      "monthly": "monthly",
+      "quarterly": "quarterly",
+      "yearly": "yearly"
+    },
+    "status": {
+      "proposed": "Proposed",
+      "active": "Active",
+      "paused": "Paused",
+      "achieved": "Achieved",
+      "dropped": "Dropped"
+    },
+    "empty": {
+      "title": "No goals yet",
+      "text": "Set a target, like leads per month, uptime or hires, and the agents propose a plan, break it into tasks and report progress here."
+    },
+    "new": {
+      "open": "New goal",
+      "title": "New goal",
+      "subtitle": "A measurable target the team works toward.",
+      "name": "Goal",
+      "nameHint": "e.g. 100 qualified leads this month",
+      "metric": "How it's measured",
+      "metricHint": "what counts and where the number comes from",
+      "target": "Target",
+      "targetHint": "the number that means done",
+      "unit": "Unit",
+      "unitHint": "leads, %, hours…",
+      "period": "Period",
+      "owner": "Owner",
+      "ownerHint": "the leader accountable for it",
+      "noOwner": "No owner",
+      "create": "Create goal"
+    },
+    "errors": {
+      "forbidden": "Only people who can assign work can change goals."
     }
   },
   "teamPlan": {

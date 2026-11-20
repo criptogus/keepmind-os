@@ -389,5 +389,6 @@ const BUSINESS_ICONS: Record<BusinessType, IconName> = {
   software: "code",
   support: "message",
   services: "document",
+  company: "agent",
   other: "more",
 };

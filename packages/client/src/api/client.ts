@@ -1,6 +1,7 @@
 import type { AppLocale } from "@keepmind/i18n/locale";
 import type { PlanModel } from "@keepmind/providers/plans";
 import type { DashboardsApi } from "../dashboards/api";
+import type { GoalsApi } from "../goals/api";
 import type { ChatPrefs } from "../lib/chat-look";
 import type { OnboardingStepId } from "../lib/onboarding";
 import type { LegacyPrefsPatch, LodiPrefs, LodiPrefsPatch } from "../lib/right-hand-prefs";
@@ -1484,6 +1485,8 @@ export interface ApiClient {
   };
   /** Boards and widgets (ADR 0135). */
   dashboards: DashboardsApi;
+  /** The workspace's goals (OKRs): people activate what agents propose. */
+  goals: GoalsApi;
   /** Missions (ADR 0029): long work by the agent's executor on a connected computer, in one thread. */
   missions: {
     /** Missions you can see (the Missões tab), most recently changed first, with the counts for the tabs. */

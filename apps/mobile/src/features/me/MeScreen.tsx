@@ -47,9 +47,19 @@ import { useChangePhoto } from "./parts";
 import { useWorkspacesAcross, WorkspaceMark } from "./WorkspacesPages";
 
 /** The rows of Você's Work group. */
-type WorkRow = "issues" | "proposals" | "routines" | "wiki" | "drive" | "dashboards" | "memory" | "threads" | "team";
+type WorkRow =
+  | "issues"
+  | "proposals"
+  | "routines"
+  | "wiki"
+  | "drive"
+  | "dashboards"
+  | "goals"
+  | "memory"
+  | "threads"
+  | "team";
 /** A team's workspace: Threads is a tab and Team a row of Agents. */
-const TEAM_WORK: WorkRow[] = ["issues", "proposals", "routines", "wiki", "drive", "dashboards", "memory"];
+const TEAM_WORK: WorkRow[] = ["issues", "proposals", "routines", "wiki", "drive", "dashboards", "goals", "memory"];
 /**
  * A personal workspace (ADR 0159): what its sidebar keeps in sight first, then the rest of its More; Threads (no tab
  * there) and Team (no row in Agents) live here, Team last.
@@ -62,6 +72,7 @@ const PERSONAL_WORK: WorkRow[] = [
   "proposals",
   "wiki",
   "dashboards",
+  "goals",
   "memory",
   "team",
 ];
@@ -186,6 +197,7 @@ export function MeScreen() {
         onPress={() => open("/dashboards")}
       />
     ),
+    goals: <GroupedRow key="goals" icon="flag" label={t("mobile.me.goals")} chevron onPress={() => open("/goals")} />,
     memory: (
       <GroupedRow key="memory" icon="brain" label={t("mobile.memory.title")} chevron onPress={() => open("/memory")} />
     ),
