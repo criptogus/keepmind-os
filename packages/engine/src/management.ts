@@ -32,6 +32,7 @@ import {
 import { can, lockOrgMembers, requireActiveMembership, requirePermission } from "./organizations";
 import { type QuietHours, quietHoursOf } from "./quiet-hours";
 import { isRightHand, rightHandPermanent } from "./right-hand";
+import { traceRun } from "./run-trace";
 import {
   agentBudgetsThisMonth,
   budgetPercent,
@@ -770,7 +771,7 @@ export async function getRun(db: Database, actorId: string, orgId: string, runId
   if (!run) throw new NotFoundError("Run not found");
   await requireUsageAccess(db, actorId, orgId, run.agentId);
   const [summary] = await listRuns(db, actorId, orgId, { agentId: run.agentId, runId });
-  if (!summary || summary.private) return { run: summary, steps: [] };
+  if (!summary || summary.private) return { run: summary, steps: [], trace: null };
   const steps = await db
     .select({
       seq: agentRunSteps.seq,
@@ -781,7 +782,7 @@ export async function getRun(db: Database, actorId: string, orgId: string, runId
     .from(agentRunSteps)
     .where(eq(agentRunSteps.runId, runId))
     .orderBy(asc(agentRunSteps.seq));
-  return { run: summary, steps };
+  return { run: summary, steps, trace: traceRun(steps, run) };
 }
 
 /**

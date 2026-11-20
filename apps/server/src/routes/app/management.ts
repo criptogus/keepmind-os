@@ -45,6 +45,7 @@ import {
   pickerModels,
   publishWorkspaceMode,
   queueInvitationEmail,
+  type RunTrace,
   requirePermission,
   resendInvitation,
   rotateCredential,
@@ -384,6 +385,39 @@ const Run = z
   })
   .openapi("Run");
 
+const TraceTool = z.object({
+  name: z.string(),
+  calls: z.number(),
+  errors: z.number(),
+  totalMs: z.number(),
+  maxMs: z.number(),
+});
+
+const RunTraceShape = z
+  .object({
+    durationMs: z.number().nullable(),
+    stepsByKind: z.record(z.string(), z.number()),
+    kindMs: z.record(z.string(), z.number()),
+    model: z.object({
+      calls: z.number(),
+      models: z.array(z.string()),
+      inputTokens: z.number(),
+      outputTokens: z.number(),
+      maxInputTokens: z.number(),
+      costNanoUsd: z.number().optional(),
+      totalMs: z.number(),
+      avgMs: z.number(),
+    }),
+    tools: z.object({
+      calls: z.number(),
+      errors: z.number(),
+      totalMs: z.number(),
+      byName: z.array(TraceTool),
+    }),
+    stalls: z.array(z.object({ seq: z.number(), kind: z.string(), ms: z.number() })),
+  })
+  .openapi("RunTrace");
+
 // Runs carry tokens, never money: owners who aren't admins read them too (admins see cost in the usage report).
 const toRun = ({ costNanoUsd: _cost, ...r }: Awaited<ReturnType<typeof listRuns>>[number]) => ({
   ...r,
@@ -397,6 +431,10 @@ const stepData = (data: Record<string, unknown>) => {
   const { costNanoUsd: _cost, ...rest } = data;
   return rest;
 };
+
+/** The trace without its cost either: runs carry tokens, never money (see `toRun`). */
+const traceData = (trace: RunTrace | null) =>
+  trace ? { ...trace, model: { ...trace.model, costNanoUsd: undefined } } : null;
 
 /** Management screens: settings, people, invitations, credential rotation, agent detail, runs and usage. */
 const Where = {
@@ -1626,6 +1664,10 @@ export function managementRoutes(deps: AppDeps) {
         200: json(
           z.object({
             run: Run,
+            trace: RunTraceShape.nullable().openapi({
+              description:
+                "Where the run's time, tokens and tool calls went, from its steps: per-kind ms (model latency before each `model_call`, tool time before each `tool_result`, `tail` after the last step), model totals with the largest single input (worst context paid), per-tool stats paired call→result, and the biggest stalls (≥60s). Null when the run is private to its asker.",
+            }),
             steps: z.array(
               z.object({
                 seq: z.number(),
@@ -1641,11 +1683,12 @@ export function managementRoutes(deps: AppDeps) {
     }),
     async (c) => {
       const { orgId, runId } = c.req.valid("param");
-      const { run, steps } = await getRun(db, c.get("user").id, orgId, runId);
+      const { run, steps, trace } = await getRun(db, c.get("user").id, orgId, runId);
       if (!run) return c.json({ error: { code: "not_found", message: "Run not found" } }, 404);
       return c.json(
         {
           run: toRun(run),
+          trace: traceData(trace),
           steps: steps.map((s) => ({ ...s, data: stepData(s.data), createdAt: s.createdAt.toISOString() })),
         },
         200,

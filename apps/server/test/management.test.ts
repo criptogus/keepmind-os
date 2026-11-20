@@ -73,9 +73,18 @@ test("management API: settings, overview, people, invitations, credentials, agen
   expect(runs.runs[0]).not.toHaveProperty("costUsd");
   const run = (await (await api(`/runs/${runs.runs[0]?.id}`)).json()) as {
     steps: { kind: string; data: Record<string, unknown> }[];
+    trace: {
+      durationMs: number | null;
+      model: { calls: number; costNanoUsd?: number };
+      kindMs: Record<string, number>;
+    } | null;
   };
   expect(run.steps.map((s) => s.kind)).toEqual(["context", "model_call", "context", "message"]);
   expect(run.steps.find((s) => s.kind === "model_call")?.data).not.toHaveProperty("costNanoUsd");
+  // The trace rides along: tokens and timings yes, money no (same rule as the steps' data).
+  expect(run.trace?.model.calls).toBe(1);
+  expect(run.trace?.model).not.toHaveProperty("costNanoUsd");
+  expect(run.trace?.kindMs.model_call).toBeGreaterThanOrEqual(0);
 
   const usage = (await (await api("/usage/report")).json()) as {
     byKind: { kind: string; calls: number }[];

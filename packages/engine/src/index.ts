@@ -293,6 +293,7 @@ export * from "./run-resume";
 export { STOP_REASON_MAX, setStopReason, stoppedText, tellAgentStopped } from "./run-stopped";
 export * from "./run-tool-tokens";
 export * from "./run-tools";
+export * from "./run-trace";
 export * from "./runs";
 export * from "./sandbox";
 export * from "./sandbox-tools";
