@@ -30,7 +30,7 @@ import { isPersonalWorkspace } from "./workspace-mode";
  * words in `@keepmind/i18n` (`teamTemplates.*`, every language). "Create the team" makes it at once, as the right
  * hand's team card in its created state.
  */
-export const BUSINESS_TEMPLATES = ["agency", "store", "clinic", "software", "support", "services"] as const;
+export const BUSINESS_TEMPLATES = ["agency", "store", "clinic", "software", "support", "services", "company"] as const;
 /**
  * A personal workspace's templates (ADR 0159): areas of one person's life, each a few agents that work in their DM with
  * the person, so they make no channel.
@@ -42,7 +42,20 @@ export type TeamTemplateId = (typeof TEAM_TEMPLATES)[number];
 export const isTeamTemplate = (v: unknown): v is TeamTemplateId => TEAM_TEMPLATES.includes(v as TeamTemplateId);
 const isPersonalTemplate = (id: TeamTemplateId) => (PERSONAL_TEMPLATES as readonly string[]).includes(id);
 
-type BusinessMember = "iara" | "caio" | "ada" | "lia" | "theo" | "nina" | "otto" | "bia";
+type BusinessMember =
+  | "iara"
+  | "caio"
+  | "ada"
+  | "lia"
+  | "theo"
+  | "nina"
+  | "otto"
+  | "bia"
+  | "ceo"
+  | "cmo"
+  | "cto"
+  | "chro"
+  | "cco";
 type PersonalMember = "clara" | "duda" | "leo" | "mel" | "gabi" | "lu" | "rosa" | "vic" | "rui";
 type Member = BusinessMember | PersonalMember;
 type SkillKey = "voice" | "dunning" | "answers" | "proposal" | "schedule" | "review";
@@ -90,6 +103,38 @@ const MEMBERS: Record<Member, { name: string; look: AgentAppearance; cron: strin
     name: "Bia",
     look: { color: "violet", eyes: "dots", accessory: "headset" },
     cron: "0 16 * * 5",
+    skill: "answers",
+  },
+  // The company template's leadership (ADR pending): each exec builds its own team with
+  // `propose_team`, so the preset stays inside the template size limit.
+  ceo: {
+    name: "Dante",
+    look: { color: "amber", eyes: "round", accessory: "hat" },
+    cron: "0 9 * * 1",
+    skill: "review",
+  },
+  cmo: {
+    name: "Maya",
+    look: { color: "rose", eyes: "happy", accessory: "bow" },
+    cron: "0 8 * * *",
+    skill: "voice",
+  },
+  cto: {
+    name: "Ken",
+    look: { color: "indigo", eyes: "wide", accessory: "headphones" },
+    cron: "0 9 * * 1-5",
+    skill: "proposal",
+  },
+  chro: {
+    name: "Lena",
+    look: { color: "violet", eyes: "dots", accessory: "scarf" },
+    cron: "0 10 * * 3",
+    skill: "schedule",
+  },
+  cco: {
+    name: "Rafa",
+    look: { color: "green", eyes: "sleepy", accessory: "cap" },
+    cron: "0 8 * * 1-5",
     skill: "answers",
   },
   // A personal workspace's agents (ADR 0159): routines on one person's clock.
@@ -163,6 +208,7 @@ const TEAMS: Record<TeamTemplateId, Member[]> = {
   software: ["iara", "caio", "ada"],
   support: ["iara", "bia"],
   services: ["nina", "theo", "caio"],
+  company: ["ceo", "cmo", "cto", "chro", "cco"],
   life: ["clara", "duda"],
   health: ["leo", "mel"],
   studies: ["gabi", "lu"],

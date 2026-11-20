@@ -19411,6 +19411,7 @@ export const ptBR = {
       software: "Software e apps",
       support: "Atendimento ao cliente",
       services: "Escritório de serviços",
+      company: "Empresa inteira",
       other: "Outra coisa",
     },
     step: "Pergunta {{step}} de {{of}}",
@@ -19686,6 +19687,11 @@ export const ptBR = {
       sub: "Contabilidade, advocacia, consultoria",
       desc: "Para um escritório que agenda clientes, manda propostas e cobra.",
     },
+    company: {
+      name: "Empresa inteira",
+      sub: "CEO e os heads de marketing, tecnologia, pessoas e vendas",
+      desc: "Para tocar um negócio de ponta a ponta: uma liderança que planeja, executa e reporta metas, e cada líder monta o próprio time.",
+    },
     /** The team's hello in #general once it can work (ADR 0162): Kivo's line, then each agent's. */
     hello: {
       lodi: {
@@ -19757,6 +19763,41 @@ export const ptBR = {
         task: "Escreva as respostas para estas perguntas de clientes:",
         hello: "Oi. Vou manter a base de respostas em dia com o que o time responder.",
       },
+      ceo: {
+        role: "CEO",
+        line: "Define a direção, transforma metas em planos e mantém cada líder no rumo.",
+        routine: "Revisar as metas da semana com a liderança",
+        task: "Transforme esta meta em um plano com responsáveis e prazos:",
+        hello: "Sou o CEO. Me passe a meta e eu organizo a empresa em volta dela.",
+      },
+      cmo: {
+        role: "CMO",
+        line: "Cuida do marketing: marca, conteúdo, campanhas e pipeline.",
+        routine: "Propor as campanhas da semana",
+        task: "Monte um plano de campanha para:",
+        hello: "Marketing é comigo. Me dê o público e eu trago o plano.",
+      },
+      cto: {
+        role: "CTO",
+        line: "Cuida da tecnologia: roadmap, arquitetura e o que construímos.",
+        routine: "Revisar bugs abertos e dívida técnica",
+        task: "Avalie este pedido técnico e proponha uma abordagem:",
+        hello: "Tecnologia é comigo. Me mande os requisitos que eu desenho a construção.",
+      },
+      chro: {
+        role: "CHRO",
+        line: "Cuida de pessoas: contratação, cultura, desempenho e desenvolvimento.",
+        routine: "Revisar o pipeline de contratação e a saúde do time",
+        task: "Me ajude a escrever esta vaga:",
+        hello: "Pessoas são o meu trabalho. Me diga quem você precisa e eu encontro.",
+      },
+      cco: {
+        role: "CCO",
+        line: "Cuida da receita: vendas, preços e crescimento de clientes.",
+        routine: "Revisar o pipeline e a previsão",
+        task: "Qualifique este lead e sugira os próximos passos:",
+        hello: "Receita é comigo. Me mostre o pipeline que eu faço crescer.",
+      },
       clara: {
         role: "Agenda e lembretes",
         line: "Cuida da sua agenda e lembra você do que importa antes que seja tarde.",
@@ -19821,6 +19862,11 @@ export const ptBR = {
       nina: "agenda",
       otto: "pedidos",
       bia: "atendimento",
+      ceo: "diretoria",
+      cmo: "marketing",
+      cto: "tecnologia",
+      chro: "pessoas",
+      cco: "vendas",
     },
     skills: {
       voice: {

@@ -9,7 +9,16 @@ import { errorText } from "./errors";
  */
 
 /** What the business does, the first run's row 1 (ADR 0155 §6): `other` asks for a sentence. */
-export const BUSINESS_TYPES = ["agency", "store", "clinic", "software", "support", "services", "other"] as const;
+export const BUSINESS_TYPES = [
+  "agency",
+  "store",
+  "clinic",
+  "software",
+  "support",
+  "services",
+  "company",
+  "other",
+] as const;
 export type BusinessType = (typeof BUSINESS_TYPES)[number];
 /** Every business type but `other` is a team template's id too (the server's `BUSINESS_TEMPLATES`). */
 export const isTemplateBusiness = (b: BusinessType): b is Exclude<BusinessType, "other"> => b !== "other";

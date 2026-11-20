@@ -19386,6 +19386,7 @@ export const en = {
       software: "Software and apps",
       support: "Customer service",
       services: "Services office",
+      company: "Whole company",
       other: "Something else",
     },
     step: "Question {{step}} of {{of}}",
@@ -19673,6 +19674,11 @@ export const en = {
       sub: "Accounting, law, consulting",
       desc: "For an office that books clients, sends proposals and bills them.",
     },
+    company: {
+      name: "Whole company",
+      sub: "CEO and the heads of marketing, tech, people and sales",
+      desc: "For running a business end to end: a leadership team that plans, executes and reports on goals, each leader building their own team.",
+    },
     /** The team's hello in #general once it can work (ADR 0162): Kivo's line, then each agent's. */
     hello: {
       lodi: {
@@ -19744,6 +19750,41 @@ export const en = {
         task: "Write answers to these customer questions:",
         hello: "Hi. I'll keep the answer base up to date with what the team says.",
       },
+      ceo: {
+        role: "CEO",
+        line: "Sets the direction, turns goals into plans and keeps every leader on track.",
+        routine: "Review the week's goals with the leadership",
+        task: "Turn this goal into a plan with owners and dates:",
+        hello: "I'm the CEO. Give me the goal and I'll organize the company around it.",
+      },
+      cmo: {
+        role: "CMO",
+        line: "Owns marketing: brand, content, campaigns and pipeline.",
+        routine: "Propose this week's campaigns",
+        task: "Draft a campaign plan for:",
+        hello: "Marketing is mine. Give me the audience and I'll bring the plan.",
+      },
+      cto: {
+        role: "CTO",
+        line: "Owns technology: roadmap, architecture and what we build.",
+        routine: "Review open bugs and tech debt",
+        task: "Assess this technical request and propose an approach:",
+        hello: "I'll own the tech. Send me the requirements and I'll shape the build.",
+      },
+      chro: {
+        role: "CHRO",
+        line: "Owns people: hiring, culture, performance and development.",
+        routine: "Review the hiring pipeline and team health",
+        task: "Help me write this job opening:",
+        hello: "People are my job. Tell me who you need and I'll find them.",
+      },
+      cco: {
+        role: "CCO",
+        line: "Owns revenue: sales, pricing and customer growth.",
+        routine: "Review the pipeline and the forecast",
+        task: "Qualify this lead and suggest the next steps:",
+        hello: "Revenue is mine. Show me the pipeline and I'll grow it.",
+      },
       clara: {
         role: "Calendar and reminders",
         line: "Keeps your calendar and reminds you of what matters before it's too late.",
@@ -19808,6 +19849,11 @@ export const en = {
       nina: "schedule",
       otto: "orders",
       bia: "support",
+      ceo: "command",
+      cmo: "marketing",
+      cto: "engineering",
+      chro: "people",
+      cco: "sales",
     },
     skills: {
       voice: {
