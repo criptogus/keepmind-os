@@ -10603,7 +10603,8 @@
     "tab": {
       "github": "GitHub-Link",
       "zip": ".zip hochladen",
-      "write": "Schreiben"
+      "write": "Schreiben",
+      "local": "Dieser Computer"
     },
     "githubUrl": "GitHub-Link",
     "githubHelp": "Der Ordner eines Skills oder ein Repository mit mehreren zur Auswahl.",
@@ -10757,7 +10758,13 @@
     "agentTitle": "Skills",
     "agentSubtitle": "Was {{name}} bei Bedarf öffnen kann.",
     "agentEmpty": "{{name}} hat noch keine Skills.",
-    "manage": "Skills verwalten"
+    "manage": "Skills verwalten",
+    "localHelp": "Liest die Skill-Ordner auf dem Rechner, auf dem KeepMind läuft: ~/.claude/skills, ~/.codex/skills, ~/.agents/skills. Jeder Ordner mit SKILL.md wird wie eine .zip-Datei installiert.",
+    "localCount_one": "Gefundene Skills: {{count}}",
+    "localCount_other": "Gefundene Skills: {{count}}",
+    "localInstalled": "Installiert: {{names}}",
+    "localNone": "In diesen Ordnern wurden keine Skills gefunden.",
+    "localSkipDuplicate": "Ein Skill mit diesem Namen ist bereits installiert."
   },
   "edit": {
     "unsaved": "Ungespeicherte Änderungen",
@@ -16544,7 +16551,11 @@
         "jev": "Agenten senden nur mit Jev von selbst Sticker.",
         "jevLink": "Jev einrichten"
       }
-    }
+    },
+    "quietHours": "Ruhezeiten",
+    "quietHoursHelp": "In diesem Zeitraum geplante Routinen werden erst nach dessen Ende ausgeführt.",
+    "quietHoursFrom": "Beginn der Ruhezeit",
+    "quietHoursUntil": "Ende der Ruhezeit"
   },
   "personalMode": {
     "toTeam": {

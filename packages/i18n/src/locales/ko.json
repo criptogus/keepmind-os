@@ -10199,7 +10199,8 @@
     "tab": {
       "github": "GitHub 링크",
       "zip": ".zip 업로드",
-      "write": "직접 작성"
+      "write": "직접 작성",
+      "local": "이 컴퓨터"
     },
     "githubUrl": "GitHub 링크",
     "githubHelp": "스킬 폴더 또는 여러 스킬이 들어 있는 저장소예요.",
@@ -10348,7 +10349,12 @@
     "agentTitle": "스킬",
     "agentSubtitle": "{{name}}이(가) 필요할 때 열 수 있는 것이에요.",
     "agentEmpty": "{{name}}에게는 아직 스킬이 없어요.",
-    "manage": "스킬 관리"
+    "manage": "스킬 관리",
+    "localHelp": "KeepMind를 실행하는 컴퓨터의 스킬 폴더를 읽습니다: ~/.claude/skills, ~/.codex/skills, ~/.agents/skills. SKILL.md가 있는 각 폴더는 .zip 파일처럼 설치됩니다.",
+    "localCount_other": "찾은 스킬: {{count}}개",
+    "localInstalled": "설치됨: {{names}}",
+    "localNone": "이 폴더에서 스킬을 찾지 못했습니다.",
+    "localSkipDuplicate": "이 이름의 스킬이 이미 설치되어 있습니다."
   },
   "edit": {
     "unsaved": "저장하지 않은 변경 사항",
@@ -15978,7 +15984,11 @@
         "jev": "에이전트가 스스로 스티커를 보내는 건 Jev를 쓸 때만 가능해요.",
         "jevLink": "Jev 설정"
       }
-    }
+    },
+    "quietHours": "휴식 시간",
+    "quietHoursHelp": "이 시간대에 예약된 루틴은 시간대가 끝난 후 실행됩니다.",
+    "quietHoursFrom": "휴식 시작",
+    "quietHoursUntil": "휴식 종료"
   },
   "personalMode": {
     "toTeam": {

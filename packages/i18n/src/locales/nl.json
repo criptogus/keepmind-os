@@ -10649,7 +10649,8 @@
     "tab": {
       "github": "GitHub-link",
       "zip": ".zip uploaden",
-      "write": "Schrijven"
+      "write": "Schrijven",
+      "local": "Deze computer"
     },
     "githubUrl": "GitHub-link",
     "githubHelp": "De map van een skill, of een repository met meerdere om uit te kiezen.",
@@ -10803,7 +10804,13 @@
     "agentTitle": "Skills",
     "agentSubtitle": "Wat {{name}} kan openen als het nodig is.",
     "agentEmpty": "{{name}} heeft nog geen skills.",
-    "manage": "Skills beheren"
+    "manage": "Skills beheren",
+    "localHelp": "Leest de skillmappen op de computer waarop KeepMind draait: ~/.claude/skills, ~/.codex/skills, ~/.agents/skills. Elke map met SKILL.md wordt geïnstalleerd als een .zip-bestand.",
+    "localCount_one": "Gevonden skills: {{count}}",
+    "localCount_other": "Gevonden skills: {{count}}",
+    "localInstalled": "Geïnstalleerd: {{names}}",
+    "localNone": "Geen skills gevonden in deze mappen.",
+    "localSkipDuplicate": "Er is al een skill met deze naam geïnstalleerd."
   },
   "edit": {
     "unsaved": "Niet-opgeslagen wijzigingen",
@@ -16608,7 +16615,11 @@
         "jev": "Agents sturen alleen zelf stickers met Jev.",
         "jevLink": "Jev instellen"
       }
-    }
+    },
+    "quietHours": "Rusturen",
+    "quietHoursHelp": "Routines die binnen deze periode gepland zijn, worden na afloop uitgevoerd.",
+    "quietHoursFrom": "Begin rusturen",
+    "quietHoursUntil": "Einde rusturen"
   },
   "personalMode": {
     "toTeam": {

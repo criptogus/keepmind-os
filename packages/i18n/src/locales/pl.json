@@ -11326,7 +11326,8 @@
     "tab": {
       "github": "Link do GitHuba",
       "zip": "Prześlij .zip",
-      "write": "Napisz"
+      "write": "Napisz",
+      "local": "Ten komputer"
     },
     "githubUrl": "Link do GitHuba",
     "githubHelp": "Folder umiejętności albo repozytorium z kilkoma do wyboru.",
@@ -11490,7 +11491,15 @@
     "agentTitle": "Umiejętności",
     "agentSubtitle": "Co {{name}} może otworzyć w razie potrzeby.",
     "agentEmpty": "{{name}} nie ma jeszcze umiejętności.",
-    "manage": "Zarządzaj umiejętnościami"
+    "manage": "Zarządzaj umiejętnościami",
+    "localHelp": "Odczytuje foldery umiejętności na komputerze, na którym działa KeepMind: ~/.claude/skills, ~/.codex/skills, ~/.agents/skills. Każdy folder z SKILL.md jest instalowany jak plik .zip.",
+    "localCount_one": "Znalezione umiejętności: {{count}}",
+    "localCount_few": "Znalezione umiejętności: {{count}}",
+    "localCount_many": "Znalezione umiejętności: {{count}}",
+    "localCount_other": "Znalezione umiejętności: {{count}}",
+    "localInstalled": "Zainstalowano: {{names}}",
+    "localNone": "Nie znaleziono umiejętności w tych folderach.",
+    "localSkipDuplicate": "Umiejętność o tej nazwie jest już zainstalowana."
   },
   "edit": {
     "unsaved": "Niezapisane zmiany",
@@ -17598,7 +17607,11 @@
         "jev": "Agenci wysyłają naklejki sami tylko z Jev.",
         "jevLink": "Skonfiguruj Jev"
       }
-    }
+    },
+    "quietHours": "Godziny ciszy",
+    "quietHoursHelp": "Procedury zaplanowane w tym przedziale uruchamiają się po jego zakończeniu.",
+    "quietHoursFrom": "Początek ciszy",
+    "quietHoursUntil": "Koniec ciszy"
   },
   "personalMode": {
     "toTeam": {

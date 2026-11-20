@@ -10254,7 +10254,8 @@
     "tab": {
       "github": "Tautan GitHub",
       "zip": "Unggah .zip",
-      "write": "Tulis"
+      "write": "Tulis",
+      "local": "Komputer ini"
     },
     "githubUrl": "Tautan GitHub",
     "githubHelp": "Folder sebuah skill, atau repositori berisi beberapa skill untuk dipilih.",
@@ -10403,7 +10404,12 @@
     "agentTitle": "Skill",
     "agentSubtitle": "Yang bisa dibuka {{name}} saat dibutuhkan.",
     "agentEmpty": "{{name}} belum punya skill.",
-    "manage": "Kelola skill"
+    "manage": "Kelola skill",
+    "localHelp": "Membaca folder skill pada komputer yang menjalankan KeepMind: ~/.claude/skills, ~/.codex/skills, ~/.agents/skills. Setiap folder dengan SKILL.md dipasang seperti berkas .zip.",
+    "localCount_other": "Skill ditemukan: {{count}}",
+    "localInstalled": "Terpasang: {{names}}",
+    "localNone": "Tidak ada skill ditemukan dalam folder tersebut.",
+    "localSkipDuplicate": "Skill dengan nama ini sudah terpasang."
   },
   "edit": {
     "unsaved": "Perubahan belum disimpan",
@@ -16040,7 +16046,11 @@
         "jev": "Agen mengirim stiker sendiri hanya dengan Jev.",
         "jevLink": "Siapkan Jev"
       }
-    }
+    },
+    "quietHours": "Jam tenang",
+    "quietHoursHelp": "Rutinitas yang dijadwalkan dalam rentang ini dijalankan setelah rentang berakhir.",
+    "quietHoursFrom": "Mulai jam tenang",
+    "quietHoursUntil": "Akhir jam tenang"
   },
   "personalMode": {
     "toTeam": {

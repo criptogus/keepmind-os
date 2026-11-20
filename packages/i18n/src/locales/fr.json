@@ -10976,7 +10976,8 @@
     "tab": {
       "github": "Lien GitHub",
       "zip": "Importer un .zip",
-      "write": "Écrire"
+      "write": "Écrire",
+      "local": "Cet ordinateur"
     },
     "githubUrl": "Lien GitHub",
     "githubHelp": "Le dossier d'une compétence, ou un dépôt qui en contient plusieurs au choix.",
@@ -11134,7 +11135,14 @@
     "agentTitle": "Compétences",
     "agentSubtitle": "Ce que {{name}} peut ouvrir au besoin.",
     "agentEmpty": "{{name}} n'a pas encore de compétences.",
-    "manage": "Gérer les compétences"
+    "manage": "Gérer les compétences",
+    "localHelp": "Lit les dossiers de skills de la machine qui exécute KeepMind : ~/.claude/skills, ~/.codex/skills, ~/.agents/skills. Chaque dossier contenant SKILL.md est installé comme une archive .zip.",
+    "localCount_one": "Skills trouvées : {{count}}",
+    "localCount_many": "Skills trouvées : {{count}}",
+    "localCount_other": "Skills trouvées : {{count}}",
+    "localInstalled": "Installées : {{names}}",
+    "localNone": "Aucune skill trouvée dans ces dossiers.",
+    "localSkipDuplicate": "Une skill portant ce nom est déjà installée."
   },
   "edit": {
     "unsaved": "Modifications non enregistrées",
@@ -17067,7 +17075,11 @@
         "jev": "Les agents n'envoient de stickers d'eux-mêmes qu'avec Jev.",
         "jevLink": "Configurer Jev"
       }
-    }
+    },
+    "quietHours": "Heures de repos",
+    "quietHoursHelp": "Les routines prévues pendant cette période démarrent à sa fin.",
+    "quietHoursFrom": "Début du repos",
+    "quietHoursUntil": "Fin du repos"
   },
   "personalMode": {
     "toTeam": {

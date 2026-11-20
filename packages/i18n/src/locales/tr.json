@@ -10548,7 +10548,8 @@
     "tab": {
       "github": "GitHub bağlantısı",
       "zip": ".zip yükle",
-      "write": "Yaz"
+      "write": "Yaz",
+      "local": "Bu bilgisayar"
     },
     "githubUrl": "GitHub bağlantısı",
     "githubHelp": "Bir becerinin klasörü ya da içinden seçim yapılacak birkaç beceri içeren bir depo.",
@@ -10702,7 +10703,13 @@
     "agentTitle": "Beceriler",
     "agentSubtitle": "{{name}} ajanının gerektiğinde açabilecekleri.",
     "agentEmpty": "{{name}} ajanının henüz becerisi yok.",
-    "manage": "Becerileri yönet"
+    "manage": "Becerileri yönet",
+    "localHelp": "KeepMind çalıştıran bilgisayardaki skill klasörlerini okur: ~/.claude/skills, ~/.codex/skills, ~/.agents/skills. SKILL.md içeren her klasör bir .zip dosyası gibi yüklenir.",
+    "localCount_one": "Bulunan skill sayısı: {{count}}",
+    "localCount_other": "Bulunan skill sayısı: {{count}}",
+    "localInstalled": "Yüklendi: {{names}}",
+    "localNone": "Bu klasörlerde skill bulunamadı.",
+    "localSkipDuplicate": "Bu adda bir skill zaten yüklü."
   },
   "edit": {
     "unsaved": "Kaydedilmemiş değişiklikler",
@@ -16481,7 +16488,11 @@
         "jev": "Ajanlar kendiliğinden çıkartmayı yalnızca Jev ile gönderir.",
         "jevLink": "Jev'i kur"
       }
-    }
+    },
+    "quietHours": "Sessiz saatler",
+    "quietHoursHelp": "Bu aralığa planlanan rutinler, aralık sona erdiğinde çalıştırılır.",
+    "quietHoursFrom": "Sessiz saatlerin başlangıcı",
+    "quietHoursUntil": "Sessiz saatlerin sonu"
   },
   "personalMode": {
     "toTeam": {

@@ -10427,8 +10427,8 @@ export const ptBR = {
     tab: { github: "Link do GitHub", local: "Este computador", zip: "Enviar .zip", write: "Escrever" },
     localHelp:
       "Lê as pastas de skills do próprio servidor: ~/.claude/skills, ~/.codex/skills e ~/.agents/skills. Cada pasta com um SKILL.md instala como um .zip enviado.",
-    localCount_one: "1 skill",
-    localCount_other: "{{count}} skills",
+    localCount_one: "1 skill encontrada",
+    localCount_other: "{{count}} skills encontradas",
     localInstalled: "Instaladas: {{names}}",
     localNone: "Nenhuma skill encontrada nessas pastas.",
     localSkipDuplicate: "Já existe uma skill com este nome.",

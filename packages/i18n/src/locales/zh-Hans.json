@@ -10250,7 +10250,8 @@
     "tab": {
       "github": "GitHub 链接",
       "zip": "上传 .zip",
-      "write": "编写"
+      "write": "编写",
+      "local": "这台电脑"
     },
     "githubUrl": "GitHub 链接",
     "githubHelp": "一个技能的文件夹，或包含多个技能可供选择的仓库。",
@@ -10399,7 +10400,12 @@
     "agentTitle": "技能",
     "agentSubtitle": "{{name}} 在需要时可以打开的内容。",
     "agentEmpty": "{{name}} 还没有技能。",
-    "manage": "管理技能"
+    "manage": "管理技能",
+    "localHelp": "读取运行 KeepMind 的电脑上的技能文件夹：~/.claude/skills, ~/.codex/skills, ~/.agents/skills。每个包含 SKILL.md 的文件夹都像 .zip 文件一样安装。",
+    "localCount_other": "找到的技能：{{count}} 个",
+    "localInstalled": "已安装：{{names}}",
+    "localNone": "这些文件夹中没有找到技能。",
+    "localSkipDuplicate": "同名技能已安装。"
   },
   "edit": {
     "unsaved": "有未保存的更改",
@@ -16050,7 +16056,11 @@
         "jev": "只有使用 Jev 时，智能体才会主动发送贴纸。",
         "jevLink": "设置 Jev"
       }
-    }
+    },
+    "quietHours": "免打扰时段",
+    "quietHoursHelp": "计划在此时段内执行的例行任务会在时段结束后运行。",
+    "quietHoursFrom": "开始时间",
+    "quietHoursUntil": "结束时间"
   },
   "personalMode": {
     "toTeam": {

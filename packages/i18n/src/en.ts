@@ -10425,7 +10425,7 @@ export const en = {
     newVersion: "Saving creates a new version.",
     tab: { github: "GitHub link", local: "This computer", zip: "Upload .zip", write: "Write" },
     localHelp:
-      "Reads this server's own skill folders: ~/.claude/skills, ~/.codex/skills and ~/.agents/skills. Each folder with a SKILL.md installs like an uploaded .zip.",
+      "Reads skill folders on the machine running KeepMind: ~/.claude/skills, ~/.codex/skills and ~/.agents/skills. Each folder with a SKILL.md installs like an uploaded .zip.",
     localCount_one: "1 skill",
     localCount_other: "{{count}} skills",
     localInstalled: "Installed: {{names}}",

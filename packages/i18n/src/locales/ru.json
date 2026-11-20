@@ -11293,7 +11293,8 @@
     "tab": {
       "github": "Ссылка на GitHub",
       "zip": "Загрузить .zip",
-      "write": "Написать"
+      "write": "Написать",
+      "local": "Этот компьютер"
     },
     "githubUrl": "Ссылка на GitHub",
     "githubHelp": "Папка навыка или репозиторий с несколькими навыками на выбор.",
@@ -11457,7 +11458,15 @@
     "agentTitle": "Навыки",
     "agentSubtitle": "Что {{name}} может открыть, когда нужно.",
     "agentEmpty": "У {{name}} пока нет навыков.",
-    "manage": "Управлять навыками"
+    "manage": "Управлять навыками",
+    "localHelp": "Читает папки навыков на компьютере, где работает KeepMind: ~/.claude/skills, ~/.codex/skills, ~/.agents/skills. Каждая папка с SKILL.md устанавливается как файл .zip.",
+    "localCount_one": "Найдено навыков: {{count}}",
+    "localCount_few": "Найдено навыков: {{count}}",
+    "localCount_many": "Найдено навыков: {{count}}",
+    "localCount_other": "Найдено навыков: {{count}}",
+    "localInstalled": "Установлено: {{names}}",
+    "localNone": "В этих папках навыки не найдены.",
+    "localSkipDuplicate": "Навык с таким именем уже установлен."
   },
   "edit": {
     "unsaved": "Несохранённые изменения",
@@ -17547,7 +17556,11 @@
         "jev": "Агенты сами отправляют стикеры только с Jev.",
         "jevLink": "Настроить Jev"
       }
-    }
+    },
+    "quietHours": "Тихие часы",
+    "quietHoursHelp": "Процедуры, запланированные на этот период, выполняются после его окончания.",
+    "quietHoursFrom": "Начало тихих часов",
+    "quietHoursUntil": "Конец тихих часов"
   },
   "personalMode": {
     "toTeam": {

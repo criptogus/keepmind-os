@@ -10205,7 +10205,8 @@
     "tab": {
       "github": "GitHubのリンク",
       "zip": ".zipをアップロード",
-      "write": "書く"
+      "write": "書く",
+      "local": "このコンピューター"
     },
     "githubUrl": "GitHubのリンク",
     "githubHelp": "スキルのフォルダ、または複数のスキルから選べるリポジトリ。",
@@ -10354,7 +10355,12 @@
     "agentTitle": "スキル",
     "agentSubtitle": "{{name}}が必要なときに開けるもの。",
     "agentEmpty": "{{name}}にはまだスキルがありません。",
-    "manage": "スキルを管理"
+    "manage": "スキルを管理",
+    "localHelp": "KeepMind を実行するマシンのスキルフォルダーを読み取ります：~/.claude/skills, ~/.codex/skills, ~/.agents/skills。SKILL.md を含む各フォルダーは .zip ファイルと同様にインストールされます。",
+    "localCount_other": "見つかったスキル：{{count}} 件",
+    "localInstalled": "インストール済み：{{names}}",
+    "localNone": "これらのフォルダーにスキルは見つかりませんでした。",
+    "localSkipDuplicate": "同名のスキルはすでにインストールされています。"
   },
   "edit": {
     "unsaved": "未保存の変更があります",
@@ -15986,7 +15992,11 @@
         "jev": "エージェントが自分からステッカーを送るのは、Jevを使っている場合だけです。",
         "jevLink": "Jevを設定"
       }
-    }
+    },
+    "quietHours": "休止時間",
+    "quietHoursHelp": "この時間帯に予定されたルーチンは、時間帯が終了してから実行されます。",
+    "quietHoursFrom": "休止開始",
+    "quietHoursUntil": "休止終了"
   },
   "personalMode": {
     "toTeam": {

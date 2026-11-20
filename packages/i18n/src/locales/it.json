@@ -10992,7 +10992,8 @@
     "tab": {
       "github": "Link GitHub",
       "zip": "Carica .zip",
-      "write": "Scrivi"
+      "write": "Scrivi",
+      "local": "Questo computer"
     },
     "githubUrl": "Link GitHub",
     "githubHelp": "La cartella di una skill, o un repository con diverse skill tra cui scegliere.",
@@ -11150,7 +11151,14 @@
     "agentTitle": "Skill",
     "agentSubtitle": "Cosa può aprire {{name}} quando serve.",
     "agentEmpty": "{{name}} non ha ancora skill.",
-    "manage": "Gestisci skill"
+    "manage": "Gestisci skill",
+    "localHelp": "Legge le cartelle delle skill sul computer che esegue KeepMind: ~/.claude/skills, ~/.codex/skills, ~/.agents/skills. Ogni cartella con SKILL.md viene installata come un file .zip.",
+    "localCount_one": "Skill trovate: {{count}}",
+    "localCount_many": "Skill trovate: {{count}}",
+    "localCount_other": "Skill trovate: {{count}}",
+    "localInstalled": "Installate: {{names}}",
+    "localNone": "Nessuna skill trovata in queste cartelle.",
+    "localSkipDuplicate": "Una skill con questo nome è già installata."
   },
   "edit": {
     "unsaved": "Modifiche non salvate",
@@ -17079,7 +17087,11 @@
         "jev": "Gli agenti inviano sticker di loro iniziativa solo con Jev.",
         "jevLink": "Configura Jev"
       }
-    }
+    },
+    "quietHours": "Orario di riposo",
+    "quietHoursHelp": "Le routine programmate durante questo intervallo vengono eseguite alla sua fine.",
+    "quietHoursFrom": "Inizio del riposo",
+    "quietHoursUntil": "Fine del riposo"
   },
   "personalMode": {
     "toTeam": {
