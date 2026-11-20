@@ -365,8 +365,8 @@ html:not([data-pointer]) .drive-row:has(.drive-hit:focus-visible) {
   padding: 12px;
   border-radius: 16px;
   background: var(--glass);
-  -webkit-backdrop-filter: blur(18px) saturate(1.6);
-  backdrop-filter: blur(18px) saturate(1.6);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  backdrop-filter: blur(20px) saturate(1.6);
   box-shadow: var(--e3);
 }
 .drive-uploads__head {

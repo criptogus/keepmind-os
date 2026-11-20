@@ -153,33 +153,33 @@ export type ShadowName = "e1" | "e2" | "e3" | "top";
 export const shadows: Record<ThemeName, Record<ShadowName, ShadowLayer[]>> = {
   light: {
     e1: [
-      { x: 0, y: 1, blur: 1, spread: 0, color: "rgba(23, 23, 22, 0.04)" },
-      { x: 0, y: 2, blur: 4, spread: -1, color: "rgba(23, 23, 22, 0.05)" },
+      { x: 0, y: 1, blur: 2, spread: 0, color: "rgba(23, 23, 22, 0.04)" },
+      { x: 0, y: 4, blur: 10, spread: -2, color: "rgba(23, 23, 22, 0.06)" },
       { x: 0, y: 0, blur: 0, spread: 1, color: "rgba(23, 23, 22, 0.07)" },
     ],
     e2: [
-      { x: 0, y: 1, blur: 1, spread: 0, color: "rgba(23, 23, 22, 0.04)" },
-      { x: 0, y: 6, blur: 16, spread: -4, color: "rgba(23, 23, 22, 0.1)" },
+      { x: 0, y: 2, blur: 4, spread: 0, color: "rgba(23, 23, 22, 0.04)" },
+      { x: 0, y: 14, blur: 34, spread: -8, color: "rgba(23, 23, 22, 0.14)" },
       { x: 0, y: 0, blur: 0, spread: 1, color: "rgba(23, 23, 22, 0.07)" },
     ],
     e3: [
-      { x: 0, y: 2, blur: 4, spread: 0, color: "rgba(23, 23, 22, 0.04)" },
-      { x: 0, y: 24, blur: 56, spread: -16, color: "rgba(23, 23, 22, 0.3)" },
+      { x: 0, y: 4, blur: 8, spread: 0, color: "rgba(23, 23, 22, 0.04)" },
+      { x: 0, y: 44, blur: 96, spread: -18, color: "rgba(23, 23, 22, 0.26)" },
       { x: 0, y: 0, blur: 0, spread: 1, color: "rgba(23, 23, 22, 0.12)" },
     ],
     top: [{ x: 0, y: 1, blur: 0, spread: 0, color: "rgba(255, 255, 255, 0.9)", inset: true }],
   },
   dark: {
     e1: [
-      { x: 0, y: 1, blur: 2, spread: 0, color: "rgba(0, 0, 0, 0.5)" },
+      { x: 0, y: 1, blur: 2, spread: 0, color: "rgba(0, 0, 0, 0.45)" },
       { x: 0, y: 0, blur: 0, spread: 1, color: "rgba(255, 255, 255, 0.1)" },
     ],
     e2: [
-      { x: 0, y: 8, blur: 20, spread: -6, color: "rgba(0, 0, 0, 0.6)" },
+      { x: 0, y: 10, blur: 28, spread: -8, color: "rgba(0, 0, 0, 0.6)" },
       { x: 0, y: 0, blur: 0, spread: 1, color: "rgba(255, 255, 255, 0.1)" },
     ],
     e3: [
-      { x: 0, y: 28, blur: 64, spread: -16, color: "rgba(0, 0, 0, 0.8)" },
+      { x: 0, y: 36, blur: 88, spread: -18, color: "rgba(0, 0, 0, 0.78)" },
       { x: 0, y: 0, blur: 0, spread: 1, color: "rgba(255, 255, 255, 0.15)" },
     ],
     top: [{ x: 0, y: 1, blur: 0, spread: 0, color: "rgba(255, 255, 255, 0.08)", inset: true }],
@@ -242,8 +242,8 @@ export const fonts = {
 
 /** Cubic bezier curves `[x1, y1, x2, y2]`: `spring` and `out` from the tokens; `ios` for sheets (`--drawer`). */
 export const motion = {
-  spring: [0.34, 1.4, 0.5, 1],
-  out: [0.2, 0.8, 0.2, 1],
+  spring: [0.34, 1.3, 0.5, 1],
+  out: [0.32, 0.72, 0, 1],
   ios: [0.32, 0.72, 0, 1],
 } as const satisfies Record<string, readonly [number, number, number, number]>;
 

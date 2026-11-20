@@ -3187,8 +3187,8 @@ html:not([data-pointer]) .artifact-table__sort:focus-visible {
   padding: 6px 6px 6px 14px;
   border-radius: 16px;
   background: var(--glass);
-  -webkit-backdrop-filter: blur(18px) saturate(1.6);
-  backdrop-filter: blur(18px) saturate(1.6);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  backdrop-filter: blur(20px) saturate(1.6);
   box-shadow: var(--e3);
 }
 .drive-selbar__count {
@@ -9324,8 +9324,8 @@ html:not([data-pointer]) .onb__step:focus-visible {
   padding: 10px 10px 10px 16px;
   border-radius: 18px;
   background: var(--glass);
-  -webkit-backdrop-filter: blur(18px) saturate(1.5);
-  backdrop-filter: blur(18px) saturate(1.5);
+  -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  backdrop-filter: blur(20px) saturate(1.5);
   box-shadow: var(--e2), var(--top);
   box-sizing: border-box;
 }
@@ -11795,8 +11795,8 @@ html:not([data-pointer]) .agp-subnav__item:focus-visible {
   padding: 10px 10px 10px 16px;
   border-radius: 18px;
   background: var(--glass);
-  -webkit-backdrop-filter: blur(18px) saturate(1.5);
-  backdrop-filter: blur(18px) saturate(1.5);
+  -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  backdrop-filter: blur(20px) saturate(1.5);
   box-shadow: var(--e3), var(--top);
   box-sizing: border-box;
 }

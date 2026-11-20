@@ -22,6 +22,7 @@ body {
   background: var(--surface);
   font-feature-settings: "ss01", "tnum";
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 /* Japanese and Chinese break lines by their own strict rules, Korean between words; none of the three slants a
@@ -6055,8 +6056,8 @@ html:not([data-pointer]) .ac-seg__item:focus-visible {
   .ac-toast,
   .ac-glass {
     background: var(--glass);
-    -webkit-backdrop-filter: blur(18px) saturate(1.6);
-    backdrop-filter: blur(18px) saturate(1.6);
+    -webkit-backdrop-filter: blur(20px) saturate(1.75);
+    backdrop-filter: blur(20px) saturate(1.75);
   }
 }
 /* Concentric: the box is its rows' corner (--radius-item) plus the room around them. */

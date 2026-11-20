@@ -113,7 +113,8 @@ Toolbar única: busca à esquerda; abas, filtros e selects à direita. Abaixo de
 
 ## 6. Movimento
 
-- `--out: cubic-bezier(.2,.8,.2,1)` para entradas/sombras; `--spring: cubic-bezier(.34,1.4,.5,1)` para press, pílulas deslizantes, enviar.
+- `--out: cubic-bezier(0.32, 0.72, 0, 1)` — a desaceleração padrão Apple — para entradas e sombras; `--spring: cubic-bezier(0.34, 1.3, 0.5, 1)` para press, pílulas deslizantes, enviar; `--drawer` divide a curva do `--out`.
+- Sombras em camadas e difusas (e1 contato + ambiente, e2 levanta, e3 flutua como uma folha) com hairline `--line`/`--line2` e a luz de topo `--top` — o par sombra-suave + filete + brilho é a assinatura de profundidade do sistema.
 - Entradas 120–220ms (opacidade + transform, sem layout shift). Só entradas — fechar é imediato.
 - Nada aparece do nada: card novo, thread aberta, painel — tudo anima.
 - `prefers-reduced-motion`: nada anima (inclusive piscar/halo do agente).
