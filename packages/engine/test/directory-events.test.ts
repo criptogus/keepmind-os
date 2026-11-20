@@ -209,10 +209,19 @@ describe("what runs cached while a transaction was open goes with its commit", (
     const ctx = await devRun(f, "põe o dev no vendas");
     const key = `${f.org.id}:${channel.id}`;
     const transaction = f.db.transaction.bind(f.db);
+    let primedDuringMembershipWrite = false;
     f.db.transaction = (async (run: (tx: never) => Promise<unknown>) =>
       transaction(async (tx) => {
         const out = await run(tx as never);
-        caches.channelMembers.set(key, ["as it was"]);
+        const [added] = await tx
+          .select({ id: schema.channelMembers.id })
+          .from(schema.channelMembers)
+          .where(and(eq(schema.channelMembers.channelId, channel.id), eq(schema.channelMembers.agentId, f.agent.id)));
+        // Simulate the stale read before the membership commit, not later audit-only transactions.
+        if (added && !primedDuringMembershipWrite) {
+          caches.channelMembers.set(key, ["as it was"]);
+          primedDuringMembershipWrite = true;
+        }
         return out;
       })) as typeof f.db.transaction;
     const tools = createToolGateway({ sources: [createWorkspaceToolSource({ pubsub: f.pubsub })] });
@@ -223,6 +232,7 @@ describe("what runs cached while a transaction was open goes with its commit", (
     });
     if (res.type !== "result") throw new Error(`not a result: ${res.type}`);
     expect(res.output.content).toContain("Added");
+    expect(primedDuringMembershipWrite).toBe(true);
     expect(caches.channelMembers.get(key)).toBeUndefined();
   });
 });
