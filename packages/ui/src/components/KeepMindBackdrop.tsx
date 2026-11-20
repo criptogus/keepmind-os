@@ -1,6 +1,5 @@
 import type { CSSProperties } from "react";
 import { useEffect, useRef, useState } from "react";
-import "../styles/backdrop.css";
 
 /** KeepMind's quiet graphite stage; status and identity remain in the profile itself. */
 export function KeepMindBackdrop({
