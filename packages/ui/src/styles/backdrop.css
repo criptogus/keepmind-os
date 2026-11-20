@@ -3,7 +3,7 @@
   inset: 0;
   overflow: hidden;
   pointer-events: none;
-  background: #111111;
+  background: transparent;
 }
 .km-agent-backdrop svg {
   display: block;
@@ -11,17 +11,18 @@
   height: 100%;
 }
 .km-agent-backdrop__fold {
-  fill: #1c1c1c;
+  fill: var(--km-backdrop-fold, var(--raised-2));
+  opacity: 0.45;
 }
 .km-agent-backdrop__flow {
   fill: none;
-  stroke: #454545;
+  stroke: var(--km-backdrop-line, var(--line2));
   stroke-width: 1;
   transform-origin: center;
   animation: km-agent-current 18s ease-in-out infinite alternate paused;
 }
 .km-agent-backdrop__accent {
-  stroke: #c4ff3d;
+  stroke: var(--km-backdrop-accent, #c4ff3d);
   stroke-width: 1.5;
   stroke-opacity: 1;
   stroke-dasharray: 56 660;
@@ -46,4 +47,14 @@
   .km-agent-backdrop__flow {
     animation: none;
   }
+}
+
+.km-agent-backdrop[data-tone="graphite"] {
+  --km-backdrop-fold: #1c1c1c;
+  --km-backdrop-line: #454545;
+  background: #111111;
+}
+
+[data-desktop-renderer="cpu"] .km-agent-backdrop__flow {
+  animation: none;
 }

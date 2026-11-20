@@ -1,14 +1,15 @@
-/*
- * The welcome on a small sky: the onboarding's last step and a newcomer's first #general (ADR 0090). The sky is the
- * same blue in both themes, so its ink is the deep sky ink; buttons on it are the sky's glass.
- */
+/* Branded graphite welcome stage, with readable text and controls in either theme. */
 .welcome-card {
   position: relative;
   min-height: 220px;
   padding: 24px;
   border-radius: 24px;
   overflow: hidden;
-  background: #2b74e6;
+  --sky-ink: #efefec;
+  --sky-ink2: #d6d6d2;
+  --sky-glass: #242423;
+  --sky-line: #454545;
+  background: #111111;
   color: var(--sky-ink);
   isolation: isolate;
 }
@@ -77,14 +78,14 @@
 }
 .welcome-card__acts > .ac-btn:hover,
 .welcome-card__close.ac-btn:hover {
-  background: rgba(255, 255, 255, 0.86);
+  background: #353534;
 }
 html:not([data-pointer]) .welcome-card__acts > .ac-btn:focus-visible,
 html:not([data-pointer]) .welcome-card__close.ac-btn:focus-visible {
   outline: none;
   box-shadow:
-    0 0 0 2px #fff,
-    0 0 0 4px var(--sky-ink);
+    0 0 0 2px #111111,
+    0 0 0 4px #c4ff3d;
 }
 .welcome-card__acts > .ac-btn .ac-avatar {
   flex: none;

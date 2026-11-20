@@ -3,11 +3,7 @@ import { type ReactNode, useRef } from "react";
 import { WelcomeSky } from "@/components/Sky";
 import "./welcome.css";
 
-/**
- * The welcome on a small sky: the onboarding's last step and a newcomer's first #general (ADR 0090). A title and a
- * lead, the faces of who works there, actions on the sky's glass and a close button, each when given. The sky stays
- * calm behind the words, and its pixel agents keep off the faces and the buttons.
- */
+/** Welcome message, crew and actions on the shared KeepMind stage. */
 export function WelcomeCard({
   title,
   titleId,

@@ -65,7 +65,7 @@ describe("a widget on a board", () => {
     const { container } = card({ kind: "text", items: ["All orders shipped."] }, { board: labels });
     const el = container.querySelector(".wg");
     expect(el?.hasAttribute("data-capped")).toBe(true);
-    expect(container.querySelector("canvas.ac-card-horizon")?.getAttribute("aria-hidden")).toBe("true");
+    expect(container.querySelector(".ac-card-horizon")?.getAttribute("aria-hidden")).toBe("true");
   });
 
   test("a number with its trend keeps the trend at its foot, no horizon", () => {

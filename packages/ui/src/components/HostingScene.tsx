@@ -1,26 +1,23 @@
-import { type CSSProperties, useMemo } from "react";
+import type { CSSProperties } from "react";
 import { cx } from "../cx";
-import { useDawn } from "../hooks/useDawn";
-import { HOSTING_CAST, type Hosting, teamSky } from "../sky/team";
+import { HOSTING_CAST, type Hosting } from "../sky/team";
 import { Avatar } from "./Avatar";
 import { ComputerPortrait } from "./Computer";
-import { PixelSky } from "./PixelSky";
+import { KeepMindBackdrop } from "./KeepMindBackdrop";
 
 export type { Hosting };
 
 /**
- * The choice of where a workspace lives, drawn: on the Cloud, day, the always-on server lit and the team up under it;
+ * The choice of where a workspace lives, drawn on the KeepMind graphite stage: the Cloud keeps the team awake;
  * on one's own server, night, the laptop dark and the team asleep (they stop when it does). Turns from one to the other
- * with the dawn's motion (held still with reduced motion). `tall`: a window's side, the server over the team. `band`:
+ * with the shared companions' motion (held still with reduced motion). `tall`: a window's side, the server over the team. `band`:
  * a strip over a sheet, side by side. Decorative: the words beside it say the same.
  */
 export function HostingScene({ hosting, shape = "band" }: { hosting: Hosting; shape?: "band" | "tall" }) {
   const cloud = hosting === "cloud";
-  const day = useDawn(cloud, { dusk: true });
-  const options = useMemo(() => teamSky(day), [day]);
   return (
     <div className={cx("ac-hosting", `ac-hosting--${shape}`)} data-hosting={hosting} aria-hidden="true">
-      <PixelSky options={options} />
+      <KeepMindBackdrop tone="graphite" />
       <div className="ac-hosting__row">
         <span className="ac-hosting__cast" data-awake={cloud ? "" : undefined}>
           {HOSTING_CAST.map((a, i) => (
@@ -98,10 +95,9 @@ export function PlaceScene({
   computer?: "mac" | "windows" | "linux";
   shape?: "band" | "tall";
 }) {
-  const options = useMemo(() => teamSky(1), []);
   return (
     <div className={cx("ac-hosting", `ac-hosting--${shape}`, "ac-place")} data-place={place} aria-hidden="true">
-      <PixelSky options={options} />
+      <KeepMindBackdrop tone="graphite" />
       <div className="ac-hosting__row">
         <span className="ac-hosting__cast" data-awake="">
           {HOSTING_CAST.map((a, i) => (
