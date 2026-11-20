@@ -49,8 +49,8 @@ describe("a personal workspace's agent", () => {
 
   test("creating one offers personal starters and the shared template library", () => {
     const create = read("src/features/agents/NewAgentScreen.tsx");
-    expect(create).toContain("{ROLE_GROUPS.map((group) => (");
-    expect(create).toContain("{PERSONAL_STARTERS.map((s) => (");
+    expect(create).toContain("{visibleGroups.map((group) => (");
+    expect(create).toContain("{visibleStarters.map((s) => (");
     expect(create).toContain("onPress={() => pickStarter(s)}");
   });
 });

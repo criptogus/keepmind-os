@@ -44,12 +44,14 @@ import {
   ROLE_DEFAULTS,
   ROLE_GROUPS,
   type RoleId,
+  roleMatchesQuery,
   savePart,
   takenHandles,
 } from "@keepmind/client/lib/new-agent";
 import { addsAgentsTo, can } from "@keepmind/client/lib/permissions";
 import { AUTO, modelChoices, usableModels } from "@keepmind/client/lib/providers";
 import { isPersonal } from "@keepmind/client/lib/workspace-mode";
+import { matchesWords } from "@keepmind/ui/search";
 import { Image } from "expo-image";
 import { usePreventRemove } from "expo-router";
 import { Fragment, type ReactNode, useEffect, useMemo, useRef, useState } from "react";
@@ -72,6 +74,7 @@ import {
   type IconName,
   Locked,
   ProviderLogo,
+  SearchField,
   Sky,
   Text,
   useReducedMotion,
@@ -223,6 +226,7 @@ function NewAgentForm({
   const [tried, setTried] = useState(false);
   const [busy, setBusy] = useState(false);
   const [role, setRole] = useState<RoleId | null>(proposed || initialWhat ? "custom" : null);
+  const [roleQuery, setRoleQuery] = useState("");
   // A personal workspace's starting point (one of the right hand's personal agents), on top of "custom" (ADR 0159 §3).
   const [starter, setStarter] = useState<PersonalStarter["id"] | null>(null);
   const personal = isPersonal(org);
@@ -609,10 +613,31 @@ function NewAgentForm({
       if (level) choose(level);
     });
 
+  const starterHit = (s: PersonalStarter) =>
+    matchesWords(
+      `${s.name} ${t(`teamTemplates.agents.${s.id}.role`)} ${t(`teamTemplates.agents.${s.id}.line`)}`,
+      roleQuery,
+    );
+  const visibleStarters = PERSONAL_STARTERS.filter(starterHit);
+  const visibleGroups = ROLE_GROUPS.map((group) => ({
+    ...group,
+    roles: group.roles.filter((id) => roleMatchesQuery(id, roleQuery, t, t(`newAgent.roles.${id}.agent`))),
+  })).filter((group) => group.roles.length > 0);
+  const noRoleHit =
+    roleQuery.trim() !== "" && visibleGroups.length === 0 && (!personal || visibleStarters.length === 0);
+
   const views: Record<PhoneStep, () => ReactNode> = {
     role: () => (
       <>
         {head(t("newAgent.steps.role.title"), t("newAgent.steps.role.lead"))}
+        <View style={styles.search}>
+          <SearchField
+            value={roleQuery}
+            onChangeText={setRoleQuery}
+            placeholder={t("newAgentCard.searchTemplates")}
+            accessibilityLabel={t("newAgentCard.searchTemplates")}
+          />
+        </View>
         <GroupedList>
           <GroupedRow
             leading={<RowTile icon="plus" />}
@@ -649,7 +674,7 @@ function NewAgentForm({
           <>
             <GroupedHeader>{t("newAgent.roleGroups.personal")}</GroupedHeader>
             <GroupedList>
-              {PERSONAL_STARTERS.map((s) => (
+              {visibleStarters.map((s) => (
                 <GroupedRow
                   key={s.id}
                   leading={<AgentAvatar agent={fullLook(s.look)} size={36} live={false} />}
@@ -668,7 +693,7 @@ function NewAgentForm({
             </GroupedList>
           </>
         ) : null}
-        {ROLE_GROUPS.map((group) => (
+        {visibleGroups.map((group) => (
           <Fragment key={group.id}>
             <GroupedHeader>{t(`newAgent.roleGroups.${group.id}`)}</GroupedHeader>
             <GroupedList>
@@ -694,6 +719,13 @@ function NewAgentForm({
             </GroupedList>
           </Fragment>
         ))}
+        {noRoleHit ? (
+          <View style={styles.foot}>
+            <Text variant="small" tone="muted">
+              {t("newAgentCard.noTemplates")}
+            </Text>
+          </View>
+        ) : null}
         {tried && !role ? (
           <View style={styles.foot}>
             <ErrorLine text={t("newAgent.errors.roleRequired")} />
@@ -1160,6 +1192,7 @@ const styles = StyleSheet.create({
   stack: { gap: 8 },
   gap: { height: 24 },
   other: { paddingTop: 12 },
+  search: { paddingHorizontal: 16, paddingTop: 4, paddingBottom: 8 },
   marks: { flexDirection: "row" },
   mark: {
     width: MARK,

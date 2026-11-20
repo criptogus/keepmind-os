@@ -40,6 +40,7 @@ import {
   setGaze,
   spriteTone,
 } from "@keepmind/ui";
+import { matchesWords } from "@keepmind/ui/search";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import {
@@ -83,6 +84,7 @@ import {
   ROLE_GROUPS,
   type RoleGroupId,
   type RoleId,
+  roleMatchesQuery,
   savePart,
   starterApps,
   takenHandles,
@@ -307,36 +309,6 @@ const GROUP_ICON: Record<RoleGroupId, "code" | "members" | "layers"> = {
   exec: "layers",
   inspired: "members",
   operations: "layers",
-};
-const ROLE_SEARCH_ALIASES: Partial<Record<RoleId, string>> = {
-  dev: "desenvolvimento development software programação",
-  finance: "finanças finances financeiro",
-  cybersec: "cybersegurança cybersecurity segurança security",
-  exec_cfo: "cfo chief financial officer financeiro finanças treasurer",
-  exec_cmo: "cmo chief marketing officer marketing growth marca",
-  exec_cto: "cto chief technology officer tecnologia technology arquitetura",
-  exec_coo: "coo chief operating officer operações operations processos",
-  exec_people: "cpo chief people officer rh hr pessoas cultura",
-  exec_research: "head research pesquisa insights estudos",
-  seo: "seo geo search engine optimization google ai search aio buscador ranqueamento",
-  designer: "design ui ux figma canva interface visual produto",
-  ux_expert: "ux user experience pesquisa research usabilidade heurísticas jornada",
-  pr_manager: "pr pull request review code review merge revisor",
-  frontend_engineer: "frontend front-end web ui react javascript typescript css",
-  ios_engineer: "ios iphone ipad swift swiftui apple mobile",
-  android_engineer: "android kotlin mobile google",
-  software_factory: "factory fábrica bugs polish refactor improvements",
-  migration_engineer: "migration migração database schema upgrade",
-  latency_optimizer: "latency performance lentidão slow speed otimização p95",
-  platform_engineer: "platform plataforma infra infrastructure devops ci cd",
-  internal_tools: "internal tools ferramentas internas script automation",
-  release_engineer: "release versão deploy changelog versionamento",
-  code_reaper: "reaper dead code cleanup remoção código morto",
-  code_health: "health saúde débito técnico tech debt cve dependências",
-  anomaly_watcher: "anomaly anomalia watcher monitoramento métricas dados",
-  technical_writer: "writer documentação docs technical writing wiki",
-  compliance_engineer: "compliance auditoria audit controles governance",
-  chief_of_staff: "chief of staff cos coordenação orquestração time",
 };
 /**
  * The skills each starting point opens when needed, as the team templates name them (`teamTemplates.skills.{key}`),
@@ -602,20 +574,11 @@ function NewAgentDialog({
     const s = starterOf(pick);
     return s ? s.name : pick === "zero" ? "" : tt(`newAgent.roles.${pick}.agent`);
   };
-  const foldTemplate = (value: string) =>
-    value
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase();
   const visiblePicks = picks.filter((id) => {
     if (id === "zero") return true;
     const starter = starterOf(id);
-    const text = starter
-      ? `${nameOf(id)} ${tt(`teamTemplates.agents.${id}.role`)}`
-      : `${id} ${ROLE_SEARCH_ALIASES[id as RoleId] ?? ""} ${nameOf(id)} ${tt(`newAgent.roles.${id}.name`)} ${tt(`newAgent.roles.${id}.desc`)} ${tt(`newAgent.hello.${id}`)}`;
-    return foldTemplate(templateQuery)
-      .split(/\s+/)
-      .every((word) => foldTemplate(text).includes(word));
+    if (starter) return matchesWords(`${nameOf(id)} ${tt(`teamTemplates.agents.${id}.role`)}`, templateQuery);
+    return roleMatchesQuery(id as RoleId, templateQuery, t, nameOf(id));
   });
   // How it works: its instructions grow with what's written, up to about eight lines, then scroll.
   // biome-ignore lint/correctness/useExhaustiveDependencies: on each change of the text or of the card

@@ -76,6 +76,7 @@ import {
   ProviderLogo,
   prefersReducedMotion,
   randomAppearance,
+  SearchField,
   Segmented,
   SettingNote,
   SettingRow,
@@ -83,6 +84,7 @@ import {
   Switch,
   Textarea,
 } from "@keepmind/ui";
+import { matchesWords } from "@keepmind/ui/search";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { type ReactNode, type RefObject, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -148,6 +150,7 @@ import {
   type RoleGroupId,
   type RoleId,
   readBudget,
+  roleMatchesQuery,
   savePart,
   stepAfter,
   stepErrors,
@@ -393,6 +396,7 @@ function NewAgentFlow({
   const [installing, setInstalling] = useState(Boolean(installLink));
   // The draft
   const [role, setRole] = useState<RoleId | null>(was ? was.role : draft ? "custom" : null);
+  const [roleQuery, setRoleQuery] = useState("");
   // Batch creation: the ready-made roles picked on the role step, in order; 2+ of them make a batch.
   const [picked, setPicked] = useState<RoleId[]>([]);
   // A personal workspace's starting point (one of its template agents), on top of "custom" (ADR 0159 §3).
@@ -1294,10 +1298,32 @@ function NewAgentFlow({
           </span>
         </span>
       );
+      const starterHit = (s: PersonalStarter) =>
+        matchesWords(
+          `${s.name} ${t(`teamTemplates.agents.${s.id}.role`)} ${t(`teamTemplates.agents.${s.id}.line`)}`,
+          roleQuery,
+        );
+      const visibleStarters = PERSONAL_STARTERS.filter(starterHit);
+      const visibleGroups = ROLE_GROUPS.map((group) => ({
+        ...group,
+        roles: group.roles.filter((id) => roleMatchesQuery(id, roleQuery, t, t(`newAgent.roles.${id}.agent`))),
+      })).filter((group) => group.roles.length > 0);
+      const noRoleHit =
+        roleQuery.trim() !== "" && visibleGroups.length === 0 && (!personal || visibleStarters.length === 0);
       return (
         <>
           {head(t("newAgent.steps.role.title"), t("newAgent.steps.role.lead"))}
           {batchable && <p className="small muted newag__batch-hint">{t("newAgent.batch.hint")}</p>}
+          <div className="newag__search">
+            <SearchField
+              value={roleQuery}
+              placeholder={t("newAgentCard.searchTemplates")}
+              aria-label={t("newAgentCard.searchTemplates")}
+              onChange={(e) => setRoleQuery(e.target.value)}
+              onClear={() => setRoleQuery("")}
+              clearLabel={t("filters.clearSearch")}
+            />
+          </div>
           {/* biome-ignore lint/a11y/useSemanticElements: pressable cards, not a native fieldset */}
           <div className="newag__role-groups" role="group" aria-label={t("newAgent.steps.role.name")}>
             <div className="newag__scratch">
@@ -1361,7 +1387,7 @@ function NewAgentFlow({
                   </h2>
                 </div>
                 <div className="newag__roles">
-                  {PERSONAL_STARTERS.map((s) => (
+                  {visibleStarters.map((s) => (
                     <button
                       key={s.id}
                       type="button"
@@ -1385,7 +1411,7 @@ function NewAgentFlow({
                 </div>
               </section>
             )}
-            {ROLE_GROUPS.map((group) => (
+            {visibleGroups.map((group) => (
               <section key={group.id} className="newag__section" aria-labelledby={`ag-roles-${group.id}`}>
                 <div className="newag__sect">
                   <h2 id={`ag-roles-${group.id}`}>
@@ -1441,6 +1467,7 @@ function NewAgentFlow({
                 </div>
               </section>
             ))}
+            {noRoleHit && <p className="small muted newag__nohit">{t("newAgentCard.noTemplates")}</p>}
           </div>
           {errorLine(errorOf("role"))}
         </>

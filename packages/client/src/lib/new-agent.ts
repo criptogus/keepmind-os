@@ -1,3 +1,4 @@
+import { matchesWords } from "@keepmind/ui/search";
 import type { TFunction } from "i18next";
 import type { AgentAudience } from "../api/types";
 import type { Level } from "./access-levels";
@@ -168,6 +169,54 @@ export const ROLE_GROUPS = [
   },
 ] as const satisfies readonly { id: string; roles: readonly Exclude<RoleId, "custom">[] }[];
 export type RoleGroupId = (typeof ROLE_GROUPS)[number]["id"];
+
+/**
+ * Extra words a role answers to in the pickers' search, beyond its name, description and hello: what people call
+ * the job ("p95", "tech debt", "UX"), in Portuguese and English where they differ.
+ */
+export const ROLE_SEARCH_ALIASES: Partial<Record<RoleId, string>> = {
+  dev: "desenvolvimento development software programação",
+  finance: "finanças finances financeiro",
+  cybersec: "cybersegurança cybersecurity segurança security",
+  exec_cfo: "cfo chief financial officer financeiro finanças treasurer",
+  exec_cmo: "cmo chief marketing officer marketing growth marca",
+  exec_cto: "cto chief technology officer tecnologia technology arquitetura",
+  exec_coo: "coo chief operating officer operações operations processos",
+  exec_people: "cpo chief people officer rh hr pessoas cultura",
+  exec_research: "head research pesquisa insights estudos",
+  seo: "seo geo search engine optimization google ai search aio buscador ranqueamento",
+  designer: "design ui ux figma canva interface visual produto",
+  ux_expert: "ux user experience pesquisa research usabilidade heurísticas jornada",
+  pr_manager: "pr pull request review code review merge revisor",
+  frontend_engineer: "frontend front-end web ui react javascript typescript css",
+  ios_engineer: "ios iphone ipad swift swiftui apple mobile",
+  android_engineer: "android kotlin mobile google",
+  software_factory: "factory fábrica bugs polish refactor improvements",
+  migration_engineer: "migration migração database schema upgrade",
+  latency_optimizer: "latency performance lentidão slow speed otimização p95",
+  platform_engineer: "platform plataforma infra infrastructure devops ci cd",
+  internal_tools: "internal tools ferramentas internas script automation",
+  release_engineer: "release versão deploy changelog versionamento",
+  code_reaper: "reaper dead code cleanup remoção código morto",
+  code_health: "health saúde débito técnico tech debt cve dependências",
+  anomaly_watcher: "anomaly anomalia watcher monitoramento métricas dados",
+  technical_writer: "writer documentação docs technical writing wiki",
+  compliance_engineer: "compliance auditoria audit controles governance",
+  chief_of_staff: "chief of staff cos coordenação orquestração time",
+};
+
+/**
+ * Whether a role's card matches a picker's search: every word of the query appears in its id, aliases, agent
+ * name, role name, description or hello (case- and accent-folded, like every list's search). An empty query
+ * matches everything.
+ */
+export function roleMatchesQuery(id: RoleId, query: string, t: TFunction, agentName?: string): boolean {
+  if (!query.trim()) return true;
+  const text = `${id} ${ROLE_SEARCH_ALIASES[id] ?? ""} ${agentName ?? ""} ${t(`newAgent.roles.${id}.name` as never)} ${t(
+    `newAgent.roles.${id}.desc` as never,
+  )} ${t(`newAgent.hello.${id}` as never)}`;
+  return matchesWords(text, query);
+}
 
 /** New specialist/advisor templates never grant connections implicitly, including personal workspaces. */
 export const RESTRICTED_ROLE_IDS: readonly RoleId[] = [

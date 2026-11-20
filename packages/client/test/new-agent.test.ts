@@ -8,6 +8,7 @@ import {
   presetChannels,
   ROLE_DEFAULTS,
   type RoleId,
+  roleMatchesQuery,
   stepAfter,
 } from "../src/lib/new-agent";
 
@@ -100,5 +101,28 @@ describe("batchDrafts personal", () => {
     // Catalog ids only: broad changes nothing here (it widens custom servers, which have no catalog id).
     const [dev] = batchDrafts(["dev"], t, myChannels, connected, true);
     expect(dev?.levels).toEqual(batchDrafts(["dev"], t, myChannels, connected)[0]?.levels);
+  });
+});
+
+describe("roleMatchesQuery", () => {
+  test("empty query matches every role; words must all appear", () => {
+    expect(roleMatchesQuery("dev", "", t)).toBe(true);
+    expect(roleMatchesQuery("dev", "   ", t)).toBe(true);
+    expect(roleMatchesQuery("dev", "desenvolvimento", t)).toBe(true);
+    expect(roleMatchesQuery("dev", "desenvolvimento inexistente", t)).toBe(false);
+  });
+
+  test("aliases and folded accents reach the right template", () => {
+    expect(roleMatchesQuery("latency_optimizer", "p95", t)).toBe(true);
+    expect(roleMatchesQuery("migration_engineer", "migração", t)).toBe(true);
+    expect(roleMatchesQuery("code_health", "tech debt", t)).toBe(true);
+    expect(roleMatchesQuery("pr_manager", "code review", t)).toBe(true);
+    expect(roleMatchesQuery("ux_expert", "usabilidade", t)).toBe(true);
+  });
+
+  test("name, description and hello all count; unrelated words don't", () => {
+    expect(roleMatchesQuery("designer", "figma", t)).toBe(true);
+    expect(roleMatchesQuery("qa", "bugs", t)).toBe(true);
+    expect(roleMatchesQuery("qa", "latência", t)).toBe(false);
   });
 });
