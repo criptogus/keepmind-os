@@ -11,6 +11,7 @@ import {
   CONTEXT_LIMIT_PROTOCOL,
   CONVERSATION_PROTOCOL,
   LOCKED_BRAIN_PROTOCOL,
+  MAX_TURNS_PROTOCOL,
   type PubSub,
   parseBrainEvent,
   SPEED_PROTOCOL,
@@ -218,6 +219,18 @@ export function contextFields(
   const tokens = turn.contextTokens || autoContextFor(kind);
   if (!tokens || (protocol !== undefined && protocol < CONTEXT_LIMIT_PROTOCOL)) return {};
   return { contextTokens: tokens };
+}
+
+/**
+ * The turn's agentic-turn cap, sent only to a runner that knows it (`MAX_TURNS_PROTOCOL`): an older one runs the
+ * turn uncapped, like before.
+ */
+export function maxTurnsFields(
+  protocol: number | undefined,
+  turn: Pick<BrainTurn, "maxTurns">,
+): Pick<BrainTurnRequest, "maxTurns"> {
+  if (!turn.maxTurns || (protocol !== undefined && protocol < MAX_TURNS_PROTOCOL)) return {};
+  return { maxTurns: turn.maxTurns };
 }
 
 /** The turn's speed, sent only to a runner that knows it (`SPEED_PROTOCOL`). */
@@ -449,6 +462,7 @@ export function createClaudeCodeBrain(deps: ClaudeCodeBrainDeps): Brain {
           ...(permissions ? { permissions } : {}),
           ...accountFields(status?.protocol, turn),
           ...contextFields(status?.protocol, turn, "claude_code"),
+          ...maxTurnsFields(status?.protocol, turn),
           ...(turn.personWaiting ? { personWaiting: true } : {}),
         };
         deps.hub

@@ -4600,6 +4600,7 @@ async function executeRunInner(
             found: computerTurns === 0 || !turnPlan.session?.resume,
             personId,
             personWaiting,
+            maxTurns: backstop,
             // Synced during the quiet window for this very turn; where it starts is picked again from its words now
             // (what came in meanwhile may name another repository).
             ...(earlyCode?.plan === turnPlan && computerTurns === 0
@@ -5692,6 +5693,8 @@ function brainTurnOf(
     personId?: string | null;
     personWaiting?: boolean;
     unattended?: boolean;
+    /** Computer brains: the most agentic turns one turn may take (the run's tool-turn backstop). */
+    maxTurns?: number;
   } = {},
 ): ComputerTurn {
   const model = plan.kind === "model" ? agent.model : plan.model;
@@ -5751,6 +5754,7 @@ function brainTurnOf(
     ...(plan.effort ? { effort: plan.effort } : {}),
     ...(speed ? { speed } : {}),
     ...(agent.contextTokens ? { contextTokens: agent.contextTokens } : {}),
+    ...(plan.kind !== "model" && options.maxTurns ? { maxTurns: options.maxTurns } : {}),
     trigger,
     ...(options.code ? { code: options.code } : {}),
     ...(options.personId ? { personId: options.personId } : {}),

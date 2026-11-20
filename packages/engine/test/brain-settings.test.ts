@@ -4,6 +4,7 @@ import {
   BRAIN_PROTOCOL,
   CODEX_WINDOWS_PROTOCOL,
   CONTEXT_LIMIT_PROTOCOL,
+  MAX_TURNS_PROTOCOL,
   MISSION_PROTOCOL,
   OPENCODE_ACP_PROTOCOL,
   SPEED_PROTOCOL,
@@ -36,7 +37,7 @@ import {
   executorBrain,
   normalizeBrainModel,
 } from "../src/brain-settings";
-import { contextFields, recordPlanUsage, speedFields } from "../src/brains/claude-code";
+import { contextFields, maxTurnsFields, recordPlanUsage, speedFields } from "../src/brains/claude-code";
 import { brainAccountFor, brainSpeedFor, planIsOwners } from "../src/brains/select";
 import { addMember, everyoneWithout, type Fixture, setup } from "./fixtures";
 import { pairMachine } from "./machine-fixtures";
@@ -368,6 +369,14 @@ describe("context window (Configuração avançada)", () => {
     expect(contextFields(CONTEXT_LIMIT_PROTOCOL, {}, "antigravity")).toEqual({});
     // An older runner never sees it: it keeps compacting at the model's window.
     expect(contextFields(CONTEXT_LIMIT_PROTOCOL - 1, {}, "claude_code")).toEqual({});
+  });
+
+  test("a computer turn carries its turn cap only to a runner that knows it (protocol 67)", () => {
+    const capped = { maxTurns: 200 };
+    expect(maxTurnsFields(MAX_TURNS_PROTOCOL, capped)).toEqual(capped);
+    expect(maxTurnsFields(MAX_TURNS_PROTOCOL - 1, capped)).toEqual({});
+    expect(maxTurnsFields(undefined, capped)).toEqual(capped);
+    expect(maxTurnsFields(MAX_TURNS_PROTOCOL, {})).toEqual({});
   });
 
   test("each model choice says its window: which limits are worth offering with it", () => {

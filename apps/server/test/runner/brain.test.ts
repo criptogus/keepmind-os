@@ -1580,6 +1580,23 @@ test.if(posix)(
   },
 );
 
+test.if(posix)("the turn cap (protocol 67) is --max-turns; another one restarts the process, resumed", async () => {
+  const { spawns, turn } = setup();
+  const logged = () => spawns() as unknown as { args: string[] }[];
+  await turn(1, "first", { maxTurns: 200 });
+  expect(logged()[0]?.args.join(" ")).toContain("--max-turns 200");
+  await turn(2, "second", { maxTurns: 200 });
+  expect(logged()).toHaveLength(1);
+  await turn(3, "third", { maxTurns: 80 });
+  expect(logged()).toHaveLength(2);
+  expect(logged()[1]?.args.join(" ")).toContain("--max-turns 80");
+  expect(logged()[1]?.args.slice(-2)).toEqual(["--resume", SESSION(1)]);
+  // None (or nonsense): the CLI's own.
+  await turn(4, "fourth", { maxTurns: "many" as never });
+  expect(logged()).toHaveLength(3);
+  expect(logged()[2]?.args.join(" ")).not.toContain("--max-turns");
+});
+
 test.if(posix)(
   "other lines for the agent's commits (turned off, the agent renamed) restart the process, resumed",
   async () => {

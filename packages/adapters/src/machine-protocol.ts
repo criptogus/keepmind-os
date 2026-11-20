@@ -7,7 +7,7 @@ import type { MergeDone } from "./command-policy";
  */
 
 /** Bumped on breaking changes; the server refuses runners older than `MIN_RUNNER_PROTOCOL`. */
-export const MACHINE_PROTOCOL_VERSION = 66;
+export const MACHINE_PROTOCOL_VERSION = 67;
 export const MIN_RUNNER_PROTOCOL = 1;
 /** From this protocol on, requests carry `agent` and each agent works in its own folder. */
 export const AGENT_FOLDERS_PROTOCOL = 2;
@@ -677,6 +677,14 @@ export const IPHONE_DEV_MODE_PROTOCOL = 65;
  * runner holds the installers. Older runners answer `bad_request`: the server asks none of them.
  */
 export const CLI_INSTALL_PROTOCOL = 66;
+/**
+ * `brain.turn.maxTurns`: the most agentic turns the CLI may take on this turn (`--max-turns` on Claude Code), so a
+ * runaway loop ends instead of re-reading its whole context hundreds of times. Absent or an older runner: no cap.
+ */
+export const MAX_TURNS_PROTOCOL = 67;
+/** A `brain.turn`'s `maxTurns` the runner applies: a whole number of turns in a sane range. */
+export const isMaxTurns = (v: unknown): v is number =>
+  typeof v === "number" && Number.isInteger(v) && v >= 1 && v <= 10_000;
 /** The coding CLIs `cli.install` installs: Claude Code and Codex. */
 export const INSTALLABLE_CLIS = ["claude", "codex"] as const;
 export type InstallableCli = (typeof INSTALLABLE_CLIS)[number];
@@ -2146,6 +2154,8 @@ export interface BrainTurnRequest {
   freeTier?: boolean;
   /** Protocol 28: the most context it reads, in tokens; absent: the model's own window. */
   contextTokens?: number;
+  /** Protocol 67 (`MAX_TURNS_PROTOCOL`): the most agentic turns the turn may take; absent: the CLI's own. */
+  maxTurns?: number;
   /**
    * A person waits on this turn (first rank of the computer's line): it may take the runner's reserved slot
    * (`PERSON_TURN_MIN_FREE_BYTES`). No protocol step: a runner that doesn't read it admits the turn like any other.

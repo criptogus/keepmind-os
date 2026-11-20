@@ -27,6 +27,7 @@ import {
   isAccountId,
   isBrainEffort,
   isContextTokens,
+  isMaxTurns,
   isRunToolToken,
   OWN_USAGE_ID,
   PERMISSION_PROMPT_TOOL,
@@ -800,6 +801,8 @@ export interface ClaudeLaunch {
   addDirs?: string[];
   /** Protocol 13: `--effort` (anything else is left out). */
   effort?: BrainEffort;
+  /** Protocol 67: `--max-turns` (anything else is left out). */
+  maxTurns?: number;
   /**
    * Which settings files load (`--setting-sources`). "" loads none: not the computer owner's own CLAUDE.md, skills
    * and plugins, which every agent there paid for on every step, and not the checkout's `.claude/settings*.json`,
@@ -951,6 +954,7 @@ export function claudeBrainArgs(l: ClaudeLaunch): string[] {
     ...(model ? ["--model", model] : []),
     ...(fallback ? ["--fallback-model", fallback] : []),
     ...(isBrainEffort(l.effort) ? ["--effort", l.effort] : []),
+    ...(isMaxTurns(l.maxTurns) ? ["--max-turns", String(l.maxTurns)] : []),
     ...(l.systemFile ? ["--append-system-prompt-file", l.systemFile] : []),
     ...(l.mcpConfigFile ? ["--mcp-config", l.mcpConfigFile] : []),
     ...(l.strictMcp ? ["--strict-mcp-config"] : []),
@@ -1950,6 +1954,8 @@ export class BrainManager {
       effort: isBrainEffort(req.effort) ? req.effort : null,
       // Another context limit: a new process (resumed), started with it.
       context: isContextTokens(req.contextTokens) ? req.contextTokens : null,
+      // Another turn cap: a new process (resumed), started with it.
+      maxTurns: isMaxTurns(req.maxTurns) ? req.maxTurns : null,
       // Its commits' lines are in its env (`co-authors.ts`): turned off or the agent renamed, a new one (resumed).
       coAuthors: coAuthorLines(ctx.agent),
     });
@@ -2433,6 +2439,7 @@ export class BrainManager {
       ...launch,
       ...(addDirs.length ? { addDirs } : {}),
       ...(isBrainEffort(req.effort) ? { effort: req.effort } : {}),
+      ...(isMaxTurns(req.maxTurns) ? { maxTurns: req.maxTurns } : {}),
     });
     // Claimed before it starts: a CLI that dies in its first turn still left a transcript that is this agent's.
     if (delegated && !resume) claimSession(delegated.room, session, ctx.agent.id, String(req.account));
