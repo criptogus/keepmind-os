@@ -97,6 +97,7 @@ import { afterMachineTaskEnded, afterMissionRunEnded, startQueuedMissionTasks } 
 import { type MissionDeps, missionOfThread, missionRole, reactivateMission } from "./missions";
 import { KEEP_GOING_JOB, keepMissionGoing, type MissionEngine } from "./missions-engine";
 import { notifyMessage } from "./notification-producers";
+import { messageReminderDue } from "./message-reminders";
 import { ORG_FILES_PURGE_ATTEMPTS, ORG_FILES_PURGE_JOB, USER_FILES_PURGE_JOB } from "./organizations";
 import { outOfOfficeIds } from "./out-of-office";
 import { enqueue, type JobHandlers, type OutboxJob, PermanentJobError } from "./outbox";
@@ -1179,6 +1180,10 @@ export function createJobHandlers(deps: JobDeps): JobHandlers {
       await notifyMessage({ db: deps.db, pubsub: deps.pubsub }, orgOf(job), String(job.payload.messageId));
       // A reply in a task's conversation (ADR 0145): the board's card counts it.
       await announceTaskConversation({ db: deps.db, pubsub: deps.pubsub }, orgOf(job), String(job.payload.messageId));
+    },
+    // A "lembrar depois" reminder's time came: notify the person once (`reminders.ts`).
+    "reminder.due": async (job) => {
+      await messageReminderDue({ db: deps.db, pubsub: deps.pubsub }, job.payload as { reminderId?: string });
     },
     // A request for help in an agent's browser nobody answered within the hour: the people asked hear it again, once.
     [HANDOFF_REMIND_JOB]: async (job) => {

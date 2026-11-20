@@ -143,6 +143,7 @@ import { isOpenMission } from "../missions/logic";
 import { PushOfferLine } from "../push/PushOfferLine";
 import { FanStrip, QueueWaitRow } from "../queue/parts";
 import { DmQueueButton, QueueButton, useAgentsQueue, useOpenQueue } from "../queue/QueueSheet";
+import { MessageRemindSheet } from "../reminders/MessageRemindSheet";
 import { RemindSheet } from "../reminders/RemindSheet";
 import { RightHandIntro } from "../right-hand/Intro";
 import { ConversationSearch } from "../search/ConversationSearch";
@@ -1284,7 +1285,7 @@ function Chat({
       inThread: isThread,
       thread: linkThreads.get(m.threadId ?? m.id),
       onMission: (goal, rootId) => openNewMission(goal, rootId),
-      onRemind: (message) => openRemind({ message }),
+      onRemind: (message) => sheet.open(<MessageRemindSheet channelId={channelId} message={message} />),
       onReply: canReply ? onReply : undefined,
     }),
     [canMission, isThread, linkThreads, canReply, onReply],

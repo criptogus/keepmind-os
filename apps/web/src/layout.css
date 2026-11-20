@@ -14944,3 +14944,19 @@ html:not([data-pointer]) .rh-set__face-edit:focus-visible {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* "Lembrar depois" dialog: the custom date and time side by side under their option, the note below. */
+.remind__custom {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3) var(--space-4);
+  padding-top: var(--space-1);
+}
+.remind__note {
+  margin-top: var(--space-4);
+}
+@media (max-width: 480px) {
+  .remind__custom {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -6743,7 +6743,12 @@ export type NotificationKind =
    * `latest.names` the first things it is about and `count` how many, `latest.text` the whole sentence in the
    * person's language. `source.agentId`, `machineId` or `accountId` when it is about one. Done once fixed.
    */
-  | "team_watch";
+  | "team_watch"
+  /**
+   * "Lembrar depois" on a message: a `reminder.due` job fired once. `source.channelId` + `messageId` (+ `threadId`)
+   * open the message; `latest.text` the snippet and the person's note. Inbox only, never merges.
+   */
+  | "reminder";
 
 /** "O Gerente aprova por você" (ADR 0139 §2): what the person let the workspace's right hand approve. */
 export interface RightHandApprovals {
@@ -7386,6 +7391,24 @@ export interface ReminderInput {
   at: string;
   text?: string | null;
   timezone?: string | null;
+}
+
+/**
+ * "Lembrar depois" on a message (`messageReminders.*`, Slack's remind me): at `remindAt` a `reminder`
+ * notification opens the message. One per person per message; reminding again moves the time.
+ */
+export interface MessageReminder {
+  id: string;
+  orgId: string;
+  channelId: string;
+  messageId: string;
+  /** The message's thread (null: the main timeline). */
+  threadId: string | null;
+  remindAt: string;
+  note: string | null;
+  /** Set once it fired; null while pending. */
+  doneAt: string | null;
+  createdAt: string;
 }
 
 // ── Mailboxes (ADR 0038) ────────────────────────────────────────────────────

@@ -1,4 +1,4 @@
-import { type Message, usePinMessage } from "@keepmind/client";
+import { type Message, useCancelMessageReminder, useMessageReminders, usePinMessage } from "@keepmind/client";
 import { messagePath } from "@keepmind/client/lib/message-links";
 import { can } from "@keepmind/client/lib/permissions";
 import { voiceOf } from "@keepmind/client/lib/voice";
@@ -21,6 +21,7 @@ import {
 import { useToast } from "@/lib/toast";
 import { CorrectionDialog } from "./MessageFeedback";
 import { DOWN, ReactButton, reactionOf, useEmojiLabels, useMessageReactions } from "./Reactions";
+import { RemindDialog } from "./RemindDialog";
 import { SaveToWikiDialog } from "./SaveToWiki";
 
 /** A message's address (`messagePath`): its conversation, or a reply's thread, with `?m=` (it scrolls to it). */
@@ -106,6 +107,11 @@ export function useMessageMenu(
   const [saving, setSaving] = useState<string | null>(null);
   const [correcting, setCorrecting] = useState(false);
   const [picking, setPicking] = useState(false);
+  const [reminding, setReminding] = useState(false);
+  // "Lembrar depois": my pending reminder on this message (one per person per message).
+  const reminders = useMessageReminders(org.id);
+  const mine = reminders.data?.find((r) => r.messageId === message.id && r.doneAt === null) ?? null;
+  const cancelReminder = useCancelMessageReminder(org.id);
   const labels = useEmojiLabels();
   const pin = usePinMessage(org.id);
   // An agent's chart can go on a board as a widget (ADR 0135): the first one the message has that reads as one.
@@ -200,6 +206,28 @@ export function useMessageMenu(
       copyLink,
       { kind: "separator" },
       ...(pinEntry ? [pinEntry] : []),
+      // "Lembrar depois" is mine alone: anyone who can read may set one, and it needs no `post`.
+      {
+        kind: "item",
+        id: "remind",
+        label: t("contextMenu.remind"),
+        icon: "clock",
+        run: () => setReminding(true),
+      } satisfies MenuEntry,
+      ...(mine
+        ? ([
+            {
+              kind: "item",
+              id: "cancel-reminder",
+              label: t("contextMenu.cancelReminder"),
+              icon: "clock",
+              run: () =>
+                cancelReminder.mutate(mine.id, {
+                  onSuccess: () => toast.show(t("remind.cancelled")),
+                }),
+            },
+          ] satisfies MenuEntry[])
+        : []),
       ...(chart
         ? ([
             {
@@ -235,6 +263,15 @@ export function useMessageMenu(
           agentId={message.author.id}
           block={chart}
           onClose={() => setPinningChart(false)}
+        />
+      )}
+      {reminding && (
+        <RemindDialog
+          orgId={org.id}
+          channelId={message.channelId}
+          message={message}
+          existing={mine}
+          onClose={() => setReminding(false)}
         />
       )}
       {correcting && (

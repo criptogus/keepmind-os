@@ -161,6 +161,7 @@ import type {
   Message,
   MessageCard,
   MessagePin,
+  MessageReminder,
   Mission,
   MissionBrain,
   MissionCommand,
@@ -568,6 +569,21 @@ export function createHttpApi(options: TransportOptions = {}): HttpApi {
       list: async (orgId) => (await request<{ reminders: Reminder[] }>(`${org(orgId)}/reminders`)).reminders,
       cancel: (orgId, reminderId) =>
         request<Reminder>(`${org(orgId)}/reminders/${enc(reminderId)}`, { method: "DELETE" }),
+    },
+    messageReminders: {
+      remind: (orgId, channelId, messageId, input) =>
+        request<MessageReminder>(
+          `${org(orgId)}/channels/${enc(channelId)}/messages/${enc(messageId)}/reminder`,
+          { json: input },
+        ),
+      list: async (orgId, done = false) =>
+        (
+          await request<{ reminders: MessageReminder[] }>(`${org(orgId)}/message-reminders`, {
+            query: done ? { done: "1" } : {},
+          })
+        ).reminders,
+      cancel: (orgId, reminderId) =>
+        request<void>(`${org(orgId)}/message-reminders/${enc(reminderId)}`, { method: "DELETE" }),
     },
     system: {
       health: async () => {

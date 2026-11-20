@@ -205,7 +205,9 @@ type WhatKey =
   | "adminAskChannel"
   | "adminAskCreate"
   | "adminAskWebhook"
-  | "reaction";
+  | "reaction"
+  | "reminder"
+  | "reminderAny";
 
 /** The line on top of a row: who did what, where. */
 export function Headline({
@@ -353,6 +355,9 @@ export function Headline({
         : k("invitationAcceptedAny", { name: joinerOf(t, dir, n) });
     case "reaction":
       return k("reaction", { names, count });
+    // "Lembrar depois": no actor, the place is the headline; the message's words are the line under it.
+    case "reminder":
+      return label ? k("reminder", { label }) : k("reminderAny", {});
     case "proposal_waiting":
       return k("proposalWaiting", { names });
     case "change_request":

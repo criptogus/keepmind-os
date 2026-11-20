@@ -366,6 +366,39 @@ export const messagePins = pgTable(
 );
 
 /**
+ * "Lembrar depois" (Slack's remind me about this): a person marks a message to be
+ * reminded of at `remindAt`. A `reminder.due` outbox job fires then, notifies them
+ * and sets `doneAt`; cancel clears `doneAt`-less rows. One open reminder per
+ * person and message.
+ */
+export const messageReminders = pgTable(
+  "message_reminders",
+  {
+    id: uuid().primaryKey().defaultRandom(),
+    orgId: uuid()
+      .notNull()
+      .references(() => organizations.id, { onDelete: "cascade" }),
+    channelId: uuid().notNull(),
+    messageId: uuid().notNull(),
+    /** The person reminded (never an agent). */
+    userId: text()
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    remindAt: timestamp({ withTimezone: true }).notNull(),
+    /** Their note ("revisar com o time"), optional. */
+    note: text(),
+    doneAt: timestamp({ withTimezone: true }),
+    createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    unique().on(t.userId, t.messageId),
+    index().on(t.userId, t.doneAt, t.remindAt),
+    index().on(t.orgId, t.remindAt),
+    foreignKey({ columns: [t.orgId, t.channelId], foreignColumns: [channels.orgId, channels.id] }).onDelete("cascade"),
+  ],
+);
+
+/**
  * Idempotent sends: the `clientId` a person's app gave a message it posted. A resend with the same
  * (org, person, clientId), e.g. a retry after the response was lost, gets the message already written
  * instead of a second one (and second runs). Claimed in the same statement that writes the message

@@ -6280,6 +6280,7 @@ function part<
     | "reads"
     | "working"
     | "reminders"
+    | "messageReminders"
     | "actions"
     | "actionCards"
     | "agentForYou"
@@ -6570,6 +6571,53 @@ export function usePinMessage(orgId: string) {
       void qc.invalidateQueries({ queryKey: keys.pins(orgId, channelId) });
       void qc.invalidateQueries({ queryKey: keys.messages(orgId, channelId) });
       void qc.invalidateQueries({ queryKey: ["org", orgId, "channel", channelId, "thread"] });
+    },
+  });
+}
+
+/** My "lembrar depois" reminders, soonest first (`done`: the fired ones). */
+export function useMessageReminders(orgId: string, done = false, enabled = true) {
+  const api = useApi();
+  return useQuery({
+    queryKey: keys.messageReminders(orgId, done),
+    queryFn: () => part(api, "messageReminders").list(orgId, done),
+    enabled: enabled && Boolean(api.messageReminders),
+    staleTime: 30_000,
+  });
+}
+
+/** Remind me about a message at a time; reminding again moves it (same row). */
+export function useRemindMessage(orgId: string) {
+  const api = useApi();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      channelId,
+      messageId,
+      remindAt,
+      note,
+    }: {
+      channelId: string;
+      messageId: string;
+      remindAt: string;
+      note?: string | null;
+    }) => part(api, "messageReminders").remind(orgId, channelId, messageId, { remindAt, note }),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: keys.messageReminders(orgId) });
+      void qc.invalidateQueries({ queryKey: keys.messageReminders(orgId, true) });
+    },
+  });
+}
+
+/** Cancels one of my reminders (a no-op for anyone else's). */
+export function useCancelMessageReminder(orgId: string) {
+  const api = useApi();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (reminderId: string) => part(api, "messageReminders").cancel(orgId, reminderId),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: keys.messageReminders(orgId) });
+      void qc.invalidateQueries({ queryKey: keys.messageReminders(orgId, true) });
     },
   });
 }

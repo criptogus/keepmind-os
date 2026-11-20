@@ -214,6 +214,7 @@ import type {
   Message,
   MessageCard,
   MessagePin,
+  MessageReminder,
   Mission,
   MissionBrain,
   MissionCommand,
@@ -2166,6 +2167,20 @@ export interface ApiClient {
     /** Your pending ones, soonest first. */
     list(orgId: string): Promise<Reminder[]>;
     cancel(orgId: string, reminderId: string): Promise<Reminder>;
+  };
+  /** "Lembrar depois" on a message: a notification at `remindAt` that opens it (Slack's remind me). */
+  messageReminders?: {
+    /** Remind me about `messageId` at `remindAt` (ISO, ≥ ~30 s ahead). Re-reminding moves the time. */
+    remind(
+      orgId: string,
+      channelId: string,
+      messageId: string,
+      input: { remindAt: string; note?: string | null },
+    ): Promise<MessageReminder>;
+    /** Your reminders, soonest first; `done` picks fired ones. */
+    list(orgId: string, done?: boolean): Promise<MessageReminder[]>;
+    /** Cancels one of yours (a no-op for anyone else's or an unknown id). */
+    cancel(orgId: string, reminderId: string): Promise<void>;
   };
 }
 

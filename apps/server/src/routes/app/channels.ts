@@ -13,7 +13,10 @@ import {
   pinMessage,
   placeChannel,
   placeChannelCategory,
+  cancelMessageReminder,
+  listMessageReminders,
   removeChannelMember,
+  remindAboutMessage,
   renameChannelCategory,
   requireChannelAccess,
   setChannelAgentAutoReply,
@@ -65,6 +68,25 @@ const Pin = z
     message: Message,
   })
   .openapi("Pin");
+const Reminder = z
+  .object({
+    id: z.uuid(),
+    orgId: z.uuid(),
+    channelId: z.uuid(),
+    messageId: z.uuid(),
+    threadId: z.uuid().nullable(),
+    remindAt: z.string(),
+    note: z.string().nullable(),
+    doneAt: z.string().nullable(),
+    createdAt: z.string(),
+  })
+  .openapi("Reminder");
+const ReminderParams = ChannelParams.extend({ messageId: z.uuid() });
+const ReminderIdParams = OrgParams.extend({ reminderId: z.uuid() });
+const RemindBody = z.object({
+  remindAt: z.string().datetime({ offset: true }).openapi({ description: "When to be reminded (ISO 8601, future)." }),
+  note: z.string().max(500).optional().openapi({ description: "An optional note shown with the reminder." }),
+});
 
 /** Channel management beyond chat (`chat.ts`): membership removal; open subscriptions are revoked at once. */
 export function channelRoutes(deps: AppDeps) {
@@ -567,6 +589,73 @@ export function channelRoutes(deps: AppDeps) {
     async (c) => {
       const { orgId, channelId, messageId } = c.req.valid("param");
       await unpinMessage({ db, pubsub: opts.pubsub }, c.get("user").id, orgId, channelId, messageId);
+      return c.body(null, 204);
+    },
+  );
+
+  app.openapi(
+    createRoute({
+      method: "post",
+      path: "/organizations/{orgId}/channels/{channelId}/messages/{messageId}/reminder",
+      tags,
+      security,
+      summary: "Remind me about this message at a time (Slack's remind me)",
+      description:
+        "Anyone who can read the conversation. Re-reminding the same message moves its time. At the time a `reminder` notification opens the message.",
+      request: { params: ReminderParams, body: body(RemindBody) },
+      responses: { 200: json(Reminder), ...errors },
+    }),
+    async (c) => {
+      const { orgId, channelId, messageId } = c.req.valid("param");
+      const input = c.req.valid("json");
+      return c.json(
+        await remindAboutMessage(
+          db,
+          c.get("user").id,
+          orgId,
+          channelId,
+          messageId,
+          new Date(input.remindAt),
+          input.note ?? null,
+        ),
+        200,
+      );
+    },
+  );
+
+  app.openapi(
+    createRoute({
+      method: "get",
+      path: "/organizations/{orgId}/message-reminders",
+      tags,
+      security,
+      summary: "My reminders, soonest first (?done=1 for fired ones)",
+      request: {
+        params: OrgParams,
+        query: z.object({ done: z.enum(["0", "1"]).optional() }),
+      },
+      responses: { 200: json(z.object({ reminders: z.array(Reminder) })), ...errors },
+    }),
+    async (c) => {
+      const { orgId } = c.req.valid("param");
+      const { done } = c.req.valid("query");
+      return c.json({ reminders: await listMessageReminders(db, c.get("user").id, orgId, done === "1") }, 200);
+    },
+  );
+
+  app.openapi(
+    createRoute({
+      method: "delete",
+      path: "/organizations/{orgId}/message-reminders/{reminderId}",
+      tags,
+      security,
+      summary: "Cancel a reminder of mine",
+      request: { params: ReminderIdParams },
+      responses: { 204: noContent[204], ...errors },
+    }),
+    async (c) => {
+      const { orgId, reminderId } = c.req.valid("param");
+      await cancelMessageReminder(db, c.get("user").id, orgId, reminderId);
       return c.body(null, 204);
     },
   );

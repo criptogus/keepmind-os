@@ -642,6 +642,12 @@ export const featureKeysEn = {
     submit: "Remind me at this time",
     quick: "See quick times",
     done: "Reminder set",
+    /** "Lembrar depois" on a message: a private notification, not a message an agent posts. */
+    subPrivate: "A notification reminds only you. Nobody else sees it",
+    note: "Note (optional)",
+    notePlaceholder: "What should I remember?",
+    cancel: "Cancel reminder",
+    cancelled: "Reminder cancelled",
     error: {
       noAgent: "No agent here can remind you",
       past: "That time has already passed",
@@ -974,6 +980,8 @@ export const featureKeysEn = {
       mission_stopped_other: "Mission stopped",
       routine_finished_one: "Routine finished",
       routine_finished_other: "Routine finished",
+      reminder_one: "Reminder",
+      reminder_other: "Reminder",
       routine_failed_one: "Routine failed",
       routine_failed_other: "Routine failed",
       run_failed_one: "Couldn't finish",

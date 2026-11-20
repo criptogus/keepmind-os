@@ -289,6 +289,12 @@ export const NOTIFICATION_KINDS = [
    * nothing of that cause is wrong.
    */
   "team_watch",
+  /**
+   * "Lembrar depois" (`reminders.ts`): the person asked to be reminded of a message at a time; the `reminder.due`
+   * job notifies them once, `source.messageId` the message, its channel in `source.channelId` (name in `label`),
+   * the message's snippet in `latest.text` and their note in `latest.title`. Never merges.
+   */
+  "reminder",
 ] as const;
 export type NotificationKind = (typeof NOTIFICATION_KINDS)[number];
 
