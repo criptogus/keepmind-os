@@ -2,6 +2,12 @@
 
 Fonte de verdade visual para o frontend.
 
+## Leia primeiro
+- `UX-GUIDE.md`: regras de facilidade de uso (obrigatório em toda mudança de UI).
+- `DESIGN-SYSTEM.md`: referência completa — tokens, tipo, espaçamento, componentes, padrões.
+- `design-system/README.md`: voz e fundamentos.
+- `.claude/skills/ui-polish/SKILL.md`: a rotina de verificação de toda mudança de UI.
+
 ## Conteúdo
 - `refresh-2026-10.md`: o design system atual (tokens, componentes, movimento).
 - `design-system/README.md`: regras de uso (cor, forma, tipo, voz). Leia primeiro.

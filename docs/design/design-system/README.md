@@ -21,7 +21,7 @@
 
 **Forma.** Pessoas são círculos (`radius-full`). Agentes são o símbolo vivo: quadrado arredondado `radius-agent` (`30% 30% 30% 9%`), com **um canto vivo** no inferior esquerdo, degradê `agent2 → agent` e dois olhos que piscam, olham em volta (pensando) ou viram traço (escrevendo); ver `../refresh-2026-10.md`. O canto vivo é a assinatura do agente e só aparece em coisas de agente: avatar, botão "Pedir a …" e card de aprovação. Controles usam `radius-sm`; cards e menus `radius-md`; diálogos `radius-lg`.
 
-**Tipo.** Onest para toda a interface: `display` em títulos de página, `title` em cabeçalhos de canal e cards, `body` nas mensagens, `small` em rodapés de thread, `label` em caixa alta nos rótulos da barra lateral. `meta` para custo, tokens e modelo ao lado do horário, com algarismos tabulares. Martian Mono (`code`) só aparece em código: inline, blocos, diffs e comandos. Nunca use mono para rótulos, metadados, botões ou texto de interface.
+**Tipo.** Na web, Source Sans 3 Variable para toda a interface (títulos inclusive), JetBrains Mono só para código, Funnel Display para a marca e Doto só em ocasiões especiais — fontes fixas, nunca trocar (`apps/web/src/styles.css`). No kit/desktop, os defaults são Onest e Martian Mono. Escala e detalhes em `../DESIGN-SYSTEM.md`.
 
 **Espaço.** Base de 4px. Mensagens do mesmo autor ficam a `space-2`; grupos de autores diferentes a `space-6`. Cards têm padding `space-4`.
 
