@@ -1,5 +1,5 @@
 import { and, type Database, desc, type Executor, eq, inArray, lt, ne, or, schema, sql } from "@keepmind/db";
-import { recordAudit } from "./audit";
+import { type AuditChainReport, recordAudit, verifyAuditChain } from "./audit";
 import type { RunAuthority } from "./authority";
 import { readableChannelIds } from "./channels";
 import { serverUrlShown } from "./connectors/presets";
@@ -432,4 +432,10 @@ export async function listAudit(
     })),
     next: found.length > limit ? (page.at(-1)?.id ?? null) : null,
   };
+}
+
+/** Whether the workspace's audit log still verifies (ADR 0187), for those who may read it (`view_audit`). */
+export async function auditChainStatus(db: Database, actorId: string, orgId: string): Promise<AuditChainReport> {
+  await requirePermission(db, actorId, orgId, "view_audit");
+  return verifyAuditChain(db, orgId);
 }

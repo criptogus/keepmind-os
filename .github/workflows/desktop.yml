@@ -49,6 +49,7 @@ jobs:
     timeout-minutes: 10
     permissions:
       contents: write
+      checks: read
     outputs:
       version: ${{ steps.version.outputs.version }}
       tag: ${{ steps.version.outputs.tag }}
@@ -59,6 +60,23 @@ jobs:
         with:
           fetch-depth: 0
           ssh-key: ${{ secrets.RELEASE_DEPLOY_KEY }}
+
+      # A release goes out only from a commit whose CI passed: the newest "CI result" check of this commit.
+      # A test build (release = none) publishes nothing and skips this.
+      - name: CI must have passed on this commit
+        if: ${{ inputs.release && inputs.release != 'none' }}
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          RESULT=$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/check-runs?check_name=CI%20result&per_page=100" \
+            --jq '[.check_runs[]] | sort_by(.started_at) | last | if . == null then "missing" else (.conclusion // .status) end')
+          case "$RESULT" in
+            success) echo "CI passed on $GITHUB_SHA" ;;
+            missing) echo "::error::CI has not run on $GITHUB_SHA. Start it (Actions → CI → Run workflow on main) and release when it is green."; exit 1 ;;
+            queued | in_progress | pending | waiting | requested) echo "::error::CI is still running on $GITHUB_SHA. Release when it is green."; exit 1 ;;
+            *) echo "::error::CI on $GITHUB_SHA ended as $RESULT. Fix main before releasing (release = none still gives a test build)."; exit 1 ;;
+          esac
 
       # Before any build, so a failed bump costs no build minutes.
       - name: Bump the version, commit and tag

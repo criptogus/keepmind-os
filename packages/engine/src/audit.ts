@@ -1,4 +1,4 @@
-import { and, desc, type Executor, eq, isNotNull, schema, sql } from "@keepmind/db";
+import { and, desc, type Executor, eq, gt, isNotNull, schema, sql } from "@keepmind/db";
 import { sha256 } from "./crypto";
 
 export interface AuditEntry {
@@ -43,9 +43,20 @@ interface ChainFields {
   prevHash: string | null;
 }
 
-/** sha256 over the row's canonical fields plus the previous chained row's hash: one chain per org. */
+/** The first format (bare hex): the row's fields and the previous hash, without its id or time. Read only. */
 export function auditEntryHash(f: ChainFields): string {
   return sha256(canonical({ v: 1, ...f }));
+}
+
+const V2 = "v2:";
+
+/**
+ * The current format (ADR 0187): also seals the row's own id and time, so neither can be changed and a row
+ * can't be moved to another place in the log. The prefix says which format a stored hash is in.
+ */
+export function auditEntryHashV2(f: ChainFields & { id: string; createdAt: Date }): string {
+  const { createdAt, ...rest } = f;
+  return `${V2}${sha256(canonical({ ...rest, v: 2, createdAt: createdAt.toISOString() }))}`;
 }
 
 /**
@@ -76,7 +87,9 @@ export async function recordAudit(db: Executor, entry: AuditEntry) {
       outcome: entry.outcome ?? null,
       prevHash: prev?.chainHash ?? null,
     };
-    await tx.insert(schema.auditLog).values({ ...fields, chainHash: auditEntryHash(fields) });
+    // The id and the time are made here, under the lock, so the hash seals them and ids follow append order.
+    const sealed = { ...fields, id: Bun.randomUUIDv7(), createdAt: new Date() };
+    await tx.insert(schema.auditLog).values({ ...sealed, chainHash: auditEntryHashV2(sealed) });
   });
 }
 
@@ -86,50 +99,77 @@ export interface AuditChainReport {
   checked: number;
   /** Rows predating the chain (both hashes null): outside it, not verifiable. */
   unhashed: number;
+  /**
+   * The latest verified row's hash, null with none. Rows removed from the END of the log leave a chain that
+   * still verifies: only this value, kept somewhere outside the database and compared later, shows it.
+   */
+  head: string | null;
   /** The first row that broke the chain, when `ok` is false. */
   badId?: string;
   reason?: "prev_mismatch" | "hash_mismatch";
 }
 
+/** Rows read per query while verifying: the whole log never sits in memory. */
+const VERIFY_PAGE = 1000;
+
 /**
  * Walks the org's log in append order and recomputes every chained row: `prevHash` must equal the previous
- * chained row's `chainHash` and `chainHash` must match the row's own fields. A changed, deleted or reordered
- * chained row fails at the first break. Unchained (pre-chain) rows are counted, not verified.
+ * chained row's `chainHash` and `chainHash` must match the row's own fields, in the format its prefix names.
+ * A changed, deleted or reordered chained row fails at the first break. Unchained (pre-chain) rows are
+ * counted, not verified.
  */
 export async function verifyAuditChain(db: Executor, orgId: string): Promise<AuditChainReport> {
-  const rows = await db
-    .select()
-    .from(schema.auditLog)
-    .where(eq(schema.auditLog.orgId, orgId))
-    .orderBy(schema.auditLog.id);
   let expectedPrev: string | null = null;
   let checked = 0;
   let unhashed = 0;
-  for (const row of rows) {
-    if (row.chainHash == null) {
-      unhashed += 1;
-      continue;
+  let after: string | null = null;
+  for (;;) {
+    const rows: (typeof schema.auditLog.$inferSelect)[] = await db
+      .select()
+      .from(schema.auditLog)
+      .where(and(eq(schema.auditLog.orgId, orgId), after ? gt(schema.auditLog.id, after) : undefined))
+      .orderBy(schema.auditLog.id)
+      .limit(VERIFY_PAGE);
+    for (const row of rows) {
+      if (row.chainHash == null) {
+        unhashed += 1;
+        continue;
+      }
+      const broken = (reason: AuditChainReport["reason"]): AuditChainReport => ({
+        ok: false,
+        checked,
+        unhashed,
+        head: expectedPrev,
+        badId: row.id,
+        reason,
+      });
+      if (row.prevHash !== expectedPrev) return broken("prev_mismatch");
+      const fields: ChainFields = {
+        orgId: row.orgId,
+        actorType: row.actorType,
+        actorId: row.actorId,
+        action: row.action,
+        targetType: row.targetType,
+        targetId: row.targetId,
+        details: row.details,
+        runId: row.runId,
+        channelId: row.channelId,
+        onBehalfOfUserId: row.onBehalfOfUserId,
+        outcome: row.outcome,
+        prevHash: row.prevHash,
+      };
+      const recomputed = row.chainHash.startsWith(V2)
+        ? auditEntryHashV2({ ...fields, id: row.id, createdAt: row.createdAt })
+        : auditEntryHash(fields);
+      if (recomputed !== row.chainHash) return broken("hash_mismatch");
+      expectedPrev = row.chainHash;
+      checked += 1;
     }
-    if (row.prevHash !== expectedPrev) return { ok: false, checked, unhashed, badId: row.id, reason: "prev_mismatch" };
-    const recomputed = auditEntryHash({
-      orgId: row.orgId,
-      actorType: row.actorType,
-      actorId: row.actorId,
-      action: row.action,
-      targetType: row.targetType,
-      targetId: row.targetId,
-      details: row.details,
-      runId: row.runId,
-      channelId: row.channelId,
-      onBehalfOfUserId: row.onBehalfOfUserId,
-      outcome: row.outcome,
-      prevHash: row.prevHash,
-    });
-    if (recomputed !== row.chainHash) return { ok: false, checked, unhashed, badId: row.id, reason: "hash_mismatch" };
-    expectedPrev = row.chainHash;
-    checked += 1;
+    const last = rows.at(-1);
+    if (!last || rows.length < VERIFY_PAGE) break;
+    after = last.id;
   }
-  return { ok: true, checked, unhashed };
+  return { ok: true, checked, unhashed, head: expectedPrev };
 }
 
 /**

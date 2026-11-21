@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { outOfOrderEntries, unsafeStatements } from "./check-migrations";
+import { duplicateNumbers, outOfOrderEntries, unsafeStatements } from "./check-migrations";
 
 const read = (path: string) => readFileSync(join(import.meta.dir, "..", path), "utf8");
 
@@ -48,4 +48,11 @@ test("journal entries must be newer than the one before them, as drizzle skips a
   ];
   expect(outOfOrderEntries(entries)).toEqual(["0003_c", "0004_d"]);
   expect(outOfOrderEntries(JSON.parse(read("packages/db/migrations/meta/_journal.json")).entries)).toEqual([]);
+});
+
+test("two migrations with one number are caught, except the pairs already applied", () => {
+  expect(duplicateNumbers(["0001_a.sql", "0002_b.sql", "0002_c.sql", "0003_d.sql"])).toEqual(["0002"]);
+  expect(duplicateNumbers(["0281_audit_chain.sql", "0281_message_reminders.sql"])).toEqual([]);
+  const files = readdirSync(join(import.meta.dir, "..", "packages/db/migrations")).filter((f) => f.endsWith(".sql"));
+  expect(duplicateNumbers(files)).toEqual([]);
 });

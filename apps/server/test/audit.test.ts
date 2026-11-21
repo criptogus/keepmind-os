@@ -75,4 +75,15 @@ test("the audit log: admins read agents' calls and people's changes, filtered; m
   ).json()) as { url: string };
   await member(`/api/app/invitations/${url.split("/invite/")[1]}/accept`, { json: {} });
   expect((await member(`/api/app/organizations/${orgId}/audit`)).status).toBe(403);
+
+  // The chain (ADR 0187): admins see that it verifies and its head; members don't.
+  const chain = (await (await owner(`/api/app/organizations/${orgId}/audit/chain`)).json()) as {
+    ok: boolean;
+    checked: number;
+    head: string | null;
+  };
+  expect(chain.ok).toBe(true);
+  expect(chain.checked).toBeGreaterThan(0);
+  expect(chain.head).toStartWith("v2:");
+  expect((await member(`/api/app/organizations/${orgId}/audit/chain`)).status).toBe(403);
 });

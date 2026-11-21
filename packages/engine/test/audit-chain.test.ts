@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { eq, schema } from "@keepmind/db";
-import { createOrganization, recordAudit, verifyAuditChain } from "../src";
+import { auditEntryHash, createOrganization, recordAudit, verifyAuditChain } from "../src";
 import { addUser, type Fixture, setup } from "./fixtures";
 
 let f: Fixture;
@@ -34,7 +34,12 @@ describe("audit hash chain", () => {
     expect(rows[2]?.prevHash).toBe(rows[1]?.chainHash);
     expect(new Set(rows.map((r) => r.chainHash)).size).toBe(3);
 
-    expect(await verifyAuditChain(f.db, f.org.id)).toEqual({ ok: true, checked: 3, unhashed: 0 });
+    expect(await verifyAuditChain(f.db, f.org.id)).toEqual({
+      ok: true,
+      checked: 3,
+      unhashed: 0,
+      head: rows[2]?.chainHash ?? null,
+    });
   });
 
   test("a changed field breaks the chain at that row", async () => {
@@ -80,7 +85,7 @@ describe("audit hash chain", () => {
     await recordAudit(f.db, entry("new.test"));
 
     const report = await verifyAuditChain(f.db, f.org.id);
-    expect(report).toEqual({ ok: true, checked: 1, unhashed: 1 });
+    expect(report).toMatchObject({ ok: true, checked: 1, unhashed: 1 });
   });
 
   test("chains are per org", async () => {
@@ -97,7 +102,60 @@ describe("audit hash chain", () => {
     expect(a?.prevHash).toBeNull();
     expect(b?.prevHash).toBeNull();
     expect(a?.chainHash).not.toBe(b?.chainHash);
-    expect(await verifyAuditChain(f.db, f.org.id)).toEqual({ ok: true, checked: 2, unhashed: 0 });
-    expect(await verifyAuditChain(f.db, org2.id)).toEqual({ ok: true, checked: 1, unhashed: 0 });
+    expect(await verifyAuditChain(f.db, f.org.id)).toMatchObject({ ok: true, checked: 2, unhashed: 0 });
+    expect(await verifyAuditChain(f.db, org2.id)).toMatchObject({ ok: true, checked: 1, unhashed: 0 });
+  });
+
+  test("a changed time or a swapped id breaks the chain", async () => {
+    await fresh();
+    await recordAudit(f.db, entry("one.test"));
+    await recordAudit(f.db, entry("two.test"));
+    const [second] = await f.db.select().from(schema.auditLog).where(eq(schema.auditLog.action, "two.test"));
+    expect(second?.chainHash?.startsWith("v2:")).toBe(true);
+
+    await f.db
+      .update(schema.auditLog)
+      .set({ createdAt: new Date(second!.createdAt.getTime() - 86_400_000) })
+      .where(eq(schema.auditLog.id, second!.id));
+
+    const report = await verifyAuditChain(f.db, f.org.id);
+    expect(report).toMatchObject({ ok: false, reason: "hash_mismatch", badId: second!.id, checked: 1 });
+  });
+
+  test("rows in the first format still verify, and new rows link to them", async () => {
+    await fresh();
+    const old = {
+      orgId: f.org.id,
+      actorType: "person",
+      actorId: f.owner.id,
+      action: "old.test",
+      targetType: "test",
+      targetId: null,
+      details: {},
+      runId: null,
+      channelId: null,
+      onBehalfOfUserId: null,
+      outcome: null,
+      prevHash: null,
+    };
+    await f.db.insert(schema.auditLog).values({ ...old, chainHash: auditEntryHash(old) });
+    await recordAudit(f.db, entry("new.test"));
+
+    const [next] = await f.db.select().from(schema.auditLog).where(eq(schema.auditLog.action, "new.test"));
+    expect(next?.prevHash).toBe(auditEntryHash(old));
+    expect(await verifyAuditChain(f.db, f.org.id)).toMatchObject({ ok: true, checked: 2, head: next?.chainHash });
+  });
+
+  test("the head shows rows removed from the end", async () => {
+    await fresh();
+    await recordAudit(f.db, entry("one.test"));
+    await recordAudit(f.db, entry("two.test"));
+    const kept = (await verifyAuditChain(f.db, f.org.id)).head;
+
+    await f.db.delete(schema.auditLog).where(eq(schema.auditLog.action, "two.test"));
+
+    const after = await verifyAuditChain(f.db, f.org.id);
+    expect(after.ok).toBe(true);
+    expect(after.head).not.toBe(kept);
   });
 });

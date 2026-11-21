@@ -1,6 +1,6 @@
 import { createRoute, z } from "@hono/zod-openapi";
 import type { schema } from "@keepmind/db";
-import { AUDIT_PAGE_MAX, listAudit } from "@keepmind/engine";
+import { AUDIT_PAGE_MAX, auditChainStatus, listAudit } from "@keepmind/engine";
 import { type AppDeps, createAppRouter, errors, json, OrgParams, requireSession, security } from "./context";
 
 const tags = ["Audit"];
@@ -103,6 +103,36 @@ export function auditRoutes(deps: AppDeps) {
       };
       return c.json(await listAudit(db, c.get("user").id, orgId, filter), 200);
     },
+  );
+
+  app.openapi(
+    createRoute({
+      method: "get",
+      path: "/organizations/{orgId}/audit/chain",
+      tags,
+      security,
+      summary: "Whether the audit log's hash chain still verifies (admins)",
+      request: { params: OrgParams },
+      responses: {
+        200: json(
+          z
+            .object({
+              ok: z.boolean(),
+              checked: z.number().int().openapi({ description: "Chained rows verified." }),
+              unhashed: z.number().int().openapi({ description: "Rows written before the chain, outside it." }),
+              head: z.string().nullable().openapi({
+                description:
+                  "The latest verified row's hash. Keep it outside the database: rows removed from the end of the log show only as a head that no longer matches the one kept.",
+              }),
+              badId: z.string().optional().openapi({ description: "The first row that broke the chain." }),
+              reason: z.enum(["prev_mismatch", "hash_mismatch"]).optional(),
+            })
+            .openapi("AuditChain"),
+        ),
+        ...errors,
+      },
+    }),
+    async (c) => c.json(await auditChainStatus(db, c.get("user").id, c.req.valid("param").orgId), 200),
   );
 
   return app;

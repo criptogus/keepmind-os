@@ -72,7 +72,33 @@ export function outOfOrderEntries(entries: { tag: string; when: number }[]): str
   return entries.filter((e, i) => i > 0 && e.when <= (entries[i - 1] as { when: number }).when).map((e) => e.tag);
 }
 
+/**
+ * Two migrations took each of these numbers before the check, and both are applied: a server refuses to start on
+ * a migration whose file changed, so they keep their names.
+ */
+const SHIPPED_TWICE = new Set(["0281", "0282"]);
+
+/**
+ * Numbers more than one migration file starts with. Two branches that each generated "the next" migration both
+ * merge clean, and the files then sort in an order that isn't the journal's: regenerate the later one on top.
+ */
+export function duplicateNumbers(files: string[]): string[] {
+  const seen = new Map<string, number>();
+  for (const file of files) {
+    const number = /^\d+/.exec(file)?.[0];
+    if (number) seen.set(number, (seen.get(number) ?? 0) + 1);
+  }
+  return [...seen].filter(([number, n]) => n > 1 && !SHIPPED_TWICE.has(number)).map(([number]) => number);
+}
+
 if (import.meta.main) {
+  const twice = duplicateNumbers([...new Glob("packages/db/migrations/*.sql").scanSync()].map((f) => basename(f)));
+  if (twice.length > 0) {
+    console.error(
+      `More than one migration has the number ${twice.join(", ")}. Regenerate the later one on top of main (bun run db:generate <name>).`,
+    );
+    process.exit(1);
+  }
   const journal = await Bun.file("packages/db/migrations/meta/_journal.json").json();
   const late = outOfOrderEntries(journal.entries);
   if (late.length > 0) {
