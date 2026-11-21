@@ -141,6 +141,8 @@ export interface FeedbackFile {
 
 export interface AuthConfig {
   socialProviders: { google: boolean; github: boolean; apple?: boolean };
+  /** The company's sign-in (ADR 0188): the name on its button. Null or absent: none. */
+  sso?: { name: string } | null;
   signupOpen: boolean;
   firstRun: boolean;
   /** No account yet, and the first one only through the owner link (`/owner#claim=…`; absent: false). */
@@ -207,6 +209,9 @@ export type BillingFrom =
 
 export type SignInProvider = "google" | "github" | "apple";
 
+/** A sign-in that leaves for another site and comes back: a social provider, or the company's own (ADR 0188). */
+export type BrowserSignIn = SignInProvider | "sso";
+
 /** How an e-mail signs in: the sign-in screen asks for the e-mail first (`account.signInOptions`). */
 export interface SignInOptions {
   account: boolean;
@@ -216,6 +221,10 @@ export interface SignInOptions {
   providers: SignInProvider[];
   /** No account, and this e-mail may create one. */
   canSignUp: boolean;
+  /** One of the company's addresses (ADR 0188): its next step is the company's sign-in. */
+  sso?: boolean;
+  /** With `sso`: the company's sign-in is its only way in. */
+  ssoOnly?: boolean;
   /** The page's early-access link is for this address, and it expired. */
   accessExpired?: true;
   /**

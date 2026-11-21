@@ -70,6 +70,22 @@ export function loadConfig(env: Record<string, string | undefined> = process.env
       "HOST_COMPUTER_TOKEN can't be set with MACHINE_PROVISIONING=external: every workspace gets its own computer, and no other computer joins it",
     ]);
   }
+  // Company sign-in (ADR 0188): the three go together, and the rest means nothing without them.
+  const sso = [config.SSO_OIDC_ISSUER, config.SSO_OIDC_CLIENT_ID, config.SSO_OIDC_CLIENT_SECRET];
+  if (sso.some(Boolean) && !sso.every(Boolean)) {
+    throw new ConfigError([
+      "SSO_OIDC_ISSUER, SSO_OIDC_CLIENT_ID and SSO_OIDC_CLIENT_SECRET go together: set all three or none",
+    ]);
+  }
+  if ((config.SSO_REQUIRED || config.SSO_DOMAINS || config.SSO_WORKSPACE_ID) && !config.SSO_OIDC_ISSUER) {
+    throw new ConfigError([
+      "SSO_DOMAINS, SSO_REQUIRED and SSO_WORKSPACE_ID need SSO_OIDC_ISSUER, SSO_OIDC_CLIENT_ID and SSO_OIDC_CLIENT_SECRET",
+    ]);
+  }
+  // Without domains "required" would name nobody, and an address outside them could not be told apart.
+  if (config.SSO_REQUIRED && !config.SSO_DOMAINS) {
+    throw new ConfigError(["SSO_REQUIRED=true needs SSO_DOMAINS"]);
+  }
   if (Boolean(config.BILLING_URL) !== Boolean(config.BILLING_LINK_SECRET)) {
     throw new ConfigError(["BILLING_URL and BILLING_LINK_SECRET go together: set both or neither"]);
   }

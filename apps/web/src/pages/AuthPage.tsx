@@ -1,10 +1,10 @@
 import {
   ApiError,
+  type BrowserSignIn,
   instanceQuery,
   invitationQuery,
   meQuery,
   type SignInOptions,
-  type SignInProvider,
   useApi,
   useAuthConfig,
 } from "@keepmind/client";
@@ -36,7 +36,15 @@ import { useAuth } from "@/auth/context";
 import { AuthShell } from "@/components/AuthLayout";
 import { HostingSheet } from "@/components/HostingChoice";
 import { prepareBurst } from "@/components/Sky";
-import { LastUsed, lastSignIn, rememberSignIn, SocialButtons, useSocialProviders } from "@/components/SocialButtons";
+import {
+  LastUsed,
+  lastSignIn,
+  providerName,
+  rememberSignIn,
+  SocialButtons,
+  SsoButton,
+  useSocialProviders,
+} from "@/components/SocialButtons";
 import { announceAccountChange } from "@/lib/accounts";
 import {
   browserSignInUrl,
@@ -64,6 +72,8 @@ type Step =
   | "email"
   | "password"
   | "social"
+  /** A company address (ADR 0188): the company's sign-in, and the password beside it unless the company forbids it. */
+  | "sso"
   | "noPassword"
   | "name"
   | "newPassword"
@@ -195,7 +205,7 @@ export function AuthPage({
             ? t(joining.kind === "link" ? "auth.flow.toAsk" : "auth.flow.toJoin", { org: joining.orgName })
             : null;
   const [browser, setBrowser] = useState<{
-    provider: SignInProvider;
+    provider: BrowserSignIn;
     verifier: string;
     requestId: string;
     code: string;
@@ -208,6 +218,9 @@ export function AuthPage({
   // The server the app runs on this computer: its owner signs in with Continue on this Mac, and a provider's sign-in
   // needs an address registered with that provider, which a computer's own server doesn't have.
   const offeredProviders = local || !placeKnown ? [] : allProviders;
+  // The company's sign-in (ADR 0188), on the same terms as the providers' buttons.
+  const ssoName = config.data?.sso?.name;
+  const ssoOffered = Boolean(ssoName) && !local && placeKnown;
   useEffect(() => {
     if (!desktop) return;
     void thisMac
@@ -269,7 +282,8 @@ export function AuthPage({
       );
       setOptions(found);
       setPassword("");
-      if (found.account) go(found.password ? "password" : found.providers.length > 0 ? "social" : "noPassword");
+      if (found.sso) go("sso");
+      else if (found.account) go(found.password ? "password" : found.providers.length > 0 ? "social" : "noPassword");
       else go(found.canSignUp ? "name" : found.accessExpired ? "expired" : "closed");
     } catch (e) {
       fail(e);
@@ -387,7 +401,7 @@ export function AuthPage({
   };
 
   /** The Mac app: the provider in the browser; this window keeps the verifier, shows the code and waits. */
-  const signInInBrowser = async (provider: SignInProvider) => {
+  const signInInBrowser = async (provider: BrowserSignIn) => {
     const verifier = newVerifier();
     const challenge = await challengeOf(verifier);
     const opened = await auth.desktopOpen(challenge).catch(() => null);
@@ -432,6 +446,7 @@ export function AuthPage({
     email: start === "up" ? [t("auth.flow.emailUp")] : [t("auth.flow.email"), purpose ?? t("auth.flow.emailLead")],
     password: wrong ? [t("auth.flow.wrong")] : [t("auth.flow.password"), purpose ?? t("auth.flow.passwordLead")],
     social: [t("auth.flow.social", { providers: providerNames }), t("auth.flow.socialLead")],
+    sso: [t("auth.flow.sso", { name: ssoName ?? "SSO" }), purpose ?? undefined],
     noPassword: [t("auth.flow.noPassword"), local ? t("auth.desktopOwner.text") : t("auth.flow.noPasswordLead")],
     name: [t("auth.flow.name"), t("auth.flow.nameLead")],
     newPassword: [first ? t("auth.flow.newPasswordNamed", { name: first }) : t("auth.flow.newPassword")],
@@ -449,7 +464,7 @@ export function AuthPage({
     sent: [t("auth.flow.sent", { email: email.trim() }), t("auth.flow.sentLead")],
     browser: [
       t("auth.desktop.browser"),
-      t("auth.desktop.browserLead", { provider: browser ? t(`auth.provider.${browser.provider}`) : "" }),
+      t("auth.desktop.browserLead", { provider: browser ? providerName(t, browser.provider, ssoName) : "" }),
     ],
     ownerWaits: [t("auth.flow.ownerWaits"), t("auth.flow.ownerWaitsLead")],
   };
@@ -679,15 +694,39 @@ export function AuthPage({
                 </div>
               )}
 
-              {step === "email" && offeredProviders.length > 0 && (
+              {step === "email" && (offeredProviders.length > 0 || ssoOffered) && (
                 <>
                   <div className="auth__or">{t("common.or")}</div>
-                  <SocialButtons
+                  {/* One stack, one gap: the company's button first, then the providers'. */}
+                  <div className="auth-social">
+                    {ssoOffered && (
+                      <SsoButton
+                        callbackURL={redirect ?? "/"}
+                        onSso={desktop ? () => void signInInBrowser("sso") : undefined}
+                      />
+                    )}
+                    <SocialButtons
+                      callbackURL={redirect ?? "/"}
+                      providers={offeredProviders}
+                      onSocial={desktop ? (p) => void signInInBrowser(p) : undefined}
+                      earlyAccess={access}
+                    />
+                  </div>
+                </>
+              )}
+
+              {step === "sso" && (
+                <>
+                  <SsoButton
+                    primary
                     callbackURL={redirect ?? "/"}
-                    providers={offeredProviders}
-                    onSocial={desktop ? (p) => void signInInBrowser(p) : undefined}
-                    earlyAccess={access}
+                    onSso={desktop ? () => void signInInBrowser("sso") : undefined}
                   />
+                  {options?.password && !options.ssoOnly && (
+                    <button type="button" className="auth__quiet" onClick={() => go("password")}>
+                      {t("auth.flow.usePassword")}
+                    </button>
+                  )}
                 </>
               )}
 

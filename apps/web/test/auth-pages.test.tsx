@@ -210,6 +210,48 @@ describe("Entrar (e-mail primeiro)", () => {
     expect(calls[0]).toEqual({ method: "signInSocial", args: ["github", "/"] });
   });
 
+  /** A server with the company's sign-in (ADR 0188), named Acme. */
+  const withCompany = (options: SignInOptions) => {
+    const made = authApi(options);
+    const config = made.api.account.authConfig;
+    made.api.account.authConfig = async () => ({ ...(await config()), sso: { name: "Acme" } });
+    return made;
+  };
+
+  test("the company's sign-in: its button on the first step, and a company address goes to it", async () => {
+    const { api } = withCompany({ ...ACCOUNT, sso: true });
+    const { auth, calls } = createFakeAuth();
+    await renderApp("/login", { api, auth });
+    expect(screen().getByRole("button", { name: /Continuar com Acme/ })).toBeTruthy();
+    await type("E-mail", "marina@acme.com.br");
+    await press(/^Continuar(?! com)/);
+    expect(heading()).toBe("Sua empresa entra com Acme.");
+    expect(screen().queryByLabelText("Senha")).toBeNull();
+    // The account has a password the company allows: one click away.
+    expect(screen().getByRole("button", { name: "Usar minha senha" })).toBeTruthy();
+    await press(/Continuar com Acme/);
+    expect(calls.at(-1)).toEqual({ method: "signInSocial", args: ["sso", "/"] });
+    await press("Usar minha senha");
+    expect(screen().getByLabelText("Senha")).toBeTruthy();
+  });
+
+  test("under SSO_REQUIRED the company's sign-in is the only way, and its refusal reads plainly", async () => {
+    const { api } = withCompany({ ...ACCOUNT, sso: true, ssoOnly: true });
+    await renderApp("/login", { api, auth: createFakeAuth().auth });
+    await type("E-mail", "marina@acme.com.br");
+    await press(/^Continuar(?! com)/);
+    expect(screen().queryByRole("button", { name: "Usar minha senha" })).toBeNull();
+    cleanup();
+    await renderApp("/login?error=SSO_REQUIRED", { api: withCompany(ACCOUNT).api });
+    expect(screen().getByRole("alert").textContent).toBe("Sua empresa só permite entrar pelo botão dela. Use-o acima.");
+  });
+
+  test("without the company's sign-in no button names it", async () => {
+    const { api } = authApi(ACCOUNT);
+    await renderApp("/login", { api });
+    expect(screen().queryByRole("button", { name: /Continuar com Acme/ })).toBeNull();
+  });
+
   test("the way used last is marked on its button's corner: a provider's, or the e-mail's Continuar", async () => {
     rememberSignIn("github");
     try {

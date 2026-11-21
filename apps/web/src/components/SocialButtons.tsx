@@ -1,5 +1,6 @@
-import { type SignInProvider, useAuthConfig } from "@keepmind/client";
-import { Button, Chip } from "@keepmind/ui";
+import { type BrowserSignIn, type SignInProvider, useAuthConfig } from "@keepmind/client";
+import { Button, Chip, Icon } from "@keepmind/ui";
+import type { TFunction } from "i18next";
 import { type ReactNode, useId } from "react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/auth/context";
@@ -36,7 +37,7 @@ const ORDER: SignInProvider[] = ["google", "github", "apple"];
 
 /** How this browser signed in last (marked "Último usado"). */
 export const lastSignIn = () => storage.get(STORAGE_KEYS.lastSignIn);
-export const rememberSignIn = (method: SignInProvider | "email") => {
+export const rememberSignIn = (method: BrowserSignIn | "email") => {
   storage.set(STORAGE_KEYS.lastSignIn, method);
   storage.remove(STORAGE_KEYS.signedOut);
 };
@@ -109,6 +110,51 @@ export function SocialButtons({
           {last === p && <LastUsed id={lastId} />}
         </div>
       ))}
+    </div>
+  );
+}
+
+/** A provider's name as the pages say it: the company's sign-in by the name its server gave it (ADR 0188). */
+export const providerName = (t: TFunction, provider: BrowserSignIn, companyName?: string) =>
+  provider === "sso" ? (companyName ?? "SSO") : t(`auth.provider.${provider}`);
+
+/**
+ * "Continuar com <empresa>": the company's sign-in (ADR 0188), at the company's provider and back. `onSso` takes over
+ * the redirect (the Mac app signs in through the browser). `primary`: the step's own way in, for a company address.
+ */
+export function SsoButton({
+  callbackURL,
+  onSso,
+  primary,
+}: {
+  callbackURL: string;
+  onSso?: () => void;
+  primary?: boolean;
+}) {
+  const { t } = useTranslation();
+  const auth = useAuth();
+  const name = useAuthConfig().data?.sso?.name;
+  const last = lastSignIn();
+  const lastId = useId();
+  if (!name) return null;
+  return (
+    <div className="auth-last-host">
+      <Button
+        type="button"
+        size="lg"
+        block
+        variant={primary ? "primary" : "default"}
+        aria-describedby={last === "sso" && !primary ? lastId : undefined}
+        onClick={() => {
+          rememberSignIn("sso");
+          if (onSso) onSso();
+          else void auth.signInSocial("sso", callbackURL);
+        }}
+      >
+        <Icon name="key" size={16} />
+        {t("auth.continueWithSso", { name })}
+      </Button>
+      {last === "sso" && !primary && <LastUsed id={lastId} />}
     </div>
   );
 }

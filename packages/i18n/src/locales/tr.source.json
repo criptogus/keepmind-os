@@ -1382,6 +1382,9 @@
   "auth.continueWithApple": {
     "value": "Continue with Apple"
   },
+  "auth.continueWithSso": {
+    "value": "Continue with {{name}}"
+  },
   "auth.lastUsed": {
     "value": "Last used"
   },
@@ -1522,6 +1525,18 @@
   },
   "auth.flow.socialLead": {
     "value": "This account has no password. Continue here."
+  },
+  "auth.flow.sso": {
+    "value": "Your company signs in with {{name}}."
+  },
+  "auth.flow.usePassword": {
+    "value": "Use my password"
+  },
+  "auth.flow.ssoRequired": {
+    "value": "Your company signs in only with its own button. Use it above."
+  },
+  "auth.flow.ssoOtherDomain": {
+    "value": "The company's sign-in is only for the company's email addresses."
   },
   "auth.flow.createPassword": {
     "value": "I'd rather create a password"
@@ -4781,6 +4796,9 @@
   "shell.customizeSidebar": {
     "value": "Customize sidebar"
   },
+  "shell.help": {
+    "value": "Help"
+  },
   "shell.sidebarMenu.title": {
     "value": "Sidebar"
   },
@@ -5464,6 +5482,15 @@
   },
   "team.workingNow": {
     "value": "Working now"
+  },
+  "team.askKivo": {
+    "value": "Tell {{name}} what you need"
+  },
+  "team.now.title": {
+    "value": "Now"
+  },
+  "team.now.empty": {
+    "value": "No one is working right now."
   },
   "team.available": {
     "value": "Available"
@@ -16120,6 +16147,9 @@
   "newAgent.steps.where.lead": {
     "value": "{{name}} joins the channels you check and has an owner on the team."
   },
+  "newAgent.steps.where.leadBatch": {
+    "value": "Each one joins the channels you check and has an owner on the team."
+  },
   "newAgent.steps.where.leadPersonal": {
     "value": "{{name}} talks to you in its own chat and joins the group conversations you check."
   },
@@ -16837,6 +16867,24 @@
   },
   "newAgent.createAnother": {
     "value": "Create another agent"
+  },
+  "newAgent.batch.hint": {
+    "value": "Pick more ready-made roles to create them together, or go on with this one"
+  },
+  "newAgent.batch.create": {
+    "value": "Create {{count}} agents"
+  },
+  "newAgent.batch.created": {
+    "value": "{{count}} agents created"
+  },
+  "newAgent.batch.customLocked": {
+    "value": "From scratch stays a single agent"
+  },
+  "newAgent.batch.limit": {
+    "value": "You can pick up to {{max}} agents at once"
+  },
+  "newAgent.batch.reviewTitle": {
+    "value": "Your new team"
   },
   "newAgent.adminsOnly": {
     "value": "Only admins and owners create agents. Ask a {{org}} admin."
@@ -24227,11 +24275,32 @@
   "skills.tab.github": {
     "value": "GitHub link"
   },
+  "skills.tab.local": {
+    "value": "This computer"
+  },
   "skills.tab.zip": {
     "value": "Upload .zip"
   },
   "skills.tab.write": {
     "value": "Write"
+  },
+  "skills.localHelp": {
+    "value": "Reads skill folders on the machine running KeepMind: ~/.claude/skills, ~/.codex/skills and ~/.agents/skills. Each folder with a SKILL.md installs like an uploaded .zip."
+  },
+  "skills.localCount": {
+    "value": {
+      "one": "1 skill",
+      "other": "{{count}} skills"
+    }
+  },
+  "skills.localInstalled": {
+    "value": "Installed: {{names}}"
+  },
+  "skills.localNone": {
+    "value": "No skills found in those folders."
+  },
+  "skills.localSkipDuplicate": {
+    "value": "A skill with this name is already installed."
   },
   "skills.githubUrl": {
     "value": "GitHub link"
@@ -27563,6 +27632,9 @@
   "wiki.import.github.error.notGithub": {
     "value": "Paste a github.com link."
   },
+  "wiki.import.github.short": {
+    "value": "Connect GitHub"
+  },
   "wiki.import.anotherLink": {
     "value": "Change link"
   },
@@ -28045,6 +28117,9 @@
   },
   "brain.picker.search": {
     "value": "Search models"
+  },
+  "brain.picker.freeOnly": {
+    "value": "Free only"
   },
   "brain.picker.account": {
     "value": "Account"
@@ -30748,6 +30823,9 @@
   "connectors.can.whatsapp.ask": {
     "value": "Sending messages always asks for your approval"
   },
+  "connectors.can.context7.1": {
+    "value": "Fetch up-to-date library documentation"
+  },
   "connectors.can.database.1": {
     "value": "See the tables"
   },
@@ -31161,6 +31239,9 @@
   },
   "connectors.descriptions.reddit": {
     "value": "Reddit posts, comments and communities."
+  },
+  "connectors.descriptions.context7": {
+    "value": "Up-to-date, version-specific library documentation."
   },
   "connectors.descriptions.whatsapp": {
     "value": "WhatsApp Business messages and templates."
@@ -38319,6 +38400,18 @@
   },
   "settings.timezoneHelp": {
     "value": "Routines and summaries use this time zone."
+  },
+  "settings.quietHours": {
+    "value": "Quiet hours"
+  },
+  "settings.quietHoursHelp": {
+    "value": "Scheduled routines don't run inside this window: a routine whose time falls here fires once it ends."
+  },
+  "settings.quietHoursFrom": {
+    "value": "Quiet hours start"
+  },
+  "settings.quietHoursUntil": {
+    "value": "Quiet hours end"
   },
   "settings.actionCheck": {
     "value": "Agents check what the team already did"
@@ -45734,6 +45827,12 @@
   "teamPlan.templates.tailorPersonal": {
     "value": "Later, just ask me to fit them to your routine."
   },
+  "teamPlan.templates.describeSend": {
+    "value": "I want to set up my team. Can you interview me?"
+  },
+  "teamPlan.templates.describeSendPersonal": {
+    "value": "I want to set up my agents. Can you interview me?"
+  },
   "teamPlan.weekly.name": {
     "value": "The team's week"
   },
@@ -46600,89 +46699,5 @@
   },
   "feedback.offer.askFirst": {
     "value": "Ask before sending"
-  },
-  "shell.help": {
-    "value": "Help"
-  },
-  "connectors.can.context7.1": {
-    "value": "Fetch up-to-date library documentation"
-  },
-  "connectors.descriptions.context7": {
-    "value": "Up-to-date, version-specific library documentation."
-  },
-  "newAgent.batch.hint": {
-    "value": "Pick more ready-made roles to create them together, or go on with this one"
-  },
-  "newAgent.batch.create": {
-    "value": "Create {{count}} agents"
-  },
-  "newAgent.batch.created": {
-    "value": "{{count}} agents created"
-  },
-  "newAgent.batch.customLocked": {
-    "value": "From scratch stays a single agent"
-  },
-  "newAgent.batch.limit": {
-    "value": "You can pick up to {{max}} agents at once"
-  },
-  "newAgent.batch.reviewTitle": {
-    "value": "Your new team"
-  },
-  "newAgent.steps.where.leadBatch": {
-    "value": "Each one joins the channels you check and has an owner on the team."
-  },
-  "team.askKivo": {
-    "value": "Tell {{name}} what you need"
-  },
-  "team.now.title": {
-    "value": "Now"
-  },
-  "team.now.empty": {
-    "value": "No one is working right now."
-  },
-  "wiki.import.github.short": {
-    "value": "Connect GitHub"
-  },
-  "brain.picker.freeOnly": {
-    "value": "Free only"
-  },
-  "teamPlan.templates.describeSend": {
-    "value": "I want to set up my team. Can you interview me?"
-  },
-  "teamPlan.templates.describeSendPersonal": {
-    "value": "I want to set up my agents. Can you interview me?"
-  },
-  "skills.tab.local": {
-    "value": "This computer"
-  },
-  "skills.localHelp": {
-    "value": "Reads skill folders on the machine running KeepMind: ~/.claude/skills, ~/.codex/skills and ~/.agents/skills. Each folder with a SKILL.md installs like an uploaded .zip."
-  },
-  "skills.localCount": {
-    "value": {
-      "one": "1 skill",
-      "other": "{{count}} skills"
-    }
-  },
-  "skills.localInstalled": {
-    "value": "Installed: {{names}}"
-  },
-  "skills.localNone": {
-    "value": "No skills found in those folders."
-  },
-  "skills.localSkipDuplicate": {
-    "value": "A skill with this name is already installed."
-  },
-  "settings.quietHours": {
-    "value": "Quiet hours"
-  },
-  "settings.quietHoursHelp": {
-    "value": "Scheduled routines don't run inside this window: a routine whose time falls here fires once it ends."
-  },
-  "settings.quietHoursFrom": {
-    "value": "Quiet hours start"
-  },
-  "settings.quietHoursUntil": {
-    "value": "Quiet hours end"
   }
 }

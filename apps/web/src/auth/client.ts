@@ -1,3 +1,4 @@
+import type { BrowserSignIn } from "@keepmind/client";
 /**
  * Sign-in for people (Better Auth at `/api/auth/*`, same origin, HttpOnly
  * session cookie: nothing auth-related is stored in JavaScript). Pages use
@@ -45,7 +46,7 @@ export interface AuthClient {
    * through the provider's redirect.
    */
   signInSocial(
-    provider: "google" | "github" | "apple",
+    provider: BrowserSignIn,
     callbackURL: string,
     earlyAccess?: string,
     errorCallbackURL?: string,

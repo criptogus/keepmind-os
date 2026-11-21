@@ -29,6 +29,7 @@ import {
   INVITATION_TOKEN_HEADER,
   isFeedbackRelay,
   isKeepMindCloud,
+  joinOrganization,
   onUserCreated,
   queueEmail,
   recordSession,
@@ -61,6 +62,7 @@ import {
   isAPIError,
 } from "better-auth/api";
 import { deleteSessionCookie, expireCookie, parseCookies, setSessionCookie } from "better-auth/cookies";
+import { genericOAuth } from "better-auth/plugins/generic-oauth";
 import { multiSession } from "better-auth/plugins/multi-session";
 import { z } from "zod";
 import { listOf } from "./app-links";
@@ -70,6 +72,18 @@ import { humanPassesFor } from "./http/human-pass";
 import type { Logger } from "./logger";
 import { ownerSignIn } from "./owner-claim";
 import { phoneBrowserSignIn, phoneFlowStarted } from "./phone-browser-sign-in";
+import {
+  discoveryUrl,
+  isCompanyEmail,
+  isProviderReturn,
+  SSO_CALLBACK_PATH,
+  SSO_PROVIDER,
+  type SsoSettings,
+  signInStep,
+  ssoProfile,
+  ssoRefusal,
+  ssoSettings,
+} from "./sso";
 
 /**
  * Sign-in for people, built on Better Auth (ADR 0006):
@@ -136,6 +150,25 @@ export function createAuth(deps: {
     });
   };
 
+  const sso = ssoSettings(config);
+  // An account the company's sign-in makes for one of its addresses (ADR 0188): the provider vouches for the person,
+  // so a closed sign-up lets it in. Every other refusal (the owner's link, a held address) still stands.
+  const admitSignup = async (email: string, access: string | null, viaSso: boolean) => {
+    try {
+      return await assertSignupAllowed(email, access);
+    } catch (error) {
+      const closed =
+        error instanceof APIError && (error.body as { code?: unknown } | undefined)?.code === SIGNUP_CLOSED;
+      if (closed && viaSso && isCompanyEmail(sso, email)) return "sso" as const;
+      throw error;
+    }
+  };
+  /** The address of an account, for the checks that only know its id. */
+  const emailOf = async (userId: string) => {
+    const [row] = await db.select({ email: schema.users.email }).from(schema.users).where(eq(schema.users.id, userId));
+    return row?.email ?? null;
+  };
+
   const devOrigins = config.NODE_ENV === "development" ? ["http://localhost:5173"] : [];
   // The phone app (ADR 0035); Expo Go and dev builds use `exp://` outside production.
   const appOrigins = [APP_SCHEME, ...(config.NODE_ENV !== "production" ? ["exp://", "exp://**"] : [])];
@@ -183,6 +216,7 @@ export function createAuth(deps: {
       phoneBrowserSignIn(),
       desktopSignIn(),
       ownerSignIn({ db, config, log, mint: (adapter, userId) => mintSignIn(adapter, `${FOR_USER}${userId}`) }),
+      ...(sso ? [companySignIn(sso)] : []),
     ],
     database: drizzleAdapter(db, {
       provider: "pg",
@@ -406,6 +440,10 @@ export function createAuth(deps: {
           );
           if (refused) throw new APIError("FORBIDDEN", refused);
         }
+        // A company address under SSO_REQUIRED never signs in, signs up or resets a password here (ADR 0188).
+        const typed = (ctx.body as { email?: unknown } | undefined)?.email;
+        const companyOnly = typeof typed === "string" ? ssoRefusal(sso, ctx.path, typed) : null;
+        if (companyOnly) throw new APIError("FORBIDDEN", companyOnly);
         if (ctx.path !== "/sign-up/email") return;
         const { email, name, password } = (ctx.body ?? {}) as { email?: unknown; name?: unknown; password?: unknown };
         if (typeof name === "string" && typeof password === "string" && nameIsPassword(name, password)) {
@@ -420,7 +458,13 @@ export function createAuth(deps: {
         create: {
           // Social sign-up too (the phone's Apple sign-in from an invitation).
           before: async (user, context) => {
-            const admission = await assertSignupAllowed(user.email, await accessOf(context));
+            const companyOnly = ssoRefusal(sso, signInStep(context), user.email);
+            if (companyOnly) throw new APIError("FORBIDDEN", companyOnly);
+            const admission = await admitSignup(
+              user.email,
+              await accessOf(context),
+              signInStep(context) === SSO_CALLBACK_PATH,
+            );
             // An early-access link opens sign-up for one address: a provider must vouch for it.
             if (admission === "early_access" && isSocial(context) && user.emailVerified !== true) {
               throw new APIError("FORBIDDEN", {
@@ -443,6 +487,13 @@ export function createAuth(deps: {
             await enqueueAccountContact(db, user.id).catch((error) =>
               log.error("account contact not queued", { userId: user.id, error }),
             );
+            // The company's workspace, for an account its sign-in made (`SSO_WORKSPACE_ID`, ADR 0188).
+            if (sso?.workspaceId && signInStep(context) === SSO_CALLBACK_PATH) {
+              const workspaceId = sso.workspaceId;
+              await db
+                .transaction((tx) => joinOrganization(tx, workspaceId, user.id, "member"))
+                .catch((error) => log.error("company workspace not joined", { userId: user.id, workspaceId, error }));
+            }
             const access = await accessOf(context);
             if (access && (!isSocial(context) || user.emailVerified === true)) {
               await useEarlyAccess(db, { access, email: user.email, userId: user.id }).catch((error) =>
@@ -470,6 +521,15 @@ export function createAuth(deps: {
       // fails the sign-in, and a sign-in "This wasn't me" overtook (`undoneMeanwhile`), which fails.
       account: {
         create: {
+          // A provider joined to an account that already exists: the company's sign-in only for its addresses, and
+          // under SSO_REQUIRED no other provider for them (ADR 0188).
+          before: async (account) => {
+            if (!sso || account.providerId === "credential") return;
+            const email = await emailOf(account.userId);
+            const path = account.providerId === SSO_PROVIDER ? SSO_CALLBACK_PATH : `/callback/${account.providerId}`;
+            const refused = email ? ssoRefusal(sso, path, email) : null;
+            if (refused) throw new APIError("FORBIDDEN", refused);
+          },
           // A provider joined (a provider's return from a sign-in begun before the undo included) or a password added.
           after: async (account) => {
             if (await undoneMeanwhile(account.userId)) {
@@ -487,7 +547,14 @@ export function createAuth(deps: {
           // A blocked account (ADR 0056 §9) gets no session, whatever the sign-in method. The code also
           // makes a social sign-in's callback send the person back to the sign-in page. On KeepMind OS Cloud the
           // body adds the block's kind, never its reason.
-          before: async (session) => {
+          before: async (session, context) => {
+            // A provider's return for an account that exists: the same rule as on its sign-up (ADR 0188).
+            const step = signInStep(context);
+            if (sso && isProviderReturn(step)) {
+              const email = await emailOf(session.userId);
+              const refused = email ? ssoRefusal(sso, step, email) : null;
+              if (refused) throw new APIError("FORBIDDEN", refused);
+            }
             const block = await accountBlock(db, session.userId);
             if (block) {
               throw new APIError("FORBIDDEN", {
@@ -522,6 +589,31 @@ export type Auth = ReturnType<typeof createAuth>;
 const authRequest = new AsyncLocalStorage<{ startedAt: number; email?: string }>();
 
 /** Every provider's `mapProfileToUser`: notes the address, changes nothing. */
+/**
+ * The company's sign-in (ADR 0188) as Better Auth's provider `sso`: its endpoints and keys from the issuer's
+ * discovery document, every ID token checked against them (a provider whose discovery fails is left out, never
+ * trusted unchecked), PKCE on. Its return is `/callback/sso`, as any social provider's.
+ */
+function companySignIn(sso: SsoSettings) {
+  return genericOAuth({
+    config: [
+      {
+        providerId: SSO_PROVIDER,
+        name: sso.name,
+        discoveryUrl: discoveryUrl(sso),
+        requireIdTokenVerification: true,
+        clientId: sso.clientId,
+        clientSecret: sso.clientSecret,
+        scopes: ["openid", "email", "profile"],
+        mapProfileToUser: (profile) => {
+          noteProviderEmail(profile);
+          return ssoProfile(sso, profile);
+        },
+      },
+    ],
+  });
+}
+
 function noteProviderEmail(profile: { email?: unknown }) {
   const seen = authRequest.getStore();
   if (seen && typeof profile.email === "string") seen.email = profile.email;
@@ -1053,6 +1145,12 @@ export const workspacePolicy = (config: Config): WorkspacePolicy => ({
   allowSignup: config.ALLOW_SIGNUP,
 });
 
+/** What the sign-in page shows of the company's sign-in: its button's name, never its client or secret. */
+export function companySignInUi(config: Config) {
+  const sso = ssoSettings(config);
+  return sso ? { name: sso.name } : null;
+}
+
 /** Sign-in options the login and sign-up pages need to render. */
 export function authUiConfig(config: Config) {
   return {
@@ -1061,6 +1159,8 @@ export function authUiConfig(config: Config) {
       github: Boolean(config.GITHUB_CLIENT_ID && config.GITHUB_CLIENT_SECRET),
       apple: appleConfigured(config),
     },
+    // The company's sign-in (ADR 0188): its button's name.
+    sso: companySignInUi(config),
     termsUrl: config.TERMS_URL ?? null,
     privacyUrl: config.PRIVACY_URL ?? null,
     supportEmail: config.SUPPORT_EMAIL ?? null,

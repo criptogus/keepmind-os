@@ -1,18 +1,18 @@
-import type { SignInProvider } from "@keepmind/client";
+import type { BrowserSignIn } from "@keepmind/client";
 import { earlyAccessToken } from "@keepmind/client/lib/guards";
 import { createFileRoute } from "@tanstack/react-router";
 import { DesktopSignInPage } from "@/pages/DesktopSignInPage";
 
-const PROVIDERS: SignInProvider[] = ["google", "github", "apple"];
+const PROVIDERS: BrowserSignIn[] = ["google", "github", "apple", "sso"];
 
 /**
- * The Mac app's social sign-in, in the browser (ADR 0036): the app opens this here instead of loading it. `error`:
+ * The Mac app's social or company sign-in (ADR 0188), in the browser (ADR 0036): the app opens this here instead of loading it. `error`:
  * the provider or the server refused it (Better Auth's code).
  */
 export const Route = createFileRoute("/desktop/sign-in")({
   validateSearch: (
     search: Record<string, unknown>,
-  ): { provider?: SignInProvider; request?: string; done?: string; error?: string; access?: string } => ({
+  ): { provider?: BrowserSignIn; request?: string; done?: string; error?: string; access?: string } => ({
     provider: PROVIDERS.find((p) => p === search.provider),
     request:
       typeof search.request === "string" && /^[A-Za-z0-9_-]{43}$/.test(search.request) ? search.request : undefined,

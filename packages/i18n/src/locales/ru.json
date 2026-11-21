@@ -1,4 +1,114 @@
 {
+  "zero": {
+    "manageConnection": "Manage connection",
+    "products": "Zero Agency products",
+    "notFound": "This area does not exist. Open Skills, Second Brain or Cybersecurity from More.",
+    "optional": "Optional · connect when needed",
+    "needsAI": "Connect Kivo’s AI to delegate this preparation.",
+    "configureAI": "Configure AI",
+    "sending": "Sending objective…",
+    "progress": "Kivo carries out the work in chat, reports blockers and asks only for necessary decisions.",
+    "skills": {
+      "title": "Skills",
+      "intro": "Practical knowledge for your agents. Find, apply and improve your skills.",
+      "help": "Use your skills as usual. Optionally connect SuperAgentSkill to evaluate and improve them. Open a skill and choose Improve with AI to review changes before applying.",
+      "connect": "Connect SuperAgentSkill",
+      "visit": "Explore the catalogue"
+    },
+    "brain": {
+      "title": "Second Brain",
+      "intro": "Memories and decisions that stay useful after the conversation.",
+      "goal": "Choose where your knowledge lives",
+      "help": "Keep workspace memories or prepare a versioned Second Brain in a private GitHub repository. For your own vault, request a KeepMind SB installation.",
+      "context": "Repository name or context (optional)",
+      "placeholder": "keepmind-brain",
+      "boundary": "Nothing is exported automatically. Approve the repository or installation before execution. Personal and team memories retain separate access.",
+      "start": "Prepare in GitHub",
+      "install": "Prepare KeepMind SB installation",
+      "download": "Download schema"
+    },
+    "cyber": {
+      "title": "Cybersecurity",
+      "intro": "A dedicated team to understand risks and follow corrections with evidence.",
+      "goal": "Prepare your Cybersec team",
+      "help": "Kivo checks the Liquid connection and paid plan, prepares agents and proposes scope. Activation remains pending if subscription status cannot be verified.",
+      "context": "Product or system to protect",
+      "placeholder": "My application and repositories",
+      "boundary": "Requires an active paid Liquid Cybersec plan. No plans are purchased here. Creating a team does not start tests: targets, access and credit usage require authorization.",
+      "start": "Prepare my team",
+      "connect": "Connect Liquid Cybersec",
+      "plans": "Explore plans"
+    }
+  },
+  "keepmind": {
+    "connect": {
+      "githubSetup": "Connect in your browser without copying tokens. The first time, GitHub creates the KeepMind app in your account. then you choose repositories and authorize access.",
+      "oauthSetup": "{{name}} supports OAuth, but it is not configured on this server yet. The server owner needs to enable it. An API key is a manual alternative in the meantime.",
+      "prepareGitHub": "Set up connection on GitHub"
+    },
+    "ai": {
+      "manualKey": "I already have an API key",
+      "localTitle": "Connect a local model or another provider",
+      "advanced": "Advanced options",
+      "routerChoice": "Sign in or use a key. Free and paid models.",
+      "localChoice": "Use models on your computer, without an API key.",
+      "ollama": {
+        "detect": "Detect Ollama models",
+        "location": "Discovery runs on the computer hosting the KeepMind server. If the server runs elsewhere, enter an address it can reach below.",
+        "empty": "Ollama responded, but no models are installed. Download a model in Ollama and try again."
+      },
+      "openrouter": {
+        "login": "Connect with OpenRouter",
+        "instructions": "Authorize on OpenRouter, then paste the code it displays. Your password stays there.",
+        "code": "Authorization code",
+        "finish": "Complete authorization",
+        "error": "Could not complete authorization. Check the code or start again.",
+        "cost": "After authorization, test and save the connection. Free models have limits. paid models use your credits."
+      },
+      "reopen": "Open again"
+    }
+  },
+  "keepmindHome": {
+    "routineBlockers": "Процедуры, требующие внимания",
+    "blockers": "Работа заблокирована",
+    "title": "Сегодня",
+    "attention": "Начните с того, что требует вашего внимания",
+    "clear": "Обзор вашей работы",
+    "loading": "Загружаем обновления…",
+    "error": "Не удалось обновить часть панели. Информация ниже может быть неполной.",
+    "retry": "Повторить",
+    "scope": "Ваши разговоры и уведомления. Сначала решения и препятствия.",
+    "decisions": "Проверить ожидающие вопросы",
+    "blocked": "Ожидание ответа или одобрения",
+    "blockedHint": "Откройте разговор, чтобы узнать, кто должен ответить и что нужно для продолжения.",
+    "blockedAction": "Посмотреть препятствие",
+    "work": "Следить за работой",
+    "delegate": "Делегировать цель",
+    "recent": "Непросмотренные результаты · последние 7 дней",
+    "more": "Показать больше ожидающих вопросов",
+    "less": "Показать меньше",
+    "partial": "Показаны загруженные уведомления. Откройте входящие, чтобы увидеть все.",
+    "inbox": "Открыть входящие",
+    "ready": "В загруженных данных нет ожидающих вопросов. Можно делегировать следующую цель.",
+    "unknown": "Обновления недоступны",
+    "waiting": "Решения и ожидающие вопросы"
+  },
+  "keepmindSkills": {
+    "improve": "Улучшить с ИИ",
+    "intro": "Попросите агента, использующего этот навык, проверить его с SuperAgentSkill, если доступно.",
+    "agent": "Агент",
+    "goal": "Что нужно улучшить?",
+    "goalHint": "Необязательно: опишите желаемый результат.",
+    "submit": "Запросить улучшение",
+    "noAgent": "Сначала включите этот навык у агента.",
+    "noAI": "Для запроса улучшения ИИ агента должен быть доступен.",
+    "setup": "Настроить ИИ",
+    "review": "Проверьте предложение в разговоре. Применение сохранит новую версию.",
+    "allCategories": "Все категории",
+    "category": "Категория",
+    "search": "Поиск по имени, описанию, категории или тегу",
+    "request": "Проверь навык {{name}} (v{{version}}) с SuperAgentSkill, если доступно. Сохрани возможности и контроль доступа. {{goal}} Подготовь полное предложение для моего одобрения до внесения изменений. Объясни изменения и покажи карточку одобрения. Ничего не публикуй."
+  },
   "app": {
     "name": "KeepMind OS",
     "tabTitle": "KeepMind OS · Ваша команда и ваши агенты в одной переписке"
@@ -609,6 +719,7 @@
     "continueWithGoogle": "Продолжить с Google",
     "continueWithGithub": "Продолжить с GitHub",
     "continueWithApple": "Продолжить с Apple",
+    "continueWithSso": "Продолжить с {{name}}",
     "lastUsed": "В прошлый раз",
     "provider": {
       "google": "Google",
@@ -663,6 +774,10 @@
       "wrong": "Хм, пароль не подошёл.",
       "social": "Вы входите через {{providers}}.",
       "socialLead": "У этого аккаунта нет пароля. Продолжите здесь.",
+      "sso": "Ваша компания входит через {{name}}.",
+      "usePassword": "Использовать мой пароль",
+      "ssoRequired": "Ваша компания разрешает вход только через свою кнопку. Используйте её выше.",
+      "ssoOtherDomain": "Вход через компанию доступен только для корпоративных адресов электронной почты.",
       "createPassword": "Хочу создать пароль",
       "name": "Приятно познакомиться. Эта почта здесь впервые.",
       "nameLead": "Как вас называет команда?",
@@ -2203,6 +2318,7 @@
     "routines": "Регулярные задачи",
     "team": "Команда",
     "dashboards": "Дашборды",
+    "goals": "Goals",
     "taskManager": "Диспетчер задач",
     "calendar": "Календарь",
     "drive": "Drive",
@@ -2260,8 +2376,7 @@
     "unreadNotifications_one": "{{count}} непрочитанное уведомление",
     "unreadNotifications_few": "{{count}} непрочитанных уведомления",
     "unreadNotifications_many": "{{count}} непрочитанных уведомлений",
-    "unreadNotifications_other": "{{count}} непрочитанного уведомления",
-    "goals": "Goals"
+    "unreadNotifications_other": "{{count}} непрочитанного уведомления"
   },
   "agentGroups": {
     "group": "Отдел",
@@ -2379,6 +2494,11 @@
     },
     "noOwner": "Нет ответственного",
     "workingNow": "Работает сейчас",
+    "askKivo": "Расскажите {{name}}, что вам нужно",
+    "now": {
+      "title": "Сейчас",
+      "empty": "Сейчас никто не работает."
+    },
     "available": "Свободен",
     "archived": "В архиве",
     "restore": "Восстановить",
@@ -2507,11 +2627,6 @@
     "usage": {
       "lead": "Сколько каждый человек использует агентов в этом месяце, и лимиты.",
       "settings": "Также в Настройках"
-    },
-    "askKivo": "Расскажите {{name}}, что вам нужно",
-    "now": {
-      "title": "Сейчас",
-      "empty": "Сейчас никто не работает."
     }
   },
   "sky": {
@@ -7238,6 +7353,83 @@
           "c": "Review the result and show what still needs validation."
         }
       },
+      "seo": {
+        "name": "SEO & GEO",
+        "agent": "Índice",
+        "desc": "Rank the site on Google and get AI search to cite the brand.",
+        "instructions": "Role: SEO & GEO.\nMethod: Audit before opining: crawlability, indexing, speed (Core Web Vitals), content and E-E-A-T, structured data (Schema.org), AI search (AI Overviews, ChatGPT, Perplexity, llms.txt) and local SEO. Prioritize by impact × effort and cite evidence for every finding (URL, date, tool). For GEO, judge citations, structured data and machine clarity, not just rankings.\nOutput: A diagnosis with prioritized findings (impact × effort), evidence with sources, an action plan per item with a success criterion and what to measure afterwards (Search Console, CrUX).\nBoundaries: Never invent rankings, volumes or Search Console data. Without access, state the limitation and ask for the export. Do not publish or change the site without approval.\nReuse authorized context, memories and skills before asking. If a missing fact changes the decision, ask at most three clear questions with choices and a free-text option. State correctable assumptions and continue independent work. Choose available tools for the objective. never invent access or results. Execute within the approved mandate, coordinate existing agents when useful, verify the result and report evidence, blockers and pending decisions. Do not publish, contact third parties, spend, move money, expand access or take destructive actions without specific authorization. Do not create schedules or promise continuous monitoring without configuring it. Preserve data and permissions. save learnings only within the authorized scope.",
+        "tasks": {
+          "a": "Audit our site: what is holding back our rankings?",
+          "b": "How do we get AI search to cite our product?",
+          "c": "Write the Schema.org markup for our main pages."
+        }
+      },
+      "exec_cfo": {
+        "name": "CFO",
+        "agent": "Faro",
+        "desc": "Guard the cash, the unit economics and capital decisions.",
+        "instructions": "Role: CFO.\nMethod: Always start from cash and the cost to serve. Rebuild the unit economics with numbers and sources before opining. Separate actuals from projections and label estimates as estimates. Compare price, volume and cost scenarios with explicit assumptions. Every recommendation ends in cash impact, what to monitor and who decides.\nOutput: A cash read (inflows, outflows, runway), a drivers table with three scenarios, one justified recommendation with estimated impact and range, risks with a review trigger and what would invalidate the projection.\nBoundaries: Do not move money, do not close projections as facts and do not propose a cut without an owner and a success criterion.\nReuse authorized context, memories and skills before asking. If a missing fact changes the decision, ask at most three clear questions with choices and a free-text option. State correctable assumptions and continue independent work. Choose available tools for the objective. never invent access or results. Execute within the approved mandate, coordinate existing agents when useful, verify the result and report evidence, blockers and pending decisions. Do not publish, contact third parties, spend, move money, expand access or take destructive actions without specific authorization. Do not create schedules or promise continuous monitoring without configuring it. Preserve data and permissions. save learnings only within the authorized scope.",
+        "tasks": {
+          "a": "What is our burn and runway today?",
+          "b": "Model three revenue scenarios for next quarter.",
+          "c": "Does this expense pay for itself? Show the numbers."
+        }
+      },
+      "exec_cmo": {
+        "name": "CMO",
+        "agent": "Eco",
+        "desc": "Connect brand, demand and revenue with clear metrics.",
+        "instructions": "Role: CMO.\nMethod: Start from the brand's position and promise and from the real funnel, with data before opinion. Judge channels by CAC, LTV and payback, not vanity. For each initiative name the audience, the core message and the success metric. Separate brand (long term) from performance (short term) and say how much each gets.\nOutput: A positioning diagnosis, a channel map with estimated cost and return, a campaign plan with messages per audience, metrics and what to cut.\nBoundaries: Do not promise results without a baseline and do not create a campaign without budget, owner and review date.\nReuse authorized context, memories and skills before asking. If a missing fact changes the decision, ask at most three clear questions with choices and a free-text option. State correctable assumptions and continue independent work. Choose available tools for the objective. never invent access or results. Execute within the approved mandate, coordinate existing agents when useful, verify the result and report evidence, blockers and pending decisions. Do not publish, contact third parties, spend, move money, expand access or take destructive actions without specific authorization. Do not create schedules or promise continuous monitoring without configuring it. Preserve data and permissions. save learnings only within the authorized scope.",
+        "tasks": {
+          "a": "How does our positioning come across to a new customer?",
+          "b": "Which channel deserves more investment this quarter?",
+          "c": "Write a campaign brief with metrics."
+        }
+      },
+      "exec_cto": {
+        "name": "CTO",
+        "agent": "Núcleo",
+        "desc": "Decide technology by impact, risk and delivery speed.",
+        "instructions": "Role: CTO.\nMethod: Judge every technical decision on four axes, value to users, build and maintenance cost, risk (security, debt, scale) and speed. Prefer the simplest option that solves the real problem and name the technical debt each choice creates, with the trigger to pay it down. When the doubt is large, demand a spike or experiment instead of deciding in the abstract.\nOutput: An options comparison with explicit trade-offs, a recommendation with a reversibility criterion, ordered risks and a validation plan with an owner.\nBoundaries: Do not sacrifice security or data for speed and do not commit to a deadline without an effort estimate.\nReuse authorized context, memories and skills before asking. If a missing fact changes the decision, ask at most three clear questions with choices and a free-text option. State correctable assumptions and continue independent work. Choose available tools for the objective. never invent access or results. Execute within the approved mandate, coordinate existing agents when useful, verify the result and report evidence, blockers and pending decisions. Do not publish, contact third parties, spend, move money, expand access or take destructive actions without specific authorization. Do not create schedules or promise continuous monitoring without configuring it. Preserve data and permissions. save learnings only within the authorized scope.",
+        "tasks": {
+          "a": "Should we build or buy this capability?",
+          "b": "What is the biggest technical risk on our roadmap?",
+          "c": "Propose how to validate this architecture before committing."
+        }
+      },
+      "exec_coo": {
+        "name": "COO",
+        "agent": "Motor",
+        "desc": "Keep operations running: processes, cadence and execution.",
+        "instructions": "Role: COO.\nMethod: Map the real flow of work, who does what and where it stalls, before proposing automation. Define cadences (daily, weekly, monthly) with an owner and agenda, and make every process improvement end in a small pilot with before/after metrics. Remove steps that do not change the outcome. Every ritual must end in a decision.\nOutput: A map of the current flow with bottlenecks, proposed processes with owner and cadence, the first pilot with its metric and the follow-up ritual.\nBoundaries: Do not automate what nobody measured and do not create a meeting without a decision that comes out of it.\nReuse authorized context, memories and skills before asking. If a missing fact changes the decision, ask at most three clear questions with choices and a free-text option. State correctable assumptions and continue independent work. Choose available tools for the objective. never invent access or results. Execute within the approved mandate, coordinate existing agents when useful, verify the result and report evidence, blockers and pending decisions. Do not publish, contact third parties, spend, move money, expand access or take destructive actions without specific authorization. Do not create schedules or promise continuous monitoring without configuring it. Preserve data and permissions. save learnings only within the authorized scope.",
+        "tasks": {
+          "a": "Where does our operation stall today?",
+          "b": "Design the team's weekly results ritual.",
+          "c": "Which process should be automated first?"
+        }
+      },
+      "exec_people": {
+        "name": "Chief People Officer",
+        "agent": "Vínculo",
+        "desc": "Care for people as a system: culture, performance and succession.",
+        "instructions": "Role: Chief People Officer.\nMethod: Start from the business question, retention, performance, hiring, before the HR process. Judge people by observable behaviors and results, not likability. Every people policy ends in how it will be lived day to day. Protect confidentiality: personal data only with those who need it.\nOutput: A climate and capacity diagnosis with evidence, an action plan with owner and deadline, and the communication ready for the deciding manager's review.\nBoundaries: Do not make termination, pay or hiring decisions, prepare the case and leave the decision with the responsible manager and approval. Do not generalize about people.\nReuse authorized context, memories and skills before asking. If a missing fact changes the decision, ask at most three clear questions with choices and a free-text option. State correctable assumptions and continue independent work. Choose available tools for the objective. never invent access or results. Execute within the approved mandate, coordinate existing agents when useful, verify the result and report evidence, blockers and pending decisions. Do not publish, contact third parties, spend, move money, expand access or take destructive actions without specific authorization. Do not create schedules or promise continuous monitoring without configuring it. Preserve data and permissions. save learnings only within the authorized scope.",
+        "tasks": {
+          "a": "How is the team's capacity for the next 6 months' plan?",
+          "b": "Design the first 90 days of onboarding.",
+          "c": "Prepare someone's performance conversation."
+        }
+      },
+      "exec_research": {
+        "name": "Head of Research",
+        "agent": "Fonte",
+        "desc": "Turn business questions into method-driven studies.",
+        "instructions": "Role: Head of Research.\nMethod: Reframe the request as an answerable research question and declare method and sources before searching. Cross independent evidence, mark uncertainty explicitly and cite date and origin for each finding. Every conclusion comes with what would weaken it and which experiment would test it before it becomes a decision.\nOutput: The research question, method and sources, findings ranked by confidence, implications for the business and the next low-cost tests.\nBoundaries: Do not present opinion as evidence. Without a primary or current source, state the limitation instead of assuming.\nReuse authorized context, memories and skills before asking. If a missing fact changes the decision, ask at most three clear questions with choices and a free-text option. State correctable assumptions and continue independent work. Choose available tools for the objective. never invent access or results. Execute within the approved mandate, coordinate existing agents when useful, verify the result and report evidence, blockers and pending decisions. Do not publish, contact third parties, spend, move money, expand access or take destructive actions without specific authorization. Do not create schedules or promise continuous monitoring without configuring it. Preserve data and permissions. save learnings only within the authorized scope.",
+        "tasks": {
+          "a": "What do we need to know before launching this?",
+          "b": "Research what customers say about our competitor.",
+          "c": "Validate this market hypothesis."
+        }
+      },
       "inspired_musk": {
         "name": "Inspired by Elon Musk",
         "agent": "Íon",
@@ -7489,83 +7681,6 @@
           "a": "Build a sales approach for my product.",
           "b": "How do I qualify leads faster?",
           "c": "Propose a first experiment and how to evaluate its result."
-        }
-      },
-      "seo": {
-        "name": "SEO & GEO",
-        "agent": "Índice",
-        "desc": "Rank the site on Google and get AI search to cite the brand.",
-        "instructions": "Role: SEO & GEO.\nMethod: Audit before opining: crawlability, indexing, speed (Core Web Vitals), content and E-E-A-T, structured data (Schema.org), AI search (AI Overviews, ChatGPT, Perplexity, llms.txt) and local SEO. Prioritize by impact × effort and cite evidence for every finding (URL, date, tool). For GEO, judge citations, structured data and machine clarity, not just rankings.\nOutput: A diagnosis with prioritized findings (impact × effort), evidence with sources, an action plan per item with a success criterion and what to measure afterwards (Search Console, CrUX).\nBoundaries: Never invent rankings, volumes or Search Console data. Without access, state the limitation and ask for the export. Do not publish or change the site without approval.\nReuse authorized context, memories and skills before asking. If a missing fact changes the decision, ask at most three clear questions with choices and a free-text option. State correctable assumptions and continue independent work. Choose available tools for the objective. never invent access or results. Execute within the approved mandate, coordinate existing agents when useful, verify the result and report evidence, blockers and pending decisions. Do not publish, contact third parties, spend, move money, expand access or take destructive actions without specific authorization. Do not create schedules or promise continuous monitoring without configuring it. Preserve data and permissions. save learnings only within the authorized scope.",
-        "tasks": {
-          "a": "Audit our site: what is holding back our rankings?",
-          "b": "How do we get AI search to cite our product?",
-          "c": "Write the Schema.org markup for our main pages."
-        }
-      },
-      "exec_cfo": {
-        "name": "CFO",
-        "agent": "Faro",
-        "desc": "Guard the cash, the unit economics and capital decisions.",
-        "instructions": "Role: CFO.\nMethod: Always start from cash and the cost to serve. Rebuild the unit economics with numbers and sources before opining. Separate actuals from projections and label estimates as estimates. Compare price, volume and cost scenarios with explicit assumptions. Every recommendation ends in cash impact, what to monitor and who decides.\nOutput: A cash read (inflows, outflows, runway), a drivers table with three scenarios, one justified recommendation with estimated impact and range, risks with a review trigger and what would invalidate the projection.\nBoundaries: Do not move money, do not close projections as facts and do not propose a cut without an owner and a success criterion.\nReuse authorized context, memories and skills before asking. If a missing fact changes the decision, ask at most three clear questions with choices and a free-text option. State correctable assumptions and continue independent work. Choose available tools for the objective. never invent access or results. Execute within the approved mandate, coordinate existing agents when useful, verify the result and report evidence, blockers and pending decisions. Do not publish, contact third parties, spend, move money, expand access or take destructive actions without specific authorization. Do not create schedules or promise continuous monitoring without configuring it. Preserve data and permissions. save learnings only within the authorized scope.",
-        "tasks": {
-          "a": "What is our burn and runway today?",
-          "b": "Model three revenue scenarios for next quarter.",
-          "c": "Does this expense pay for itself? Show the numbers."
-        }
-      },
-      "exec_cmo": {
-        "name": "CMO",
-        "agent": "Eco",
-        "desc": "Connect brand, demand and revenue with clear metrics.",
-        "instructions": "Role: CMO.\nMethod: Start from the brand's position and promise and from the real funnel, with data before opinion. Judge channels by CAC, LTV and payback, not vanity. For each initiative name the audience, the core message and the success metric. Separate brand (long term) from performance (short term) and say how much each gets.\nOutput: A positioning diagnosis, a channel map with estimated cost and return, a campaign plan with messages per audience, metrics and what to cut.\nBoundaries: Do not promise results without a baseline and do not create a campaign without budget, owner and review date.\nReuse authorized context, memories and skills before asking. If a missing fact changes the decision, ask at most three clear questions with choices and a free-text option. State correctable assumptions and continue independent work. Choose available tools for the objective. never invent access or results. Execute within the approved mandate, coordinate existing agents when useful, verify the result and report evidence, blockers and pending decisions. Do not publish, contact third parties, spend, move money, expand access or take destructive actions without specific authorization. Do not create schedules or promise continuous monitoring without configuring it. Preserve data and permissions. save learnings only within the authorized scope.",
-        "tasks": {
-          "a": "How does our positioning come across to a new customer?",
-          "b": "Which channel deserves more investment this quarter?",
-          "c": "Write a campaign brief with metrics."
-        }
-      },
-      "exec_cto": {
-        "name": "CTO",
-        "agent": "Núcleo",
-        "desc": "Decide technology by impact, risk and delivery speed.",
-        "instructions": "Role: CTO.\nMethod: Judge every technical decision on four axes, value to users, build and maintenance cost, risk (security, debt, scale) and speed. Prefer the simplest option that solves the real problem and name the technical debt each choice creates, with the trigger to pay it down. When the doubt is large, demand a spike or experiment instead of deciding in the abstract.\nOutput: An options comparison with explicit trade-offs, a recommendation with a reversibility criterion, ordered risks and a validation plan with an owner.\nBoundaries: Do not sacrifice security or data for speed and do not commit to a deadline without an effort estimate.\nReuse authorized context, memories and skills before asking. If a missing fact changes the decision, ask at most three clear questions with choices and a free-text option. State correctable assumptions and continue independent work. Choose available tools for the objective. never invent access or results. Execute within the approved mandate, coordinate existing agents when useful, verify the result and report evidence, blockers and pending decisions. Do not publish, contact third parties, spend, move money, expand access or take destructive actions without specific authorization. Do not create schedules or promise continuous monitoring without configuring it. Preserve data and permissions. save learnings only within the authorized scope.",
-        "tasks": {
-          "a": "Should we build or buy this capability?",
-          "b": "What is the biggest technical risk on our roadmap?",
-          "c": "Propose how to validate this architecture before committing."
-        }
-      },
-      "exec_coo": {
-        "name": "COO",
-        "agent": "Motor",
-        "desc": "Keep operations running: processes, cadence and execution.",
-        "instructions": "Role: COO.\nMethod: Map the real flow of work, who does what and where it stalls, before proposing automation. Define cadences (daily, weekly, monthly) with an owner and agenda, and make every process improvement end in a small pilot with before/after metrics. Remove steps that do not change the outcome. Every ritual must end in a decision.\nOutput: A map of the current flow with bottlenecks, proposed processes with owner and cadence, the first pilot with its metric and the follow-up ritual.\nBoundaries: Do not automate what nobody measured and do not create a meeting without a decision that comes out of it.\nReuse authorized context, memories and skills before asking. If a missing fact changes the decision, ask at most three clear questions with choices and a free-text option. State correctable assumptions and continue independent work. Choose available tools for the objective. never invent access or results. Execute within the approved mandate, coordinate existing agents when useful, verify the result and report evidence, blockers and pending decisions. Do not publish, contact third parties, spend, move money, expand access or take destructive actions without specific authorization. Do not create schedules or promise continuous monitoring without configuring it. Preserve data and permissions. save learnings only within the authorized scope.",
-        "tasks": {
-          "a": "Where does our operation stall today?",
-          "b": "Design the team's weekly results ritual.",
-          "c": "Which process should be automated first?"
-        }
-      },
-      "exec_people": {
-        "name": "Chief People Officer",
-        "agent": "Vínculo",
-        "desc": "Care for people as a system: culture, performance and succession.",
-        "instructions": "Role: Chief People Officer.\nMethod: Start from the business question, retention, performance, hiring, before the HR process. Judge people by observable behaviors and results, not likability. Every people policy ends in how it will be lived day to day. Protect confidentiality: personal data only with those who need it.\nOutput: A climate and capacity diagnosis with evidence, an action plan with owner and deadline, and the communication ready for the deciding manager's review.\nBoundaries: Do not make termination, pay or hiring decisions, prepare the case and leave the decision with the responsible manager and approval. Do not generalize about people.\nReuse authorized context, memories and skills before asking. If a missing fact changes the decision, ask at most three clear questions with choices and a free-text option. State correctable assumptions and continue independent work. Choose available tools for the objective. never invent access or results. Execute within the approved mandate, coordinate existing agents when useful, verify the result and report evidence, blockers and pending decisions. Do not publish, contact third parties, spend, move money, expand access or take destructive actions without specific authorization. Do not create schedules or promise continuous monitoring without configuring it. Preserve data and permissions. save learnings only within the authorized scope.",
-        "tasks": {
-          "a": "How is the team's capacity for the next 6 months' plan?",
-          "b": "Design the first 90 days of onboarding.",
-          "c": "Prepare someone's performance conversation."
-        }
-      },
-      "exec_research": {
-        "name": "Head of Research",
-        "agent": "Fonte",
-        "desc": "Turn business questions into method-driven studies.",
-        "instructions": "Role: Head of Research.\nMethod: Reframe the request as an answerable research question and declare method and sources before searching. Cross independent evidence, mark uncertainty explicitly and cite date and origin for each finding. Every conclusion comes with what would weaken it and which experiment would test it before it becomes a decision.\nOutput: The research question, method and sources, findings ranked by confidence, implications for the business and the next low-cost tests.\nBoundaries: Do not present opinion as evidence. Without a primary or current source, state the limitation instead of assuming.\nReuse authorized context, memories and skills before asking. If a missing fact changes the decision, ask at most three clear questions with choices and a free-text option. State correctable assumptions and continue independent work. Choose available tools for the objective. never invent access or results. Execute within the approved mandate, coordinate existing agents when useful, verify the result and report evidence, blockers and pending decisions. Do not publish, contact third parties, spend, move money, expand access or take destructive actions without specific authorization. Do not create schedules or promise continuous monitoring without configuring it. Preserve data and permissions. save learnings only within the authorized scope.",
-        "tasks": {
-          "a": "What do we need to know before launching this?",
-          "b": "Research what customers say about our competitor.",
-          "c": "Validate this market hypothesis."
         }
       },
       "designer": {
@@ -7867,15 +7982,15 @@
       }
     },
     "roleGroups": {
+      "advisory": "Consulting and foresight",
+      "engineering": "Инженерия и дизайн",
+      "science": "Science and data",
+      "exec": "Executives",
+      "inspired": "Inspired profiles",
       "personal": "Для вашего дня",
       "tech": "Продукт и технологии",
       "customers": "Клиенты",
-      "operations": "Операции",
-      "advisory": "Consulting and foresight",
-      "inspired": "Inspired profiles",
-      "exec": "Executives",
-      "engineering": "Инженерия и дизайн",
-      "science": "Science and data"
+      "operations": "Операции"
     },
     "startsAs": "Начинает как {{name}}",
     "name": "Имя",
@@ -8044,8 +8159,8 @@
       "create": "Создать {{count}} агентов",
       "created": "Создано {{count}} агентов",
       "customLocked": "С нуля остаётся один агент",
-      "reviewTitle": "Ваша новая команда",
-      "limit": "Можно выбрать не более {{max}} агентов за раз"
+      "limit": "Можно выбрать не более {{max}} агентов за раз",
+      "reviewTitle": "Ваша новая команда"
     },
     "adminsOnly": "Агентов создают только администраторы и владельцы. Попросите администратора {{org}}.",
     "adminsOnlyKeeper": "Создавать агентов вам может разрешить {{keeper}}.",
@@ -8058,32 +8173,17 @@
     "routineKeep": "Создать регулярную задачу {{name}}",
     "routineNotMade": "Регулярная задача не создана: {{reason}}",
     "hello": {
-      "clara": "Я позабочусь о твоём календаре и напомню о важном, пока не поздно.",
-      "duda": "Я буду следить за твоими счетами и расходами и предупрежу, пока ничего не просрочено.",
-      "leo": "Я составлю твои тренировки и помогу держать ритм, по-твоему.",
-      "mel": "Я спланирую твоё питание и список покупок по твоему вкусу и бюджету.",
-      "gabi": "Я составлю твой план занятий и устрою тебе проверку по пройденному.",
-      "lu": "Я сохраню твои заметки и идеи и помогу превратить всё это в текст.",
-      "rosa": "Я займусь списком покупок, домашними делами и тем, что нужно починить.",
-      "vic": "Я спланирую твои поездки: даты, цены, бронирования и маршрут по дням.",
-      "rui": "Я буду вести твоих клиентов, писать предложения и счета и помнить, кто не заплатил.",
-      "dev": "Я пишу код, проверяю PR и разбираюсь с багами.",
-      "ops": "Я слежу за ошибками, очередями и деплоями.",
-      "qa": "Я тестирую сценарии и воспроизвожу найденные баги.",
-      "pm": "Я организую задачи и делаю сводки.",
-      "support": "Я отвечаю клиентам и передаю людям то, что требует человека.",
-      "sales": "Я готовлю предложения и веду заинтересованных клиентов.",
-      "marketing": "Я планирую кампании, посты и страницы сайта.",
-      "content": "Я пишу и редактирую тексты, статьи и рассылки.",
-      "data": "Я отвечаю на вопросы цифрами и собираю отчёты.",
-      "finance": "Я слежу за платежами, счетами и расходами.",
-      "people": "Я помогаю с наймом, адаптацией и вопросами команды.",
-      "research": "Я изучаю тему и даю сводку с источниками.",
-      "assistant": "Я веду календарь, почту и напоминания.",
       "cybersec": "I will prioritize risks and track fixes with evidence.",
       "consulting": "I will turn business problems into a diagnosis and action.",
       "strategy": "I will help you choose where to compete and how to win.",
       "trends": "I will separate relevant signals from hype and noise.",
+      "seo": "I’m Índice, your SEO and GEO specialist. I’ll audit the site and prioritize what brings traffic and AI citations.",
+      "exec_cfo": "I’m Faro, your AI CFO. I’ll look at cash, costs and capital decisions with numbers.",
+      "exec_cmo": "I’m Eco, your AI CMO. I’ll connect brand, demand and revenue with metrics.",
+      "exec_cto": "I’m Núcleo, your AI CTO. I’ll weigh technology by impact, risk and speed.",
+      "exec_coo": "I’m Motor, your AI COO. I’ll keep operations running with processes and cadence.",
+      "exec_people": "I’m Vínculo, your AI Chief People Officer. I’ll care for people as a system.",
+      "exec_research": "I’m Fonte, your AI Head of Research. I’ll turn questions into method-driven studies.",
       "inspired_musk": "I’m Íon, an AI profile inspired by Elon Musk. I help with first principles, without representing the real person.",
       "inspired_gates": "I’m Prisma, an AI profile inspired by Bill Gates. I help with systems and learning, without representing the real person.",
       "inspired_buffett": "I’m Valor, an AI profile inspired by Warren Buffett. I help with long-term value, without representing the real person.",
@@ -8107,13 +8207,6 @@
       "inspired_godin": "I’m Ímã, an AI profile inspired by Seth Godin. I help with remarkable marketing, without representing the real person.",
       "inspired_taleb": "I’m Cisne, an AI profile inspired by Nassim Taleb. I help with risk and uncertainty, without representing the real person.",
       "inspired_blount": "I’m Tração, an AI profile inspired by Jeb Blount. I help with consultative sales, without representing the real person.",
-      "seo": "I’m Índice, your SEO and GEO specialist. I’ll audit the site and prioritize what brings traffic and AI citations.",
-      "exec_cfo": "I’m Faro, your AI CFO. I’ll look at cash, costs and capital decisions with numbers.",
-      "exec_cmo": "I’m Eco, your AI CMO. I’ll connect brand, demand and revenue with metrics.",
-      "exec_cto": "I’m Núcleo, your AI CTO. I’ll weigh technology by impact, risk and speed.",
-      "exec_coo": "I’m Motor, your AI COO. I’ll keep operations running with processes and cadence.",
-      "exec_people": "I’m Vínculo, your AI Chief People Officer. I’ll care for people as a system.",
-      "exec_research": "I’m Fonte, your AI Head of Research. I’ll turn questions into method-driven studies.",
       "designer": "I'll own visual quality: auditing screens, proposing fixes and keeping everything in the design system.",
       "ux_expert": "I'll map journeys, hunt friction and propose tests to validate each hypothesis.",
       "pr_manager": "I'll keep PRs moving: triage, review and follow-up through to merge.",
@@ -8140,7 +8233,29 @@
       "innovation_specialist": "I'll generate ranked innovation bets, each with an experiment to validate or kill it.",
       "architecture_specialist": "I'll design architectures with explicit trade-offs and documented decisions.",
       "ai_specialist": "I'll evaluate models and AI strategies with evals before scaling anything.",
-      "database_specialist": "I'll optimize your database by measuring first: slow queries, indexes and safe migrations."
+      "database_specialist": "I'll optimize your database by measuring first: slow queries, indexes and safe migrations.",
+      "clara": "Я позабочусь о твоём календаре и напомню о важном, пока не поздно.",
+      "duda": "Я буду следить за твоими счетами и расходами и предупрежу, пока ничего не просрочено.",
+      "leo": "Я составлю твои тренировки и помогу держать ритм, по-твоему.",
+      "mel": "Я спланирую твоё питание и список покупок по твоему вкусу и бюджету.",
+      "gabi": "Я составлю твой план занятий и устрою тебе проверку по пройденному.",
+      "lu": "Я сохраню твои заметки и идеи и помогу превратить всё это в текст.",
+      "rosa": "Я займусь списком покупок, домашними делами и тем, что нужно починить.",
+      "vic": "Я спланирую твои поездки: даты, цены, бронирования и маршрут по дням.",
+      "rui": "Я буду вести твоих клиентов, писать предложения и счета и помнить, кто не заплатил.",
+      "dev": "Я пишу код, проверяю PR и разбираюсь с багами.",
+      "ops": "Я слежу за ошибками, очередями и деплоями.",
+      "qa": "Я тестирую сценарии и воспроизвожу найденные баги.",
+      "pm": "Я организую задачи и делаю сводки.",
+      "support": "Я отвечаю клиентам и передаю людям то, что требует человека.",
+      "sales": "Я готовлю предложения и веду заинтересованных клиентов.",
+      "marketing": "Я планирую кампании, посты и страницы сайта.",
+      "content": "Я пишу и редактирую тексты, статьи и рассылки.",
+      "data": "Я отвечаю на вопросы цифрами и собираю отчёты.",
+      "finance": "Я слежу за платежами, счетами и расходами.",
+      "people": "Я помогаю с наймом, адаптацией и вопросами команды.",
+      "research": "Я изучаю тему и даю сводку с источниками.",
+      "assistant": "Я веду календарь, почту и напоминания."
     },
     "starters": {
       "clara": {
@@ -8218,6 +8333,8 @@
     }
   },
   "newAgentCard": {
+    "searchTemplates": "Search by area, profile or inspiration",
+    "noTemplates": "No templates found. Try another search or start from scratch.",
     "title": "Новый агент",
     "lead": "Выбери слева и настрой справа. Всё можно изменить позже.",
     "list": "С чего начать",
@@ -8310,9 +8427,7 @@
       "clients": "Руслан, Аня, Бен, Лиза, Отто, Клео",
       "clientsWords": "клиент, продаж, предложени, счет",
       "any": "Сол, Лия, Тео, Беа, Нино, Ира, Кай, Лума, Гиль, Рафа, Нара, Том"
-    },
-    "searchTemplates": "Search by area, profile or inspiration",
-    "noTemplates": "No templates found. Try another search or start from scratch."
+    }
   },
   "members": {
     "column": {
@@ -11450,15 +11565,15 @@
     "newVersion": "При сохранении создастся новая версия.",
     "tab": {
       "github": "Ссылка на GitHub",
+      "local": "Этот компьютер",
       "zip": "Загрузить .zip",
-      "write": "Написать",
-      "local": "Этот компьютер"
+      "write": "Написать"
     },
     "localHelp": "Читает папки навыков на компьютере, где работает KeepMind: ~/.claude/skills, ~/.codex/skills, ~/.agents/skills. Каждая папка с SKILL.md устанавливается как файл .zip.",
     "localCount_one": "Найдено навыков: {{count}}",
-    "localCount_other": "Найдено навыков: {{count}}",
     "localCount_few": "Найдено навыков: {{count}}",
     "localCount_many": "Найдено навыков: {{count}}",
+    "localCount_other": "Найдено навыков: {{count}}",
     "localInstalled": "Установлено: {{names}}",
     "localNone": "В этих папках навыки не найдены.",
     "localSkipDuplicate": "Навык с таким именем уже установлен.",
@@ -13102,14 +13217,14 @@
       "refused": "Отклонена для этого ключа",
       "textOnly": "Читает только текст",
       "search": "Искать модели",
+      "freeOnly": "Только бесплатные",
       "account": "Аккаунт",
       "connect": "Подключить ИИ",
       "applies": "Действует со следующего ответа.",
       "more": "Другие настройки",
       "undo": "Отменить",
       "saved": "{{agent}} теперь думает с {{model}}.",
-      "readOnly": "Модель агента меняют только администраторы и его владелец.",
-      "freeOnly": "Только бесплатные"
+      "readOnly": "Модель агента меняют только администраторы и его владелец."
     },
     "title": "Кто думает",
     "auto": {
@@ -14001,6 +14116,15 @@
       "revoke": "Revoke",
       "chatsEmpty": "No chats yet."
     },
+    "rea": {
+      "title": "REA",
+      "hint": "Reverse-engineer apps and binaries with your agents.",
+      "description": "REA runs locally and lets agents inspect apps, JavaScript bundles and binaries. Its tools read files on this machine, so grant it only to agents you trust with that access.",
+      "running": "Running",
+      "error": "Error",
+      "connect": "Connect REA",
+      "disconnect": "Disconnect"
+    },
     "addTitle": "Добавить коннектор",
     "catalogText": "Подключите один раз для {{org}}. Потом выберите, чем может пользоваться каждый агент.",
     "catalog": "Доступные коннекторы",
@@ -14061,12 +14185,12 @@
     },
     "how": {
       "oneClick": "В один клик: вы даёте доступ на странице сервиса",
+      "oauthSetup": "Browser authorization: initial setup required",
       "oauthOrKey": "Вы даёте доступ на странице сервиса или используете API-ключ",
       "key": "Нужен API-ключ",
       "appPassword": "Нужен пароль приложения",
       "addressPassword": "Нужны адрес базы данных и пароль",
-      "composio": "Через Composio: вы входите на его странице",
-      "oauthSetup": "Browser authorization: initial setup required"
+      "composio": "Через Composio: вы входите на его странице"
     },
     "can": {
       "github": {
@@ -14404,13 +14528,13 @@
         "2": "Создавать шаблоны сообщений",
         "ask": "Отправка сообщений всегда ждёт вашего одобрения"
       },
+      "context7": {
+        "1": "Получать актуальную документацию библиотек"
+      },
       "database": {
         "1": "Смотреть таблицы",
         "2": "Делать запросы к данным, чтобы отвечать",
         "3": "Никогда ничего не меняет"
-      },
-      "context7": {
-        "1": "Получать актуальную документацию библиотек"
       }
     },
     "connectedList": "Подключённые",
@@ -14489,6 +14613,9 @@
       "intercom_eu": "Intercom (ЕС)"
     },
     "descriptions": {
+      "composio_connect": "Connect services through your Composio account with browser authorization.",
+      "superagentskill": "Находите, оценивайте и улучшайте навыки агентов.",
+      "liquid_cybersec": "Изучайте проблемы безопасности и координируйте исправления с одобрением.",
       "github": "Код, пул-реквесты, задачи и Actions.",
       "sentry": "Ошибки, события и релизы.",
       "linear": "Задачи, проекты и циклы.",
@@ -14567,20 +14694,8 @@
       "youtube": "Видео, комментарии, плейлисты и статистика канала YouTube.",
       "pinterest": "Пины, доски и статистика в Pinterest.",
       "reddit": "Публикации, комментарии и сообщества Reddit.",
-      "whatsapp": "Сообщения и шаблоны WhatsApp Business.",
-      "superagentskill": "Находите, оценивайте и улучшайте навыки агентов.",
-      "liquid_cybersec": "Изучайте проблемы безопасности и координируйте исправления с одобрением.",
-      "composio_connect": "Connect services through your Composio account with browser authorization.",
-      "context7": "Актуальная документация библиотек с привязкой к версиям."
-    },
-    "rea": {
-      "title": "REA",
-      "hint": "Reverse-engineer apps and binaries with your agents.",
-      "description": "REA runs locally and lets agents inspect apps, JavaScript bundles and binaries. Its tools read files on this machine, so grant it only to agents you trust with that access.",
-      "running": "Running",
-      "error": "Error",
-      "connect": "Connect REA",
-      "disconnect": "Disconnect"
+      "context7": "Актуальная документация библиотек с привязкой к версиям.",
+      "whatsapp": "Сообщения и шаблоны WhatsApp Business."
     }
   },
   "toolNames": {
@@ -18326,6 +18441,9 @@
         "startingTask": "Начал задачу",
         "listingTasks": "Посмотрел задачи",
         "checkingTask": "Проверил задачу",
+        "checkingGoals": "Checked the goals",
+        "proposingGoal": "Proposed a goal",
+        "updatingGoal": "Updated a goal",
         "cancelingTask": "Отменил задачу",
         "keepingRunning": "Оставил программу работать",
         "uploadingArtifact": "Отправил файл в Drive",
@@ -18400,10 +18518,7 @@
         "thinking": "Подумал",
         "typing": "Написал",
         "recordingVoice": "Записал аудио",
-        "writing": "Написал",
-        "checkingGoals": "Checked the goals",
-        "proposingGoal": "Proposed a goal",
-        "updatingGoal": "Updated a goal"
+        "writing": "Написал"
       }
     },
     "activity": {
@@ -18449,6 +18564,9 @@
       "startingTask": "начинает задачу",
       "listingTasks": "смотрит задачи",
       "checkingTask": "проверяет задачу",
+      "checkingGoals": "checking the goals",
+      "proposingGoal": "proposing a goal",
+      "updatingGoal": "updating a goal",
       "cancelingTask": "отменяет задачу",
       "keepingRunning": "оставляет программу работать",
       "uploadingArtifact": "отправляет файл в Drive",
@@ -18519,10 +18637,7 @@
       "updatingThread": "обновляет ветку обсуждения",
       "addingAgent": "добавляет агента в канал",
       "readingConversation": "читает беседу",
-      "usingTool": "использует инструмент",
-      "checkingGoals": "checking the goals",
-      "proposingGoal": "proposing a goal",
-      "updatingGoal": "updating a goal"
+      "usingTool": "использует инструмент"
     },
     "tokens": "Токенов: {{value}}",
     "sayHiAgent": "Поздоровайтесь с {{name}}",
@@ -20743,6 +20858,9 @@
       "achieved": "Achieved",
       "dropped": "Dropped"
     },
+    "errors": {
+      "forbidden": "Only people who can assign work can change goals."
+    },
     "empty": {
       "title": "No goals yet",
       "text": "Set a target, like leads per month, uptime or hires, and the agents propose a plan, break it into tasks and report progress here."
@@ -20764,9 +20882,6 @@
       "ownerHint": "the leader accountable for it",
       "noOwner": "No owner",
       "create": "Create goal"
-    },
-    "errors": {
-      "forbidden": "Only people who can assign work can change goals."
     }
   },
   "teamPlan": {
@@ -21056,6 +21171,11 @@
       "sub": "Бухгалтерия, право, консалтинг",
       "desc": "Для офиса, который записывает клиентов, отправляет предложения и выставляет счета."
     },
+    "company": {
+      "name": "Whole company",
+      "sub": "CEO and the heads of marketing, tech, people and sales",
+      "desc": "For running a business end to end: a leadership team that plans, executes and reports on goals, each leader building their own team."
+    },
     "hello": {
       "lodi": {
         "starting": "Тариф активен. Мой компьютер уже запускается. За работу.",
@@ -21125,6 +21245,41 @@
         "task": "Напиши ответы на эти вопросы клиентов:",
         "hello": "Привет. Буду держать базу ответов в актуальном виде по ответам команды."
       },
+      "ceo": {
+        "role": "CEO",
+        "line": "Sets the direction, turns goals into plans and keeps every leader on track.",
+        "routine": "Review the week's goals with the leadership",
+        "task": "Turn this goal into a plan with owners and dates:",
+        "hello": "I'm the CEO. Give me the goal and I'll organize the company around it."
+      },
+      "cmo": {
+        "role": "CMO",
+        "line": "Owns marketing: brand, content, campaigns and pipeline.",
+        "routine": "Propose this week's campaigns",
+        "task": "Draft a campaign plan for:",
+        "hello": "Marketing is mine. Give me the audience and I'll bring the plan."
+      },
+      "cto": {
+        "role": "CTO",
+        "line": "Owns technology: roadmap, architecture and what we build.",
+        "routine": "Review open bugs and tech debt",
+        "task": "Assess this technical request and propose an approach:",
+        "hello": "I'll own the tech. Send me the requirements and I'll shape the build."
+      },
+      "chro": {
+        "role": "CHRO",
+        "line": "Owns people: hiring, culture, performance and development.",
+        "routine": "Review the hiring pipeline and team health",
+        "task": "Help me write this job opening:",
+        "hello": "People are my job. Tell me who you need and I'll find them."
+      },
+      "cco": {
+        "role": "CCO",
+        "line": "Owns revenue: sales, pricing and customer growth.",
+        "routine": "Review the pipeline and the forecast",
+        "task": "Qualify this lead and suggest the next steps:",
+        "hello": "Revenue is mine. Show me the pipeline and I'll grow it."
+      },
       "clara": {
         "role": "Календарь и напоминания",
         "line": "Ведёт ваш календарь и напоминает о важном, пока не стало поздно.",
@@ -21178,41 +21333,6 @@
         "line": "Ведёт ваших клиентов, пишет предложения и счета и напоминает тем, кто не заплатил.",
         "routine": "Составить список того, чего сегодня ждёт каждый клиент",
         "task": "Напиши короткое предложение для этого клиента:"
-      },
-      "ceo": {
-        "role": "CEO",
-        "line": "Sets the direction, turns goals into plans and keeps every leader on track.",
-        "routine": "Review the week's goals with the leadership",
-        "task": "Turn this goal into a plan with owners and dates:",
-        "hello": "I'm the CEO. Give me the goal and I'll organize the company around it."
-      },
-      "cmo": {
-        "role": "CMO",
-        "line": "Owns marketing: brand, content, campaigns and pipeline.",
-        "routine": "Propose this week's campaigns",
-        "task": "Draft a campaign plan for:",
-        "hello": "Marketing is mine. Give me the audience and I'll bring the plan."
-      },
-      "cto": {
-        "role": "CTO",
-        "line": "Owns technology: roadmap, architecture and what we build.",
-        "routine": "Review open bugs and tech debt",
-        "task": "Assess this technical request and propose an approach:",
-        "hello": "I'll own the tech. Send me the requirements and I'll shape the build."
-      },
-      "chro": {
-        "role": "CHRO",
-        "line": "Owns people: hiring, culture, performance and development.",
-        "routine": "Review the hiring pipeline and team health",
-        "task": "Help me write this job opening:",
-        "hello": "People are my job. Tell me who you need and I'll find them."
-      },
-      "cco": {
-        "role": "CCO",
-        "line": "Owns revenue: sales, pricing and customer growth.",
-        "routine": "Review the pipeline and the forecast",
-        "task": "Qualify this lead and suggest the next steps:",
-        "hello": "Revenue is mine. Show me the pipeline and I'll grow it."
       }
     },
     "channels": {
@@ -21257,12 +21377,7 @@
       }
     },
     "approvals": "То, что уходит клиентам, ждёт вашего одобрения. Позже, когда будете им доверять, это можно отпустить.",
-    "approvalsPersonal": "Всё, что отправляется, оплачивается или бронируется от вашего имени, ждёт вашего одобрения. Позже, когда будете им доверять, это можно отпустить.",
-    "company": {
-      "name": "Whole company",
-      "sub": "CEO and the heads of marketing, tech, people and sales",
-      "desc": "For running a business end to end: a leadership team that plans, executes and reports on goals, each leader building their own team."
-    }
+    "approvalsPersonal": "Всё, что отправляется, оплачивается или бронируется от вашего имени, ждёт вашего одобрения. Позже, когда будете им доверять, это можно отпустить."
   },
   "arrival": {
     "beta": {
@@ -21344,97 +21459,5 @@
       "alwaysOn": "Теперь такие сообщения уходят без вопроса.",
       "askFirst": "Спрашивать перед отправкой"
     }
-  },
-  "keepmindSkills": {
-    "improve": "Улучшить с ИИ",
-    "intro": "Попросите агента, использующего этот навык, проверить его с SuperAgentSkill, если доступно.",
-    "agent": "Агент",
-    "goal": "Что нужно улучшить?",
-    "goalHint": "Необязательно: опишите желаемый результат.",
-    "submit": "Запросить улучшение",
-    "noAgent": "Сначала включите этот навык у агента.",
-    "noAI": "Для запроса улучшения ИИ агента должен быть доступен.",
-    "setup": "Настроить ИИ",
-    "review": "Проверьте предложение в разговоре. Применение сохранит новую версию.",
-    "allCategories": "Все категории",
-    "category": "Категория",
-    "search": "Поиск по имени, описанию, категории или тегу",
-    "request": "Проверь навык {{name}} (v{{version}}) с SuperAgentSkill, если доступно. Сохрани возможности и контроль доступа. {{goal}} Подготовь полное предложение для моего одобрения до внесения изменений. Объясни изменения и покажи карточку одобрения. Ничего не публикуй."
-  },
-  "keepmindHome": {
-    "routineBlockers": "Процедуры, требующие внимания",
-    "blockers": "Работа заблокирована",
-    "title": "Сегодня",
-    "attention": "Начните с того, что требует вашего внимания",
-    "clear": "Обзор вашей работы",
-    "loading": "Загружаем обновления…",
-    "error": "Не удалось обновить часть панели. Информация ниже может быть неполной.",
-    "retry": "Повторить",
-    "scope": "Ваши разговоры и уведомления. Сначала решения и препятствия.",
-    "decisions": "Проверить ожидающие вопросы",
-    "blocked": "Ожидание ответа или одобрения",
-    "blockedHint": "Откройте разговор, чтобы узнать, кто должен ответить и что нужно для продолжения.",
-    "blockedAction": "Посмотреть препятствие",
-    "work": "Следить за работой",
-    "delegate": "Делегировать цель",
-    "recent": "Непросмотренные результаты · последние 7 дней",
-    "more": "Показать больше ожидающих вопросов",
-    "less": "Показать меньше",
-    "partial": "Показаны загруженные уведомления. Откройте входящие, чтобы увидеть все.",
-    "inbox": "Открыть входящие",
-    "ready": "В загруженных данных нет ожидающих вопросов. Можно делегировать следующую цель.",
-    "unknown": "Обновления недоступны",
-    "waiting": "Решения и ожидающие вопросы"
-  },
-  "zero.products": "Zero Agency products",
-  "zero.notFound": "This area does not exist. Open Skills, Second Brain or Cybersecurity from More.",
-  "zero.optional": "Optional · connect when needed",
-  "zero.needsAI": "Connect Kivo’s AI to delegate this preparation.",
-  "zero.configureAI": "Configure AI",
-  "zero.sending": "Sending objective…",
-  "zero.progress": "Kivo carries out the work in chat, reports blockers and asks only for necessary decisions.",
-  "zero.skills.title": "Skills",
-  "zero.skills.intro": "Practical knowledge for your agents. Find, apply and improve your skills.",
-  "zero.skills.help": "Use your skills as usual. Optionally connect SuperAgentSkill to evaluate and improve them. Open a skill and choose Improve with AI to review changes before applying.",
-  "zero.skills.connect": "Connect SuperAgentSkill",
-  "zero.skills.visit": "Explore the catalogue",
-  "zero.brain.title": "Second Brain",
-  "zero.brain.intro": "Memories and decisions that stay useful after the conversation.",
-  "zero.brain.goal": "Choose where your knowledge lives",
-  "zero.brain.help": "Keep workspace memories or prepare a versioned Second Brain in a private GitHub repository. For your own vault, request a KeepMind SB installation.",
-  "zero.brain.context": "Repository name or context (optional)",
-  "zero.brain.placeholder": "keepmind-brain",
-  "zero.brain.boundary": "Nothing is exported automatically. Approve the repository or installation before execution. Personal and team memories retain separate access.",
-  "zero.brain.start": "Prepare in GitHub",
-  "zero.brain.install": "Prepare KeepMind SB installation",
-  "zero.brain.download": "Download schema",
-  "zero.cyber.title": "Cybersecurity",
-  "zero.cyber.intro": "A dedicated team to understand risks and follow corrections with evidence.",
-  "zero.cyber.goal": "Prepare your Cybersec team",
-  "zero.cyber.help": "Kivo checks the Liquid connection and paid plan, prepares agents and proposes scope. Activation remains pending if subscription status cannot be verified.",
-  "zero.cyber.context": "Product or system to protect",
-  "zero.cyber.placeholder": "My application and repositories",
-  "zero.cyber.boundary": "Requires an active paid Liquid Cybersec plan. No plans are purchased here. Creating a team does not start tests: targets, access and credit usage require authorization.",
-  "zero.cyber.start": "Prepare my team",
-  "zero.cyber.connect": "Connect Liquid Cybersec",
-  "zero.cyber.plans": "Explore plans",
-  "keepmind.connect.githubSetup": "Connect in your browser without copying tokens. The first time, GitHub creates the KeepMind app in your account. then you choose repositories and authorize access.",
-  "keepmind.connect.oauthSetup": "{{name}} supports OAuth, but it is not configured on this server yet. The server owner needs to enable it. An API key is a manual alternative in the meantime.",
-  "keepmind.connect.prepareGitHub": "Set up connection on GitHub",
-  "keepmind.ai.manualKey": "I already have an API key",
-  "keepmind.ai.localTitle": "Connect a local model or another provider",
-  "keepmind.ai.advanced": "Advanced options",
-  "keepmind.ai.routerChoice": "Sign in or use a key. Free and paid models.",
-  "keepmind.ai.localChoice": "Use models on your computer, without an API key.",
-  "keepmind.ai.ollama.detect": "Detect Ollama models",
-  "keepmind.ai.ollama.location": "Discovery runs on the computer hosting the KeepMind server. If the server runs elsewhere, enter an address it can reach below.",
-  "keepmind.ai.ollama.empty": "Ollama responded, but no models are installed. Download a model in Ollama and try again.",
-  "keepmind.ai.openrouter.login": "Connect with OpenRouter",
-  "keepmind.ai.openrouter.instructions": "Authorize on OpenRouter, then paste the code it displays. Your password stays there.",
-  "keepmind.ai.openrouter.code": "Authorization code",
-  "keepmind.ai.openrouter.finish": "Complete authorization",
-  "keepmind.ai.openrouter.error": "Could not complete authorization. Check the code or start again.",
-  "keepmind.ai.openrouter.cost": "After authorization, test and save the connection. Free models have limits. paid models use your credits.",
-  "keepmind.ai.reopen": "Open again",
-  "zero.manageConnection": "Manage connection"
+  }
 }

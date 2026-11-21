@@ -725,6 +725,8 @@ export const en = {
     continueWithGoogle: "Continue with Google",
     continueWithGithub: "Continue with GitHub",
     continueWithApple: "Continue with Apple",
+    /** The company's own sign-in (SSO): `name` is the company's or its identity provider's, set by the server. */
+    continueWithSso: "Continue with {{name}}",
     lastUsed: "Last used",
     provider: { google: "Google", github: "GitHub", apple: "Apple" },
     yourName: "Your name",
@@ -775,6 +777,14 @@ export const en = {
       wrong: "Hmm, that password didn't match.",
       social: "You sign in with {{providers}}.",
       socialLead: "This account has no password. Continue here.",
+      /** A company address: it signs in through the company's sign-in (SSO). `name`: as on its button. */
+      sso: "Your company signs in with {{name}}.",
+      /** Under the company's button, when the account also has a password the company allows. */
+      usePassword: "Use my password",
+      /** Refused: the company allows only its own sign-in for this address. */
+      ssoRequired: "Your company signs in only with its own button. Use it above.",
+      /** Refused: the company's sign-in returned an address that isn't the company's. */
+      ssoOtherDomain: "The company's sign-in is only for the company's email addresses.",
       createPassword: "I'd rather create a password",
       name: "Nice to meet you. This email is new here.",
       nameLead: "What does your team call you?",

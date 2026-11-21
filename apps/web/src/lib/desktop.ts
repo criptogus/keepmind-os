@@ -1,4 +1,4 @@
-import type { AppNotification, SignInProvider } from "@keepmind/client";
+import type { AppNotification, BrowserSignIn } from "@keepmind/client";
 import { deviceNoticeOf } from "@keepmind/client/lib/devices";
 import { firstName } from "@keepmind/client/lib/format";
 import { noticeLine } from "@keepmind/client/lib/island";
@@ -180,7 +180,7 @@ export async function challengeOf(verifier: string) {
 }
 
 /** `access`: an early-access link's token, for the sign-up the browser makes (DesktopSignInPage). */
-export const browserSignInUrl = (provider: SignInProvider, requestId: string, access?: string) =>
+export const browserSignInUrl = (provider: BrowserSignIn, requestId: string, access?: string) =>
   `${BROWSER_SIGN_IN_PATH}?${new URLSearchParams({ provider, request: requestId, ...(access ? { access } : {}) })}`;
 
 /**

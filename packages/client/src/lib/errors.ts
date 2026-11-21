@@ -243,6 +243,10 @@ const KNOWN = {
   EARLY_ACCESS_EMAIL_UNVERIFIED: "auth.earlyAccess.unverified",
   // A provider's sign-up on a closed server comes back to /login with this code.
   SIGNUP_CLOSED: "auth.flow.closedLead",
+  // The company's sign-in (ADR 0188, apps/server sso.ts): its address signs in only through it, or the company's
+  // provider signed in an address that isn't the company's.
+  SSO_REQUIRED: "auth.flow.ssoRequired",
+  SSO_OTHER_DOMAIN: "auth.flow.ssoOtherDomain",
   // A sign-up whose name is its password (apps/server auth.ts `NAME_IS_PASSWORD`).
   NAME_IS_PASSWORD: "auth.flow.nameIsPassword",
   // A sign-up with an address an account just left, held for its "This wasn't me" (apps/server auth.ts `EMAIL_HELD`).

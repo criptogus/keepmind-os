@@ -260,6 +260,59 @@ export const envVars = {
     section: "Sign-in",
     secret: true,
   },
+  SSO_OIDC_ISSUER: {
+    schema: z
+      .string()
+      .url()
+      .regex(/^https:\/\//, "must be an https URL (the identity provider's issuer)")
+      .optional(),
+    description:
+      "Company sign-in (SSO, ADR 0188): the OpenID Connect issuer of the company's identity provider (Microsoft Entra ID, Okta, Google Workspace, Keycloak, JumpCloud…), such as `https://login.microsoftonline.com/<tenant>/v2.0`. With `SSO_OIDC_CLIENT_ID` and `SSO_OIDC_CLIENT_SECRET`, the sign-in page shows “Continue with `SSO_NAME`”. The server reads `<issuer>/.well-known/openid-configuration` and checks every ID token's signature against its keys. Redirect URI to register at the provider: `{PUBLIC_URL}/api/auth/callback/sso`.",
+    section: "Sign-in",
+  },
+  SSO_OIDC_CLIENT_ID: {
+    schema: z.string().optional(),
+    description: "Company sign-in: the client (application) id registered at the identity provider.",
+    section: "Sign-in",
+  },
+  SSO_OIDC_CLIENT_SECRET: {
+    schema: z.string().optional(),
+    description: "Company sign-in: the client secret registered at the identity provider.",
+    section: "Sign-in",
+    secret: true,
+  },
+  SSO_NAME: {
+    schema: z.string().trim().min(1).max(40).default("SSO"),
+    description:
+      "Company sign-in: the name on its button, “Continue with <name>” (the company's, or its provider's, such as `Acme` or `Microsoft`).",
+    section: "Sign-in",
+  },
+  SSO_DOMAINS: {
+    schema: z
+      .string()
+      .trim()
+      .toLowerCase()
+      .regex(
+        /^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)+(?:\s*,\s*[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)+)*$/,
+        "must be email domains separated by commas, such as acme.com,acme.com.br",
+      )
+      .optional(),
+    description:
+      "Company sign-in: the company's email domains, separated by commas (`acme.com,acme.com.br`). Only addresses in them sign in through it, the provider's word counts as the address's confirmation, and they may create an account here even while sign-up is closed. Typing such an address on the sign-in page goes to the company's sign-in. Unset: anyone the provider signs in, with the usual sign-up rules.",
+    section: "Sign-in",
+  },
+  SSO_REQUIRED: {
+    schema: z.stringbool().default(false),
+    description:
+      "Company sign-in: addresses in `SSO_DOMAINS` sign in only through it. Their password, Google, GitHub and Apple sign-ins and password resets are refused, so access ends when the company's provider ends it. Needs `SSO_DOMAINS`.",
+    section: "Sign-in",
+  },
+  SSO_WORKSPACE_ID: {
+    schema: z.string().trim().min(1).optional(),
+    description:
+      "Company sign-in: the id of the workspace an account made through it joins, as a member, the first time it signs in (the id in the workspace's address, `/org/<id>`). Unset: it joins nothing until invited.",
+    section: "Sign-in",
+  },
   APPLE_CLIENT_ID: {
     schema: z.string().optional(),
     description:

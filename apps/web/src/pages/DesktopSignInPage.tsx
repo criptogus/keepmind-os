@@ -1,4 +1,4 @@
-import { type SignInProvider, useAuthConfig } from "@keepmind/client";
+import { type BrowserSignIn, useAuthConfig } from "@keepmind/client";
 import { signInRefusalText } from "@keepmind/client/lib/errors";
 import { Button } from "@keepmind/ui";
 import { useEffect, useRef, useState } from "react";
@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useAuth } from "@/auth/context";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { AuthShell } from "@/components/AuthLayout";
+import { providerName } from "@/components/SocialButtons";
 import { BROWSER_SIGN_IN_PATH } from "@/lib/desktop";
 
 /**
@@ -24,7 +25,7 @@ export function DesktopSignInPage({
   error,
   access,
 }: {
-  provider?: SignInProvider;
+  provider?: BrowserSignIn;
   request?: string;
   done: boolean;
   error?: string;
@@ -33,7 +34,8 @@ export function DesktopSignInPage({
   const { t } = useTranslation();
   const auth = useAuth();
   // A refusal points to a password reset only where this server can mail its link.
-  const canReset = useAuthConfig().data?.passwordReset === true;
+  const config = useAuthConfig().data;
+  const canReset = config?.passwordReset === true;
   const [state, setState] = useState<"opening" | "confirm" | "done" | "expired" | "refused">("opening");
   const [code, setCode] = useState<string | null>(null);
   const [working, setWorking] = useState(false);
@@ -74,7 +76,7 @@ export function DesktopSignInPage({
     setState(r.ok ? "done" : "expired");
   };
 
-  const name = provider ? t(`auth.provider.${provider}`) : "";
+  const name = provider ? providerName(t, provider, config?.sso?.name) : "";
   const [title, lead] =
     state === "done"
       ? [t("auth.desktop.done"), t("auth.desktop.doneLead")]

@@ -42,6 +42,25 @@ Rules are in [AGENTS.md](../AGENTS.md) and [CLAUDE.md](../CLAUDE.md); release ga
 9. **Stale documents.** `KEEPMIND-ROADMAP.md` was last updated on 2026-11-15, before the
    goals, reminders, scheduled messages and three desktop releases. Bring it up to date.
 
+## Enterprise readiness (2026-11-21)
+
+The market comparison and the plan are in the owner's doc "KeepMind OS: comparação com o mercado e plano
+para empresas". Phase 1 is what a company's security review asks for first: company sign-in, SCIM, a second
+factor, audit events sent to the company's SIEM and LGPD papers.
+
+Done: company sign-in (SSO) through OpenID Connect, one provider per server, ADR 0188
+(`apps/server/src/sso.ts`, `SSO_*` in `SELF_HOSTING.md`). Next in phase 1, in order:
+
+1. **Company sign-in on the phone.** `sign-in-options` already answers `sso`; the phone app needs the button
+   and the browser sign-in for provider `sso` (`apps/mobile/src/lib/auth.ts`, `phoneBrowserSignIn`).
+2. **End sessions when the company ends the person.** Today an open session outlives `SSO_REQUIRED` and the
+   provider turning the person off. SCIM (`/scim/v2/Users` with a bearer token) deactivating the account and
+   ending its sessions closes that, and adds automatic accounts.
+3. **Second factor** (Better Auth's `two-factor` plugin, TOTP and backup codes) for password accounts.
+4. **Audit events out**: the audit rows as JSON lines to a webhook or syslog for the company's SIEM.
+5. **Per-workspace SSO and SAML** for keepmind.io, where several companies share one server (ADR 0188, "Not in
+   this decision").
+
 ## Agent cost and speed: what was measured on 2026-11-21
 
 A default agent answering "oi" in a channel, on the server's real wiring with the fake model:

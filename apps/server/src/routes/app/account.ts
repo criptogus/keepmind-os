@@ -98,6 +98,7 @@ import { apiError, errorResponse } from "../../http/errors";
 import { humanCheckRefusal } from "../../http/human-check";
 import { humanPassesFor } from "../../http/human-pass";
 import { imageFile } from "../../http/image-file";
+import { isCompanyEmail, ssoRequiredFor, ssoSettings } from "../../sso";
 import { releaseOf } from "../../version";
 import {
   type AppDeps,
@@ -329,6 +330,10 @@ export function accountRoutes(deps: AppDeps) {
         200: json(
           z.object({
             socialProviders: z.object({ google: z.boolean(), github: z.boolean(), apple: z.boolean() }),
+            sso: z.object({ name: z.string() }).nullable().openapi({
+              description:
+                'The company\'s sign-in (`SSO_OIDC_*`, ADR 0188): the name on its button, “Continue with <name>”, started with `POST /api/auth/sign-in/social` and `provider: "sso"`. Null: none.',
+            }),
             signupOpen: z
               .boolean()
               .openapi({ description: "Offer the sign-up form (invited people can always sign up)." }),
@@ -445,6 +450,13 @@ export function accountRoutes(deps: AppDeps) {
               .array(z.enum(["google", "github", "apple"]))
               .openapi({ description: "Social sign-ins linked." }),
             canSignUp: z.boolean().openapi({ description: "No account, and this e-mail may create one." }),
+            sso: z.boolean().optional().openapi({
+              description:
+                "The address is one of the company's (`SSO_DOMAINS`, ADR 0188): its next step is the company's sign-in. With `SSO_REQUIRED` it is the only one.",
+            }),
+            ssoOnly: z.boolean().optional().openapi({
+              description: "With `sso`: the address signs in only through the company's sign-in (`SSO_REQUIRED`).",
+            }),
             accessExpired: z.literal(true).optional().openapi({
               description: "`access` is the link of an invitation to this same address, and it expired.",
             }),
@@ -470,7 +482,13 @@ export function accountRoutes(deps: AppDeps) {
       );
       if (refused) return apiError(c, 403, refused.code, refused.message);
       const { email, access } = c.req.valid("json");
-      const found = await signInOptions(db, email, signupPolicy(config), access);
+      const company = ssoSettings(config);
+      const found = {
+        ...(await signInOptions(db, email, signupPolicy(config), access)),
+        ...(isCompanyEmail(company, email)
+          ? { sso: true, ...(ssoRequiredFor(company, email) ? { ssoOnly: true } : {}) }
+          : {}),
+      };
       // Checked once: the step after this one, for this address, goes with the pass and no second check.
       if (!deps.adapters.humanCheck) return c.json(found, 200);
       const pass = humanPassesFor(deriveSecret(config.AGENTES_SECRET, "human-pass")).issue(email, ip);
