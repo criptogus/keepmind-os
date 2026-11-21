@@ -32,7 +32,8 @@ export function archParam(rustArch: string): string {
 
 /** The repo the desktop CI publishes releases to (`.github/workflows/desktop.yml`). */
 const RELEASES_REPO = "criptogus/keepmind-os";
-const RELEASES_API = `https://api.github.com/repos/${RELEASES_REPO}/releases?per_page=30`;
+/** The updater's own manifest — a static release asset: no API rate limit, and the same file `update_install` reads. */
+const UPDATER_MANIFEST = `https://github.com/${RELEASES_REPO}/releases/latest/download/latest.json`;
 
 /** The download asset a release carries for this build, named as the CI names it (`KeepMind_OS_<v>_…`). */
 export function githubAsset(os: string, rustArch: string, version: string): string | null {
@@ -43,41 +44,47 @@ export function githubAsset(os: string, rustArch: string, version: string): stri
   return null;
 }
 
-interface GitHubRelease {
-  tag_name?: string;
-  draft?: boolean;
-  prerelease?: boolean;
-  body?: string | null;
-  published_at?: string | null;
-  html_url?: string;
-  assets?: { name?: string; browser_download_url?: string }[];
+/** The updater manifest's platform key for this build (`darwin-aarch64`, `windows-x86_64`, `linux-x86_64`, …). */
+function manifestPlatform(os: string, rustArch: string): string | null {
+  const arm = rustArch === "aarch64" || rustArch === "arm64";
+  const x64 = rustArch === "x86_64" || rustArch === "x64";
+  if (!arm && !x64) return null;
+  const arch = arm ? "aarch64" : "x86_64";
+  if (os === "macos" || os === "darwin") return `darwin-${arch}`;
+  if (os === "windows") return `windows-${arch}`;
+  if (os === "linux") return `linux-${arch}`;
+  return null;
+}
+
+interface UpdateManifest {
+  version?: unknown;
+  notes?: unknown;
+  pub_date?: unknown;
+  platforms?: Record<string, { url?: unknown } | undefined>;
 }
 
 /**
- * The newest `desktop-v*` GitHub release with this build's asset, as a LatestRelease (its download is the
- * asset's own URL). Null when GitHub can't be read or no release has the file — the keepmind.io answer stands.
+ * The newest release as the updater's manifest (`latest.json` on the latest GitHub release), as a
+ * LatestRelease whose download is this build's asset URL. Null when it can't be read, names no bundle for
+ * this platform or has no download file — the keepmind.io answer stands.
  */
 export async function checkGitHub(os: string, rustArch: string, signal?: AbortSignal): Promise<LatestRelease | null> {
   try {
-    const res = await fetch(RELEASES_API, { headers: { accept: "application/vnd.github+json" }, signal });
+    const res = await fetch(UPDATER_MANIFEST, { signal });
     if (!res.ok) return null;
-    const releases = (await res.json()) as GitHubRelease[];
-    const release = releases.find(
-      (r) => !r.draft && !r.prerelease && typeof r.tag_name === "string" && r.tag_name.startsWith("desktop-v"),
-    );
-    const tag = release?.tag_name;
-    if (!release || !tag) return null;
-    const version = tag.slice("desktop-v".length);
-    const assetName = githubAsset(os, rustArch, version);
-    const asset = assetName ? release.assets?.find((a) => a.name === assetName) : undefined;
-    if (!asset?.browser_download_url) return null;
-    const cut = (release.body ?? "").indexOf("<!-- install -->");
-    const notes = (cut < 0 ? (release.body ?? "") : (release.body ?? "").slice(0, cut)).trim();
+    const m = (await res.json()) as UpdateManifest;
+    if (typeof m.version !== "string" || !m.version) return null;
+    const platform = manifestPlatform(os, rustArch);
+    if (!platform || typeof m.platforms?.[platform]?.url !== "string") return null;
+    const version = m.version;
+    const asset = githubAsset(os, rustArch, version);
     return {
       version,
-      url: asset.browser_download_url,
-      notes: notes || undefined,
-      publishedAt: release.published_at ?? undefined,
+      url: asset
+        ? `https://github.com/${RELEASES_REPO}/releases/download/desktop-v${version}/${asset}`
+        : `https://github.com/${RELEASES_REPO}/releases/latest`,
+      notes: typeof m.notes === "string" && m.notes.trim() ? m.notes.trim() : undefined,
+      publishedAt: typeof m.pub_date === "string" ? m.pub_date : undefined,
     };
   } catch {
     return null;

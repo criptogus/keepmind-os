@@ -459,6 +459,12 @@ const UPDATE_PROGRESS_EVENT: &str = "update://progress";
 /// Err "cancelled": Cancel dropped the check or the download.
 #[tauri::command]
 async fn update_install(app: AppHandle) -> Result<bool, String> {
+    // Linux: the updater's bundle is the AppImage. A .deb install has none — taking the AppImage would
+    // drop a second copy beside it — so it gets `false` and Preferences' download flow (.deb) instead.
+    #[cfg(target_os = "linux")]
+    if std::env::var_os("APPIMAGE").is_none() {
+        return Ok(false);
+    }
     let before_exit = app.clone();
     let updater = app
         .updater_builder()
@@ -514,11 +520,35 @@ async fn update_install(app: AppHandle) -> Result<bool, String> {
     // The runners and the server here finish their work first, as when quitting; then the new app opens
     // (and starts the server here's new version, `local_server`).
     tauri::async_runtime::spawn_blocking(move || {
+        clear_quarantine();
         stop_children(&app);
         app.restart();
     });
     Ok(true)
 }
+
+/// Ad-hoc builds carry no Developer ID, so Gatekeeper would treat the just-installed bundle as a new
+/// download and ask "Open Anyway" again at the relaunch. The user already approved this app once: drop
+/// the quarantine mark the .dmg set, on the bundle about to open. macOS only; elsewhere a no-op.
+#[cfg(target_os = "macos")]
+fn clear_quarantine() {
+    let Ok(exe) = std::env::current_exe() else { return };
+    // <App>.app/Contents/MacOS/<exe>: the bundle is three levels up.
+    let Some(bundle) = exe.parent().and_then(|p| p.parent()).and_then(|p| p.parent()) else {
+        return;
+    };
+    if bundle.extension().and_then(|e| e.to_str()) != Some("app") {
+        return;
+    }
+    let _ = std::process::Command::new("xattr")
+        .arg("-dr")
+        .arg("com.apple.quarantine")
+        .arg(bundle)
+        .output();
+}
+
+#[cfg(not(target_os = "macos"))]
+fn clear_quarantine() {}
 
 /// Preferences' Cancel while an update downloads.
 #[tauri::command]
