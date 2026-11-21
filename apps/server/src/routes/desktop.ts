@@ -10,7 +10,7 @@ const tags = ["Desktop app"];
  * repository, read with a fine-grained token. Convention (the desktop CI
  * follows it): tag `desktop-v<semver>`; per platform a download with its
  * `.sha256` and an updater bundle with its minisign signature `.sig` (Tauri
- * updater), named as `desktopAssets` says; an optional line
+ * updater), named as `desktopAssets` says (`KeepMind_OS_<v>_…`, the names the desktop CI writes); an optional line
  * `min-version: x.y.z` in the release body (the rest of the body is the notes).
  */
 export const DESKTOP_TAG_PREFIX = "desktop-v";
@@ -53,8 +53,8 @@ interface GitHubRelease {
   assets?: GitHubAsset[];
 }
 
-export const dmgName = (version: string) => `agentes_${version}_universal.dmg`;
-export const updaterName = (version: string) => `agentes_${version}_universal.app.tar.gz`;
+export const dmgName = (version: string) => `KeepMind_OS_${version}_universal.dmg`;
+export const updaterName = (version: string) => `KeepMind_OS_${version}_universal.app.tar.gz`;
 
 /**
  * The builds the app comes in, as `/desktop/latest` and the updater ask for them (Tauri's `{{target}}` and
@@ -70,12 +70,12 @@ export type DesktopTarget = "darwin" | "windows" | "windows-arm64" | "linux" | "
  */
 export function desktopAssets(target: DesktopTarget, version: string): { download: string; updater: string } {
   if (target === "windows" || target === "windows-arm64") {
-    const installer = `agentes_${version}_${target === "windows" ? "x64" : "arm64"}-setup.exe`;
+    const installer = `KeepMind_OS_${version}_${target === "windows" ? "x64" : "arm64"}-setup.exe`;
     return { download: installer, updater: installer };
   }
   if (target === "linux" || target === "linux-arm64") {
     const arch = target === "linux" ? "amd64" : "arm64";
-    return { download: `agentes_${version}_${arch}.deb`, updater: `agentes_${version}_${arch}.AppImage` };
+    return { download: `KeepMind_OS_${version}_${arch}.deb`, updater: `KeepMind_OS_${version}_${arch}.AppImage` };
   }
   return { download: dmgName(version), updater: updaterName(version) };
 }

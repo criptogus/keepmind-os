@@ -145,8 +145,8 @@ function Linux({ children }: { children: ReactNode }) {
 export function Scene({ id, version, file }: { id: SceneId; version: string; file?: string }) {
   const { t } = useTranslation();
   const v = version || "1.0.0";
-  const installer = file?.endsWith(".exe") ? file : `agentes_${v}_x64-setup.exe`;
-  const deb = file?.endsWith(".deb") ? file : `agentes_${v}_amd64.deb`;
+  const installer = file?.endsWith(".exe") ? file : `KeepMind_OS_${v}_x64-setup.exe`;
+  const deb = file?.endsWith(".deb") ? file : `KeepMind_OS_${v}_amd64.deb`;
   switch (id) {
     case "macDrag":
       return (

@@ -22,7 +22,7 @@ const release = (version: string, extra: Record<string, unknown> = {}) => ({
   tag_name: `desktop-v${version}`,
   body: "Melhorias.\nmin-version: 0.1.0\n",
   published_at: "2026-10-17T12:00:00Z",
-  assets: [asset(`agentes_${version}_universal.dmg`), asset(`agentes_${version}_universal.dmg.sha256`)],
+  assets: [asset(`KeepMind_OS_${version}_universal.dmg`), asset(`KeepMind_OS_${version}_universal.dmg.sha256`)],
   ...extra,
 });
 
@@ -74,7 +74,7 @@ test("without a token the desktop endpoints answer 404", async () => {
   const github = fakeGithub([release("0.2.0")]);
   t = await createTestServer({ desktopFetch: github.fetch });
   expect((await server().app.request("/api/desktop/latest?target=darwin&arch=arm64")).status).toBe(404);
-  expect((await server().app.request("/api/desktop/download/0.2.0/agentes_0.2.0_universal.dmg")).status).toBe(404);
+  expect((await server().app.request("/api/desktop/download/0.2.0/KeepMind_OS_0.2.0_universal.dmg")).status).toBe(404);
   expect(github.calls).toEqual([]);
 });
 
@@ -93,7 +93,7 @@ test("latest: the newest desktop-v* release with its dmg and checksum, cached, o
   expect(res.headers.get("access-control-allow-origin")).toBe("*");
   expect(await res.json()).toEqual({
     version: "0.2.0",
-    url: "http://localhost:3000/api/desktop/download/0.2.0/agentes_0.2.0_universal.dmg",
+    url: "http://localhost:3000/api/desktop/download/0.2.0/KeepMind_OS_0.2.0_universal.dmg",
     sha256: SUM,
     notes: "Melhorias.",
     publishedAt: "2026-10-17T12:00:00Z",
@@ -118,10 +118,10 @@ test("latest: the newest desktop-v* release with its dmg and checksum, cached, o
 test("update: Tauri's format for signed builds, 204 when the release has no updater bundle", async () => {
   const signed = release("0.3.0", {
     assets: [
-      asset("agentes_0.3.0_universal.dmg"),
-      asset("agentes_0.3.0_universal.dmg.sha256"),
-      asset("agentes_0.3.0_universal.app.tar.gz"),
-      asset("agentes_0.3.0_universal.app.tar.gz.sig"),
+      asset("KeepMind_OS_0.3.0_universal.dmg"),
+      asset("KeepMind_OS_0.3.0_universal.dmg.sha256"),
+      asset("KeepMind_OS_0.3.0_universal.app.tar.gz"),
+      asset("KeepMind_OS_0.3.0_universal.app.tar.gz.sig"),
     ],
   });
   const github = fakeGithub([signed]);
@@ -132,7 +132,7 @@ test("update: Tauri's format for signed builds, 204 when the release has no upda
     version: "0.3.0",
     notes: "Melhorias.",
     pub_date: "2026-10-17T12:00:00Z",
-    url: "http://localhost:3000/api/desktop/download/0.3.0/agentes_0.3.0_universal.app.tar.gz",
+    url: "http://localhost:3000/api/desktop/download/0.3.0/KeepMind_OS_0.3.0_universal.app.tar.gz",
     signature: "SIGNATURE-BASE64",
   });
   // The web view's endpoint doesn't carry the updater fields.
@@ -148,19 +148,19 @@ test("update: Tauri's format for signed builds, 204 when the release has no upda
 
 test("Windows and Linux: each platform's own files, from the newest release that has them", async () => {
   const all = (v: string) => [
-    asset(`agentes_${v}_universal.dmg`),
-    asset(`agentes_${v}_universal.dmg.sha256`),
+    asset(`KeepMind_OS_${v}_universal.dmg`),
+    asset(`KeepMind_OS_${v}_universal.dmg.sha256`),
     ...["x64", "arm64"].flatMap((arch) => [
-      asset(`agentes_${v}_${arch}-setup.exe`),
-      asset(`agentes_${v}_${arch}-setup.exe.sha256`),
-      asset(`agentes_${v}_${arch}-setup.exe.sig`),
+      asset(`KeepMind_OS_${v}_${arch}-setup.exe`),
+      asset(`KeepMind_OS_${v}_${arch}-setup.exe.sha256`),
+      asset(`KeepMind_OS_${v}_${arch}-setup.exe.sig`),
     ]),
     ...["amd64", "arm64"].flatMap((arch) => [
-      asset(`agentes_${v}_${arch}.deb`),
-      asset(`agentes_${v}_${arch}.deb.sha256`),
-      asset(`agentes_${v}_${arch}.AppImage`),
-      asset(`agentes_${v}_${arch}.AppImage.sha256`),
-      asset(`agentes_${v}_${arch}.AppImage.sig`),
+      asset(`KeepMind_OS_${v}_${arch}.deb`),
+      asset(`KeepMind_OS_${v}_${arch}.deb.sha256`),
+      asset(`KeepMind_OS_${v}_${arch}.AppImage`),
+      asset(`KeepMind_OS_${v}_${arch}.AppImage.sha256`),
+      asset(`KeepMind_OS_${v}_${arch}.AppImage.sig`),
     ]),
   ];
   // 0.4.0 was a Mac-only build: Windows and Linux keep 0.3.0.
@@ -179,25 +179,25 @@ test("Windows and Linux: each platform's own files, from the newest release that
   const windows = await latest("target=windows&arch=x86_64");
   expect(windows).toMatchObject({
     version: "0.3.0",
-    url: "http://localhost:3000/api/desktop/download/0.3.0/agentes_0.3.0_x64-setup.exe",
+    url: "http://localhost:3000/api/desktop/download/0.3.0/KeepMind_OS_0.3.0_x64-setup.exe",
   });
   expect(windows).not.toHaveProperty("appImage");
   // A deb is the first download on Linux; the AppImage, which updates itself, is offered beside it for a
   // distribution that takes no deb.
   expect(await latest("target=linux&arch=x64")).toMatchObject({
-    url: "http://localhost:3000/api/desktop/download/0.3.0/agentes_0.3.0_amd64.deb",
+    url: "http://localhost:3000/api/desktop/download/0.3.0/KeepMind_OS_0.3.0_amd64.deb",
     appImage: {
-      url: "http://localhost:3000/api/desktop/download/0.3.0/agentes_0.3.0_amd64.AppImage",
+      url: "http://localhost:3000/api/desktop/download/0.3.0/KeepMind_OS_0.3.0_amd64.AppImage",
       sha256: SUM,
     },
   });
   // ARM64 has builds of its own on Windows and Linux; a chip with none gets nothing.
   expect(await latest("target=windows&arch=arm64")).toMatchObject({
-    url: "http://localhost:3000/api/desktop/download/0.3.0/agentes_0.3.0_arm64-setup.exe",
+    url: "http://localhost:3000/api/desktop/download/0.3.0/KeepMind_OS_0.3.0_arm64-setup.exe",
   });
   expect(await latest("target=linux&arch=aarch64")).toMatchObject({
-    url: "http://localhost:3000/api/desktop/download/0.3.0/agentes_0.3.0_arm64.deb",
-    appImage: { url: "http://localhost:3000/api/desktop/download/0.3.0/agentes_0.3.0_arm64.AppImage" },
+    url: "http://localhost:3000/api/desktop/download/0.3.0/KeepMind_OS_0.3.0_arm64.deb",
+    appImage: { url: "http://localhost:3000/api/desktop/download/0.3.0/KeepMind_OS_0.3.0_arm64.AppImage" },
   });
   expect(await latest("target=linux&arch=armv7")).toBe(404);
   expect(await latest("target=freebsd&arch=x64")).toBe(404);
@@ -207,17 +207,17 @@ test("Windows and Linux: each platform's own files, from the newest release that
     return res.status === 200 ? ((await res.json()) as { url: string; signature: string }) : res.status;
   };
   expect(await update("target=windows&arch=x86_64&current=0.2.0")).toMatchObject({
-    url: "http://localhost:3000/api/desktop/download/0.3.0/agentes_0.3.0_x64-setup.exe",
+    url: "http://localhost:3000/api/desktop/download/0.3.0/KeepMind_OS_0.3.0_x64-setup.exe",
     signature: "SIGNATURE-BASE64",
   });
   expect(await update("target=linux&arch=x86_64&current=0.2.0&bundle=appimage")).toMatchObject({
-    url: "http://localhost:3000/api/desktop/download/0.3.0/agentes_0.3.0_amd64.AppImage",
+    url: "http://localhost:3000/api/desktop/download/0.3.0/KeepMind_OS_0.3.0_amd64.AppImage",
   });
   expect(await update("target=windows&arch=aarch64&current=0.2.0")).toMatchObject({
-    url: "http://localhost:3000/api/desktop/download/0.3.0/agentes_0.3.0_arm64-setup.exe",
+    url: "http://localhost:3000/api/desktop/download/0.3.0/KeepMind_OS_0.3.0_arm64-setup.exe",
   });
   expect(await update("target=linux&arch=aarch64&current=0.2.0&bundle=appimage")).toMatchObject({
-    url: "http://localhost:3000/api/desktop/download/0.3.0/agentes_0.3.0_arm64.AppImage",
+    url: "http://localhost:3000/api/desktop/download/0.3.0/KeepMind_OS_0.3.0_arm64.AppImage",
   });
   expect(await update("target=linux&arch=aarch64&current=0.2.0&bundle=deb")).toBe(204);
   // A deb install can't take the AppImage (the updater would refuse it after the whole download): it downloads
@@ -231,10 +231,10 @@ test("Windows and Linux: each platform's own files, from the newest release that
 test("download links are on PUBLIC_URL, whatever address the request came in on", async () => {
   const signed = release("0.6.0", {
     assets: [
-      asset("agentes_0.6.0_universal.dmg"),
-      asset("agentes_0.6.0_universal.dmg.sha256"),
-      asset("agentes_0.6.0_universal.app.tar.gz"),
-      asset("agentes_0.6.0_universal.app.tar.gz.sig"),
+      asset("KeepMind_OS_0.6.0_universal.dmg"),
+      asset("KeepMind_OS_0.6.0_universal.dmg.sha256"),
+      asset("KeepMind_OS_0.6.0_universal.app.tar.gz"),
+      asset("KeepMind_OS_0.6.0_universal.app.tar.gz.sig"),
     ],
   });
   t = await createTestServer({
@@ -247,8 +247,8 @@ test("download links are on PUBLIC_URL, whatever address the request came in on"
     return [((await latest.json()) as { url: string }).url, ((await update.json()) as { url: string }).url];
   };
   const onPublicUrl = [
-    "https://keepmind.io/api/desktop/download/0.6.0/agentes_0.6.0_universal.dmg",
-    "https://keepmind.io/api/desktop/download/0.6.0/agentes_0.6.0_universal.app.tar.gz",
+    "https://keepmind.io/api/desktop/download/0.6.0/KeepMind_OS_0.6.0_universal.dmg",
+    "https://keepmind.io/api/desktop/download/0.6.0/KeepMind_OS_0.6.0_universal.app.tar.gz",
   ];
   expect(await links("https://keepmind.io")).toEqual(onPublicUrl);
   expect(await links("https://keepmind.io")).toEqual(onPublicUrl);
@@ -257,9 +257,9 @@ test("download links are on PUBLIC_URL, whatever address the request came in on"
 test("download streams an asset of a desktop-v* release, as an attachment; nothing else", async () => {
   const github = fakeGithub([release("0.2.0"), { tag_name: "v1.0.0", assets: [asset("secret.txt")] }]);
   t = await createTestServer({ env: { DESKTOP_RELEASES_TOKEN: "ghp_test" }, desktopFetch: github.fetch });
-  const res = await server().app.request("/api/desktop/download/0.2.0/agentes_0.2.0_universal.dmg");
+  const res = await server().app.request("/api/desktop/download/0.2.0/KeepMind_OS_0.2.0_universal.dmg");
   expect(res.status).toBe(200);
-  expect(res.headers.get("content-disposition")).toBe('attachment; filename="agentes_0.2.0_universal.dmg"');
+  expect(res.headers.get("content-disposition")).toBe('attachment; filename="KeepMind_OS_0.2.0_universal.dmg"');
   expect(res.headers.get("content-type")).toBe("application/x-apple-diskimage");
   expect(await res.text()).toBe("DMG-BYTES");
   expect((await server().app.request("/api/desktop/download/0.2.0/other.dmg")).status).toBe(404);

@@ -35,14 +35,14 @@ export function buildTarget({ system, arm }: InstallBuild) {
   return { target: system, arch: arm ? "aarch64" : "x86_64" } as const;
 }
 
-/** The file a release's link downloads (`agentes_<v>_arm64-setup.exe`…), or the name a build's file would have. */
+/** The file a release's link downloads (`KeepMind_OS_<v>_arm64-setup.exe`…), or the name a build's file would have. */
 export function fileOf({ system, arm }: InstallBuild, release: DesktopRelease | null): string {
   const named = release?.url.split("?")[0]?.split("/").pop();
   if (named) return decodeURIComponent(named);
   const v = release?.version ?? "<version>";
-  if (system === "windows") return `agentes_${v}_${arm ? "arm64" : "x64"}-setup.exe`;
-  if (system === "linux") return `agentes_${v}_${arm ? "arm64" : "amd64"}.deb`;
-  return `agentes_${v}_universal.dmg`;
+  if (system === "windows") return `KeepMind_OS_${v}_${arm ? "arm64" : "x64"}-setup.exe`;
+  if (system === "linux") return `KeepMind_OS_${v}_${arm ? "arm64" : "amd64"}.deb`;
+  return `KeepMind_OS_${v}_universal.dmg`;
 }
 
 /** What makes a downloaded AppImage run: it comes without the right to, and has no installer. */

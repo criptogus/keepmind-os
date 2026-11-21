@@ -8,10 +8,10 @@ name: Desktop
 # each with the updater bundle signed with the updater key;
 # one job publishes every file in the GitHub Release (the server reads those names, apps/server
 # routes/desktop.ts):
-#   macOS    agentes_<v>_universal.dmg (+ .sha256), agentes_<v>_universal.app.tar.gz (+ .sig)
-#   Windows  agentes_<v>_x64-setup.exe, agentes_<v>_arm64-setup.exe (+ .sha256, + .sig: the installer is its own
+#   macOS    KeepMind_OS_<v>_universal.dmg (+ .sha256), KeepMind_OS_<v>_universal.app.tar.gz (+ .sig)
+#   Windows  KeepMind_OS_<v>_x64-setup.exe, KeepMind_OS_<v>_arm64-setup.exe (+ .sha256, + .sig: the installer is its own
 #            updater bundle)
-#   Linux    agentes_<v>_{amd64,arm64}.deb (+ .sha256), agentes_<v>_{amd64,arm64}.AppImage (+ .sha256, + .sig)
+#   Linux    KeepMind_OS_<v>_{amd64,arm64}.deb (+ .sha256), KeepMind_OS_<v>_{amd64,arm64}.AppImage (+ .sha256, + .sig)
 # Every app carries the runner and agent-browser (ADR 0040), and the server's own files, built once from the
 # same commit (the `server` job: JavaScript and WebAssembly, the same on every system), for "Run agentes.chat
 # on this computer" (ADR 0066; tauri.native.conf.json adds them to the resources). `none` only builds the
