@@ -30,6 +30,60 @@ export function archParam(rustArch: string): string {
   return rustArch;
 }
 
+/** The repo the desktop CI publishes releases to (`.github/workflows/desktop.yml`). */
+const RELEASES_REPO = "criptogus/keepmind-os";
+const RELEASES_API = `https://api.github.com/repos/${RELEASES_REPO}/releases?per_page=30`;
+
+/** The download asset a release carries for this build, named as the CI names it (`KeepMind_OS_<v>_…`). */
+export function githubAsset(os: string, rustArch: string, version: string): string | null {
+  const arm = rustArch === "aarch64" || rustArch === "arm64";
+  if (os === "macos" || os === "darwin") return `KeepMind_OS_${version}_universal.dmg`;
+  if (os === "windows") return `KeepMind_OS_${version}_${arm ? "arm64" : "x64"}-setup.exe`;
+  if (os === "linux") return `KeepMind_OS_${version}_${arm ? "arm64" : "amd64"}.deb`;
+  return null;
+}
+
+interface GitHubRelease {
+  tag_name?: string;
+  draft?: boolean;
+  prerelease?: boolean;
+  body?: string | null;
+  published_at?: string | null;
+  html_url?: string;
+  assets?: { name?: string; browser_download_url?: string }[];
+}
+
+/**
+ * The newest `desktop-v*` GitHub release with this build's asset, as a LatestRelease (its download is the
+ * asset's own URL). Null when GitHub can't be read or no release has the file — the keepmind.io answer stands.
+ */
+export async function checkGitHub(os: string, rustArch: string, signal?: AbortSignal): Promise<LatestRelease | null> {
+  try {
+    const res = await fetch(RELEASES_API, { headers: { accept: "application/vnd.github+json" }, signal });
+    if (!res.ok) return null;
+    const releases = (await res.json()) as GitHubRelease[];
+    const release = releases.find(
+      (r) => !r.draft && !r.prerelease && typeof r.tag_name === "string" && r.tag_name.startsWith("desktop-v"),
+    );
+    const tag = release?.tag_name;
+    if (!release || !tag) return null;
+    const version = tag.slice("desktop-v".length);
+    const assetName = githubAsset(os, rustArch, version);
+    const asset = assetName ? release.assets?.find((a) => a.name === assetName) : undefined;
+    if (!asset?.browser_download_url) return null;
+    const cut = (release.body ?? "").indexOf("<!-- install -->");
+    const notes = (cut < 0 ? (release.body ?? "") : (release.body ?? "").slice(0, cut)).trim();
+    return {
+      version,
+      url: asset.browser_download_url,
+      notes: notes || undefined,
+      publishedAt: release.published_at ?? undefined,
+    };
+  } catch {
+    return null;
+  }
+}
+
 export function latestUrl(os: string, rustArch: string, site: string = SITE_URL): string {
   const query = new URLSearchParams({ target: targetParam(os), arch: archParam(rustArch) });
   return `${site}/api/desktop/latest?${query}`;

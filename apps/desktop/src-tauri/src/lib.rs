@@ -459,12 +459,6 @@ const UPDATE_PROGRESS_EVENT: &str = "update://progress";
 /// Err "cancelled": Cancel dropped the check or the download.
 #[tauri::command]
 async fn update_install(app: AppHandle) -> Result<bool, String> {
-    if app.config().identifier == "io.keepmind.teams" {
-        return Err("Automatic updates are not configured for this KeepMind build.".into());
-    }
-    // Windows runs the installer and ends the app at once, and the installer can't replace the files of a
-    // runner or a server still running: they stop first there (then the plugin's own cleanup, which this
-    // replaces).
     let before_exit = app.clone();
     let updater = app
         .updater_builder()
@@ -582,8 +576,8 @@ pub fn run() {
         // the site may not do, so the click did nothing. The main window routes those itself (`on_new_window`).
         .plugin(tauri_plugin_opener::Builder::new().open_js_links_on_click(false).build())
         .plugin(tauri_plugin_positioner::init())
-        // KeepMind disables automatic updates and ships no updater configuration.
-        // Registering the plugin without that configuration aborts startup.
+        // Self-update (ADR 0036 §9): the endpoint and key are in tauri.conf.json's plugins.updater.
+        .plugin(tauri_plugin_updater::Builder::new().build())
         .manage(Runners::default())
         .manage(PopoverClock(Mutex::new(None)))
         .manage(servers::Servers::default())

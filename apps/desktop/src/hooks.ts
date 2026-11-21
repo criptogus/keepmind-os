@@ -9,6 +9,7 @@ import type { ServerWorkspaces } from "./control/server";
 import type { Home } from "./control/store";
 import {
   CHECK_EVERY_MS,
+  checkGitHub,
   type LatestRelease,
   latestUrl,
   parseLatest,
@@ -109,9 +110,18 @@ export function useUpdateCheck(auto: boolean): UpdateCheck {
     const timer = setTimeout(() => quit.abort(), 15_000);
     try {
       const res = await fetch(latestUrl(os, arch), { headers: { accept: "application/json" }, signal: quit.signal });
-      // 404: no release published yet (or the server can't read them): nothing to offer.
-      const found = res.ok ? parseLatest(await res.json()) : null;
-      if (!res.ok && res.status !== 404) throw new Error(String(res.status));
+      // 404: nothing offered there — the GitHub releases still name the newest build.
+      let found: LatestRelease | null = null;
+      if (res.ok) {
+        try {
+          found = parseLatest(await res.json());
+        } catch {
+          found = null;
+        }
+      } else if (res.status !== 404) {
+        throw new Error(String(res.status));
+      }
+      found ??= await checkGitHub(os, arch, quit.signal);
       setLatest(found);
       setCheckedAt(Date.now());
       return updateStateOf(version, found);

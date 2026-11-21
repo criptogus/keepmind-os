@@ -220,7 +220,8 @@ jobs:
 
       - run: bun install --frozen-lockfile
 
-      # Automatic updates are disabled; no updater key is required. Signing and notarization (Developer ID .p12 + App Store Connect API
+      # Updater bundles are signed with TAURI_SIGNING_PRIVATE_KEY when set (the publish job puts them and their
+      # signatures in latest.json). Signing and notarization (Developer ID .p12 + App Store Connect API
       # key) are optional (ADR 0036 §10): with all six Apple secrets the app is signed and notarized; with none,
       # it is ad-hoc signed and the first open asks for "Open Anyway"; some but not all is a mistake.
       - name: Signing secrets
@@ -413,6 +414,14 @@ jobs:
           mkdir -p out
           cp "$SRC" "out/$NAME"
           (cd out && shasum -a 256 "$NAME" > "$NAME.sha256")
+          # The updater bundle and its signature (TAURI_SIGNING_PRIVATE_KEY signs them at build time): the
+          # in-app updater installs this .app.tar.gz, never the .dmg.
+          find "$BUNDLE" \( -name '*.app.tar.gz' -o -name '*.app.tar.gz.sig' \) | while read -r f; do
+            case "$f" in
+              *.sig) cp "$f" "out/KeepMind_OS_${VERSION}_universal.app.tar.gz.sig" ;;
+              *) cp "$f" "out/KeepMind_OS_${VERSION}_universal.app.tar.gz" ;;
+            esac
+          done
           ls -l out
 
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -549,6 +558,10 @@ jobs:
           mkdir -p out
           cp "$SRC" "out/$NAME"
           (cd out && sha256sum "$NAME" > "$NAME.sha256")
+          # The updater's signature for the installer itself (the exe is the update bundle on Windows).
+          find "$BUNDLE" -name '*.sig' | while read -r f; do
+            cp "$f" "out/KeepMind_OS_${VERSION}_${{ matrix.arch }}-setup.exe.sig"
+          done
           ls -l out
 
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -679,6 +692,10 @@ jobs:
           cp "$DEB" "out/KeepMind_OS_${VERSION}_$PKG.deb"
           cp "$APPIMAGE" "out/KeepMind_OS_${VERSION}_$PKG.AppImage"
           (cd out && for f in "KeepMind_OS_${VERSION}_$PKG.deb" "KeepMind_OS_${VERSION}_$PKG.AppImage"; do sha256sum "$f" > "$f.sha256"; done)
+          # The updater's signature for the AppImage (the update bundle on Linux).
+          find "$BUNDLE" -name '*.AppImage.sig' | while read -r f; do
+            cp "$f" "out/KeepMind_OS_${VERSION}_$PKG.AppImage.sig"
+          done
           ls -l out
 
       # What the deb puts on the computer: the two sidecars and the server's files (the AppImage has the same).
@@ -782,5 +799,32 @@ jobs:
           # How to open it the first time while the builds aren't notarized/signed (ADR 0036 §10). It starts with
           # <!-- install -->, where the server cuts the notes the app shows on an update.
           { echo; sed -e "s|{{repo}}|$GITHUB_REPOSITORY|g" -e "s|{{version}}|$VERSION|g" .github/desktop-install.md; } >> notes.txt
+          # latest.json: the updater's manifest (plugins.updater's endpoint is releases/latest/download/latest.json).
+          # Each platform points at its signed bundle; a missing signature leaves that platform on manual download.
+          BASE="https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG"
+          platform() { # <platform-key> <bundle-file> <signature-file>
+            if [ -f "out/$3" ] && [ -f "out/$2" ]; then
+              jq -n --arg k "$1" --arg u "$BASE/$2" --rawfile s "out/$3" \
+                '{($k): {signature: $s, url: $u}}'
+            else
+              echo "::warning::No updater signature for $2: $1 can't self-update"
+            fi
+          }
+          platforms='{}'
+          for spec in \
+            "darwin-aarch64 KeepMind_OS_${VERSION}_universal.app.tar.gz KeepMind_OS_${VERSION}_universal.app.tar.gz.sig" \
+            "darwin-x86_64 KeepMind_OS_${VERSION}_universal.app.tar.gz KeepMind_OS_${VERSION}_universal.app.tar.gz.sig" \
+            "windows-x86_64 KeepMind_OS_${VERSION}_x64-setup.exe KeepMind_OS_${VERSION}_x64-setup.exe.sig" \
+            "windows-aarch64 KeepMind_OS_${VERSION}_arm64-setup.exe KeepMind_OS_${VERSION}_arm64-setup.exe.sig" \
+            "linux-x86_64 KeepMind_OS_${VERSION}_amd64.AppImage KeepMind_OS_${VERSION}_amd64.AppImage.sig" \
+            "linux-aarch64 KeepMind_OS_${VERSION}_arm64.AppImage KeepMind_OS_${VERSION}_arm64.AppImage.sig"; do
+            set -- $spec
+            part=$(platform "$1" "$2" "$3")
+            [ -n "$part" ] && platforms=$(jq -n --argjson a "$platforms" --argjson b "$part" '$a * $b')
+          done
+          sed '/<!-- install -->/,$d' notes.txt > update-notes.txt
+          jq -n --arg v "$VERSION" --rawfile notes update-notes.txt \
+            --arg d "$(date -u +%Y-%m-%dT%H:%M:%SZ)" --argjson p "$platforms" \
+            '{version: $v, notes: $notes, pub_date: $d, platforms: $p}' > out/latest.json
           ls -l out
           gh release create "$TAG" out/* --title "KeepMind OS $VERSION" --notes-file notes.txt
