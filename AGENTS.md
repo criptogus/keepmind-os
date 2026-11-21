@@ -61,7 +61,8 @@ Never run the whole test suite to fix one failure: run the one file. CI runs eve
 
 - Work lands on `main`. Fetch and rebase onto `origin/main` right before pushing.
 - After a push, wait for the "CI result" check of your commit and fix it if it is red.
-  Do not stack new features on a red `main`.
+  Do not stack new features on a red `main`. Every push to `main` gets its own run (about
+  30 minutes for a change that touches everything) and runs no longer cancel each other.
 - The Desktop workflow refuses a release (`fix`, `feature`, `major`) unless that check
   passed on the commit. `none` only makes a test build.
 - Do not delete branches, tags, releases or data, and do not change repository settings,

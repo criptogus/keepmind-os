@@ -41,11 +41,15 @@ env:
   BACKUP_IMAGE: ghcr.io/criptogus/keepmind-backup
   SPEECH_IMAGE: ghcr.io/criptogus/keepmind-speech
 
-# A newer push supersedes a running check of the same branch or pull request (on main only the newest
-# commit's image matters); a release tag's run is never cancelled. A pull request's runs and a manual run
-# on its branch are two groups.
+# A newer push supersedes a running check of the same pull request or branch, except on main: there every
+# push is a group of its own (its commit), so each commit gets a whole run and a red one names the commit
+# that broke it. With one group for main, pushes in a row cancelled each other and none finished; and since
+# a push's run checks only what that push changed, a cancelled one left its changes unchecked. A release
+# tag's run is never cancelled. A pull request's runs and a manual run on its branch are two groups.
 concurrency:
-  group: ci-${{ github.ref }}
+  group: >-
+    ci-${{ github.ref }}-${{ (github.event_name == 'push' && github.ref_type == 'branch' &&
+    github.ref_name == github.event.repository.default_branch) && github.sha || 'latest' }}
   cancel-in-progress: ${{ github.ref_type != 'tag' }}
 
 defaults:
@@ -707,7 +711,17 @@ jobs:
         working-directory: /tmp/digests
         env:
           META: ${{ steps.meta.outputs.json }}
+          GH_TOKEN: ${{ github.token }}
         run: |
+          # main's runs no longer cancel each other, so an older commit's run can get here after a newer
+          # one's: only the newest commit of main moves the `edge` tag.
+          if [ "$GITHUB_REF_TYPE" = branch ]; then
+            head=$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_REF_NAME" --jq .sha)
+            if [ "$head" != "$GITHUB_SHA" ]; then
+              echo "::notice::$GITHUB_REF_NAME moved on to $head: its run tags the images, not this one."
+              exit 0
+            fi
+          fi
           app=() backup=() speech=()
           for tag in $(jq -r '.tags[]' <<<"$META"); do
             app+=(-t "$tag")
