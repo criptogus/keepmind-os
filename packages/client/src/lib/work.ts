@@ -268,7 +268,7 @@ export function workFromSteps(steps: RunStep[], run?: Pick<Run, "createdAt" | "f
       ...(autoApproved ? { autoApproved } : {}),
       // A permission check opens on the whole command it checked (recorded masked), not on its JSON.
       input: source !== null ? null : typeof s.data.command === "string" ? s.data.command : shortJson(input),
-      result: source === null && content && !check ? clip(content) : null,
+      result: source === null && content && !check ? clip(readableResult(content)) : null,
       ...(source !== null
         ? {
             code: {
@@ -443,6 +443,22 @@ export function stopsMovedOn(
 const OPEN_MAX = 1200;
 
 const clip = (text: string, max = OPEN_MAX) => (text.length > max ? `${text.slice(0, max - 1)}…` : text);
+
+/**
+ * A tool's answer as people read it: the server keeps a JSON answer without its indentation (the agent pays for
+ * every space on each later turn), so it gets its lines back here. Only when writing it again gives the same
+ * text, so a number longer than a double holds is shown as it was, on one line.
+ */
+export const readableResult = (content: string) => {
+  const first = content[0];
+  if ((first !== "{" && first !== "[") || content.includes("\n")) return content;
+  try {
+    const value = JSON.parse(content) as unknown;
+    return JSON.stringify(value) === content ? JSON.stringify(value, null, 2) : content;
+  } catch {
+    return content;
+  }
+};
 
 const shortJson = (input: Record<string, unknown>) => {
   if (Object.keys(input).length === 0) return null;

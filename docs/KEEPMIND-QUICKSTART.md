@@ -40,6 +40,10 @@ Generate a separate owner token, save it privately, and set
 `https://keepmind.io/owner#claim=TOKEN` to claim the first owner. This deployment
 expects control of the domain, DNS pointed at the host and ports 80/443 available.
 
+Optional, recommended: set `TYPESAFE_API_KEY` (Jev). It picks which agent answers a message nobody
+@mentioned and which tools each answer loads, in a fraction of a second. Without it a small model on the
+workspace's own key does that, slower and paid by that key. The owner can also add it in Settings › AI accounts.
+
 ```sh
 docker compose --env-file deploy/keepmind/.env -f deploy/keepmind/compose.yml up -d --build
 ```

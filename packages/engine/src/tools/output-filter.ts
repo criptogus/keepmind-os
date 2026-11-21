@@ -33,12 +33,51 @@ const DUP_RUN = 3;
 const SIGNAL_BUDGET = 4_000;
 const SIGNAL_LINES = 40;
 
+/** Below this an indented answer costs too little to touch. */
+const JSON_MIN_CHARS = 400;
+
+/**
+ * An answer that is one indented JSON document, without its indentation: connectors print their answers
+ * with two spaces a level, and that whitespace is resent with every later turn of the run. Only spaces
+ * and line breaks between tokens go. Strings and numbers are copied as written, never parsed and written
+ * again, so a long id keeps every digit. Anything that isn't valid JSON comes back untouched.
+ */
+export function minifyJsonOutput(text: string): string {
+  if (text.length < JSON_MIN_CHARS) return text;
+  const first = text.trimStart()[0];
+  if ((first !== "{" && first !== "[") || !/\n[ \t]+/.test(text)) return text;
+  try {
+    JSON.parse(text);
+  } catch {
+    return text;
+  }
+  let out = "";
+  let inString = false;
+  let start = 0;
+  for (let i = 0; i < text.length; i++) {
+    const c = text.charCodeAt(i);
+    if (inString) {
+      if (c === 92) i++;
+      else if (c === 34) inString = false;
+    } else if (c === 34) {
+      inString = true;
+    } else if (c === 32 || c === 10 || c === 13 || c === 9) {
+      out += text.slice(start, i);
+      start = i + 1;
+    }
+  }
+  return out + text.slice(start);
+}
+
 /**
  * Terminal cleanup: ANSI codes out, `\r` progress overwrites resolved to their final state,
- * spinner-only lines dropped, runs of the same line collapsed. No-ops on ordinary text.
+ * spinner-only lines dropped, runs of the same line collapsed. No-ops on ordinary text. An indented JSON
+ * answer only loses its indentation (`minifyJsonOutput`): its lines are data, never noise to drop.
  */
 export function compressToolOutput(text: string): string {
   if (!text) return text;
+  const compact = minifyJsonOutput(text);
+  if (compact !== text) return compact;
   const lines = text
     .replace(/\r\n/g, "\n")
     .split("\n")

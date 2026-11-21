@@ -42,6 +42,35 @@ Rules are in [AGENTS.md](../AGENTS.md) and [CLAUDE.md](../CLAUDE.md); release ga
 9. **Stale documents.** `KEEPMIND-ROADMAP.md` was last updated on 2026-11-15, before the
    goals, reminders, scheduled messages and three desktop releases. Bring it up to date.
 
+## Agent cost and speed: what was measured on 2026-11-21
+
+A default agent answering "oi" in a channel, on the server's real wiring with the fake model:
+
+| | System text | Tool schemas | About |
+| --- | --- | --- | --- |
+| Tools on demand (the server's default) | 24,300 chars | 31,800 chars, 32 tools | 14,000 tokens |
+| Every tool listed (tools on demand off) | 27,200 chars | 111,800 chars, 101 tools | 34,700 tokens |
+
+The settled part is cached for an hour (ADR 0050), so a conversation pays most of it at the cache price.
+"How you work" (9,400 chars) and "How to reply" (8,800) are the two largest sections.
+
+Done from this: a connector's indented JSON answer is kept without its indentation
+(`minifyJsonOutput` in `packages/engine/src/tools/output-filter.ts`, 25% and 38% fewer characters on a sample list of issues and of
+calendar events, resent on every later turn of the run), and the apps give it its lines back for people
+(`readableResult` in `packages/client/src/lib/work.ts`). The Jev key is in the deploy's `.env.example`.
+
+Not done, and why: the prompt's words, the router, the hand-offs between agents and the speed setting were
+tuned upstream against real models (`bun run eval:behavior`, `eval:router`, `eval:turns`, `eval:conversation`).
+Those evals need provider keys. Changing any of them without running the evals before and after is a guess.
+
+Next, in order:
+
+1. Run the evals above with real keys and keep the numbers as the baseline.
+2. Show a run's trace in the apps. `GET …/runs/{runId}` already returns `trace` (time by step kind, tokens,
+   time per tool, stalls: `packages/engine/src/run-trace.ts`) and no screen reads it. One line in the opened
+   tool block of a reply, on the web and the phone, following `.claude/skills/ui-polish`.
+3. With the baseline, shorten "How you work" and "How to reply" one rule at a time, an eval run per change.
+
 ## Left as they are, on purpose
 
 - **Branch protection on `main` is off.** The owner pushes to `main` directly and the
