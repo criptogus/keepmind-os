@@ -39,9 +39,5 @@ export const goals = pgTable(
     createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
   },
-  (t) => [
-    index().on(t.orgId, t.status),
-    index().on(t.orgId, t.ownerAgentId),
-    index().on(t.orgId, t.createdAt),
-  ],
+  (t) => [index().on(t.orgId, t.status), index().on(t.orgId, t.ownerAgentId), index().on(t.orgId, t.createdAt)],
 );

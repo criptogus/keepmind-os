@@ -1,7 +1,7 @@
 # KeepMind OS rebuild
 
 Based on agentes-chat/agentes-chat at a01d9fdd035da52d828ad23745bce04a2c245d57.
-The upstream license, NOTICE and About attribution are retained. Package scopes and internal protocol IDs remain stable to make upstream updates tractable.
+The upstream license, NOTICE and About attribution are retained. Packages were renamed to the `@keepmind/*` scope; internal protocol IDs (the `agenteschat://` scheme, `X-Agentes-*` headers, `AGENTES_*` variables) remain stable. The scope rename makes every upstream merge touch import lines, so merge upstream in small, frequent steps.
 
 ## Architecture
 
@@ -23,7 +23,7 @@ User choice: a shared server for teams at https://keepmind.io. Bun/Hono, Postgre
 
 ## Deployment
 
-Copy `deploy/keepmind/.env.example` to `deploy/keepmind/.env`, set unique secrets and the owner claim hash. Do not expose a fresh instance without the hash. Run:
+Copy `deploy/keepmind/.env.example` to `deploy/keepmind/.env`, set unique secrets and the owner claim hash (`OWNER_CLAIM_SHA256`). Do not expose a fresh instance without the hash. Run:
 
 ```sh
 docker compose --env-file deploy/keepmind/.env -f deploy/keepmind/compose.yml up -d --build

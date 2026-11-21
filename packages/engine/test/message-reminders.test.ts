@@ -13,7 +13,7 @@ import {
   remindAboutMessage,
   ValidationError,
 } from "../src";
-import { addMember, setup, type Fixture } from "./fixtures";
+import { addMember, type Fixture, setup } from "./fixtures";
 
 let f: Fixture;
 afterEach(async () => {
@@ -83,9 +83,9 @@ describe("message reminders", () => {
 
     // The message lives in #general: naming another channel is a 404, not a reminder there.
     const other = await createChannel(f.db, f.owner.id, f.org.id, { name: "outro" });
-    await expect(
-      remindAboutMessage(f.db, f.owner.id, f.org.id, other.id, msg.id, inAnHour()),
-    ).rejects.toBeInstanceOf(NotFoundError);
+    await expect(remindAboutMessage(f.db, f.owner.id, f.org.id, other.id, msg.id, inAnHour())).rejects.toBeInstanceOf(
+      NotFoundError,
+    );
   });
 
   test("a person only sees and cancels their own reminders, inside their org", async () => {

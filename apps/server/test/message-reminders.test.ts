@@ -43,7 +43,7 @@ test("remind me about a message: set, list, cancel — own only", async () => {
   const steal = await memberApi(`/message-reminders/${reminder.id}`, { method: "DELETE" });
   expect(steal.status).toBe(204); // no-op, not an error
 
-  const mine = (await (await api("/message-reminders")).json()) as { reminders: typeof reminder[] };
+  const mine = (await (await api("/message-reminders")).json()) as { reminders: (typeof reminder)[] };
   expect(mine.reminders.map((r) => r.id)).toEqual([reminder.id]);
 
   const cancelled = await api(`/message-reminders/${reminder.id}`, { method: "DELETE" });
@@ -59,9 +59,7 @@ test("reminder validation: past time, unknown message, unreadable channel", asyn
   const api = (path: string, init?: Parameters<typeof owner>[1]) =>
     owner(`/api/app/organizations/${orgId}${path}`, init);
 
-  const msg = (await (
-    await api(`/channels/${channelId}/messages`, { json: { body: "oi" } })
-  ).json()) as { id: string };
+  const msg = (await (await api(`/channels/${channelId}/messages`, { json: { body: "oi" } })).json()) as { id: string };
 
   const past = await api(`/channels/${channelId}/messages/${msg.id}/reminder`, {
     json: { remindAt: new Date(Date.now() - 60_000).toISOString() },

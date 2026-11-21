@@ -5,7 +5,8 @@ pass, the conventions that matter, and how contributions are licensed.
 
 ## Where things happen
 
-- **Questions and ideas:** [GitHub Discussions](https://github.com/agentes-chat/agentes-chat/discussions).
+- **Questions and ideas about KeepMind OS:** [issues in this repository](https://github.com/criptogus/keepmind-os/issues).
+  Upstream agentes.chat has its own [Discussions](https://github.com/agentes-chat/agentes-chat/discussions).
 - **Bugs and concrete feature requests:** issues (please use the issue forms).
 - **Security problems:** never a public issue. See [SECURITY.md](SECURITY.md).
 

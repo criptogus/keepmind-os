@@ -36,7 +36,7 @@ source. Copy `deploy/keepmind/.env.example` to `deploy/keepmind/.env`. Generate
 independent hex secrets for `POSTGRES_PASSWORD` and `AGENTES_SECRET`.
 
 Generate a separate owner token, save it privately, and set
-`INSTALL_OWNER_TOKEN_HASH` to its SHA-256 hex digest. After boot, visit
+`OWNER_CLAIM_SHA256` to its SHA-256 hex digest. After boot, visit
 `https://keepmind.io/owner#claim=TOKEN` to claim the first owner. This deployment
 expects control of the domain, DNS pointed at the host and ports 80/443 available.
 
@@ -72,7 +72,7 @@ begin. Advanced scopes, providers and routines remain available when needed.
 
 See [CONTRIBUTING.md](../CONTRIBUTING.md) for the inherited engine conventions.
 Open KeepMind issues and pull requests in this repository. Keep upstream copyright
-and attribution. Internal `@agenteschat/*` names are intentional compatibility IDs.
+and attribution. Packages use the `@keepmind/*` scope; the `agenteschat://` link scheme, `X-Agentes-*` headers and `AGENTES_*` variables are intentional compatibility IDs.
 
 ```sh
 bun run lint

@@ -1,6 +1,6 @@
 # KeepMind OS — Teams
 
-Reconstruction of KeepMind OS on the agentes.chat engine, for shared teams at **keepmind.io**. This branch is under validation and is not the desktop 0.1.22 update channel.
+Reconstruction of KeepMind OS on the agentes.chat engine, for shared teams at **keepmind.io**. Desktop builds are published from this repository as `desktop-v*` releases (unsigned beta); the server is still under validation, and none of this is the update channel of the old desktop 0.1.22.
 
 - [KeepMind developer quickstart](docs/KEEPMIND-QUICKSTART.md)
 - [Roadmap and acceptance gates](docs/KEEPMIND-ROADMAP.md)
@@ -17,7 +17,7 @@ and its production-readiness checklist. It uses this repository's
 [KeepMind Compose configuration](deploy/keepmind/compose.yml), not the upstream installer.
 
 The reconstruction is still under validation. Real-provider acceptance, production
-configuration and signed desktop packaging remain pending as described in the
+configuration and signed, notarized desktop packaging remain pending as described in the
 [rebuild status](docs/KEEPMIND-REBUILD.md). It does not automatically migrate existing
 KeepMind data or replace the installed desktop app.
 

@@ -196,9 +196,7 @@ function NewGoalDialog({ open, onClose }: { open: boolean; onClose: () => void }
         </div>
       </DialogBody>
       <DialogFooter>
-        <Button onClick={onClose}>
-          {t("common.cancel")}
-        </Button>
+        <Button onClick={onClose}>{t("common.cancel")}</Button>
         <Button variant="primary" disabled={!ready || create.isPending} onClick={submit}>
           {t("goals.new.create")}
         </Button>
