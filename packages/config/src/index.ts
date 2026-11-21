@@ -77,7 +77,10 @@ export function loadConfig(env: Record<string, string | undefined> = process.env
       "SSO_OIDC_ISSUER, SSO_OIDC_CLIENT_ID and SSO_OIDC_CLIENT_SECRET go together: set all three or none",
     ]);
   }
-  if ((config.SSO_REQUIRED || config.SSO_DOMAINS || config.SSO_WORKSPACE_ID) && !config.SSO_OIDC_ISSUER) {
+  if (
+    (config.SSO_REQUIRED || config.SSO_DOMAINS || config.SSO_WORKSPACE_ID || config.SCIM_TOKEN_SHA256) &&
+    !config.SSO_OIDC_ISSUER
+  ) {
     throw new ConfigError([
       "SSO_DOMAINS, SSO_REQUIRED and SSO_WORKSPACE_ID need SSO_OIDC_ISSUER, SSO_OIDC_CLIENT_ID and SSO_OIDC_CLIENT_SECRET",
     ]);
@@ -85,6 +88,10 @@ export function loadConfig(env: Record<string, string | undefined> = process.env
   // Without domains "required" would name nobody, and an address outside them could not be told apart.
   if (config.SSO_REQUIRED && !config.SSO_DOMAINS) {
     throw new ConfigError(["SSO_REQUIRED=true needs SSO_DOMAINS"]);
+  }
+  // The directory reaches only the company's addresses (ADR 0189): without domains it would reach everyone.
+  if (config.SCIM_TOKEN_SHA256 && !config.SSO_DOMAINS) {
+    throw new ConfigError(["SCIM_TOKEN_SHA256 needs SSO_DOMAINS (and the company sign-in, SSO_OIDC_*)"]);
   }
   if (Boolean(config.BILLING_URL) !== Boolean(config.BILLING_LINK_SECRET)) {
     throw new ConfigError(["BILLING_URL and BILLING_LINK_SECRET go together: set both or neither"]);

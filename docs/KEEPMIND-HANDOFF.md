@@ -49,16 +49,14 @@ para empresas". Phase 1 is what a company's security review asks for first: comp
 factor, audit events sent to the company's SIEM and LGPD papers.
 
 Done: company sign-in (SSO) through OpenID Connect, one provider per server, ADR 0188
-(`apps/server/src/sso.ts`, `SSO_*` in `SELF_HOSTING.md`). Next in phase 1, in order:
+(`apps/server/src/sso.ts`, `SSO_*` in `SELF_HOSTING.md`), and the company's directory through SCIM 2.0, ADR 0189
+(`apps/server/src/routes/scim.ts`, `SCIM_TOKEN_SHA256`): accounts made, turned off and removed by Entra ID or Okta,
+sessions ended at once. The phone app is not in use yet, so its company sign-in waits. Next in phase 1, in order:
 
-1. **Company sign-in on the phone.** `sign-in-options` already answers `sso`; the phone app needs the button
-   and the browser sign-in for provider `sso` (`apps/mobile/src/lib/auth.ts`, `phoneBrowserSignIn`).
-2. **End sessions when the company ends the person.** Today an open session outlives `SSO_REQUIRED` and the
-   provider turning the person off. SCIM (`/scim/v2/Users` with a bearer token) deactivating the account and
-   ending its sessions closes that, and adds automatic accounts.
-3. **Second factor** (Better Auth's `two-factor` plugin, TOTP and backup codes) for password accounts.
-4. **Audit events out**: the audit rows as JSON lines to a webhook or syslog for the company's SIEM.
-5. **Per-workspace SSO and SAML** for keepmind.io, where several companies share one server (ADR 0188, "Not in
+1. **Second factor** (Better Auth's `two-factor` plugin, TOTP and backup codes) for password accounts.
+2. **Audit events out**: the audit rows as JSON lines to a webhook or syslog for the company's SIEM.
+3. **Groups from the directory** (SCIM `/Groups` mapped to channels or roles).
+4. **Per-workspace SSO and SAML** for keepmind.io, where several companies share one server (ADR 0188, "Not in
    this decision").
 
 ## Agent cost and speed: what was measured on 2026-11-21

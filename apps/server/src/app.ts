@@ -86,6 +86,7 @@ import { registerWhatsAppInternal } from "./routes/internal-whatsapp";
 import { machineAppRoutes, registerMachinePublicRoutes } from "./routes/machines";
 import { type AppsRouteOptions, registerAppsRoot, registerOauthRoutes } from "./routes/oauth";
 import { pushRelayRoutes } from "./routes/push-relay";
+import { registerScim } from "./routes/scim";
 import { registerWaitlist } from "./routes/waitlist";
 import { registerRoutineHooks, registerWebhookReceiver, webhookAdminRoutes } from "./routes/webhooks";
 
@@ -128,6 +129,7 @@ export interface AppOptions {
  * - `/api/waitlist`       public: join the waiting list and confirm the email (the landing page, only with LANDING_URL)
  * - `/api/partners/waitlist` public: join the partner program's waiting list (the landing page, only with LANDING_URL)
  * - `/api/oauth/*`        public: the OAuth 2.1 authorization server for AI apps (ADR 0119)
+ * - `/api/scim/v2/*`      the company directory's SCIM 2.0, bearer token only (only with SCIM_TOKEN_SHA256, ADR 0189)
  * - `/api/push-relay/v1/*` other installations' phone pushes, server to server (only with PUSH_RELAY_SERVE, ADR 0152)
  * - `/mcp`                AI apps' MCP endpoint, bearer tokens only (ADR 0119); `/.well-known/oauth-*` its discovery
  * - `/api/ws`             WebSocket (real-time)
@@ -242,6 +244,7 @@ export function createApp(options: AppOptions) {
     registerOauthRoutes(api, deps, { version, fetchDocument: options.appsFetchDocument });
     registerWebhookReceiver(api, deps);
     registerRoutineHooks(api, deps);
+    registerScim(api, deps);
     registerGitHubAppWebhook(api, deps);
     registerMachinePublicRoutes(api, deps);
     registerWhatsAppInternal(api, deps);

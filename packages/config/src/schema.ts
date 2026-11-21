@@ -307,6 +307,15 @@ export const envVars = {
       "Company sign-in: addresses in `SSO_DOMAINS` sign in only through it. Their password, Google, GitHub and Apple sign-ins and password resets are refused, so access ends when the company's provider ends it. Needs `SSO_DOMAINS`.",
     section: "Sign-in",
   },
+  SCIM_TOKEN_SHA256: {
+    schema: z
+      .string()
+      .regex(/^[0-9a-f]{64}$/, "must be 64 hex characters (the SHA-256 of the SCIM token)")
+      .optional(),
+    description:
+      "SHA-256 (hex) of the bearer token the company's directory (Microsoft Entra ID, Okta) sends to `{PUBLIC_URL}/api/scim/v2` (SCIM 2.0, ADR 0189). With it, the directory makes accounts for the company's people and turns them off: a deactivated or removed person is blocked here at once, with every session and phone signed out. It reaches only addresses in `SSO_DOMAINS`, which it needs. Make the token with `openssl rand -hex 32`, give it to the directory, keep only its hash here: `printf %s <token> | sha256sum`.",
+    section: "Sign-in",
+  },
   SSO_WORKSPACE_ID: {
     schema: z.string().trim().min(1).optional(),
     description:
