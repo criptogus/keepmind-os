@@ -4,6 +4,8 @@ Reconstruction of KeepMind OS on the agentes.chat engine, for shared teams at **
 
 - [KeepMind developer quickstart](docs/KEEPMIND-QUICKSTART.md)
 - [Roadmap and acceptance gates](docs/KEEPMIND-ROADMAP.md)
+- [Handoff: what is done and what is next](docs/KEEPMIND-HANDOFF.md)
+- [Instructions for coding agents](AGENTS.md)
 - [Architecture and migration status](docs/KEEPMIND-REBUILD.md)
 - [Shared-server deployment](deploy/keepmind/compose.yml)
 - Existing KeepMind data and the installed desktop app are unchanged.

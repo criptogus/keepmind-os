@@ -1,6 +1,6 @@
 # KeepMind OS fork
 
-User-approved direction: a shared team server at keepmind.io with KeepMind branding. The upstream package scopes and engine protocols remain unchanged. Use docs/KEEPMIND-REBUILD.md for migration status. The engineering rules below are inherited from the upstream engine; KeepMind product identity takes precedence over its product-name rule.
+User-approved direction: a shared team server at keepmind.io with KeepMind branding. Packages use the `@keepmind/*` scope; the engine's protocols and compatibility ids remain unchanged. Use docs/KEEPMIND-REBUILD.md for migration status and docs/KEEPMIND-HANDOFF.md for what is done and what is next. `AGENTS.md` gives other coding agents (Codex) the same rules in short. The engineering rules below are inherited from the upstream engine; KeepMind product identity takes precedence over its product-name rule.
 
 # agentes.chat
 
