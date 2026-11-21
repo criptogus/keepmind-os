@@ -114,13 +114,15 @@ export function StorageMeter() {
             : t(tight ? "limits.storage.near" : "limits.storage.meter", { used, limit })
         }
         status={tight && billing ? t("limits.storage.fullAdmin") : undefined}
-      >
-        {tight && billing && (
+      />
+      {/* Under the words, not beside them: on a phone the button took the sentence's width and left it three lines. */}
+      {tight && billing && (
+        <div>
           <BillingLinkButton orgId={org.id} from="storage" size="sm">
             {t("billing.seeOptions")}
           </BillingLinkButton>
-        )}
-      </SettingRow>
+        </div>
+      )}
     </div>
   );
 }

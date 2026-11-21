@@ -66,10 +66,20 @@ describe("You in a personal workspace", () => {
       "proposals",
       "wiki",
       "dashboards",
+      "goals",
       "memory",
       "team",
     ]);
-    expect(list("TEAM_WORK")).toEqual(["issues", "proposals", "routines", "wiki", "drive", "dashboards", "memory"]);
+    expect(list("TEAM_WORK")).toEqual([
+      "issues",
+      "proposals",
+      "routines",
+      "wiki",
+      "drive",
+      "dashboards",
+      "goals",
+      "memory",
+    ]);
     expect(me).toContain('onPress={() => open("/team")}');
   });
 

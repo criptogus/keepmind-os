@@ -1793,6 +1793,8 @@ html:not([data-pointer]) .ac-msg__time--details:focus-visible {
   vertical-align: -2px;
   border-radius: 1px;
   background: var(--agent);
+  /* The caret's glow, named here so the keyframes below carry no color of their own. */
+  --caret-glow: color-mix(in srgb, var(--agent) 55%, transparent);
 }
 @media (prefers-reduced-motion: no-preference) {
   .ac-msg--streaming .ac-msg__text::after,
@@ -1808,11 +1810,11 @@ html:not([data-pointer]) .ac-msg__time--details:focus-visible {
   0%,
   100% {
     opacity: 1;
-    box-shadow: 0 0 5px color-mix(in srgb, var(--agent) 55%, transparent);
+    box-shadow: 0 0 5px var(--caret-glow);
   }
   50% {
     opacity: 0.45;
-    box-shadow: 0 0 0 color-mix(in srgb, var(--agent) 0%, transparent);
+    box-shadow: 0 0 0 transparent;
   }
 }
 @keyframes ac-arrive {

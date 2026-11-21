@@ -86,6 +86,7 @@ describe("message action bars", () => {
       "Copiar texto",
       "Copiar link da mensagem",
       "Fixar mensagem",
+      "Lembrar depois",
       "Salvar na wiki",
     ]);
   });
@@ -287,6 +288,7 @@ describe("message action bars", () => {
         "Copiar texto",
         "Copiar link da mensagem",
         "Fixar mensagem",
+        "Lembrar depois",
         "Salvar na wiki",
       ]);
       expect(document.querySelector('article[data-message-id="m-1"]')?.getAttribute("data-menu-open")).toBe("true");
@@ -304,6 +306,7 @@ describe("message action bars", () => {
         "Responder",
         "Copiar link da mensagem",
         "Fixar mensagem",
+        "Lembrar depois",
       ]);
       await act(async () => fireEvent.keyDown(screen().getByRole("menu"), { key: "Escape" }));
       expect(screen().queryByRole("menu")).toBeNull();
@@ -316,6 +319,7 @@ describe("message action bars", () => {
         "Copiar texto",
         "Copiar link da mensagem",
         "Fixar mensagem",
+        "Lembrar depois",
         "Salvar na wiki",
       ]);
       await click(within(agent).getByRole("menuitem", { name: "Corrigir resposta" }));
