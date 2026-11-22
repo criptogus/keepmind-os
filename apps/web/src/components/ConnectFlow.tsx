@@ -255,7 +255,9 @@ function ConnectStep({
   const [apiKey, setApiKey] = useState("");
   const [keyOpen, setKeyOpen] = useState(false);
   const [needsKey, setNeedsKey] = useState<Extract<CustomConnectStart, { status: "needs_key" }> | null>(null);
-  const [touched, setTouched] = useState<"oauth" | "key" | null>(null);
+  const [touched, setTouched] = useState<"oauth" | "key" | "manual" | null>(null);
+  const [manualCode, setManualCode] = useState("");
+  const [manualOpen, setManualOpen] = useState(false);
 
   // An account of a server by address: its own address, whatever the catalog says.
   const fixed = item?.server?.serverUrl ?? null;
@@ -307,6 +309,42 @@ function ConnectStep({
 
   const urlError = touched && askUrl && !isHttpsUrl(url) ? t("connectors.serverUrlInvalid") : undefined;
   const keyError = touched === "key" && apiKey.trim().length < 8 ? t("connectors.apiKeyInvalid") : undefined;
+  const manualError =
+    touched === "manual" && !manualCode.trim().startsWith("sas_code_")
+      ? "Código deve começar com sas_code_"
+      : undefined;
+
+  const submitManual = async () => {
+    setTouched("manual");
+    if (!serverUrl || !manualCode.trim().startsWith("sas_code_")) return;
+    try {
+      const res = await fetch(`/api/app/organizations/${org.id}/connectors/oauth/manual`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ serverUrl, code: manualCode.trim() }),
+      });
+      if (!res.ok) throw new Error("Failed to complete manual OAuth");
+      const data = await res.json();
+      done(
+        fromConnection(
+          {
+            id: data.connectionId,
+            connector: data.connector,
+            label: name ?? new URL(serverUrl).hostname,
+            accountLabel: null,
+            status: "active",
+            authType: "oauth",
+            createdAt: new Date().toISOString(),
+            reconnectAdds: [],
+          },
+          catalog.data?.connectors ?? [],
+        ),
+        data.outcome,
+      );
+    } catch (_e) {
+      toast.show("Erro ao conectar com código manual", "error");
+    }
+  };
 
   const done = (next: ConnectedItem, outcome: ConnectOutcome) => {
     // A new account's confirmation says it connected; any other ending is a toast.
@@ -477,6 +515,26 @@ function ConnectStep({
             </details>
           )}
           {!viaApp && !oauthFirst && canKey && keyForm}
+          {canOAuth && (
+            <details
+              className="cflow__more"
+              open={manualOpen}
+              onToggle={(e) => setManualOpen((e.currentTarget as HTMLDetailsElement).open)}
+            >
+              <summary>Código manual (se o redirecionamento falhou)</summary>
+              <Field
+                label="Código de autorização"
+                id="cflow-manual"
+                hint="Cole o código mostrado na tela do SuperAgentSkill (começa com sas_code_)"
+                error={manualError}
+              >
+                <Input value={manualCode} onChange={(e) => setManualCode(e.target.value)} />
+              </Field>
+              <Button variant="primary" onClick={submitManual} disabled={!!manualError}>
+                Conectar com código
+              </Button>
+            </details>
+          )}
         </DialogBody>
       </Locked>
       <DialogFooter
