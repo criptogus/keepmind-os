@@ -1109,7 +1109,7 @@ export const envVars = {
   DESKTOP_RELEASES_TOKEN: {
     schema: z.string().optional(),
     description:
-      "Fine-grained GitHub token (read-only contents) for the repository that publishes the desktop app's releases and the server's. The server reads the latest `desktop-v*` release with it (`/api/desktop/latest`, `/api/desktop/download/...`), and the packages that run KeepMind OS without Docker from the latest `v*` one (`/api/native/latest`, `/api/native/download/...`). Unset: those endpoints answer 404.",
+      "Fine-grained GitHub token (read-only contents) for the repository that publishes the desktop app's releases and the server's. The server reads the latest `desktop-v*` release with it (`/api/desktop/latest`, `/api/desktop/download/...`), and the packages that run KeepMind OS without Docker from the latest `v*` one (`/api/native/latest`, `/api/native/download/...`). Needed only for a private repository: a public one is read without it. Unset with a private repository: those endpoints answer 404.",
     section: "Sandbox",
     secret: true,
   },

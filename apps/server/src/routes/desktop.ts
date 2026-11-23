@@ -155,8 +155,10 @@ function releaseReader<T, K extends string>(
   const now = options.now ?? Date.now;
   const latest = new Map<K, { at: number; value: T | null }>();
   let list: { at: number; value: GitHubRelease[] } | null = null;
+  // A public repository answers without a token (rate-limited per address, and the reads are cached);
+  // a private one needs DESKTOP_RELEASES_TOKEN, and without it GitHub's 401/404 reads as "no release".
   const headers = () => ({
-    authorization: `Bearer ${options.token}`,
+    ...(options.token ? { authorization: `Bearer ${options.token}` } : {}),
     accept: "application/vnd.github+json",
     "x-github-api-version": "2022-11-28",
     "user-agent": "keepmind.io",
@@ -201,11 +203,10 @@ function releaseReader<T, K extends string>(
   }
 
   return {
-    enabled: Boolean(options.token),
+    enabled: Boolean(options.repo),
 
     /** The newest published release of this kind with what `key` needs, as `read` makes it; null when there is none. */
     async latest(key: K): Promise<T | null> {
-      if (!options.token) return null;
       const cached = latest.get(key);
       if (cached && now() - cached.at < LATEST_TTL_MS) return cached.value;
       const value = await readLatest(key);
@@ -215,7 +216,7 @@ function releaseReader<T, K extends string>(
 
     /** The bytes of one asset of the release of this kind and version; null when it isn't one. */
     async download(version: string, file: string): Promise<{ response: Response; name: string } | null> {
-      if (!options.token || !SEMVER.test(version) || !FILE_NAME.test(file)) return null;
+      if (!SEMVER.test(version) || !FILE_NAME.test(file)) return null;
       const release = await getJson<GitHubRelease>(
         `/repos/${options.repo}/releases/tags/${encodeURIComponent(`${options.prefix}${version}`)}`,
       );
@@ -324,7 +325,8 @@ const Latest = z
 /**
  * `GET /api/desktop/latest`, `GET /api/desktop/update` (the Tauri updater) and
  * `GET /api/desktop/download/{version}/{file}` (ADR 0036 §9): public, no session;
- * 404 (204 for the updater) without `DESKTOP_RELEASES_TOKEN`.
+ * 404 (204 for the updater) when the configured repository has no such release — a private
+ * repository also needs `DESKTOP_RELEASES_TOKEN`.
  */
 export function registerDesktopRoutes(api: OpenAPIHono, deps: AppDeps, releases: DesktopReleases) {
   const { rateLimiter } = deps.adapters;

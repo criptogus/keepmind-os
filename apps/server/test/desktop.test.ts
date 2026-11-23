@@ -26,8 +26,8 @@ const release = (version: string, extra: Record<string, unknown> = {}) => ({
   ...extra,
 });
 
-/** A fake GitHub: releases newest first; assets redirect to a "signed" URL that must not get our token. */
-function fakeGithub(releases: Record<string, unknown>[]) {
+/** A fake GitHub: releases newest first; assets redirect to a "signed" URL that must not get our token. `publicRepo` answers anonymous reads, as github.com does for a public repository. */
+function fakeGithub(releases: Record<string, unknown>[], opts: { publicRepo?: boolean } = {}) {
   const calls: { url: string; auth: string | null }[] = [];
   const fakeFetch = (async (input: string | URL | Request, init?: RequestInit) => {
     const url = String(input);
@@ -42,7 +42,7 @@ function fakeGithub(releases: Record<string, unknown>[]) {
       const headers = { "content-type": "application/x-apple-diskimage", "content-length": "9" };
       return new Response("DMG-BYTES", { headers });
     }
-    if (auth !== "Bearer ghp_test") return new Response("no", { status: 401 });
+    if (auth !== "Bearer ghp_test" && !(opts.publicRepo && auth === null)) return new Response("no", { status: 401 });
     if (url.endsWith("/releases?per_page=30")) return Response.json(releases);
     const tag = url.match(/\/releases\/tags\/(.+)$/)?.[1];
     if (tag) {
@@ -70,12 +70,22 @@ test("release body and checksum parsing", () => {
   expect(parseSha256("nope")).toBeNull();
 });
 
-test("without a token the desktop endpoints answer 404", async () => {
-  const github = fakeGithub([release("0.2.0")]);
+test("without a token a public repository still answers; a private one reads as no release", async () => {
+  const github = fakeGithub([release("0.2.0")], { publicRepo: true });
   t = await createTestServer({ desktopFetch: github.fetch });
+  const res = await server().app.request("/api/desktop/latest?target=darwin&arch=arm64");
+  expect(res.status).toBe(200);
+  expect(await res.json()).toMatchObject({ version: "0.2.0" });
+  expect((await server().app.request("/api/desktop/download/0.2.0/KeepMind_OS_0.2.0_universal.dmg")).status).toBe(200);
+  // No credential went to GitHub, and none to the signed asset URL either.
+  expect(github.calls.every((c) => c.auth === null)).toBe(true);
+
+  // The same server against a private repository (GitHub refuses anonymous reads): 404, as before.
+  const privateGithub = fakeGithub([release("0.2.0")]);
+  await t.close();
+  t = await createTestServer({ desktopFetch: privateGithub.fetch });
   expect((await server().app.request("/api/desktop/latest?target=darwin&arch=arm64")).status).toBe(404);
   expect((await server().app.request("/api/desktop/download/0.2.0/KeepMind_OS_0.2.0_universal.dmg")).status).toBe(404);
-  expect(github.calls).toEqual([]);
 });
 
 test("latest: the newest desktop-v* release with its dmg and checksum, cached, open to the web view", async () => {
@@ -280,16 +290,19 @@ test("native packages: the newest v* release's manifest and signature, never a d
     nativeRelease("1.3.0"),
   ]);
   const first = await createTestServer({ desktopFetch: github.fetch });
+  // No token: GitHub refuses the anonymous read (a private repository), so still 404.
   expect((await first.app.request("/api/native/latest")).status).toBe(404);
   await first.close();
-  expect(github.calls).toEqual([]);
+  expect(github.calls.some((c) => c.url.endsWith("/releases?per_page=30") && c.auth === null)).toBe(true);
 
   t = await createTestServer({ env: { DESKTOP_RELEASES_TOKEN: "ghp_test" }, desktopFetch: github.fetch });
   const res = await server().app.request("/api/native/latest");
   expect(res.status).toBe(200);
   expect(await res.json()).toEqual({ version: "1.4.0", manifest: MANIFEST, signature: "SIGNATURE-BASE64" });
   await server().app.request("/api/native/latest");
-  expect(github.calls.filter((c) => c.url.endsWith("/releases?per_page=30"))).toHaveLength(1);
+  expect(
+    github.calls.filter((c) => c.url.endsWith("/releases?per_page=30") && c.auth === "Bearer ghp_test"),
+  ).toHaveLength(1);
 
   const tarball = await server().app.request("/api/native/download/1.4.0/agentes-native-1.4.0-linux-x64.tar.gz");
   expect(tarball.status).toBe(200);
