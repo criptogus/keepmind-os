@@ -1,6 +1,7 @@
 import { useMe } from "@keepmind/client";
 import { membershipIn, settingUp } from "@keepmind/client/lib/guards";
 import { can } from "@keepmind/client/lib/permissions";
+import { KeepMindBackdrop } from "@keepmind/ui";
 import { createFileRoute, Outlet, redirect, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import { requireUserIn } from "@/app/guards";
@@ -127,6 +128,10 @@ function OrgLayout() {
                     {/* One new agent's dialog for every way in (ADR 0164): the sidebar, the pages and the menus. */}
                     <NewAgentProvider>
                       <div className="shell">
+                        {/* The neural stage behind the whole workspace; the work area's paper lets it breathe through. */}
+                        <div className="shell__neurons" aria-hidden="true">
+                          <KeepMindBackdrop field />
+                        </div>
                         <RefetchBar />
                         <CommandMenu />
                         <LeaveChannelDialog />

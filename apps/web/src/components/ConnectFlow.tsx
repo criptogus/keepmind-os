@@ -331,10 +331,13 @@ function ConnectStep({
             id: data.connectionId,
             connector: data.connector,
             label: name ?? new URL(serverUrl).hostname,
+            serverUrl,
             accountLabel: null,
+            tokenExpiresAt: null,
             status: "active",
             authType: "oauth",
             createdAt: new Date().toISOString(),
+            revokedAt: null,
             reconnectAdds: [],
           },
           catalog.data?.connectors ?? [],
@@ -525,7 +528,10 @@ function ConnectStep({
               <Field
                 label="Código de autorização"
                 id="cflow-manual"
-                hint="Cole o código mostrado na tela do SuperAgentSkill (começa com sas_code_)"
+                hint={{
+                  name: "Sobre o código manual",
+                  text: "Cole o código mostrado na tela do SuperAgentSkill (começa com sas_code_)",
+                }}
                 error={manualError}
               >
                 <Input value={manualCode} onChange={(e) => setManualCode(e.target.value)} />

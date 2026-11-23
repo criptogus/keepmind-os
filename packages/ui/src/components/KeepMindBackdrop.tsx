@@ -24,6 +24,33 @@ const neurons = [
   [615, 94],
 ];
 
+/* Field mode tiles the neural cluster across a 16:9 stage, so the same artwork reads as a
+   wallpaper and not a cropped banner. Offsets reach past every edge: slice cropping never
+   leaves a bare corner. */
+const FIELD_TILES: [number, number][] = [];
+for (const x of [-80, 560, 1200, 1840]) {
+  for (const y of [-120, 240, 600, 960]) {
+    FIELD_TILES.push([x, y]);
+  }
+}
+
+const flow = (
+  <g className="km-agent-backdrop__flow">
+    {synapses.map((d, index) => (
+      <g key={d} style={{ "--km-synapse-delay": `${index * -1.3}s` } as CSSProperties}>
+        <path className="km-agent-backdrop__connection" d={d} />
+        <path className="km-agent-backdrop__accent" d={d} pathLength="100" />
+      </g>
+    ))}
+    {neurons.map(([cx, cy], index) => (
+      <g key={`${cx}-${cy}`} style={{ "--km-synapse-delay": `${index * -1.7}s` } as CSSProperties}>
+        <circle className="km-agent-backdrop__neuron-ring" cx={cx} cy={cy} r="7" />
+        <circle className="km-agent-backdrop__neuron" cx={cx} cy={cy} r="2.4" />
+      </g>
+    ))}
+  </g>
+);
+
 /** KeepMind's neural stage; decorative activity never substitutes for real status. */
 export function KeepMindBackdrop({
   busy = false,
@@ -31,12 +58,15 @@ export function KeepMindBackdrop({
   accent,
   strength = 1,
   still = false,
+  field = false,
 }: {
   busy?: boolean;
   tone?: "surface" | "graphite";
   accent?: string;
   strength?: number;
   still?: boolean;
+  /** Tile the neural cluster into a full-window field instead of the banner crop. */
+  field?: boolean;
 }) {
   const host = useRef<HTMLSpanElement>(null);
   const [visible, setVisible] = useState(false);
@@ -65,22 +95,24 @@ export function KeepMindBackdrop({
       data-moving={(!still && visible && foreground) || undefined}
       data-busy={busy || undefined}
     >
-      <svg aria-hidden="true" viewBox="0 0 640 160" preserveAspectRatio="xMidYMid slice" focusable="false">
-        <path className="km-agent-backdrop__fold" d="M300-40C340 90 480 24 700 140V220H260Z" />
-        <g className="km-agent-backdrop__flow">
-          {synapses.map((d, index) => (
-            <g key={d} style={{ "--km-synapse-delay": `${index * -1.3}s` } as CSSProperties}>
-              <path className="km-agent-backdrop__connection" d={d} />
-              <path className="km-agent-backdrop__accent" d={d} pathLength="100" />
+      <svg
+        aria-hidden="true"
+        viewBox={field ? "0 0 1920 1080" : "0 0 640 160"}
+        preserveAspectRatio="xMidYMid slice"
+        focusable="false"
+      >
+        {field ? (
+          FIELD_TILES.map(([tx, ty]) => (
+            <g key={`${tx}-${ty}`} transform={`translate(${tx} ${ty})`}>
+              {flow}
             </g>
-          ))}
-          {neurons.map(([cx, cy], index) => (
-            <g key={`${cx}-${cy}`} style={{ "--km-synapse-delay": `${index * -1.7}s` } as CSSProperties}>
-              <circle className="km-agent-backdrop__neuron-ring" cx={cx} cy={cy} r="7" />
-              <circle className="km-agent-backdrop__neuron" cx={cx} cy={cy} r="2.4" />
-            </g>
-          ))}
-        </g>
+          ))
+        ) : (
+          <>
+            <path className="km-agent-backdrop__fold" d="M300-40C340 90 480 24 700 140V220H260Z" />
+            {flow}
+          </>
+        )}
       </svg>
     </span>
   );

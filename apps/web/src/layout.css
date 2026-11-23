@@ -252,6 +252,41 @@ p {
   height: auto;
 }
 
+/*
+ * The neural stage behind the workspace (`KeepMindBackdrop` as the shell's first child): it fills the window.
+ * The work frame goes bare and the page sheet keeps one tinted pane, translucent enough for the synapses to
+ * breathe through — translucent layers multiply, so only the sheet's own background may carry the pane color.
+ * Cards and raised surfaces stay solid: the field shows behind words, never under them.
+ */
+.shell__neurons {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.7;
+}
+.shell__work {
+  background: transparent;
+}
+.shell__pages {
+  background: color-mix(in srgb, var(--pane) 74%, transparent);
+}
+.shell__work--bare {
+  background: color-mix(in srgb, var(--pane) 74%, transparent);
+}
+.shell__work--bare > .shell__pages {
+  background: transparent;
+}
+.shell__main {
+  background: transparent;
+}
+[data-theme="light"] .shell__neurons {
+  opacity: 0.45;
+}
+[data-theme="light"] .shell__pages,
+[data-theme="light"] .shell__work--bare {
+  background: color-mix(in srgb, var(--pane) 88%, transparent);
+}
+
 /* "The MacBook Air went offline": a thin neutral strip on top of the work area, one line, our attention
    color only on its icon. Flat (a hairline under it), so nothing below can clip it. */
 .outages {

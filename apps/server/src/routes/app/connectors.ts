@@ -468,7 +468,8 @@ export function connectorRoutes(deps: AppDeps) {
       tags,
       security,
       summary: "Complete OAuth with a manual code (admins)",
-      description: "When the automatic redirect fails, paste the code from the provider (e.g., sas_code_...). Works for SuperAgentSkill and other providers that support manual codes.",
+      description:
+        "When the automatic redirect fails, paste the code from the provider (e.g., sas_code_...). Works for SuperAgentSkill and other providers that support manual codes.",
       request: {
         params: OrgParams,
         body: body(z.object({ serverUrl: z.string().url(), code: z.string().min(1).max(2000) })),
