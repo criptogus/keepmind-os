@@ -26,6 +26,7 @@ const COMMANDS: &[&str] = &[
     "notify",
     "update_install",
     "update_cancel",
+    "update_check",
     "notch_set",
     "notch_info",
     "notch_place",
