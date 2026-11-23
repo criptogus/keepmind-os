@@ -26,7 +26,6 @@ import {
   listConnections,
   listGitHubAppInstallations,
   NotFoundError,
-  oauthRedirectUri,
   peekOAuthState,
   presetForServer,
   renameConnection,
@@ -35,9 +34,7 @@ import {
   revokeConnection,
   setAgentScopes,
   startOAuth,
-  storeConnection,
   syncCustomTools,
-  tokenRequest,
   uninstallInstallation,
   withComposio,
 } from "@keepmind/engine";
@@ -457,65 +454,6 @@ export function connectorRoutes(deps: AppDeps) {
       await afterConnected(connection, user.id);
       const landing = isDesktopReturn(returnTo) ? { returnTo: desktopReturnPath(returnTo) } : {};
       return c.json({ connectionId: connection.id, connector: connection.connector, outcome, ...landing }, 200);
-    },
-  );
-
-  // Manual code fallback for SuperAgentSkill when redirect fails
-  app.openapi(
-    createRoute({
-      method: "post",
-      path: "/organizations/{orgId}/connectors/oauth/manual",
-      tags,
-      security,
-      summary: "Complete OAuth with a manual code (admins)",
-      description:
-        "When the automatic redirect fails, paste the code from the provider (e.g., sas_code_...). Works for SuperAgentSkill and other providers that support manual codes.",
-      request: {
-        params: OrgParams,
-        body: body(z.object({ serverUrl: z.string().url(), code: z.string().min(1).max(2000) })),
-      },
-      responses: {
-        200: json(
-          z.object({
-            connectionId: z.uuid(),
-            connector: z.string(),
-            outcome: Outcome,
-          }),
-        ),
-        ...errors,
-      },
-    }),
-    async (c) => {
-      const { orgId } = c.req.valid("param");
-      const { serverUrl, code } = c.req.valid("json");
-      const user = c.get("user");
-      await requirePermission(connectorDeps.db, user.id, orgId, "manage_connectors");
-      // Try the token exchange directly with the manual code
-      const token = await tokenRequest(
-        connectorDeps,
-        `${new URL(serverUrl).origin}/api/public/oauth/token`,
-        {
-          grant_type: "authorization_code",
-          code,
-          redirect_uri: oauthRedirectUri(connectorDeps.publicUrl),
-          client_id: "", // SuperAgentSkill uses public client
-          client_secret: "",
-        },
-        {},
-        null as any,
-      );
-      const stored = await storeConnection(connectorDeps, {
-        orgId,
-        actorId: user.id,
-        connector: `custom:${serverUrl}`,
-        authType: "oauth",
-        serverUrl,
-        secret: { accessToken: token.access_token, refreshToken: token.refresh_token },
-        tokenExpiresAt: token.expires_in ? new Date(Date.now() + token.expires_in * 1000) : null,
-        oauthScopes: "mcp:read mcp:write",
-      });
-      await afterConnected(stored, user.id);
-      return c.json({ connectionId: stored.id, connector: stored.connector, outcome: "connected" }, 200);
     },
   );
 
