@@ -478,6 +478,8 @@ export function createFakeHost(
           reject("cancelled");
         };
       }),
+    // The browser has no updater to ask: nothing newer here.
+    checkUpdate: async () => null,
     cancelUpdate: async () => dropUpdate?.(),
     onUpdateProgress: (cb) => {
       progressListeners.add(cb);

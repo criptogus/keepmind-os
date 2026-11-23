@@ -63,6 +63,40 @@ interface UpdateManifest {
   platforms?: Record<string, { url?: unknown } | undefined>;
 }
 
+/** A LatestRelease for this build's download asset, from a version the updater already vouched for. */
+export function githubRelease(
+  version: string,
+  notes: string | undefined,
+  publishedAt: string | undefined,
+  os: string,
+  rustArch: string,
+): LatestRelease {
+  const asset = githubAsset(os, rustArch, version);
+  return {
+    version,
+    url: asset
+      ? `https://github.com/${RELEASES_REPO}/releases/download/desktop-v${version}/${asset}`
+      : `https://github.com/${RELEASES_REPO}/releases/latest`,
+    notes,
+    publishedAt,
+  };
+}
+
+/** The updater's own answer (`update_check` in Rust): the same manifest `update_install` reads. */
+export function releaseFromUpdater(
+  info: { version: string; notes?: string | null; date?: number | null },
+  os: string,
+  rustArch: string,
+): LatestRelease {
+  return githubRelease(
+    info.version,
+    info.notes ?? undefined,
+    info.date ? new Date(info.date * 1000).toISOString() : undefined,
+    os,
+    rustArch,
+  );
+}
+
 /**
  * The newest release as the updater's manifest (`latest.json` on the latest GitHub release), as a
  * LatestRelease whose download is this build's asset URL. Null when it can't be read, names no bundle for
@@ -77,15 +111,13 @@ export async function checkGitHub(os: string, rustArch: string, signal?: AbortSi
     const platform = manifestPlatform(os, rustArch);
     if (!platform || typeof m.platforms?.[platform]?.url !== "string") return null;
     const version = m.version;
-    const asset = githubAsset(os, rustArch, version);
-    return {
+    return githubRelease(
       version,
-      url: asset
-        ? `https://github.com/${RELEASES_REPO}/releases/download/desktop-v${version}/${asset}`
-        : `https://github.com/${RELEASES_REPO}/releases/latest`,
-      notes: typeof m.notes === "string" && m.notes.trim() ? m.notes.trim() : undefined,
-      publishedAt: typeof m.pub_date === "string" ? m.pub_date : undefined,
-    };
+      typeof m.notes === "string" && m.notes.trim() ? m.notes.trim() : undefined,
+      typeof m.pub_date === "string" ? m.pub_date : undefined,
+      os,
+      rustArch,
+    );
   } catch {
     return null;
   }

@@ -92,6 +92,7 @@ export function createTauriHost(): Host {
     setAutostart: (on) => invoke<void>("autostart_set", { on }),
     notify: (title, body) => invoke<void>("notify", { title, body }),
     installUpdate: () => invoke<boolean>("update_install"),
+    checkUpdate: () => invoke<{ version: string; notes?: string | null; date?: number | null } | null>("update_check"),
     cancelUpdate: () => invoke<void>("update_cancel"),
     onUpdateProgress: (cb) => subscribe<[number, number | null]>("update://progress", ([got, total]) => cb(got, total)),
     setNotch: (on) => invoke<void>("notch_set", { on }),

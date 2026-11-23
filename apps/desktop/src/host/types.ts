@@ -149,6 +149,12 @@ export interface Host {
    * there is nothing to install. Rejects with "cancelled" after `cancelUpdate`.
    */
   installUpdate(): Promise<boolean>;
+  /**
+   * The newer version the updater itself sees (the same manifest `installUpdate` reads), asked on the Rust
+   * side; null when there's none or it can't be asked. The webview can't fetch it: the release assets answer
+   * without CORS headers.
+   */
+  checkUpdate(): Promise<{ version: string; notes?: string | null; date?: number | null } | null>;
   /** Drops the download under way: nothing is installed until it is whole. */
   cancelUpdate(): Promise<void>;
   /** The download's bytes so far, and its size when the server says it. */

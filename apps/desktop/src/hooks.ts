@@ -13,6 +13,7 @@ import {
   type LatestRelease,
   latestUrl,
   parseLatest,
+  releaseFromUpdater,
   type UpdateState,
   updateStateOf,
 } from "./control/version";
@@ -93,6 +94,7 @@ export interface UpdateCheck {
  */
 export function useUpdateCheck(auto: boolean): UpdateCheck {
   const info = useAppInfo();
+  const host = useHost();
   const [latest, setLatest] = useState<LatestRelease | null>(null);
   const [checkedAt, setCheckedAt] = useState<number | null>(null);
   const [checking, setChecking] = useState(false);
@@ -121,6 +123,10 @@ export function useUpdateCheck(auto: boolean): UpdateCheck {
       } else if (res.status !== 404) {
         throw new Error(String(res.status));
       }
+      // The updater's own check first: the same manifest `installUpdate` reads, asked in Rust — the
+      // webview can't fetch the release assets (no CORS headers), so `checkGitHub` is only a fallback.
+      const updater = await host.checkUpdate().catch(() => null);
+      if (updater) found = releaseFromUpdater(updater, os, arch);
       found ??= await checkGitHub(os, arch, quit.signal);
       setLatest(found);
       setCheckedAt(Date.now());
@@ -132,7 +138,7 @@ export function useUpdateCheck(auto: boolean): UpdateCheck {
       clearTimeout(timer);
       setChecking(false);
     }
-  }, [version, arch, os]);
+  }, [version, arch, os, host]);
 
   useEffect(() => {
     if (!auto || !version) return;

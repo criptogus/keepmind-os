@@ -550,6 +550,26 @@ fn clear_quarantine() {
 #[cfg(not(target_os = "macos"))]
 fn clear_quarantine() {}
 
+/// The newer version the updater sees, for Preferences' check: the same manifest `update_install` reads,
+/// asked in Rust so the webview's CORS rules never get in the way (the release assets answer without
+/// `Access-Control-Allow-Origin`, so a `fetch` of `latest.json` always fails there). `null`: nothing newer.
+#[tauri::command]
+async fn update_check(app: AppHandle) -> Result<Option<serde_json::Value>, String> {
+    let updater = app
+        .updater_builder()
+        .timeout(Duration::from_secs(20))
+        .build()
+        .map_err(|e| e.to_string())?;
+    let Some(update) = updater.check().await.map_err(|e| e.to_string())? else {
+        return Ok(None);
+    };
+    Ok(Some(serde_json::json!({
+        "version": update.version,
+        "notes": update.body,
+        "date": update.date.map(|d| d.unix_timestamp()),
+    })))
+}
+
 /// Preferences' Cancel while an update downloads.
 #[tauri::command]
 fn update_cancel(download: tauri::State<'_, UpdateDownload>) {
@@ -642,6 +662,7 @@ pub fn run() {
             autostart_set,
             notify,
             update_install,
+            update_check,
             update_cancel,
             notch_set,
             notch_info,
