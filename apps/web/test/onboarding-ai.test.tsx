@@ -361,7 +361,7 @@ describe("each card opens Connect for the whole team on its own steps (ADR 0162)
     expect(within(dialog).queryByRole("combobox", { name: "Agentes que usam este plano" })).toBeNull();
   });
 
-  test("with no computer, a plan's panel never leaves for Computers, which the onboarding would send back here", async () => {
+  test("with no computer, a plan's panel connects one over the dialog, without leaving the onboarding", async () => {
     const state = ownTeam();
     const api = createFakeApi(state);
     // A self-hosted workspace with no computer connected yet.
@@ -371,13 +371,11 @@ describe("each card opens Connect for the whole team on its own steps (ADR 0162)
     await settle(16);
     await click(within(body()).getByRole("button", { name: /^Claude/ }), 12);
     const panel = within(screen().getByRole("dialog")).getByRole("region", { name: "Seu plano do Claude" });
-    expect(panel.textContent).toContain(
-      "As contas precisam de um computador, e este workspace ainda não tem. Dá para adicionar um assim que o workspace abrir.",
-    );
-    expect(within(panel).queryByRole("button", { name: "Conectar um computador" })).toBeNull();
-    await click(within(panel).getByRole("button", { name: "Usar uma chave de API agora" }), 6);
+    expect(panel.textContent).toContain("As contas ficam num computador conectado. Conecte um seu primeiro.");
+    // Pairing opens over the dialog: the onboarding stays, and no page of the workspace opens.
+    await click(within(panel).getByRole("button", { name: "Conectar um computador" }), 6);
     expect(router.state.location.pathname).toBe("/onboarding");
-    expect(within(screen().getByRole("dialog")).getByRole("region", { name: "Chave de API" })).toBeTruthy();
+    expect(screen().getByRole("dialog", { name: "Conectar um dispositivo" })).toBeTruthy();
   });
 
   test("connected while the dialog is open: the step moves on by the data", async () => {
