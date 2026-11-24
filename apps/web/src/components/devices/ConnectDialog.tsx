@@ -18,7 +18,7 @@ import {
   useNow,
 } from "@keepmind/ui";
 import { Link } from "@tanstack/react-router";
-import { type ReactNode, useEffect, useRef, useState } from "react";
+import { createContext, type ReactNode, useContext, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { HelpLink } from "@/components/HelpLink";
 import { DownloadWithGuide } from "@/components/install/guide";
@@ -53,7 +53,21 @@ const WIDTH: Record<ConnectStep, number> = {
  * "Connect a device": a chooser (this computer, another computer, a server, an Android phone, an iPhone), then each
  * flow in place. Back goes to the chooser when the dialog started there; the × and Cancel always close it.
  */
-export function ConnectDialog({ start, onClose }: { start: ConnectStart | null; onClose: () => void }) {
+/**
+ * Whether the workspace's pages open: on the onboarding they don't (the org route sends them back to it), so a joined
+ * computer shows no link to its page there.
+ */
+const PagesOpen = createContext(true);
+
+export function ConnectDialog({
+  start,
+  onClose,
+  settingUp = false,
+}: {
+  start: ConnectStart | null;
+  onClose: () => void;
+  settingUp?: boolean;
+}) {
   const { t } = useTranslation();
   const [step, setStep] = useState<ConnectStep>(start?.step ?? "choose");
   const [title, setTitle] = useState<ReactNode>(null);
@@ -70,37 +84,39 @@ export function ConnectDialog({ start, onClose }: { start: ConnectStart | null; 
     setStep("link");
   };
   return (
-    <Dialog
-      open={start !== null}
-      onOpenChange={(o) => !o && onClose()}
-      title={step === "choose" ? t("devices.connect") : (title ?? t("devices.connect"))}
-      leading={step === "choose" ? undefined : <FlowMark step={step} />}
-      closeLabel={t("common.close")}
-      width={WIDTH[step]}
-    >
-      {start !== null &&
-        (step === "choose" ? (
-          <Chooser onPick={setStep} onClose={onClose} />
-        ) : step === "this" ? (
-          <LinkFlow
-            key={step}
-            kind="computer"
-            viaApp
-            onLine={toLine}
-            onServer={() => setStep("server")}
-            {...flowProps}
-          />
-        ) : step === "server" || step === "link" ? (
-          // Its own instance per step: a line's system tab starts from where it came from.
-          <LinkFlow key={step} kind={step === "server" ? "server" : "computer"} shell={lineShell} {...flowProps} />
-        ) : step === "computer" ? (
-          <ComputerFlow {...flowProps} onLine={toLine} />
-        ) : step === "android" ? (
-          <AndroidFlow {...flowProps} hostId={start.hostId ?? null} onConnectComputer={() => setStep("choose")} />
-        ) : (
-          <IphoneFlow {...flowProps} hostId={start.hostId ?? null} onConnectComputer={() => setStep("choose")} />
-        ))}
-    </Dialog>
+    <PagesOpen.Provider value={!settingUp}>
+      <Dialog
+        open={start !== null}
+        onOpenChange={(o) => !o && onClose()}
+        title={step === "choose" ? t("devices.connect") : (title ?? t("devices.connect"))}
+        leading={step === "choose" ? undefined : <FlowMark step={step} />}
+        closeLabel={t("common.close")}
+        width={WIDTH[step]}
+      >
+        {start !== null &&
+          (step === "choose" ? (
+            <Chooser onPick={setStep} onClose={onClose} />
+          ) : step === "this" ? (
+            <LinkFlow
+              key={step}
+              kind="computer"
+              viaApp
+              onLine={toLine}
+              onServer={() => setStep("server")}
+              {...flowProps}
+            />
+          ) : step === "server" || step === "link" ? (
+            // Its own instance per step: a line's system tab starts from where it came from.
+            <LinkFlow key={step} kind={step === "server" ? "server" : "computer"} shell={lineShell} {...flowProps} />
+          ) : step === "computer" ? (
+            <ComputerFlow {...flowProps} onLine={toLine} />
+          ) : step === "android" ? (
+            <AndroidFlow {...flowProps} hostId={start.hostId ?? null} onConnectComputer={() => setStep("choose")} />
+          ) : (
+            <IphoneFlow {...flowProps} hostId={start.hostId ?? null} onConnectComputer={() => setStep("choose")} />
+          ))}
+      </Dialog>
+    </PagesOpen.Provider>
   );
 }
 
@@ -278,6 +294,7 @@ function ComputerFlow({
   if (!known.current && devices.data && !devices.isFetching)
     known.current = new Set(devices.data.devices.map((d) => d.id));
   const found = known.current ? newComputerOf(devices.data?.devices, known.current, myId) : undefined;
+  const pagesOpen = useContext(PagesOpen);
   useEffect(() => setTitle(t("devices.computer.title")), [setTitle, t]);
   return (
     <>
@@ -306,14 +323,16 @@ function ComputerFlow({
             <Icon name="check" size={14} />
             <span>
               {t("devices.computer.connected", { name: found.name })}{" "}
-              <Link
-                to="/org/$orgId/settings/devices/$deviceId"
-                params={{ orgId: org.id, deviceId: found.id }}
-                className="ac-link"
-                onClick={onClose}
-              >
-                {t("devices.link.openPage")}
-              </Link>
+              {pagesOpen && (
+                <Link
+                  to="/org/$orgId/settings/devices/$deviceId"
+                  params={{ orgId: org.id, deviceId: found.id }}
+                  className="ac-link"
+                  onClick={onClose}
+                >
+                  {t("devices.link.openPage")}
+                </Link>
+              )}
             </span>
           </p>
         ) : (
@@ -567,6 +586,7 @@ function Joined({
   const { org } = useOrg();
   const devices = useDevices(org.id);
   const device = devices.data?.devices.find((d) => d.id === joined.machineId);
+  const pagesOpen = useContext(PagesOpen);
   return (
     <>
       <DialogBody>
@@ -587,16 +607,18 @@ function Joined({
             <span className="dv-connected__facts">{joinFacts(t, joined.request)}</span>
           </span>
         </div>
-        <p className="small muted">
-          <Link
-            to="/org/$orgId/settings/devices/$deviceId"
-            params={{ orgId: org.id, deviceId: joined.machineId }}
-            className="ac-link"
-            onClick={onClose}
-          >
-            {t("devices.link.openPage")}
-          </Link>
-        </p>
+        {pagesOpen && (
+          <p className="small muted">
+            <Link
+              to="/org/$orgId/settings/devices/$deviceId"
+              params={{ orgId: org.id, deviceId: joined.machineId }}
+              className="ac-link"
+              onClick={onClose}
+            >
+              {t("devices.link.openPage")}
+            </Link>
+          </p>
+        )}
       </DialogBody>
       <DialogFooter>
         <Button variant="primary" onClick={onClose}>

@@ -220,7 +220,8 @@ export function ConnectAiProvider({
   poll?: number;
   /**
    * On the onboarding: the workspace's pages don't open until it ends (the org route sends them back to it), so the
-   * dialog offers no way out to one (Computers, the keys), saying what comes after instead.
+   * dialog offers no way out to one (the keys' page), saying what comes after instead. Connecting a computer stays
+   * offered: its dialog opens over this one and needs no page.
    */
   settingUp?: boolean;
 }) {
@@ -279,7 +280,7 @@ export function ConnectAiProvider({
           onPairComputer={() => setPairing(true)}
         />
       )}
-      {pairing && <ConnectDialog start={PAIR_START} onClose={() => setPairing(false)} />}
+      {pairing && <ConnectDialog start={PAIR_START} settingUp={settingUp} onClose={() => setPairing(false)} />}
     </ConnectAiContext.Provider>
   );
 }
@@ -821,7 +822,9 @@ function ConnectAiDialog({
     onClose();
     void navigate({ to: "/org/$orgId/settings/$section", params: { orgId: org.id, section } });
   };
-  const toComputers = settingUp ? undefined : onPairComputer;
+  // The pairing dialog opens over this one and needs no other page, so the onboarding offers it too: a plan signs in
+  // there as soon as the computer joins, instead of waiting for the workspace to open.
+  const toComputers = onPairComputer;
   const keySelect = mayAddKey && !keySaved && (
     <ProviderKeySelect
       value={draft.provider}
